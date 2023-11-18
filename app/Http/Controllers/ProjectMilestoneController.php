@@ -139,7 +139,7 @@ class ProjectMilestoneController extends AccountBaseController
 
         $milestone->invoice_created= 0;
         $milestone->status= 'incomplete';
-        $milestone->added_by= Auth::id();
+        $milestone->added_by= 1;
         $milestone->last_updated_by= Auth::id();
         $milestone->milestone_type= 'Client Created this Milestone';
         //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);

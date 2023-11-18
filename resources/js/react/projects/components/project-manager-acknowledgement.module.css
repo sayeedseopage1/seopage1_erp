@@ -32,6 +32,7 @@
 .order_list li{
     list-style: upper-alpha;
     margin-bottom: 10px;
+    margin-left: 2rem;
 }
 
 .card_body{

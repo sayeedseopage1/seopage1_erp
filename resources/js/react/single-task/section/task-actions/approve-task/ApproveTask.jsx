@@ -270,7 +270,7 @@ const SubmittedWorkCard = ({data, latest=false, className="", style, isLoading =
             <div className='sp1_st--approve-card-body'>
                 <div className='mb-2'>
                     <div className='font-weight-bold f-12' style={{color: '#81868E'}}> Links</div>
-                    <ol style={{listStyle: 'unset'}}>
+                    <ol style={{listStyle: 'unset', marginLeft: "32px"}}>
                         {_.map(links, (link, index) =>(
                             <li key={`${link}_${index}`} style={{listStyle: 'numaric'}}>
                                 <a href={link}>{link}</a>

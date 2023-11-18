@@ -83,7 +83,7 @@ export const DevIssuesTableColumns = [
             const shortCode = row?.final_responsible_person;
             const disputed = row?.dispute_created;
             const disputeBetween = row?.dispute_between;
-            
+
             const obj = {
                 C: row.client_name,
                 PM: row.project_manager_name,
@@ -91,9 +91,9 @@ export const DevIssuesTableColumns = [
                 LD: row.lead_developer_name,
                 D: row.developer_name,
                 UD: row.developer_name,
-                GD: row.developer_name 
+                GD: row.developer_name
             }
-            
+
             if(!shortCode && disputed && disputeBetween==='LDR'){
                 return obj.D;
             }
@@ -102,10 +102,10 @@ export const DevIssuesTableColumns = [
         rowSpan: 2,
         marge: false,
         row: ({ row }) => {
-            if (!row) return null; 
+            if (!row) return null;
             const rPerson = row?.final_responsible_person;
             const disputed = row?.dispute_created;
- 
+
             return (
                 <Switch>
                     <Switch.Case
@@ -133,7 +133,7 @@ export const DevIssuesTableColumns = [
                     </Switch.Case>
 
                     <Switch.Case
-                        condition={!rPerson && disputed && row.raised_against_p }
+                        condition={!rPerson && row.raised_against_p }
                     >
                         <a
                             href={`/account/employees/${row.developer_id}`}
@@ -145,7 +145,7 @@ export const DevIssuesTableColumns = [
                         ({row.raised_against_p}%)
                     </Switch.Case>
                 </Switch>
-            ); 
+            );
         },
     },
     {

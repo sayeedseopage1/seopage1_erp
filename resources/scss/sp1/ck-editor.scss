@@ -468,13 +468,10 @@
 .sp1_ck_content{
     word-wrap: break-word !important;
 
-    ul{
-        margin-left: 40px !important;
-        list-style: unset !important;
-    }
-
     ul,ol{
         margin-bottom: 10px;
+        margin-left: 40px !important;
+        list-style: unset !important;
     }
 
     li{list-style: unset !important;}

@@ -1,14 +1,15 @@
 import axios from "axios";
 import React from "react";
-import Button from "../../../../../global/Button";
-import Switch from "../../../../../global/Switch";
+import Button from "../../../../../../global/Button";
+import Switch from "../../../../../../global/Switch";
+import { convertTime } from "../../../../../../utils/converTime";
+import { CompareDate } from "../../../../../../utils/dateController";
 import Option1 from "./helper/acknowledgement-options/Option1";
 import Option2 from "./helper/acknowledgement-options/Option2";
 import Option3 from "./helper/acknowledgement-options/Option3";
 import Option4 from "./helper/acknowledgement-options/Option4";
 import Option5 from "./helper/acknowledgement-options/Option5";
 import Option6 from "./helper/acknowledgement-options/Option6";
-import { CompareDate } from "../../../../../utils/dateController";
 
 /**
  * * This components responsible for showing daily working report to developer
@@ -18,14 +19,14 @@ const dayjs = new CompareDate();
 
 const DateFormat = (date) => {
     const d = {
-    unFormatted: date,
-    formatted: dayjs.dayjs(date).isSame(dayjs.dayjs(), 'day') ? 'Today' : dayjs.dayjs(date).format('MMM DD, YYYY')
+        unFormatted: date,
+        formatted: dayjs.dayjs(date).isSame(dayjs.dayjs(), 'day') ? 'Today' : dayjs.dayjs(date).format('MMM DD, YYYY')
     }
 
     return d;
 };
 
-const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDate, reminderType }) => {
+const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDate, reminderType, data, onSubmit }) => {
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -35,24 +36,24 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
         return () => console.log("unmount");
     }, []);
 
-
     // handle form submission
     const handleSubmitForm = async (data) => {
         setIsSubmitting(true);
-        console.log(data);
 
         try{
-            await axios.post('/account/developer/stop-tasks-timer', {
+            await axios.post('/account/developer/daily-minimum-track-hours-log/acknowledgement', {
                 ...data,
+                date: dayjs.dayjs(reminderDate).format('YYYY-MM-DD'),
                 _token: document.querySelector("meta[name='csrf-token']").getAttribute('content')
             }).then(res => {
-                console.log(res);
+                onSubmit();
+                close();
             })
 
             setIsSubmitting(false);
         }catch(error){
             console.log(error)
-        } 
+        }
     }
 
     return (
@@ -73,9 +74,7 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                     {/* modal body */}
                     <div className="sp1_single_task--modal-body sp1_single_task-modal-body-options p-3">
                         <div className="alert alert-warning">
-                            Your tracked time for <strong>{DateFormat(reminderDate).formatted}</strong> is <strong> 0 hours </strong>and <strong> 0
-                            minutes</strong>. Your minimum tracked hours should have been <strong> 7 hours </strong>and <strong> 0 minutes</strong>, and it is <strong> 7 hours </strong>and <strong> 0
-                            minutes</strong> less.
+                            Your tracked time for <strong>{DateFormat(reminderDate).formatted}</strong> is <strong>{convertTime(data?.data?.complete_hours)}</strong>. Your minimum tracked hours should have been <strong>{convertTime(data?.data?.target_minimum_log_hours)}</strong>, and it is <strong>{convertTime(data?.data?.incomplete_hours)}</strong> less.
                         </div>
 
 
@@ -116,6 +115,7 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                                             onChange={e => setStep(Number(e.target.value))}
                                             onSubmit={handleSubmitForm}
                                             onBack={() => setStep(0)}
+                                            checkInTime={DateFormat(reminderDate).formatted}
                                             isLoading={isSubmitting}
                                         />
                                     </Switch.Case>

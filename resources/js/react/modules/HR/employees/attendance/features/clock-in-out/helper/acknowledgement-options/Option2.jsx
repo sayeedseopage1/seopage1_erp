@@ -1,7 +1,7 @@
 import React from 'react';
-import CKEditorComponent from '../../../../../../../ckeditor';
-import Button from '../../../../../../../global/Button';
-import Switch from '../../../../../../../global/Switch';
+import CKEditorComponent from '../../../../../../../../ckeditor';
+import Button from '../../../../../../../../global/Button';
+import Switch from '../../../../../../../../global/Switch';
 
 /**
  * * this component show the first acknowledgement option

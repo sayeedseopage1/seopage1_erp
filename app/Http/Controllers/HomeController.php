@@ -77,6 +77,7 @@ use App\Notifications\ClientBlogArticleSubmitNotification;
 use App\Notifications\ClientFormSubmitNotification;
 use App\Notifications\ClientProductCategoryCollectionSubmitNotification;
 use App\Notifications\ClientProductDescriptionSubmitNotification;
+use App\Http\Controllers\HelperPendingActionController;
 
 class HomeController extends Controller
 {
@@ -245,6 +246,12 @@ class HomeController extends Controller
         $project->authorization_status = 'pending';
         $project->deliverable_authorization= 0;
         $project->save();
+
+             
+        $helper = new HelperPendingActionController();
+
+
+        $helper->ClientDisagreeAgreement($project);
 
 
         $text = 'Client ('.$project->client->name.') Disagree with delivarables';

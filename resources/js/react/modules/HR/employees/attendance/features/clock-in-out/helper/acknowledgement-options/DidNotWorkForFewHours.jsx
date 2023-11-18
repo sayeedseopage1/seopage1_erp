@@ -1,14 +1,14 @@
 import React from "react";
-import CKEditorComponent from "../../../../../../../ckeditor";
-import Button from "../../../../../../../global/Button";
-import Switch from "../../../../../../../global/Switch";
-import { Label } from "../../../../../../../global/styled-component/Form";
+import CKEditorComponent from "../../../../../../../../ckeditor";
+import Button from "../../../../../../../../global/Button";
+import Switch from "../../../../../../../../global/Switch";
+import { Flex } from "../../../../../../../../global/styled-component/Flex";
+import DurationTime from "./DurationTimer";
 
 /**
- * * This component responsible for rendering leave early explanation form
+ * * This component responsible for rendering working report details explanation form
  */
-
-const LeavingEarlyExplanation = ({
+const DidNotWorkForFewHours = ({
     checked,
     index,
     onChange,
@@ -18,33 +18,41 @@ const LeavingEarlyExplanation = ({
     lessTrackDate,
     onBack,
 }) => {
-    // form data
     const [comment, setComment] = React.useState("");
+    const [durations, setDurations] = React.useState([
+        { start: "00:00AM", end: "00:00AM", id: "dwedj" },
+    ]);
     const [error, setError] = React.useState(null);
-    const [durationStart, setDurationStart] = React.useState("08:00 AM");
-    const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
 
-    // setup time field
-    React.useEffect(() => {
-        // start time
-        window
-            .$("#timepicker1")
-            .timepicker("setTime", durationStart)
-            .on("changeTime.timepicker", function (e) {
-                setDurationStart(e.target.value);
-            });
+    // generate random id
+    const uniqueId = Math.random().toString(6).slice(2);
 
-        // end time
-        window
-            .$("#timepicker2")
-            .timepicker("setTime", durationEnd)
-            .on("changeTime.timepicker", function (e) {
-                setDurationEnd(e.target.value);
-                // console.log(e.timeStamp)
-            });
-    }, [checked]);
+    // remove duration
+    const onRemove = (e, id) => {
+        e.preventDefault();
+        let filtered = durations.filter((d) => d.id !== id);
+        setDurations([...filtered]);
+    };
 
-    // form validation checking
+    // add duration
+    const addDurationForm = () => {
+        setDurations((prev) => [
+            ...prev,
+            {
+                id: uniqueId,
+                start: "00:00 AM",
+                end: "00:00 AM",
+            },
+        ]);
+    };
+
+    // editor data change
+    const handleEditorChange = (e, editor) => {
+        const data = editor.getData();
+        setComment(data);
+    };
+
+    // form validation check
     const isValid = () => {
         let errCount = 0;
         let err = new Object();
@@ -58,21 +66,13 @@ const LeavingEarlyExplanation = ({
         return !errCount;
     };
 
-    // editor data change
-    const handleEditorChange = (e, editor) => {
-        const data = editor.getData();
-        setComment(data);
-    };
-
-    // handle submission
+    // handle form submit
     const handleSubmission = (e) => {
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
-            child_reason: "I am leaving early",
-            durations: JSON.stringify([
-                { id: "de2sew", start: durationStart, end: durationEnd },
-            ]),
+            durations: JSON.stringify(durations),
+            child_reason: "I didn't work for a few hours in between",
             comment,
         };
 
@@ -92,10 +92,7 @@ const LeavingEarlyExplanation = ({
         <React.Fragment>
             <div className="--option-item">
                 {/* acknowledgement option */}
-                <div
-                    className="d-flex align-items-center"
-                    style={{ gap: "10px" }}
-                >
+                <Flex alignItem="center" gap="10px">
                     <input
                         type="checkbox"
                         style={{ cursor: "pointer" }}
@@ -103,48 +100,54 @@ const LeavingEarlyExplanation = ({
                         value={index.toString()}
                         onChange={onChange}
                     />
-                    I am leaving early
-                </div>
+                    I didn't work for a few hours in between.
+                </Flex>
 
+                {/* if checked */}
                 <Switch>
                     <Switch.Case condition={checked}>
                         <div className="pl-3 my-3 bg-white">
-                            <Label className="font-weight-bold">
-                                Select the time here <sup>*</sup>
-                            </Label>
-
-                            {/* time selection */}
+                            {/* duration selection row */}
                             <div className="row">
-                                <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                                <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                     <label htmlFor="" className="d-block">
                                         From:
                                     </label>
-                                    <input
-                                        id="timepicker1"
-                                        className="form-control w-100 py-2"
-                                        data-minute-step="1"
-                                        data-modal-backdrop="false"
-                                        type="text"
-                                    />
                                 </div>
 
-                                <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                                <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                     <label htmlFor="" className="d-block">
                                         To
                                     </label>
-                                    <input
-                                        id="timepicker2"
-                                        className="form-control w-100 py-2"
-                                        data-minute-step="1"
-                                        data-modal-backdrop="false"
-                                        type="text"
-                                    />
                                 </div>
                             </div>
 
+                            {/* duration */}
+                            {_.map(durations, (duration) => (
+                                <DurationTime
+                                    key={duration.id}
+                                    id={duration.id}
+                                    onRemove={onRemove}
+                                    startTime={duration.start}
+                                    endTime={duration.end}
+                                    durations={durations}
+                                    setDurations={setDurations}
+                                />
+                            ))}
+
+                            {/* add timer field */}
+                            <button
+                                className="mt-2 d-flex align-items-center bg-transparent"
+                                style={{ gap: "10px" }}
+                                onClick={addDurationForm}
+                            >
+                                <i className="fa-solid fa-circle-plus" />
+                                Add New Time
+                            </button>
+
                             {/* comment field */}
                             <div className="mt-3">
-                                <Label className="font-weight-bold">Explain the reason why you are leaving early on ${lessTrackDate} <sup>*</sup> </Label>
+                                <h6>Write your comments here: </h6>
                                 <div className="ck-editor-holder stop-timer-options">
                                     <CKEditorComponent
                                         data={comment}
@@ -159,7 +162,7 @@ const LeavingEarlyExplanation = ({
                             </div>
 
                             {/* footer section */}
-                            <div className="mt-3 w-100 d-flex align-items-center">
+                            <div className="mt-3 d-flex align-items-center">
                                 {/* back button */}
                                 <Button
                                     variant="tertiary"
@@ -185,4 +188,4 @@ const LeavingEarlyExplanation = ({
     );
 };
 
-export default LeavingEarlyExplanation;
+export default DidNotWorkForFewHours;

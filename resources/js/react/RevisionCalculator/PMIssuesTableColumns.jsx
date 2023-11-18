@@ -85,7 +85,7 @@ export const PMIssuesTableColumns = [
             const search = table.state.search;
             const between = row.dispute_between;
             const tv = between === 'CPR' ? row?.client_name : row?.revision_raised_by_name;
-            const id = between === 'CPR' ? row?.clientId : row?.revision_raised_by_id; 
+            const id = between === 'CPR' ? row?.clientId : row?.revision_raised_by_id;
             const isEqual = search
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
@@ -115,8 +115,8 @@ export const PMIssuesTableColumns = [
                 LD: row.lead_developer_name,
                 D: row.developer_name,
                 UD: row.developer_name,
-                GD: row.developer_name 
-            } 
+                GD: row.developer_name
+            }
             return obj[`${shortCode}`]
         },
         rowSpan: 2,
@@ -126,9 +126,9 @@ export const PMIssuesTableColumns = [
             const rPerson = row?.final_responsible_person;
             const disputed = row?.dispute_created;
             const between = row?.dispute_between;
-            
+
             return (
-                <Switch> 
+                <Switch>
                     <a
                         href={`/account/employees/${row.project_manager_id}`}
                         title={row.project_manager_name}
@@ -136,15 +136,19 @@ export const PMIssuesTableColumns = [
                     >
                         {row.project_manager_name}
                     </a>
-                    <Switch.Case condition={!rPerson && disputed }>
+                    <Switch.Case condition={!rPerson && disputed && between !== 'PLR'}>
                         <span>({row.raised_against_p}%)</span>
                     </Switch.Case>
 
-                    <Switch.Case condition={!rPerson && disputed && between === 'PLD' }>
+                    <Switch.Case condition={!rPerson && disputed && between === 'PLR' }>
+                        <span>({row.raised_by_p}%)</span>
+                    </Switch.Case>
+
+                    <Switch.Case condition={!rPerson && !disputed}>
                         <span>({row.raised_by_p}%)</span>
                     </Switch.Case>
                 </Switch>
-            ); 
+            );
         },
     },
     {

@@ -1,8 +1,8 @@
 import React from "react";
-import Modal from "../../components/Modal";
-import Button from "../../components/Button";
-import { User } from "../../../utils/user-details";
 import { Link } from "react-router-dom";
+import { User } from "../../../utils/user-details";
+import Button from "../../components/Button";
+import Modal from "../../components/Modal";
 
 const LeadConfirmationModal = ({ isOpen, onConfirm, close }) => {
     const [buttonVisible, setButtonVisible] = React.useState(false);
@@ -45,7 +45,7 @@ const LeadConfirmationModal = ({ isOpen, onConfirm, close }) => {
                         Do you understand the following things?{" "}
                     </h4>
 
-                    <ol type="A">
+                    <ol type="A" style={{marginLeft: '32px'}}>
                         <li>
                             {" "}
                             Your team's job is not to decide what the look and

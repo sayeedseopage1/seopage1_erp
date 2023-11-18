@@ -35,7 +35,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
         window
             .$("#timepicker1")
             .timepicker("setTime", durationStart)
-            .on("changeTime.timepicker", function (e) { 
+            .on("changeTime.timepicker", function (e) {
                 setDurationStart(e.target.value);
             });
 
@@ -57,7 +57,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             setProject(null);
             setIsOutsideERP(undefined);
             setIsSystemGlitch(undefined);
-            setComment(''); 
+            setComment('');
             setError(null);
         };
     };
@@ -81,7 +81,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     };
 
     // validation
-    const isVaild = () => {
+    const isValid = () => {
         let errCount = 0;
         let err = new Object();
 
@@ -89,7 +89,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             err.comment = "Please explain the reason!";
             errCount++;
         }
-  
+
         if(isOutsideERP === undefined && isSystemGlitch === undefined && !person){
             err.reason = "Please selected responsible person/system!"
             errCount++;
@@ -108,13 +108,13 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             err.project = "You have to pick an option.";
             errCount++;
         }
-  
+
         setError(err);
         return !errCount;
     }
 
     // handle submission
-    const handleSubmittion = (e) => {
+    const handleSubmission = (e) => {
         e.preventDefault();
 
         const data = {
@@ -130,14 +130,14 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             responsible,
             client: client,
         };
-          
-        if(isVaild()){ 
+
+        if(isValid()){
             onSubmit(data);
         }else{
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please fillup the all required fields!",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
         }
@@ -157,7 +157,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                         checked={checked}
                         onChange={handleOnChange}
                     />
-                   I couldn't log hours. 
+                   I couldn't log hours.
                 </div>
 
                 {checked && (
@@ -231,7 +231,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                     />{" "}
                                     Systems technical glitch
                                 </label>
-                                
+
 
                                 <label htmlFor="outside-erp-project">
                                     <input
@@ -252,7 +252,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                     Outside ERP project
                                 </label>
                             </div>
-                            
+
                             {error?.reason && <div className="f-14" style={{color:'red'}}>{error?.reason}</div>}
                         </div>
                         {activeResponsiblePersonDropdown && (
@@ -269,7 +269,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                     }
                                 >
                                     {
-                                        isOutsideERP ? 
+                                        isOutsideERP ?
                                             <input
                                                 value={client}
                                                 onChange={e => setClient(e.target.value)}
@@ -282,7 +282,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                             filter=""
                                         />
                                     }
-                                </Suspense> 
+                                </Suspense>
                                 {error?.responsiblePerson && <div className="f-14" style={{color:'red'}}>{error?.responsiblePerson}</div>}
                             </>
                         )}
@@ -327,7 +327,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                             </label>
                                         </div>
 
-                                        
+
                                         {error?.project && <div className="f-14" style={{color:'red'}}>{error?.project}</div>}
                                     </div>
 
@@ -390,8 +390,8 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                             </Button>
 
                             {
-                                !isSubmitting ? 
-                                <Button onClick={handleSubmittion} className="">
+                                !isSubmitting ?
+                                <Button onClick={handleSubmission} className="">
                                     Submit
                                 </Button>
                                 : <Button className="cursor-processing">

@@ -1,17 +1,17 @@
 import axios from "axios";
 import React from "react";
-import CKEditorComponent from "../../../../../ckeditor";
-import FileUploader from "../../../../../file-upload/FileUploader";
-import Button from "../../../../../global/Button";
-import { Flex } from "../../../../../global/styled-component/Flex";
+import { toast } from "react-toastify";
+import CKEditorComponent from "../../../../../../ckeditor";
+import FileUploader from "../../../../../../file-upload/FileUploader";
+import Button from "../../../../../../global/Button";
+import { Flex } from "../../../../../../global/styled-component/Flex";
 import {
-    Checkbox,
     FormError,
     FormGroup,
     Input,
-    Label,
-} from "../../../../../global/styled-component/Form";
-import { checkIsURL } from "../../../../../utils/check-is-url";
+    Label
+} from "../../../../../../global/styled-component/Form";
+import { checkIsURL } from "../../../../../../utils/check-is-url";
 
 /**
  * * This component render task report form
@@ -19,7 +19,7 @@ import { checkIsURL } from "../../../../../utils/check-is-url";
 
 const SUBMISSION_URL = `/account/tasks/daily-submissions`;
 
-const DailyReportSubmissionForm = ({ close, task, reportDate }) => {
+const DailyReportSubmissionForm = ({ close, task, reportDate, onSubmit }) => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [completedSection, setCompletedSection] = React.useState("");
     const [attachmentLink, setAttachmentLink] = React.useState("");
@@ -86,7 +86,7 @@ const DailyReportSubmissionForm = ({ close, task, reportDate }) => {
         fd.append("link_name", attachmentLink);
         fd.append("section_name", completedSection);
         fd.append("comment", description);
-        fd.append("mark_as_complete", markAsCompleted);
+        fd.append("mark_as_complete", false);
         fd.append("report_date", reportDate);
         fd.append(
             "_token",
@@ -100,7 +100,10 @@ const DailyReportSubmissionForm = ({ close, task, reportDate }) => {
             try {
                 await axios
                     .post(SUBMISSION_URL, fd)
-                    .then((res) => console.log(res));
+                    .then((res) => {
+                        toast.success('Daily Task Report Successfully Submitted.')
+                        onSubmit(res.data.submission_status)
+                    });
                 setIsLoading(false);
                 close();
             } catch (error) {
@@ -235,7 +238,7 @@ const DailyReportSubmissionForm = ({ close, task, reportDate }) => {
                             </FormError>
                         </FormGroup>
 
-                        <Flex alignItem="center" className="mt-3">
+                        {/* <Flex alignItem="center" className="mt-3">
                             <label htmlFor="markAsComplete">
                                 <Checkbox
                                     type="checkbox"
@@ -249,7 +252,7 @@ const DailyReportSubmissionForm = ({ close, task, reportDate }) => {
                                 />{" "}
                                 Mark as Complete
                             </label>
-                        </Flex>
+                        </Flex> */}
 
                         {/* footer section */}
                         <div className="mt-3 w-100 d-flex align-items-center">

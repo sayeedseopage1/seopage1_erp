@@ -1,20 +1,21 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import Button from "../../global/Button";
 import Loader from "../../global/Loader";
-import { useLazyGetAllSubtaskQuery } from "../../services/api/tasksApiSlice";
+import { useCheckUnAuthorizedTaskTypeQuery, useLazyGetAllSubtaskQuery } from "../../services/api/tasksApiSlice";
 import { storeSubTasks } from "../../services/features/tasksSlice";
 import { User } from "../../utils/user-details";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
 import Filterbar from "../components/Filter-bar/Filterbar";
+import PrimaryPageAuthorizationTable from "../components/PrimaryPageAuthorizationTable";
 import SearchBox from "../components/Searchbox";
 import SubTasksTable from "../components/SubtaskTable";
 import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
 import Tabbar from "../components/Tabbar";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
-
 
 // current user
 const auth = new User(window.Laravel.user);
@@ -26,7 +27,11 @@ const Subtasks = () => {
     const [search,setSearch] = React.useState('');
     const [columnVisibility, setColumnVisibility] = React.useState(new Object(defaultColumnVisibility(auth)))
 
+    // api function
     const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
+    const { data: unAuthorizedType } = useCheckUnAuthorizedTaskTypeQuery();
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
@@ -79,6 +84,19 @@ const Subtasks = () => {
         return newTableColumns;
     }
 
+    // fetch table data
+    const fetchTasksTypeData = () => {
+        searchParams.set('modal', 'primary_task_authorization');
+        searchParams.set('show', 'pending');
+        setSearchParams(searchParams)
+    }
+
+    const isProjectManager = auth.getRoleId() === 4 ? true : false;
+    const primaryPageButton = isProjectManager
+        ? "Primary Page [Awaiting Authorization]"
+        : "Primary Page [Need Authorization]";
+
+
     return (
         <React.Fragment>
             <FilterContainer>
@@ -88,6 +106,20 @@ const Subtasks = () => {
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         <Tabbar/>
+
+                        {
+                            _.includes([1, 8], auth?.getRoleId()) &&
+                            <Button
+                                onClick={fetchTasksTypeData}
+                                className="sp1_tlr_tab active ml-2 mb-2 text-white"
+                            >
+
+                                    <i className="fa-solid fa-hourglass-half" />
+                                      {primaryPageButton}
+                                    <span className="badge badge-light">{unAuthorizedType?.task_types}</span>
+
+                            </Button>
+                        }
 
 
                         <div className="ml-auto mr-2">
@@ -120,6 +152,8 @@ const Subtasks = () => {
                     />
                 </div>
             </div>
+
+            <PrimaryPageAuthorizationTable />
         </React.Fragment>
     );
 };

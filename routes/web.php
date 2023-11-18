@@ -359,10 +359,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
-   
+
     Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
     Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
-    Route::get('check-in-check-out-status', [DashboardController::class, 'clockInStatus']);
+
+    /** DEVELOPER CHECK IN CHECK OUT START*/
+    Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
+    Route::post('/developer/daily-minimum-track-hours-log/acknowledgement',[DashboardController::class,'developerDailytrackHoursLog']);
+    Route::put('check-out-status', [DashboardController::class, 'clockOutStatus']);
+    /** DEVELOPER CHECK IN CHECK OUT START*/
+
     /* Setting menu routes starts from here */
     Route::group(['prefix' => 'settings'], function () {
         Route::post('app-settings/deleteSessions', [AppSettingController::class, 'deleteSessions'])->name('app-settings.delete_sessions');
@@ -515,8 +521,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('employee-shifts', EmployeeShiftController::class);
         Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::resource('pending-action', PendingActionController::class);
-      
-   
+
+
 
     });
 
@@ -978,7 +984,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('invoices/add-item', [InvoiceController::class, 'addItem'])->name('invoices.add_item');
     Route::get('invoices/update-status/{invoiceID}', [InvoiceController::class, 'cancelStatus'])->name('invoices.update_status');
     Route::get('invoices/get-client-company/{projectID?}', [InvoiceController::class, 'getClientOrCompanyName'])->name('invoices.get_client_company');
-    Route::post('invoices/fetchTimelogs', [InvoiceController::class, 'fetchTimelogs'])->name('invoices.fetch_timelogs');
+    Route::post('invoices/fetchTimetart-timers', [InvoiceController::class, 'fetchTimelogs'])->name('invoices.fetch_timelogs');
     Route::get('invoices/check-shipping-address', [InvoiceController::class, 'checkShippingAddress'])->name('invoices.check_shipping_address');
 
     Route::get('invoices/toggle-shipping-address/{invoice}', [InvoiceController::class, 'toggleShippingAddress'])->name('invoices.toggle_shipping_address');

@@ -25,8 +25,6 @@ import { checkIsURL } from "../../../utils/check-is-url";
 import { CompareDate } from "../../../utils/dateController";
 import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
-import LeadConfirmationModal from "./LeadConfirmationModal";
-import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
 
 const SubTaskForm = ({ close }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
@@ -554,7 +552,7 @@ const SubTaskForm = ({ close }) => {
                     )}
 
                     {assignedTo?.isOverloaded && <div style={{ color: "red" }}>
-                            {`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 10 Submittable tasks.`}
+                            {`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 4 Submittable tasks.`}
                         </div>}
                 </div>
                 {/*
