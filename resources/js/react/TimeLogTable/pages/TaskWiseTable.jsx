@@ -1,15 +1,14 @@
-import React, {useState, useEffect} from "react";
-import {useGetTaskWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
-import { paginate } from '../../utils/paginate';
 import { groupBy, orderBy } from "lodash";
+import React, { useState } from "react";
+import Loader from "../../global/Loader";
+import { useGetTaskWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
+import { convertTime } from "../../utils/converTime";
+import { paginate } from '../../utils/paginate';
+import { RefreshButton } from "../components/RefreshButton";
 import Tabbar from "../components/Tabbar";
-import TaskWiseLogTable from '../components/TaskWiseLogTable'
+import TaskWiseLogTable from '../components/TaskWiseLogTable';
 import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
-import { convertTime } from "../../utils/converTime";
-import Button from "../../global/Button";
-import { RefreshButton } from "../components/RefreshButton";
-import Loader from "../../global/Loader";
 
 const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);
@@ -43,9 +42,9 @@ const TaskWiseLogReport = () => {
                 setTrackedTime(totalTrackTime);
             })
     }
- 
 
-    // data sort handle 
+
+    // data sort handle
     const handleSorting = (sort) => {
         const sortData = orderBy(data, ...sort);
         handleData(sortData, currentPage, perPageData);
@@ -74,7 +73,7 @@ const TaskWiseLogReport = () => {
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
                     <Tabbar/>
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
+                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} >
                         {isLoading ?
                             <Loader title="Refreshing..."  borderRightColor="white" />
                         : 'Refresh'}
@@ -98,7 +97,7 @@ const TaskWiseLogReport = () => {
                     currentPage={currentPage}
                     totalEntry={data.length}
                     isLoading={isLoading}
-                /> 
+                />
             </div>
         </div>
     );
