@@ -20,12 +20,15 @@ export default function ModalForm({ setIsOpen, form_data }) {
     useEffect(() => {
         [...form_data.form].forEach((input) => {
             if (input?.type === "hidden") {
-                setFormData((prev) => {
-                    return {
-                        ...prev,
-                        [input.name]: input.value,
-                    };
-                });
+                setFormData((prev) => ({
+                    ...prev,
+                    [input.name]: input.value,
+                }));
+            } else if (input?.type === "select") {
+                setFormData((prev) => ({
+                    ...prev,
+                    [input.name]: selectDefaultValue(input.options),
+                }));
             }
         });
     }, [form_data]);
@@ -52,6 +55,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
         // console.log({ url, method, formData });
         // setIsOpen(false);
         // setLoading(false);
+        // return;
 
         try {
             await axios[method.toLowerCase()](url, formData);
@@ -90,10 +94,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
                 {[...form_data.form].map((input, i) => {
                     if (input.type === "textarea") {
                         return (
-                            <div
-                                key={i}
-                                className={style.form_textArea_label}
-                            >
+                            <div key={i} className={style.form_textArea_label}>
                                 <span>
                                     <b>{input.label} :</b>{" "}
                                     <b style={{ color: "red" }}>
@@ -117,6 +118,49 @@ export default function ModalForm({ setIsOpen, form_data }) {
                                         }
                                     />
                                 </div>
+                            </div>
+                        );
+                    } 
+                    else if (input.type === "select") {
+                        return (
+                            <div key={i} className={style.form_select_area_container}>
+                                <span>
+                                    <b>{input.label} :</b>{" "}
+                                    {input?.required && (
+                                        <b style={{ color: "red" }}>
+                                            * This field is Required
+                                        </b>
+                                    )}
+                                </span>
+                                <span className={style.form_select_container}>
+                                    <b className={style.form_select_title}>
+                                        Select {input.name} :
+                                    </b>
+                                    <select
+                                        name={input.name}
+                                        onChange={(e) => {
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                [input.name]: e.target.value,
+                                            }));
+                                        }}
+                                        defaultValue={selectDefaultValue(
+                                            input.options
+                                        )}
+                                        className={style.form_select}
+                                    >
+                                        {[...input.options].map((opt, i) => {
+                                            return (
+                                                <option
+                                                    key={i}
+                                                    value={opt.value}
+                                                >
+                                                    {opt.lable}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </span>
                             </div>
                         );
                     }
@@ -147,3 +191,11 @@ export default function ModalForm({ setIsOpen, form_data }) {
         </div>
     );
 }
+
+const selectDefaultValue = (arr = []) => {
+    const defaultValue = [...arr].find((val) => {
+        return val.selected;
+    });
+
+    return defaultValue.value;
+};
