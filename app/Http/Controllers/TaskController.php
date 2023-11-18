@@ -82,6 +82,7 @@ use App\Models\DailySubmission;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
+use App\Notifications\PPAuthDenyNotification;
 use App\Notifications\TaskCommentNotification;
 use App\Notifications\TaskCommentReplyNotification;
 
@@ -1082,7 +1083,7 @@ class TaskController extends AccountBaseController
         if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
             $task_revision->raised_by_percent = 50;
             $task_revision->raised_against_percent = 50;
-            $task_revision->final_responsible_person = null;
+            $task_revision->final_responsible_person = '';
         }
         $task_revision->save();
 
@@ -3034,7 +3035,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->lead_comment = $request->comment;
             $tasks_accept->approval_status = 'accepted';
             $tasks_accept->is_accept = true;
-            if($tasks_accept->dispute_between  == 'PLR' || $tasks_accept->dispute_between  == 'LDR'){
+            if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')){
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
             }
 
@@ -3222,7 +3223,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
         } elseif ($request->mode == 'continue') {
             $tasks_accept->is_accept = true;
-            if($tasks_accept->acknowledgement_id !== null){
+            if($tasks_accept->acknowledgement_id !== null && $tasks_accept->acknowledgement_id != 'LDRx4'){
                 $tasks_accept->final_responsible_person = $this->role[$added_by_role_id];
             }
         }
@@ -5394,6 +5395,13 @@ class TaskController extends AccountBaseController
             $taskType->authorization_status = 2;
             $taskType->comment = $request->comment;
             $taskType->save();
+
+            $findTask = Task::where('id',$taskType->task_id)->first();
+
+            $user = User::where('id',$findTask->created_by)->first();
+
+            Notification::send($user, new PPAuthDenyNotification($findTask, $taskType));
+
         }
         $actions = PendingAction::where('code','PPA')->where('past_status',0)->where('task_id',$taskType->task_id)->get();
 
@@ -5444,11 +5452,14 @@ class TaskController extends AccountBaseController
     public function get_today_tasks(Request $request, $id)
     {
         $id = Auth::user()->id;
+        
             // dd($request->all());
         $startDate = Carbon::today()->format('Y-m-d');
         $endDate = Carbon::today()->format('Y-m-d');
 
         $date = Carbon::parse($request->date_type);
+
+        // dd($date);
 
         $tasks = ProjectTimeLog::select(
             'tasks.id',
@@ -5460,7 +5471,6 @@ class TaskController extends AccountBaseController
             'clients.name as client_name',
             'clients.id as clientId',
             'developers.id as developer_id',
-            'daily_submissions.status as daily_submission_status',
             'project_time_logs.created_at as project_time_logs_created_at',
 
             DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . $date . '" AND DATE(project_time_logs.end_time) <= "' . $date . '"), 0) as total_time_spent'),
@@ -5470,12 +5480,26 @@ class TaskController extends AccountBaseController
             ->join('users as clients', 'clients.id', 'projects.client_id')
             ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
             ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
-            ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
             ->where('project_time_logs.user_id', $id)
 
             ->whereDate('project_time_logs.created_at', $date)
-            ->groupBy('tasks.id')
+            ->groupBy('project_time_logs.task_id')
             ->get();
+            foreach($tasks as $task)
+            {
+                $dalysubmission = DailySubmission::where('task_id',$task->id)->where('report_date',$date)->first();
+                if($dalysubmission != null)
+                {
+                    $task->daily_submission_status = $dalysubmission->status;
+
+                }else 
+                {
+                    $task->daily_submission_status = 0;
+
+                }
+                
+            }
+
 
 
 
@@ -5582,14 +5606,14 @@ class TaskController extends AccountBaseController
         //     $date = Carbon::yesterday();
         // }
 
-        $tasks->each(function ($task) {
-            $daily_submission = DailySubmission::select("status")
-                ->where('task_id', $task->id)
-                ->whereDate("created_at", '=', date('Y-m-d', strtotime($task->project_time_logs_created_at)))
-                ->orderBy('id', 'desc')
-                ->first();
-            $task->daily_submission_status = $daily_submission ? $daily_submission->status : 0;
-        });
+        // $tasks->each(function ($task) {
+        //     $daily_submission = DailySubmission::select("status")
+        //         ->where('task_id', $task->id)
+        //         ->whereDate("created_at", '=', date('Y-m-d', strtotime($task->project_time_logs_created_at)))
+        //         ->orderBy('id', 'desc')
+        //         ->first();
+        //     $task->daily_submission_status = $daily_submission ? $daily_submission->status : 0;
+        // });
 
         // dd($tasks);
         // $tasks = $yesterdayData;

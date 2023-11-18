@@ -10,10 +10,8 @@ import { useState } from "react";
 import Button from "../../../../ui/Button";
 
 export default function RequiredActionsCard__Active({ data }) {
-    console.log("active card");
-    console.log({
-        created_at: dayjs(data.created_at).format("DD-MM-YYYY HH:mm:ss"),
-    });
+    // console.log("active card");
+    // console.log({created_at: dayjs(data.created_at).format("DD-MM-YYYY HH:mm:ss")});
 
     return (
         <div className={style.card_container}>
@@ -83,9 +81,7 @@ const ShowTimer = ({ targetTime }) => {
     });
 
     useEffect(() => {
-        console.log({
-            targetTime: dayjs(targetTime).format("DD-MM-YYYY HH:mm:ss"),
-        });
+        // console.log({targetTime: dayjs(targetTime).format("DD-MM-YYYY HH:mm:ss")});
         // console.log(time);
     }, []);
 

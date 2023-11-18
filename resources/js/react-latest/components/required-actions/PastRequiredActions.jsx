@@ -11,7 +11,7 @@ import RequiredActionCard_Loader from "./RequiredActionCards/RequiredActionCard_
 
 const PastRequiredActions = () => {
     const { currentPage, perPageItem, setTotalItem } = usePagination();
-    const { refresh } = useRefresh();
+    const { refresh,setLoading } = useRefresh();
     const [data, setData] = useState([]);
     const [filterData, setFilterData] = useState([]);
     const [slicedData, setSlicedData] = useState([]);
@@ -20,6 +20,11 @@ const PastRequiredActions = () => {
     const [viewFilter, setViewFilter] = useState("");
     const [getPastRequiredAction, { isLoading, isFetching }] =
         useLazyGetPastRequiredActionQuery();
+
+    // global refresh loading
+    useEffect(() => {
+        setLoading(isFetching || isLoading);
+    }, [isFetching, isLoading]);
 
     // data fetching according to dateFilter
     useEffect(() => {
@@ -51,7 +56,7 @@ const PastRequiredActions = () => {
         if (viewFilter === "all") {
             setFilterData(data);
         }
-        console.log({ viewFilter });
+        // console.log({ viewFilter });
     }, [viewFilter, data]);
 
     // slicing data according to paginate
@@ -61,8 +66,8 @@ const PastRequiredActions = () => {
             const startIndex = (currentPage - 1) * perPageItem;
             const endIndex = currentPage * perPageItem;
             setSlicedData(filterData.slice(startIndex, endIndex));
-        }else{
-            setTotalItem(prev=>prev);
+        } else {
+            setTotalItem((prev) => prev);
             setSlicedData([]);
         }
     }, [currentPage, perPageItem, filterData]);

@@ -31,7 +31,7 @@ const TaskAction = ({ task, status }) => {
     const {  data: checkMarkAsCompleteEnableStatus, isLoading: isLoadingCompleteCheck } = useDeveloperCanCompleteTaskQuery(task?.id, {skip: !task.id});
     const ENABLE_MARKASCOMPLETE_BUTTON = task && (task?.isSubtask ? checkMarkAsCompleteEnableStatus?.message === "Developer can complete this task" : true);
 
-    console.log({task});
+    // console.log({task});
 
 
     const onModalEditButtonClick = (e) => {

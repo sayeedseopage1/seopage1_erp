@@ -11,7 +11,7 @@ import { useRefresh } from "../Index";
 
 const LiveRequiredAction = () => {
     const { currentPage, perPageItem, setTotalItem } = usePagination();
-    const { refresh } = useRefresh();
+    const { refresh, setLoading } = useRefresh();
     const [data, setData] = useState([]);
     const [filterData, setFilterData] = useState([]);
     const [slicedData, setSlicedData] = useState([]);
@@ -20,6 +20,11 @@ const LiveRequiredAction = () => {
     const [viewFilter, setViewFilter] = useState("");
     const [getLiveRequiredAction, { isLoading, isFetching }] =
         useLazyGetLiveRequiredActionQuery();
+
+    // global refresh loading
+    useEffect(() => {
+        setLoading(isFetching || isLoading);
+    }, [isFetching, isLoading]);
 
     // data fetching according to filter
     useEffect(() => {
@@ -51,7 +56,7 @@ const LiveRequiredAction = () => {
         if (viewFilter === "all") {
             setFilterData(data);
         }
-        console.log({ viewFilter });
+        // console.log({ viewFilter });
     }, [viewFilter, data]);
 
     // slicing data according to paginate

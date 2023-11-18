@@ -116,10 +116,10 @@ const Selection = ({
     // remove
     const handleRemove = (option) => {
         let arr = [...value];
-        console.log("clicked");
+        // console.log("clicked");
         // find index
         const index = arr.indexOf(option);
-        console.log(index);
+        // console.log(index);
         if (index > -1) {
             arr.splice(index, 1);
         }

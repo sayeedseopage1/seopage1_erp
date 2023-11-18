@@ -10,7 +10,6 @@ import Modal from "../Modal";
 import Card from "../../../global/Card";
 import Avatar from "../../../global/Avatar";
 import { User } from "../../../utils/user-details";
-import useIndependentTaskContext from "../../../hooks/useIndependentTaskContext";
 import { CompareDate } from "../../../utils/dateController";
 import DatePickerComponent from "./DatePicker";
 import { useEffect } from "react";
@@ -22,6 +21,7 @@ import {
 } from "../../../services/api/independentTaskApiSlice";
 import Swal from "sweetalert2";
 import Loader from "../Loader";
+import { useRefresh } from "../../index";
 
 const day = new CompareDate();
 
@@ -41,7 +41,7 @@ const clientRadio = [
 ];
 
 const TaskAuthorizationForm = ({ data, table, refreshing }) => {
-    const { setRefresh } = useIndependentTaskContext();
+    const { refresh, handleRefresh } = useRefresh();
 
     const [startDate, setStartDate] = useState(new Date(data?.start_date));
     const [showless, setShowless] = useState(true);
@@ -90,15 +90,33 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
     const handleSubmission = async (e, status) => {
         if (status) {
             if (!client) {
-                toast.warning("Client is required");
+                // toast.warning("Client is required");
+                Swal.fire({
+                    icon:"warning",
+                    title:"Client is required",
+                    timer:'2000',
+                    timerProgressBar:true,
+                })
                 return;
             } else if (!comment) {
-                toast.warning("Comment is required");
+                // toast.warning("Comment is required");
+                Swal.fire({
+                    icon:"warning",
+                    title:"Comment is required",
+                    timer:'2000',
+                    timerProgressBar:true,
+                })
                 return;
             }
         } else {
             if (!comment) {
-                toast.warning("Comment is required");
+                // toast.warning("Comment is required");
+                Swal.fire({
+                    icon:"warning",
+                    title:"Comment is required",
+                    timer:'2000',
+                    timerProgressBar:true,
+                })
                 return;
             }
         }
@@ -121,13 +139,13 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
         } else {
             _data.client = client;
         }
-        console.log(_data);
+        // console.log(_data);
 
         // if (comment) {
         await putIndependentAuthorizeTask(_data)
             .unwrap()
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if (status) {
                     Swal.fire({
                         position: "center",
@@ -147,7 +165,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                 }
                 close();
                 refreshing();
-                setRefresh();
+                handleRefresh();
             });
         // } else {
         // Swal.fire({
@@ -164,8 +182,8 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
     const notAnswered = _.filter(conversationData?.data, (c) => !c.replied_by);
     const auth = _.includes([1, 8], user.getRoleId());
 
-    console.log(data.heading);
-    console.log({ data, table });
+    // console.log(data.heading);
+    // console.log({ data, table });
 
     return (
         <div>
@@ -463,6 +481,11 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                             className={styles.task_info__label}
                                         >
                                             Client Name{" "}
+                                            {!hasQuestion && (
+                                                <span className="text-danger">
+                                                    *
+                                                </span>
+                                            )}
                                         </div>
 
                                         {!data?.approval_status && auth ? (
@@ -639,7 +662,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                             isConversationLoading || isFetching
                                         }
                                         refresh={() => {
-                                            setRefresh();
+                                            handleRefresh();
                                             refreshing();
                                             refetch();
                                         }}
@@ -715,7 +738,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                                 <QuestionAnswer
                                                     data={data}
                                                     refresh={() => {
-                                                        setRefresh();
+                                                        handleRefresh();
                                                         refreshing();
                                                         refetch();
                                                     }}

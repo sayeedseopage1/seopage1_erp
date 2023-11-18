@@ -14,7 +14,7 @@ const TimeExtension = ({task}) => {
   // on submit a form
   const handleSubmittion = (e, data) => {
     e.preventDefault();
-    console.log(data)
+    // console.log(data)
   }
 
   const open = (type) =>{

@@ -162,7 +162,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
         if(validate()){
             onSubmit(data);
         }else{
-            console.log('Your forgot to fill up some required fields')
+            // console.log('Your forgot to fill up some required fields')
         }
     }
 

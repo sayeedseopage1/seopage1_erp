@@ -3,7 +3,7 @@ import { MdPendingActions } from "react-icons/md";
 import style from "../../../../styles/required-action-card.module.css";
 
 export default function RequiredActionsCard__Past({ data }) {
-    console.log('active page rendered');
+    // console.log('active page rendered');
     return (
         <div className={style.card_container}>
             {/* card details */}

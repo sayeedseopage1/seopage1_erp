@@ -11,7 +11,7 @@ import RequiredActionCard_Loader from "../RequiredActionCards/RequiredActionCard
 
 const ExpireRequiredAction = () => {
     const { currentPage, perPageItem, setTotalItem } = usePagination();
-    const { refresh } = useRefresh();
+    const { refresh, setLoading } = useRefresh();
     const [data, setData] = useState([]);
     const [filterData, setFilterData] = useState([]);
     const [slicedData, setSlicedData] = useState([]);
@@ -20,6 +20,11 @@ const ExpireRequiredAction = () => {
     const [viewFilter, setViewFilter] = useState("");
     const [getExpiredRequiredAction, { isLoading, isFetching }] =
         useLazyGetExpiredRequiredActionQuery();
+
+    // global refresh loading
+    useEffect(() => {
+        setLoading(isFetching || isLoading);
+    }, [isFetching, isLoading]);
 
     // data fetching according to filter
     useEffect(() => {
@@ -51,7 +56,7 @@ const ExpireRequiredAction = () => {
         if (viewFilter === "all") {
             setFilterData(data);
         }
-        console.log({ viewFilter });
+        // console.log({ viewFilter });
     }, [viewFilter, data]);
 
     // slicing data according to paginate
