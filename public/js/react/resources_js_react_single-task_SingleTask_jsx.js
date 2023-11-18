@@ -966,23 +966,26 @@ var SingleTaskPage = function SingleTaskPage() {
                           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
                             className: "d-block",
                             children: (_task$pageType = task === null || task === void 0 ? void 0 : task.pageType) !== null && _task$pageType !== void 0 ? _task$pageType : "--"
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
-                                className: "badge badge-warning",
-                                children: " Primary page request denied "
-                              })
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Panel, {
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                                className: "single_task_revision_popover_panel",
-                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                                  className: "sp1_ck_content",
-                                  dangerouslySetInnerHTML: {
-                                    __html: task === null || task === void 0 ? void 0 : task.taskTypeDetails.comment
-                                  }
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"].Case, {
+                            condition: !(task !== null && task !== void 0 && task.taskTypeDetails.comment),
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
+                                  className: "badge badge-warning",
+                                  children: " Primary page request denied "
                                 })
-                              })
-                            })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Panel, {
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                                  className: "single_task_revision_popover_panel",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                                    className: "sp1_ck_content",
+                                    dangerouslySetInnerHTML: {
+                                      __html: task === null || task === void 0 ? void 0 : task.taskTypeDetails.comment
+                                    }
+                                  })
+                                })
+                              })]
+                            })
                           })]
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
@@ -1020,23 +1023,26 @@ var SingleTaskPage = function SingleTaskPage() {
                           className: "sp1_st-list-item-value",
                           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
                             children: (_task$taskTypeDetails = task === null || task === void 0 || (_task$taskTypeDetails2 = task.taskTypeDetails) === null || _task$taskTypeDetails2 === void 0 ? void 0 : _task$taskTypeDetails2.taskTypeName) !== null && _task$taskTypeDetails !== void 0 ? _task$taskTypeDetails : "--"
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
-                                className: "badge badge-warning",
-                                children: " Primary page request denied "
-                              })
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Panel, {
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                                className: "single_task_revision_popover_panel",
-                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                                  className: "sp1_ck_content",
-                                  dangerouslySetInnerHTML: {
-                                    __html: task === null || task === void 0 ? void 0 : task.taskTypeDetails.comment
-                                  }
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"].Case, {
+                            condition: !(task !== null && task !== void 0 && task.taskTypeDetails.comment),
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
+                                  className: "badge badge-warning",
+                                  children: " Primary page request denied "
                                 })
-                              })
-                            })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Panel, {
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                                  className: "single_task_revision_popover_panel",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                                    className: "sp1_ck_content",
+                                    dangerouslySetInnerHTML: {
+                                      __html: task === null || task === void 0 ? void 0 : task.taskTypeDetails.comment
+                                    }
+                                  })
+                                })
+                              })]
+                            })
                           })]
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {

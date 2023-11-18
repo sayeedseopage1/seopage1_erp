@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import "./data-table.css";
+import React, { useEffect, useState } from "react";
+import { useLocalStorage } from "react-use";
+import TableDragAbleHeader from "./DragHeader";
 import TableFooter from "./TableFooter";
 import TaskWiseTimeLogTableLoader from "./TaskWiseTableLoader";
-import TableDragAbleHeader from "./DragHeader";
-import { useLocalStorage } from "react-use";
+import "./data-table.css";
 
 const DataTable = ({
     data,
@@ -41,36 +41,34 @@ const DataTable = ({
         const rows = [];
         if (data) {
             for (const [key, value] of data) {
-                {
-                    value?.map((item, index) => {
-                        const className =
-                            value.length === index + 1
-                                ? "sp1_tlr_td f-14 sp1_tlr_td_border"
-                                : "sp1_tlr_td f-14"; 
-                        rows.push(
-                            <React.Fragment key={item.start_time}>
-                                <tr className="sp1_tlr_tr">
-                                    {
-                                        _.map(_columns, col =>{
-                                            if(col.group){
-                                                return index === 0 && (
-                                                    <React.Fragment key={col.id}>
-                                                        {col.cell({row: item, rowSpan: _.size(value)})}
-                                                    </React.Fragment>
-                                                );
-                                            }else{
-                                                    return <React.Fragment key={col.id}>
-                                                        { col.cell({ row: item, className: `${className} sp1_drag_col_${col?.id}`})}
-                                                    </React.Fragment>
-                                                }
+                value?.map((item, index) => {
+                    const className =
+                        value.length === index + 1
+                            ? "sp1_tlr_td f-14 sp1_tlr_td_border"
+                            : "sp1_tlr_td f-14";
+                    rows.push(
+                        <React.Fragment key={item.uuid}>
+                            <tr className="sp1_tlr_tr">
+                                {
+                                    _.map(_columns, col =>{
+                                        if(col.group){
+                                            return index === 0 && (
+                                                <React.Fragment key={col.id}>
+                                                    {col.cell({row: item, rowSpan: _.size(value)})}
+                                                </React.Fragment>
+                                            );
+                                        }else{
+                                                return <React.Fragment key={col.id}>
+                                                    { col.cell({ row: item, className: `${className} sp1_drag_col_${col?.id}`})}
+                                                </React.Fragment>
                                             }
-                                        )
-                                    }
-                                </tr>
-                            </React.Fragment>
-                        );
-                    });
-                }
+                                        }
+                                    )
+                                }
+                            </tr>
+                        </React.Fragment>
+                    );
+                });
             }
         }
         return rows;
@@ -98,7 +96,7 @@ const DataTable = ({
                                             order={columnOrder}
                                             tableName={tableName}
                                             storeOnLocalStore={(columns) => setValue({...value, columnOrders: columns})}
-                                        /> 
+                                        />
                                     );
                                 })}
                             </tr>
