@@ -1,9 +1,12 @@
-import dayjs from "dayjs";
 import _ from "lodash";
 import * as React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
+import FileUploader from "../file-upload/FileUploader";
+import Popover from "../global/Popover";
+import Switch from "../global/Switch";
 import Toaster from "../global/Toaster";
 import {
     useGetTaskDetailsQuery,
@@ -23,15 +26,12 @@ import DailySubmissionSection from "./section/daily-submission/DailySubmissionSe
 import HistorySection from "./section/history/HistorySection";
 import NoteSection from "./section/notes/NoteSection";
 import RevisionSection from "./section/revisions/RevisionSection";
+import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
 import SubTaskSection from "./section/sub-task/SubTaskSection";
+import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubmittedWork from "./section/submitted-work/SubmittedWork";
 import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
-import TaskEditForm from "./section/sub-task/TaskEditForm";
-import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
-import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
-import FileUploader from "../file-upload/FileUploader";
-import Switch from "../global/Switch";
 
 const SingleTaskPage = () => {
     const { task: Task } = useSelector((s) => s.subTask);
@@ -47,7 +47,7 @@ const SingleTaskPage = () => {
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
 
-  
+
 
     useEffect(() => {
         (() => {
@@ -82,7 +82,7 @@ const SingleTaskPage = () => {
 
     if (!task) return null;
 
-   
+
 
     return (
         <div className="position-relative">
@@ -399,7 +399,7 @@ const SingleTaskPage = () => {
                                                 </div>
 
 
-                                                
+
                                                 <Switch>
                                                     <Switch.Case condition={ task?.taskTypeDetails.taskType === 'New Page Design'}>
                                                         <div className="sp1_st-list-item">
@@ -407,7 +407,22 @@ const SingleTaskPage = () => {
                                                                 Page Type:{" "}
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                {task?.pageType ?? "--"}
+                                                                <span className="d-block">{task?.pageType ?? "--"}</span>
+                                                                <Switch.Case condition={!task?.taskTypeDetails.comment}>
+                                                                    <Popover>
+                                                                        <Popover.Button>
+                                                                            <span className="badge badge-warning"> Primary page request denied </span>
+                                                                        </Popover.Button>
+                                                                        <Popover.Panel >
+                                                                            <div className="single_task_revision_popover_panel">
+                                                                                <div
+                                                                                    className="sp1_ck_content"
+                                                                                    dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
+                                                                                />
+                                                                            </div>
+                                                                        </Popover.Panel>
+                                                                    </Popover>
+                                                                </Switch.Case>
                                                             </div>
                                                         </div>
 
@@ -433,7 +448,7 @@ const SingleTaskPage = () => {
                                                                     <span>--</span>
                                                                 )}
                                                             </div>
-                                                        </div> 
+                                                        </div>
                                                     </Switch.Case>
 
 
@@ -443,7 +458,22 @@ const SingleTaskPage = () => {
                                                                 Page Type:{" "}
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                {task?.taskTypeDetails?.taskTypeName ?? "--"}
+                                                                <span>{task?.taskTypeDetails?.taskTypeName ?? "--"}</span>
+                                                                <Switch.Case condition={!task?.taskTypeDetails.comment}>
+                                                                    <Popover>
+                                                                        <Popover.Button>
+                                                                            <span className="badge badge-warning"> Primary page request denied </span>
+                                                                        </Popover.Button>
+                                                                        <Popover.Panel >
+                                                                            <div className="single_task_revision_popover_panel">
+                                                                                <div
+                                                                                    className="sp1_ck_content"
+                                                                                    dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
+                                                                                />
+                                                                            </div>
+                                                                        </Popover.Panel>
+                                                                    </Popover>
+                                                                </Switch.Case>
                                                             </div>
                                                         </div>
 
@@ -468,32 +498,32 @@ const SingleTaskPage = () => {
                                                                     "--"
                                                                 }
                                                             </div>
-                                                        </div> 
+                                                        </div>
                                                     </Switch.Case>
 
 
                                                     <Switch.Case condition={task?.taskTypeDetails?.taskType === 'Others'}>
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
-                                                               Other Task Type:  
+                                                               Other Task Type:
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 --
                                                             </div>
-                                                        </div>  
+                                                        </div>
 
-                                                        
+
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
-                                                                Page Name: 
+                                                                Page Name:
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 {task?.taskTypeDetails?.pageName ?? '--'}
                                                             </div>
-                                                        </div>  
+                                                        </div>
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
-                                                                Page URL: 
+                                                                Page URL:
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 {task?.taskTypeDetails?.pageUrl ?
@@ -503,7 +533,7 @@ const SingleTaskPage = () => {
                                                                     "--"
                                                                 }
                                                             </div>
-                                                        </div>  
+                                                        </div>
                                                     </Switch.Case>
 
                                                 </Switch>

@@ -14,6 +14,7 @@ import {
 import { DragableColumnHeader } from './DragableColumnHeader';
 import EmptyTable from '../../../global/EmptyTable';
 import TablePagination from '../../../global/table/TablePagination';
+import { Placeholder } from '../../../global/Placeholder';
 
 const DataTable = ({
     tableData,
@@ -136,7 +137,15 @@ const DataTable = ({
                         </tr>
                     ))}
 
-                    {isLoading && loader}
+                    {isLoading && _.fill(Array(8),'*').map((row,i) => (
+                        <tr key={i} className={`sp1-data-table-tr ${classes?.tr ?? ''}`}>
+                            {_.fill(Array(8),'*').map((cell,j) => (
+                                <td key={j} className={`sp1-data-table-td ${classes?.td ?? ''} sp1_data_table_td--${i}`}>
+                                    <Placeholder />
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
                 </tbody>
             </table>
 

@@ -25,7 +25,7 @@ const TaskChecker = ()=>{
       fetch(`/account/check-independent-task/${taskId}`)
           .then(res=> res.json())
           .then(({is_independent})=> {
-            console.log({is_independent});
+            // console.log({is_independent});
             setTaskStatus(is_independent);
         })
     },[taskId])

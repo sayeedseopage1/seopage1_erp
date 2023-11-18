@@ -25,9 +25,15 @@ const QuestionAnswer = ({ data, refresh }) => {
     const handleSubmission = async (e) => {
         e.preventDefault();
 
-        console.log({question, data});
+        // console.log({question, data});
         if (!question) {
-            toast.warning("Please enter your question.");
+            // toast.warning("Please enter your question.");
+            Swal.fire({
+                icon:"warning",
+                title:"Please enter your question.",
+                timer:'2000',
+                timerProgressBar:true,
+            })
             return ;
         }
         

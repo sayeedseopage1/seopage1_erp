@@ -7,8 +7,7 @@ import { Placeholder } from "../../../global/Placeholder";
 
 const compareDate = new CompareDate();
 
-export const authorizationColumns = (loading, refreshing) => {
-    // console.log({loading});
+export const authorizationColumns = (refreshing) => {
     return [
         {
             id: "u_id",
@@ -17,29 +16,23 @@ export const authorizationColumns = (loading, refreshing) => {
             cell: ({ row }) => {
                 const data = row?.original;
                 return (
-                    <>
-                        {loading ? (
-                            <Placeholder />
-                        ) : (
-                            <abbr
-                                title={data?.heading}
-                                style={{ textDecoration: "none" }}
+                    <abbr
+                        title={data?.heading}
+                        style={{ textDecoration: "none" }}
+                    >
+                        <div
+                            className="d-flex align-items-center"
+                            style={{ gap: "10px" }}
+                        >
+                            <a
+                                href={`/account/tasks/${data?.u_id}`}
+                                className="hover-underline multine-ellipsis"
                             >
-                                <div
-                                    className="d-flex align-items-center"
-                                    style={{ gap: "10px" }}
-                                >
-                                    <a
-                                        href={`/account/tasks/${data?.u_id}`}
-                                        className="hover-underline multine-ellipsis"
-                                    >
-                                        {" "}
-                                        {data?.u_id}{" "}
-                                    </a>
-                                </div>
-                            </abbr>
-                        )}
-                    </>
+                                {" "}
+                                {data?.u_id}{" "}
+                            </a>
+                        </div>
+                    </abbr>
                 );
             },
         },
@@ -51,29 +44,23 @@ export const authorizationColumns = (loading, refreshing) => {
             cell: ({ row }) => {
                 const data = row?.original;
                 return (
-                    <>
-                        {loading ? (
-                            <Placeholder />
-                        ) : (
-                            <abbr
-                                title={data?.heading}
-                                style={{ textDecoration: "none" }}
+                    <abbr
+                        title={data?.heading}
+                        style={{ textDecoration: "none" }}
+                    >
+                        <div
+                            className="d-flex align-items-center"
+                            style={{ gap: "10px" }}
+                        >
+                            <a
+                                href={`/account/tasks/${data?.id}`}
+                                className="hover-underline multine-ellipsis"
                             >
-                                <div
-                                    className="d-flex align-items-center"
-                                    style={{ gap: "10px" }}
-                                >
-                                    <a
-                                        href={`/account/tasks/${data?.id}`}
-                                        className="hover-underline multine-ellipsis"
-                                    >
-                                        {" "}
-                                        {data?.heading}{" "}
-                                    </a>
-                                </div>
-                            </abbr>
-                        )}
-                    </>
+                                {" "}
+                                {data?.heading}{" "}
+                            </a>
+                        </div>
+                    </abbr>
                 );
             },
         },
@@ -84,11 +71,7 @@ export const authorizationColumns = (loading, refreshing) => {
             accessorKey: "creation_date",
             cell: ({ row }) => {
                 const data = row?.original;
-                return loading ? (
-                    <Placeholder />
-                ) : (
-                    <span>{data?.creation_date}</span>
-                );
+                return <span>{data?.creation_date}</span>;
             },
         },
 
@@ -101,9 +84,7 @@ export const authorizationColumns = (loading, refreshing) => {
                     : "--",
             cell: ({ row }) => {
                 const data = row?.original;
-                return loading ? (
-                    <Placeholder />
-                ) : (
+                return (
                     <strong>
                         {data?.start_date ? (
                             <>
@@ -142,9 +123,7 @@ export const authorizationColumns = (loading, refreshing) => {
 
                 date =
                     date === "Today" ? date : dayjs(date).format("DD-MM-YYYY");
-                return loading ? (
-                    <Placeholder />
-                ) : (
+                return (
                     <span style={{ color: color }}>
                         <strong>{date ?? "--"}</strong>
                     </span>
@@ -160,9 +139,7 @@ export const authorizationColumns = (loading, refreshing) => {
             cell: ({ row }) => {
                 const data = row?.original;
 
-                return loading ? (
-                    <Placeholder />
-                ) : (
+                return (
                     <Person
                         url={`/account/employees/${data?.assign_by_id}`}
                         avatar={data?.assign_by_avator}
@@ -180,9 +157,7 @@ export const authorizationColumns = (loading, refreshing) => {
             cell: ({ row }) => {
                 const data = row?.original;
                 // console.log(data);
-                return loading ? (
-                    <Placeholder />
-                ) : (
+                return (
                     <Person
                         url={`/account/employees/${data?.assign_to_id}`}
                         avatar={data?.assign_to_avator}
@@ -198,10 +173,12 @@ export const authorizationColumns = (loading, refreshing) => {
             draggable: true,
 
             cell: ({ row, table }) => {
-                return loading ? (
-                    <Placeholder />
-                ) : (
-                    <TaskAuthorizationForm data={row.original} table={table} refreshing={refreshing} />
+                return (
+                    <TaskAuthorizationForm
+                        data={row.original}
+                        table={table}
+                        refreshing={refreshing}
+                    />
                 );
             },
         },

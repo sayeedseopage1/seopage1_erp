@@ -114,7 +114,7 @@ class RevisionCalculatorController extends AccountBaseController
                 $total_disputes= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
                 ->where('task_revisions.dispute_created',1)
-                ->where('task_revision_disputes.status',0)
+                ->where('task_revisions.dispute_status',1)
               
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
@@ -585,7 +585,7 @@ public function LeadDevIssue(Request $request, $id)
         })
         // ->orWhere('task_revisions.dispute_between','PLR')
         // ->orWhere('task_revisions.dispute_between','LDR')
-        ->where('task_revisions.dispute_between','LDR')
+        //->where('task_revisions.dispute_between','LDR')
         // ->orWhereNotNull('task_revisions.raised_by_percent')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])

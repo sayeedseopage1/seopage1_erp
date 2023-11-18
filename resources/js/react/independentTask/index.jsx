@@ -9,7 +9,7 @@ import { Provider } from "react-redux";
 import { store } from "../services/store";
 import Loading from "./components/Loading";
 import Tasks from "./pages/Tasks";
-import { useMouse } from "react-use";
+import { useLocalStorage, useMouse } from "react-use";
 // const SingleTask = React.lazy(() => import('../single-task/SingleTask'));
 // const Subtasks = React.lazy(() => import("./pages/Subtasks"));
 
@@ -23,6 +23,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { User } from "../utils/user-details";
 import _ from "lodash";
+import { useCallback } from "react";
 
 // custom drag layer
 const DragLayer = () => {
@@ -89,9 +90,10 @@ const SubtasksContainer = () => {
 
 
 
-export const RefreshContext = createContext({refresh:true,setRefresh:()=>true});
+export const RefreshContext = createContext({});
 export function useRefresh(){
-    return useContext(RefreshContext);
+    const { refresh, handleRefresh } = useContext(RefreshContext);
+    return { refresh, handleRefresh };
 }
 
 const IndependentTask = () => {
@@ -100,7 +102,7 @@ const IndependentTask = () => {
     const [tableData, setTableData] = useState([]);
     // console.log(data);
     // const { data: tasks } = useGetIndependentTaskQuery();
-    const [getIndependentTask, { isFetching, isLoading }] = useLazyGetIndependentTaskQuery();
+    const [getIndependentTask, { isFetching, isLoading, }] = useLazyGetIndependentTaskQuery();
 
     // user and auth
     const user = new User(window.Laravel.user);
@@ -118,7 +120,6 @@ const IndependentTask = () => {
     // fetching data against dependencies
     useEffect(() => {
         if (filter) {
-            // console.log({filter});
             getIndependentTask(filter)
                 .unwrap()
                 .then(({ data, status }) => {
@@ -129,7 +130,6 @@ const IndependentTask = () => {
                         }else{
                             setTableData(filteredData(data))
                         }
-
                     } else {
                         setTableData([]);
                     }
@@ -145,7 +145,9 @@ const IndependentTask = () => {
     const onFilter = (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
-        setFilter(queryString);
+        if (queryString) {
+            setFilter(queryString);
+        }
     }
 
     //   return (
@@ -154,12 +156,13 @@ const IndependentTask = () => {
     //         <Tasks tableData={tableData} isLoading={isLoading || isFetching} onFilter={onFilter} filter={filter} />
     //     </RefreshContext.Provider>
     //   );
-    const handleRefresh = ()=>{
-        setRefresh(prev=>!prev);
-    }
+
+    const handleRefresh = useCallback(()=>{
+      setRefresh(prev=>!prev);
+    },[setRefresh]) ;
 
     return (
-        <RefreshContext.Provider value={{ refresh, setRefresh:handleRefresh }}>
+        <RefreshContext.Provider value={{ refresh:isLoading||isFetching, handleRefresh }}>
             <BrowserRouter basename="/account/independent-task">
                 <Routes>
                     <Route path="/" element={<Container />}>

@@ -34,7 +34,7 @@ const ReportButton = ({row}) => {
     .unwrap()
     .then(res => {
         if(res.status === 200){
-            console.log(res.tasks)
+            // console.log(res.tasks)
             dispatch(storeReport( {reports: [...res?.tasks]}))
         }
     })

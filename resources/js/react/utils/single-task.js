@@ -258,6 +258,8 @@ export class SingleTask {
             taskTypeName: task?.page_type_name,
             existingDesignLink: task?.existing_design_link,
             numberOfPages: task?.number_of_pages,
+            status: task?.primary_page_authorization_status,
+            comment: task?.primary_page_authorization_comment
         });
 
         this.subtaskId = task?.subtask_id;

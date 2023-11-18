@@ -61,7 +61,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         e.preventDefault();
         if (submittedWork.length === 0) {
             const data = await getSubmittionInfo(taskID);
-            console.log({ data });
+            // console.log({ data });
             setSubmittedWork([...data]);
         }
     };

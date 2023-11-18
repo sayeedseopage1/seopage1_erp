@@ -34,13 +34,13 @@ const ClientRevisionForm = ({
        let errorCount = 0;
        
        if(comment === ""){
-        console.log("open")
+        // console.log("open")
             errorCount++;
             setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')     
        }
 
        if(reason === ''){
-        console.log('first')
+        // console.log('first')
             errorCount++;
             setReasonError('You have to select a reason from below options')
        }
@@ -61,7 +61,7 @@ const ClientRevisionForm = ({
         if(validate()){
            onSubmitForm(data);
         }else{
-            console.log('Your forgot to fillup some requried fields')
+            // console.log('Your forgot to fillup some requried fields')
         } 
     }
 

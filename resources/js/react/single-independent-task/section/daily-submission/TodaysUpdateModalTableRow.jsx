@@ -72,7 +72,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading, 
         submitDailySubmission(formData)
             .unwrap()
             .then(res => {
-                console.log(res);
+                // console.log(res);
                 if (res.mark_as_complete==="true" || res.mark_as_complete===true) {
                     navigate(`${location.pathname}?modal=complete-task`);
                 }

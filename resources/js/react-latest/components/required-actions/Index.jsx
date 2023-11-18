@@ -5,6 +5,7 @@ import ActiveRequiredActions from "./ActiveRequiredActions";
 import PastRequiredActions from "./PastRequiredActions";
 import Pagination, { PaginationContext } from "./Pagination";
 import { ToastContainer } from "react-toastify";
+import Button from "../../ui/Button";
 
 const RefreshContext = createContext({
     refresh: false,
@@ -12,7 +13,7 @@ const RefreshContext = createContext({
 });
 export function useRefresh() {
     const { refresh, setRefresh } = useContext(RefreshContext);
-    return { refresh, setRefresh:()=>setRefresh(prev=>!prev) };
+    return { refresh, setRefresh: () => setRefresh((prev) => !prev) };
 }
 
 export default function Index() {
@@ -24,8 +25,12 @@ export default function Index() {
 
     const [action, setAction] = useState("active");
 
+    const handleRefresh = () => {
+        setRefresh((prev) => !prev);
+    };
+
     return (
-        <RefreshContext.Provider value={{refresh,setRefresh}}>
+        <RefreshContext.Provider value={{ refresh, setRefresh }}>
             <PaginationContext.Provider
                 value={{
                     currentPage,
@@ -36,34 +41,53 @@ export default function Index() {
                     setPerPageItem,
                 }}
             >
-                <div
-                    className="sp1_tlr_tbl_container"
-                >
+                <div className="sp1_tlr_tbl_container">
                     {/* heading */}
                     {/* <h1 className={style.heading}>Required Actions</h1> */}
 
                     {/* actions => active , past */}
-                    <section className={style.action_container}>
+                    <section className={style.container}>
+                        <div className={style.action_container}>
+                            <button
+                                onClick={() => setAction("active")}
+                                className={`${style.btn} ${
+                                    action === "active"
+                                        ? style.btn_active
+                                        : style.btn_inactive
+                                }`}
+                            >
+                                Active
+                            </button>
+                            <button
+                                onClick={() => setAction("past")}
+                                className={`${style.btn} ${
+                                    action === "past"
+                                        ? style.btn_active
+                                        : style.btn_inactive
+                                }`}
+                            >
+                                Past
+                            </button>
+                        </div>
+
                         <button
-                            onClick={() => setAction("active")}
-                            className={`${style.btn} ${
-                                action === "active"
-                                    ? style.btn_active
-                                    : style.btn_inactive
-                            }`}
+                            onClick={() => handleRefresh()}
+                            className={`${style.btn} ${style.btn_active}`}
+                            style={{
+                                fontWeight: "bold",
+                                letterSpacing: "1px",
+                                // textTransform: "uppercase",
+                            }}
                         >
-                            Active
+                            Refresh
                         </button>
-                        <button
-                            onClick={() => setAction("past")}
-                            className={`${style.btn} ${
-                                action === "past"
-                                    ? style.btn_active
-                                    : style.btn_inactive
-                            }`}
+                        {/* <Button 
+                            onClick={() => handleRefresh()}
+                            size="md"
+                            variant="primary"
                         >
-                            Past
-                        </button>
+                            Refresh
+                        </Button> */}
                     </section>
 
                     <div className={style.outlet_container}>
