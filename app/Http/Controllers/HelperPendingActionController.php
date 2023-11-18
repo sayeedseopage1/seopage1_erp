@@ -802,7 +802,7 @@ class HelperPendingActionController extends AccountBaseController
                         ], 
                         [
                             'type'=> 'textarea',
-                            'label'=> '',
+                            'label'=> 'Write reson',
                            
                             'readonly'=> false,
                             
