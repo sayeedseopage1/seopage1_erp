@@ -537,12 +537,10 @@
 .sp1_ck_content {
   word-wrap: break-word !important;
 }
-.sp1_ck_content ul {
-  margin-left: 40px !important;
-  list-style: unset !important;
-}
 .sp1_ck_content ul, .sp1_ck_content ol {
   margin-bottom: 10px;
+  margin-left: 40px !important;
+  list-style: unset !important;
 }
 .sp1_ck_content li {
   list-style: unset !important;

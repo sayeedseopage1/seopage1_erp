@@ -1458,6 +1458,18 @@
   margin-left: auto;
 }
 
+.single_task_revision_popover_panel {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 13px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+  /* width: clamp(255px, 100%, 350px); */
+  max-width: 600px;
+  max-height: 450px;
+  overflow-y: auto;
+}
+
 .text-hover-underline:hover {
   text-decoration: underline;
 }

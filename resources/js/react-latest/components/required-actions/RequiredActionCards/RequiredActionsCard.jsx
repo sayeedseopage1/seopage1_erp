@@ -32,7 +32,7 @@ export default function RequiredActionsCard({ data, status }) {
                     return <RequiredActionsCard_Admin_Past data={data} />;
                 }
 
-            case 8: // team lead
+            case 8: // team lead / sales lead
                 if (status === "live") {
                     return <RequiredActionsCard_TeamLead_Live data={data} />;
                 } else if (status === "expire") {
@@ -40,8 +40,6 @@ export default function RequiredActionsCard({ data, status }) {
                 } else {
                     return <RequiredActionsCard_TeamLead_Past data={data} />;
                 }
-
-            //   case 8: // sales lead
 
             case 4: // project manager
                 if (status === "live") {
