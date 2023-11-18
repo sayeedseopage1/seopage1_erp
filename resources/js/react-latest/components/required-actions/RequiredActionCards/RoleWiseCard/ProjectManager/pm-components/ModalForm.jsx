@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 
 // modal form
 export default function ModalForm({ setIsOpen, form_data }) {
-    const { setRefresh } = useRefresh();
+    const { handleRefresh } = useRefresh();
     const [loading, setLoading] = useState(false);
     const { data, isFetching, isLoading } = useGetFormDataQuery(
         form_data.button_url
@@ -59,7 +59,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
         } catch (err) {
             toast.error("Not submitted");
         } finally {
-            setRefresh();
+            handleRefresh();
             setIsOpen(false);
             setLoading(false);
         }
