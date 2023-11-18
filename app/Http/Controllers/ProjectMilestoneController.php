@@ -68,7 +68,7 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
-    //    / dd($request);
+       dd($request->all());
         $milestone_id= ProjectMilestone::where('id',$request->id)->first();
         $milestone= ProjectMilestone::find($request->id);
         $milestone->status= "complete";
@@ -110,18 +110,18 @@ class ProjectMilestoneController extends AccountBaseController
         {
             return response()->json(['status'=>200]);
 
-        }else 
+        }else
         {
             return back()->with('success','Milestone Status Updated Successfully');
         }
 
-     
-       
+
+
 
     }
     public function createAutoMilestone(Request $request)
     {
-       // dd($request->all());
+    //    dd($request->all());
     //   / DB::beginTransaction();
         $project=Project::where('id',$request->project_id)->first();
         $deal=Deal::where('id',$project->deal_id)->first();
@@ -252,7 +252,7 @@ class ProjectMilestoneController extends AccountBaseController
             $pm_assign->save();
 
             //kpi points start here
-            
+
             $find_deal_id= Deal::where('id',$project->deal_id)->first();
             $find_project_id= Project::where('id',$project->id)->first();
             $current_date= Carbon::now()->format('Y-m-d');
@@ -285,7 +285,7 @@ class ProjectMilestoneController extends AccountBaseController
                 $point->save();
                 // dd($point);
 
-            
+
 
             $deal_qualified = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 1)->first();
 
@@ -434,8 +434,8 @@ class ProjectMilestoneController extends AccountBaseController
             }
             $point->save();
 
-           
-            
+
+
 
 
             // Delete previous duplicated entries for the user
@@ -450,7 +450,7 @@ class ProjectMilestoneController extends AccountBaseController
 
 
 
-             
+
 
 
             //kpi points end here
@@ -622,12 +622,12 @@ class ProjectMilestoneController extends AccountBaseController
     {
         $milestone = ProjectMilestone::findOrFail($id);
         $milestone_id= ProjectMilestone::where('id',$milestone->id)->first();
-       
+
         $project= Project::where('id',$milestone->project_id)->first();
         $update_project= Project::find($project->id);
         $update_project->project_budget= $project->project_budget-$milestone->cost;
         $update_project->due= $project->due- $milestone->cost;
-        
+
         $update_project->save();
         $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
         $pm_assign= PMAssign::find($pm_id->id);
@@ -654,10 +654,10 @@ class ProjectMilestoneController extends AccountBaseController
         $contract->upsell_amount= $contract->upsell_amount- $milestone->cost;
         $contract->save();
         // $user= User::where('id',$project->pm_id)->first();
-        
+
 
         //update authoziation action
-       
+
         //end authorization action
 
         ProjectMilestone::destroy($id);
@@ -784,7 +784,7 @@ class ProjectMilestoneController extends AccountBaseController
             $deal->save();
 
         }
-       
+
         $contract_id= Contract::where('deal_id',$deal->id)->first();
         $contract= Contract::find($contract_id->id);
         // $contract->actual_amount= $contract->actual_amount- $milestone->actual_cost;
@@ -798,7 +798,7 @@ class ProjectMilestoneController extends AccountBaseController
              $contract->save();
 
         }
-       
+
         $user= User::where('id',$project->pm_id)->first();
         $log_user = Auth::user();
         $activity = new ProjectActivity();
@@ -810,12 +810,12 @@ class ProjectMilestoneController extends AccountBaseController
         $activity->save();
 
         //update authoziation action
-       
+
         $actions = PendingAction::where('code','MCA')->where('past_status',0)->where('milestone_id',$milestone->id)->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-           
+
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -843,8 +843,8 @@ class ProjectMilestoneController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                 $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
-                
-           
+
+
         }
     }
 
