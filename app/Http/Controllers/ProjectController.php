@@ -5780,6 +5780,10 @@ public function updatePmBasicSEO(Request $request){
 
 
         $helper->SendDeliverabletoClient($past_action->project_id);
+        $helper = new HelperPendingActionController();
+
+
+        $helper->CreateTask($past_action->project_id);
     }
 
 
