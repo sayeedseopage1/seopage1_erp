@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
 use App\Models\ProjectDeliverable;
+use App\Models\Role;
+use App\Models\TaskRevision;
 
 class HelperPendingActionController extends AccountBaseController
 {
@@ -887,6 +889,55 @@ class HelperPendingActionController extends AccountBaseController
        //    dd(json_decode($action->button));
 
            
+
+   }
+   public function TaskApproveAction($task,$sender)
+   {
+    $sender = User::where('id',$sender->id)->first();
+    $user_role= Role::where('id',$sender->role_id)->first();
+    $project= Project::where('id',$task->project_id)->first();
+    $client= User::where('id',$project->client_id)->first();
+    $task_revision = TaskRevision::where('task_id',$task->id)->orderBy('id','desc')->first();
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizers= User::where('role_id',1)->orWhere('id',$task->added_by)->get();
+       foreach ($authorizers as $key => $authorizer) {
+        $action = new PendingAction();
+        $action->code = 'TSA';
+        $action->serial = 'TSA'.'x'.$key;
+        if($task_revision != null)
+        {
+            $action->item_name= 'Revision submitted by '.$user_role->name;
+            $action->heading= 'Revision submitted by '.$user_role->name;
+            $action->message = 'Review the revision submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+
+        }else 
+        {
+            $action->item_name= 'Task submitted by '.$user_role->name;
+            $action->heading= 'Task submitted by '.$user_role->name;
+            $action->message = 'Review the task submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+
+        }
+       
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+        $action->task_id = $task->id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Review',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('tasks.show', $task->id),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      //  dd($action);
+   //    dd(json_decode($action->button));
+
+       }
 
    }
   
