@@ -78,6 +78,7 @@
                                     <th scope="col">Title</th>
                                     <th scope="col">Milestone</th>
                                     <th scope="col">Created By</th>
+                                    <th scope="col">Created Date</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -104,6 +105,7 @@
                                                 <a href="{{ route('employees.show',$milestonCreatedBy->id) }}" class="pl-2 ">{{ $milestonCreatedBy->name }}</a>
                                             </div>
                                         </td>
+                                        <td>{{ \Carbon\Carbon::parse($dMilestone->created_at)->format('Y-m-d') }}</td>
                                     @endforeach
                                 </tr>
                                 </tbody>

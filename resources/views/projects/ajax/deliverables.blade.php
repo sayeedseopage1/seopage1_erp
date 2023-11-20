@@ -251,6 +251,7 @@
                       <th scope="col" class="text-center">Quantity</th>
                       <th scope="col" class="text-center">Description</th>
                       <th scope="col" class="text-center">Estimated completion date</th>
+                      <th scope="col" class="text-center">Created Date</th>
                       @if($signature == null)
                       <th scope="col" class="text-center">Action</th>
                       @endif
@@ -864,6 +865,7 @@
                             @endif
                             </td>
                         @endif
+                        <td class="text-center">{{ \Carbon\Carbon::parse($deliverable->created_at)->format('Y-m-d') }}</td>
                         @if($signature == null)
                         <td class="text-center">
                             @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
