@@ -477,7 +477,21 @@ const SingleIndependentTask = () => {
                                                                 "rgba(252, 189, 1, 1)",
                                                         }}
                                                     /> */}
-                                                        {task.additionalInfo.loginURL}
+
+                                                        <a
+                                                            target="__blank"
+                                                            href={
+                                                                task
+                                                                    ?.additionalInfo
+                                                                    ?.loginURL
+                                                            }
+                                                        >
+                                                            {
+                                                                task
+                                                                    ?.additionalInfo
+                                                                    ?.loginURL
+                                                            }
+                                                        </a>
                                                     </div>
                                                 </div>
                                             ) : (
@@ -498,7 +512,10 @@ const SingleIndependentTask = () => {
                                                                 "rgba(252, 189, 1, 1)",
                                                         }}
                                                     /> */}
-                                                        {task.additionalInfo.username}
+                                                        {
+                                                            task.additionalInfo
+                                                                .username
+                                                        }
                                                     </div>
                                                 </div>
                                             ) : (
@@ -519,7 +536,10 @@ const SingleIndependentTask = () => {
                                                                 "rgba(252, 189, 1, 1)",
                                                         }}
                                                     /> */}
-                                                        {task.additionalInfo.password}
+                                                        {
+                                                            task.additionalInfo
+                                                                .password
+                                                        }
                                                     </div>
                                                 </div>
                                             ) : (
@@ -540,7 +560,20 @@ const SingleIndependentTask = () => {
                                                                 "rgba(252, 189, 1, 1)",
                                                         }}
                                                     /> */}
-                                                        {task.additionalInfo.refSite}
+                                                        <a
+                                                            target="__blank"
+                                                            href={
+                                                                task
+                                                                    ?.additionalInfo
+                                                                    ?.refSite
+                                                            }
+                                                        >
+                                                            {
+                                                                task
+                                                                    ?.additionalInfo
+                                                                    ?.refSite
+                                                            }
+                                                        </a>
                                                     </div>
                                                 </div>
                                             ) : (
@@ -742,7 +775,7 @@ const SingleIndependentTask = () => {
                                                                 </div>
 
                                                                 {/* Reference Page */}
-                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                {/* <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                                     <span>
                                                                         <strong>
                                                                             Reference
@@ -763,7 +796,7 @@ const SingleIndependentTask = () => {
                                                                             tab
                                                                         </a>
                                                                     </span>
-                                                                </div>
+                                                                </div> */}
                                                             </div>
                                                         </div>
                                                     </div>
