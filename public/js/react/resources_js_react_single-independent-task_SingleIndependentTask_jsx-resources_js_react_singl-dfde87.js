@@ -14717,7 +14717,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
   // console.log({pathname});
 
   var role = auth.getRoleId();
-  var revisionOptions = role === 4 || role === 1 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
+  var revisionOptions = role === 1 || role === 4 || role === 8 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
   var _useCreateRevisionMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_4__.useCreateRevisionMutation)(),
     _useCreateRevisionMut2 = _slicedToArray(_useCreateRevisionMut, 2),
     createRevision = _useCreateRevisionMut2[0],
