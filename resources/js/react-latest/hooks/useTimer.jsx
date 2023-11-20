@@ -23,9 +23,7 @@ export default function useTimer(
             return time;
           }
         } else {
-          return time
-          clearInterval(intervalRef.current);
-          return [0, 0, 0];
+          return time;
         }
       });
     }, 1000);

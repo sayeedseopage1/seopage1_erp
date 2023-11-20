@@ -26,7 +26,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     const role = auth.getRoleId();
 
     const revisionOptions =
-        (role === 4 || role === 1)
+        (role === 1 || role === 4 || role === 8)
             ? getProjectManagerAcknowladgementOptions()
             : getLeadDeveloperAcknowladgementOptions();
 
