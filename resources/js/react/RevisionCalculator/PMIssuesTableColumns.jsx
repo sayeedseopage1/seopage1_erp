@@ -15,8 +15,7 @@ export const PMIssuesTableColumns = [
                 title={row?.project_name}
                 className="multiline-ellipsis"
             >
-                {" "}
-                {row?.project_name}{" "}
+                {row?.project_name}
             </a>
         ),
     },
@@ -62,14 +61,15 @@ export const PMIssuesTableColumns = [
                 : "";
 
             return (
-                <span
+                <a
+                    href={`/account/tasks/${row?.taskId}`}
                     title={task_name}
                     className={`multiline-ellipsis ${
                         isEqual ? "highlight" : ""
                     }`}
                 >
                     {task_name}
-                </span>
+                </a>
             );
         },
     },

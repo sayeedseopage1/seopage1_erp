@@ -27,9 +27,9 @@ class RevisionCalculatorController extends AccountBaseController
      */
     public function index()
     {
-        
-       
-        
+
+
+
         return view('revision-calculator.index',$this->data);
     }
     public function getData(Request $request)
@@ -38,13 +38,13 @@ class RevisionCalculatorController extends AccountBaseController
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
        // dd($startDate, $$endDate);
-        
+
         // Check if $startDate and $endDate are not null and valid dates
         if ($startDate && $endDate) {
 
             $users= DB::table('users as pm')->select(['pm.id as project_manager_id', 'pm.name as project_manager_name'])
             ->where('pm.role_id',4)->get();
-           
+
             foreach($users as $pm)
             {
                 $total_projects = Project::where('pm_id',$pm->project_manager_id)
@@ -56,9 +56,9 @@ class RevisionCalculatorController extends AccountBaseController
                 ->where('project_status','Accepted')
                 ->sum('project_budget');
                 $total_tasks = Task::select('tasks.id')
-              
+
                 ->where('tasks.added_by',$pm->project_manager_id)
-               
+
                 ->whereBetween('tasks.created_at', [$startDate, $endDate])
                 ->count();
                // dd($total_tasks);
@@ -75,38 +75,38 @@ class RevisionCalculatorController extends AccountBaseController
                 ->sum('total_minutes');
                 $sales_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.final_responsible_person','S')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $pm_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.final_responsible_person','PM')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $client_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.final_responsible_person','C')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $lead_developer_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.final_responsible_person','LD')
                 ->where('task_revisions.dispute_between','!=','')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $developer_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.final_responsible_person','D')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $pending_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.approval_status','pending')
                 ->where('task_revisions.acknowledgement_id','!=',null)
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
@@ -115,7 +115,7 @@ class RevisionCalculatorController extends AccountBaseController
                 ->where('projects.pm_id',$pm->project_manager_id)
                 ->where('task_revisions.dispute_created',1)
                 ->where('task_revisions.dispute_status',0)
-              
+
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $total_disputes_not_solved= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
@@ -123,54 +123,54 @@ class RevisionCalculatorController extends AccountBaseController
                 ->where('projects.pm_id',$pm->project_manager_id)
                 ->where('task_revisions.dispute_created',1)
                 ->where('task_revision_disputes.status',0)
-              
+
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $developer_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','LDR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_against_percent');
                 $lead_developer_dev_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','LDR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_by_percent');
                 $lead_developer_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','PLR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_against_percent');
                 $project_manager_lead_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','PLR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_by_percent');
                 $project_manager_client_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','CPR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_against_percent');
                 $project_manager_sales_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','SPR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_by_percent');
                 $client_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','CPR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_by_percent');
                 $project_manager_sales_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-              
+
                 ->where('task_revisions.dispute_between','SPR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_against_percent');
@@ -191,22 +191,22 @@ class RevisionCalculatorController extends AccountBaseController
             $pm->total_disputes= $total_disputes;
             }
             return response()->json($users, 200);
-        
-          
-           
-           
+
+
+
+
         }
 
 
     }
 
-    
+
     public function AssignProjects(Request $request, $id)
     {
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
-       
-    if ($startDate && $endDate) { 
+
+    if ($startDate && $endDate) {
 
         $total_projects = Task::select('tasks.id','tasks.heading as task_title','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
@@ -231,22 +231,22 @@ class RevisionCalculatorController extends AccountBaseController
         ->where('projects.project_status','Accepted')
         ->get();
         return response()->json($total_projects, 200);
-       
-       
+
+
     }
 }
     public function TotalTasks(Request $request, $id)
     {
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
-        // $id= 209; 
+        // $id= 209;
         // $startDate = '2023-09-01 00:00:00';
         // $endDate = '2023-09-30 00:00:00';
-          
-        if ($startDate && $endDate) { 
 
-   
-       
+        if ($startDate && $endDate) {
+
+
+
        $total_tasks = Task::select('tasks.id','tasks.heading as task_title','projects.id as projectId',
        'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
        'p_m_projects.created_at as project_creation_date',
@@ -270,63 +270,63 @@ class RevisionCalculatorController extends AccountBaseController
        ->where('projects.project_status','Accepted')
        ->get();
        return response()->json($total_tasks, 200);
-       
+
     }
-       
+
     }
     public function TotalRevisions(Request $request, $id)
     {
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
-        //   $id= 209; 
+        //   $id= 209;
         // $startDate = '2023-09-01 00:00:00';
         // $endDate = '2023-09-20 00:00:00';
-          
-        if ($startDate && $endDate) { 
+
+        if ($startDate && $endDate) {
 
             $data['sales_issues'] = TaskRevision::select('task_revisions.id')
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id')          
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','S')
             ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['pm_issues'] = TaskRevision::select('task_revisions.id')
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id')          
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','PM')
             ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['client_issues'] = TaskRevision::select('task_revisions.id')
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id')          
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','C')
             ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['lead_developer_issues'] = TaskRevision::select('task_revisions.id')
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id')          
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','LD')
             ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['developer_issues'] = TaskRevision::select('task_revisions.id')
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id')          
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','D')
             ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['total_disputes'] = TaskRevision::select('task_revisions.id')
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id')          
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
             ->where('projects.pm_id',$id)
             ->where('task_revisions.dispute_created',1)
             ->where('task_revisions.dispute_status',0)
@@ -334,8 +334,8 @@ class RevisionCalculatorController extends AccountBaseController
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['total_disputes_not_solved'] = TaskRevision::select('task_revisions.id')
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id')          
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
             ->where('projects.pm_id',$id)
             ->where('task_revisions.dispute_created',1)
             ->where('task_revisions.dispute_status',0)
@@ -343,12 +343,12 @@ class RevisionCalculatorController extends AccountBaseController
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
        // dd($total_tasks);
-        
-       
+
+
        // dd($data);
         return response()->json($data, 200);
     }
-        
+
 
 
 
@@ -357,13 +357,13 @@ class RevisionCalculatorController extends AccountBaseController
     {
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
-        // $id= 209; 
+        // $id= 209;
         // $startDate = '2023-09-01 00:00:00';
         // $endDate = '2023-09-20 00:00:00';
-          
-        if ($startDate && $endDate) { 
 
-            $data['sales_issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+        if ($startDate && $endDate) {
+
+            $data['sales_issues'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
             'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
             'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
             'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -372,13 +372,13 @@ class RevisionCalculatorController extends AccountBaseController
             'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
             DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
             )
-          
-            ->leftJoin('projects','projects.id','task_revisions.project_id') 
-            ->leftJoin('deals','deals.id','projects.deal_id') 
-            ->join('users as pm','pm.id','projects.pm_id') 
+
+            ->leftJoin('projects','projects.id','task_revisions.project_id')
+            ->leftJoin('deals','deals.id','projects.deal_id')
+            ->join('users as pm','pm.id','projects.pm_id')
             ->join('users as clients','clients.id','projects.client_id')
-           
-            ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')   
+
+            ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
             ->join('tasks','tasks.id','task_revisions.task_id')
             ->leftJoin('task_users','task_users.task_id','tasks.id')
             ->leftJoin('users as developer','developer.id','task_users.user_id')
@@ -388,26 +388,26 @@ class RevisionCalculatorController extends AccountBaseController
                 $join->on('lead_developer.id', '=', 'project_members.lead_developer_id')
                      ->orderBy('lead_developer.id', 'desc');
             })
-            ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id') 
-            ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-            ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')   
-            ->leftJoin('users as winners','winners.id','task_revision_disputes.winner') 
-            
+            ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+            ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+            ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
+            ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','S')
             ->orWhere(function ($query) {
                 $query->where('task_revisions.dispute_between', 'SPR')
                     ->where('task_revisions.raised_against_percent', '!=', null);
             })
-           
+
             // ->orWhere('task_revisions.dispute_between','SPR')
             ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->get();
-          
+
        // dd($data);
-        
-       
+
+
        // dd($data);
         return response()->json($data, 200);
     }
@@ -417,13 +417,13 @@ public function PMIssue(Request $request, $id)
 {
     $startDate = $request->input('start_date', null);
     $endDate = $request->input('end_date', null);
-    // $id= 209; 
+    // $id= 209;
     // $startDate = '2023-09-01 00:00:00';
     // $endDate = '2023-09-20 00:00:00';
-      
-    if ($startDate && $endDate) { 
 
-        $data['pm_issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+    if ($startDate && $endDate) {
+
+        $data['pm_issues'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -432,12 +432,12 @@ public function PMIssue(Request $request, $id)
         'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
-      
-        ->leftJoin('projects','projects.id','task_revisions.project_id') 
-        ->leftJoin('deals','deals.id','projects.deal_id') 
-        ->join('users as pm','pm.id','projects.pm_id') 
-        ->join('users as clients','clients.id','projects.client_id')  
-        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')    
+
+        ->leftJoin('projects','projects.id','task_revisions.project_id')
+        ->leftJoin('deals','deals.id','projects.deal_id')
+        ->join('users as pm','pm.id','projects.pm_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
         ->join('tasks','tasks.id','task_revisions.task_id')
         ->leftJoin('task_users','task_users.task_id','tasks.id')
         ->leftJoin('users as developer','developer.id','task_users.user_id')
@@ -447,10 +447,10 @@ public function PMIssue(Request $request, $id)
             $join->on('lead_developer.id', '=', 'project_members.lead_developer_id')
                  ->orderBy('lead_developer.id', 'desc');
         })
-        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')  
-        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')  
-        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')         
+        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','PM')
         ->orWhere(function ($query) {
@@ -468,10 +468,10 @@ public function PMIssue(Request $request, $id)
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
-      
+
    // dd($data);
-    
-   
+
+
    // dd($data);
     return response()->json($data, 200);
 }
@@ -481,13 +481,13 @@ public function ClientIssue(Request $request, $id)
 {
     $startDate = $request->input('start_date', null);
     $endDate = $request->input('end_date', null);
-    // $id= 209; 
+    // $id= 209;
     // $startDate = '2023-09-01 00:00:00';
     // $endDate = '2023-09-20 00:00:00';
-      
-    if ($startDate && $endDate) { 
 
-        $data['client_issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+    if ($startDate && $endDate) {
+
+        $data['client_issues'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -496,11 +496,11 @@ public function ClientIssue(Request $request, $id)
         'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
-      
-        ->leftJoin('projects','projects.id','task_revisions.project_id') 
-        ->join('users as pm','pm.id','projects.pm_id') 
-        ->join('users as clients','clients.id','projects.client_id')  
-        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')   
+
+        ->leftJoin('projects','projects.id','task_revisions.project_id')
+        ->join('users as pm','pm.id','projects.pm_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
         ->join('tasks','tasks.id','task_revisions.task_id')
         ->leftJoin('task_users','task_users.task_id','tasks.id')
         ->leftJoin('users as developer','developer.id','task_users.user_id')
@@ -509,13 +509,13 @@ public function ClientIssue(Request $request, $id)
             $join->on('lead_developer.id', '=', 'project_members.lead_developer_id')
                  ->orderBy('lead_developer.id', 'desc');
         })
-        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id') 
-        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')  
-        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')          
+        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','C')
-       
+
         ->orWhere(function ($query) {
             $query->where('task_revisions.dispute_between', 'CPR')
                 ->where('task_revisions.raised_against_percent', '!=', null);
@@ -526,10 +526,10 @@ public function ClientIssue(Request $request, $id)
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
-      
+
    //dd($data);
-    
-   
+
+
    // dd($data);
     return response()->json($data, 200);
 }
@@ -539,13 +539,13 @@ public function LeadDevIssue(Request $request, $id)
 {
     $startDate = $request->input('start_date', null);
     $endDate = $request->input('end_date', null);
-    // $id= 209; 
+    // $id= 209;
     // $startDate = '2023-09-01 00:00:00';
     // $endDate = '2023-09-20 00:00:00';
-      
-    if ($startDate && $endDate) { 
 
-        $data['lead_dev__issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+    if ($startDate && $endDate) {
+
+        $data['lead_dev__issues'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -554,11 +554,11 @@ public function LeadDevIssue(Request $request, $id)
         'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
-      
-        ->leftJoin('projects','projects.id','task_revisions.project_id') 
-        ->join('users as pm','pm.id','projects.pm_id') 
-        ->join('users as clients','clients.id','projects.client_id')  
-        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')    
+
+        ->leftJoin('projects','projects.id','task_revisions.project_id')
+        ->join('users as pm','pm.id','projects.pm_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
         ->join('tasks','tasks.id','task_revisions.task_id')
         ->leftJoin('task_users','task_users.task_id','tasks.id')
         ->leftJoin('users as developer','developer.id','task_users.user_id')
@@ -567,14 +567,14 @@ public function LeadDevIssue(Request $request, $id)
             $join->on('lead_developer.id', '=', 'project_members.lead_developer_id')
                  ->orderBy('lead_developer.id', 'desc');
         })
-        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')    
-        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner') 
-        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')       
+        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_between','!=','')
         ->where('task_revisions.final_responsible_person','LD')
-      
+
         ->orWhere(function ($query) {
             $query->where('task_revisions.dispute_between', 'PLR')
                 ->where('task_revisions.raised_against_percent', '!=', null);
@@ -590,10 +590,10 @@ public function LeadDevIssue(Request $request, $id)
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
-      
+
    // dd($data);
-    
-   
+
+
    // dd($data);
     return response()->json($data, 200);
 }
@@ -603,13 +603,13 @@ public function DevIssue(Request $request, $id)
 {
     $startDate = $request->input('start_date', null);
     $endDate = $request->input('end_date', null);
-    // $id= 209; 
+    // $id= 209;
     // $startDate = '2023-09-01 00:00:00';
     // $endDate = '2023-09-20 00:00:00';
-      
-    if ($startDate && $endDate) { 
 
-        $data['dev__issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+    if ($startDate && $endDate) {
+
+        $data['dev__issues'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -618,11 +618,11 @@ public function DevIssue(Request $request, $id)
         'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
-      
-        ->leftJoin('projects','projects.id','task_revisions.project_id') 
-        ->join('users as pm','pm.id','projects.pm_id') 
-        ->join('users as clients','clients.id','projects.client_id')  
-        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by') 
+
+        ->leftJoin('projects','projects.id','task_revisions.project_id')
+        ->join('users as pm','pm.id','projects.pm_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
         ->join('tasks','tasks.id','task_revisions.task_id')
         ->leftJoin('task_users','task_users.task_id','tasks.id')
         ->leftJoin('users as developer','developer.id','task_users.user_id')
@@ -631,28 +631,28 @@ public function DevIssue(Request $request, $id)
             $join->on('lead_developer.id', '=', 'project_members.lead_developer_id')
                  ->orderBy('lead_developer.id', 'desc');
         })
-        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')  
-        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')  
-        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')         
+        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','D')
-       
+
         ->orWhere(function ($query) {
             $query->where('task_revisions.dispute_between', 'LDR')
                 ->where('task_revisions.raised_against_percent', '!=', null);
         })
-       
+
         // ->orWhereNull('task_revisions.raised_against_percent')
         //  ->where('task_revisions.dispute_between','LDR')
         //  ->orWhereNotNull('task_revisions.raised_against_percent')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
-      
+
    // dd($data);
-    
-   
+
+
    // dd($data);
     return response()->json($data, 200);
 }
@@ -662,13 +662,13 @@ public function TotalDispute(Request $request, $id)
 {
     $startDate = $request->input('start_date', null);
     $endDate = $request->input('end_date', null);
-    // $id= 209; 
+    // $id= 209;
     // $startDate = '2023-09-01 00:00:00';
     // $endDate = '2023-09-20 00:00:00';
-      
-    if ($startDate && $endDate) { 
 
-        $data['total_disputes'] = TaskRevision::select('task_revisions.id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+    if ($startDate && $endDate) {
+
+        $data['total_disputes'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -676,30 +676,30 @@ public function TotalDispute(Request $request, $id)
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
-      
-        ->leftJoin('projects','projects.id','task_revisions.project_id') 
-        ->join('users as pm','pm.id','projects.pm_id') 
-        ->join('users as clients','clients.id','projects.client_id')  
-        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')  
+
+        ->leftJoin('projects','projects.id','task_revisions.project_id')
+        ->join('users as pm','pm.id','projects.pm_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
         ->join('tasks','tasks.id','task_revisions.task_id')
         ->leftJoin('task_users','task_users.task_id','tasks.id')
         ->leftJoin('users as developer','developer.id','task_users.user_id')
         ->leftJoin('project_members','project_members.project_id','projects.id')
         ->leftJoin('users as lead_developer','lead_developer.id','project_members.lead_developer_id')
-        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')  
-        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner') 
-        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')      
+        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_created',1)
         ->where('task_revisions.dispute_status',0)
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
-      
+
    // dd($data);
-    
-   
+
+
    // dd($data);
     return response()->json($data, 200);
 }
@@ -709,13 +709,13 @@ public function DisputeNotResolve(Request $request, $id)
 {
     $startDate = $request->input('start_date' , null);
     $endDate = $request->input('end_date', null);
-    // $id= 209; 
+    // $id= 209;
     // $startDate = '2023-09-01 00:00:00';
     // $endDate = '2023-09-20 00:00:00';
-      
-    if ($startDate && $endDate) { 
 
-        $data['dispute_not_resolved'] = TaskRevision::select('task_revisions.id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+    if ($startDate && $endDate) {
+
+        $data['dispute_not_resolved'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -723,30 +723,30 @@ public function DisputeNotResolve(Request $request, $id)
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
-      
-        ->leftJoin('projects','projects.id','task_revisions.project_id') 
-        ->join('users as pm','pm.id','projects.pm_id') 
-        ->join('users as clients','clients.id','projects.client_id')  
-        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')    
+
+        ->leftJoin('projects','projects.id','task_revisions.project_id')
+        ->join('users as pm','pm.id','projects.pm_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
         ->join('tasks','tasks.id','task_revisions.task_id')
         ->leftJoin('task_users','task_users.task_id','tasks.id')
         ->leftJoin('users as developer','developer.id','task_users.user_id')
         ->leftJoin('project_members','project_members.project_id','projects.id')
         ->leftJoin('users as lead_developer','lead_developer.id','project_members.lead_developer_id')
-        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')  
-        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')   
-        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')        
+        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_created',1)
-        ->where('task_revisions.dispute_status',0)    
-        ->groupBy('task_revisions.id')                                                                 
+        ->where('task_revisions.dispute_status',0)
+        ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
-      
+
    // dd($data);
-    
-   
+
+
    // dd($data);
     return response()->json($data, 200);
 }
@@ -757,13 +757,13 @@ public function PendingIssues(Request $request, $id)
 
     $startDate = $request->input('start_date' , null);
     $endDate = $request->input('end_date', null);
-    // $id= 209; 
+    // $id= 209;
     // $startDate = '2023-09-01 00:00:00';
     // $endDate = '2023-09-20 00:00:00';
-      
-    if ($startDate && $endDate) { 
 
-        $data['pending_issues'] = TaskRevision::select('task_revisions.id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+    if ($startDate && $endDate) {
+
+        $data['pending_issues'] = TaskRevision::select('task_revisions.id','task_revisions.task_id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -771,36 +771,36 @@ public function PendingIssues(Request $request, $id)
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
-      
-        ->leftJoin('projects','projects.id','task_revisions.project_id') 
-        ->join('users as pm','pm.id','projects.pm_id') 
-        ->join('users as clients','clients.id','projects.client_id')  
-        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')    
+
+        ->leftJoin('projects','projects.id','task_revisions.project_id')
+        ->join('users as pm','pm.id','projects.pm_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->leftJoin('users as revision_added_by','revision_added_by.id','task_revisions.added_by')
         ->join('tasks','tasks.id','task_revisions.task_id')
         ->leftJoin('task_users','task_users.task_id','tasks.id')
         ->leftJoin('users as developer','developer.id','task_users.user_id')
         ->leftJoin('project_members','project_members.project_id','projects.id')
         ->leftJoin('users as lead_developer','lead_developer.id','project_members.lead_developer_id')
-        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')  
-        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')   
-        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
-        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')        
+        ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+        ->leftJoin('users as winners','winners.id','task_revision_disputes.winner')
+        ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by')
+        ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')
         ->where('projects.pm_id',$id)
         ->where('task_revisions.approval_status','pending')
         ->where('task_revisions.acknowledgement_id','!=',null)
-       
-        ->groupBy('task_revisions.id')                                                                 
+
+        ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
-        ->get(); 
-   
+        ->get();
+
     // dd($data);
         return response()->json($data, 200);
     }
 
 }
 
-   
-    
+
+
 
     /**
      * Show the form for creating a new resource.
