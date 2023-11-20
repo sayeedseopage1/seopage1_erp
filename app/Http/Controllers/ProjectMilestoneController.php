@@ -68,7 +68,7 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
-       dd($request->all());
+    //    dd($request->all());
         $milestone_id= ProjectMilestone::where('id',$request->id)->first();
         $milestone= ProjectMilestone::find($request->id);
         $milestone->status= "complete";

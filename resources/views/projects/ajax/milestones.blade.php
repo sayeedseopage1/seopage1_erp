@@ -339,7 +339,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     @if($item->cancelation_status == null)
 
 
-             <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" data-id="{{ $item->id }}">Mark As Complete13 ({{$complete_task}}/{{$total_tasks}})</button>
+             <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" data-id="{{ $item->id }}">Mark As Complet ({{$complete_task}}/{{$total_tasks}})</button>
              <button type="submit" class="btn-danger btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button>
     @else
             @if(Auth::user()->role_id == 1)
@@ -611,12 +611,13 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
             button.prop('disabled', true);
             button.text('Processing');
             var self = this;
+            var totalTasks = {{$total_tasks}};
 
             Swal.fire({
                 title: "Will you work more hours on this project after this?",
                 icon: 'warning',
                 showCancelButton: false,
-                showDenyButton: true,
+                showDenyButton: totalTasks !== 0,
                 focusConfirm: false,
                 confirmButtonText: "Yes",
                 denyButtonText: "No",
@@ -689,6 +690,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                 $(self).prop('disabled', false);
                 $(self).text('Complete Milestone');
             });
+            $('.swal2-deny-button').click(function() {
+            $(this).prop('disabled', true);
+        });
         });
     });
 </script>
