@@ -5118,6 +5118,7 @@ class TaskController extends AccountBaseController
         $sale = $filter['sale'] ?? null;
         $revision_id = $filter['revision_id'] ?? null;
         $raised_by = $filter['raised_by'] ?? null;
+        $against_to = $filter['against_to'] ?? null;
         $project_manager = $filter['project_manager'] ?? null;
         $lead = $filter['lead'] ?? null;
         $project = $filter['project'] ?? null;
@@ -5189,7 +5190,7 @@ class TaskController extends AccountBaseController
             return $task;
         }
 
-
+        // TODO: Need filter revision against to by dispute_between 
         $revisions = DB::table('task_revisions as revisions')
                     ->leftJoin('projects', 'revisions.project_id', 'projects.id')
                     ->leftJoin('deals', 'projects.deal_id', 'deals.id')
@@ -5212,8 +5213,8 @@ class TaskController extends AccountBaseController
                       'tasks.status as task_status',
                       'task_users.user_id as task_assign_to',
                     )
-                    ->where(function($query) use ($author, $revision_id, $client, $sale, $raised_by, $project_manager, $lead, $project, $start_date,$end_date){
-                        if($author->role_id != 1){
+                    ->where(function($query) use ($author, $revision_id, $client, $sale, $raised_by, $against_to, $project_manager, $lead, $project, $start_date,$end_date){
+                        if($author->role_id != 1 && $author->role_id !=8){
                            $query->where('task_users.user_id', $author->id)
                                 ->orWhere('tasks.added_by', $author->id)
                                 ->orWhere('revisions.added_by', $author->id)
@@ -5262,6 +5263,7 @@ class TaskController extends AccountBaseController
 
                     })
                     ->get();
+                    // dd($start_date, $end_date);
 
 
                     $revisions->each(function ($revision){
@@ -5297,6 +5299,7 @@ class TaskController extends AccountBaseController
             'project_manager' => $request->project_manager ?? NULL,
             'lead' => $request->lead ?? NULL,
             'project' => $request->project ?? NULL,
+            'against_to' => $request->against_to ?? NULL,
         ];
 
 

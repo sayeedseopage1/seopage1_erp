@@ -1,5 +1,6 @@
 import Switch from "../global/Switch";
 import styles from './styles.module.css';
+import {LongText} from './LongText';
 
 export const LeadIssuesTableColumns = [
     {
@@ -12,13 +13,14 @@ export const LeadIssuesTableColumns = [
         searchText: (row) => `${row?.project_name}`,
         row: ({ row }) => (
             <div className={styles.project_title}>
-                <a
-                    href={`/account/projects/${row?.ProjectId}`}
-                    title={row?.project_name}
-                    className="text-hover-underline"
-                >
-                    {row?.project_name}
-                </a>
+               <LongText render={row?.project_name}>
+                    <a
+                        href={`/account/projects/${row?.ProjectId}`} 
+                        className="text-hover-underline"
+                    >
+                        {row?.project_name}
+                    </a>
+               </LongText> 
             </div>
         ),
     },
@@ -65,14 +67,15 @@ export const LeadIssuesTableColumns = [
 
             return (
                <div className={styles.task_title}>
-                    <span
-                        title={task_name}
-                        className={`multiline-ellipsis ${
-                            isEqual ? "highlight" : ""
-                        }`}
-                    >
-                        {task_name}
-                    </span>
+                    <LongText render={task_name}>
+                        <span 
+                            className={`multiline-ellipsis ${
+                                isEqual ? "highlight" : ""
+                            }`}
+                        >
+                            {task_name}
+                        </span>
+                    </LongText>
                </div>
             );
         },
@@ -177,12 +180,13 @@ export const LeadIssuesTableColumns = [
         searchText: (row) => `${row?.reason_for_revision}`,
         row: ({ row }) => (
             <div className={styles.reason_for_revision}>
-                <span
-                    title={row?.reason_for_revision}
-                    className="multiline-ellipsis"
-                >
-                    {row?.reason_for_revision ?? "--"}
-                </span>
+                <LongText render={row?.reason_for_revision}>
+                    <span
+                        className="multiline-ellipsis"
+                    >
+                        {row?.reason_for_revision ?? "--"}
+                    </span>
+                </LongText>
             </div>
         ),
     },

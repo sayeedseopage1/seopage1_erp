@@ -15,7 +15,7 @@ export const revisionColumns = [
         loader: () => <Placeholder />,
         row: ({row}) => {
             return(
-                <a href={`/accounts/employees/${row.project_manager_id}`} title={row?.project_manager_name} >
+                <a href={`/account/employees/${row.project_manager_id}`} title={row?.project_manager_name} >
                     <span className="singleline-ellipsis">
                         {row?.project_manager_name}
                     </span>
@@ -124,7 +124,7 @@ export const revisionColumns = [
                             to={`sales-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
-                            {row?.sales_issues}
+                            {Number(row?.sales_issues)?.toFixed(2)}
                         </Link>
                     )
                 }
@@ -143,7 +143,7 @@ export const revisionColumns = [
                             to={`client-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
-                            {row?.client_issues}
+                            {Number(row?.client_issues)?.toFixed(2)}
                         </Link>
                     )
                 }
@@ -162,7 +162,7 @@ export const revisionColumns = [
                             to={`project-manager-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
-                            {row?.pm_issues}
+                            {Number(row?.pm_issues)?.toFixed(2)}
                         </Link>
                     )
                 }
@@ -181,7 +181,7 @@ export const revisionColumns = [
                             to={`lead-developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
-                            {row?.lead_developer_issues}
+                            {Number(row?.lead_developer_issues)?.toFixed(2)}
                         </Link>
                     )
                 }
@@ -200,7 +200,7 @@ export const revisionColumns = [
                             to={`developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
-                            {row?.developer_issues}
+                            {Number(row?.developer_issues)?.toFixed(2)}
                         </Link>
                     )
                 }
@@ -237,7 +237,7 @@ export const revisionColumns = [
                             to={`total-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
-                            {row?.total_disputes}
+                            {Number(row?.total_disputes)?.toFixed(2)}
                         </Link>
                     )
                 }

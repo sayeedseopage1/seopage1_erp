@@ -1,6 +1,7 @@
 import _ from "lodash";
 import Switch from "../../global/Switch";
 import styles from '../styles.module.css';
+import { LongText } from "../LongText";
 
 export const PendingRevisionColumns = [
     {
@@ -13,13 +14,14 @@ export const PendingRevisionColumns = [
         searchText: (row) =>  `${row?.project_name}`,
         row: ({row}) => (
             <div className={styles.project_title}>
-                <a
-                    href={`/account/projects/${row?.ProjectId}`}
-                    title={row?.project_name}
-                    className="multiline-ellipsis"
-                >
-                    {row?.project_name}
-                </a>
+                <LongText render={row?.project_name}>
+                    <a
+                        href={`/account/projects/${row?.ProjectId}`}
+                        className="multiline-ellipsis"
+                    >
+                        {row?.project_name}
+                    </a>
+                </LongText>
             </div>
         )
     },
@@ -61,9 +63,11 @@ export const PendingRevisionColumns = [
 
             return (
                <div className={styles.task_title}>
-                    <span title={task_name} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                    <LongText render={task_name}>
+                    <span className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {task_name}
                     </span>
+                    </LongText>
                </div>
             );
         },
@@ -200,7 +204,7 @@ export const PendingRevisionColumns = [
                     </Switch.Case>
 
                     <Switch.Case condition={!_.includes(["C", "S", "PM", "LD", "D", "UD", "GD"], row.final_responsible_person)}>
-                        <span style={{color: '#ccc'}}>N/A</span>
+                        <span style={{color: '#888'}}>Not yet accepted or denied</span>
                     </Switch.Case>
                 </Switch>
             );
@@ -216,12 +220,11 @@ export const PendingRevisionColumns = [
         row: ({row}) => {
             return(
                 <div className={styles.reason_for_revision}>
-                    <span
-                        title={row?.reason_for_revision}
-                        className="multiline-ellipsis"
-                    >
-                        {row?.reason_for_revision ?? '--'}
-                    </span>
+                    <LongText render={row?.reason_for_revision}>
+                        <span className="multiline-ellipsis">
+                            {row?.reason_for_revision ?? '--'}
+                        </span>
+                    </LongText>
                 </div>
             )
         }

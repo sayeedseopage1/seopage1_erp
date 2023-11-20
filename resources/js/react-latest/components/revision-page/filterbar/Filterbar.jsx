@@ -12,7 +12,7 @@ import Avatar from "../../../../react/global/Avatar";
 import { useClickAway, useWindowSize } from "react-use";
 import Button from '../../../ui/Button';
 
-const Filterbar = ({ onFilter }) => {
+const Filterbar = ({ onFilter, tab }) => {
     // UI
     const [expandMenu, setExpandMenu] = useState(false);
     const { width } = useWindowSize();
@@ -51,7 +51,7 @@ const Filterbar = ({ onFilter }) => {
             endDate: _endDate,
             project: _project?.id,
             raised_by: _raisedBy?.id,
-            against_to: _againstTo?.id,
+            against_to: tab==='my-revision' ? window.Laravel.user.id : _againstTo?.id,
             project_manager: _projectManager?.id,
             sale: _sale?.id,
             lead: _lead?.id,
@@ -72,6 +72,7 @@ const Filterbar = ({ onFilter }) => {
         _sale,
         _lead,
         _client,
+        tab
     ]);
 
 
@@ -143,8 +144,7 @@ const Filterbar = ({ onFilter }) => {
                                             return _.size(data) > 0 ? (
                                                 <React.Fragment>
                                                     <Select.Option value={null}>
-                                                        {" "}
-                                                        Select All{" "}
+                                                        Select All
                                                     </Select.Option>
                                                     {_.map(data, (client) => (
                                                         <Select.Option
@@ -222,35 +222,42 @@ const Filterbar = ({ onFilter }) => {
                                                     )
                                             );
                                             return _.size(data) > 0 ? (
-                                                _.map(data, (employee) => (
-                                                    <Select.Option
-                                                        key={employee.id}
-                                                        value={employee}
-                                                    >
-                                                        <div
-                                                            className="d-flex align-items-center"
-                                                            style={{
-                                                                gap: "10px",
-                                                            }}
-                                                        >
-                                                            <Avatar
-                                                                src={
-                                                                    employee?.image_url ||
-                                                                    null
-                                                                }
-                                                                width={24}
-                                                                height={24}
-                                                                type="circle"
-                                                            />
-                                                            <span className="d-block">
-                                                                {" "}
-                                                                {
-                                                                    employee.name
-                                                                }{" "}
-                                                            </span>
-                                                        </div>
+                                               <React.Fragment>
+                                                    <Select.Option value={null}>
+                                                        Select All
                                                     </Select.Option>
-                                                ))
+                                                {
+                                                    _.map(data, (employee) => (
+                                                        <Select.Option
+                                                            key={employee.id}
+                                                            value={employee}
+                                                        >
+                                                            <div
+                                                                className="d-flex align-items-center"
+                                                                style={{
+                                                                    gap: "10px",
+                                                                }}
+                                                            >
+                                                                <Avatar
+                                                                    src={
+                                                                        employee?.image_url ||
+                                                                        null
+                                                                    }
+                                                                    width={24}
+                                                                    height={24}
+                                                                    type="circle"
+                                                                />
+                                                                <span className="d-block">
+                                                                    {" "}
+                                                                    {
+                                                                        employee.name
+                                                                    }{" "}
+                                                                </span>
+                                                            </div>
+                                                        </Select.Option>
+                                                    ))
+                                                }
+                                               </React.Fragment> 
                                             ) : (
                                                 <div
                                                     className={`${styles.filterLoader} py-2`}
@@ -299,35 +306,42 @@ const Filterbar = ({ onFilter }) => {
                                                     )
                                             );
                                             return _.size(data) > 0 ? (
-                                                _.map(data, (employee) => (
-                                                    <Select.Option
-                                                        key={employee.id}
-                                                        value={employee}
-                                                    >
-                                                        <div
-                                                            className="d-flex align-items-center"
-                                                            style={{
-                                                                gap: "10px",
-                                                            }}
-                                                        >
-                                                            <Avatar
-                                                                src={
-                                                                    employee?.image_url ||
-                                                                    null
-                                                                }
-                                                                width={24}
-                                                                height={24}
-                                                                type="circle"
-                                                            />
-                                                            <span className="d-block">
-                                                                {" "}
-                                                                {
-                                                                    employee.name
-                                                                }{" "}
-                                                            </span>
-                                                        </div>
+                                                <React.Fragment>
+                                                    <Select.Option value={null}>
+                                                        Select All
                                                     </Select.Option>
-                                                ))
+                                                    {
+                                                        _.map(data, (employee) => (
+                                                            <Select.Option
+                                                                key={employee.id}
+                                                                value={employee}
+                                                            >
+                                                                <div
+                                                                    className="d-flex align-items-center"
+                                                                    style={{
+                                                                        gap: "10px",
+                                                                    }}
+                                                                >
+                                                                    <Avatar
+                                                                        src={
+                                                                            employee?.image_url ||
+                                                                            null
+                                                                        }
+                                                                        width={24}
+                                                                        height={24}
+                                                                        type="circle"
+                                                                    />
+                                                                    <span className="d-block">
+                                                                        {" "}
+                                                                        {
+                                                                            employee.name
+                                                                        }{" "}
+                                                                    </span>
+                                                                </div>
+                                                            </Select.Option>
+                                                        ))
+                                                    }
+                                                </React.Fragment>
                                             ) : (
                                                 <div
                                                     className={`${styles.filterLoader} py-2`}
@@ -363,30 +377,37 @@ const Filterbar = ({ onFilter }) => {
                                         <Loader title="Loading..." />
                                     </div>
                                 ) : (
-                                    _.map(getEmployees(7), (employee) => (
-                                        <Select.Option
-                                            key={employee.id}
-                                            value={employee}
-                                        >
-                                            <div
-                                                className="d-flex align-items-center"
-                                                style={{ gap: "10px" }}
-                                            >
-                                                <Avatar
-                                                    src={
-                                                        employee?.image_url ||
-                                                        null
-                                                    }
-                                                    width={24}
-                                                    height={24}
-                                                    type="circle"
-                                                />
-                                                <span className="d-block">
-                                                    {employee.name}
-                                                </span>
-                                            </div>
+                                    <React.Fragment>
+                                        <Select.Option value={null}>
+                                            Select All
                                         </Select.Option>
-                                    ))
+                                        {
+                                            _.map(getEmployees(7), (employee) => (
+                                                <Select.Option
+                                                    key={employee.id}
+                                                    value={employee}
+                                                >
+                                                    <div
+                                                        className="d-flex align-items-center"
+                                                        style={{ gap: "10px" }}
+                                                    >
+                                                        <Avatar
+                                                            src={
+                                                                employee?.image_url ||
+                                                                null
+                                                            }
+                                                            width={24}
+                                                            height={24}
+                                                            type="circle"
+                                                        />
+                                                        <span className="d-block">
+                                                            {employee.name}
+                                                        </span>
+                                                    </div>
+                                                </Select.Option>
+                                            ))
+                                        }
+                                    </React.Fragment>
                                 )}
                             </Select.Options>
                         </Select>
@@ -413,31 +434,40 @@ const Filterbar = ({ onFilter }) => {
                                         <Loader title="Loading..." />
                                     </div>
                                 ) : (
-                                    _.map(getEmployees(4), (employee) => (
-                                        <Select.Option
-                                            key={employee.id}
-                                            value={employee}
-                                        >
-                                            <div
-                                                className="d-flex align-items-center"
-                                                style={{ gap: "10px" }}
-                                            >
-                                                <Avatar
-                                                    src={
-                                                        employee?.image_url ||
-                                                        null
-                                                    }
-                                                    width={24}
-                                                    height={24}
-                                                    type="circle"
-                                                />
-                                                <span className="d-block">
-                                                    {" "}
-                                                    {employee.name}{" "}
-                                                </span>
-                                            </div>
+                                    <React.Fragment> 
+                                        <Select.Option value={null}>
+                                            Select All
                                         </Select.Option>
-                                    ))
+
+                                        {
+                                            _.map(getEmployees(4), (employee) => (
+                                                <Select.Option
+                                                    key={employee.id}
+                                                    value={employee}
+                                                >
+                                                    <div
+                                                        className="d-flex align-items-center"
+                                                        style={{ gap: "10px" }}
+                                                    >
+                                                        <Avatar
+                                                            src={
+                                                                employee?.image_url ||
+                                                                null
+                                                            }
+                                                            width={24}
+                                                            height={24}
+                                                            type="circle"
+                                                        />
+                                                        <span className="d-block">
+                                                            {" "}
+                                                            {employee.name}{" "}
+                                                        </span>
+                                                    </div>
+                                                </Select.Option>
+                                            ))
+                                        }
+                                        
+                                    </React.Fragment>
                                 )}
                             </Select.Options>
                         </Select>
@@ -464,30 +494,37 @@ const Filterbar = ({ onFilter }) => {
                                         <Loader title="Loading..." />
                                     </div>
                                 ) : (
-                                    _.map(getEmployees(6), (employee) => (
-                                        <Select.Option
-                                            key={employee.id}
-                                            value={employee}
-                                        >
-                                            <div
-                                                className="d-flex align-items-center"
-                                                style={{ gap: "10px" }}
-                                            >
-                                                <Avatar
-                                                    src={
-                                                        employee?.image_url ||
-                                                        null
-                                                    }
-                                                    width={24}
-                                                    height={24}
-                                                    type="circle"
-                                                />
-                                                <span className="d-block">
-                                                    {employee.name}
-                                                </span>
-                                            </div>
+                                    <React.Fragment>
+                                        <Select.Option value={null}>
+                                            Select All
                                         </Select.Option>
-                                    ))
+                                        {
+                                            _.map(getEmployees(6), (employee) => (
+                                                <Select.Option
+                                                    key={employee.id}
+                                                    value={employee}
+                                                >
+                                                    <div
+                                                        className="d-flex align-items-center"
+                                                        style={{ gap: "10px" }}
+                                                    >
+                                                        <Avatar
+                                                            src={
+                                                                employee?.image_url ||
+                                                                null
+                                                            }
+                                                            width={24}
+                                                            height={24}
+                                                            type="circle"
+                                                        />
+                                                        <span className="d-block">
+                                                            {employee.name}
+                                                        </span>
+                                                    </div>
+                                                </Select.Option>
+                                            ))
+                                        }
+                                    </React.Fragment>
                                 )}
                             </Select.Options>
                         </Select>
