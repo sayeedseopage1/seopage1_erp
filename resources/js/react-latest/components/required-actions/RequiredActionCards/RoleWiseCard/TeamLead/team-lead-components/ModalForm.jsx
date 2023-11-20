@@ -96,9 +96,12 @@ export default function ModalForm({ setIsOpen, form_data }) {
                             >
                                 <span>
                                     <b>{input.label} :</b>{" "}
-                                    <b style={{ color: "red" }}>
-                                        * This field is Required
-                                    </b>
+                                    {
+                                        input?.required && 
+                                        <b style={{ color: "red" }}>
+                                            * This field is Required
+                                        </b>
+                                    }
                                 </span>
                                 <div
                                     className="sp1_st_write_comment_editor"
