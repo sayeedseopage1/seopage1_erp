@@ -3662,6 +3662,10 @@ class TaskController extends AccountBaseController
                 'pending_parent_tasks.sub_acknowledgement as sub_acknowledgement',
                 'pending_parent_tasks.comment as comment',
                 'pending_parent_tasks.approval_status as approval_status',
+                'pending_parent_tasks.login_url as pp_task_login_url',
+                'pending_parent_tasks.user_name as pp_task_user_name',
+                'pending_parent_tasks.reference_site as pp_task_reference_site',
+                'pending_parent_tasks.password as pp_task_password',
 
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])

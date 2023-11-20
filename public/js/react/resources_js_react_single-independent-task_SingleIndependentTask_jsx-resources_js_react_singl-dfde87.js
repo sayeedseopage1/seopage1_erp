@@ -757,7 +757,43 @@ var SingleIndependentTask = function SingleIndependentTask() {
                         }
                       }), task === null || task === void 0 ? void 0 : task.priority]
                     })]
-                  }), (task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {
+                  }), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Login URL :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: task.additionalInfo.loginURL
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Username :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: task.additionalInfo.username
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Password :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: task.additionalInfo.password
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Reference page :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: task.additionalInfo.refSite
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), (task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
                       className: "sp1_st-list-item",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {

@@ -69,7 +69,6 @@ class IndependentTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $ppTask = new PendingParentTasks();
         $ppTask->heading = $request->heading;
         $ppTask->description = $request->description;
@@ -83,11 +82,9 @@ class IndependentTaskController extends AccountBaseController
         $ppTask->added_by = Auth::user()->id;
         $ppTask->u_id = $request->id;
         $ppTask->login_url = $request->login_url;
-        $ppTask->frontend_password = $request->frontend_password;
-        $ppTask->password = $request->password;
         $ppTask->user_name = $request->user_name;
+        $ppTask->password = $request->password;
         $ppTask->reference_site = $request->reference_site;
-        $ppTask->site_url = $request->site_url;
         $ppTask->independent_task_status = $request->isIndependent;
         $ppTask->save();
 
@@ -155,9 +152,7 @@ class IndependentTaskController extends AccountBaseController
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        // dd($request->all());
-        
+    {        
         if($request->approval_status == 1){
             $pendingParentTasks = PendingParentTasks::find($id);
             $pendingParentTasks->start_date = $request->start_date;
@@ -221,16 +216,6 @@ class IndependentTaskController extends AccountBaseController
             $task_user->user_id = $pendingParentTasks->user_id;
             $task_user->save();
 
-
-            $workingEnv = new WorkingEnvironment();
-            $workingEnv->site_url = $pendingParentTasks->site_url;
-            $workingEnv->reference_site = $pendingParentTasks->reference_site;
-            $workingEnv->frontend_password = $pendingParentTasks->frontend_password;
-            $workingEnv->password = $pendingParentTasks->password;
-            $workingEnv->login_url = $pendingParentTasks->login_url;
-            $workingEnv->user_name = $pendingParentTasks->user_name;
-            $workingEnv->task_id = $independent_task->id;
-            $workingEnv->save();
 
             $user = User::where('id',$pendingParentTasks->user_id)->first();
 

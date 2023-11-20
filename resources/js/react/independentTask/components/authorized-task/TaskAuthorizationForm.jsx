@@ -92,31 +92,31 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
             if (!client) {
                 // toast.warning("Client is required");
                 Swal.fire({
-                    icon:"warning",
-                    title:"Client is required",
-                    timer:'2000',
-                    timerProgressBar:true,
-                })
+                    icon: "warning",
+                    title: "Client is required",
+                    timer: "2000",
+                    timerProgressBar: true,
+                });
                 return;
             } else if (!comment) {
                 // toast.warning("Comment is required");
                 Swal.fire({
-                    icon:"warning",
-                    title:"Comment is required",
-                    timer:'2000',
-                    timerProgressBar:true,
-                })
+                    icon: "warning",
+                    title: "Comment is required",
+                    timer: "2000",
+                    timerProgressBar: true,
+                });
                 return;
             }
         } else {
             if (!comment) {
                 // toast.warning("Comment is required");
                 Swal.fire({
-                    icon:"warning",
-                    title:"Comment is required",
-                    timer:'2000',
-                    timerProgressBar:true,
-                })
+                    icon: "warning",
+                    title: "Comment is required",
+                    timer: "2000",
+                    timerProgressBar: true,
+                });
                 return;
             }
         }
@@ -689,50 +689,60 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                                 </span>
                                             </div>
 
-                                            <div className={styles.inline_flex}>
+                                            {/* has question radio input */}
+                                            {!(
+                                                user.getRoleId() === 1 &&
+                                                user.id === data.assign_by_id
+                                            ) && (
                                                 <div
                                                     className={
-                                                        styles.task_info__label
+                                                        styles.inline_flex
                                                     }
                                                 >
-                                                    Has Question
-                                                </div>
-                                                <div
-                                                    className={
-                                                        styles.task_info__text
-                                                    }
-                                                >
-                                                    <label>
-                                                        <input
-                                                            onChange={(e) =>
-                                                                setHasQuestion(
+                                                    <div
+                                                        className={
+                                                            styles.task_info__label
+                                                        }
+                                                    >
+                                                        Has Question
+                                                    </div>
+                                                    <div
+                                                        className={
+                                                            styles.task_info__text
+                                                        }
+                                                    >
+                                                        <label>
+                                                            <input
+                                                                onChange={(e) =>
+                                                                    setHasQuestion(
+                                                                        true
+                                                                    )
+                                                                }
+                                                                value={true}
+                                                                type="radio"
+                                                                name="has_question"
+                                                            />{" "}
+                                                            Yes
+                                                        </label>
+                                                        <label>
+                                                            <input
+                                                                onChange={(e) =>
+                                                                    setHasQuestion(
+                                                                        false
+                                                                    )
+                                                                }
+                                                                value={false}
+                                                                type="radio"
+                                                                defaultChecked={
                                                                     true
-                                                                )
-                                                            }
-                                                            value={true}
-                                                            type="radio"
-                                                            name="has_question"
-                                                        />{" "}
-                                                        Yes
-                                                    </label>
-                                                    <label>
-                                                        <input
-                                                            onChange={(e) =>
-                                                                setHasQuestion(
-                                                                    false
-                                                                )
-                                                            }
-                                                            value={false}
-                                                            type="radio"
-                                                            defaultChecked={
-                                                                true
-                                                            }
-                                                            name="has_question"
-                                                        />{" "}
-                                                        No
-                                                    </label>
+                                                                }
+                                                                name="has_question"
+                                                            />{" "}
+                                                            No
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
 
                                             {hasQuestion ? (
                                                 <QuestionAnswer

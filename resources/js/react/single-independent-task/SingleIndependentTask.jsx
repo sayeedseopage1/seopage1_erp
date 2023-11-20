@@ -463,6 +463,90 @@ const SingleIndependentTask = () => {
                                                 </div>
                                             </div>
 
+                                            {/* login url */}
+                                            {!task.subtaskId ? (
+                                                <div className="sp1_st-list-item">
+                                                    <div className="sp1_st-list-item-head">
+                                                        Login URL :{" "}
+                                                    </div>
+                                                    <div className="sp1_st-list-item-value">
+                                                        {/* <span
+                                                        className="dot-color mr-2"
+                                                        style={{
+                                                            background:
+                                                                "rgba(252, 189, 1, 1)",
+                                                        }}
+                                                    /> */}
+                                                        {task.additionalInfo.loginURL}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <></>
+                                            )}
+
+                                            {/* username */}
+                                            {!task.subtaskId ? (
+                                                <div className="sp1_st-list-item">
+                                                    <div className="sp1_st-list-item-head">
+                                                        Username :{" "}
+                                                    </div>
+                                                    <div className="sp1_st-list-item-value">
+                                                        {/* <span
+                                                        className="dot-color mr-2"
+                                                        style={{
+                                                            background:
+                                                                "rgba(252, 189, 1, 1)",
+                                                        }}
+                                                    /> */}
+                                                        {task.additionalInfo.username}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <></>
+                                            )}
+
+                                            {/* password */}
+                                            {!task.subtaskId ? (
+                                                <div className="sp1_st-list-item">
+                                                    <div className="sp1_st-list-item-head">
+                                                        Password :{" "}
+                                                    </div>
+                                                    <div className="sp1_st-list-item-value">
+                                                        {/* <span
+                                                        className="dot-color mr-2"
+                                                        style={{
+                                                            background:
+                                                                "rgba(252, 189, 1, 1)",
+                                                        }}
+                                                    /> */}
+                                                        {task.additionalInfo.password}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <></>
+                                            )}
+
+                                            {/* ref site */}
+                                            {!task.subtaskId ? (
+                                                <div className="sp1_st-list-item">
+                                                    <div className="sp1_st-list-item-head">
+                                                        Reference page :{" "}
+                                                    </div>
+                                                    <div className="sp1_st-list-item-value">
+                                                        {/* <span
+                                                        className="dot-color mr-2"
+                                                        style={{
+                                                            background:
+                                                                "rgba(252, 189, 1, 1)",
+                                                        }}
+                                                    /> */}
+                                                        {task.additionalInfo.refSite}
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <></>
+                                            )}
+
                                             {/* category */}
                                             {task?.isSubtask && (
                                                 <>
