@@ -604,6 +604,8 @@ class DashboardController extends AccountBaseController
         $createdAt = Carbon::parse($userClockIn->created_at);
         $logStatus = true;
 
+        // dd($userTotalMin);
+
         $minimum_log_hours = 0;
 
         if($userDeveloperHoursTrack){
@@ -611,8 +613,8 @@ class DashboardController extends AccountBaseController
         }else{
 
             if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
-                $minimum_log_hours = 240;
-                if($userTotalMin < 240){
+                $minimum_log_hours = 270;
+                if($userTotalMin < 270){
                     $logStatus = false;
                 }else{
                     $logStatus = true;
@@ -706,8 +708,8 @@ class DashboardController extends AccountBaseController
         $minimum_log_hours = 0;
 
         if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
-            $minimum_log_hours = 240;
-            if($userTotalMin < 240){
+            $minimum_log_hours = 270;
+            if($userTotalMin < 270){
                 $logStatus = false;
             }
         } else {
