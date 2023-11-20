@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import "./data-table.css";
-import UserRender from "./UserRender";
-import { convertTime } from "../../utils/converTime";
-import TableFooter from "./TableFooter";
-import { Placeholder } from "../../global/Placeholder";
-import TimeLogTableLoader from "./TimeLogTableLoader";
-import TableDragAbleHeader from "./DragHeader";
+import React, { useEffect, useState } from "react";
 import { useLocalStorage } from "react-use";
+import TableDragAbleHeader from "./DragHeader";
+import TableFooter from "./TableFooter";
+import TimeLogTableLoader from "./TimeLogTableLoader";
+import "./data-table.css";
 
 const DataTable = ({
     data,
@@ -28,7 +25,7 @@ const DataTable = ({
     useEffect(() => {
         if(value?.columnOrders){
             setColumnOrder([...value?.columnOrders]);
-        }else{ 
+        }else{
             const column_ids = _.map(columns, "id");
             setColumnOrder([...column_ids]);
         }
@@ -42,14 +39,13 @@ const DataTable = ({
         const rows = [];
         if (data) {
             for (const [key, value] of data) {
-                {
                     value?.map((item, index) => {
                         const className =
                             value.length === index + 1
                                 ? "sp1_tlr_td f-14 sp1_tlr_td_border"
                                 : "sp1_tlr_td f-14";
                         rows.push(
-                            <React.Fragment key={item.time_log_start_time}>
+                            <React.Fragment key={item.uuid}>
                                 <tr className="sp1_tlr_tr">
                                     {
                                         _.map(_columns, col =>{
@@ -71,7 +67,6 @@ const DataTable = ({
                             </React.Fragment>
                         );
                     });
-                }
             }
         }
         return rows;

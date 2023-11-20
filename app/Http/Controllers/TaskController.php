@@ -5452,11 +5452,14 @@ class TaskController extends AccountBaseController
     public function get_today_tasks(Request $request, $id)
     {
         $id = Auth::user()->id;
+        
             // dd($request->all());
         $startDate = Carbon::today()->format('Y-m-d');
         $endDate = Carbon::today()->format('Y-m-d');
 
         $date = Carbon::parse($request->date_type);
+
+        // dd($date);
 
         $tasks = ProjectTimeLog::select(
             'tasks.id',
@@ -5468,7 +5471,6 @@ class TaskController extends AccountBaseController
             'clients.name as client_name',
             'clients.id as clientId',
             'developers.id as developer_id',
-            'daily_submissions.status as daily_submission_status',
             'project_time_logs.created_at as project_time_logs_created_at',
 
             DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . $date . '" AND DATE(project_time_logs.end_time) <= "' . $date . '"), 0) as total_time_spent'),
@@ -5478,12 +5480,26 @@ class TaskController extends AccountBaseController
             ->join('users as clients', 'clients.id', 'projects.client_id')
             ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
             ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
-            ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
             ->where('project_time_logs.user_id', $id)
 
             ->whereDate('project_time_logs.created_at', $date)
-            ->groupBy('tasks.id')
+            ->groupBy('project_time_logs.task_id')
             ->get();
+            foreach($tasks as $task)
+            {
+                $dalysubmission = DailySubmission::where('task_id',$task->id)->where('report_date',$date)->first();
+                if($dalysubmission != null)
+                {
+                    $task->daily_submission_status = $dalysubmission->status;
+
+                }else 
+                {
+                    $task->daily_submission_status = 0;
+
+                }
+                
+            }
+
 
 
 
@@ -5590,14 +5606,14 @@ class TaskController extends AccountBaseController
         //     $date = Carbon::yesterday();
         // }
 
-        $tasks->each(function ($task) {
-            $daily_submission = DailySubmission::select("status")
-                ->where('task_id', $task->id)
-                ->whereDate("created_at", '=', date('Y-m-d', strtotime($task->project_time_logs_created_at)))
-                ->orderBy('id', 'desc')
-                ->first();
-            $task->daily_submission_status = $daily_submission ? $daily_submission->status : 0;
-        });
+        // $tasks->each(function ($task) {
+        //     $daily_submission = DailySubmission::select("status")
+        //         ->where('task_id', $task->id)
+        //         ->whereDate("created_at", '=', date('Y-m-d', strtotime($task->project_time_logs_created_at)))
+        //         ->orderBy('id', 'desc')
+        //         ->first();
+        //     $task->daily_submission_status = $daily_submission ? $daily_submission->status : 0;
+        // });
 
         // dd($tasks);
         // $tasks = $yesterdayData;

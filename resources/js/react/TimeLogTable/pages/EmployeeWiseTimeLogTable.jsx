@@ -1,15 +1,15 @@
-import React, {useState, useEffect, useContext} from "react";
+import _, { groupBy, orderBy } from "lodash";
+import React, { useContext, useState } from "react";
+import Loader from "../../global/Loader";
+import { useGetEmployeeWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
+import { convertTime } from "../../utils/converTime";
+import { paginate } from '../../utils/paginate';
 import { EmployeeTableColumn } from "../components/EmployeeTableColumn";
 import EmployeeTimeLogDataTable from '../components/EmployeeTimeLogDataTable';
-import { useGetEmployeeWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
-import { paginate } from '../../utils/paginate';
-import _, { groupBy, orderBy } from "lodash";
-import Tabbar from "../components/Tabbar"; 
-import { EmployeeTableCtx } from "../context/EmployeeTableContext";
-import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
-import { convertTime } from "../../utils/converTime";
 import { RefreshButton } from "../components/RefreshButton";
-import Loader from "../../global/Loader";
+import Tabbar from "../components/Tabbar";
+import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
+import { EmployeeTableCtx } from "../context/EmployeeTableContext";
 
 
 
@@ -51,7 +51,7 @@ const EmployeeWiseTimeLogTable = () => {
         })
     }
 
-    // data sort handle 
+    // data sort handle
     const handleSorting = (sort) => {
         const sortData = orderBy(data, ...sort);
         handleData(sortData, currentPage, perPageData);
@@ -79,8 +79,8 @@ const EmployeeWiseTimeLogTable = () => {
         <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
-                    <Tabbar/> 
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
+                    <Tabbar/>
+                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} >
                         {isLoading ?
                             <Loader title="Refreshing..."  borderRightColor="white" />
                         : 'Refresh'}
@@ -104,7 +104,7 @@ const EmployeeWiseTimeLogTable = () => {
                     currentPage={currentPage}
                     totalEntry={data.length}
                     isLoading={isLoading}
-                /> 
+                />
             </div>
         </div>
     );
