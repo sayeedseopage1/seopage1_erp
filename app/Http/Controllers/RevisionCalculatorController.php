@@ -109,6 +109,7 @@ class RevisionCalculatorController extends AccountBaseController
               
                 ->where('task_revisions.approval_status','pending')
                 ->where('task_revisions.acknowledgement_id','!=',null)
+                ->where('task_revisions.is_deniable','!=',0)
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $total_disputes= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
@@ -787,6 +788,7 @@ public function PendingIssues(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')        
         ->where('projects.pm_id',$id)
         ->where('task_revisions.approval_status','pending')
+        ->where('task_revisions.is_deniable','!=',0)
         ->where('task_revisions.acknowledgement_id','!=',null)
        
         ->groupBy('task_revisions.id')                                                                 

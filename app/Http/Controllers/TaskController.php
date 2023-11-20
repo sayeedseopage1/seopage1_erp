@@ -1076,7 +1076,7 @@ class TaskController extends AccountBaseController
             $task_revision->final_responsible_person = "LD";
         }
 
-        if($dispute_between == 'PLR' && $request->is_deniable==false){
+        if($dispute_between == 'PLR' && $request->is_deniable==false && $request->acknowledgement_id != 'PLRx04'){
             $task_revision->final_responsible_person = "PM";
         }
 
@@ -3060,7 +3060,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->approval_status = 'accepted';
 
             $tasks_accept->is_accept = true;
-            if($tasks_accept->dispute_between  == 'PLR' || $tasks_accept->dispute_between  == 'LDR')
+            if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4'))
             {
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
             }
