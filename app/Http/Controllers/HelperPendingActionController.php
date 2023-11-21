@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
 use App\Models\ProjectDeliverable;
+use App\Models\Role;
+use App\Models\TaskRevision;
 
 class HelperPendingActionController extends AccountBaseController
 {
@@ -703,6 +705,239 @@ class HelperPendingActionController extends AccountBaseController
          ];
          $action->button = json_encode($button);
          $action->save();
+
+   }
+   public function CreateTask($id)
+   {
+    $project= Project::where('id',$id)->first();
+   // dd($project);
+    $client= User::where('id',$project->client_id)->first();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $authorizer= User::where('id',$project_manager->id)->first();
+        
+            $action = new PendingAction();
+            $action->code = 'CT';
+            $action->serial = 'CT'.'x0';
+            $action->item_name= 'Creating tasks';
+            $action->heading= 'Create tasks!';
+            $action->message = 'Create tasks for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name;
+            $action->timeframe= 24;
+            $action->project_id = $project->id;
+           
+            $action->client_id = $client->id;
+            $action->authorization_for= $authorizer->id;
+            $button= '';
+           
+            $action->save();
+         //   dd($action);
+            $button = [
+                [
+                    'button_name' => 'Create',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('projects.show', $project->id.'?tab=tasks'),
+                ],
+                [
+                    'button_name' => 'Request more time',
+                    'button_color' => 'success',
+                    'button_type' => 'modal',
+                    'button_url' => '',
+                    'modal_form'=> true,
+                    'form'=> [
+                        [
+                            'type'=> 'select',
+                            'label'=>'Select how many hours need you to create tasks',
+                            'name'=>'hours',
+                            'options'=> [
+                                [
+                                    'type'=> 'option',
+                                    'value'=> '6',
+                                    'lable'=> '6',
+                                    'selected'=> true,
+                                ],
+                                [
+                                    'type'=> 'option',
+                                    'value'=> '12',
+                                    'lable'=> '12',
+                                    'selected'=> false,
+                                ],
+                                [
+                                    'type'=> 'option',
+                                    'value'=> '18',
+                                    'lable'=> '18',
+                                    'selected'=> false,
+                                ],
+                                [
+                                    'type'=> 'option',
+                                    'value'=> '24',
+                                    'lable'=> '24',
+                                    'selected'=> false,
+                                ],
+                                [
+                                    'type'=> 'option',
+                                    'value'=> '30',
+                                    'lable'=> '30',
+                                    'selected'=> false,
+                                ],
+
+
+                            ],
+                            'required'=> true,
+                        ], 
+                        [
+                            'type'=> 'hidden',
+                             'value'=> $project->id,
+                             'readonly'=> true,
+                           
+                            'name'=>'project_id',
+                            'required'=> true,
+                        ], 
+                         [
+                            'type'=> 'hidden',
+                            'value'=> $action->id,
+                            'readonly'=> true,
+                            
+                            'name'=>'authorization_id',
+                           
+                            'required'=> true,
+                            
+                        ], 
+                        [
+                            'type'=> 'textarea',
+                            'label'=> 'Write reson',
+                           
+                            'readonly'=> false,
+                            
+                            'name'=>'reason',
+                           
+                            'required'=> true,
+                            
+                        ], 
+                        
+                    ], 
+                    'form_action'=> [
+                        [
+                            'type'=> 'button',
+                            'method'=>'POST',
+                            'label'=> 'Submit',
+                            'color'=> 'success',
+                            'url'=> '',
+      
+                        ], 
+                       
+                        
+                    ]
+                ],
+                [
+                    'button_name' => 'All the tasks were already created',
+                    'button_color' => 'success',
+                    'button_type' => 'modal',
+                    'button_url' => '',
+                    'modal_form'=> true,
+                    'form'=> [
+                        
+                        [
+                            'type'=> 'hidden',
+                             'value'=> $project->id,
+                             'readonly'=> true,
+                           
+                            'name'=>'project_id',
+                            'required'=> true,
+                        ], 
+                         [
+                            'type'=> 'hidden',
+                            'value'=> $action->id,
+                            'readonly'=> true,
+                            
+                            'name'=>'authorization_id',
+                           
+                            'required'=> true,
+                            
+                        ], 
+                        [
+                            'type'=> 'textarea',
+                            'label' => 'The number of tasks created are too few when compared to the number of deliverables. Why is that?',
+                           
+                            'readonly'=> false,
+                            
+                            'name'=>'comment',
+                           
+                            'required'=> true,
+                            
+                        ], 
+                        
+                    ], 
+                    'form_action'=> [
+                        [
+                            'type'=> 'button',
+                            'method'=>'POST',
+                            'label'=> 'Submit',
+                            'color'=> 'success',
+                            'url'=> '',
+      
+                        ], 
+                       
+                        
+                    ]
+                    ],
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+
+
+          //  dd($action);
+       //    dd(json_decode($action->button));
+
+           
+
+   }
+   public function TaskApproveAction($task,$sender)
+   {
+    $sender = User::where('id',$sender->id)->first();
+    $user_role= Role::where('id',$sender->role_id)->first();
+    $project= Project::where('id',$task->project_id)->first();
+    $client= User::where('id',$project->client_id)->first();
+    $task_revision = TaskRevision::where('task_id',$task->id)->orderBy('id','desc')->first();
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizers= User::where('role_id',1)->orWhere('id',$task->added_by)->get();
+       foreach ($authorizers as $key => $authorizer) {
+        $action = new PendingAction();
+        $action->code = 'TSA';
+        $action->serial = 'TSA'.'x'.$key;
+        if($task_revision != null)
+        {
+            $action->item_name= 'Revision submitted by '.$user_role->name;
+            $action->heading= 'Revision submitted by '.$user_role->name;
+            $action->message = 'Review the revision submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+
+        }else 
+        {
+            $action->item_name= 'Task submitted by '.$user_role->name;
+            $action->heading= 'Task submitted by '.$user_role->name;
+            $action->message = 'Review the task submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+
+        }
+       
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+        $action->task_id = $task->id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Review',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('tasks.show', $task->id),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      //  dd($action);
+   //    dd(json_decode($action->button));
+
+       }
 
    }
   

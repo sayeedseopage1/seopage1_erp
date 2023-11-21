@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import ShowTimer from "./admin-components/ShowTimer";
 import ActionsButton from "./admin-components/ActionsButton";
 
-export default function RequiredActionsCard_Admin_Live({ data }) {
+export default function RequiredActionsCard_Admin_Expire({ data }) {
 
     return (
         <div className={style.card_container}>

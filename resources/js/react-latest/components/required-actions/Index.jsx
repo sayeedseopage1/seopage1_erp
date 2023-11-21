@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useCallback, useContext } from "react";
 import style from "../../styles/required-actions.module.css";
 import { useState } from "react";
 import ActiveRequiredActions from "./ActiveRequiredActions";
@@ -9,11 +9,12 @@ import Button from "../../ui/Button";
 
 const RefreshContext = createContext({
     refresh: false,
-    setRefresh: () => true,
+    setRefresh: () => {},
+    setLoading: () => {},
 });
 export function useRefresh() {
-    const { refresh, setRefresh } = useContext(RefreshContext);
-    return { refresh, setRefresh: () => setRefresh((prev) => !prev) };
+    const { refresh, handleRefresh, setLoading } = useContext(RefreshContext);
+    return { refresh, handleRefresh, setLoading };
 }
 
 export default function Index() {
@@ -22,15 +23,16 @@ export default function Index() {
     const [totalItem, setTotalItem] = useState(1);
     const [perPageItem, setPerPageItem] = useState(1);
     const [refresh, setRefresh] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [action, setAction] = useState("active");
 
-    const handleRefresh = () => {
+    const handleRefresh = useCallback(() => {
         setRefresh((prev) => !prev);
-    };
+    },[setRefresh]);
 
     return (
-        <RefreshContext.Provider value={{ refresh, setRefresh }}>
+        <RefreshContext.Provider value={{ refresh, handleRefresh, setLoading }}>
             <PaginationContext.Provider
                 value={{
                     currentPage,
@@ -70,7 +72,7 @@ export default function Index() {
                             </button>
                         </div>
 
-                        <button
+                        {/* <button
                             onClick={() => handleRefresh()}
                             className={`${style.btn} ${style.btn_active}`}
                             style={{
@@ -80,14 +82,23 @@ export default function Index() {
                             }}
                         >
                             Refresh
-                        </button>
-                        {/* <Button 
-                            onClick={() => handleRefresh()}
-                            size="md"
-                            variant="primary"
-                        >
-                            Refresh
-                        </Button> */}
+                        </button> */}
+                        <button
+                        onClick={handleRefresh}
+                        className="btn btn-primary"
+                        type="button"
+                        disabled={loading}
+                        style={{paddingTop:"5px",paddingBottom:"5px"}}
+                    >
+                        {loading && (
+                            <span
+                                className="spinner-border spinner-border-sm mr-1"
+                                role="status"
+                                aria-hidden="true"
+                            ></span>
+                        )}
+                        Refresh
+                    </button>
                     </section>
 
                     <div className={style.outlet_container}>

@@ -90,6 +90,7 @@ class TimelogReportController extends AccountBaseController
 
         if ($type == 'employees') {
             $data = DB::table('project_time_logs')->select([
+                DB::raw('(SELECT UUID()) as uuid'),
                 'project_time_logs.id as log_id',
                 'employee.id as employee_id',
                 'employee.name as employee_name',
@@ -235,6 +236,7 @@ class TimelogReportController extends AccountBaseController
 
         }else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
+                DB::raw('(SELECT UUID()) as uuid'),
                 'tasks.id as task_id',
                 'tasks.heading as task_name',
                 'projects.client_id',
@@ -394,6 +396,7 @@ class TimelogReportController extends AccountBaseController
         else if($type == 'projects') {
         //    dd("projects");
             $data = ProjectTimeLog::select([
+                DB::raw('(SELECT UUID()) as uuid'),
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.client_id',
