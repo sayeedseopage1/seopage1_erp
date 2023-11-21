@@ -1088,8 +1088,7 @@ class TaskController extends AccountBaseController
         $task_revision->save();
 
 
-        //dd($type);
-        //authorizatoin action start here
+        //authorization action start here
         if (Auth::user()->role_id == 6) {
             $type = 'task_revision_by_lead_developer';
         } else {
@@ -5190,7 +5189,7 @@ class TaskController extends AccountBaseController
             return $task;
         }
 
-        // TODO: Need filter revision against to by dispute_between 
+        // TODO: Need filter revision against to by dispute_between
         $revisions = DB::table('task_revisions as revisions')
                     ->leftJoin('projects', 'revisions.project_id', 'projects.id')
                     ->leftJoin('deals', 'projects.deal_id', 'deals.id')
@@ -5455,7 +5454,7 @@ class TaskController extends AccountBaseController
     public function get_today_tasks(Request $request, $id)
     {
         $id = Auth::user()->id;
-        
+
             // dd($request->all());
         $startDate = Carbon::today()->format('Y-m-d');
         $endDate = Carbon::today()->format('Y-m-d');
@@ -5495,12 +5494,12 @@ class TaskController extends AccountBaseController
                 {
                     $task->daily_submission_status = $dalysubmission->status;
 
-                }else 
+                }else
                 {
                     $task->daily_submission_status = 0;
 
                 }
-                
+
             }
 
 

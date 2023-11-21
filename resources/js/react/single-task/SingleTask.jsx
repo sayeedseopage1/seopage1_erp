@@ -408,7 +408,7 @@ const SingleTaskPage = () => {
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 <span className="d-block">{task?.pageType ?? "--"}</span>
-                                                                <Switch.Case condition={!task?.taskTypeDetails.comment}>
+                                                                <Switch.Case condition={task?.taskTypeDetails.comment}>
                                                                     <Popover>
                                                                         <Popover.Button>
                                                                             <span className="badge badge-warning"> Primary page request denied </span>
@@ -459,7 +459,7 @@ const SingleTaskPage = () => {
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 <span>{task?.taskTypeDetails?.taskTypeName ?? "--"}</span>
-                                                                <Switch.Case condition={!task?.taskTypeDetails.comment}>
+                                                                <Switch.Case condition={task?.taskTypeDetails.comment}>
                                                                     <Popover>
                                                                         <Popover.Button>
                                                                             <span className="badge badge-warning"> Primary page request denied </span>
