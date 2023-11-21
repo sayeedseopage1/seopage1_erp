@@ -80,22 +80,18 @@ class ProjectMilestoneController extends AccountBaseController
 
         //authorization action start
 
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $milestone->getMorphClass();
-        $authorization_action->model_id = $milestone->id;
-        $authorization_action->type = 'complete_milestone';
-        $authorization_action->deal_id = $project->deal_id;
-        $authorization_action->project_id = $project->id;
-        $authorization_action->link = route('projects.show', $project->id).'?tab=milestones';
-        $authorization_action->title = Auth::user()->name.' mark milestone complete';
-        $authorization_action->authorization_for = 62;
-        $authorization_action->save();
+      
         //authorization action end
 
         $milestone_count= ProjectMilestone::where('project_id',$milestone->project_id)->count();
 
         $milestone_complete= ProjectMilestone::where('project_id',$milestone->project_id)->where('status','complete')->count();
         if ($milestone_count == $milestone_complete) {
+            $helper = new HelperPendingActionController();
+
+
+            $helper->ProjectQcSubmission($project,$milestone);
+    
             $users= User::where('role_id',1)->get();
             foreach ($users as $user) {
 

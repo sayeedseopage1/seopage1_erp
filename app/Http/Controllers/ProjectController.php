@@ -743,7 +743,42 @@ class ProjectController extends AccountBaseController
         $dispute->save();
         $project = Project::find($dispute->project_id);
 
+        $actions = PendingAction::where('code','DSA')->where('past_status',0)->where('project_id',$project->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
 
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message. ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+                
+           
+        }
+    }
         $helper = new HelperPendingActionController();
 
 
@@ -3505,6 +3540,11 @@ class ProjectController extends AccountBaseController
         $project = Project::find($request->id);
         $project->dispute_status = 1;
         $project->save();
+
+        $helper = new HelperPendingActionController();
+
+
+        $helper->DisputeSubmitAction($project);
         return response()->json([
             'status' => 400,
         ]);
@@ -3748,7 +3788,45 @@ class ProjectController extends AccountBaseController
 
         // authorization action section
         $project_id = Project::find($project->project_id);
-        //need pending action
+
+        //need pending action 
+        $actions = PendingAction::where('code','PCSA')->where('past_status',0)->where('project_id',$project_id->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message. ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+                
+           
+        }
+    }
+         
 
          $helper = new HelperPendingActionController();
 
@@ -5438,6 +5516,42 @@ public function updatePmBasicSEO(Request $request){
 
                $helper->QcSubmissionAuthorization($project_id);
                //need pending action
+               $actions = PendingAction::where('code','QCSA')->where('past_status',0)->where('project_id',$project_id->id)->get();
+               if($actions != null)
+               {
+               foreach ($actions as $key => $action) {
+                  
+                       $action->authorized_by= Auth::id();
+                       $action->authorized_at= Carbon::now();
+                       $action->past_status = 1;
+                       $action->save();
+                       $project_manager= User::where('id',$project->pm_id)->first();
+                       $client= User::where('id',$project->client_id)->first();
+                       $authorize_by= User::where('id',$action->authorized_by)->first();
+       
+                       $past_action= new PendingActionPast();
+                       $past_action->item_name = $action->item_name;
+                       $past_action->code = $action->code;
+                       $past_action->serial = $action->serial;
+                       $past_action->action_id = $action->id;
+                       $past_action->heading = $action->heading;
+                       $past_action->message = $action->message. ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    //   $past_action->button = $action->button;
+                       $past_action->timeframe = $action->timeframe;
+                       $past_action->authorization_for = $action->authorization_for;
+                       $past_action->authorized_by = $action->authorized_by;
+                       $past_action->authorized_at = $action->authorized_at;
+                       $past_action->expired_status = $action->expired_status;
+                       $past_action->past_status = $action->past_status;
+                       $past_action->project_id = $action->project_id;
+                       $past_action->task_id = $action->task_id;
+                       $past_action->client_id = $action->client_id;
+                       $past_action->milestone_id = $action->milestone_id;
+                       $past_action->save();
+                       
+                  
+               }
+           }
 
                 $milestone = ProjectMilestone::where('id', $request->milestone_id)->first();
                 //dd($milestone);
