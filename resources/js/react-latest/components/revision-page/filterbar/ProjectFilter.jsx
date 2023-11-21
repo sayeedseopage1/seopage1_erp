@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "../../../styles/filterbar.module.css";
 import Loader from "../../../ui/Loader";
 import Select from "../../../ui/Select";
@@ -39,21 +38,14 @@ const ProjectFilter = ({
                                     Data Not Found
                                 </div>
                             ) : (
-                                <React.Fragment>
-                                    <Select.Option value={null}>
-                                        Select All
+                                _.map(data, (project) => (
+                                    <Select.Option
+                                        key={project.id}
+                                        value={project}
+                                    >
+                                        {project.project_name}
                                     </Select.Option>
-                                    {
-                                        _.map(data, (project) => (
-                                            <Select.Option
-                                                key={project.id}
-                                                value={project}
-                                            >
-                                                {project.project_name}
-                                            </Select.Option>
-                                        ))
-                                    }
-                                </React.Fragment>
+                                ))
                             );
                         }}
                     </Select.SearchControllerWrapper>

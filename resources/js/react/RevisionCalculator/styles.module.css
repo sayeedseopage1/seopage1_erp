@@ -1,8 +1,8 @@
-.tableContainer{
+.tableContainer{  
     max-height: calc(100vh - 300px);
     overflow-y: auto;
 }
-
+ 
 .table tr{
     border: none;
 }
@@ -16,30 +16,26 @@
     background-color: #DCE8FD;
 }
 
-.table tr th[data-column-id = 'revision_breakdown']{
-    text-align: center;
-}
-
 .table tr td{
     padding: 6px 10px;
     min-width: 150px;
 }
-
+ 
 .table tr:nth-child(evet){
     background-color: #fdfdfd;
 }
 
-.table tbody tr td:not(:last-child),
+.table tbody tr td:not(:last-child), 
 .table thead tr th:not(:last-child){
-    border-width: 0 1px 1px 0 !important;
+    border-width: 0 1px 1px 0 !important; 
 }
 
-.table tbody tr td:last-child,
+.table tbody tr td:last-child, 
 .table thead tr th:last-child{
-    border-width: 0 0px 1px 0 !important;
+    border-width: 0 0px 1px 0 !important; 
 }
 
-.table tbody tr td:not(:first-child),
+.table tbody tr td:not(:first-child), 
 .table thead tr th:not(:first-child){
     border-left: none !important;
 }
@@ -53,29 +49,29 @@
     background-color: #d9e6fc;
 }
 
-.modal_panel{
+.modal_panel{  
     width: 70vw;
 }
 
-.modal_body{
+.modal_body{ 
     padding: 10px 16px 20px;
 }
 
 
 
 @media only screen and (max-width: 1400px){
-    .modal_panel{
-        width: 80vw;
+    .modal_panel{  
+        width: 80vw; 
     }
 }
-
+ 
 
 @media only screen and (max-width: 756px){
-    .modal_panel{
-        width: 100vw !important;
+    .modal_panel{  
+        width: 100vw !important; 
     }
 }
-
+ 
 
 .modal_title_bar{
     background-color: #f1f1f1;
@@ -99,14 +95,14 @@
 
 .comment_number{
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc; 
 }
 
 .comment_modal{
     max-height: 80vh;
     overflow-y: auto;
 }
-
+ 
 .comment_item{
     max-width: 550px;
     padding-bottom: 10px;
@@ -115,7 +111,7 @@
 }
 
 .comment_item_header{
-   font-size: 16px;
+   font-size: 16px; 
 }
 
 .comment_item_header span{
@@ -129,22 +125,3 @@
     color: #2f2f35;
 }
 
-/* table ui by column name */
-.project_title{
-    min-width: 200px;
-    text-align: left;
-}
-
-.task_title{
-    min-width: 320px;
-    text-align: left;
-}
-
-.reason_for_revision{
-    min-width: 320px;
-    text-align: left;
-}
-
-.dispute_comment{
-    text-align: center;
-}

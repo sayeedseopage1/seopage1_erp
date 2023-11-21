@@ -47,11 +47,6 @@
      $client= App\Models\User::where('id',$project->client_id)->first();
       $deal= App\Models\Deal::where('id',$project->deal_id)->first();
        $currency= App\Models\Currency::where('id',$deal->original_currency_id)->first();
-       $oldContractSign = App\Models\ContractSign::where('project_id',$project->id)->first();
-       $newDeliverable = null;
-       if ($oldContractSign != null) {
-            $newDeliverable = App\Models\ProjectDeliverable::where('project_id',$oldContractSign->project_id)->whereDate('created_at','>',$oldContractSign->created_at)->get();
-       }
      if($project->pm_id != null)
      {
      $pm = App\Models\User::where('id',$project->pm_id)->first();
@@ -278,9 +273,6 @@
                                 <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
                             @endif
                             {{$deliverable->deliverable_type}}
-                            @if ($newDeliverable != null && $newDeliverable->contains($deliverable))
-                                <span class="badge badge-success">{{ \Carbon\Carbon::parse($deliverable->created_at)->format('Y-m-d') }}</span>
-                            @endif
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
                                     $data = \App\Models\DelivarableColumnEdit::where([

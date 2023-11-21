@@ -1,6 +1,4 @@
 import Switch from "../global/Switch";
-import { LongText } from "./LongText";
-import styles from './styles.module.css';
 
 export const DevIssuesTableColumns = [
     {
@@ -11,21 +9,7 @@ export const DevIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => {
-            return(
-                <div className={styles.project_title}>
-                    <LongText render={row?.project_name}>
-                        <a
-                            href={`/account/projects/${row?.ProjectId}`}
-                            title={row?.project_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row?.project_name}
-                        </a>
-                    </LongText>
-                </div>
-            )
-        }
+        row: ({row}) => <a href={`/account/projects/${row?.ProjectId}`} title={row?.project_name} className="multiline-ellipsis"> {row?.project_name} </a>
     },
     {
         id: "client_name",
@@ -64,13 +48,9 @@ export const DevIssuesTableColumns = [
                 : "";
 
             return (
-               <div className={styles.task_title}>
-                   <LongText render={task_name}>
-                        <span className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                            {task_name}
-                        </span>
-                    </LongText>
-               </div>
+                <span title={task_name} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                    {task_name}
+                </span>
             );
         },
     },
@@ -175,19 +155,7 @@ export const DevIssuesTableColumns = [
         sort: row => row?.reason_for_revision,
         rowSpan: 2,
         searchText: (row) => `${row?.reason_for_revision}`,
-        row: ({row}) => {
-            return(
-                <div className={styles.reason_for_revision}>
-                    <LongText render={row?.reason_for_revision}>
-                        <span
-                            className="multiline-ellipsis"
-                        >
-                            {row?.reason_for_revision ?? '--'}
-                        </span>
-                    </LongText>
-                </div>
-            )
-        }
+        row: ({row}) => <span title={row?.reason_for_revision} className="multiline-ellipsis">{row?.reason_for_revision ?? '--'}</span>
     },
     {
         id: 'disputed',
@@ -207,13 +175,7 @@ export const DevIssuesTableColumns = [
         sort: row => row?.disputes_comments,
         rowSpan: 2,
         searchText: (row) => `${row?.disputes_comments}`,
-        row: ({row}) => {
-           return(
-            <div className={styles.dispute_comment}>
-                <span className="multiline-ellipsis">{row?.disputes_comments}</span>
-            </div>
-           )
-        }
+        row: ({row}) => <span className="multiline-ellipsis">{row?.disputes_comments}</span>
     },
     {
         id: 'verdict',

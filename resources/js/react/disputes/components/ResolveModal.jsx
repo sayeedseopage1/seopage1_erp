@@ -308,11 +308,6 @@ const ResolveModal = ({ state }) => {
         answerStatus();
         setHasQuestion(false);
         setFinishedPartial(false);
-        setWinner(null);
-        setNeedAuthorization(false);
-        setRaisedByPercent(0);
-        setRaisedAgainstPercent(0);
-        setResolveComment("")
         closeModal();
     };
     const resolvedBy = new User(getUserById(row?.resolved_by?.id));
@@ -1007,7 +1002,8 @@ const ResolveModal = ({ state }) => {
                                                                         }}
                                                                     />
                                                                     <label className="form-check-label">
-                                                                        Yes
+                                                                        {" "}
+                                                                        Yes{" "}
                                                                     </label>
                                                                 </div>
 
@@ -1028,7 +1024,8 @@ const ResolveModal = ({ state }) => {
                                                                         }}
                                                                     />
                                                                     <label className="form-check-label">
-                                                                        No
+                                                                        {" "}
+                                                                        No{" "}
                                                                     </label>
                                                                 </div>
                                                             </div>
@@ -1305,20 +1302,31 @@ const ResolveModal = ({ state }) => {
                                                                                     type="number"
                                                                                     className="form-control"
                                                                                     placeholder="50"
-                                                                                    min={0}
-                                                                                    max={100}
-                                                                                    value={raisedByPercent}
+                                                                                    min={
+                                                                                        0
+                                                                                    }
+                                                                                    max={
+                                                                                        100
+                                                                                    }
+                                                                                    value={
+                                                                                        raisedByPercent
+                                                                                    }
                                                                                     style={{
-                                                                                        minWidth: "80px",
+                                                                                        minWidth:
+                                                                                            "80px",
                                                                                     }}
-                                                                                    onChange={(e) =>{
-                                                                                        if (e.target.value.includes('.')) {
-                                                                                            toast.error('Decimal points are not allowed in this field. Please enter a whole number.');
-                                                                                        } else {
-                                                                                            setRaisedByPercent(e.target.value);
-                                                                                        }
-                                                                                    }}
-                                                                                    onWheel={(e) =>
+                                                                                    onChange={(
+                                                                                        e
+                                                                                    ) =>
+                                                                                        setRaisedByPercent(
+                                                                                            e
+                                                                                                .target
+                                                                                                .value
+                                                                                        )
+                                                                                    }
+                                                                                    onWheel={(
+                                                                                        e
+                                                                                    ) =>
                                                                                         e.currentTarget.blur()
                                                                                     }
                                                                                 />
@@ -1358,13 +1366,13 @@ const ResolveModal = ({ state }) => {
                                                                                     }}
                                                                                     onChange={(
                                                                                         e
-                                                                                    ) =>{
-                                                                                        if(e.target.value.includes('.')){
-                                                                                            toast.error('Decimal points are not allowed in this field. Please enter a whole number.')
-                                                                                        }else{
-                                                                                            setRaisedAgainstPercent(e.target.value)
-                                                                                        }
-                                                                                    }}
+                                                                                    ) =>
+                                                                                        setRaisedAgainstPercent(
+                                                                                            e
+                                                                                                .target
+                                                                                                .value
+                                                                                        )
+                                                                                    }
                                                                                     onWheel={(
                                                                                         e
                                                                                     ) =>

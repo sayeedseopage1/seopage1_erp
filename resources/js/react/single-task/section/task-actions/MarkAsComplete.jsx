@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import CKEditorComponent from "../../../ckeditor/index";
 import FileUploader from "../../../file-upload/FileUploader";
 import { useLazyCheckSubTaskStateQuery, useMarkAsCompleteMutation } from "../../../services/api/SingleTaskPageApi";
@@ -12,7 +10,6 @@ import Button from "../../components/Button";
 import Loader from "../../components/Loader";
 import Modal from "../../components/Modal";
 import SubmitButton from "../../components/SubmitButton";
-
 
 import { checkIsURL } from '../../../utils/check-is-url';
 
@@ -51,16 +48,14 @@ const MarkAsComplete = ({task, auth}) => {
                     if(res.status === 'true' || res.status === true){
                         const htmlContent =  <div className="__tostar_modal">
                         <strong>You can't complete this task because you have some pending subtask?</strong>
-                        <ul className="py-3">
+                        <ul className="py-1">
                             {res.subtasks.map((el, idx) =>
                                 <li
                                     key={el.id}
-                                    className="d-flex align-items-center"
-                                    style={{listStyle: 'unset', fontSize: '16px', gap: '10px'}}
+                                    style={{listStyle: 'unset', fontSize: '13px'}}
                                 >
-                                    {idx + 1}.
                                     <a href={`/account/tasks/${el.id}`}>
-                                        {el.heading}
+                                       {idx + 1}. {el.heading}
                                     </a> (<a href={`/account/clients/${el.clientId}`}>{el.client_name}</a>)
                                 </li>
                             )}
@@ -68,18 +63,10 @@ const MarkAsComplete = ({task, auth}) => {
                     </div>
                     ;
 
-
-                    withReactContent(Swal).fire({
-                        icon: 'info',
-                        html: htmlContent,
-                        customClass: {
-                            confirmButton: 'btn btn-primary px-4'
-                        },
-                        didClose: () => {
-                            close();
-                        }
-                    })
-
+                    toast.warn(htmlContent, {
+                        position: 'top-center',
+                        icon: false,
+                    });
                     }else {
                         setMarkAsCompleteModalIsOpen(true);
                     }
@@ -88,7 +75,8 @@ const MarkAsComplete = ({task, auth}) => {
                 setMarkAsCompleteModalIsOpen(true);
             };
 
-        } else{
+        }
+        else{
             setMarkAsCompleteModalIsOpen(false);
         }
 
