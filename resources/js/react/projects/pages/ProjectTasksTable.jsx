@@ -2,6 +2,8 @@ import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import Loader from "../../global/Loader";
 import { useProject } from "../../hooks/useProject";
 import {
     useLazyGetAllSubtaskQuery,
@@ -18,19 +20,17 @@ import SubmitButton from "../../tasks/components/SubmitButton";
 import SubTasksTable from "../../tasks/components/SubtaskTable";
 import TasksTable from "../../tasks/components/TasksTable";
 import { User } from "../../utils/user-details";
+import EditProjectManagerGuideline from "../components/EditProjectManagerGuideline";
 import JqueryDateRangePicker from "../components/JqueryDateRangePicker";
 import ProjectManagerGuideline from "../components/ProjectManagerGuideline";
 import { ProjectTableColumns } from "../components/ProjectTaskTableColumns";
 import ProjectTasksFilterBar from "../components/ProjectTasksFilterBar";
-import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
-import TaskCreationForm from "../components/TaskCreationForm";
-import { toast } from "react-toastify";
-import EditProjectManagerGuideline from "../components/EditProjectManagerGuideline";
-import TaskAuthorization from "../components/TaskAuthorization";
-import TableColumnSetting from "../components/TableColumnSetting";
-import { projectTaskTableDefaultVisibleColumns } from "../constants";
 import { RefreshButton } from "../components/RefreshButton";
-import Loader from "../../global/Loader";
+import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
+import TableColumnSetting from "../components/TableColumnSetting";
+import TaskAuthorization from "../components/TaskAuthorization";
+import TaskCreationForm from "../components/TaskCreationForm";
+import { projectTaskTableDefaultVisibleColumns } from "../constants";
 
 const ProjectTasks = () => {
     const { tasks } = useSelector((s) => s.tasks);
@@ -123,10 +123,7 @@ const ProjectTasks = () => {
                 if(projectGuidelineStatus.is_allow){
                     setShowTaskCreationForm(true)
                 }else{
-                    toast.warn(projectGuidelineStatus.message, {
-                        position: 'bottom-right',
-                    });
-
+                    toast.warn(projectGuidelineStatus.message);
                     setShowProjectGuidelineEditForm({...projectGuidelineStatus, open: true});
                 }
                }
@@ -262,7 +259,7 @@ const ProjectTasks = () => {
                             {/* refresh button */}
                             <div>
                                 <RefreshButton onClick={handleRefresh}>
-                                    {isFetching ? 
+                                    {isFetching ?
                                         <Loader title="" /> :
                                         <i className="fa-solid fa-arrows-rotate"></i>
                                     }

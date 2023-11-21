@@ -413,7 +413,6 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             await updateProjectGuideline(formData)
             .unwrap()
             .then(res => {
-                console.log(res)
                 toast.success('Task Guideline Update Successfully');
                 close();
             })
