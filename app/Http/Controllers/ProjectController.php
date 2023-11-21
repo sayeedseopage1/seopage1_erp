@@ -747,7 +747,7 @@ class ProjectController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-           
+
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -775,8 +775,8 @@ class ProjectController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                 $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
-                
-           
+
+
         }
     }
         $helper = new HelperPendingActionController();
@@ -922,7 +922,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-            //   / dd($request->all());
+            //   dd($request->all());
 
         //kpi distribution start from here
       //  DB::beginTransaction();
@@ -2000,6 +2000,7 @@ class ProjectController extends AccountBaseController
         $project = Project::findOrFail($id);
         $originalValues = $project->getOriginal();
         $project->project_name = $request->project_name;
+        $project->dept_status = $request->dept_status;
         $project->project_short_code = $request->project_code;
         if ($project->status == 'not started') {
             $project->requirement_defined = $request->requirement_defined;
@@ -3789,12 +3790,12 @@ class ProjectController extends AccountBaseController
         // authorization action section
         $project_id = Project::find($project->project_id);
 
-        //need pending action 
+        //need pending action
         $actions = PendingAction::where('code','PCSA')->where('past_status',0)->where('project_id',$project_id->id)->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-           
+
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -3822,11 +3823,11 @@ class ProjectController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                 $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
-                
-           
+
+
         }
     }
-         
+
 
          $helper = new HelperPendingActionController();
 
@@ -5520,7 +5521,7 @@ public function updatePmBasicSEO(Request $request){
                if($actions != null)
                {
                foreach ($actions as $key => $action) {
-                  
+
                        $action->authorized_by= Auth::id();
                        $action->authorized_at= Carbon::now();
                        $action->past_status = 1;
@@ -5528,7 +5529,7 @@ public function updatePmBasicSEO(Request $request){
                        $project_manager= User::where('id',$project->pm_id)->first();
                        $client= User::where('id',$project->client_id)->first();
                        $authorize_by= User::where('id',$action->authorized_by)->first();
-       
+
                        $past_action= new PendingActionPast();
                        $past_action->item_name = $action->item_name;
                        $past_action->code = $action->code;
@@ -5548,8 +5549,8 @@ public function updatePmBasicSEO(Request $request){
                        $past_action->client_id = $action->client_id;
                        $past_action->milestone_id = $action->milestone_id;
                        $past_action->save();
-                       
-                  
+
+
                }
            }
 
@@ -5894,7 +5895,7 @@ public function updatePmBasicSEO(Request $request){
 
 
         $helper->SendDeliverabletoClient($past_action->project_id);
-       
+
     }
 
 
