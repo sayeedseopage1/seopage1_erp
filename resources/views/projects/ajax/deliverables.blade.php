@@ -279,7 +279,7 @@
                             @endif
                             {{$deliverable->deliverable_type}}
                             @if ($newDeliverable != null && $newDeliverable->contains($deliverable))
-                                <span class="badge badge-success">{{ \Carbon\Carbon::parse($deliverable->created_at)->format('Y-m-d') }}</span>
+                                <span class="badge badge-success">{{ $deliverable->created_at }}</span>
                             @endif
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
