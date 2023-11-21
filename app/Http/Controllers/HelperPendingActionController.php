@@ -899,7 +899,7 @@ class HelperPendingActionController extends AccountBaseController
     $client= User::where('id',$project->client_id)->first();
     $task_revision = TaskRevision::where('task_id',$task->id)->orderBy('id','desc')->first();
     $project_manager= User::where('id',$project->pm_id)->first();
-    $authorizers= User::where('role_id',1)->orWhere('id',$task->added_by)->get();
+    $authorizers= User::where('id',$task->added_by)->get();
        foreach ($authorizers as $key => $authorizer) {
         $action = new PendingAction();
         $action->code = 'TSA';
@@ -940,12 +940,123 @@ class HelperPendingActionController extends AccountBaseController
        }
 
    }
-  
-  
     
-   
-    
+   public function ProjectQcSubmission($project,$milestone)
+   {
    
    
+    $project= Project::where('id',$project->id)->first();
+    $client= User::where('id',$project->client_id)->first();
+   
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizer= User::where('id',$project_manager->id)->first();
+     
+        $action = new PendingAction();
+        $action->code = 'QCSA';
+        $action->serial = 'QCSA'.'x0';
+       
+        $action->item_name= 'QC form';
+        $action->heading= 'Submit QC form!';
+        $action->message = 'Submit qc form for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+     
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+        $action->milestone_id = $milestone->id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Submit',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('projects.show', $project->id.'?tab=milestones'),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+   
+
     
+   }
+   public function ProjectCompletionSubmission($project,$milestone)
+   {
+   
+   
+    $project= Project::where('id',$project->id)->first();
+    $client= User::where('id',$project->client_id)->first();
+   
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizer= User::where('id',$project_manager->id)->first();
+     
+        $action = new PendingAction();
+        $action->code = 'PCSA';
+        $action->serial = 'PCSA'.'x0';
+        $action->item_name= 'Project completion form ';
+        $action->heading= 'Project completion form!';
+        $action->message = 'Submit project completion form for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+        $action->milestone_id = $milestone->id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Submit',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('projects.show', $project->id.'?tab=milestones'),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      //  dd($action);
+   //    dd(json_decode($action->button));
+
+       
+
+   }
+   public function DisputeSubmitAction($project)
+   {
+   
+   
+    $project= Project::where('id',$project->id)->first();
+    $client= User::where('id',$project->client_id)->first();
+   
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizer= User::where('id',$project_manager->id)->first();
+     
+        $action = new PendingAction();
+        $action->code = 'DSA';
+        $action->serial = 'DSA'.'x0';
+       
+        $action->item_name= 'Project dispute form ';
+        $action->heading= 'Project dispute form!';
+        $action->message = 'Submit project dispute form for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+       // $action->milestone_id = $milestone->id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Submit',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('projects.show', $project->id),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      //  dd($action);
+   //    dd(json_decode($action->button));
+
+       
+
+   }
+ 
+
 }
