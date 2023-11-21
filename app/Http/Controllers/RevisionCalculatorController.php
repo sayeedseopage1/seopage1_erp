@@ -396,12 +396,14 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')   
             ->leftJoin('users as winners','winners.id','task_revision_disputes.winner') 
             
-            ->where('projects.pm_id',$id)
+           
             ->where('task_revisions.final_responsible_person','S')
             ->orWhere(function ($query) {
                 $query->where('task_revisions.dispute_between', 'SPR')
+               
                     ->where('task_revisions.raised_against_percent', '!=', null);
             })
+            ->where('projects.pm_id',$id)
            
             // ->orWhere('task_revisions.dispute_between','SPR')
             ->groupBy('task_revisions.id')
