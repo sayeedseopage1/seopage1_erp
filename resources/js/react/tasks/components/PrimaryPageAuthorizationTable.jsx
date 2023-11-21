@@ -203,7 +203,7 @@ export const Columns = [
     },
     {
         id: "task",
-        header: "Sub Task",
+        header: "Task",
         accessorKey: 'task',
         draggable: true,
         cell: ({ row }) => {
@@ -220,26 +220,25 @@ export const Columns = [
             );
         },
     },
-    // TODO Need to enable this and change the aboove object title
-    // {
-    //     id: "sub_task",
-    //     header: "SubTask",
-    //     accessorKey: 'sub_task',
-    //     draggable: true,
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         return (
-    //             <abbr title={data?.sub_task}>
-    //                 <a
-    //                     href={`/account/tasks/${data?.sub_task_id}`}
-    //                     className="multiline-ellipsis"
-    //                 >
-    //                     {data?.sub_task}
-    //                 </a>
-    //             </abbr>
-    //         );
-    //     },
-    // },
+    {
+        id: "sub_task",
+        header: "SubTask",
+        accessorKey: 'sub_task',
+        draggable: true,
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <abbr title={data?.sub_task}>
+                    <a
+                        href={`/account/tasks/${data?.sub_task_id}`}
+                        className="multiline-ellipsis"
+                    >
+                        {data?.sub_task}
+                    </a>
+                </abbr>
+            );
+        },
+    },
 
     {
         id: "assigned_by",

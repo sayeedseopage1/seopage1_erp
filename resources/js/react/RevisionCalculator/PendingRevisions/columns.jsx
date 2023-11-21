@@ -1,7 +1,4 @@
-import _ from "lodash";
 import Switch from "../../global/Switch";
-import styles from '../styles.module.css';
-import { LongText } from "../LongText";
 
 export const PendingRevisionColumns = [
     {
@@ -12,18 +9,7 @@ export const PendingRevisionColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => (
-            <div className={styles.project_title}>
-                <LongText render={row?.project_name}>
-                    <a
-                        href={`/account/projects/${row?.ProjectId}`}
-                        className="multiline-ellipsis"
-                    >
-                        {row?.project_name}
-                    </a>
-                </LongText>
-            </div>
-        )
+        row: ({row}) => <a href={`/account/projects/${row?.ProjectId}`} title={row?.project_name} className="multiline-ellipsis"> {row?.project_name} </a>
     },
     {
         id: "client_name",
@@ -62,13 +48,9 @@ export const PendingRevisionColumns = [
                 : "";
 
             return (
-               <div className={styles.task_title}>
-                    <LongText render={task_name}>
-                    <span className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                        {task_name}
-                    </span>
-                    </LongText>
-               </div>
+                <span title={task_name} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                    {task_name}
+                </span>
             );
         },
     },
@@ -106,15 +88,15 @@ export const PendingRevisionColumns = [
                 LD: row.lead_developer_name,
                 D: row.developer_name,
                 UD: row.developer_name,
-                GD: row.developer_name
-            }
+                GD: row.developer_name 
+            } 
             return obj[`${shortCode}`]
         },
         rowSpan: 2,
         marge: false,
         row: ({ row }) => {
             if (!row) return null;
-
+  
             return (
                 <Switch>
                     <Switch.Case
@@ -165,7 +147,7 @@ export const PendingRevisionColumns = [
                         </a>
                     </Switch.Case>
 
-
+                    
 
                     <Switch.Case
                         condition={row.final_responsible_person === "D"}
@@ -202,12 +184,8 @@ export const PendingRevisionColumns = [
                             {row.developer_name}
                         </a>
                     </Switch.Case>
-
-                    <Switch.Case condition={!_.includes(["C", "S", "PM", "LD", "D", "UD", "GD"], row.final_responsible_person)}>
-                        <span style={{color: '#888'}}>Not yet accepted or denied</span>
-                    </Switch.Case>
                 </Switch>
-            );
+            ); 
         },
     },
     {
@@ -217,27 +195,17 @@ export const PendingRevisionColumns = [
         sort: row => row?.reason_for_revision,
         rowSpan: 2,
         searchText: (row) => `${row?.reason_for_revision}`,
-        row: ({row}) => {
-            return(
-                <div className={styles.reason_for_revision}>
-                    <LongText render={row?.reason_for_revision}>
-                        <span className="multiline-ellipsis">
-                            {row?.reason_for_revision ?? '--'}
-                        </span>
-                    </LongText>
-                </div>
-            )
-        }
+        row: ({row}) => <span title={row?.reason_for_revision} className="multiline-ellipsis">{row?.reason_for_revision ?? '--'}</span>
     },
 
-
+    
     {
         id: 'status',
         heading: 'Status',
-        moveable: false,
-        rowSpan: 2,
+        moveable: false, 
+        rowSpan: 2, 
         row: ({row}) => <span className="badge badge-warning">Pending</span>
     },
+     
 
-
-];
+]; 
