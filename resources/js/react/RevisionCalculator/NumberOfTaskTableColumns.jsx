@@ -1,5 +1,5 @@
 import { convertTime } from '../utils/converTime';
-
+import styles from './styles.module.css';
 
 export const NumberOfTaskTableColumns = [
 
@@ -18,11 +18,11 @@ export const NumberOfTaskTableColumns = [
                 : "";
 
             return (
-                <abbr title={row?.task_title}>
+                <div className={styles.task_title}>
                     <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {task_name}
                     </a>
-                </abbr>
+                </div>
             );
         },
     },

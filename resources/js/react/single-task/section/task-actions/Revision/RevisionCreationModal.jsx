@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 import CKEditorComponent from "../../../../ckeditor";
 import { useRevision } from '../../../../hooks/useRevision';
 import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPageApi";
 import Button from "../../../components/Button";
 import SubmitButton from "../../../components/SubmitButton";
-import Swal from "sweetalert2";
 
 
 
