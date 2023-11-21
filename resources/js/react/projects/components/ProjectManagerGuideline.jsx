@@ -1,12 +1,12 @@
 import _ from "lodash";
 import React from "react";
+import { toast } from "react-toastify";
 import CKEditorComponent from "../../ckeditor";
 import { useStoreProjectGuidelineMutation } from "../../services/api/projectApiSlice";
 import Button from "../../tasks/components/Button";
 import Modal from "../../tasks/components/Modal";
 import SubmitButton from "../../tasks/components/SubmitButton";
 import Input from "../../tasks/components/form/Input";
-import { toast } from "react-toastify";
 
 const ProjectManagerGuideline = ({
     isOpen,
@@ -291,7 +291,7 @@ const ProjectManagerGuideline = ({
                 .unwrap()
                 .then((res) => {
                     // openTaskForm();
-                    toast.success("Task Guideline Store Successfully");
+                    toast.success("Task Guideline Store Successfully", {position: 'top-right'});
                     close();
                 })
                 .catch((err) => console.log(err));
@@ -388,7 +388,6 @@ const ProjectManagerGuideline = ({
                                                     className=""
                                                     style={{ color: "red" }}
                                                 >
-                                                    {" "}
                                                     {error?.themeDetails}{" "}
                                                 </div>
                                             )}
@@ -422,12 +421,9 @@ const ProjectManagerGuideline = ({
                                                             value={themeUrl}
                                                             type="url"
                                                             required={true}
-                                                            onChange={(e) =>
-                                                                onChange(
-                                                                    e,
-                                                                    setThemeUrl
-                                                                )
-                                                            }
+                                                            onChange={(e) =>{
+                                                                onChange( e, setThemeUrl )
+                                                            }}
                                                             error={
                                                                 error?.themeUrl
                                                             }
