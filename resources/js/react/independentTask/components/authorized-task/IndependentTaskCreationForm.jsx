@@ -59,8 +59,8 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setUsername("");
         setPassword("");
         setRefPage("");
-        setSiteUrl("");
-        setFrontendPass("");
+        // setSiteUrl("");
+        // setFrontendPass("");
         setFiles([]);
         setFormError(null);
     };
@@ -160,10 +160,10 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        if (siteUrl && !validator.isURL(siteUrl)) {
-            err.refPage = "Enter a valid Site URL";
-            errCount++;
-        }
+        // if (siteUrl && !validator.isURL(siteUrl)) {
+        //     err.refPage = "Enter a valid Site URL";
+        //     errCount++;
+        // }
 
         setFormError(err);
         return !errCount;
@@ -203,8 +203,8 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         fd.append("user_name", username ?? "");
         fd.append("password", password ?? "");
         fd.append("reference_site", refPage ?? "");
-        fd.append("site_url", siteUrl ?? "");
-        fd.append("frontend_password", frontendPass ?? "");
+        // fd.append("site_url", siteUrl ?? "");
+        // fd.append("frontend_password", frontendPass ?? "");
 
         // fd.append("estimate_hours", estimateTimeHour ?? 0);
         // fd.append("estimate_minutes", estimateTimeMin ?? 0);
@@ -396,7 +396,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 </div>
 
                                 {/* Site URL */}
-                                <div className="col-12 col-md-6">
+                                {/* <div className="col-12 col-md-6">
                                     <Input
                                         id="site-url"
                                         label="Site's URL (Optional)"
@@ -410,10 +410,10 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                             handleChange(e, setSiteUrl)
                                         }
                                     />
-                                </div>
+                                </div> */}
 
                                 {/* Frontend Password */}
-                                <div className="col-12 col-md-6">
+                                {/* <div className="col-12 col-md-6">
                                     <Input
                                         id="frontend-password"
                                         label="Frontend Password (Optional)"
@@ -427,7 +427,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                             handleChange(e, setFrontendPass)
                                         }
                                     />
-                                </div>
+                                </div> */}
                             </section>
 
                             <section

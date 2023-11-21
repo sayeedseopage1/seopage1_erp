@@ -221,6 +221,14 @@ p{
 } */
 .form_input_container{
   margin-bottom: 5px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 30px;
+}
+.form_textArea_label{
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5px;
 }
 /* .form_textArea{
 
@@ -228,6 +236,33 @@ p{
 /* .form_textField{
 
 } */
+.form_select_area_container{
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5px;
+}
+.form_select_container{
+  display: flex;
+  /* align-items: center; */
+  gap: 5px;
+}
+.form_select_title{
+  padding-top: 8px;
+}
+.form_select{
+  padding: 5px;
+  margin: 5px 0;
+  background-color: #F2F4F7;
+  outline: none;
+  border: solid 1px rgb(218, 218, 218);
+  min-width: 5rem;
+  text-align: center;
+  border-radius: 3px;
+  color: gray;
+  font-weight: bold;
+  font-size: 15px;
+}
+
 
 .form_btn_container{
   display: flex;

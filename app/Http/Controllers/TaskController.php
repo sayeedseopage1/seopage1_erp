@@ -748,7 +748,7 @@ class TaskController extends AccountBaseController
     public function TaskReview(Request $request)
     {
 
-        // DB::beginTransaction();
+        // / DB::beginTransaction();
         $validator = Validator::make($request->input(), [
             'link' => 'required|array',
             'link.*' => 'required|url|min:1',
@@ -856,6 +856,13 @@ class TaskController extends AccountBaseController
 
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
+        // need pending action 
+        $helper = new HelperPendingActionController();
+
+
+        $helper->TaskApproveAction($task_id,$sender);
+
+        //need pending action
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
@@ -923,27 +930,9 @@ class TaskController extends AccountBaseController
         $task_status->save();
         $board_column = TaskBoardColumn::where('id', $task_status->board_column_id)->first();
         // dd($task_status);
-        if (Auth::user()->role_id == 6) {
-            $lead_dev_authorization = AuthorizationAction::where('task_id', $task_status->id)->where('type', 'task_submission_by_developer')->where('authorization_for', Auth::id())->first();
-            //dd($lead_dev_authorization);
-            if ($lead_dev_authorization != null && $lead_dev_authorization->status == 0) {
-                $lead_dev_authorization_update = AuthorizationAction::find($lead_dev_authorization->id);
-                $lead_dev_authorization_update->status = '1';
-                $lead_dev_authorization_update->authorization_by = Auth::id();
-                $lead_dev_authorization_update->save();
-            }
-        }
+       
 
-        if (Auth::user()->role_id == 4) {
-            $pm_authorization = AuthorizationAction::where('task_id', $task_status->id)->where('type', 'task_submission_by_lead_developer')->where('authorization_for', Auth::id())->first();
-            //dd($lead_dev_authorization);
-            if ($pm_authorization != null && $pm_authorization->status == 0) {
-                $lead_dev_authorization_update = AuthorizationAction::find($lead_dev_authorization->id);
-                $lead_dev_authorization_update->status = '1';
-                $lead_dev_authorization_update->authorization_by = Auth::id();
-                $lead_dev_authorization_update->save();
-            }
-        }
+        
 
 
 
@@ -958,6 +947,44 @@ class TaskController extends AccountBaseController
         $task->rating3 = $request->rating3;
         $task->comments = $request->comments;
         $task->save();
+        $taskId= Task::where('id',$task->task_id)->first();
+        $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$taskId->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $project= Project::where('id',$taskId->project_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message. ' reviewed by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               
+                $past_action->save();
+                
+           
+        }
+    }
+
         //dd($task, $task_status);
 
 
@@ -1076,7 +1103,7 @@ class TaskController extends AccountBaseController
             $task_revision->final_responsible_person = "LD";
         }
 
-        if($dispute_between == 'PLR' && $request->is_deniable==false){
+        if($dispute_between == 'PLR' && $request->is_deniable==false && $request->acknowledgement_id != 'PLRx04'){
             $task_revision->final_responsible_person = "PM";
         }
 
@@ -3059,7 +3086,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->approval_status = 'accepted';
 
             $tasks_accept->is_accept = true;
-            if($tasks_accept->dispute_between  == 'PLR' || $tasks_accept->dispute_between  == 'LDR')
+            if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4'))
             {
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
             }
@@ -3661,6 +3688,10 @@ class TaskController extends AccountBaseController
                 'pending_parent_tasks.sub_acknowledgement as sub_acknowledgement',
                 'pending_parent_tasks.comment as comment',
                 'pending_parent_tasks.approval_status as approval_status',
+                'pending_parent_tasks.login_url as pp_task_login_url',
+                'pending_parent_tasks.user_name as pp_task_user_name',
+                'pending_parent_tasks.reference_site as pp_task_reference_site',
+                'pending_parent_tasks.password as pp_task_password',
 
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])

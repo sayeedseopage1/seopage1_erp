@@ -475,7 +475,7 @@ var useRefetchTaskDetails = function useRefetchTaskDetails() {
   };
 };
 var SingleIndependentTask = function SingleIndependentTask() {
-  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$taskType, _task$pageType, _task$pageName, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _task$workEnvData6, _task$workEnvData7, _$last;
+  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$additionalInfo, _task$additionalInfo2, _task$additionalInfo3, _task$additionalInfo4, _task$category$name, _task$category, _task$taskType, _task$pageType, _task$pageName, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _task$workEnvData6, _$last;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -757,7 +757,51 @@ var SingleIndependentTask = function SingleIndependentTask() {
                         }
                       }), task === null || task === void 0 ? void 0 : task.priority]
                     })]
-                  }), (task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {
+                  }), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Login URL :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("a", {
+                        target: "__blank",
+                        href: task === null || task === void 0 || (_task$additionalInfo = task.additionalInfo) === null || _task$additionalInfo === void 0 ? void 0 : _task$additionalInfo.loginURL,
+                        children: task === null || task === void 0 || (_task$additionalInfo2 = task.additionalInfo) === null || _task$additionalInfo2 === void 0 ? void 0 : _task$additionalInfo2.loginURL
+                      })
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Username :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: task.additionalInfo.username
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Password :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: task.additionalInfo.password
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
+                      children: ["Reference page :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("a", {
+                        target: "__blank",
+                        href: task === null || task === void 0 || (_task$additionalInfo3 = task.additionalInfo) === null || _task$additionalInfo3 === void 0 ? void 0 : _task$additionalInfo3.refSite,
+                        children: task === null || task === void 0 || (_task$additionalInfo4 = task.additionalInfo) === null || _task$additionalInfo4 === void 0 ? void 0 : _task$additionalInfo4.refSite
+                      })
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), (task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
                       className: "sp1_st-list-item",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
@@ -870,17 +914,6 @@ var SingleIndependentTask = function SingleIndependentTask() {
                             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("strong", {
                               children: "Password"
                             }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData6 = task.workEnvData) === null || _task$workEnvData6 === void 0 ? void 0 : _task$workEnvData6.password]
-                          })
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
-                          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("span", {
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("strong", {
-                              children: "Reference Page"
-                            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("a", {
-                              target: "__blank",
-                              href: task === null || task === void 0 || (_task$workEnvData7 = task.workEnvData) === null || _task$workEnvData7 === void 0 ? void 0 : _task$workEnvData7.reference_site,
-                              children: "View on new tab"
-                            })]
                           })
                         })]
                       })]
@@ -14717,7 +14750,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
   // console.log({pathname});
 
   var role = auth.getRoleId();
-  var revisionOptions = role === 4 || role === 1 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
+  var revisionOptions = role === 1 || role === 4 || role === 8 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
   var _useCreateRevisionMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_4__.useCreateRevisionMutation)(),
     _useCreateRevisionMut2 = _slicedToArray(_useCreateRevisionMut, 2),
     createRevision = _useCreateRevisionMut2[0],

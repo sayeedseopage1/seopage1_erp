@@ -5,7 +5,7 @@
         $findProject = App\Models\Project::where('id',$project->id)->first();
         $milestonCreatedBy = App\Models\User::where('id',$findProject->pm_id)->first();
         $deliverables = App\Models\ProjectDeliverable::where('project_id',$contractSign->project_id)->whereDate('created_at','>',$contractSign->created_at)->get();
-        // dd($deliverables);
+        // dd($milestonCreatedBy);
     }
 @endphp
 <style>
@@ -40,28 +40,28 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
                                     @foreach ($milestones as $mItem)
-                                        <th scope="row">{{ $loop->iteration }}</th>
-                                        <td>{{ $mItem->created_at }}</td>
-                                        <td>{{ $mItem->milestone_title }}</td>
-                                        <td>{{ $mItem->actual_cost }}</td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="" style="width: 28px;">
-                                                    <div style="width: 32px; height: 28px;">
-                                                        @if ($milestonCreatedBy->image)
-                                                            <img src="{{ asset('user-uploads/avatar/'.$milestonCreatedBy->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
-                                                        @else
-                                                            <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
-                                                        @endif
+                                        <tr>
+                                            <th scope="row">{{ $loop->iteration }}</th>
+                                            <td>{{ $mItem->created_at }}</td>
+                                            <td>{{ $mItem->milestone_title }}</td>
+                                            <td>{{ $mItem->actual_cost }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="" style="width: 28px;">
+                                                        <div style="width: 32px; height: 28px;">
+                                                            @if ($milestonCreatedBy->image)
+                                                                <img src="{{ asset('user-uploads/avatar/'.$milestonCreatedBy->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                                            @else
+                                                                <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                                            @endif
+                                                        </div>
                                                     </div>
+                                                    <a href="{{ route('employees.show',$milestonCreatedBy->id) }}" class="pl-2 ">{{ $milestonCreatedBy->name }}</a>
                                                 </div>
-                                                <a href="{{ route('employees.show',$milestonCreatedBy->id) }}" class="pl-2 ">{{ $milestonCreatedBy->name }}</a>
-                                            </div>
-                                        </td>
+                                            </td>
+                                        </tr>
                                     @endforeach
-                                </tr>
                                 </tbody>
                             </table>
                         @endif
@@ -81,13 +81,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
                                     @foreach ($deliverables as $dItem)
+                                    <tr>
                                         @php
                                             $dMilestone = App\Models\ProjectMilestone::where('id',$dItem->milestone_id)->first();
                                         @endphp
                                         <th scope="row">{{ $loop->iteration }}</th>
-                                        <td>{{ $dItem->deliverable_type }}</td>
+                                        <td>{{ $dItem->deliverable_type }} <span class="badge badge-success"> {{ \Carbon\Carbon::parse($dMilestone->created_at)->format('Y-m-d') }} </span></td>
                                         <td>{{ $dItem->title }}</td>
                                         <td>{{ $dMilestone->milestone_title }}</td>
                                         <td>
@@ -104,8 +104,8 @@
                                                 <a href="{{ route('employees.show',$milestonCreatedBy->id) }}" class="pl-2 ">{{ $milestonCreatedBy->name }}</a>
                                             </div>
                                         </td>
+                                    </tr>
                                     @endforeach
-                                </tr>
                                 </tbody>
                             </table>
                         @endif
