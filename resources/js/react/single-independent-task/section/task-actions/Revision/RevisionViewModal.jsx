@@ -15,7 +15,7 @@ import _ from "lodash";
 import { User } from "../../../../utils/user-details";
 
 const RevisionViewModal = ({ task, close }) => {
-    const {task:Task} = useSelector((s)=>s.subTask)
+    const { task: Task } = useSelector((s) => s.subTask);
     const [show, setShow] = useState("REVISION");
     const [accept, setAccept] = useState("");
     const [comment, setComment] = useState("");
@@ -75,9 +75,11 @@ const RevisionViewModal = ({ task, close }) => {
     };
 
     const handleContinueButton = () => {
+        console.log(revision);
         setAccept("continue");
         if (_.size(revision?.taskSubTask) === 0) {
             setShow("DENY_ASSIGNEE_TO_DEV");
+            close();
         } else {
             handleOnSubmit(
                 {
@@ -100,7 +102,7 @@ const RevisionViewModal = ({ task, close }) => {
         } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
             return `Revision By ${Task?.create_by?.name}`;
         } else return "Revision By Lead Developer";
-    },[Task]);
+    }, [Task]);
 
     //   console.log({task})
     return (
@@ -119,6 +121,7 @@ const RevisionViewModal = ({ task, close }) => {
                 </div>
 
                 <div className="px-3">
+                    {/* revision view */}
                     {show === "REVISION" && (
                         <RevisionView
                             revision={revision}
@@ -136,6 +139,7 @@ const RevisionViewModal = ({ task, close }) => {
                         />
                     )}
 
+                    {/* revision accepted after view */}
                     {show === "ACCEPT_AND_CONTINUE" && (
                         <RevisionAcceptAndContinue
                             task={task}
@@ -150,19 +154,22 @@ const RevisionViewModal = ({ task, close }) => {
                         />
                     )}
 
-                    {show === "ASSIGNEE_TO_DEV" && (
-                        <AssigneeRevisionToDev
-                            task={task}
-                            revision={revision}
-                            type={true}
-                            onSubmit={(data) =>
-                                handleOnSubmit(data, "ASSIGNEE_TO_DEV")
-                            }
-                            isSubmitting={isLoadingRevisionReview}
-                            onBack={() => setShow("ACCEPT_AND_CONTINUE")}
-                        />
-                    )}
+                    {/* revision assigned to dev after accepted */}
+                    {_.size(task?.taskSubTask) > 0 &&
+                        show === "ASSIGNEE_TO_DEV" && (
+                            <AssigneeRevisionToDev
+                                task={task}
+                                revision={revision}
+                                type={true}
+                                onSubmit={(data) =>
+                                    handleOnSubmit(data, "ASSIGNEE_TO_DEV")
+                                }
+                                isSubmitting={isLoadingRevisionReview}
+                                onBack={() => setShow("ACCEPT_AND_CONTINUE")}
+                            />
+                        )}
 
+                    {/* revision denied after view */}
                     {show === "DENY_AND_CONTINUE" && (
                         <DenyAndContinue
                             task={task}
@@ -177,6 +184,7 @@ const RevisionViewModal = ({ task, close }) => {
                         />
                     )}
 
+                    {/* revision assigned to dev after denied */}
                     {_.size(task?.taskSubTask) > 0 &&
                         show === "DENY_ASSIGNEE_TO_DEV" && (
                             <AssigneeRevisionToDev
