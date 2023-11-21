@@ -856,7 +856,7 @@ class TaskController extends AccountBaseController
 
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
-        // need pending action 
+        // need pending action
         $helper = new HelperPendingActionController();
 
 
@@ -930,9 +930,9 @@ class TaskController extends AccountBaseController
         $task_status->save();
         $board_column = TaskBoardColumn::where('id', $task_status->board_column_id)->first();
         // dd($task_status);
-       
 
-        
+
+
 
 
 
@@ -978,10 +978,10 @@ class TaskController extends AccountBaseController
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               
+
                 $past_action->save();
-                
-           
+
+
         }
     }
 
@@ -2922,7 +2922,9 @@ class TaskController extends AccountBaseController
          * * initially responsible person is the "current user"
          */
         if (
-            $dispute_between != 'CPR' &&
+            $dispute_between != 'CPRx01' &&
+            $dispute_between != 'CPRx05' &&
+            $dispute_between != 'CPRx06' &&
             $dispute_between != 'SPR' &&
             $request->is_deniable == false &&
             $auth->role_id != 1

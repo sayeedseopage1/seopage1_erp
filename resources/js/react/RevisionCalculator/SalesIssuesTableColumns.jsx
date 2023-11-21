@@ -1,8 +1,9 @@
 import Popover from '../global/Popover';
 import Switch from '../global/Switch';
+import { LongText } from './LongText';
 import styles from './styles.module.css';
 
-export const SalesIssuesTableColumns = [ 
+export const SalesIssuesTableColumns = [
     {
         id: "project_name",
         heading: "Project Name",
@@ -11,7 +12,7 @@ export const SalesIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <a href={`/account/projects/${row?.ProjectId}`} className="multiline-ellipsis"> {row?.project_name} </a> 
+        row: ({row}) => <a href={`/account/projects/${row?.ProjectId}`} className="multiline-ellipsis"> {row?.project_name} </a>
     },
     {
         id: "client_name",
@@ -29,10 +30,10 @@ export const SalesIssuesTableColumns = [
                 : "";
 
             return (
-                <a 
-                    href={`/account/clients/${row?.clientId}`} 
-                    title={client_name} 
-                    className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`} 
+                <a
+                    href={`/account/clients/${row?.clientId}`}
+                    title={client_name}
+                    className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}
                 >
                     {client_name}
                 </a>
@@ -54,12 +55,16 @@ export const SalesIssuesTableColumns = [
                 : "";
 
             return (
-                <span className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {task_name}
-                </span> 
+                <div className={styles.task_title}>
+                    <LongText render={task_name}>
+                        <a href={`/account/tasks/${row?.task_id}`} className={`multiline-ellipsis text-hover-underline ${isEqual ? "highlight" : ""}`}>
+                            {task_name}
+                        </a>
+                    </LongText>
+                </div>
             );
         },
-    },  
+    },
     {
         id: "revision_request_raised_by",
         heading: "Revision request raised by",
@@ -82,7 +87,7 @@ export const SalesIssuesTableColumns = [
               </abbr>
             );
         },
-    },  
+    },
     {
         id: "revision_requests_against",
         heading: "Responsible Person",
@@ -96,8 +101,8 @@ export const SalesIssuesTableColumns = [
                 LD: row.lead_developer_name,
                 D: row.developer_name,
                 UD: row.developer_name,
-                GD: row.developer_name 
-            } 
+                GD: row.developer_name
+            }
             return obj[`${shortCode}`]
         },
         rowSpan: 2,
@@ -107,9 +112,9 @@ export const SalesIssuesTableColumns = [
             const rPerson = row?.final_responsible_person;
             const disputed = row?.dispute_created;
             const between = row?.dispute_between;
-            
+
             return (
-                <Switch> 
+                <Switch>
                     <a
                         href={`/account/employees/${row.sales_id}`}
                         title={row.sales_name}
@@ -117,13 +122,13 @@ export const SalesIssuesTableColumns = [
                     >
                         {row.sales_name}
                     </a>
-                    <Switch.Case condition={!rPerson && disputed }>
+                    <Switch.Case condition={!rPerson && row?.raised_against_percent}>
                         <span>({row.raised_against_percent}%)</span>
-                    </Switch.Case> 
+                    </Switch.Case>
                 </Switch>
-            ); 
+            );
         },
-    },  
+    },
     {
         id: 'reason_for_revision',
         heading: 'Reason for revision',
@@ -142,7 +147,7 @@ export const SalesIssuesTableColumns = [
                             {row?.reason_for_revision}
                         </div>
                     </Popover.Panel>
-                </Popover> 
+                </Popover>
             )
         }
     },
@@ -154,7 +159,7 @@ export const SalesIssuesTableColumns = [
         rowSpan: 2,
         searchText: (row) => `${row?.dispute_created}`,
         row: ({row}) => <span className="multiline-ellipsis">{row?.dispute_created ? 'YES' : 'NO'}</span>
-    },  
+    },
     {
         id: 'total_comments',
         heading: 'Total comments',
@@ -173,16 +178,16 @@ export const SalesIssuesTableColumns = [
         searchText: (row) => `${row?.verdict}`,
         row: ({row}) => <Verdict row={row} />
     },
-     
+
 ];
 
 const Verdict = ({ row }) => {
     if (row?.status) {
         if (row?.winner) {
-            return <span> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </span>
+            return <div className={styles.task_title}> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </div>
         } else {
             return (
-                <div>
+                <div className={styles.task_title}>
                      Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             );

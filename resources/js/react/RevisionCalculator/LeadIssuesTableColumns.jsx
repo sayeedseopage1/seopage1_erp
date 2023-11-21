@@ -1,4 +1,6 @@
 import Switch from "../global/Switch";
+import { LongText } from './LongText';
+import styles from './styles.module.css';
 
 export const LeadIssuesTableColumns = [
     {
@@ -10,14 +12,16 @@ export const LeadIssuesTableColumns = [
         marge: true,
         searchText: (row) => `${row?.project_name}`,
         row: ({ row }) => (
-            <a
-                href={`/account/projects/${row?.ProjectId}`}
-                title={row?.project_name}
-                className="singleline-ellipsis"
-            >
-                {" "}
-                {row?.project_name}{" "}
-            </a>
+            <div className={styles.project_title}>
+               <LongText render={row?.project_name}>
+                    <a
+                        href={`/account/projects/${row?.ProjectId}`}
+                        className="text-hover-underline"
+                    >
+                        {row?.project_name}
+                    </a>
+               </LongText>
+            </div>
         ),
     },
     {
@@ -62,14 +66,18 @@ export const LeadIssuesTableColumns = [
                 : "";
 
             return (
-                <span
-                    title={task_name}
-                    className={`singleline-ellipsis ${
-                        isEqual ? "highlight" : ""
-                    }`}
-                >
-                    {task_name}
-                </span>
+               <div className={styles.task_title}>
+                    <LongText render={task_name}>
+                        <a
+                            href={`/account/tasks/${row?.task_id}`}
+                            className={`multiline-ellipsis ${
+                                isEqual ? "highlight" : ""
+                            }`}
+                        >
+                            {task_name}
+                        </a>
+                    </LongText>
+               </div>
             );
         },
     },
@@ -172,12 +180,15 @@ export const LeadIssuesTableColumns = [
         rowSpan: 2,
         searchText: (row) => `${row?.reason_for_revision}`,
         row: ({ row }) => (
-            <span
-                title={row?.reason_for_revision}
-                className="singleline-ellipsis"
-            >
-                {row?.reason_for_revision ?? "--"}
-            </span>
+            <div className={styles.reason_for_revision}>
+                <LongText render={row?.reason_for_revision}>
+                    <span
+                        className="multiline-ellipsis"
+                    >
+                        {row?.reason_for_revision ?? "--"}
+                    </span>
+                </LongText>
+            </div>
         ),
     },
     {
@@ -203,9 +214,11 @@ export const LeadIssuesTableColumns = [
         rowSpan: 2,
         searchText: (row) => `${row?.disputes_comments}`,
         row: ({ row }) => (
-            <span className="singleline-ellipsis">
-                {row?.disputes_comments}
-            </span>
+            <div className={styles.dispute_comment}>
+                <span className="singleline-ellipsis">
+                    {row?.disputes_comments}
+                </span>
+            </div>
         ),
     },
     {
