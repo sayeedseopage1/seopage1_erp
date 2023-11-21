@@ -876,7 +876,7 @@
                         <td class="text-center">
                             @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
                             <a target="_blank" href="{{route('deliverables_modification_form', $deliverable->id)}}">
-                                <i class="fa fa-plus"></i>
+                                <i class="fa-solid fa-screwdriver-wrench" style="color: black"></i>
                             </a>
                             @endif
                             @php
