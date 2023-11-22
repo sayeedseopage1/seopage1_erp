@@ -233,6 +233,7 @@ class RevisionCalculatorController extends AccountBaseController
         ->where('tasks.added_by',$id)
         ->whereBetween('projects.created_at', [$startDate, $endDate])
         ->where('projects.project_status','Accepted')
+        ->groupBy('tasks.id')
         ->get();
         return response()->json($total_projects, 200);
        
