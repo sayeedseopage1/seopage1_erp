@@ -303,7 +303,7 @@
 
                                 <x-sub-menu-item :link="route('disputes.index')" :text="__('Disputes')" />
 
-                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth:user()->role_id == 4)
                                 <x-sub-menu-item :link="route('revision-calculator.index')" :text="__('Revision Calculator')" />
                             @endif
                             @if (Auth::user()->role_id == 1)
