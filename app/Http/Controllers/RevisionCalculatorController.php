@@ -214,7 +214,7 @@ class RevisionCalculatorController extends AccountBaseController
         $total_projects = Task::select('tasks.id','tasks.heading as task_title','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'p_m_projects.created_at as project_creation_date',
-        DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE task_revisions.project_id = projects.id AND DATE(p_m_projects.created_at) >= "'.$startDate.'" AND DATE(p_m_projects.created_at) <= "'.$endDate.'") as total_revisions'),
+        DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE task_revisions.project_id = projects.id AND WHERE task_revisions.dispute_between != null AND DATE(p_m_projects.created_at) >= "'.$startDate.'" AND DATE(p_m_projects.created_at) <= "'.$endDate.'") as total_revisions'),
         DB::raw('(SELECT COUNT(tasks.id) FROM tasks WHERE tasks.added_by = "'.$id.'" AND tasks.project_id = projects.id AND DATE(tasks.created_at) >= "'.$startDate.'" AND DATE(tasks.created_at) <= "'.$endDate.'") as total_tasks'),
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.project_id = projects.id AND project_time_logs.revision_status = 1 AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'"), 0) as total_time_spent'),
         DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE task_revisions.project_id = projects.id AND task_revisions.final_responsible_person = "S" AND DATE(task_revisions.created_at) >= "'.$startDate.'" AND DATE(task_revisions.created_at) <= "'.$endDate.'") as sales_issues'),
