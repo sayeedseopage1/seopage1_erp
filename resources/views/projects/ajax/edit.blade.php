@@ -43,6 +43,11 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
 
                 @endif
+                @if ($project->dept_status =='DM')
+                <input type="hidden" name="dept_status" id="dept_status" value="{{ $project->dept_status }}">
+                @else
+                <input type="hidden" name="dept_status" id="dept_status" value="WD">
+                @endif
             <div class="add-client bg-white rounded">
                 <h4 class="mb-0 p-20 f-21 font-weight-normal text-capitalize border-bottom-grey">
                     @lang('modules.projects.projectInfo')</h4>
@@ -237,71 +242,73 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         @endif
 
 
-                    @if ($project->public == 0 && $editProjectMembersPermission == 'all' || $editPermission == 'all')
-                        <div class="col-md-12" id="edit_members">
-                           <div class="form-group my-3">
-                                <x-forms.label fieldId="selectAssignee" :fieldLabel="__('Recommended Developers')">
-                                </x-forms.label>
-                                <x-forms.input-group>
-                                    <select class="form-control multiple-users" multiple name="member_id[]"
-                                        id="selectEmployee" data-live-search="true" data-size="8">
-                                        <?php
-                                        $users= App\Models\User::where('role_id',5)->get();
-                                        $user= App\Models\User::where('role_id',6)->orderBy('id', 'DESC')->first();
-                                         ?>
-                                        @foreach ($users as $item)
-                                            @php
-                                                $selected = '';
-                                            @endphp
-
-                                            @foreach ($project->members as $member)
-                                                @if ($member->user->id == $item->id)
-                                                    @php
-                                                        $selected = 'selected';
-                                                    @endphp
-                                                @endif
-                                            @endforeach
+                    @if ($project->dept_status !='DM')
+                        @if ($project->public == 0 && $editProjectMembersPermission == 'all' || $editPermission == 'all')
+                            <div class="col-md-12" id="edit_members">
+                            <div class="form-group my-3">
+                                    <x-forms.label fieldId="selectAssignee" :fieldLabel="__('Recommended Developers')">
+                                    </x-forms.label>
+                                    <x-forms.input-group>
+                                        <select class="form-control multiple-users" multiple name="member_id[]"
+                                            id="selectEmployee" data-live-search="true" data-size="8">
                                             <?php
-                                            $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
-                                            if($task_id != null)
-                                            {
-                                                $task= App\Models\Task::where('id',$task_id->task_id)->first();
-                                                if ($task != null && $task->status != 'completed') {
-                                                  $d_data= "Busy Until ".$task->due_date->format('Y-m-d') . ' ('.$task->due_date->format('h:i:s A'). ')';
-                                                }else {
-                                                      $d_data=  "Open to Work";
-                                                }
-                                                  //$d_data= "Busy Until ".$task->due_date;
-                                            }else {
-                                              $d_data=  "Open to Work";
-                                            }
-                                          // dd($task_id->task_id);
+                                            $users= App\Models\User::where('role_id',5)->get();
+                                            $user= App\Models\User::where('role_id',6)->orderBy('id', 'DESC')->first();
+                                            ?>
+                                            @foreach ($users as $item)
+                                                @php
+                                                    $selected = '';
+                                                @endphp
 
-                                             ?>
-                                            <option {{ $selected }}
-                                            data-content="<span class='badge badge-pill badge-light border'>
-                                            <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle'
-                                            src='{{ $item->image_url }}'></div>
-                                            {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
-                                            </span>"
-                                            value="{{ $item->id }}">{{ mb_ucwords($item->name) }}</option>
-                                        @endforeach
-                                    </select>
-                                    @if ($addEmployeePermission == 'all' || $addEmployeePermission == 'added')
-                                        <x-slot name="append">
-                                            <button id="add-employee" type="button"
-                                                class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
-                                        </x-slot>
-                                    @endif
-                                </x-forms.input-group>
+                                                @foreach ($project->members as $member)
+                                                    @if ($member->user->id == $item->id)
+                                                        @php
+                                                            $selected = 'selected';
+                                                        @endphp
+                                                    @endif
+                                                @endforeach
+                                                <?php
+                                                $task_id= App\Models\TaskUser::where('user_id',$item->id)->first();
+                                                if($task_id != null)
+                                                {
+                                                    $task= App\Models\Task::where('id',$task_id->task_id)->first();
+                                                    if ($task != null && $task->status != 'completed') {
+                                                    $d_data= "Busy Until ".$task->due_date->format('Y-m-d') . ' ('.$task->due_date->format('h:i:s A'). ')';
+                                                    }else {
+                                                        $d_data=  "Open to Work";
+                                                    }
+                                                    //$d_data= "Busy Until ".$task->due_date;
+                                                }else {
+                                                $d_data=  "Open to Work";
+                                                }
+                                            // dd($task_id->task_id);
+
+                                                ?>
+                                                <option {{ $selected }}
+                                                data-content="<span class='badge badge-pill badge-light border'>
+                                                <div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle'
+                                                src='{{ $item->image_url }}'></div>
+                                                {{ ucfirst($item->name) }} {{ '<span style="font-size:11px;" class="badge badge-info">'.' '. '('.$d_data .')'. '</span>'   }}
+                                                </span>"
+                                                value="{{ $item->id }}">{{ mb_ucwords($item->name) }}</option>
+                                            @endforeach
+                                        </select>
+                                        @if ($addEmployeePermission == 'all' || $addEmployeePermission == 'added')
+                                            <x-slot name="append">
+                                                <button id="add-employee" type="button"
+                                                    class="btn btn-outline-secondary border-grey">@lang('app.add')</button>
+                                            </x-slot>
+                                        @endif
+                                    </x-forms.input-group>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                          <div class="form-group my-3">
-                          <x-forms.text :fieldLabel="__('Lead Developer')" fieldName="" fieldId=""
-                              :fieldValue="$user->name" fieldReadOnly="true" />
+                            <div class="col-md-6">
+                            <div class="form-group my-3">
+                            <x-forms.text :fieldLabel="__('Lead Developer')" fieldName="" fieldId=""
+                                :fieldValue="$user->name" fieldReadOnly="true" />
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endif
 
                     @if ($project->public == 1 && $editProjectMembersPermission || $editPermission == 'all')

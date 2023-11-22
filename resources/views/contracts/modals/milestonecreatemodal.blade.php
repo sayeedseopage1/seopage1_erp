@@ -67,6 +67,10 @@
                             <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
                                 @if ($deal->dept_status=='DM')
                                 <option >--</option>
+                                <option value="seo">SEO</option>
+                                <option value="paid-campaign-setup">Paid Campaign Setup</option>
+                                <option value="social-media-marketing">Social Media Marketing</option>
+                                <option value="email-marketing">Email Marketing</option>
                                 <option value="web-content">Webcontent</option>
                                 <option value="blogs-articles">Blogs/articles</option>
                                 <option value="product-description">Product descriptions</option>
@@ -227,7 +231,11 @@
         var selectedServiceType = $('#service_type').val();
         var createButton = $('.add_milestone');
 
-        if (selectedServiceType === 'web-development') {
+        if (selectedServiceType === 'web-development' ||
+            selectedServiceType === 'seo' ||
+            selectedServiceType === 'paid-campaign-setup' ||
+            selectedServiceType === 'social-media-marketing' ||
+            selectedServiceType === 'email-marketing') {
             createButton.prop('disabled', false);
         } else {
             createButton.prop('disabled', true);
