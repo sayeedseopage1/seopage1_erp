@@ -1318,9 +1318,9 @@ const ResolveModal = ({ state }) => {
                                                                                     onChange={(
                                                                                         e
                                                                                     ) =>{
-                                                                                        // if (/^\d*$/.test(e.target.value)) {
-                                                                                            setRaisedByPercent( Math.trunc(Number(e.target.value)))
-                                                                                        // }
+                                                                                        if (/^\d*$/.test(e.target.value)) {
+                                                                                            setRaisedByPercent(e.target.value)
+                                                                                        }
                                                                                     }
                                                                                     }
                                                                                     onWheel={(
@@ -1366,9 +1366,9 @@ const ResolveModal = ({ state }) => {
                                                                                     onChange={(
                                                                                         e
                                                                                     ) =>{
-                                                                                        // if (/^\d*$/.test(e.target.value)) {
-                                                                                            setRaisedAgainstPercent(Math.trunc(Number(e.target.value)))
-                                                                                        // }
+                                                                                        if (/^\d*$/.test(e.target.value)) {
+                                                                                            setRaisedAgainstPercent(e.target.value)
+                                                                                        }
                                                                                     }
                                                                                     }
                                                                                     onWheel={(
@@ -1852,9 +1852,9 @@ const ResolveModal = ({ state }) => {
                                                                                         onChange={(
                                                                                             e
                                                                                         ) =>{
-                                                                                            // if (/^\d*$/.test(e.target.value)) {
-                                                                                                setRaisedByPercent(Math.trunc(Number(e.target.value)))
-                                                                                            // }
+                                                                                            if (/^\d*$/.test(e.target.value)) {
+                                                                                                setRaisedByPercent(e.target.value)
+                                                                                            }
                                                                                         }
                                                                                         }
                                                                                         onWheel={(
@@ -1900,9 +1900,9 @@ const ResolveModal = ({ state }) => {
                                                                                         onChange={(
                                                                                             e
                                                                                         ) =>{
-                                                                                            // if (/^\d*$/.test(e.target.value)) {
-                                                                                                setRaisedAgainstPercent(Math.trunc(Number(e.target.value)))
-                                                                                            // }
+                                                                                            if (/^\d*$/.test(e.target.value)) {
+                                                                                                setRaisedAgainstPercent(e.target.value)
+                                                                                            }
                                                                                         }
                                                                                         }
                                                                                         onWheel={(
