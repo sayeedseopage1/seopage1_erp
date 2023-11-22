@@ -104,12 +104,14 @@ class RevisionCalculatorController extends AccountBaseController
                 ->where('task_revisions.final_responsible_person','D')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
-                $pending_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
-                ->where('projects.pm_id',$pm->project_manager_id)
-              
-                ->where('task_revisions.approval_status','pending')
-                ->where('task_revisions.acknowledgement_id','!=',null)
-                ->where('task_revisions.is_deniable','!=',0)
+                $pending_issues = TaskRevision::leftJoin('projects', 'projects.id', 'task_revisions.project_id')
+                ->where('projects.pm_id', $pm->project_manager_id)
+                ->where('task_revisions.approval_status', 'pending')
+                ->where('task_revisions.acknowledgement_id', '!=', null)
+                ->where(function($query) {
+                    $query->where('task_revisions.sale_person', '!=', null)
+                        ->orWhere('task_revisions.is_deniable', '!=', 0);
+                })
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $total_disputes= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
@@ -212,7 +214,10 @@ class RevisionCalculatorController extends AccountBaseController
         $total_projects = Task::select('tasks.id','tasks.heading as task_title','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'p_m_projects.created_at as project_creation_date',
-        DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE task_revisions.project_id = projects.id AND DATE(p_m_projects.created_at) >= "'.$startDate.'" AND DATE(p_m_projects.created_at) <= "'.$endDate.'") as total_revisions'),
+        DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE task_revisions.project_id = projects.id AND task_revisions.dispute_between IS NOT NULL AND DATE(p_m_projects.created_at) >= "'.$startDate.'" AND DATE(p_m_projects.created_at) <= "'.$endDate.'") as total_revisions'),
+
+
+
         DB::raw('(SELECT COUNT(tasks.id) FROM tasks WHERE tasks.added_by = "'.$id.'" AND tasks.project_id = projects.id AND DATE(tasks.created_at) >= "'.$startDate.'" AND DATE(tasks.created_at) <= "'.$endDate.'") as total_tasks'),
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.project_id = projects.id AND project_time_logs.revision_status = 1 AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'"), 0) as total_time_spent'),
         DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE task_revisions.project_id = projects.id AND task_revisions.final_responsible_person = "S" AND DATE(task_revisions.created_at) >= "'.$startDate.'" AND DATE(task_revisions.created_at) <= "'.$endDate.'") as sales_issues'),
@@ -394,12 +399,14 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')   
             ->leftJoin('users as winners','winners.id','task_revision_disputes.winner') 
             
-            ->where('projects.pm_id',$id)
+           
             ->where('task_revisions.final_responsible_person','S')
             ->orWhere(function ($query) {
                 $query->where('task_revisions.dispute_between', 'SPR')
+               
                     ->where('task_revisions.raised_against_percent', '!=', null);
             })
+            ->where('projects.pm_id',$id)
            
             // ->orWhere('task_revisions.dispute_between','SPR')
             ->groupBy('task_revisions.id')
@@ -788,8 +795,12 @@ public function PendingIssues(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')        
         ->where('projects.pm_id',$id)
         ->where('task_revisions.approval_status','pending')
-        ->where('task_revisions.is_deniable','!=',0)
+       
         ->where('task_revisions.acknowledgement_id','!=',null)
+        ->where(function($query) {
+            $query->where('task_revisions.sale_person', '!=', null)
+                ->orWhere('task_revisions.is_deniable', '!=', 0);
+        })
        
         ->groupBy('task_revisions.id')                                                                 
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])

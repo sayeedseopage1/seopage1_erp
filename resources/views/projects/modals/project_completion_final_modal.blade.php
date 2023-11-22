@@ -9,7 +9,7 @@
             <?php
            $project_submission= App\Models\ProjectSubmission::select('project_submissions.*','project_niches.category_name')
        ->leftJoin('project_niches','project_niches.id','project_submissions.niche')
-
+      
       ->where('project_id',$project->id)->orderBy('id','desc')->first();
             $project_portfolio = DB::table('project_portfolios')
                 ->leftJoin('project_cms', 'project_portfolios.cms_category', '=', 'project_cms.id')
@@ -434,16 +434,14 @@
                                             </div>
                                         </td>
                                        <td>
-
-                                       @if ($project_portfolio != null)
-                                            <p class="fw-normal mb-1">Category : {{ $project_portfolio->category_name }}</p>
-                                            @php
-                                                  if ($project_portfolio->sub_niche) {
-                                                    $sub_niche = App\Models\ProjectNiche::where('id',$project_portfolio->sub_niche)->first();
-                                                  }
-                                              @endphp
-                                              <p class="fw-normal mb-1">Sub-Category : {{ $sub_niche->category_name }}</p>
-                                      @else
+                                       
+                                        @if($project_submission->niche != null)
+                                      <p class="fw-normal mb-1">{{$project_submission->category_name}}</p>
+                                       @elseif ($project_portfolio != null)
+                                            <p class="fw-normal mb-1">{{ $project_portfolio->category_name }}</p>
+                                      
+                                      
+                                      @else 
                                             <p class="fw-normal mb-1">--</p>
                                         @endif
                                     </td>
@@ -652,13 +650,13 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 22
-
+                              
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 Plugin Name And Url
-
+                              
                                             </div>
                                         </td>
                                         <td>
@@ -667,7 +665,7 @@
                                                     @php
                                                         $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
                                                     @endphp
-
+                                                   
                                                     <p class="fw-normal mb-1">
                                                         {{ $website_plugin->plugin_name ?? '' }}
                                                     </p>
@@ -686,10 +684,10 @@
                                             @else
                                             <p class="fw-normal mb-1">--</p>
                                             @endif
-
+                              
                                         </td>
-
-
+                              
+                              
                                     </tr>
                                     <tr>
                                         <td>
@@ -727,7 +725,7 @@
 
 
                                     </tr>
-
+                                    
 
                                     <tr>
                                         <td>

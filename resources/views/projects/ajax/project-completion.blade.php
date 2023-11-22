@@ -758,7 +758,7 @@
                 'comments': document.getElementById("comments").value,
                 'comments2': document.getElementById("comments2").value,
                 'comments3': document.getElementById("comments3").value,
-
+                
                 'website_type': document.getElementById("website_type").value,
                 'niche': document.getElementById("niche").value,
                 'sub_niche': document.getElementById("sub_niche").value,
