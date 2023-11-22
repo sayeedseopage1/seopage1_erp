@@ -71,7 +71,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="d-flex align-items-center">
+                                {{-- <div class="d-flex align-items-center">
                                     <div class="" style="width: 28px;">
                                         <div style="width: 32px; height: 28px;">
                                             @if ($personResponsible->image)
@@ -82,7 +82,8 @@
                                         </div>
                                     </div>
                                     <a href="{{ route('employees.show',$personResponsible->id) }}" class="pl-2 ">{{ $personResponsible->name }}</a>
-                                </div>
+                                </div> --}}
+                                --
                             </td>
                             <td>
                                 <p>{{ $item->revision_acknowledgement }}</p>
