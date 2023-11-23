@@ -92,8 +92,8 @@ const SubtasksContainer = () => {
 
 export const RefreshContext = createContext({});
 export function useRefresh(){
-    const { refresh, handleRefresh } = useContext(RefreshContext);
-    return { refresh, handleRefresh };
+    const { refreshState,refresh, handleRefresh } = useContext(RefreshContext);
+    return { refreshState,refresh, handleRefresh };
 }
 
 const IndependentTask = () => {
@@ -162,7 +162,7 @@ const IndependentTask = () => {
     },[setRefresh]) ;
 
     return (
-        <RefreshContext.Provider value={{ refresh:isLoading||isFetching, handleRefresh }}>
+        <RefreshContext.Provider value={{ refreshState:refresh,refresh:isLoading||isFetching, handleRefresh }}>
             <BrowserRouter basename="/account/independent-task">
                 <Routes>
                     <Route path="/" element={<Container />}>

@@ -22,6 +22,7 @@ import {
 import Swal from "sweetalert2";
 import Loader from "../Loader";
 import { useRefresh } from "../../index";
+import './ckeditor.css';
 
 const day = new CompareDate();
 
@@ -40,8 +41,8 @@ const clientRadio = [
     },
 ];
 
-const TaskAuthorizationForm = ({ data, table, refreshing }) => {
-    const { refresh, handleRefresh } = useRefresh();
+const TaskAuthorizationForm = ({ data, table }) => {
+    const { refreshState, handleRefresh } = useRefresh();
 
     const [startDate, setStartDate] = useState(new Date(data?.start_date));
     const [showless, setShowless] = useState(true);
@@ -57,7 +58,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
         data: conversationData,
         isLoading: isConversationLoading,
         isFetching,
-        refetch,
+        refetch:conversationRefetch,
     } = useGetIndependentTaskAuthorizationConversationsQuery(data.id);
 
     // console.log({ conversationData, isConversationLoading });
@@ -70,6 +71,10 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
             setClient("");
         }
     }, [radio]);
+
+    useEffect(()=>{
+      conversationRefetch();
+    },[refreshState])
 
     // console.log({ chat: data?.conversations });
     // const [conversations, setConversations] = React.useState(data.conversations);
@@ -157,14 +162,13 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                 } else {
                     Swal.fire({
                         position: "center",
-                        icon: "success",
+                        icon: "error",
                         title: "Independent task creation request denied successfully",
                         showConfirmButton: false,
                         timer: 3000,
                     });
                 }
                 close();
-                refreshing();
                 handleRefresh();
             });
         // } else {
@@ -368,6 +372,57 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                         </div>
                                     </div>
 
+                                    {/* login url */}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                            Login URL :{" "}
+                                        </div>
+                                        <div className={styles.task_info__text}>
+                                            <a href={data.login_url}>{data.login_url}</a>
+                                        </div>
+                                    </div>
+
+                                    {/* username */}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                            Username :{" "}
+                                        </div>
+                                        <div className={styles.task_info__text}>
+                                            {data.user_name}
+                                        </div>
+                                    </div>
+
+                                    {/* password */}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                            Password :{" "}
+                                        </div>
+                                        <div className={styles.task_info__text}>
+                                            {data.password}
+                                        </div>
+                                    </div>
+
+                                    {/* ref site */}
+                                    {
+                                        data.reference_site &&
+                                        <div className={styles.inline_flex}>
+                                            <div
+                                                className={styles.task_info__label}
+                                            >
+                                                Reference page :{" "}
+                                            </div>
+                                            <div className={styles.task_info__text}>
+                                                <a href={data.reference_site}>{data.reference_site}</a>
+                                            </div>
+                                        </div>
+                                    }
+
                                     {/* description */}
                                     <div
                                         style={{
@@ -393,6 +448,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                             }}
                                         >
                                             <div
+                                                className="task-description"
                                                 dangerouslySetInnerHTML={{
                                                     __html: data.description,
                                                 }}
@@ -523,7 +579,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                                 }
                                             >
                                                 {(data.existing_client_id ||
-                                                    data.new_client) && (
+                                                    data.new_client)? (
                                                     <>
                                                         <Avatar
                                                             name={
@@ -552,6 +608,8 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                                                 : data.new_client}
                                                         </a>
                                                     </>
+                                                ): (
+                                                    <span className="text-danger">Not Applicable</span>
                                                 )}
                                             </div>
                                         )}
@@ -662,9 +720,8 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                             isConversationLoading || isFetching
                                         }
                                         refresh={() => {
-                                            handleRefresh();
-                                            refreshing();
-                                            refetch();
+                                            // handleRefresh();
+                                            conversationRefetch();
                                         }}
                                         // updateConversations={updateConversation}
                                     />
@@ -691,7 +748,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
 
                                             {/* has question radio input */}
                                             {!(
-                                                user.getRoleId() === 1 &&
+                                                (user.getRoleId() === 1 || user.getRoleId() === 8) &&
                                                 user.id === data.assign_by_id
                                             ) && (
                                                 <div
@@ -748,9 +805,8 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                                 <QuestionAnswer
                                                     data={data}
                                                     refresh={() => {
-                                                        handleRefresh();
-                                                        refreshing();
-                                                        refetch();
+                                                        // handleRefresh();
+                                                        conversationRefetch();
                                                     }}
                                                     // conversations={conversationData?.data}
                                                     // setConversations={updateConversation}

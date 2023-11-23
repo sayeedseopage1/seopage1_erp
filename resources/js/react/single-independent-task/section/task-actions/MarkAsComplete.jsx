@@ -218,7 +218,13 @@ const MarkAsComplete = ({ task, auth }) => {
                     });
                     close();
                 })
-                .catch((err) => console.log(err));
+                .catch((err)=>{
+                    close();
+                    console.log(err);
+                })
+                .finally(()=>{
+                  close();
+                });
         }
     };
 

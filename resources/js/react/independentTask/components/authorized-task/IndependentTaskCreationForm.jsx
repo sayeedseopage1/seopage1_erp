@@ -18,6 +18,7 @@ import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 import Input from "../form/Input";
 import validator from "validator";
 import Swal from "sweetalert2";
+import './ckeditor.css';
 
 const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const dayjs = new CompareDate();
@@ -65,9 +66,9 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setFormError(null);
     };
 
-    useEffect(()=>{
-      handleResetForm();
-    },[])
+    useEffect(() => {
+        handleResetForm();
+    }, []);
 
     const params = useParams();
     const [postIndependentTask, { isLoading, error }] =
@@ -173,11 +174,11 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const handleSubmit = (e) => {
         if (!isValid()) {
             Swal.fire({
-                icon:"error",
-                title:"Missing required field or inavlid input",
-                timer:'2000',
-                timerProgressBar:true,
-            })
+                icon: "error",
+                title: "Missing required field or inavlid input",
+                timer: "2000",
+                timerProgressBar: true,
+            });
             return;
         }
         e.preventDefault();
@@ -189,7 +190,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             : "";
 
         const fd = new FormData();
-        fd.append("heading", `${title} for ${loginUrl}` ?? "");
+        fd.append("heading", `${title} for ${getUrl(loginUrl)}` ?? "");
         fd.append("description", description ?? "");
         fd.append("start_date", _startDate ?? "");
         fd.append("due_date", _dueDate ?? "");
@@ -293,6 +294,37 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         return errText;
     };
 
+    // url shortener
+    const getUrl = (url = "") => {
+        const urlPettern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+        if (url) {
+            if (urlPettern.test(url)) {
+                if (url.includes("https://www.")) {
+                    const newUrl = url.split("https://www.")[1];
+                    return newUrl.split("/")[0];
+                } else if (url.includes("http://www.")) {
+                    const newUrl = url.split("http://www.")[1];
+                    return newUrl.split("/")[0];
+                } else if (url.includes("https://")) {
+                    const newUrl = url.split("https://")[1];
+                    return newUrl.split("/")[0];
+                } else if (url.includes("http://")) {
+                    const newUrl = url.split("http://")[1];
+                    return newUrl.split("/")[0];
+                } else if (url.includes("www.")) {
+                    const newUrl = url.split("www.")[1];
+                    return newUrl.split("/")[0];
+                } else {
+                    return url.split("/")[0];
+                }
+            } else {
+                return "not a valid url";
+            }
+        } else {
+            return "";
+        }
+    };
+
     return (
         <Modal isOpen={isOpen}>
             <div className="sp1_modal-content-wrapper">
@@ -382,7 +414,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 <div className="col-12 col-md-6">
                                     <Input
                                         id="password"
-                                        label="Password Field"
+                                        label="Password"
                                         type="password"
                                         placeholder="Enter the password"
                                         name="password"
@@ -472,10 +504,10 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         className="form-control height-35 w-100 f-14 mt-md-4 mx-0 d-flex align-items-center"
                                         style={{
                                             backgroundColor: "whitesmoke",
-                                            overflowX:'auto'
+                                            overflowX: "auto",
                                         }}
                                     >
-                                        <span>{loginUrl}</span>
+                                        <span>{getUrl(loginUrl)}</span>
                                     </span>
                                 </div>
                             </section>

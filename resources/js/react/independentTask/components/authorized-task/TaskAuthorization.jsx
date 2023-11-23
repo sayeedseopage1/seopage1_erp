@@ -18,8 +18,10 @@ import DataTable from "../table/DataTable";
 import { useSearchParams } from "react-router-dom";
 import { User } from "../../../utils/user-details";
 import Loader from "../Loader";
+import { useRefresh } from "../../index";
 
 const TaskAuthorization = ({ title }) => {
+    const {refreshState,handleRefresh} = useRefresh()
     // user and auth
     const user = new User(window.Laravel.user);
     const auth = _.includes([1, 8], user.getRoleId());
@@ -29,7 +31,9 @@ const TaskAuthorization = ({ title }) => {
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState([]);
     const [authorizedData, setAuthorizedData] = useState([]);
-    const [visibilityOption, setVisibilityOption] = useState("all");
+    // const [visibilityOption, setVisibilityOption] = useState("all");
+    const [visibilityOption, setVisibilityOption] = useState("pending");
+    const [loading, setLoading] = useState(false);
     // const [authorizationData, setAuthorizationData] = useState([]);
 
     const {
@@ -49,6 +53,10 @@ const TaskAuthorization = ({ title }) => {
     //             setAuthorizationData(data);
     //         });
     // }, [refresh]);
+
+    useEffect(()=>{
+      refetch();
+    },[refreshState])
 
     const open = () => setVisible(true);
     const close = () => setVisible(false);
@@ -101,7 +109,14 @@ const TaskAuthorization = ({ title }) => {
 
     useEffect(() => {
         // console.log(visibilityOption);
+        setLoading(true);
+        const timeoutRef = setTimeout(()=>{
+          setLoading(false);
+        },500);
         setData(_data[visibilityOption]);
+        return ()=>{
+            clearTimeout(timeoutRef);
+        };
     }, [visibilityOption, authorizedData]);
 
     return (
@@ -141,7 +156,7 @@ const TaskAuthorization = ({ title }) => {
                                     Refresh
                                 </Button> */}
                                 <button
-                                    onClick={refetch}
+                                    onClick={handleRefresh}
                                     className="btn btn-primary"
                                     type="button"
                                     disabled={isFetching || isLoading}
@@ -169,9 +184,9 @@ const TaskAuthorization = ({ title }) => {
                                         ["desc", "desc"]
                                     ) || []
                                 }
-                                tableColumns={authorizationColumns(refetch)}
+                                tableColumns={authorizationColumns()}
                                 tableName="authorize-task-table"
-                                isLoading={isFetching || isLoading}
+                                isLoading={isFetching || isLoading || loading}
                                 // loader={<Loader />}
                                 // tableMaxHeight
                             />

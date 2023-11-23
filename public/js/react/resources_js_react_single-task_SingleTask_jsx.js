@@ -182,7 +182,7 @@ var useRevision = function useRevision() {
     }, {
       id: 'PLRx04',
       revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
-      isDeniable: false
+      isDeniable: true
     }];
   };
 
@@ -208,7 +208,7 @@ var useRevision = function useRevision() {
       }, {
         id: 'LDRx4',
         revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
-        isDeniable: false
+        isDeniable: true
       }];
     }
   };
@@ -967,7 +967,7 @@ var SingleTaskPage = function SingleTaskPage() {
                             className: "d-block",
                             children: (_task$pageType = task === null || task === void 0 ? void 0 : task.pageType) !== null && _task$pageType !== void 0 ? _task$pageType : "--"
                           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"].Case, {
-                            condition: !(task !== null && task !== void 0 && task.taskTypeDetails.comment),
+                            condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.status) === 2,
                             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
                               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
                                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
@@ -1024,7 +1024,7 @@ var SingleTaskPage = function SingleTaskPage() {
                           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
                             children: (_task$taskTypeDetails = task === null || task === void 0 || (_task$taskTypeDetails2 = task.taskTypeDetails) === null || _task$taskTypeDetails2 === void 0 ? void 0 : _task$taskTypeDetails2.taskTypeName) !== null && _task$taskTypeDetails !== void 0 ? _task$taskTypeDetails : "--"
                           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"].Case, {
-                            condition: !(task !== null && task !== void 0 && task.taskTypeDetails.comment),
+                            condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.status) === 2,
                             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
                               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
                                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
