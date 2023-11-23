@@ -136,28 +136,16 @@ export const LeadIssuesTableColumns = [
 
             return (
                 <Switch>
-                    <Switch.Case
-                        condition={row.final_responsible_person === "LD"}
-                    >
-                        <a
+                    <a
                             href={`/account/employees/${row.lead_developer_id}`}
                             title={row.lead_developer_name}
                             className="multiline-ellipsis"
                         >
                             {row.lead_developer_name}
                         </a>
-                    </Switch.Case>
-
                     <Switch.Case
                         condition={!rPerson && row.raised_against_p }
                     >
-                        <a
-                            href={`/account/employees/${row.lead_developer_id}`}
-                            title={row.lead_developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.lead_developer_name}
-                        </a>
 
                         <Switch.Case condition={disputeBetween === "PLR"}>
                             <span>({row.raised_against_p}%)</span>

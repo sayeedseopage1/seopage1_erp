@@ -1,18 +1,18 @@
+import _ from "lodash";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
+import { useWindowSize } from "react-use";
+import Avatar from "../../../../react/global/Avatar";
 import { useFilter } from "../../../hooks/useFilter";
 import styles from "../../../styles/filterbar.module.css";
+import Button from '../../../ui/Button';
 import JqueryDateRangePicker from "../../../ui/JqueryDateRangePicker";
-import FilterItem from "./FilterItem";
-import _ from "lodash";
 import Loader from "../../../ui/Loader";
 import Select from "../../../ui/Select";
+import FilterItem from "./FilterItem";
 import ProjectFilter from "./ProjectFilter";
-import Avatar from "../../../../react/global/Avatar";
-import { useClickAway, useWindowSize } from "react-use";
-import Button from '../../../ui/Button';
 
-const Filterbar = ({ onFilter }) => {
+const Filterbar = ({ onFilter, isOwnRevision }) => {
     // UI
     const [expandMenu, setExpandMenu] = useState(false);
     const { width } = useWindowSize();
@@ -51,7 +51,7 @@ const Filterbar = ({ onFilter }) => {
             endDate: _endDate,
             project: _project?.id,
             raised_by: _raisedBy?.id,
-            against_to: _againstTo?.id,
+            against_to: isOwnRevision ? window?.Laravel?.user?.id : _againstTo?.id,
             project_manager: _projectManager?.id,
             sale: _sale?.id,
             lead: _lead?.id,
@@ -72,6 +72,7 @@ const Filterbar = ({ onFilter }) => {
         _sale,
         _lead,
         _client,
+        isOwnRevision
     ]);
 
 
@@ -267,6 +268,8 @@ const Filterbar = ({ onFilter }) => {
                 </FilterItem>
 
                 {/* against to */}
+
+                {!isOwnRevision ?
                 <FilterItem id="against_to">
                     <div>
                         <div className={styles.label}>Revision Against To:</div>
@@ -341,7 +344,7 @@ const Filterbar = ({ onFilter }) => {
                             </Select.Options>
                         </Select>
                     </div>
-                </FilterItem>
+                </FilterItem> : null}
 
                 {/* Sales*/}
                 <FilterItem id="sales">

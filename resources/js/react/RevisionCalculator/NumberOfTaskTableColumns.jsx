@@ -78,6 +78,7 @@ export const NumberOfTaskTableColumns = [
         moveable: true,
         sort: row => row?.total_revisions,
         rowSpan: 2,
+        marge: true,
         searchText: (row) => `${row?.total_revisions}`,
         row: ({row}) => <span className="singleline-ellipsis">{row?.total_revisions}</span>
     },
@@ -112,6 +113,7 @@ export const NumberOfTaskTableColumns = [
                 id: "sales_issues",
                 heading: "Sales Issues",
                 moveable: false,
+                marge: true,
                 sortBy: "sales_issues",
                 searchText: (row) => `${row?.sales_issues}`,
                 row: ({ row, table }) => {
@@ -136,6 +138,7 @@ export const NumberOfTaskTableColumns = [
                 id: "client_side_issues",
                 heading: "Client Side Issues",
                 moveable: false,
+                marge: true,
                 sortBy: "client_side_issues",
                 searchText: (row) => `${row?.client_issues}`,
                 row: ({ row, table }) => {
@@ -160,6 +163,7 @@ export const NumberOfTaskTableColumns = [
                 id: "project_manager_issues",
                 heading: "Project Manager Issues",
                 moveable: false,
+                marge: true,
                 sortBy: "project_manager_issues",
                 searchText: (row) => `${row?.pm_issues}`,
                 row: ({ row, table }) => {
@@ -184,6 +188,7 @@ export const NumberOfTaskTableColumns = [
                 id: "lead_developer",
                 heading: "Lead Developer Issues",
                 moveable: false,
+                marge: true,
                 sortBy: "lead_developer_issues",
                 searchText: (row) => `${row?.lead_developer_issues}`,
                 row: ({ row, table }) => {
@@ -208,6 +213,7 @@ export const NumberOfTaskTableColumns = [
                 id: "developer",
                 heading: "Developers Issues",
                 moveable: false,
+                marge: true,
                 sortBy: "developer_issues",
                 searchText: (row) => `${row?.developer_issues}`,
                 row: ({ row, table }) => {
@@ -232,6 +238,7 @@ export const NumberOfTaskTableColumns = [
                 id: "disputed_total",
                 heading: "Total Disputed",
                 moveable: false,
+                marge: true,
                 sortBy: "disputed_total",
                 searchText: (row) => `${row?.total_disputes}`,
                 row: ({ row, table }) => {

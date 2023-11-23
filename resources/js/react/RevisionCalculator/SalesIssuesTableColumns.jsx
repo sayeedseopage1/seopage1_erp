@@ -135,8 +135,8 @@ export const SalesIssuesTableColumns = [
                     >
                         {row.sales_name}
                     </a>
-                    <Switch.Case condition={!rPerson && disputed }>
-                        <span>({row.raised_against_percent}%)</span>
+                    <Switch.Case condition={!rPerson}>
+                        <span>({row.raised_by_p}%)</span>
                     </Switch.Case>
                 </Switch>
             );

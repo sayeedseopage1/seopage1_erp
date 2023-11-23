@@ -1,5 +1,6 @@
 import _ from "lodash";
 import React from "react";
+import Loader from "../global/Loader";
 import DataTable from "../global/table/DataTable";
 import { useLazyGetDisputesQuery } from "../services/api/SingleTaskPageApi";
 import { User } from "../utils/user-details";
@@ -7,9 +8,8 @@ import { disputeTableColumn } from "./components/DisputeTableColumn";
 import DisputeTableLoader from "./components/DisputeTableLoader";
 import FilterContainer from './components/Filter-bar/FilterContainer';
 import Filterbar from "./components/Filter-bar/Filterbar";
-import ResolveModal from "./components/ResolveModal";
 import { RefreshButton } from "./components/RefreshButton";
-import Loader from "../global/Loader";
+import ResolveModal from "./components/ResolveModal";
 
 
 const reducer = (state=[], action) => {
@@ -251,7 +251,7 @@ const Disputes = () => {
 
                 <div className="w-100 d-flex align-items-center">
                     <RefreshButton onClick={handleRefresh}>
-                        {isFetching ? 
+                        {isFetching ?
                             <Loader title="Loading..." borderRightColor="white" />:
                             "Refresh"
                         }
