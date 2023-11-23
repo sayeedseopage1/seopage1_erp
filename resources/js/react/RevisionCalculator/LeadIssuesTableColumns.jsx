@@ -69,7 +69,7 @@ export const LeadIssuesTableColumns = [
                <div className={styles.task_title}>
                     <LongText render={task_name}>
                         <a
-                            href={`/account/tasks/${row?.task_id}`}
+                            href={`/account/tasks/${row?.taskId}`}
                             className={`multiline-ellipsis ${
                                 isEqual ? "highlight" : ""
                             }`}
@@ -236,7 +236,7 @@ const Verdict = ({ row }) => {
     if (row?.status) {
         if (row?.winner) {
             return (
-                <span>
+                <div className={styles.task_title}>
                     Verdict given in favor of {" "}
                     <a
                         href={`/account/employees/${row?.winner}`}
@@ -244,11 +244,11 @@ const Verdict = ({ row }) => {
                     >
                         {row?.winner_name}
                     </a>
-                </span>
+                </div>
             );
         } else {
             return (
-                <div>
+                <div className={styles.task_title}>
                     Both parties were hold partially responsible. Party {" "}<a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             );

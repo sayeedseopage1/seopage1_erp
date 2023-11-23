@@ -12,7 +12,20 @@ export const SalesIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <a href={`/account/projects/${row?.ProjectId}`} className="multiline-ellipsis"> {row?.project_name} </a>
+        row: ({row}) => {
+            return(
+               <div className={styles.task_title}>
+                    <LongText render={row?.project_name}>
+                        <a
+                            href={`/account/projects/${row?.ProjectId}`}
+                            className="multiline-ellipsis"
+                        >
+                            {row?.project_name}
+                        </a>
+                    </LongText>
+               </div>
+            )
+        }
     },
     {
         id: "client_name",
@@ -57,7 +70,7 @@ export const SalesIssuesTableColumns = [
             return (
                 <div className={styles.task_title}>
                     <LongText render={task_name}>
-                        <a href={`/account/tasks/${row?.task_id}`} className={`multiline-ellipsis text-hover-underline ${isEqual ? "highlight" : ""}`}>
+                        <a href={`/account/tasks/${row?.taskId}`} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
                             {task_name}
                         </a>
                     </LongText>
@@ -122,7 +135,7 @@ export const SalesIssuesTableColumns = [
                     >
                         {row.sales_name}
                     </a>
-                    <Switch.Case condition={!rPerson && row?.raised_against_percent}>
+                    <Switch.Case condition={!rPerson && disputed }>
                         <span>({row.raised_against_percent}%)</span>
                     </Switch.Case>
                 </Switch>
@@ -138,16 +151,18 @@ export const SalesIssuesTableColumns = [
         searchText: (row) => `${row?.reason_for_revision}`,
         row: ({row}) => {
             return(
-                <Popover>
-                    <Popover.Button>
-                        <span className="multiline-ellipsis">{row?.reason_for_revision}</span>
-                    </Popover.Button>
-                    <Popover.Panel>
-                        <div className={styles.revision_popover_panel}>
-                            {row?.reason_for_revision}
-                        </div>
-                    </Popover.Panel>
-                </Popover>
+                <div className={styles.reason_for_revision}>
+                    <Popover>
+                        <Popover.Button>
+                            <span className="multiline-ellipsis">{row?.reason_for_revision}</span>
+                        </Popover.Button>
+                        <Popover.Panel>
+                            <div className={styles.revision_popover_panel}>
+                                {row?.reason_for_revision}
+                            </div>
+                        </Popover.Panel>
+                    </Popover>
+                </div>
             )
         }
     },

@@ -1,5 +1,6 @@
 import { convertTime } from '../utils/converTime';
-
+import { LongText } from './LongText';
+import styles from './styles.module.css';
 
 export const NumberOfTaskTableColumns = [
 
@@ -18,11 +19,13 @@ export const NumberOfTaskTableColumns = [
                 : "";
 
             return (
-                <abbr title={row?.task_title}>
-                    <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                        {task_name}
-                    </a>
-                </abbr>
+                <div className={styles.task_title}>
+                   <LongText render={task_name}>
+                        <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                            {task_name}
+                        </a>
+                    </LongText>
+                </div>
             );
         },
     },

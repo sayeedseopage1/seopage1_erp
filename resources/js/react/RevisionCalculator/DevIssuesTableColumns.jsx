@@ -1,4 +1,6 @@
 import Switch from "../global/Switch";
+import { LongText } from "./LongText";
+import styles from './styles.module.css';
 
 export const DevIssuesTableColumns = [
     {
@@ -9,7 +11,20 @@ export const DevIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <a href={`/account/projects/${row?.ProjectId}`} title={row?.project_name} className="multiline-ellipsis"> {row?.project_name} </a>
+        row: ({row}) => {
+            return(
+                <div className={styles.project_title}>
+                    <LongText render={row?.project_name}>
+                        <a
+                            href={`/account/projects/${row?.ProjectId}`}
+                            className="multiline-ellipsis"
+                        >
+                            {row?.project_name}
+                        </a>
+                    </LongText>
+                </div>
+            )
+        }
     },
     {
         id: "client_name",
@@ -48,9 +63,13 @@ export const DevIssuesTableColumns = [
                 : "";
 
             return (
-                <span title={task_name} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {task_name}
-                </span>
+               <div className={styles.task_title}>
+                   <LongText render={task_name}>
+                        <a href={`/account/tasks/${row?.taskId}`} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                            {task_name}
+                        </a>
+                    </LongText>
+               </div>
             );
         },
     },
@@ -155,7 +174,19 @@ export const DevIssuesTableColumns = [
         sort: row => row?.reason_for_revision,
         rowSpan: 2,
         searchText: (row) => `${row?.reason_for_revision}`,
-        row: ({row}) => <span title={row?.reason_for_revision} className="multiline-ellipsis">{row?.reason_for_revision ?? '--'}</span>
+        row: ({row}) => {
+            return(
+                <div className={styles.reason_for_revision}>
+                    <LongText render={row?.reason_for_revision}>
+                        <span
+                            className="multiline-ellipsis"
+                        >
+                            {row?.reason_for_revision ?? '--'}
+                        </span>
+                    </LongText>
+                </div>
+            )
+        }
     },
     {
         id: 'disputed',
@@ -175,7 +206,13 @@ export const DevIssuesTableColumns = [
         sort: row => row?.disputes_comments,
         rowSpan: 2,
         searchText: (row) => `${row?.disputes_comments}`,
-        row: ({row}) => <span className="multiline-ellipsis">{row?.disputes_comments}</span>
+        row: ({row}) => {
+           return(
+            <div className={styles.dispute_comment}>
+                <span className="multiline-ellipsis">{row?.disputes_comments}</span>
+            </div>
+           )
+        }
     },
     {
         id: 'verdict',
@@ -194,10 +231,10 @@ export const DevIssuesTableColumns = [
 const Verdict = ({row}) => {
     if(row?.status){
         if(row?.winner){
-            return <span> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </span>
+            return <div className={styles.task_title}> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </div>
         }else{
             return (
-                <div>
+                <div className={styles.task_title}>
                      Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             )

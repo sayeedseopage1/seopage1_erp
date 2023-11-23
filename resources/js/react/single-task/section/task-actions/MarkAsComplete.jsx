@@ -3,6 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import CKEditorComponent from "../../../ckeditor/index";
 import FileUploader from "../../../file-upload/FileUploader";
 import { useLazyCheckSubTaskStateQuery, useMarkAsCompleteMutation } from "../../../services/api/SingleTaskPageApi";
@@ -46,27 +49,15 @@ const MarkAsComplete = ({task, auth}) => {
                 .unwrap()
                 .then(res => {
                     if(res.status === 'true' || res.status === true){
-                        const htmlContent =  <div className="__tostar_modal">
-                        <strong>You can't complete this task because you have some pending subtask?</strong>
-                        <ul className="py-1">
-                            {res.subtasks.map((el, idx) =>
-                                <li
-                                    key={el.id}
-                                    style={{listStyle: 'unset', fontSize: '13px'}}
-                                >
-                                    <a href={`/account/tasks/${el.id}`}>
-                                       {idx + 1}. {el.heading}
-                                    </a> (<a href={`/account/clients/${el.clientId}`}>{el.client_name}</a>)
-                                </li>
-                            )}
-                        </ul>
-                    </div>
-                    ;
+                        const htmlContent = <ToasterContent data={res} />
+                        withReactContent(Swal).fire({
+                            html: htmlContent,
+                            customClass: {
+                                confirmButton: 'btn btn-primary py-1 px-4 f-14',
+                            },
+                            didClose:() => {close()}
+                        });
 
-                    toast.warn(htmlContent, {
-                        position: 'top-center',
-                        icon: false,
-                    });
                     }else {
                         setMarkAsCompleteModalIsOpen(true);
                     }
@@ -334,3 +325,49 @@ const MarkAsComplete = ({task, auth}) => {
 };
 
 export default MarkAsComplete;
+
+
+// toaster content
+const ToasterContent = ({data}) => {
+    return(
+        <ToasterContainer>
+            <ToasterTitle>You can't complete this task because you have some pending subtask?</ToasterTitle>
+            <ToasterListContainer>
+                <ToasterList>
+                    {data.subtasks.map((el, idx) =>
+                        <ToasterListItem key={el.id}>
+                            <a href={`/account/tasks/${el.id}`}>
+                            {el.heading}
+                            </a> ( <a href={`/account/clients/${el.clientId}`}>{el.client_name}</a> )
+                        </ToasterListItem>
+                    )}
+                </ToasterList>
+            </ToasterListContainer>
+        </ToasterContainer>
+    )
+}
+
+
+const ToasterContainer = styled.div`
+    text-align: center;
+`;
+const ToasterTitle = styled.div`
+    font-weight: 600;
+    font-size: 16px;
+`;
+const ToasterListContainer = styled.div`
+    width: fit-content;
+    margin-inline: auto;
+`;
+const ToasterList = styled.ol`
+    margin-top: 1rem;
+    list-style: decimal !important;
+`;
+const ToasterListItem = styled.li`
+    font-size: 15px;
+    list-style: unset;
+    margin-left: 1rem;
+    & > a:hover{
+        text-decoration: underline;
+    }
+`;
