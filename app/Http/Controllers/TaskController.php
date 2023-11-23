@@ -1107,11 +1107,11 @@ class TaskController extends AccountBaseController
             $task_revision->final_responsible_person = "PM";
         }
 
-        // if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
-        //     $task_revision->raised_by_percent = 50;
-        //     $task_revision->raised_against_percent = 50;
-        //     $task_revision->final_responsible_person = '';
-        // }
+        if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
+            $task_revision->raised_by_percent = 50;
+            $task_revision->raised_against_percent = 50;
+            $task_revision->final_responsible_person = '';
+        }
         $task_revision->save();
 
 
@@ -3064,12 +3064,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->is_accept = true;
             if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')){
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
-            }elseif($tasks_accept->acknowledgement_id == 'LDRx4' || $tasks_accept->acknowledgement_id == 'PLRx04'){
-                    $tasks_accept->raised_by_percent = 50;
-                    $tasks_accept->raised_against_percent = 50;
-                    $tasks_accept->final_responsible_person = '';
-                }
-            
+            }
 
             $tasks_accept->save();
         } else {
@@ -3251,16 +3246,8 @@ class TaskController extends AccountBaseController
             $tasks_accept->dispute_created = true;
             $tasks_accept->deny_reason = $request->deny_reason;
         } elseif ($request->mode == 'accept') {
-            if($tasks_accept->acknowledgement_id == 'LDRx4' || $tasks_accept->acknowledgement_id == 'PLRx04'){
-                $tasks_accept->raised_by_percent = 50;
-                $tasks_accept->raised_against_percent = 50;
-                $tasks_accept->final_responsible_person = '';
-            }else 
-            {
-                $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
-            }
             $tasks_accept->is_accept = true;
-            
+            $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
         } elseif ($request->mode == 'continue') {
             $tasks_accept->is_accept = true;
             if($tasks_accept->acknowledgement_id !== null && $tasks_accept->acknowledgement_id != 'LDRx4'){
@@ -5167,7 +5154,6 @@ class TaskController extends AccountBaseController
         $project = $filter['project'] ?? null;
         $start_date = $filter['start_date'] ?? null;
         $end_date = $filter['end_date'] ?? null;
-        $against_to = $filter['against_to'] ?? null;
 
         $author = Auth::user();
 
@@ -5310,7 +5296,6 @@ class TaskController extends AccountBaseController
 
 
                     $revisions->each(function ($revision){
-                        
                         $revision->task_assign_to = get_user($revision->task_assign_to, false);
                         $revision->client = get_user($revision->clientId, true);
                         $revision->deal_added_by = get_user($revision->deal_added_by, false);
@@ -5343,7 +5328,6 @@ class TaskController extends AccountBaseController
             'project_manager' => $request->project_manager ?? NULL,
             'lead' => $request->lead ?? NULL,
             'project' => $request->project ?? NULL,
-            'against_to' => $request->against_to ?? NULL,
         ];
 
 
@@ -6040,7 +6024,6 @@ class TaskController extends AccountBaseController
                 'assignee_by.image as assignee_by_avatar',
                 'approved_by.name as approved_by_name',
                 'approved_by.image as approved_by_avatar',
-                
             ])
                 ->leftJoin('projects', 'pending_parent_tasks.project_id', '=', 'projects.id')
                 ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
