@@ -103,7 +103,7 @@ const TaskAuthorizationQuestionAnswers = ({
                                         color: "black",
                                     }}
                                 >
-                                    Q{index + 1}.{" "}
+                                    Question {index + 1}.{" "}
                                 </span>
                                 {conversation.question}
                                 <span className={styles.ques_by}>

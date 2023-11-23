@@ -12711,7 +12711,10 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
         });
         close();
       })["catch"](function (err) {
-        return console.log(err);
+        close();
+        console.log(err);
+      })["finally"](function () {
+        close();
       });
     }
   };

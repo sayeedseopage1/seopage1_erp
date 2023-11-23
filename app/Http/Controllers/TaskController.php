@@ -6024,6 +6024,7 @@ class TaskController extends AccountBaseController
                 'assignee_by.image as assignee_by_avatar',
                 'approved_by.name as approved_by_name',
                 'approved_by.image as approved_by_avatar',
+                
             ])
                 ->leftJoin('projects', 'pending_parent_tasks.project_id', '=', 'projects.id')
                 ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
