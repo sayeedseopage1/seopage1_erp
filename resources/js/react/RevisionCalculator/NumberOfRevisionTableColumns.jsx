@@ -3,6 +3,7 @@ export const NumberOfRevisionTableColumns = [
         id: "sales_issues",
         heading: "Sales Issues",
         moveable: false,
+        marge: true,
         sortBy: "sales_issues",
         searchText: (row) => `${row?.sales_issues}`,
         row: ({ row, table }) => {
@@ -27,6 +28,7 @@ export const NumberOfRevisionTableColumns = [
         id: "client_side_issues",
         heading: "Client Side Issues",
         moveable: false,
+        marge: true,
         sortBy: "client_side_issues",
         searchText: (row) => `${row?.client_issues}`,
         row: ({ row, table }) => {
@@ -51,6 +53,7 @@ export const NumberOfRevisionTableColumns = [
         id: "project_manager_issues",
         heading: "Project Manager Issues",
         moveable: false,
+        marge: true,
         sortBy: "project_manager_issues",
         searchText: (row) => `${row?.pm_issues}`,
         row: ({ row, table }) => {
@@ -75,6 +78,7 @@ export const NumberOfRevisionTableColumns = [
         id: "lead_developer",
         heading: "Lead Developer Issues",
         moveable: false,
+        marge: true,
         sortBy: "lead_developer_issues",
         searchText: (row) => `${row?.lead_developer_issues}`,
         row: ({ row, table }) => {
@@ -99,6 +103,7 @@ export const NumberOfRevisionTableColumns = [
         id: "developer",
         heading: "Developers Issues",
         moveable: false,
+        marge: true,
         sortBy: "developer_issues",
         searchText: (row) => `${row?.developer_issues}`,
         row: ({ row, table }) => {

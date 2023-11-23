@@ -856,7 +856,7 @@ class TaskController extends AccountBaseController
 
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
-        // need pending action 
+        // need pending action
         $helper = new HelperPendingActionController();
 
 
@@ -930,9 +930,9 @@ class TaskController extends AccountBaseController
         $task_status->save();
         $board_column = TaskBoardColumn::where('id', $task_status->board_column_id)->first();
         // dd($task_status);
-       
 
-        
+
+
 
 
 
@@ -978,10 +978,10 @@ class TaskController extends AccountBaseController
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               
+
                 $past_action->save();
-                
-           
+
+
         }
     }
 
@@ -2922,7 +2922,9 @@ class TaskController extends AccountBaseController
          * * initially responsible person is the "current user"
          */
         if (
-            $dispute_between != 'CPR' &&
+            $dispute_between != 'CPRx01' &&
+            $dispute_between != 'CPRx05' &&
+            $dispute_between != 'CPRx06' &&
             $dispute_between != 'SPR' &&
             $request->is_deniable == false &&
             $auth->role_id != 1
@@ -5154,6 +5156,7 @@ class TaskController extends AccountBaseController
         $project = $filter['project'] ?? null;
         $start_date = $filter['start_date'] ?? null;
         $end_date = $filter['end_date'] ?? null;
+        $against_to = $filter['against_to'] ?? null;
 
         $author = Auth::user();
 
@@ -5244,7 +5247,7 @@ class TaskController extends AccountBaseController
                       'task_users.user_id as task_assign_to',
                     )
                     ->where(function($query) use ($author, $revision_id, $client, $sale, $raised_by, $project_manager, $lead, $project, $start_date,$end_date){
-                        if($author->role_id != 1){
+                        if($author->role_id != 1 && $author->role_id != 8){
                            $query->where('task_users.user_id', $author->id)
                                 ->orWhere('tasks.added_by', $author->id)
                                 ->orWhere('revisions.added_by', $author->id)
@@ -5295,26 +5298,96 @@ class TaskController extends AccountBaseController
                     ->get();
 
 
-                    $revisions->each(function ($revision){
+                    $data = [];
+
+
+                    foreach ($revisions as $revision) {
                         $revision->task_assign_to = get_user($revision->task_assign_to, false);
                         $revision->client = get_user($revision->clientId, true);
                         $revision->deal_added_by = get_user($revision->deal_added_by, false);
                         $revision->project_manager = get_user($revision->pm_id, false);
-                        if($revision->sale_person){
+
+                        if ($revision->sale_person) {
                             $revision->sale_person = get_user($revision->sale_person, false);
                         }
+
                         $revision->added_by = get_user($revision->added_by, false);
 
-                        if($revision->subtask_id){
+                        if ($revision->subtask_id) {
                             $revision->lead_developer = $revision->added_by;
                             $revision->developer = $revision->task_assign_to;
-                        }else{
+                        } else {
                             $revision->lead_developer = $revision->task_assign_to;
                             $revision->developer = null;
                         }
-                    });
 
-        return response()->json($revisions, 200);
+                        if($against_to){
+
+                            if($revision->dispute_between == 'SPR' && $revision->sale_person['id'] == $against_to) {
+                                $data[] = $revision;
+                            }
+
+                            if($revision->dispute_between == 'LDR' && $revision->task_assign_to['id'] == $against_to){
+                                $data[] = $revision;
+                            }
+
+                            if($revision->dispute_between == 'PLR' && $revision->task_assign_to['id'] == $against_to){
+                                $data[] = $revision;
+                            }
+
+                            if($revision->dispute_between == 'CPR' && $revision->project_manager['id'] == $against_to){
+                                $data[] = $revision;
+                            }
+                        } else $data[] = $revision;
+                    }
+
+
+                    // $revisions->each(function ($revision) use ($against_to) {
+                    //     if ($against_to) {
+                    //         switch ($revision->dispute_between) {
+                    //             case 'SPR':
+                    //                 if ($revision->sale_person != $against_to) {
+                    //                     return null;
+                    //                 }
+                    //                 break;
+                    //             case 'LDR':
+                    //             case 'PLR':
+                    //                 if ($revision->task_assign_to != $against_to) {
+                    //                     return null;
+                    //                 }
+                    //                 break;
+                    //             case 'CPR':
+                    //                 if ($revision->project_manager != $against_to) {
+                    //                     return null;
+                    //                 }
+                    //                 break;
+                    //         }
+                    //     }
+
+                    //     $revision->task_assign_to = get_user($revision->task_assign_to, false);
+                    //     $revision->client = get_user($revision->clientId, true);
+                    //     $revision->deal_added_by = get_user($revision->deal_added_by, false);
+                    //     $revision->project_manager = get_user($revision->pm_id, false);
+
+                    //     if ($revision->sale_person) {
+                    //         $revision->sale_person = get_user($revision->sale_person, false);
+                    //     }
+
+                    //     $revision->added_by = get_user($revision->added_by, false);
+
+                    //     if ($revision->subtask_id) {
+                    //         $revision->lead_developer = $revision->added_by;
+                    //         $revision->developer = $revision->task_assign_to;
+                    //     } else {
+                    //         $revision->lead_developer = $revision->task_assign_to;
+                    //         $revision->developer = null;
+                    //     }
+
+
+                    // });
+
+        // dd($data);
+        return response()->json($data, 200);
     }
 
     /************** GET TASKS REVISIONs ************* */
@@ -5328,6 +5401,7 @@ class TaskController extends AccountBaseController
             'project_manager' => $request->project_manager ?? NULL,
             'lead' => $request->lead ?? NULL,
             'project' => $request->project ?? NULL,
+            'against_to' => $request->against_to ?? NULL,
         ];
 
 
@@ -5483,7 +5557,7 @@ class TaskController extends AccountBaseController
     public function get_today_tasks(Request $request, $id)
     {
         $id = Auth::user()->id;
-        
+
             // dd($request->all());
         $startDate = Carbon::today()->format('Y-m-d');
         $endDate = Carbon::today()->format('Y-m-d');
@@ -5523,12 +5597,12 @@ class TaskController extends AccountBaseController
                 {
                     $task->daily_submission_status = $dalysubmission->status;
 
-                }else 
+                }else
                 {
                     $task->daily_submission_status = 0;
 
                 }
-                
+
             }
 
 

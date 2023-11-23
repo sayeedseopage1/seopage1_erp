@@ -1,11 +1,10 @@
 import React, { useState } from "react";
+import styles from '../../styles/revision-page.module.css';
 import Button from "../../ui/Button";
 import Card from "../../ui/Card";
 import Editor from "../../ui/Editor";
 import Modal from "../../ui/Modal";
-import styles from '../../styles/revision-page.module.css';
 
-import { toast } from "react-toastify";
 import { useSaleRevisionActionMutation } from "../../services/api/revisionApiSlice";
 import Loader from "../../ui/Loader";
 import Switch from "../../ui/Switch";
@@ -37,10 +36,6 @@ const SaleActionButton = ({row, table}) => {
     const handleSubmit = async (e , type) => {
         e.preventDefault();
         if(comment == ''){
-           toast.warn(`You have to explain the reason!`, {
-                autoClose: 1000
-           })
-
          setErr({
             comment: 'You have to explain the reason!'
           })

@@ -1,4 +1,6 @@
 import Switch from "../global/Switch";
+import { LongText } from "./LongText";
+import styles from './styles.module.css';
 
 export const ClientIssuesTableColumns = [
     {
@@ -10,15 +12,16 @@ export const ClientIssuesTableColumns = [
         marge: true,
         searchText: (row) => `${row?.project_name}`,
         row: ({ row }) => (
-            <a
-                href={`/account/projects/${row?.ProjectId}`}
-                title={row?.project_name}
-                className="multiline-ellipsis"
-            >
-                {" "}
-                {row?.project_name}{" "}
-            </a>
-        ),
+            <LongText render={row?.project_name}>
+                <a
+                    href={`/account/projects/${row?.ProjectId}`}
+                    title={row?.project_name}
+                    className="multiline-ellipsis"
+                >
+                    {row?.project_name}
+                </a>
+            </LongText>
+       ),
     },
     {
         id: "client_name",
@@ -62,14 +65,18 @@ export const ClientIssuesTableColumns = [
                 : "";
 
             return (
-                <span
-                    title={task_name}
-                    className={`multiline-ellipsis ${
-                        isEqual ? "highlight" : ""
-                    }`}
-                >
-                    {task_name}
-                </span>
+              <div className={styles.task_title}>
+                 <LongText render={task_name}>
+                    <a
+                        href={`/account/tasks/${row?.taskId}`}
+                        className={`multiline-ellipsis ${
+                            isEqual ? "highlight" : ""
+                        }`}
+                    >
+                        {task_name}
+                    </a>
+                 </LongText>
+              </div>
             );
         },
     },
@@ -85,7 +92,7 @@ export const ClientIssuesTableColumns = [
             const search = table.state.search;
             const between = row.dispute_between;
             const tv = between === 'CPR' ? row?.client_name : row?.revision_raised_by_name;
-            const id = between === 'CPR' ? row?.clientId : row?.revision_raised_by_id; 
+            const id = between === 'CPR' ? row?.clientId : row?.revision_raised_by_id;
             const isEqual = search
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
@@ -115,8 +122,8 @@ export const ClientIssuesTableColumns = [
                 LD: row.lead_developer_name,
                 D: row.developer_name,
                 UD: row.developer_name,
-                GD: row.developer_name 
-            } 
+                GD: row.developer_name
+            }
             return obj[`${shortCode}`]
         },
         rowSpan: 2,
@@ -126,9 +133,9 @@ export const ClientIssuesTableColumns = [
             const rPerson = row?.final_responsible_person;
             const disputed = row?.dispute_created;
             const between = row?.dispute_between;
-            
+
             return (
-                <Switch> 
+                <Switch>
                     <a
                         href={`/account/employees/${row.clientId}`}
                         title={row.client_name}
@@ -138,9 +145,9 @@ export const ClientIssuesTableColumns = [
                     </a>
                     <Switch.Case condition={!rPerson && disputed }>
                         <span>({row.raised_by_p}%)</span>
-                    </Switch.Case> 
+                    </Switch.Case>
                 </Switch>
-            ); 
+            );
         },
     },
     {
@@ -151,12 +158,16 @@ export const ClientIssuesTableColumns = [
         rowSpan: 2,
         searchText: (row) => `${row?.reason_for_revision}`,
         row: ({ row }) => (
-            <span
-                title={row?.reason_for_revision}
-                className="multiline-ellipsis"
-            >
-                {row?.reason_for_revision ?? "--"}
-            </span>
+            <div className={styles.reason_for_revision}>
+               <LongText render={row?.reason_for_revision}>
+                    <span
+                        title={row?.reason_for_revision}
+                        className="multiline-ellipsis"
+                    >
+                        {row?.reason_for_revision ?? "--"}
+                    </span>
+                </LongText>
+            </div>
         ),
     },
     {
@@ -199,6 +210,7 @@ export const ClientIssuesTableColumns = [
 ];
 
 const Verdict = ({ row }) => {
+
     if (row?.status) {
         if (row?.winner) {
             return <span> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </span>
