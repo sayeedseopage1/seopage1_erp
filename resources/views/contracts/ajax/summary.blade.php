@@ -242,13 +242,13 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
      @elseif($contract->deal->status == 'Accepted')
        <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
        @else
-       @if($contract->deal->status == 'Denied')  
+       @if($contract->deal->status == 'Denied')
      <h3 class="d-flex justify-content-left" style="color:red;">
-       
+
             Time Expired
         </h3>
         <span class="mt-5 d-flex justify-content-start">
-            @php 
+            @php
         $award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->where('status',1)->first();
             @endphp
             @if($award_time_request == null)
@@ -256,9 +256,9 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
             @endif
 
         </span>
-        
-      
-   
+
+
+
     @endif
 
      @endif
@@ -312,7 +312,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
                               Project Name</td>
-							
+
                             <td class="border-left-0"><a href="{{route('projects.show',$project->id)}}">{{ $project->project_name }}</a>
                             </td>
                         </tr>
@@ -463,7 +463,11 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
               <x-cards.data>
                   <div class="row-cols-lg-1">
                       <div class="col">
+                        @if ($contract->deal->dept_status == 'DM')
+                          <h4>Profile Link</h4>
+                        @else
                           <h4>Freelancer Profile Link</h4>
+                        @endif
                           <br>
                           <p><a target="_blank" href="{{ $contract->deal->profile_link}}">{{ $contract->deal->profile_link}}</a></p>
 
@@ -480,7 +484,11 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
               <x-cards.data>
                   <div class="row-cols-lg-1">
                       <div class="col">
+                        @if ($contract->deal->dept_status == 'DM')
+                          <h4>Message Link</h4>
+                        @else
                           <h4>Freelancer Message Link</h4>
+                        @endif
                           <br>
                           <?php
                           $mystring = $contract->deal->message_link;
@@ -509,7 +517,11 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
               <x-cards.data>
                   <div class="row-cols-lg-1">
                       <div class="col">
-                          <h4>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h4>
+                        @if ($contract->deal->dept_status == 'DM')
+                            <h4>Write the what in 2-8 words here (Example: Whole website seo, Google ads, Backlink creation, Basic SEO, Sponsored posts etc.)</h4>
+                        @else
+                            <h4>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h4>
+                        @endif
                           <br>
                           <p>{!! $contract->deal->description2 !!}</p>
 
@@ -526,10 +538,14 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
               <x-cards.data>
                   <div class="row-cols-lg-1">
                       <div class="col">
+                        @if ($contract->deal->dept_status == 'DM')
+                            <h4>Elaborate the "WHAT" 3-4 lines here (The client created a new website recently and he now wants to start full suite SEO for his website.). Please share all the necessary information you possible can here. The execution team will work based on this instruction primarily.</h4>
+                        @else
                           <h4>
                             Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency.
                             It should include home, about, his services in one page, blog, and contact. The look and feel should be
                             better than the references.)</h4>
+                            @endif
                           <br>
                           <p>{!! $contract->deal->description3 !!}</p>
 
@@ -540,6 +556,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
+      @if ($contract->deal->description4)
       <div class="row mb-4" >
           <!-- BUDGET VS SPENT START -->
           <div class="col-md-12">
@@ -559,15 +576,20 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
+      @endif
       <div class="row mb-4" >
           <!-- BUDGET VS SPENT START -->
           <div class="col-md-12">
               <x-cards.data>
                   <div class="row-cols-lg-1">
                       <div class="col">
+                        @if ($contract->deal->dept_status == 'DM')
+                            <h4>Any particular focus/concern of the client (Ex: 1. The client is very concerned about his websites current rank drop.  2. The client is frustrated about his google ads campaigns not getting enough returns and desperately wants someone to improve this)</h4>
+                        @else
                           <h4>
                             Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work
                             the way he wants.)</h4>
+                        @endif
                           <br>
                           <p>{!! $contract->deal->description5 !!}</p>
 
@@ -942,7 +964,7 @@ $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)-
             $('#task_id').val($(this).data('id'));
             $('#award_time_incress_modal').modal('toggle');
         });
-        
+
 
         $('#award_time_incress_submit').click(function() {
             var task_id = {{$contract->deal->id}};

@@ -177,7 +177,7 @@ export const authorizationColumns = (refreshing) => {
                     <TaskAuthorizationForm
                         data={row.original}
                         table={table}
-                        refreshing={refreshing}
+                        // refreshing={refreshing}
                     />
                 );
             },

@@ -31,7 +31,7 @@ class UpdateProject extends CoreRequest
         $rules = [
             'project_name' => 'required|max:150',
             'start_date' => 'required',
-           
+
             'project_summary'=>'required',
 
             // 'hours_allocated' => 'required|numeric',
@@ -47,11 +47,13 @@ class UpdateProject extends CoreRequest
             $rules['project_budget'] = 'numeric';
 
         }
-        if($this->status_validation == 'not started')
-        {
-            $rules['requirement_defined'] = 'required';
-            $rules['deadline_meet'] = 'required';
+        if($this->dept_status != 'DM'){
+            if($this->status_validation == 'not started')
+            {
+                $rules['requirement_defined'] = 'required';
+                $rules['deadline_meet'] = 'required';
 
+            }
         }
 
         $project = Project::find(request()->project_id);

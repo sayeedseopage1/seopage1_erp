@@ -47,6 +47,11 @@
      $client= App\Models\User::where('id',$project->client_id)->first();
       $deal= App\Models\Deal::where('id',$project->deal_id)->first();
        $currency= App\Models\Currency::where('id',$deal->original_currency_id)->first();
+       $oldContractSign = App\Models\ContractSign::where('project_id',$project->id)->first();
+       $newDeliverable = null;
+       if ($oldContractSign != null) {
+            $newDeliverable = App\Models\ProjectDeliverable::where('project_id',$oldContractSign->project_id)->whereDate('created_at','>',$oldContractSign->created_at)->get();
+       }
      if($project->pm_id != null)
      {
      $pm = App\Models\User::where('id',$project->pm_id)->first();
@@ -273,6 +278,9 @@
                                 <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
                             @endif
                             {{$deliverable->deliverable_type}}
+                            @if ($newDeliverable != null && $newDeliverable->contains($deliverable))
+                                <span class="badge badge-success">{{ $deliverable->created_at }}</span>
+                            @endif
                             @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
                                     $data = \App\Models\DelivarableColumnEdit::where([
@@ -866,24 +874,26 @@
                         @endif
                         @if($signature == null)
                         <td class="text-center">
-                            @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
-                            <a target="_blank" href="{{route('deliverables_modification_form', $deliverable->id)}}">
-                                <i class="fa fa-plus"></i>
-                            </a>
-                            @endif
-                            @php
-                                $checkShowAction = $data = \App\Models\DelivarableColumnEdit::where([
-                                    'delivarable_id' => $deliverable->id,
-                                    'status' => '0'
-                                ])->first();
-                            @endphp
-                            @if($project->authorization_status == 'pending' || $checkShowAction && \Auth::user()->role_id == 4)
-                            <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
-                            @elseif(\Auth::user()->role_id == 1)
-                            <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
-                            <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
-                            @endif
+                            <div class="d-flex flex-column mb-3">
+                                @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+                                <a target="_blank" class="btn" href="{{route('deliverables_modification_form', $deliverable->id)}}" style="margin-top: 25px;">
+                                    <i class="fa-solid fa-screwdriver-wrench" style="color: black"></i>
+                                </a>
+                                @endif
+                                @php
+                                    $checkShowAction = $data = \App\Models\DelivarableColumnEdit::where([
+                                        'delivarable_id' => $deliverable->id,
+                                        'status' => '0'
+                                    ])->first();
+                                @endphp
+                                @if($project->authorization_status == 'pending' || $checkShowAction && \Auth::user()->role_id == 4)
+                                    <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
+                                @elseif(\Auth::user()->role_id == 1)
+                                    <button class="btn btn primary" data-toggle="modal" data-target="#deliverableseditModal{{$deliverable->id}}"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn primary deleteDeliverable" data-id="{{ $deliverable->id }}"><i class="fas fa-trash"></i></button>
+                                @endif
+                            </div>
                             @if($deliverable->authorization == 0 && Auth::user()->role_id == 1)
                             <button class="btn btn-success approve_deliverable" data-id="{{$deliverable->id}}">Approve</button>
                             @endif

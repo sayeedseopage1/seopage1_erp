@@ -129,7 +129,7 @@ var useRevision = function useRevision() {
     }, {
       id: 'PLRx04',
       revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
-      isDeniable: false
+      isDeniable: true
     }];
   };
 
@@ -155,7 +155,7 @@ var useRevision = function useRevision() {
       }, {
         id: 'LDRx4',
         revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
-        isDeniable: false
+        isDeniable: true
       }];
     }
   };
@@ -12711,7 +12711,10 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
         });
         close();
       })["catch"](function (err) {
-        return console.log(err);
+        close();
+        console.log(err);
+      })["finally"](function () {
+        close();
       });
     }
   };
@@ -15285,9 +15288,11 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
     });
   };
   var handleContinueButton = function handleContinueButton() {
+    console.log(revision);
     setAccept("continue");
     if (lodash__WEBPACK_IMPORTED_MODULE_9___default().size(revision === null || revision === void 0 ? void 0 : revision.taskSubTask) === 0) {
       setShow("DENY_ASSIGNEE_TO_DEV");
+      close();
     } else {
       handleOnSubmit({
         "continue": true
@@ -15350,7 +15355,7 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
           close: function close() {
             return setShow("REVISION");
           }
-        }), show === "ASSIGNEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        }), lodash__WEBPACK_IMPORTED_MODULE_9___default().size(task === null || task === void 0 ? void 0 : task.taskSubTask) > 0 && show === "ASSIGNEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
           task: task,
           revision: revision,
           type: true,

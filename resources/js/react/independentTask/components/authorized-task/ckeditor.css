@@ -1,0 +1,8 @@
+.ck.ck-toolbar.ck-toolbar_grouping > .ck-toolbar__items{
+  flex-wrap: nowrap;
+  z-index: 0;
+}
+
+.task-description > p{
+  margin-bottom: 10px !important;
+}

@@ -298,12 +298,21 @@ class InvoiceController extends AccountBaseController
         $invoice->estimate_id = $request->estimate_id ? $request->estimate_id : null;
         $invoice->save();
        
-       //authorization action start
-
-         
+       //need pending action 
 
        
-        //authorization action end
+        $projectId= Project::where('id',$invoice->project_id)->first();
+        $milestoneId= ProjectMilestone::where('id',$invoice->milestone_id)->first();
+         if($milestoneId->qc_status == 1)
+         {
+            $helper = new HelperPendingActionController();
+
+
+            $helper->ProjectCompletionSubmission($projectId,$milestoneId);
+
+         }
+
+        //need pending action
 
         if($milestone_check->status == 'incomplete')
       {
