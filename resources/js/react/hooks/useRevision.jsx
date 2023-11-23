@@ -32,7 +32,7 @@ export const useRevision = () => {
             {
                 id: 'PLRx04',
                 revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
-                isDeniable: false
+                isDeniable: true
             },
         ]
     }
@@ -64,7 +64,7 @@ export const useRevision = () => {
                 {
                     id: 'LDRx4',
                     revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
-                    isDeniable: false,
+                    isDeniable: true,
                 },
             ]
         }
