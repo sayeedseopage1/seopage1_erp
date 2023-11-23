@@ -41,9 +41,17 @@ class RevisionCalculatorController extends AccountBaseController
         
         // Check if $startDate and $endDate are not null and valid dates
         if ($startDate && $endDate) {
+            if(Auth::user()->role_id == 4)
+            {
+                $users= DB::table('users as pm')->select(['pm.id as project_manager_id', 'pm.name as project_manager_name'])
+                ->where('pm.id',Auth::id())->get();
 
-            $users= DB::table('users as pm')->select(['pm.id as project_manager_id', 'pm.name as project_manager_name'])
-            ->where('pm.role_id',4)->get();
+            }else 
+            {
+                $users= DB::table('users as pm')->select(['pm.id as project_manager_id', 'pm.name as project_manager_name'])
+                ->where('pm.role_id',4)->get();
+            }
+           
            
             foreach($users as $pm)
             {
