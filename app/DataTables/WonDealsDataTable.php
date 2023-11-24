@@ -66,7 +66,12 @@ class WonDealsDataTable extends BaseDataTable
                 }
             })
             ->addColumn('amount', function ($row) {
-                return $row->actual_amount . ' ' . $row->original_currency->currency_symbol;
+                if($row->project_type=="fixed" && $row->actual_amount == 0){
+                    $badge = '<span class="badge badge-success ml-1"> Upsell Amount</span>';
+                    return $row->upsell_actual_amount . ' ' . $row->original_currency->currency_symbol . $badge;
+                }else{
+                    return $row->actual_amount. ' ' . $row->original_currency->currency_symbol;
+                }
             })
             ->addColumn('client_name', function ($row) {
                 return '<a class="openRightModal" href="' . route('clients.show', $row->client_id) . '"><img src="' . $row->client->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->client->name . '" title="' . $row->client->name . '">' . $row->client_name . '</a>';
