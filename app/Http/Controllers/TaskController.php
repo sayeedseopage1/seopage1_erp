@@ -4267,6 +4267,13 @@ class TaskController extends AccountBaseController
             $data->last_updated_by = $this->user->id;
 
             $data->save();
+            //need pedning action 
+            $helper = new HelperPendingActionController();
+
+
+            $helper->NewCommentAdded($data->task_id,$data->user_id);
+
+            //need pending action
             $taskID = Task::where('id', $request->task_id)->first();
             $task_member = TaskUser::where('task_id', $request->task_id)->first();
             $projectID = Project::where('id', $taskID->project_id)->first();
@@ -4892,7 +4899,7 @@ class TaskController extends AccountBaseController
     // * @params id is dispute id;
     public function store_dispute_question(Request $request)
     {
-
+      //  DB::beginTransaction();
         $questions = $request->questions;
         $dispute_id = $questions['0']['dispute_id'];
 
@@ -4904,6 +4911,13 @@ class TaskController extends AccountBaseController
             $query->question = $question['question'];
             $query->question_for = $question['question_for'];
             $query->save();
+         //   dd($query);
+            //need pending action 
+            $helper = new HelperPendingActionController();
+
+
+            $helper->TaskDisputeQuestion($query->dispute_id,$query->question_for);
+            //need pending action
         }
 
         $revision_dispute = TaskRevisionDispute::find($dispute_id);
@@ -4939,6 +4953,44 @@ class TaskController extends AccountBaseController
             $query->replied_by = $question['replied_by'];
             $query->replied_date = Carbon::now();
             $query->save();
+            $actions = PendingAction::where('code','TDQ')->where('past_status',0)->where('dispute_id',$query->dispute_id)->get();
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                   
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = $action->message. ' (Replied by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->milestone_id = $action->milestone_id;
+                    $past_action->revision_id = $action->revision_id;
+                    $past_action->dispute_id = $action->dispute_id;
+                    $past_action->save();
+
+
+            }
+        }
+
         }
 
 

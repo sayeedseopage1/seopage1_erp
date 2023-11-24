@@ -989,6 +989,7 @@ trait PmDashboard
             ->where('project_milestones.added_by',Auth::id())
             ->groupBy('project_milestones.project_id')
             ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->whereNotBetween('projects.created_at', [$this->startMonth, $this->endMonth])
             ->where('project_milestones.status','!=','canceled')
             ->orderBy('project_milestones.created_at','desc')
             ->get();
@@ -2226,6 +2227,7 @@ trait PmDashboard
                 ->groupBy('project_milestones.project_id')
                 ->where('project_milestones.status','!=','canceled')
                 ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+                ->whereNotBetween('projects.created_at', [$startMonth, $endMonth])
                 ->orderBy('project_milestones.created_at','desc')
                 ->get();
                 $this->no_of_new_milestones_added_on_old_projects_value = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')

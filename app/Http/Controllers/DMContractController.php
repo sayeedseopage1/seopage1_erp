@@ -426,7 +426,7 @@ class DMContractController extends AccountBaseController
                  $milestone->last_updated_by = Auth::id();
                  $milestone->milestone_type = 'Client Created this Milestone';
                  //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
-
+                
                  $milestone->save();
                 //   dd('milestone');
 

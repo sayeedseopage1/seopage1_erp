@@ -972,6 +972,7 @@ if (count($this->no_of_accepted_projects) > 0 ) {
          ->where('project_milestones.added_by',$this->pm->id)
          ->groupBy('project_milestones.project_id')
          ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->whereNotBetween('projects.created_at', [$this->startMonth, $this->endMonth])
          ->where('project_milestones.status','!=','canceled')
          ->orderBy('project_milestones.created_at','desc')
          ->get();
@@ -2254,16 +2255,19 @@ if (count($this->no_of_accepted_projects) > 0 ) {
           ->orderBy('deals.created_at','desc')
           ->get();
           $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
-          ->join('projects','projects.id','project_milestones.project_id')
-          ->join('deals','deals.id','projects.deal_id')
+          ->leftJoin('projects','projects.id','project_milestones.project_id')
+          ->leftJoin('deals','deals.id','projects.deal_id')
           ->where('deals.project_type','fixed')
           ->where('deals.added_by','!=',$this->pm->id)
           ->where('project_milestones.added_by',$this->pm->id)
-          ->where('project_milestones.status','!=','canceled')
+             ->where('project_milestones.status','!=','canceled')
 
           ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
           ->orderBy('project_milestones.created_at','desc')
           ->get();
+        //   $mlestone_created= ProjectMilestone::where('added_by',$this->pm->id)
+        //   ->whereBetween('created_at',[$startMonth, $endMonth])->count();
+          //dd($mlestone_created,$this->pm->id,$startMonth,$endMonth,$this->no_of_new_milestones_added_on_old_projects);
           $this->no_of_new_milestones_added_on_old_projects_id = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId','projects.status as projectStatus')
           ->join('projects','projects.id','project_milestones.project_id')
           ->join('deals','deals.id','projects.deal_id')
@@ -2273,8 +2277,10 @@ if (count($this->no_of_accepted_projects) > 0 ) {
           ->groupBy('project_milestones.project_id')
           ->where('project_milestones.status','!=','canceled')
           ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+          ->whereNotBetween('projects.created_at', [$startMonth, $endMonth])
           ->orderBy('project_milestones.created_at','desc')
           ->get();
+          
          // dd($this->pm->id,$this->no_of_new_deals_added,$this->no_of_new_milestones_added_on_old_projects,$this->no_of_new_milestones_added_on_old_projects_id);
           $this->no_of_new_milestones_added_on_old_projects_value = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
           ->join('projects','projects.id','project_milestones.project_id')

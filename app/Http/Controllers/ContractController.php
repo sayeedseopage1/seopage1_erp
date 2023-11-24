@@ -888,6 +888,7 @@ class ContractController extends AccountBaseController
 
             $milestone->summary = $request->summary;
             $milestone->currency_id = 1;
+            $milestone->added_by = Auth::id();
 
 
             $milestone->save();
