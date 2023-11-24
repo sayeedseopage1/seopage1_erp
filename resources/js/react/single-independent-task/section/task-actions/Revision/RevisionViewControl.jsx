@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import Button from '../../../components/Button';
 import Modal from '../../../components/Modal';
-import { SingleTask } from '../../../../utils/single-task';
-import RevisionViewModal from './RevisionViewModal';
-import _ from 'lodash';
 import DeveloperRevisionView from './DeveloperRevisionView';
-import { revisionButtonPermission } from '../../../permissions';
+import RevisionViewModal from './RevisionViewModal';
 
 const RevisionViewControl = ({task, auth, status}) => {
     const [revisionModal, setRevisionModal] = useState(false);
     const singleTask = task;
 
+    console.log({task})
   return (
     <React.Fragment>
         <Button
@@ -25,7 +23,8 @@ const RevisionViewControl = ({task, auth, status}) => {
         <Modal isOpen={revisionModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
                 {
-                    _.includes([6], auth?.getRoleId()) ?
+                    // check is subtask
+                    task?.hasSubtask ?
                     <RevisionViewModal
                         task={singleTask}
                         close={() => setRevisionModal(false)}

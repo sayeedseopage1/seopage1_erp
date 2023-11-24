@@ -1,23 +1,20 @@
-import { Listbox } from "@headlessui/react";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import validator from "validator";
 import CKEditorComponent from "../../../ckeditor";
 import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
-import DatePickerComponent from "./DatePicker";
-import PrioritySelection from "./PrioritySelection";
+import { usePostIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
+import { CompareDate } from "../../../utils/dateController";
+import { User } from "../../../utils/user-details";
 import Button from "../Button";
 import Modal from "../Modal";
-import { CompareDate } from "../../../utils/dateController";
-import { SingleTask } from "../../../utils/single-task";
-import { User } from "../../../utils/user-details";
-import AssginedToSelection from "./AssignedToSelection";
-import { usePostIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
-import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 import Input from "../form/Input";
-import validator from "validator";
-import Swal from "sweetalert2";
+import AssginedToSelection from "./AssignedToSelection";
+import DatePickerComponent from "./DatePicker";
+import PrioritySelection from "./PrioritySelection";
+import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 import './ckeditor.css';
 
 const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
@@ -140,6 +137,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             err.description = "Write a Description";
             errCount++;
         }
+
 
         if (!validator.isURL(loginUrl)) {
             err.loginUrl = "Enter a valid URL";
@@ -297,6 +295,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     // url shortener
     const getUrl = (url = "") => {
         const urlPettern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
+
         if (url) {
             if (urlPettern.test(url)) {
                 if (url.includes("https://www.")) {

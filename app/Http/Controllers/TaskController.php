@@ -3089,7 +3089,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->approval_status = 'accepted';
 
             $tasks_accept->is_accept = true;
-            if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4'))
+            if((($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')) && $task_status->independent_task_status != 1)
             {
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
             }
@@ -3252,7 +3252,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
         } elseif ($request->mode == 'continue') {
             $tasks_accept->is_accept = true;
-            if($tasks_accept->acknowledgement_id !== null && $tasks_accept->acknowledgement_id != 'LDRx4'){
+            if($tasks_accept->acknowledgement_id !== null && $tasks_accept->acknowledgement_id != 'LDRx4' && $task_status->independent_task_status != 1){
                 $tasks_accept->final_responsible_person = $this->role[$added_by_role_id];
             }
         }

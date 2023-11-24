@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import React, { useEffect, useState } from "react";
 import styles from "./taskAuthorization.module.css";
 // import Button from '../../global/Button'
 // import Modal from '../../global/Modal';
 // import Card from '../../global/Card';
 // import DataTable from '../../global/table/DataTable';
-import { authorizationColumns } from "./TaskAuthorizationColumns";
 import _ from "lodash";
+import Card from "../../../../react-latest/ui/Card";
 import {
-    useGetIndependentAuthorizeTaskQuery,
-    useLazyGetIndependentAuthorizeTaskQuery,
+    useGetIndependentAuthorizeTaskQuery
 } from "../../../services/api/independentTaskApiSlice";
+import { User } from "../../../utils/user-details";
+import { useRefresh } from "../../index";
 import Button from "../Button";
 import Modal from "../Modal";
-import Card from "../../../../react-latest/ui/Card";
 import DataTable from "../table/DataTable";
-import { useSearchParams } from "react-router-dom";
-import { User } from "../../../utils/user-details";
-import Loader from "../Loader";
-import { useRefresh } from "../../index";
+import { authorizationColumns } from "./TaskAuthorizationColumns";
 
 const TaskAuthorization = ({ title }) => {
     const {refreshState,handleRefresh} = useRefresh()
@@ -206,6 +203,7 @@ export default TaskAuthorization;
 
 // tabs
 const Tabs = ({ data, visibilityOption, setVisibilityOption }) => {
+
     const badge = (type) => {
         return _.size(data[type]);
     };
