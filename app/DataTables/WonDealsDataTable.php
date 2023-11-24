@@ -67,7 +67,7 @@ class WonDealsDataTable extends BaseDataTable
             })
             ->addColumn('amount', function ($row) {
                 if($row->project_type=="fixed" && $row->actual_amount == 0){
-                    $badge = '<span class="badge badge-success ml-1"> Upsell Amount</span>';
+                    $badge = '<span class="badge badge-success ml-1"> Upsold By PM</span>';
                     return $row->upsell_actual_amount . ' ' . $row->original_currency->currency_symbol . $badge;
                 }else{
                     return $row->actual_amount. ' ' . $row->original_currency->currency_symbol;
