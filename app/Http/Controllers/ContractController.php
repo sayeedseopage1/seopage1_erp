@@ -396,7 +396,7 @@ class ContractController extends AccountBaseController
         $project->added_by = Auth::id();
         $project->status = 'not started';
         $project->public = 0;
-        $project->due = $deal->amount;
+        $project->due = $deal->amount + $deal->upsell_amount;
 
 
         if ($project->save()) {
@@ -684,8 +684,8 @@ class ContractController extends AccountBaseController
         $project->deliverable_authorization = 0;
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = ($request->amount) / $currency->exchange_rate;
-        $project->due = $deal->amount;
+        $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+        $project->due = $deal->amount + $deal->upsell_amount;
 
         $project->completion_percent = 0;
         $project->deal_id = $deal->id;
@@ -1189,8 +1189,8 @@ class ContractController extends AccountBaseController
 
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount) / $currency->exchange_rate;
-            $project->due = $deal->amount;
+            $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+            $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
             $project->project_summary = $request->project_summary;
             $project->save();
@@ -1722,8 +1722,8 @@ class ContractController extends AccountBaseController
             $project->deadline = $request->deadline;
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount) / $currency->exchange_rate;
-            $project->due = $deal->amount;
+            $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+            $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
             $project->project_summary = $request->project_summary;
             $project->save();
@@ -2848,8 +2848,8 @@ public function storeClientDeal(Request $request){
     $project->deliverable_authorization = 0;
     $currency = Currency::where('id', $request->original_currency_id)->first();
     //dd($currency);
-    $project->project_budget =  $deal->upsell_amount;
-    $project->due =  $deal->upsell_amount;
+    $project->project_budget = $deal->amount + $deal->upsell_amount;
+    $project->due = $deal->amount + $deal->upsell_amount;
 
     $project->completion_percent = 0;
     $project->deal_id = $deal->id;
