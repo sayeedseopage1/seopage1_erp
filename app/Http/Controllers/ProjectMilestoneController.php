@@ -194,6 +194,7 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->currency_id = 1;
 
         $milestone->original_currency_id = $currency->id;
+        $milestone->added_by = Auth::id();
 
         $milestone->save();
 

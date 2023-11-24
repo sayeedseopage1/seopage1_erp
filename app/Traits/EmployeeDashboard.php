@@ -634,7 +634,10 @@ public function storeClockIn(ClockInRequest $request)
         $checkTodayAttendance = Attendance::where('user_id', $this->user->id)
         ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $now->format('Y-m-d'))->first();
 
-        if($checkTodayAttendance){
+        $count = Attendance::where('user_id', $this->user->id)
+        ->where(DB::raw('DATE(attendances.clock_in_time)'), '=', $now->format('Y-m-d'))->count();
+
+        if($count > 5){
             return response()->json([
                 "error" => 'Maximum Check-In Attempts Reached',
                 "message" => "You've reached the maximum allowable check-in attempts. Please follow the provided instructions to resolve the issue.",
