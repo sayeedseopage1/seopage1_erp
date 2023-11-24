@@ -124,7 +124,7 @@
 .inline_flex {
     display: grid;
     gap: 1rem;
-    grid-template-columns: 135px 1fr;
+    grid-template-columns: 180px 1fr;
 }
 
 .task_info__label {
