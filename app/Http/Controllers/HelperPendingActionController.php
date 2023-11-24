@@ -13,6 +13,9 @@ use Auth;
 use App\Models\ProjectDeliverable;
 use App\Models\Role;
 use App\Models\TaskRevision;
+use App\Models\TaskRevisionDispute;
+use App\Models\Task;
+use App\Models\Taskuser;
 
 class HelperPendingActionController extends AccountBaseController
 {
@@ -1055,6 +1058,178 @@ class HelperPendingActionController extends AccountBaseController
 
        
 
+   }
+   public function TaskDisputeQuestion($dispute_id,$user_id)
+   {
+        $task_dispute= TaskRevisionDispute::where('id',$dispute_id)->first();
+        $task_revision= TaskRevision::where('id',$task_dispute->revision_id)->first();
+        $task= Task::where('id',$task_revision->task_id)->first();
+        $project= Project::where('id',$task->project_id)->first();
+        $client= User::where('id',$project->client_id)->first();
+   
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $authorizer= User::where('id',$project_manager->id)->first();
+        $action = new PendingAction();
+        $action->code = 'TDQ';
+        $action->serial = 'TDQ'.'x0';
+       
+        $action->item_name= 'Question aksed about your dispute!';
+        $action->heading= 'Question aksed about your dispute!';
+        $action->message = 'You have been asked 1 question about your dispute!';
+
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+        $action->dispute_id = $dispute_id;
+        $action->authorization_for= $user_id;
+        $action->task_id= $task->id;
+        $action->revision_id= $task_revision->id;
+        $button = [
+            [
+                'button_name' => 'Check and Answer',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('disputes.index'),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+
+   }
+   public function NewCommentAdded($taskId,$commentor)
+   {
+    //dd($taskId,$commentor);
+    $task= Task::where('id',$taskId)->first();
+    $project= Project::where('id',$task->project_id)->first();
+    $client= User::where('id',$project->client_id)->first();
+   
+    $commentor= User::where('id',$commentor)->first();
+    if($commentor->role_id == 4)
+    {
+        $authorizers= TaskUser::where('task_id',$task->id)->get();
+
+    }else 
+    {
+        $authorizers= User::where('id',$project->pm_id)->get();
+
+    }
+   // dd($authorizers);
+   
+    
+    foreach ($authorizers as $key => $authorizer) {
+     $action = new PendingAction();
+     $action->code = 'TCOA';
+     $action->serial = 'TCOA'.'x'.$key;
+     $action->item_name= 'New comment';
+     $action->heading= 'A new comment has been added!';
+     $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+     $action->timeframe= 12;
+     $action->project_id = $project->id;
+     $action->client_id = $client->id;
+     $action->task_id = $task->id;
+     $action->authorization_for= $authorizer->id;
+     $button = [
+         [
+             'button_name' => 'View and Reply',
+             'button_color' => 'primary',
+             'button_type' => 'modal',
+             'button_url' => '',
+             'modal_form'=> true,
+             'form'=> [
+                 [
+                     'type'=> 'textarea',
+                     'label'=>'Write a reply',
+                     'name'=>'reply',
+                     'required'=> true,
+                 ], 
+                 [
+                     'type'=> 'hidden',
+                      'value'=> $task->id,
+                      'readonly'=> true,
+                    
+                     'name'=>'project_id',
+                     'required'=> true,
+                 ], 
+                  [
+                     'type'=> 'hidden',
+                     'value'=> $action->id,
+                     'readonly'=> true,
+                     
+                     'name'=>'authorization_id',
+                    
+                     'required'=> true,
+                     
+                 ], 
+                 
+             ], 
+             'form_action'=> [
+                 [
+                     'type'=> 'button',
+                     'method'=>'POST',
+                     'label'=> 'Reply',
+                     'color'=> 'success',
+                     'url'=> '',
+
+                 ], 
+                
+                 
+             ]
+         ],
+         [
+            'button_name' => 'Not relevant to me',
+            'button_color' => 'primary',
+            'button_type' => 'modal',
+             'button_url' => '',
+             'modal_form'=> true,
+             'form'=> [
+                 [
+                     'type'=> 'textarea',
+                     'label'=>'Are you sure this comment is not relevant to you?',
+                     'name'=>'confirmation',
+                     'required'=> true,
+                 ], 
+                 [
+                     'type'=> 'hidden',
+                      'value'=> $task->id,
+                      'readonly'=> true,
+                    
+                     'name'=>'project_id',
+                     'required'=> true,
+                 ], 
+                  [
+                     'type'=> 'hidden',
+                     'value'=> $action->id,
+                     'readonly'=> true,
+                     
+                     'name'=>'authorization_id',
+                    
+                     'required'=> true,
+                     
+                 ], 
+                 
+             ], 
+             'form_action'=> [
+                 [
+                     'type'=> 'button',
+                     'method'=>'POST',
+                     'label'=> 'Confirm',
+                     'color'=> 'success',
+                     'url'=> '',
+
+                 ], 
+                
+                 
+             ]
+        ],
+       
+     ];
+     $action->button = json_encode($button);
+     $action->save();
+    //dd($action);
+//    dd(json_decode($action->button));
+
+    }
    }
  
 
