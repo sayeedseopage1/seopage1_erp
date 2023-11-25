@@ -14,6 +14,7 @@ use Auth;
 use Str;
 use DB;
 use App\Models\Project;
+use App\Models\User;
 
 class WonDealsDataTable extends BaseDataTable
 {
@@ -124,9 +125,20 @@ class WonDealsDataTable extends BaseDataTable
                     $action .= '<a class="dropdown-item" href="deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
                 }
 
-                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8) {
+                $upDeal = Deal::where('id',$row->id)->first();
+                $upSellAddedBy = User::where('id',$upDeal->added_by)->first();
+                
+                if($upSellAddedBy->role_id==4 && Auth::user()->role_id ==4){
                     $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+                }elseif($upSellAddedBy->role_id==7 && Auth::user()->role_id == 7){
+                    $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+                }else{
+                    if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
+                        $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+                    }
                 }
+
+
                 if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
                     if ($row->authorization_status == 0 || $row->authorization_status == '2') {
                         if (Auth::user()->role_id == 8) {
