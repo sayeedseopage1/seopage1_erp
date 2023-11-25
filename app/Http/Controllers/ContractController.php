@@ -2668,7 +2668,7 @@ class ContractController extends AccountBaseController
 // client dela store
 public function storeClientDeal(Request $request){
     // dd($request->all());
-    \DB::beginTransaction();
+    // DB::beginTransaction();
 
     $validated = $request->validate([
         'user_name' => 'required',
@@ -2739,7 +2739,7 @@ public function storeClientDeal(Request $request){
     $deal->actual_amount =  0;
     $deal->upsell_actual_amount =  $request->amount;
     $currency = Currency::where('id', $request->original_currency_id)->first();
-    //  dd($currency);
+    $deal->award_time = Carbon::now();
     $deal->upsell_amount = ($request->amount) / $currency->exchange_rate;
     $deal->client_name = $request->client_name;
     $deal->client_username = $request->user_name;
@@ -2759,7 +2759,7 @@ public function storeClientDeal(Request $request){
     $deal->start_date = $newDate;
     $deal->client_badge = 'existing client';
     $deal->save();
-   // dd($deal);
+//    dd($deal);
     //$lead_con_id = Lead::where('id', $request->lead_id)->first();
     if (Auth::id() != null) {
         $agent_id = SalesCount::where('user_id', Auth::id())->first();
