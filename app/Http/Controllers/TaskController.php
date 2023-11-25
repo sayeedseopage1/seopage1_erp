@@ -1045,7 +1045,6 @@ class TaskController extends AccountBaseController
 
     public function TaskRevision(Request $request)
     {
-        // DB::beginTransaction();
 
         $task_status = Task::find($request->task_id);
         $task_status->status = "incomplete";
@@ -1107,11 +1106,11 @@ class TaskController extends AccountBaseController
             $task_revision->final_responsible_person = "PM";
         }
 
-        if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
-            $task_revision->raised_by_percent = 50;
-            $task_revision->raised_against_percent = 50;
-            $task_revision->final_responsible_person = '';
-        }
+        // if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
+        //     $task_revision->raised_by_percent = 50;
+        //     $task_revision->raised_against_percent = 50;
+        //     $task_revision->final_responsible_person = '';
+        // }
         $task_revision->save();
 
 
@@ -3017,8 +3016,7 @@ class TaskController extends AccountBaseController
     //ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
     {
-        // dd('accept and continue');
-        // DB::beginTransaction();
+
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
@@ -3064,7 +3062,12 @@ class TaskController extends AccountBaseController
             $tasks_accept->lead_comment = $request->comment;
             $tasks_accept->approval_status = 'accepted';
             $tasks_accept->is_accept = true;
-            if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')){
+            if($tasks_accept->acknowledgement_id == 'LDRx4' || $tasks_accept->acknowledgement_id == 'PLRx04'){
+                $tasks_accept->raised_by_percent = 50;
+                $tasks_accept->raised_against_percent = 50;
+                $tasks_accept->final_responsible_person = '';
+            }else if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') ||
+            ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')){
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
             }
 
@@ -3089,10 +3092,19 @@ class TaskController extends AccountBaseController
             $tasks_accept->approval_status = 'accepted';
 
             $tasks_accept->is_accept = true;
-            if((($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')) && $task_status->independent_task_status != 1)
+
+            if($tasks_accept->acknowledgement_id == 'LDRx4' || $tasks_accept->acknowledgement_id == 'PLRx04'){
+                $tasks_accept->raised_by_percent = 50;
+                $tasks_accept->raised_against_percent = 50;
+                $tasks_accept->final_responsible_person = '';
+            }else if(
+                (($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') ||
+                ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')) &&
+                $task_status->independent_task_status != 1)
             {
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
             }
+
 
             $tasks_accept->save();
         }
@@ -3226,13 +3238,13 @@ class TaskController extends AccountBaseController
         ]);
     }
 
-    /*************** PM->LEAD->DEV *************************/
+    /**
+     * * Revision => Developer Action
+     * * Developer Can Accept, Deny or Continue
+     */
 
     public function accept_or_revision_by_developer(Request $request)
     {
-
-        //DB::beginTransaction();
-
 
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
@@ -3249,10 +3261,21 @@ class TaskController extends AccountBaseController
             $tasks_accept->deny_reason = $request->deny_reason;
         } elseif ($request->mode == 'accept') {
             $tasks_accept->is_accept = true;
-            $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
+
+            if($tasks_accept->acknowledgement_id == 'LDRx4' || $tasks_accept->acknowledgement_id == 'PLRx04'){
+                $tasks_accept->raised_by_percent = 50;
+                $tasks_accept->raised_against_percent = 50;
+                $tasks_accept->final_responsible_person = '';
+            }else{
+                $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
+            }
         } elseif ($request->mode == 'continue') {
             $tasks_accept->is_accept = true;
-            if($tasks_accept->acknowledgement_id !== null && $tasks_accept->acknowledgement_id != 'LDRx4' && $task_status->independent_task_status != 1){
+            if(
+                $tasks_accept->acknowledgement_id !== null &&
+                $tasks_accept->acknowledgement_id != 'LDRx4' &&
+                $task_status->independent_task_status != 1
+            ){
                 $tasks_accept->final_responsible_person = $this->role[$added_by_role_id];
             }
         }
@@ -4267,7 +4290,7 @@ class TaskController extends AccountBaseController
             $data->last_updated_by = $this->user->id;
 
             $data->save();
-            //need pedning action 
+            //need pedning action
             $helper = new HelperPendingActionController();
 
 
@@ -4912,7 +4935,7 @@ class TaskController extends AccountBaseController
             $query->question_for = $question['question_for'];
             $query->save();
          //   dd($query);
-            //need pending action 
+            //need pending action
             $helper = new HelperPendingActionController();
 
 
@@ -4962,7 +4985,7 @@ class TaskController extends AccountBaseController
                     $action->authorized_at= Carbon::now();
                     $action->past_status = 1;
                     $action->save();
-                   
+
                     $authorize_by= User::where('id',$action->authorized_by)->first();
 
                     $past_action= new PendingActionPast();
@@ -5394,51 +5417,6 @@ class TaskController extends AccountBaseController
                     }
 
 
-                    // $revisions->each(function ($revision) use ($against_to) {
-                    //     if ($against_to) {
-                    //         switch ($revision->dispute_between) {
-                    //             case 'SPR':
-                    //                 if ($revision->sale_person != $against_to) {
-                    //                     return null;
-                    //                 }
-                    //                 break;
-                    //             case 'LDR':
-                    //             case 'PLR':
-                    //                 if ($revision->task_assign_to != $against_to) {
-                    //                     return null;
-                    //                 }
-                    //                 break;
-                    //             case 'CPR':
-                    //                 if ($revision->project_manager != $against_to) {
-                    //                     return null;
-                    //                 }
-                    //                 break;
-                    //         }
-                    //     }
-
-                    //     $revision->task_assign_to = get_user($revision->task_assign_to, false);
-                    //     $revision->client = get_user($revision->clientId, true);
-                    //     $revision->deal_added_by = get_user($revision->deal_added_by, false);
-                    //     $revision->project_manager = get_user($revision->pm_id, false);
-
-                    //     if ($revision->sale_person) {
-                    //         $revision->sale_person = get_user($revision->sale_person, false);
-                    //     }
-
-                    //     $revision->added_by = get_user($revision->added_by, false);
-
-                    //     if ($revision->subtask_id) {
-                    //         $revision->lead_developer = $revision->added_by;
-                    //         $revision->developer = $revision->task_assign_to;
-                    //     } else {
-                    //         $revision->lead_developer = $revision->task_assign_to;
-                    //         $revision->developer = null;
-                    //     }
-
-
-                    // });
-
-        // dd($data);
         return response()->json($data, 200);
     }
 
