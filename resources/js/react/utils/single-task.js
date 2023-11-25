@@ -272,6 +272,7 @@ export class SingleTask {
         this.approvalStatus = task?.approval_status;
         this.isIndependentTask = !!task?.independent_task_status;
         this.attachments = task?.taskFiles;
+        this.hasSubtask = _.size(task?.taskSubTask);
         this.additionalInfo = {
             loginURL : task?.pp_task_login_url,
             username : task?.pp_task_user_name,

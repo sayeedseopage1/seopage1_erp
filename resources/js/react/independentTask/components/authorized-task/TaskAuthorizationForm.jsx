@@ -1,28 +1,27 @@
-import React, { useState } from "react";
-import styles from "./taskAuthorization.module.css";
 import dayjs from "dayjs";
-import { toast } from "react-toastify";
-import QuestionAnswer from "./QuestionAnswer";
-import TaskAuthorizationQuestionAnswers from "./TaskAuthorizationQuestionAnswers";
 import _ from "lodash";
-import Button from "../Button";
-import Modal from "../Modal";
-import Card from "../../../global/Card";
+import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
 import Avatar from "../../../global/Avatar";
-import { User } from "../../../utils/user-details";
-import { CompareDate } from "../../../utils/dateController";
-import DatePickerComponent from "./DatePicker";
-import { useEffect } from "react";
-import Input from "../form/Input";
-import UserSelectionList from "./UserSelectionList";
+import Card from "../../../global/Card";
 import {
     useGetIndependentTaskAuthorizationConversationsQuery,
     usePutIndependentTaskMutation,
+    useUpdateIndependentTaskStatusMutation,
 } from "../../../services/api/independentTaskApiSlice";
-import Swal from "sweetalert2";
-import Loader from "../Loader";
+import { CompareDate } from "../../../utils/dateController";
+import { User } from "../../../utils/user-details";
 import { useRefresh } from "../../index";
+import Button from "../Button";
+import Loader from "../Loader";
+import Modal from "../Modal";
+import DatePickerComponent from "./DatePicker";
+import QuestionAnswer from "./QuestionAnswer";
+import TaskAuthorizationQuestionAnswers from "./TaskAuthorizationQuestionAnswers";
+import UserSelectionList from "./UserSelectionList";
 import './ckeditor.css';
+import styles from "./taskAuthorization.module.css";
 
 const day = new CompareDate();
 
@@ -61,6 +60,9 @@ const TaskAuthorizationForm = ({ data, table }) => {
         refetch:conversationRefetch,
     } = useGetIndependentTaskAuthorizationConversationsQuery(data.id);
 
+
+    const [updateIndependentTaskStatus, {isError}] = useUpdateIndependentTaskStatusMutation();
+
     // console.log({ conversationData, isConversationLoading });
 
     useEffect(() => {
@@ -84,9 +86,32 @@ const TaskAuthorizationForm = ({ data, table }) => {
     // };
 
     const open = () => setVisible(true);
-    const close = () => {
+
+
+    const hasUpdateConversations = _.filter(conversationData?.data, c => c.has_update)
+
+    // update status on close
+    const close = async () => {
         setVisible(false);
         setRadio("");
+
+        // if has conversion with has_update
+        // then update the status if user close the modal
+        if(_.size(hasUpdateConversations) > 0){
+            try {
+                await updateIndependentTaskStatus(hasUpdateConversations).unwrap();
+            } catch (error) {
+                if(error.originalStatus === 500){
+                    withReactContent(Swal).fire({
+                        icon: 'error',
+                        html: <>
+                            <h1>500</h1>
+                            <h3>Oops! Something went wrong.</h3>
+                        </>
+                    })
+                }
+            }
+        }
     };
 
     const [putIndependentAuthorizeTask, { isLoading }] =
@@ -232,7 +257,32 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     </h2>
                                 </div>
 
+
                                 <div className={styles.task_info}>
+                                     {/* approval_status */}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                            Authorization Status
+                                        </div>
+                                        <div className={styles.task_info__text}>
+                                            {data?.approval_status === null ? (
+                                                <span className="badge badge-warning">
+                                                    Pending
+                                                </span>
+                                            ) : data?.approval_status === 1 ? (
+                                                <span className="badge badge-success">
+                                                    Approved
+                                                </span>
+                                            ) : (
+                                                <span className="badge badge-danger">
+                                                    Rejected
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
                                     {/* start_date */}
                                     <div
                                         className={styles.inline_flex}
@@ -336,29 +386,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
-                                    {/* approval_status */}
-                                    <div className={styles.inline_flex}>
-                                        <div
-                                            className={styles.task_info__label}
-                                        >
-                                            Status
-                                        </div>
-                                        <div className={styles.task_info__text}>
-                                            {data?.approval_status === null ? (
-                                                <span className="badge badge-warning">
-                                                    Pending
-                                                </span>
-                                            ) : data?.approval_status === 1 ? (
-                                                <span className="badge badge-success">
-                                                    Approved
-                                                </span>
-                                            ) : (
-                                                <span className="badge badge-danger">
-                                                    Rejected
-                                                </span>
-                                            )}
-                                        </div>
-                                    </div>
+
 
                                     {/* heading */}
                                     <div className={styles.inline_flex}>
@@ -377,7 +405,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         <div
                                             className={styles.task_info__label}
                                         >
-                                            Login URL :{" "}
+                                            Login URL
                                         </div>
                                         <div className={styles.task_info__text}>
                                             <a href={data.login_url}>{data.login_url}</a>
@@ -389,7 +417,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         <div
                                             className={styles.task_info__label}
                                         >
-                                            Username :{" "}
+                                            Username
                                         </div>
                                         <div className={styles.task_info__text}>
                                             {data.user_name}
@@ -401,7 +429,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         <div
                                             className={styles.task_info__label}
                                         >
-                                            Password :{" "}
+                                            Password
                                         </div>
                                         <div className={styles.task_info__text}>
                                             {data.password}
@@ -415,7 +443,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             <div
                                                 className={styles.task_info__label}
                                             >
-                                                Reference page :{" "}
+                                                Reference page
                                             </div>
                                             <div className={styles.task_info__text}>
                                                 <a href={data.reference_site}>{data.reference_site}</a>

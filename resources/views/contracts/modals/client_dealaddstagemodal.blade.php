@@ -30,7 +30,6 @@
                 @endif
                 <input type="hidden" name="date" value="{{$date}}">
                 <input type="hidden" name="id" value="{{$deal->id}}">
-{{-- {{ dd($deal) }} --}}
                 <div class="modal-body">
 
                     <div class="row">
@@ -239,7 +238,6 @@
 </script>
 <script>
     $('#create_won_deal').click(function(e){
-        // alert("success");
         e.preventDefault();
         var project_type = $('input[name="project_type"]:checked').val();
         $('#create_won_deal').attr("disabled", true);

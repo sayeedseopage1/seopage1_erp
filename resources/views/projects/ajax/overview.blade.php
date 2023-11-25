@@ -538,7 +538,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <div class="col-12 col-sm-6">
                         <x-cards.widget
                             :title="__('Project Budget (USD)')"
-                            :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->project_budget, $project->currency->currency_symbol) : '0')"
+                            :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->amount + $project->deal->upsell_amount, $project->currency->currency_symbol) : '0')"
                             icon="coins"
                         />
                     </div>

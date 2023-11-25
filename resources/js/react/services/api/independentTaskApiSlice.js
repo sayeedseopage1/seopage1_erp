@@ -41,7 +41,7 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
     // get conversations
     getIndependentTaskAuthorizationConversations: builder.query({
       query: (id) => `/account/independent-task-conversations/${id}`,
-      // providesTags: ["IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS"]
+      providesTags: ["IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS"]
     }),
 
     // create independent task conversation
@@ -72,6 +72,21 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
         },
       }),
       invalidatesTags: ["IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS"]
+    }),
+
+    // update independent task "has_update" status
+    updateIndependentTaskStatus: builder.mutation({
+        query: (data) => ({
+            url: `/account/independent-task/conversions/status/update`,
+            method: "PUT",
+            body: {
+                data,
+                _token:document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+            }
+        }),
+        invalidatesTags: ["IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS", "INDEPENDENT_TASK"]
     })
 
 
@@ -89,4 +104,5 @@ export const {
   useLazyGetIndependentTaskAuthorizationConversationsQuery,
   useCreateIndependentTaskAuthorizationConversationMutation,
   useUpdateIndependentTaskAuthorizationConversationMutation,
+  useUpdateIndependentTaskStatusMutation,
 } = independentTaskApiSlice;
