@@ -45,7 +45,7 @@ class IndependentTaskController extends AccountBaseController
                             ->leftJoin('users as authorizeBy', 'pending_parent_tasks.authorize_by', '=', 'authorizeBy.id')
                             ->leftJoin('users as client', 'pending_parent_tasks.client_id', '=', 'client.id')
                             ->select('pending_parent_tasks.login_url','pending_parent_tasks.reference_site','pending_parent_tasks.password','pending_parent_tasks.user_name',
-                            
+
                             'pending_parent_tasks.id','pending_parent_tasks.heading','pending_parent_tasks.description','pending_parent_tasks.start_date','pending_parent_tasks.due_date','pending_parent_tasks.category_id','pending_parent_tasks.board_column_id','pending_parent_tasks.need_authorization','pending_parent_tasks.approval_status','user.id as assign_to_id','user.name as assign_to_name','user.image as assign_to_avator','userRole.name as assign_to_designation','pending_parent_tasks.u_id','pending_parent_tasks.independent_task_status','addedBy.id as assign_by_id','addedBy.name as assign_by_name','addedBy.image as assign_by_avator','addedByRole.name as assign_by_designation','authorizeBy.id as authorize_by_id','authorizeBy.name as authorize_by_name','authorizeBy.image as authorize_by_avator','client.id as existing_client_id','client.name as existing_client_name','pending_parent_tasks.client_name as new_client','pending_parent_tasks.comment','pending_parent_tasks.created_at as creation_date')
                             ->where('pending_parent_tasks.independent_task_status', '1')
                             ->get();
@@ -154,7 +154,7 @@ class IndependentTaskController extends AccountBaseController
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {        
+    {
         if($request->approval_status == 1){
             $pendingParentTasks = PendingParentTasks::find($id);
             $pendingParentTasks->start_date = $request->start_date;
@@ -195,7 +195,7 @@ class IndependentTaskController extends AccountBaseController
                 $files = $request->file('file');
                 $destinationPath = storage_path('app/public/');
                 $file_name = [];
-    
+
                 foreach ($files as $file) {
                     $ppTaskFile = TaskFile::where('task_id',$pendingParentTasks->id);
                     $ppTaskFile->task_id = $independent_task->id;
@@ -206,9 +206,9 @@ class IndependentTaskController extends AccountBaseController
                     $ppTaskFile->hashname = $filename;
                     $ppTaskFile->size = $file->getSize();
                     $ppTaskFile->save();
-    
+
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
-    
+
                     $this->logTaskActivity($independent_task->id, $independent_task->user_id, 'fileActivity', $independent_task->board_column_id);
                 }
             }
@@ -306,6 +306,26 @@ class IndependentTaskController extends AccountBaseController
 
     }
 
+    // update independent task update status
+    public function updateIndependentTaskHasUpdateStatus(Request $request){
+        // received all conversation on $request->data variable
+        $conversations = $request->data;
+
+        // update each conversation "has_update" & "seen" status
+        foreach ($conversations as $conversation) {
+            $query =  PendingParentTaskConversation::find($conversation["id"]);
+            $query->has_update = false;
+            $query->seen = true;
+            $query->seen_date = Carbon::now();
+            $query->save();
+        }
+
+        // response success message
+        return response()->json([
+            'message' => 'Conversion Status Successfully Updated.'
+        ], 200);
+    }
+
     public function update_independent_task_conversation_question_by_answer(Request $request){
         $data = $request->data;
         $pending_parent_task_id = $data[0]["pending_parent_task_id"];
@@ -349,7 +369,7 @@ class IndependentTaskController extends AccountBaseController
         $assignee_to = $request->input('assignee_to', null);
         $assignee_by = $request->input('assignee_by', null);
 
-       
+
         $clientId = $request->input('client_name', null);
       //  $projectId = $request->input('project_id', null);
         $status = $request->input('status', null);
@@ -367,10 +387,10 @@ class IndependentTaskController extends AccountBaseController
 
                             if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
                             {
-                
-                
+
+
                                 $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
-                
+
                             }else
                             {
                                 if (!is_null($startDate)) {
@@ -379,9 +399,9 @@ class IndependentTaskController extends AccountBaseController
                                 if (!is_null($endDate)) {
                                     $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                                 }
-                
+
                             }
-                           
+
                             if (!is_null($assignee_to)) {
                                 $tasks = $tasks->where('task_users.user_id', $assignee_to);
                             }
@@ -394,13 +414,13 @@ class IndependentTaskController extends AccountBaseController
                             if (!is_null($clientId)) {
                                 $tasks = $tasks->where('tasks.client_name', $clientId)->orWhere('client.name',$clientId);
                             }
-                           
+
                             if(!is_null($status))
                             {
                                 if($status == 11)
                                 {
                                     $tasks = $tasks;
-                
+
                                 }elseif ($status== 10) {
                                     $tasks = $tasks->where('tasks.board_column_id','!=',4);
                                 }elseif ($status == 1) {
@@ -421,12 +441,12 @@ class IndependentTaskController extends AccountBaseController
                                 elseif($status == 9) {
                                     $tasks = $tasks->where('tasks.board_column_id',9);
                                 }
-                
+
                             }
                             if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
                             {
                                 $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
-                
+
                             }else {
                                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
                             }
