@@ -1,25 +1,23 @@
+import _ from "lodash";
 import React from "react";
-import TimerControl from "./TimerControl";
-import MarkAsComplete from "./MarkAsComplete";
+import { useDeveloperCanCompleteTaskQuery, useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
+import { User } from "../../../utils/user-details";
 import {
-    timeControlPermision,
-    markAsCompletedButtonPermission,
-    taskEditPermision,
     approveButtonPermission,
+    markAsCompletedButtonPermission,
     needRevisionPermision,
     revisionButtonPermission,
+    timeControlPermision
 } from "../../permissions";
+import DailySubmissionControl from './DailySubmissionControl';
+import MarkAsComplete from "./MarkAsComplete";
 import RevisionControl from "./Revision/RevisionControl";
 import RevisionViewControl from "./Revision/RevisionViewControl";
+import SubtaskCreationControl from "./SubtaskCreationControl";
+import TimerControl from "./TimerControl";
 import ApproveTask from "./approve-task/ApproveTask";
 import ClientApproval from "./client-approval/ClientApproval";
 import ReportControl from "./report/Report";
-import { User } from "../../../utils/user-details";
-import _ from "lodash";
-import { useDeveloperCanCompleteTaskQuery, useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
-import DailySubmissionControl from './DailySubmissionControl';
-import SubtaskCreationControl from "./SubtaskCreationControl";
-import { Link } from "react-router-dom";
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
@@ -78,6 +76,7 @@ const TaskAction = ({ task, status }) => {
             {approveButtonPermission({ task, status, loggedUser }) ? (
                 <ApproveTask task={task} status={status} auth={loggedUser} />
             ) : null}
+
             {needRevisionPermision({ task, status, loggedUser }) ? (
                 <RevisionControl task={task} auth={loggedUser} />
             ) : null}
@@ -140,7 +139,7 @@ const TaskAction = ({ task, status }) => {
                     </Link>
                 )} */}
 
-                {task &&  task.boardColumn.id === 2 && !(_.includes([5, 6], loggedUser?.getRoleId()))  &&
+                {/* {task &&  task.boardColumn.id === 2 && !(_.includes([5, 6], loggedUser?.getRoleId()))  &&
                     <Link
                         to={`?modal=edit&task=${task?.id}`}
                         className="cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button"
@@ -151,7 +150,7 @@ const TaskAction = ({ task, status }) => {
                         <i className="fa-regular fa-pen-to-square" />
                         Edit
                     </Link>
-                }
+                } */}
             </div>
 
             {/* {{-- 3 dot --}} */}

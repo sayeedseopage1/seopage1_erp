@@ -4,14 +4,13 @@ import * as React from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
+import FileUploader from "../file-upload/FileUploader";
 import Toaster from "../global/Toaster";
 import {
-    useGetTaskDetailsQuery,
     useGetTaskStatusQuery,
-    useGetWorkingEnvironmentQuery,
     useLazyGetTaskDetailsQuery,
-    useLazyGetTaskStatusQuery,
-    useLazyGetWorkingEnvironmentQuery,
+    useLazyGetWorkingEnvironmentQuery
 } from "../services/api/SingleTaskPageApi";
 import { storeTask } from "../services/features/subTaskSlice";
 import { BoardColumn, SingleTask } from "../utils/single-task";
@@ -19,25 +18,20 @@ import { User } from "../utils/user-details";
 import Accordion from "./components/Accordion";
 import Guideline from "./components/Guideline";
 import Loading from "./components/Loading";
-import PMGuideline from "./components/PMGuideline";
 import RevisionText from "./components/RevisionText";
 import GenarelLoader from "./components/loader/GenarelLoader";
+import { singleTaskPagePermission } from "./permissions";
 import CommentSection from "./section/comments/CommentsSection";
 import DailySubmissionSection from "./section/daily-submission/DailySubmissionSection";
 import HistorySection from "./section/history/HistorySection";
 import NoteSection from "./section/notes/NoteSection";
 import RevisionSection from "./section/revisions/RevisionSection";
+import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
 import SubTaskSection from "./section/sub-task/SubTaskSection";
+import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubmittedWork from "./section/submitted-work/SubmittedWork";
 import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
-import TaskEditForm from "./section/sub-task/TaskEditForm";
-import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
-import { singleTaskPagePermission } from "./permissions";
-import ERROR from "../global/ERROR";
-import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
-import { toast } from "react-toastify";
-import FileUploader from "../file-upload/FileUploader";
 
 const RefetchTaskProvider = React.createContext({});
 export const useRefetchTaskDetails = () => {

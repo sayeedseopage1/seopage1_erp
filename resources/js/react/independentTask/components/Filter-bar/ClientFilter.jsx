@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from 'react'
-import Dropdown from '../Dropdown';
-import {User} from '../../../utils/user-details';
 import _ from 'lodash';
-import { useUsers } from '../../../hooks/useUsers';
-import Search from '../Searchbox';
+import React, { useEffect, useState } from 'react';
+import Dropdown from '../Dropdown';
 import Loader from '../Loader';
+import Search from '../Searchbox';
 
 const useClient = ()=>{
   const [clients, setClients] = useState([]);
@@ -12,7 +10,7 @@ const useClient = ()=>{
 
   useEffect(()=>{
     setIsFetching(true);
-    fetch('http://127.0.0.1:8000/account/independent-task-clients')
+    fetch('/account/independent-task-clients')
       .then((res)=>res.json())
       .then(({data}) => {
         // console.log({data});
@@ -25,7 +23,7 @@ const useClient = ()=>{
 }
 
 const ClientFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 9, 10]}) => {
-    const [query, setQuery] = useState(''); 
+    const [query, setQuery] = useState('');
     const { users, usersIsFetching } = useClient();
 
 
@@ -50,17 +48,17 @@ const ClientFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5
                         title={state?.name ?? ''}
                     >
                         <strong>{name ?? 'All'}</strong>
-                    </span> 
+                    </span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu >
                     <div>
                         <Search autoFocus={true} value={query} onChange={setQuery} />
                     </div>
-                    {usersIsFetching && 
+                    {usersIsFetching &&
                         <Loader title="Loading..." />
                     }
                     <div className="sp1_filter--users">
-                        {!usersIsFetching && 
+                        {!usersIsFetching &&
                             <Dropdown.Item onClick={() => setState(null)} className={state === null ? 'sp1_filter--user active' : 'sp1_filter--user'}>
                                 All
                             </Dropdown.Item>}

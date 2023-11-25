@@ -149,7 +149,8 @@ class SubTaskController extends AccountBaseController
         $total_minutes = $hours + $minutes;
         if($task->independent_task_status != 1)
         {
-        if (($total_parent_tasks_minutes - $total_subtasks_minutes) - $total_minutes < 1) {
+            
+        if (($total_parent_tasks_minutes - $total_subtasks_minutes) - $total_minutes < 2) {
 
             return response()->json([
                 "message" => "The given data was invalid.",
@@ -161,6 +162,19 @@ class SubTaskController extends AccountBaseController
             ], 422);
 
         }
+        if($total_minutes < 1)
+        {
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours and minutes cannot be 0 !"
+                    ]
+                ]
+            ], 422);
+
+        }
+        
     }
         $this->addPermission = user()->permission('add_sub_tasks');
         $task = Task::findOrFail($request->task_id);

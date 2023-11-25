@@ -1,13 +1,12 @@
-import React, { useEffect } from "react";
-import styles from "./taskAuthorization.module.css";
-import _ from "lodash";
-import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import _ from "lodash";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { useUpdateIndependentTaskAuthorizationConversationMutation } from "../../../services/api/independentTaskApiSlice";
 import { User } from "../../../utils/user-details";
 import Button from "../Button";
-import { useState } from "react";
-import { useUpdateIndependentTaskAuthorizationConversationMutation } from "../../../services/api/independentTaskApiSlice";
-import Loader from "../../../global/Loader";
+import EditableField from "../form/Editable";
+import styles from "./taskAuthorization.module.css";
 
 const TaskAuthorizationQuestionAnswers = ({
     data,
@@ -27,13 +26,14 @@ const TaskAuthorizationQuestionAnswers = ({
 
     // console.log({isConversationLoading});
 
+
     const [updateIndependentTaskAuthorizationConversation, { isLoading }] =
         useUpdateIndependentTaskAuthorizationConversationMutation();
 
-    const updateConversation = (e, prevData) => {
+    const updateConversation = (content, prevData) => {
         const shadow = _.map(conversations, (c) => {
             if (c.id === prevData.id) {
-                return { ...c, answer: e.target.value };
+                return { ...c, answer: content };
             } else return c;
         });
         setConversations(shadow);
@@ -105,7 +105,7 @@ const TaskAuthorizationQuestionAnswers = ({
                                 >
                                     Question {index + 1}.{" "}
                                 </span>
-                                {conversation.question}
+                                <div dangerouslySetInnerHTML={{__html: conversation.question}} />
                                 <span className={styles.ques_by}>
                                     -by
                                     <a
@@ -131,7 +131,7 @@ const TaskAuthorizationQuestionAnswers = ({
                         <div className={styles.ans} style={{paddingLeft:'0'}}>
                             {conversation.replied_by ? (
                                 <>
-                                    <p>
+                                    <div>
                                         <span
                                             style={{
                                                 fontWeight: "bold",
@@ -140,8 +140,8 @@ const TaskAuthorizationQuestionAnswers = ({
                                         >
                                             Answer :
                                         </span>{" "}
-                                        {conversation.answer}
-                                    </p>
+                                        <div dangerouslySetInnerHTML={{__html: conversation.answer}} />
+                                    </div>
                                     <span className={styles.ques_by}>
                                         -by
                                         <a
@@ -200,14 +200,24 @@ const TaskAuthorizationQuestionAnswers = ({
 export default TaskAuthorizationQuestionAnswers;
 
 const Answer = ({ conversation, updateConversation, error }) => {
+
+    const handleInput = (e, conversation) => {
+        updateConversation(e.target.innerHTML, conversation);
+    }
+
     return (
         <div className={styles.comment_field}>
             <label className="task_info__label mt-2">Answer:</label>
-            <textarea
+            {/* <textarea
                 rows={3}
                 style={{ overflowY: "auto" }}
                 value={conversation.answer || ""}
                 onChange={(e) => updateConversation(e, conversation)}
+                placeholder="Write your answer here."
+            /> */}
+            <EditableField
+                value={conversation.answer}
+                onChange={(data) => updateConversation(data, conversation)}
                 placeholder="Write your answer here."
             />
             {error && error[conversation.id] && (

@@ -1,9 +1,8 @@
 import dayjs from "dayjs";
-import Person from "../Person";
-import ActionDropdown from "../ActionDropdown";
 import { CompareDate } from "../../../utils/dateController";
+import Person from "../Person";
+import IndependentTaskId from "./IndependentTaskid";
 import TaskAuthorizationForm from "./TaskAuthorizationForm";
-import { Placeholder } from "../../../global/Placeholder";
 
 const compareDate = new CompareDate();
 
@@ -16,23 +15,7 @@ export const authorizationColumns = (refreshing) => {
             cell: ({ row }) => {
                 const data = row?.original;
                 return (
-                    <abbr
-                        title={data?.heading}
-                        style={{ textDecoration: "none" }}
-                    >
-                        <div
-                            className="d-flex align-items-center"
-                            style={{ gap: "10px" }}
-                        >
-                            <a
-                                href={`/account/tasks/${data?.u_id}`}
-                                className="hover-underline multine-ellipsis"
-                            >
-                                {" "}
-                                {data?.u_id}{" "}
-                            </a>
-                        </div>
-                    </abbr>
+                   <IndependentTaskId data={data} />
                 );
             },
         },
@@ -53,11 +36,10 @@ export const authorizationColumns = (refreshing) => {
                             style={{ gap: "10px" }}
                         >
                             <a
-                                href={`/account/tasks/${data?.id}`}
+                                href="#"
                                 className="hover-underline multine-ellipsis"
                             >
-                                {" "}
-                                {data?.heading}{" "}
+                                {data?.heading}
                             </a>
                         </div>
                     </abbr>
@@ -184,3 +166,4 @@ export const authorizationColumns = (refreshing) => {
         },
     ];
 };
+

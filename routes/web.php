@@ -871,6 +871,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('independent-task-conversations/{id}', [IndependentTaskController::class, 'get_independent_task_conversation_question'] )->name('independent-task-conversations');
     Route::post('create-independent-task-conversations', [IndependentTaskController::class, 'add_independent_task_conversation_question'] )->name('create-independent-task-conversations');
     Route::put('update-independent-task-conversations', [IndependentTaskController::class, 'update_independent_task_conversation_question_by_answer'] )->name('update-independent-task-conversations');
+    Route::put('independent-task/conversions/status/update', [IndependentTaskController::class, 'updateIndependentTaskHasUpdateStatus'] )->name('independent-task/conversions/update');
     Route::get('independent-task-clients', [IndependentTaskController::class, 'clients'] );
     /******* TASK DISPUTE ******** */
     Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
