@@ -709,7 +709,7 @@
                             <div class="text-left">
                                 <p>This is the number of old projects where upsale/cross sales milestones were added. For
                                     example, if 3 milestones were added under 2 old projects in the assign cycle i.e. June
-                                    16th-July 15th, the count will be 3 here.</p>
+                                    16th-July 15th, the count will be 2 here.</p>
                             </div>
                         </div>
                     </div>
