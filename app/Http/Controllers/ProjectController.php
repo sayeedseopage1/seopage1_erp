@@ -2089,7 +2089,7 @@ class ProjectController extends AccountBaseController
 
         $currency = Currency::where('id', $deal->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = $deal->amount;
+        // $project->project_budget = $deal->amount;
 
         $project->currency_id = 1;
 

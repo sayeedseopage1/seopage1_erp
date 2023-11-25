@@ -389,14 +389,14 @@ class ContractController extends AccountBaseController
 
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = ($request->amount) / $currency->exchange_rate;
+        $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
 
         $project->completion_percent = 0;
         $project->deal_id = $deal->id;
         $project->added_by = Auth::id();
         $project->status = 'not started';
         $project->public = 0;
-        $project->due = $deal->amount;
+        $project->due = $deal->amount + $deal->upsell_amount;
 
 
         if ($project->save()) {
@@ -684,8 +684,8 @@ class ContractController extends AccountBaseController
         $project->deliverable_authorization = 0;
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = ($request->amount) / $currency->exchange_rate;
-        $project->due = $deal->amount;
+        $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+        $project->due = $deal->amount + $deal->upsell_amount;
 
         $project->completion_percent = 0;
         $project->deal_id = $deal->id;
@@ -1189,8 +1189,8 @@ class ContractController extends AccountBaseController
 
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount) / $currency->exchange_rate;
-            $project->due = $deal->amount;
+            $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+            $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
             $project->project_summary = $request->project_summary;
             $project->save();
@@ -1264,12 +1264,20 @@ class ContractController extends AccountBaseController
                         $pmassign = new PMProject();
                         $pmassign->project_id = $project->id;
                         $pmassign->status = 'pending';
+                        if(Auth::user()->role_id==4){
+                        $pmassign->pm_id = Auth::id();
+                        }else{
                         $pmassign->pm_id = $pm_user->pm_id;
+                        }
                         $pmassign->deal_id = $deal->id;
                         $pmassign->client_id = $client->id;
                         $pmassign->save();
                         $deal_assign = Deal::find($deal->id);
+                        if(Auth::user()->role_id==4){
+                        $deal_assign->pm_id = Auth::id();
+                        }else{
                         $deal_assign->pm_id = $pm_user->pm_id;
+                        }
                         $deal_assign->save();
                         $pm_assign_project = Project::find($project->id);
                         $pm_assign_project->pm_id = $pmassign->pm_id;
@@ -1321,10 +1329,18 @@ class ContractController extends AccountBaseController
                         $pmassign->status = 'pending';
                         $pmassign->deal_id = $deal->id;
                         $pmassign->client_id = $client->id;
+                        if(Auth::user()->role_id==4){
+                        $pmassign->pm_id = Auth::id();
+                        }else{
                         $pmassign->pm_id = $pm_find_id->pm_id;
+                        }
                         $pmassign->save();
                         $deal_assign = Deal::find($deal->id);
+                        if(Auth::user()->role_id==4){
+                        $deal_assign->pm_id = Auth::id();
+                        }else{
                         $deal_assign->pm_id = $pm_find_id->pm_id;
+                        }
                         $deal_assign->save();
                         $pm_assign_project = Project::find($project->id);
                         $pm_assign_project->pm_id = $pmassign->pm_id;
@@ -1346,10 +1362,18 @@ class ContractController extends AccountBaseController
                         $pmassign->status = 'pending';
                         $pmassign->deal_id = $deal->id;
                         $pmassign->client_id = $client->id;
+                        if(Auth::user()->role_id==4){
+                        $pmassign->pm_id = Auth::id();
+                        }else{
                         $pmassign->pm_id = $final_id->pm_id;
+                        }
                         $pmassign->save();
                         $deal_assign = Deal::find($deal->id);
+                        if(Auth::user()->role_id==4){
+                        $deal_assign->pm_id = Auth::id();
+                        }else{
                         $deal_assign->pm_id = $final_id->pm_id;
+                        }
                         $deal_assign->save();
                         $pm_assign_project = Project::find($project->id);
                         $pm_assign_project->pm_id = $pmassign->pm_id;
@@ -1698,8 +1722,8 @@ class ContractController extends AccountBaseController
             $project->deadline = $request->deadline;
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount) / $currency->exchange_rate;
-            $project->due = $deal->amount;
+            $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+            $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
             $project->project_summary = $request->project_summary;
             $project->save();
@@ -1771,12 +1795,20 @@ class ContractController extends AccountBaseController
                             $pmassign = new PMProject();
                             $pmassign->project_id = $project->id;
                             $pmassign->status = 'pending';
+                            if(Auth::user()->role_id==4){
+                            $pmassign->pm_id = Auth::id();
+                            }else{
                             $pmassign->pm_id = $pm_user->pm_id;
+                            }
                             $pmassign->deal_id = $deal->id;
                             $pmassign->client_id = $client->id;
                             $pmassign->save();
                             $deal_assign = Deal::find($deal->id);
+                            if(Auth::user()->role_id==4){
+                            $deal_assign->pm_id = Auth::id();
+                            }else{
                             $deal_assign->pm_id = $pm_user->pm_id;
+                            }
                             $deal_assign->save();
                             $pm_assign_project = Project::find($project->id);
                             $pm_assign_project->pm_id = $pmassign->pm_id;
@@ -1827,10 +1859,18 @@ class ContractController extends AccountBaseController
                             $pmassign->status = 'pending';
                             $pmassign->deal_id = $deal->id;
                             $pmassign->client_id = $client->id;
+                            if(Auth::user()->role_id==4){
+                            $pmassign->pm_id = Auth::id();
+                            }else{
                             $pmassign->pm_id = $pm_find_id->pm_id;
+                            }
                             $pmassign->save();
                             $deal_assign = Deal::find($deal->id);
+                            if(Auth::user()->role_id==4){
+                            $deal_assign->pm_id = Auth::id;
+                            }else{
                             $deal_assign->pm_id = $pm_find_id->pm_id;
+                            }
                             $deal_assign->save();
                             $pm_assign_project = Project::find($project->id);
                             $pm_assign_project->pm_id = $pmassign->pm_id;
@@ -1852,10 +1892,18 @@ class ContractController extends AccountBaseController
                             $pmassign->status = 'pending';
                             $pmassign->deal_id = $deal->id;
                             $pmassign->client_id = $client->id;
+                            if(Auth::user()->role_id==4){
+                            $pmassign->pm_id = Auth::id();
+                            }else{
                             $pmassign->pm_id = $final_id->pm_id;
+                            }
                             $pmassign->save();
                             $deal_assign = Deal::find($deal->id);
+                            if(Auth::user()->role_id==4){
+                            $deal_assign->pm_id = Auth::id();
+                            }else{
                             $deal_assign->pm_id = $final_id->pm_id;
+                            }
                             $deal_assign->save();
                             $pm_assign_project = Project::find($project->id);
                             $pm_assign_project->pm_id = $pmassign->pm_id;
@@ -2620,7 +2668,7 @@ class ContractController extends AccountBaseController
 // client dela store
 public function storeClientDeal(Request $request){
     // dd($request->all());
-    \DB::beginTransaction();
+    // DB::beginTransaction();
 
     $validated = $request->validate([
         'user_name' => 'required',
@@ -2691,7 +2739,7 @@ public function storeClientDeal(Request $request){
     $deal->actual_amount =  0;
     $deal->upsell_actual_amount =  $request->amount;
     $currency = Currency::where('id', $request->original_currency_id)->first();
-    //  dd($currency);
+    $deal->award_time = Carbon::now();
     $deal->upsell_amount = ($request->amount) / $currency->exchange_rate;
     $deal->client_name = $request->client_name;
     $deal->client_username = $request->user_name;
@@ -2711,7 +2759,7 @@ public function storeClientDeal(Request $request){
     $deal->start_date = $newDate;
     $deal->client_badge = 'existing client';
     $deal->save();
-   // dd($deal);
+//    dd($deal);
     //$lead_con_id = Lead::where('id', $request->lead_id)->first();
     if (Auth::id() != null) {
         $agent_id = SalesCount::where('user_id', Auth::id())->first();
@@ -2800,8 +2848,8 @@ public function storeClientDeal(Request $request){
     $project->deliverable_authorization = 0;
     $currency = Currency::where('id', $request->original_currency_id)->first();
     //dd($currency);
-    $project->project_budget =  $deal->upsell_amount;
-    $project->due =  $deal->upsell_amount;
+    $project->project_budget = $deal->amount + $deal->upsell_amount;
+    $project->due = $deal->amount + $deal->upsell_amount;
 
     $project->completion_percent = 0;
     $project->deal_id = $deal->id;
