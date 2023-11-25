@@ -2,11 +2,13 @@ import dayjs from "dayjs";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
 import Avatar from "../../../global/Avatar";
 import Card from "../../../global/Card";
 import {
     useGetIndependentTaskAuthorizationConversationsQuery,
     usePutIndependentTaskMutation,
+    useUpdateIndependentTaskStatusMutation,
 } from "../../../services/api/independentTaskApiSlice";
 import { CompareDate } from "../../../utils/dateController";
 import { User } from "../../../utils/user-details";
@@ -58,6 +60,9 @@ const TaskAuthorizationForm = ({ data, table }) => {
         refetch:conversationRefetch,
     } = useGetIndependentTaskAuthorizationConversationsQuery(data.id);
 
+
+    const [updateIndependentTaskStatus, {isError}] = useUpdateIndependentTaskStatusMutation();
+
     // console.log({ conversationData, isConversationLoading });
 
     useEffect(() => {
@@ -81,9 +86,32 @@ const TaskAuthorizationForm = ({ data, table }) => {
     // };
 
     const open = () => setVisible(true);
-    const close = () => {
+
+
+    const hasUpdateConversations = _.filter(conversationData?.data, c => c.has_update)
+
+    // update status on close
+    const close = async () => {
         setVisible(false);
         setRadio("");
+
+        // if has conversion with has_update
+        // then update the status if user close the modal
+        if(_.size(hasUpdateConversations) > 0){
+            try {
+                await updateIndependentTaskStatus(hasUpdateConversations).unwrap();
+            } catch (error) {
+                if(error.originalStatus === 500){
+                    withReactContent(Swal).fire({
+                        icon: 'error',
+                        html: <>
+                            <h1>500</h1>
+                            <h3>Oops! Something went wrong.</h3>
+                        </>
+                    })
+                }
+            }
+        }
     };
 
     const [putIndependentAuthorizeTask, { isLoading }] =
