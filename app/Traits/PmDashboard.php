@@ -977,7 +977,7 @@ trait PmDashboard
             ->where('deals.project_type','fixed')
             ->where('projects.pm_id',Auth::id())
             ->where('project_milestones.added_by',Auth::id())
-            ->where('deals.added_by','!=',$this->pm->id)
+            ->where('deals.added_by','!=',Auth::id())
             ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
             ->where('project_milestones.status','!=','canceled')
             ->orderBy('project_milestones.created_at','desc')
@@ -2214,7 +2214,7 @@ trait PmDashboard
                 ->join('deals','deals.id','projects.deal_id')
                 ->where('deals.project_type','fixed')
                 ->where('projects.pm_id',Auth::id())
-                ->where('deals.added_by','!=',$this->pm->id)
+                ->where('deals.added_by','!=',Auth::id())
                 ->where('project_milestones.added_by',Auth::id())
                 ->where('project_milestones.status','!=','canceled')
 
