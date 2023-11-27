@@ -167,12 +167,14 @@ class DMLeadController extends AccountBaseController
                 'bid_value' => 'required',
                 'bid_value2' => 'required',
                 'value' => 'required',
+                'lead_source' => 'required',
                 'project_type' => 'required',
                 'description' => 'required',
                 'cover_letter' => 'required',
             ], [
                 'client_name.required' => 'Please enter the project name!',
                 'country.required' => 'Please select client country!',
+                'lead_source.required' => 'Please select lead source!',
                 'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
                 'deadline.required' => 'Please select project deadline from Freelancer.com!',
                 'original_currency_id.required' => 'Please select correct currency!',
@@ -194,6 +196,7 @@ class DMLeadController extends AccountBaseController
                 'bid_value' => 'required',
                 'bid_value2' => 'required',
                 'value' => 'required',
+                'lead_source' => 'required',
                 'project_type' => 'required',
                 'description' => 'required',
                 'cover_letter' => 'required',
@@ -202,6 +205,7 @@ class DMLeadController extends AccountBaseController
                 'project_id.required' => 'The project id has already been taken!',
                 'project_type.required' => 'The project type field is required!',
                 'country.required' => 'Please select client country!',
+                'lead_source.required' => 'Please select lead source!',
                 'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
                 'original_currency_id.required' => 'Please select correct currency!',
                 'bid_value.required' => 'Please enter minimum project budget!',
@@ -256,6 +260,7 @@ class DMLeadController extends AccountBaseController
         $lead->currency_id= 1;
         $lead->cover_letter= $request->cover_letter;
         $lead->status= 'DM';
+        $lead->lead_source= $request->lead_source;
 
         $lead->save();
         $lead_agent= new LeadAgent();
@@ -423,6 +428,7 @@ class DMLeadController extends AccountBaseController
       $lead->cover_letter= $request->cover_letter;
       $lead->currency_id= 1;
       $lead->total_spent= $request->total_spent;
+      $lead->lead_source= $request->lead_source;
       $lead->save();
 
       foreach ($originalValues as $attribute => $originalValue) {
