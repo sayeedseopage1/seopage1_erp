@@ -10,7 +10,7 @@
     <!-- DATE END -->
 
     <!-- CLIENT START -->
-    <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
+   {{-- <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
         <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('modules.invoices.type')</p>
         <div class="select-status">
             <select class="form-control select-picker" name="type" id="type">
@@ -21,7 +21,7 @@
                     @lang('modules.lead.client')</option>
             </select>
         </div>
-    </div>
+    </div> --}}
     <!-- CLIENT END -->
 
     <!-- SEARCH BY TASK START -->
@@ -74,14 +74,15 @@
             </div>
         </div> --}}
             <?php
-            $sales_executives= App\Models\User::where('role_id',7)->get();
+            $sales_executives= App\Models\User::where('role_id',7)->orWhere('role_id',8)->get();
             ?>
             <div class="more-filter-items">
                 <label class="f-14 text-dark-grey mb-12 text-capitalize" for="usr">@lang('Created By')</label>
                 <div class="select-filter mb-4">
                     <div class="select-others">
                         <select class="form-control select-picker" data-container="body" id="sales_executive_id">
-                            @foreach($sales_executives as $row) v
+                             <option>--</option>
+                            @foreach($sales_executives as $row) 
                             <option value="{{$row->name}}">{{ucfirst($row->name)}}</option>
                             @endforeach
                         </select>
@@ -158,7 +159,6 @@
 
 @push('scripts')
     <script>
-        
         $('#search-text-field, #type, #followUp, #sales_executive_id, #category_id, #filter_source_id, #date_filter_on')
             .on('change keyup', function() {
                 if ($('#search-text-field').val() != "") {

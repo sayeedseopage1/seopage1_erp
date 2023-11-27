@@ -1231,6 +1231,94 @@ class HelperPendingActionController extends AccountBaseController
 
     }
    }
+   public function NewTaskAssign($task)
+   {
+    $task= Task::where('id',$task->id)->first();
+    $project= Project::where('id',$task->project_id)->first();
+    $client= User::where('id',$project->client_id)->first();
+
+    $task_user= TaskUser::where('task_id',$task->id)->first();
+    $added_by= User::where('id',$task->added_by)->first();
+    $authorizer= User::where('id',$task_user->user_id)->first();
+    $action = new PendingAction();
+    $action->code = 'NTA';
+    $action->serial = 'NTA'.'x0';
+   
+    $action->item_name= 'Taking actions on new task';
+    $action->heading= 'New task has been assigned!';
+    $action->message = 'New task has been assigned from PM <a href="'.route('employees.show',$added_by->id).'">'.$added_by->name.'</a> for client <a href="'.route('employees.show',$client->id).'">'.$client->name.'</a>!';
+
+    $action->timeframe= 24;
+    $action->project_id = $project->id;
+    $action->client_id = $client->id;
+   // $action->dispute_id = $dispute_id;
+    $action->authorization_for= $authorizer->id;
+    $action->task_id= $task->id;
+   // $action->revision_id= $task_revision->id;
+    $button = [
+        [
+            'button_name' => 'Review',
+            'button_color' => 'primary',
+            'button_type' => 'redirect_url',
+            'button_url' => route('tasks.show',$task->id),
+        ],
+      
+    ];
+    $action->button = json_encode($button);
+    $action->save();
+
+
+
+   }
+   public function TaskRevisionAction($task_revision)
+   {
+    $task= Task::where('id',$task_revision->task_id)->first();
+   
+    $sender = User::where('id',Auth::user()->id)->first();
+   
+    $user_role= Role::where('id',$sender->role_id)->first();
+   
+    $project= Project::where('id',$task->project_id)->first();
+    
+    $client= User::where('id',$project->client_id)->first();
+   // dd($client);
+    $task_user= TaskUser::where('task_id',$task->id)->first();
+//    / dd($);
+    
+   // $task_revision = TaskRevision::where('task_id',$task->id)->orderBy('id','desc')->first();
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizer= User::where('id',$task_user->user_id)->first();
+   // dd("kdaslkdn");
+        $action = new PendingAction();
+        $action->code = 'TRA';
+        $action->serial = 'TRA'.'x0';
+      
+        $action->item_name= 'Revision request';
+        $action->heading= 'New revision request!';
+        $action->message = 'New revision request for task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from '.$user_role->name.' <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+        $action->task_id = $task->id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Review',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('tasks.show', $task->id),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      // dd($action);
+   //    dd(json_decode($action->button));
+
+       
+
+   }
  
 
 }

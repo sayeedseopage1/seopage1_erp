@@ -2252,6 +2252,7 @@ if (count($this->no_of_accepted_projects) > 0 ) {
           ->get();
           $this->no_of_new_deals_added = Deal::select('deals.*')
           ->where('deals.added_by', $this->pm->id)
+          ->whereBetween('deals.created_at', [$startMonth, $endMonth])
           ->orderBy('deals.created_at','desc')
           ->get();
           $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
