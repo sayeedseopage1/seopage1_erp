@@ -3265,6 +3265,43 @@ class TaskController extends AccountBaseController
         $tasks_accept->approval_status = 'accepted';
         $tasks_accept->save();
         // dd($tasks_accept);
+
+        $actions = PendingAction::where('code','TRA')->where('past_status',0)->where('task_id',$tasks_accept->task_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $taskId= Task::where('id',$tasks_accept->task_id)->first();
+                $project= Project::where('id',$taskId->project_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+               
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message. ' authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+
+        }
+    }
         $board_column = TaskBoardColumn::where('id', $task_status->board_column_id)->first();
 
 
