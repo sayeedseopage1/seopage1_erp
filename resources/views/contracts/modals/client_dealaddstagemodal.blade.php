@@ -180,7 +180,7 @@
                     </div>
 
                     <div class="mt-3">
-                        <label for="amount" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong>
+                        <label for="amount" class="form-label"><strong>Upsell Project Budget <span style="color:red;">*<span></strong>
                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Budget" data-html="true" data-trigger="hover"></i>
                         </label>
                         <input name="amount" value="{{$deal->actual_amount}}" id="amount" min="1" type="number" class="form-control height-35 f-14" placeholder="Enter Amount">
