@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="monthlyValueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="monthlyValueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects_value_month_get) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -25,7 +25,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($no_of_new_milestones_added_on_old_projects as $item)
+                    @foreach ($no_of_new_milestones_added_on_old_projects_value_month_get as $item)
                         @php
                             $client = \App\Models\User::where('id',$item->client_id)->first();
                         @endphp

@@ -1003,6 +1003,17 @@ trait PmDashboard
             ->where('project_milestones.status','!=','canceled')
             ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
             ->sum('project_milestones.cost');
+
+            $this->no_of_new_milestones_added_on_old_projects_value_month_get = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
+            ->join('projects','projects.id','project_milestones.project_id')
+            ->join('deals','deals.id','projects.deal_id')
+            ->where('deals.project_type','fixed')
+            ->where('projects.pm_id',Auth::id())
+            ->where('project_milestones.added_by',Auth::id())
+            ->where('project_milestones.status','!=','canceled')
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->get();
+            
             $this->no_of_delayed_projects = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date',
             
             'project_members.created_at as project_accept_date')
@@ -2242,6 +2253,17 @@ trait PmDashboard
                 ->where('project_milestones.status','!=','canceled')
                 ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
                 ->sum('project_milestones.cost');
+
+                $this->no_of_new_milestones_added_on_old_projects_value_get = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
+                ->join('projects','projects.id','project_milestones.project_id')
+                ->join('deals','deals.id','projects.deal_id')
+                ->where('deals.project_type','fixed')
+                ->where('projects.pm_id',Auth::id())
+                ->where('project_milestones.added_by',Auth::id())
+                ->where('project_milestones.status','!=','canceled')
+                ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+                ->get();
+
 
                 $this->no_of_delayed_projects = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date',
                 'project_members.created_at as project_accept_date'
