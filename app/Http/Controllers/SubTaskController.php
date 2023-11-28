@@ -335,35 +335,6 @@ class SubTaskController extends AccountBaseController
         //     Notification::send($user, new PrimaryPageNotification($task_type));
         // }
 
-        if($task->independent_task_status != 1)
-        {
-
-
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $task_s->getMorphClass();
-        $authorization_action->model_id = $task_s->id;
-        $authorization_action->type = 'task_assign_by_lead_developer';
-        $authorization_action->deal_id = $task_s->project->deal_id;
-        $authorization_action->project_id = $task_s->project->id;
-        $authorization_action->task_id = $task_s->id;
-        $authorization_action->link = route('tasks.show', $task_s->id);
-        $authorization_action->title = Auth::user()->name . ' assign new task to developer';
-        $authorization_action->authorization_for = $request->user_id ;
-        $authorization_action->save();
-
-
-        $parent_task_authorization= AuthorizationAction::where('task_id',$request->task_id)->first();
-        //dd($parent_task_authorization);
-        if($parent_task_authorization != null && $parent_task_authorization->status == 0)
-        {
-            $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $task_authorization= AuthorizationAction::find($parent_task_authorization->id);
-            $task_authorization->authorization_by=  $lead_developer->id;
-            $task_authorization->status = '1';
-            $task_authorization->save();
-
-        }
-    }
 
         // $task_user= new TaskUser();
         // $task_user->task_id= $request->task_id;
@@ -404,6 +375,11 @@ class SubTaskController extends AccountBaseController
             }
         }
         // /dd($parent_task, $subTask,$file);
+        $helper = new HelperPendingActionController();
+
+
+        $helper->NewTaskAssign($task_s);
+
         $task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);
         return Reply::successWithData(__('messages.subTaskAdded'), [

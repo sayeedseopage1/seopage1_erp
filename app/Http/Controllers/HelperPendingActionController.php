@@ -1240,13 +1240,18 @@ class HelperPendingActionController extends AccountBaseController
     $task_user= TaskUser::where('task_id',$task->id)->first();
     $added_by= User::where('id',$task->added_by)->first();
     $authorizer= User::where('id',$task_user->user_id)->first();
+    $user_role= Role::where('id',$added_by->role_id)->first();
     $action = new PendingAction();
     $action->code = 'NTA';
     $action->serial = 'NTA'.'x0';
    
     $action->item_name= 'Taking actions on new task';
     $action->heading= 'New task has been assigned!';
-    $action->message = 'New task has been assigned from PM <a href="'.route('employees.show',$added_by->id).'">'.$added_by->name.'</a> for client <a href="'.route('employees.show',$client->id).'">'.$client->name.'</a>!';
+   
+     $action->message = 'New task has been assigned from '.$user_role->name.' <a href="'.route('employees.show',$added_by->id).'">'.$added_by->name.'</a> for client <a href="'.route('employees.show',$client->id).'">'.$client->name.'</a>!';
+
+    
+   
 
     $action->timeframe= 24;
     $action->project_id = $project->id;
