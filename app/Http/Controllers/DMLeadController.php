@@ -189,7 +189,6 @@ class DMLeadController extends AccountBaseController
         }else{
             $request->validate([
                 'client_name' => 'required|max:255',
-                'project_id' => 'required|unique:leads,project_id,'.$request->project_id.'|numeric',
                 'country' => 'required',
                 'project_link' => 'required|url',
                 'original_currency_id' => 'required',
@@ -202,7 +201,6 @@ class DMLeadController extends AccountBaseController
                 'cover_letter' => 'required',
             ], [
                 'client_name.required' => 'Please enter the project name!',
-                'project_id.required' => 'The project id has already been taken!',
                 'project_type.required' => 'The project type field is required!',
                 'country.required' => 'Please select client country!',
                 'lead_source.required' => 'Please select lead source!',
