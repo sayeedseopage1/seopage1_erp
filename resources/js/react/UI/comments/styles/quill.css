@@ -71,12 +71,21 @@
   /* background-color: black; */
   border: none !important;
   border-top: solid 0.5px white !important;
-  padding-right: 35.05px;
+  padding-right: 33.66px;
+  padding-left: 33.66px;
   font-size: 12px;
   color: black;
   /* border-radius: 0 0 10px 10px;
   overflow: hidden; */
 }
+.ql-editor.ql-blank::before{
+  left: 33.66px;
+  top: 35%;
+}
+/* .ql-editor::placeholder{
+  vertical-align: middle;
+  padding-left: 33.66px;
+} */
 
 .ql-toolbar {
   /* background-color: black; */

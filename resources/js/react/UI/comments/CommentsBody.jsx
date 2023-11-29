@@ -28,6 +28,7 @@ const CommentsBody = ({
     fullScreenView,
     setFullScreenView,
 }) => {
+    const [scroll, setScroll] = useState(false);
     const { contextMenu, onContextMenu, onKeyDown } = useContextMenu(
         <>
             <ContextMenuItem
@@ -86,7 +87,7 @@ const CommentsBody = ({
 
     useEffect(() => {
         document.getElementById("chat-bottom-point").scrollIntoView();
-    }, []);
+    }, [scroll]);
 
     return (
         <div
@@ -134,7 +135,7 @@ const CommentsBody = ({
                 {_.fill(Array(20), "*").map((v, i) => {
                     return (
                         <SingleChat
-                            // handleContextMenu={handleContextMenu}
+                            setScroll={setScroll}
                             onContextMenu={onContextMenu}
                             onKeyDown={onKeyDown}
                             key={i}
@@ -154,7 +155,7 @@ const CommentsBody = ({
             </main>
 
             <footer className={`${style.commentsBody_inputField}`}>
-                <ChatInput />
+                <ChatInput setScroll={setScroll} />
             </footer>
         </div>
     );

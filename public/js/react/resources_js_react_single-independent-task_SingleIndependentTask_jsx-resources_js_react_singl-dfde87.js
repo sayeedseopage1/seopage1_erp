@@ -30,6 +30,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
 /* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -60,6 +66,10 @@ var CommentsBody = function CommentsBody(_ref) {
     comments = _ref.comments,
     fullScreenView = _ref.fullScreenView,
     setFullScreenView = _ref.setFullScreenView;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    scroll = _useState2[0],
+    setScroll = _useState2[1];
   var _useContextMenu = (0,use_context_menu__WEBPACK_IMPORTED_MODULE_8__.useContextMenu)( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
       // onSelect={selectAll}
@@ -132,7 +142,7 @@ var CommentsBody = function CommentsBody(_ref) {
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     document.getElementById("chat-bottom-point").scrollIntoView();
-  }, []);
+  }, [scroll]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody,
     style: {
@@ -172,9 +182,8 @@ var CommentsBody = function CommentsBody(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("main", {
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_commentArea),
       children: [_.fill(Array(20), "*").map(function (v, i) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_SingleChat__WEBPACK_IMPORTED_MODULE_6__["default"]
-        // handleContextMenu={handleContextMenu}
-        , {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_SingleChat__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          setScroll: setScroll,
           onContextMenu: onContextMenu,
           onKeyDown: onKeyDown,
           index: i + 1
@@ -184,7 +193,9 @@ var CommentsBody = function CommentsBody(_ref) {
       }), contextMenu]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("footer", {
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_inputField),
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ChatInput__WEBPACK_IMPORTED_MODULE_7__["default"], {})
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_ChatInput__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        setScroll: setScroll
+      })
     })]
   });
 };
@@ -359,16 +370,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_quill__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-quill */ "./node_modules/react-quill/lib/index.js");
 /* harmony import */ var react_quill__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_quill__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_quill_dist_quill_snow_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-quill/dist/quill.snow.css */ "./node_modules/react-quill/dist/quill.snow.css");
-/* harmony import */ var _styles_quill_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles/quill.css */ "./resources/js/react/UI/comments/styles/quill.css");
-/* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
-/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
-/* harmony import */ var react_icons_lu__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-icons/lu */ "./node_modules/react-icons/lu/index.esm.js");
-/* harmony import */ var react_icons_io5__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-icons/io5 */ "./node_modules/react-icons/io5/index.esm.js");
-/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
-/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
-/* harmony import */ var react_icons_fa__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-icons/fa */ "./node_modules/react-icons/fa/index.esm.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var quill_mention__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! quill-mention */ "./node_modules/quill-mention/dist/quill.mention.esm.js");
+/* harmony import */ var react_quill_dist_quill_snow_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-quill/dist/quill.snow.css */ "./node_modules/react-quill/dist/quill.snow.css");
+/* harmony import */ var _styles_quill_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/quill.css */ "./resources/js/react/UI/comments/styles/quill.css");
+/* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
+/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
+/* harmony import */ var react_icons_lu__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-icons/lu */ "./node_modules/react-icons/lu/index.esm.js");
+/* harmony import */ var react_icons_io5__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-icons/io5 */ "./node_modules/react-icons/io5/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
+/* harmony import */ var react_icons_fa__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-icons/fa */ "./node_modules/react-icons/fa/index.esm.js");
+/* harmony import */ var react_icons_bs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-icons/bs */ "./node_modules/react-icons/bs/index.esm.js");
+/* harmony import */ var emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! emoji-picker-react */ "./node_modules/emoji-picker-react/dist/emoji-picker-react.esm.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -394,7 +414,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var ChatInput = function ChatInput() {
+
+
+var ChatInput = function ChatInput(_ref) {
+  var setScroll = _ref.setScroll;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState2 = _slicedToArray(_useState, 2),
     editorHtml = _useState2[0],
@@ -407,32 +430,64 @@ var ChatInput = function ChatInput() {
     _useState6 = _slicedToArray(_useState5, 2),
     files = _useState6[0],
     setFiles = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    showEmoji = _useState8[0],
+    setShowEmoji = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState10 = _slicedToArray(_useState9, 2),
+    emoji = _useState10[0],
+    setEmoji = _useState10[1];
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     console.log(files);
   }, [files]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
-      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FilePreviewer, {
+
+  // useEffect(()=>{
+  //   setScroll(prev=>!prev);
+  // },[show,files])
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    console.log(editorHtml);
+  }, [emoji]);
+  var handleEmojiSelection = function handleEmojiSelection(emoji, e) {
+    console.log(emoji);
+    setEmoji(emoji.emoji);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+    children: [showEmoji && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emojis),
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        width: "100%",
+        height: "100%",
+        skinTonesDisabled: true,
+        emojiStyle: "facebook",
+        onEmojiClick: handleEmojiSelection
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("section", {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(FilePreviewer, {
         files: files,
         setFiles: setFiles
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(CommentEditor, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(CommentEditor, {
         editorHtml: editorHtml,
         setEditorHtml: setEditorHtml,
         files: files,
         show: show,
-        setShow: setShow
+        setShow: setShow,
+        setShowEmoji: setShowEmoji
+        // text={text}
+        // setText={setText}
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FileUpload, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(FileUpload, {
       files: files,
       setFiles: setFiles
     })]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ChatInput);
-function FilePreviewer(_ref) {
-  var files = _ref.files,
-    setFiles = _ref.setFiles;
+function FilePreviewer(_ref2) {
+  var files = _ref2.files,
+    setFiles = _ref2.setFiles;
   var handlePreviewUrl = function handlePreviewUrl(file) {
     return URL.createObjectURL(file);
   };
@@ -448,7 +503,7 @@ function FilePreviewer(_ref) {
     switch (type) {
       case "image":
         console.log(handlePreviewUrl(file));
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
           onClick: function onClick() {
             return window.open(handlePreviewUrl(file), "_blank");
           },
@@ -464,32 +519,32 @@ function FilePreviewer(_ref) {
       // case ""
 
       default:
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           style: {
-            display: 'flex',
-            flexFlow: 'column nowrap',
-            justifyContent: 'center',
-            gap: '5px'
+            display: "flex",
+            flexFlow: "column nowrap",
+            justifyContent: "center",
+            gap: "5px"
           },
           onClick: function onClick() {
             return window.open(handlePreviewUrl(file), "_blank");
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_fa__WEBPACK_IMPORTED_MODULE_6__.FaFile, {
-            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_filePreview__file__fileIcon)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-            className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_filePreview__file__fileName,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_icons_fa__WEBPACK_IMPORTED_MODULE_8__.FaFile, {
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file__fileIcon)
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
+            className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file__fileName,
             children: file.name
           })]
         });
     }
   };
-  return files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_filePreview),
+  return files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview),
     children: [files.map(function (file, i) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_filePreview__file),
-        children: [handleFileComponent(file), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_7__.IoMdCloseCircle, {
-          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_filePreview__removeFile),
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file),
+        children: [handleFileComponent(file), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_9__.IoMdCloseCircle, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__removeFile),
           onClick: function onClick() {
             var newFiles = _toConsumableArray(files);
             newFiles.splice(i, 1);
@@ -503,16 +558,16 @@ function FilePreviewer(_ref) {
           }
         })]
       }, i);
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
       htmlFor: "add-file",
-      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_filePreview__addFile),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_8__.AiOutlinePlusSquare, {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__addFile),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_10__.AiOutlinePlusSquare, {
         style: {
           height: "19.42px",
           width: "19.42px",
           color: "gray"
         }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
         style: {
           display: "none"
         },
@@ -526,15 +581,26 @@ function FilePreviewer(_ref) {
         }
       })]
     })]
-  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {});
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {});
 }
-function CommentEditor(_ref2) {
-  var show = _ref2.show,
-    setShow = _ref2.setShow,
-    files = _ref2.files,
-    editorHtml = _ref2.editorHtml,
-    setEditorHtml = _ref2.setEditorHtml;
+function CommentEditor(_ref3) {
+  var show = _ref3.show,
+    setShow = _ref3.setShow,
+    files = _ref3.files,
+    editorHtml = _ref3.editorHtml,
+    setEditorHtml = _ref3.setEditorHtml,
+    setShowEmoji = _ref3.setShowEmoji;
   var quillRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var atValues = [{
+    id: 1,
+    value: "Fredrik Sundqvist"
+  }, {
+    id: 2,
+    value: "Patrik Sjölin"
+  }];
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    console.log(editorHtml);
+  }, [editorHtml]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var quill = quillRef.current.getEditor();
 
@@ -554,52 +620,94 @@ function CommentEditor(_ref2) {
   }, [show]);
   var modules = {
     toolbar: [["bold", "italic", "underline"]]
+    // mention: {
+    //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+    //     mentionDenotationChars: [
+    //         "@",
+    //         // '#'
+    //     ],
+    //     source: function (searchTerm, renderList, mentionChar) {
+    //         let values;
+
+    //         if (mentionChar === "@") {
+    //             values = atValues;
+    //         }
+    //         //    else {
+    //         //     values = hashValues;
+    //         //   }
+
+    //         if (searchTerm.length === 0) {
+    //             renderList(values, searchTerm);
+    //         } else {
+    //             const matches = [];
+    //             for (let i = 0; i < values.length; i++)
+    //                 if (
+    //                     values[i].value
+    //                         .toLowerCase()
+    //                         .indexOf(searchTerm.toLowerCase())
+    //                 )
+    //                     matches.push(values[i]);
+    //             renderList(matches, searchTerm);
+    //         }
+    //     },
+    // },
   };
+
   var formats = ["bold", "italic", "underline"];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_text_input),
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_input),
     style: {
-      borderRadius: !(show || files.length) ? "60px" : "0 0 10px 10px",
-      overflow: "hidden"
+      borderRadius: !(show || files.length) ? "40px" : "10px"
+      // overflow: "hidden",
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react_quill__WEBPACK_IMPORTED_MODULE_1___default()), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react_quill__WEBPACK_IMPORTED_MODULE_1___default()), {
       ref: quillRef,
       theme: "snow",
       value: editorHtml,
       onChange: function onChange(value) {
         return setEditorHtml(value);
       },
-      modules: modules,
+      modules: _objectSpread({}, modules),
       formats: formats,
       placeholder: "Write your comment..."
-    }), !show ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_lu__WEBPACK_IMPORTED_MODULE_9__.LuPencilLine, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_icons_bs__WEBPACK_IMPORTED_MODULE_11__.BsEmojiSmile, {
+      onClick: function onClick() {
+        return setShowEmoji(function (prev) {
+          return !prev;
+        });
+      },
+      style: {
+        bottom: show ? "14.16px" : "calc(50% - 7.66px)"
+      },
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emoji_icon)
+    }), !show ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_icons_lu__WEBPACK_IMPORTED_MODULE_12__.LuPencilLine, {
       onClick: function onClick() {
         return setShow(true);
       },
-      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_text_style_icon)
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_io5__WEBPACK_IMPORTED_MODULE_10__.IoChevronDownOutline, {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_style_icon)
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_icons_io5__WEBPACK_IMPORTED_MODULE_13__.IoChevronDownOutline, {
       onClick: function onClick() {
         return setShow(false);
       },
-      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_text_style_icon),
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_style_icon),
       style: {
         bottom: "14.16px"
       }
     })]
   });
 }
-function FileUpload(_ref3) {
-  var files = _ref3.files,
-    setFiles = _ref3.setFiles;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
-    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_4__["default"].chatInput_file_add_btn),
+function FileUpload(_ref4) {
+  var files = _ref4.files,
+    setFiles = _ref4.setFiles;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_file_add_btn),
     htmlFor: "file-input",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__.FaFileCirclePlus, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_14__.FaFileCirclePlus, {
       style: {
         height: "100%",
         width: "100%"
       }
-    }), !files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+    }), !files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
       type: "file",
       id: "file-input",
       multiple: true,
@@ -609,7 +717,7 @@ function FileUpload(_ref3) {
       style: {
         display: "none"
       }
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {})]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {})]
   });
 }
 
@@ -803,7 +911,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
 /* harmony import */ var react_icons_fi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-icons/fi */ "./node_modules/react-icons/fi/index.esm.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
 
 
 
@@ -811,9 +934,41 @@ __webpack_require__.r(__webpack_exports__);
 
 var SingleChat = function SingleChat(_ref) {
   var index = _ref.index,
-    handleContextMenu = _ref.handleContextMenu,
     onContextMenu = _ref.onContextMenu,
-    onKeyDown = _ref.onKeyDown;
+    onKeyDown = _ref.onKeyDown,
+    setScroll = _ref.setScroll;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    showCommentMenu = _useState2[0],
+    setShowCommentMenu = _useState2[1];
+  var menuRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var menuBtnRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var closeContext = function closeContext() {
+    setShowCommentMenu(false);
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var handleClickOutside = function handleClickOutside(event) {
+      // console.log(event.target);
+      if (menuRef.current && !menuRef.current.contains(event.target) && menuBtnRef.current && !menuBtnRef.current.contains(event.target)) {
+        setShowCommentMenu(function (prev) {
+          if (prev) {
+            return false;
+          } else {
+            return prev;
+          }
+        });
+        // console.log("outside clicked");
+        // setShowCommentMenu(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("contextmenu", closeContext);
+    return function () {
+      document.removeEventListener("contextmenu", closeContext);
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   var isCurrentUser = function isCurrentUser() {
     return index % 2 === 0;
   };
@@ -850,15 +1005,64 @@ var SingleChat = function SingleChat(_ref) {
             },
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_message),
             children: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, qui quaerat. Atque, odit temporibus esse excepturi expedita aut eos repellendus."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_fi__WEBPACK_IMPORTED_MODULE_3__.FiMoreVertical
-          // onClick={handleContextMenu}
-          , {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+            onClick: function onClick() {
+              setScroll(function (prev) {
+                return !prev;
+              });
+              setShowCommentMenu(function (prev) {
+                return !prev;
+              });
+            },
             style: {
               left: isCurrentUser() ? "-14px" : "auto",
               right: isCurrentUser() ? "auto" : "-14px"
             },
-            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more)
-          })]
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_btn),
+            ref: menuBtnRef,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_fi__WEBPACK_IMPORTED_MODULE_3__.FiMoreVertical, {
+              style: {
+                height: "100%",
+                width: "100%"
+              }
+            })
+          }), showCommentMenu ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+            ref: menuRef,
+            style: {
+              left: isCurrentUser() ? "-98px" : "auto",
+              right: isCurrentUser() ? "auto" : "-98px"
+            },
+            className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_options,
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("section", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_4__.HiReply, {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                children: "Reply"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("section", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_5__.TbMessage2Check, {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                children: "Select Message"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("section", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_6__.MdOutlineContentCopy, {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                children: "Copy"
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("section", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_7__.IoMdCloseCircleOutline, {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                children: "Remove"
+              })]
+            })]
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {})]
         })]
       })]
     })]
@@ -18167,7 +18371,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 ___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Poppins&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.xKTA64JpPBJ8Ut9ZDbn9rg\\=\\={\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 10px;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  background-size: cover;\r\n  position: relative;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.lNdp1uhUVwyTMS8gXh\\+ukw\\=\\={\r\n  /* height: 57px; */\r\n  padding: 0 20px;\r\n  /* border: solid; */\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\={\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n\r\n.W3912K8vxyr9Jqu9BSeJmg\\=\\={\r\n  border:solid 1px #727272;\r\n}\r\n\r\n\r\n/* ---------------------------------------------------------- */\r\n.hwrDAUbLAFvk3tT5O8yUWw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 20px;\r\n  padding-top: 20px; */\r\n}\r\n.AHrh7nNelyFOlX8D-8vVOg\\=\\={\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n}\r\n.WXR6qxKTISGZx4u40qK\\+Aw\\=\\={\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.lzG-A5LIYcFnh0Ffq18x3A\\=\\={\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.M6c3Wn9AMARvfa1tdaWY-w\\=\\={\r\n  border: none;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n._3Ww24uW4\\+XDNVrun81m4eQ\\=\\={\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\={\r\n  position: relative;\r\n  /* border: solid; */\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\=:hover .y3nudlY1bG-4yxNBxeeesA\\=\\={\r\n  display: block;\r\n}\r\n.y3nudlY1bG-4yxNBxeeesA\\=\\={\r\n  height: 15px;\r\n  width: 15px;\r\n  display: none;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\={\r\n  padding: 7px 11px;\r\n  border: 0.15000000596046448px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n.iknHr9FIl5ngnBMZopuWhQ\\=\\={\r\n  border: none;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.zrdgoGyh2d-jYHAdcQ6zRw\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n}\r\n.RwrF3vIc7qZnuBaQOCCGtw\\=\\={\r\n  flex: 1 1 calc(100% - 58px);\r\n  overflow: auto;\r\n}\r\n.MU\\+2fsRtd-fYkwtfChCZ5Q\\=\\={\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n}\r\n.BA94bXFVSLRqwsaHI-WPbg\\=\\={\r\n  cursor: pointer;\r\n}\r\n.DZoHasb9fTH95vYwijQvYg\\=\\={\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover{\r\n  cursor: pointer !important;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover .XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.Uy9qarsT3oxliXUpdMTp7g\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.EHoh9kHBfS25-lsSApkjcA\\=\\={\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.Z4idHPZ\\+Jg5FhKPogy5vLA\\=\\={\r\n  position: absolute;\r\n  right: 22.23px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n}\r\n.d9ImWwRcKSCeTIhL5iIcSQ\\=\\={\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/comments.module.css"],"names":[],"mappings":"AAGA;EACE,SAAS;EACT,UAAU;EACV,sBAAsB;AACxB;;AAEA;EACE,YAAY;EACZ,uBAAuB;EACvB,aAAa;EACb,wBAAwB;EACxB,SAAS;EACT,6CAA6C;EAC7C,mBAAmB;EACnB,4BAA4B;EAC5B,2BAA2B;EAI3B,sBAAsB;EACtB,kBAAkB;EAClB,iCAAiC;AACnC;;AAEA,+DAA+D;AAC/D;EACE,kBAAkB;EAClB,eAAe;EACf,mBAAmB;EACnB,aAAa;EACb,sBAAsB;EACtB,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,YAAY;EACZ,WAAW;EACX,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,sBAAsB;AACxB;;AAEA;EACE,wBAAwB;AAC1B;;;AAGA,+DAA+D;AAC/D;EACE,cAAc;EACd,mBAAmB;EACnB,aAAa;EACb,wBAAwB;EACxB,eAAe;EACf,mBAAmB;EACnB,gBAAgB;EAChB;sBACoB;AACtB;AACA;EACE,iBAAiB;EACjB,cAAc;AAChB;AACA;EACE,aAAa;EACb,QAAQ;AACV;AACA;EACE,cAAc;EACd,mBAAmB;EACnB,YAAY;EACZ,WAAW;EACX,4BAA4B;AAC9B;AACA;EACE,YAAY;EACZ,aAAa;EACb,wBAAwB;EACxB,QAAQ;AACV;AACA;EACE,eAAe;EACf,cAAc;AAChB;AACA;EACE,kBAAkB;EAClB,mBAAmB;AACrB;AACA;EACE,cAAc;AAChB;AACA;EACE,YAAY;EACZ,WAAW;EACX,aAAa;EACb,oBAAoB;EACpB,kBAAkB;EAClB,sBAAsB;EACtB,eAAe;AACjB;AACA;EACE,iBAAiB;EACjB,2CAA2C;EAC3C,yBAAyB;EACzB,kBAAkB;EAClB,eAAe;EACf,iBAAiB;AACnB;AACA;EACE,YAAY;AACd;AACA,+DAA+D;AAC/D;EACE,mBAAmB;EACnB,aAAa;EACb,SAAS;AACX;AACA;EACE,2BAA2B;EAC3B,cAAc;AAChB;AACA;EACE,YAAY;EACZ,yBAAyB;EACzB,4BAA4B;EAC5B,oBAAoB;EACpB,aAAa;EACb,qBAAqB;EACrB,SAAS;EACT,kBAAkB;EAClB,gBAAgB;AAClB;AACA;EACE,YAAY;EACZ,WAAW;EACX,kBAAkB;EAClB,8BAA8B;EAC9B,iBAAiB;EACjB,kBAAkB;EAClB,iBAAiB;EACjB;;aAEW;AACb;AACA;EACE,eAAe;AACjB;AACA;EACE,mBAAmB;EACnB,gBAAgB;EAChB,uBAAuB;EACvB,cAAc;EACd,iBAAiB;AACnB;AACA;EACE,0BAA0B;AAC5B;AACA;EACE,8BAA8B;EAC9B,4BAA4B;EAC5B,kBAAkB;EAClB,qBAAqB;AACvB;AACA;EACE,oCAAoC;AACtC;AACA;EACE,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iBAAiB;EACjB,kBAAkB;EAClB,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,yBAAyB;EACzB;qBACmB;AACrB;AACA;EACE,kBAAkB;EAClB,cAAc;EACd,yBAAyB;EACzB,cAAc;EACd,aAAa;AACf;AACA;EACE,YAAY;EACZ,WAAW;EACX,mBAAmB;EACnB,yBAAyB;EACzB,YAAY;EACZ,eAAe;AACjB;AACA,+DAA+D;AAC/D,+DAA+D;AAC/D,+DAA+D","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.commentsBody{\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 10px;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  -webkit-background-size: cover;\r\n  -moz-background-size: cover;\r\n  -o-background-size: cover;\r\n  background-size: cover;\r\n  position: relative;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_header{\r\n  /* height: 57px; */\r\n  padding: 0 20px;\r\n  /* border: solid; */\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n\r\n.commentsBody_header_btn{\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.commentsBody_header_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n\r\n.fullscreen_icons{\r\n  border:solid 1px #727272;\r\n}\r\n\r\n\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_commentArea{\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 20px;\r\n  padding-top: 20px; */\r\n}\r\n.singleChat{\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n}\r\n.singleChat_comment_card{\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.singleChat_comment_card_avator{\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.singleChat_comment_card_text{\r\n  border: none;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n.singleChat_comment_card_text_time{\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.singleChat_comment_card_text_container{\r\n  position: relative;\r\n  /* border: solid; */\r\n}\r\n.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more{\r\n  display: block;\r\n}\r\n.singleChat_comment_card_text_more{\r\n  height: 15px;\r\n  width: 15px;\r\n  display: none;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.singleChat_comment_card_text_message{\r\n  padding: 7px 11px;\r\n  border: 0.15000000596046448px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n.singleChat_comment_card_text_files{\r\n  border: none;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_inputField{\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n}\r\n.chatInput{\r\n  flex: 1 1 calc(100% - 58px);\r\n  overflow: auto;\r\n}\r\n.chatInput_filePreview{\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.chatInput_filePreview__file{\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n}\r\n.chatInput_filePreview__file__fileIcon{\r\n  cursor: pointer;\r\n}\r\n.chatInput_filePreview__file__fileName{\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.chatInput_filePreview__file:hover{\r\n  cursor: pointer !important;\r\n}\r\n.chatInput_filePreview__file:hover .chatInput_filePreview__removeFile{\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.chatInput_filePreview__removeFile{\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.chatInput_filePreview__addFile{\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_input{\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.chatInput_text_style_icon{\r\n  position: absolute;\r\n  right: 22.23px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n}\r\n.chatInput_file_add_btn{\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "/* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.xKTA64JpPBJ8Ut9ZDbn9rg\\=\\={\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 10px;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  background-size: cover;\r\n  position: relative;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.lNdp1uhUVwyTMS8gXh\\+ukw\\=\\={\r\n  /* height: 57px; */\r\n  padding: 0 20px;\r\n  /* border: solid; */\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\={\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n\r\n.W3912K8vxyr9Jqu9BSeJmg\\=\\={\r\n  border:solid 1px #727272;\r\n}\r\n\r\n\r\n/* ---------------------------------------------------------- */\r\n.hwrDAUbLAFvk3tT5O8yUWw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 20px;\r\n  padding-top: 20px; */\r\n}\r\n.AHrh7nNelyFOlX8D-8vVOg\\=\\={\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n}\r\n.WXR6qxKTISGZx4u40qK\\+Aw\\=\\={\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.lzG-A5LIYcFnh0Ffq18x3A\\=\\={\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.M6c3Wn9AMARvfa1tdaWY-w\\=\\={\r\n  border: none;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n._3Ww24uW4\\+XDNVrun81m4eQ\\=\\={\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\={\r\n  position: relative;\r\n  /* border: solid; */\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\=:hover .b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\={\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  width: 94px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.S59xMzZAdnSxfMKxhWYluQ\\=\\={\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n._9eTdcW7EtRqzqd-9Sx0beA\\=\\={\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\={\r\n  padding: 7px 11px;\r\n  border: 0.15000000596046448px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n.iknHr9FIl5ngnBMZopuWhQ\\=\\={\r\n  border: none;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.zrdgoGyh2d-jYHAdcQ6zRw\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.RwrF3vIc7qZnuBaQOCCGtw\\=\\={\r\n  flex: 1 1 calc(100% - 58px);\r\n  overflow: auto;\r\n}\r\n.QNBcto9P7B0fe75qKKERxg\\=\\={\r\n  position: absolute;\r\n  top: -400px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.MU\\+2fsRtd-fYkwtfChCZ5Q\\=\\={\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n}\r\n.BA94bXFVSLRqwsaHI-WPbg\\=\\={\r\n  cursor: pointer;\r\n}\r\n.DZoHasb9fTH95vYwijQvYg\\=\\={\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover{\r\n  cursor: pointer !important;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover .XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.Uy9qarsT3oxliXUpdMTp7g\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.EHoh9kHBfS25-lsSApkjcA\\=\\={\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border-radius: 10px; */\r\n  /* overflow: hidden; */\r\n}\r\n/* .chatInput_text_emojis{\r\n  position: fixed;\r\n  top: -500px;\r\n  left: 0;\r\n  height: 500px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n} */\r\n._9xtGbNPYWLNVvodQc9Zexw\\=\\={\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  height: 15.32px;\r\n  width: 15.32px;\r\n  cursor: pointer;\r\n}\r\n.Z4idHPZ\\+Jg5FhKPogy5vLA\\=\\={\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.d9ImWwRcKSCeTIhL5iIcSQ\\=\\={\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/comments.module.css"],"names":[],"mappings":"AAEC,UAAU;AACX;;;GAGG;;AAEH,UAAU;AACV;;GAEG;;AAEH,WAAW;AACX;;GAEG;;AAEH,oBAAoB;AACpB;;IAEI;;AAEJ;EACE,SAAS;EACT,UAAU;EACV,sBAAsB;AACxB;;AAEA;EACE,YAAY;EACZ,uBAAuB;EACvB,aAAa;EACb,wBAAwB;EACxB,SAAS;EACT,6CAA6C;EAC7C,mBAAmB;EACnB,4BAA4B;EAC5B,2BAA2B;EAI3B,sBAAsB;EACtB,kBAAkB;EAClB,iCAAiC;AACnC;;AAEA,+DAA+D;AAC/D;EACE,kBAAkB;EAClB,eAAe;EACf,mBAAmB;EACnB,aAAa;EACb,sBAAsB;EACtB,qBAAqB;EACrB,WAAW;AACb;;AAEA;EACE,YAAY;EACZ,WAAW;EACX,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,sBAAsB;AACxB;;AAEA;EACE,wBAAwB;AAC1B;;;AAGA,+DAA+D;AAC/D;EACE,cAAc;EACd,mBAAmB;EACnB,aAAa;EACb,wBAAwB;EACxB,eAAe;EACf,mBAAmB;EACnB,gBAAgB;EAChB;sBACoB;AACtB;AACA;EACE,iBAAiB;EACjB,cAAc;AAChB;AACA;EACE,aAAa;EACb,QAAQ;AACV;AACA;EACE,cAAc;EACd,mBAAmB;EACnB,YAAY;EACZ,WAAW;EACX,4BAA4B;AAC9B;AACA;EACE,YAAY;EACZ,aAAa;EACb,wBAAwB;EACxB,QAAQ;AACV;AACA;EACE,eAAe;EACf,cAAc;AAChB;AACA;EACE,kBAAkB;EAClB,mBAAmB;AACrB;AACA;EACE,cAAc;EACd,YAAY;EACZ,WAAW;EACX,oBAAoB;EACpB,kBAAkB;EAClB,sBAAsB;EACtB,eAAe;AACjB;AACA;EACE,aAAa;EACb,kBAAkB;EAClB,iBAAiB;EACjB,oBAAoB;EACpB,wBAAwB;EACxB,4BAA4B;EAC5B,qBAAqB;AACvB;AACA;EACE,kBAAkB;EAClB,8BAA8B;EAC9B,oBAAoB;EACpB,kBAAkB;EAClB,WAAW;EACX,mBAAmB;EACnB,WAAW;EACX,aAAa;EACb,wBAAwB;EACxB,6CAA6C;EAC7C,yBAAyB;EACzB,kBAAkB;EAClB,6BAA6B;AAC/B;AACA;EACE,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,6BAA6B;EAC7B,oBAAoB;EACpB,YAAY;AACd;AACA;EACE,YAAY;EACZ,yBAAyB;AAC3B;AACA;EACE,YAAY;EACZ,WAAW;AACb;AACA;EACE,cAAc;EACd,cAAc;EACd,6CAA6C;EAC7C,cAAc;AAChB;AACA;EACE,iBAAiB;EACjB,2CAA2C;EAC3C,yBAAyB;EACzB,kBAAkB;EAClB,eAAe;EACf,iBAAiB;AACnB;AACA;EACE,YAAY;AACd;AACA,+DAA+D;AAC/D;EACE,mBAAmB;EACnB,aAAa;EACb,SAAS;EACT,kBAAkB;AACpB;AACA;EACE,2BAA2B;EAC3B,cAAc;AAChB;AACA;EACE,kBAAkB;EAClB,WAAW;EACX,OAAO;EACP,aAAa;EACb,gBAAgB;EAChB,WAAW;AACb;AACA;EACE,YAAY;EACZ,yBAAyB;EACzB,4BAA4B;EAC5B,oBAAoB;EACpB,aAAa;EACb,qBAAqB;EACrB,SAAS;EACT,kBAAkB;EAClB,gBAAgB;AAClB;AACA;EACE,YAAY;EACZ,WAAW;EACX,kBAAkB;EAClB,8BAA8B;EAC9B,iBAAiB;EACjB,kBAAkB;EAClB,iBAAiB;EACjB;;aAEW;AACb;AACA;EACE,eAAe;AACjB;AACA;EACE,mBAAmB;EACnB,gBAAgB;EAChB,uBAAuB;EACvB,cAAc;EACd,iBAAiB;AACnB;AACA;EACE,0BAA0B;AAC5B;AACA;EACE,8BAA8B;EAC9B,4BAA4B;EAC5B,kBAAkB;EAClB,qBAAqB;AACvB;AACA;EACE,oCAAoC;AACtC;AACA;EACE,YAAY;EACZ,WAAW;EACX,8BAA8B;EAC9B,iBAAiB;EACjB,kBAAkB;EAClB,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,yBAAyB;EACzB,yBAAyB;EACzB,sBAAsB;AACxB;AACA;;;;;;;GAOG;AACH;EACE,kBAAkB;EAClB,YAAY;EACZ,0BAA0B;EAC1B,eAAe;EACf,cAAc;EACd,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,cAAc;EACd,yBAAyB;EACzB,cAAc;EACd,aAAa;EACb,eAAe;AACjB;AACA;EACE,YAAY;EACZ,WAAW;EACX,mBAAmB;EACnB,yBAAyB;EACzB,YAAY;EACZ,eAAe;AACjB;AACA,+DAA+D;AAC/D,+DAA+D;AAC/D,+DAA+D","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n /* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.commentsBody{\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 10px;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  -webkit-background-size: cover;\r\n  -moz-background-size: cover;\r\n  -o-background-size: cover;\r\n  background-size: cover;\r\n  position: relative;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_header{\r\n  /* height: 57px; */\r\n  padding: 0 20px;\r\n  /* border: solid; */\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n\r\n.commentsBody_header_btn{\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.commentsBody_header_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n\r\n.fullscreen_icons{\r\n  border:solid 1px #727272;\r\n}\r\n\r\n\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_commentArea{\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 20px;\r\n  padding-top: 20px; */\r\n}\r\n.singleChat{\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n}\r\n.singleChat_comment_card{\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.singleChat_comment_card_avator{\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.singleChat_comment_card_text{\r\n  border: none;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n.singleChat_comment_card_text_time{\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.singleChat_comment_card_text_container{\r\n  position: relative;\r\n  /* border: solid; */\r\n}\r\n.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more_btn{\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.singleChat_comment_card_text_more_btn{\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.singleChat_comment_card_text_more_options{\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  width: 94px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.singleChat_comment_card_text_more_options > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.singleChat_comment_card_text_more_options > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.context_icons{\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n.context_title{\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n.singleChat_comment_card_text_message{\r\n  padding: 7px 11px;\r\n  border: 0.15000000596046448px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n.singleChat_comment_card_text_files{\r\n  border: none;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_inputField{\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.chatInput{\r\n  flex: 1 1 calc(100% - 58px);\r\n  overflow: auto;\r\n}\r\n.chatInput_text_emojis{\r\n  position: absolute;\r\n  top: -400px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.chatInput_filePreview{\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.chatInput_filePreview__file{\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n}\r\n.chatInput_filePreview__file__fileIcon{\r\n  cursor: pointer;\r\n}\r\n.chatInput_filePreview__file__fileName{\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.chatInput_filePreview__file:hover{\r\n  cursor: pointer !important;\r\n}\r\n.chatInput_filePreview__file:hover .chatInput_filePreview__removeFile{\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.chatInput_filePreview__removeFile{\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.chatInput_filePreview__addFile{\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_input{\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border-radius: 10px; */\r\n  /* overflow: hidden; */\r\n}\r\n/* .chatInput_text_emojis{\r\n  position: fixed;\r\n  top: -500px;\r\n  left: 0;\r\n  height: 500px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n} */\r\n.chatInput_text_emoji_icon{\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  height: 15.32px;\r\n  width: 15.32px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_style_icon{\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_file_add_btn{\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"commentsBody": "xKTA64JpPBJ8Ut9ZDbn9rg==",
@@ -18181,11 +18385,15 @@ ___CSS_LOADER_EXPORT___.locals = {
 	"singleChat_comment_card_text": "M6c3Wn9AMARvfa1tdaWY-w==",
 	"singleChat_comment_card_text_time": "_3Ww24uW4+XDNVrun81m4eQ==",
 	"singleChat_comment_card_text_container": "iXxQt2ilXdp3hz4sSqwgLA==",
-	"singleChat_comment_card_text_more": "y3nudlY1bG-4yxNBxeeesA==",
+	"singleChat_comment_card_text_more_btn": "b88vZXkQEZupqpqCOpBq+w==",
+	"singleChat_comment_card_text_more_options": "AnXvk2Phi1b1oIgEvs7HGQ==",
+	"context_icons": "S59xMzZAdnSxfMKxhWYluQ==",
+	"context_title": "_9eTdcW7EtRqzqd-9Sx0beA==",
 	"singleChat_comment_card_text_message": "ozoqbxWJE0LRx7y9ID5w7w==",
 	"singleChat_comment_card_text_files": "iknHr9FIl5ngnBMZopuWhQ==",
 	"commentsBody_inputField": "zrdgoGyh2d-jYHAdcQ6zRw==",
 	"chatInput": "RwrF3vIc7qZnuBaQOCCGtw==",
+	"chatInput_text_emojis": "QNBcto9P7B0fe75qKKERxg==",
 	"chatInput_filePreview": "MU+2fsRtd-fYkwtfChCZ5Q==",
 	"chatInput_filePreview__file": "f83hmzg55NGhPxy3Uxioqw==",
 	"chatInput_filePreview__file__fileIcon": "BA94bXFVSLRqwsaHI-WPbg==",
@@ -18193,6 +18401,7 @@ ___CSS_LOADER_EXPORT___.locals = {
 	"chatInput_filePreview__removeFile": "XUBNxpW9I1MVSnQsoZ1gLg==",
 	"chatInput_filePreview__addFile": "Uy9qarsT3oxliXUpdMTp7g==",
 	"chatInput_text_input": "EHoh9kHBfS25-lsSApkjcA==",
+	"chatInput_text_emoji_icon": "_9xtGbNPYWLNVvodQc9Zexw==",
 	"chatInput_text_style_icon": "Z4idHPZ+Jg5FhKPogy5vLA==",
 	"chatInput_file_add_btn": "d9ImWwRcKSCeTIhL5iIcSQ=="
 };
@@ -18247,7 +18456,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  border-top: solid 0.5px white !important;\r\n  padding-right: 35.05px;\r\n  font-size: 12px;\r\n  color: black;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/quill.css"],"names":[],"mappings":"AAAA;EACE,uBAAuB;EACvB,yBAAyB;EACzB,wBAAwB;EACxB,wBAAwB;EACxB,qBAAqB;AACvB;;AAEA,yCAAyC;AACzC;kDACkD;AAClD,MAAM;;AAEN;sDACsD;EACpD,+DAA+D;AACjE,MAAM;;AAEN;sDACsD;AACtD,MAAM;;AAEN,gBAAgB;AAChB;qEACqE;EACnE,kEAAkE;AACpE,MAAM;;AAEN,mCAAmC;AACnC;;GAEG;;AAEH;;iEAEiE;AACjE,MAAM;;AAEN;;GAEG;;AAEH,mCAAmC;AACnC;;GAEG;;AAEH;;;GAGG;;AAEH;;GAEG;AACH,oDAAoD;;AAEpD;EACE,uBAAuB;EACvB,kCAAkC;EAClC,+BAA+B;EAC/B,wCAAwC;EACxC,kCAAkC;EAClC,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;EAChB,iBAAiB;EACjB,gBAAgB;AAClB;AACA;EACE,6BAA6B;EAC7B,uBAAuB;EACvB,wCAAwC;EACxC,sBAAsB;EACtB,eAAe;EACf,YAAY;EACZ;qBACmB;AACrB;;AAEA;EACE,6BAA6B;EAC7B,4BAA4B;EAC5B,8BAA8B;EAC9B,uCAAuC;EACvC,aAAa;EACb,mBAAmB;EACnB,cAAc;EACd,uBAAuB;EACvB,8BAA8B;EAC9B,YAAY;AACd;;AAEA;EACE,YAAY;EACZ,uBAAuB;EACvB,sBAAsB;EACtB,qBAAqB;EACrB,0BAA0B;AAC5B","sourcesContent":[":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  border-top: solid 0.5px white !important;\r\n  padding-right: 35.05px;\r\n  font-size: 12px;\r\n  color: black;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  border-top: solid 0.5px white !important;\r\n  padding-right: 33.66px;\r\n  padding-left: 33.66px;\r\n  font-size: 12px;\r\n  color: black;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 35%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/quill.css"],"names":[],"mappings":"AAAA;EACE,uBAAuB;EACvB,yBAAyB;EACzB,wBAAwB;EACxB,wBAAwB;EACxB,qBAAqB;AACvB;;AAEA,yCAAyC;AACzC;kDACkD;AAClD,MAAM;;AAEN;sDACsD;EACpD,+DAA+D;AACjE,MAAM;;AAEN;sDACsD;AACtD,MAAM;;AAEN,gBAAgB;AAChB;qEACqE;EACnE,kEAAkE;AACpE,MAAM;;AAEN,mCAAmC;AACnC;;GAEG;;AAEH;;iEAEiE;AACjE,MAAM;;AAEN;;GAEG;;AAEH,mCAAmC;AACnC;;GAEG;;AAEH;;;GAGG;;AAEH;;GAEG;AACH,oDAAoD;;AAEpD;EACE,uBAAuB;EACvB,kCAAkC;EAClC,+BAA+B;EAC/B,wCAAwC;EACxC,kCAAkC;EAClC,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;EAChB,iBAAiB;EACjB,gBAAgB;AAClB;AACA;EACE,6BAA6B;EAC7B,uBAAuB;EACvB,wCAAwC;EACxC,sBAAsB;EACtB,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ;qBACmB;AACrB;AACA;EACE,aAAa;EACb,QAAQ;AACV;AACA;;;GAGG;;AAEH;EACE,6BAA6B;EAC7B,4BAA4B;EAC5B,8BAA8B;EAC9B,uCAAuC;EACvC,aAAa;EACb,mBAAmB;EACnB,cAAc;EACd,uBAAuB;EACvB,8BAA8B;EAC9B,YAAY;AACd;;AAEA;EACE,YAAY;EACZ,uBAAuB;EACvB,sBAAsB;EACtB,qBAAqB;EACrB,0BAA0B;AAC5B","sourcesContent":[":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  border-top: solid 0.5px white !important;\r\n  padding-right: 33.66px;\r\n  padding-left: 33.66px;\r\n  font-size: 12px;\r\n  color: black;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 35%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -18427,7 +18636,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/comments_body_bg.svg?d330c2e6e5ec66ec9a5becd59e66ce9d");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/comments_body_bg.svg?6e3beb7d0c73bb7ce8b6011c7e9572d1");
 
 /***/ }),
 

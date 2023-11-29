@@ -1,5 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+ /* width */
+/* .commentsBody::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 5px;
+} */
+
+/* Track */
+/* .commentsBody::-webkit-scrollbar-track {
+  background: #f1f1f1;
+} */
+
+/* Handle */
+/* .commentsBody::-webkit-scrollbar-thumb {
+  background: #888;
+} */
+
+/* Handle on hover */
+/* .commentsBody::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}  */
 
 *{
   margin: 0;
@@ -92,17 +112,60 @@
   position: relative;
   /* border: solid; */
 }
-.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more{
+.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more_btn{
   display: block;
-}
-.singleChat_comment_card_text_more{
   height: 15px;
   width: 15px;
-  display: none;
   /* display: block; */
   position: absolute;
   top: calc(50% - 7.5px);
   cursor: pointer;
+}
+.singleChat_comment_card_text_more_btn{
+  display: none;
+  /* height: 15px; */
+  /* width: 15px; */
+  /* display: block; */
+  /* position: absolute; */
+  /* top: calc(50% - 7.5px); */
+  /* cursor: pointer; */
+}
+.singleChat_comment_card_text_more_options{
+  position: absolute;
+  /* bottom: calc(50% - 50px); */
+  top: calc(50% - 7px);
+  /* height: 79px; */
+  width: 94px;
+  /* border: solid; */
+  z-index: 99;
+  display: flex;
+  flex-flow: column nowrap;
+  font-family: 'Poppins', sans-serif !important;
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  padding: 8px 0 6px !important;
+}
+.singleChat_comment_card_text_more_options > section{
+  display: flex;
+  align-items: center;
+  gap: 5.45px;
+  padding: 3.5px 8px !important;
+  margin: 0 !important;
+  color: black;
+}
+.singleChat_comment_card_text_more_options > section:hover{
+  color: black;
+  background-color: #EEF9FF;
+}
+.context_icons{
+  height: 10px;
+  width: 10px;
+}
+.context_title{
+  font-size: 8px;
+  color: #626365;
+  font-family: 'Poppins', sans-serif !important;
+  line-height: 0;
 }
 .singleChat_comment_card_text_message{
   padding: 7px 11px;
@@ -120,10 +183,19 @@
   /* border: solid; */
   display: flex;
   gap: 18px;
+  position: relative;
 }
 .chatInput{
   flex: 1 1 calc(100% - 58px);
   overflow: auto;
+}
+.chatInput_text_emojis{
+  position: absolute;
+  top: -400px;
+  left: 0;
+  height: 400px;
+  max-width: 300px;
+  z-index: 99;
 }
 .chatInput_filePreview{
   height: 68px;
@@ -184,15 +256,32 @@
 .chatInput_text_input{
   position: relative;
   background-color: #DAEDF8;
-  /* border-radius: 0 0 10px 10px;
-  overflow: hidden; */
+  /* border-radius: 10px; */
+  /* overflow: hidden; */
+}
+/* .chatInput_text_emojis{
+  position: fixed;
+  top: -500px;
+  left: 0;
+  height: 500px;
+  max-width: 300px;
+  z-index: 99;
+} */
+.chatInput_text_emoji_icon{
+  position: absolute;
+  left: 8.34px;
+  bottom: calc(50% - 7.66px);
+  height: 15.32px;
+  width: 15.32px;
+  cursor: pointer;
 }
 .chatInput_text_style_icon{
   position: absolute;
-  right: 22.23px;
+  right: 16.18px;
   bottom: calc(50% - 6.4px);
   height: 12.8px;
   width: 12.8px;
+  cursor: pointer;
 }
 .chatInput_file_add_btn{
   height: 40px;

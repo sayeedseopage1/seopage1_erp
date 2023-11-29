@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactQuill from "react-quill";
+import 'quill-mention';
 import "react-quill/dist/quill.snow.css";
 import "../styles/quill.css";
 import style from "../styles/comments.module.css";
@@ -10,18 +11,45 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import { FaFile } from "react-icons/fa";
 import { BsEmojiSmile } from "react-icons/bs";
+import EmojiPicker from "emoji-picker-react";
 
-const ChatInput = () => {
+const ChatInput = ({ setScroll }) => {
     const [editorHtml, setEditorHtml] = useState("");
     const [show, setShow] = useState(false);
     const [files, setFiles] = useState([]);
+    const [showEmoji, setShowEmoji] = useState(false);
+    const [emoji, setEmoji] = useState("");
 
     useEffect(() => {
         console.log(files);
     }, [files]);
 
+    // useEffect(()=>{
+    //   setScroll(prev=>!prev);
+    // },[show,files])
+
+    useEffect(() => {
+        console.log(editorHtml);
+    }, [emoji]);
+
+    const handleEmojiSelection = (emoji, e) => {
+        console.log(emoji);
+        setEmoji(emoji.emoji);
+    };
+
     return (
         <>
+            {showEmoji && (
+                <div className={`${style.chatInput_text_emojis}`}>
+                    <EmojiPicker
+                        width={"100%"}
+                        height={"100%"}
+                        skinTonesDisabled
+                        emojiStyle="facebook"
+                        onEmojiClick={handleEmojiSelection}
+                    />
+                </div>
+            )}
             <section className={`${style.chatInput}`}>
                 <FilePreviewer files={files} setFiles={setFiles} />
                 <CommentEditor
@@ -30,6 +58,9 @@ const ChatInput = () => {
                     files={files}
                     show={show}
                     setShow={setShow}
+                    setShowEmoji={setShowEmoji}
+                    // text={text}
+                    // setText={setText}
                 />
             </section>
             <FileUpload files={files} setFiles={setFiles} />
@@ -72,10 +103,10 @@ function FilePreviewer({ files, setFiles }) {
                 return (
                     <div
                         style={{
-                            display:'flex',
-                            flexFlow:'column nowrap',
-                            justifyContent:'center',
-                            gap:'5px'
+                            display: "flex",
+                            flexFlow: "column nowrap",
+                            justifyContent: "center",
+                            gap: "5px",
                         }}
                         onClick={() =>
                             window.open(handlePreviewUrl(file), "_blank")
@@ -152,8 +183,25 @@ function FilePreviewer({ files, setFiles }) {
     );
 }
 
-function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
+function CommentEditor({
+    show,
+    setShow,
+    files,
+    editorHtml,
+    setEditorHtml,
+    setShowEmoji,
+    // text,
+    // setText,
+}) {
     const quillRef = useRef(null);
+    const atValues = [
+        { id: 1, value: "Fredrik Sundqvist" },
+        { id: 2, value: "Patrik Sjölin" },
+    ];
+
+    useEffect(() => {
+        console.log(editorHtml);
+    }, [editorHtml]);
 
     useEffect(() => {
         const quill = quillRef.current.getEditor();
@@ -175,6 +223,37 @@ function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
 
     const modules = {
         toolbar: [["bold", "italic", "underline"]],
+        // mention: {
+        //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+        //     mentionDenotationChars: [
+        //         "@",
+        //         // '#'
+        //     ],
+        //     source: function (searchTerm, renderList, mentionChar) {
+        //         let values;
+
+        //         if (mentionChar === "@") {
+        //             values = atValues;
+        //         }
+        //         //    else {
+        //         //     values = hashValues;
+        //         //   }
+
+        //         if (searchTerm.length === 0) {
+        //             renderList(values, searchTerm);
+        //         } else {
+        //             const matches = [];
+        //             for (let i = 0; i < values.length; i++)
+        //                 if (
+        //                     values[i].value
+        //                         .toLowerCase()
+        //                         .indexOf(searchTerm.toLowerCase())
+        //                 )
+        //                     matches.push(values[i]);
+        //             renderList(matches, searchTerm);
+        //         }
+        //     },
+        // },
     };
 
     const formats = ["bold", "italic", "underline"];
@@ -183,10 +262,8 @@ function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
         <div
             className={`${style.chatInput_text_input}`}
             style={{
-                borderRadius: !(show || files.length)
-                    ? "60px"
-                    : "0 0 10px 10px",
-                overflow: "hidden",
+                borderRadius: !(show || files.length) ? "40px" : "10px",
+                // overflow: "hidden",
             }}
         >
             <ReactQuill
@@ -194,11 +271,17 @@ function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
                 theme="snow"
                 value={editorHtml}
                 onChange={(value) => setEditorHtml(value)}
-                modules={modules}
+                modules={{...modules}}
                 formats={formats}
                 placeholder="Write your comment..."
             />
-            {/* <BsEmojiSmile className={`${style.chatInput_text_emoji_icon}`} /> */}
+            <BsEmojiSmile
+                onClick={() => setShowEmoji((prev) => !prev)}
+                style={{
+                    bottom: show ? "14.16px" : "calc(50% - 7.66px)",
+                }}
+                className={`${style.chatInput_text_emoji_icon}`}
+            />
             {!show ? (
                 <LuPencilLine
                     onClick={() => setShow(true)}
