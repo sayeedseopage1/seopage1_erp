@@ -2981,7 +2981,8 @@ class TaskController extends AccountBaseController
 
 
         if ($clientRevisionCount >= 5) {
-            $task_revision->dispute_created = true; // create dispute
+            $task_revision->dispute_created = true;
+            $task_revision->final_responsible_person = ''; // create dispute
         }else if ($request->acknowledgement_id == 'CPRx06') {
             $task_revision->final_responsible_person = 'C'; // final responsible person "client"
         }

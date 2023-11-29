@@ -1393,7 +1393,130 @@ class HelperPendingActionController extends AccountBaseController
        
 
    }
- 
+   public function RemovalofStagingSite($project,$project_submission)
+   {
+    
+     $client= User::where('id',$project->client_id)->first();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $authorizer= User::where('role_id',6)->orderBy('id','desc')->first();
+        
+        
+            $action = new PendingAction();
+            $action->code = 'STR';
+            $action->serial = 'STR'.'x0';
+            $action->item_name= 'Removal of staging site';
+            $action->heading= 'Removal of staging site!';
+            $action->message = 'Staging site <a target="_blank" href="'.$project_submission->dummy_link.'">'.$project_submission->dummy_link.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> should be Deleted (PM: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+            $action->timeframe= 24;
+            $action->project_id = $project->id;
+           
+            $action->client_id = $client->id;
+            $action->authorization_for= $authorizer->id;
+            $button= '';
+           
+            $action->save();
+            $button = [
+                
+                [
+                    'button_name' => 'Delete',
+                    'button_color' => 'success',
+                    'button_type' => 'modal',
+                    'button_url' => '',
+                    'modal_form'=> true,
+                    'form'=> [
+                        [
+                            'type'=> 'textarea',
+                            'label'=>'Write down the hosting company it\'s hosted in',
+                            'name'=>'hosting_company_name',
+                            'required'=> true,
+                        ], 
+                        [
+                            'type'=> 'file',
+                            'label'=>'Share a screenshot of the "Delete confirmation" page within the hosting',
+                            'name'=>'screenshot',
+                            'required'=> true,
+                        ], 
+                        [
+                            'type'=> 'hidden',
+                             'value'=> $project->id,
+                             'readonly'=> true,
+                           
+                            'name'=>'project_id',
+                            'required'=> true,
+                        ], 
+                         [
+                            'type'=> 'hidden',
+                            'value'=> $action->id,
+                            'readonly'=> true,
+                            
+                            'name'=>'authorization_id',
+                           
+                            'required'=> true,
+                            
+                        ], 
+                        
+                    ], 
+                    'form_action'=> [
+                        [
+                            'type'=> 'button',
+                            'method'=>'POST',
+                            'label'=> 'Confirm Deletion',
+                            'color'=> 'danger',
+                            'url'=> '',
+      
+                        ], 
+                       
+                        
+                    ]
+                ],
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+           // dd($action);
+
+
+   
+        }
+        public function NeedtoTaskAssign($developer)
+        {
+            $developer= User::where('id',$developer->id)->first();
+            $authorizer= User::where('role_id',6)->orderBy('id','desc')->first();
+               
+                $action = new PendingAction();
+                $action->code = 'NTTA';
+                $action->serial = 'NTTA'.'x'.$developer->id;
+                $action->item_name= 'New task needs to be assigned!';
+                $action->heading= 'New task needs to be assigned!';
+                $action->message = 'Developer <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> should finish all his current tasks in the next few hours! Assign a new task now!';
+                $action->timeframe= 24;
+              //  $action->project_id = $project->id;
+              //  $action->client_id = $client->id;
+                $action->developer_id = $developer->id;
+                $action->authorization_for= $authorizer->id;
+                $button= '';
+                $button = [
+                    [
+                        'button_name' => 'Assign',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('tasks.index'),
+                    ],
+                    [
+                        'button_name' => 'Ignore',
+                        'button_color' => 'danger',
+                        'button_type' => 'redirect_url',
+                        'button_url' => '',
+                   
+                  
+                    
+                    ],
+                  
+                ];
+                
+                $action->button = json_encode($button);
+                $action->save();
+
+        }
  
 
 }

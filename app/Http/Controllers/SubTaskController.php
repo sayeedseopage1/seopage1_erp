@@ -203,6 +203,44 @@ class SubTaskController extends AccountBaseController
         $subTask->assigned_to = $request->user_id ? $request->user_id : null;
 
         $subTask->save();
+        $actions = PendingAction::where('code','NTTA')->where('developer_id',$request->user_id)->where('past_status',0)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+              
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+               
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message . ' assigned by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->developer_id = $action->developer_id;
+                $past_action->client_id = $action->client_id;
+           //     $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+             
+
+
+        }
+    }
         $parent_task_count= Subtask::where('task_id',$subTask->task_id)->count();
     //    / dd($parent_task_count);
         if($parent_task_count > 0)
@@ -379,9 +417,12 @@ class SubTaskController extends AccountBaseController
 
 
         $helper->NewTaskAssign($task_s);
+        // $actions = PendingAction::where('serial','NTTAx'.$request->user_id)->where('past_status',0)->get();
+        // dd($actions);
 
         $task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);
+       
         return Reply::successWithData(__('messages.subTaskAdded'), [
             'subTaskID' => $subTask->id,
             'sub_task' => [
