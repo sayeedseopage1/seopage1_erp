@@ -21,13 +21,13 @@ import { TbMessage2Check } from "react-icons/tb";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
-
 const CommentsBody = ({
     close,
     comments,
     fullScreenView,
     setFullScreenView,
 }) => {
+    const chatbottom_ref = useRef(null);
     const [scroll, setScroll] = useState(false);
     const { contextMenu, onContextMenu, onKeyDown } = useContextMenu(
         <>
@@ -57,43 +57,20 @@ const CommentsBody = ({
             </ContextMenuItem>
         </>
     );
-    // const menuRef = useRef(null);
-    // const [contextMenu, setContextMenu] = useState({
-    //     showMenu: false,
-    //     position: { x: 0, y: 0 },
-    // });
-
-    // const handleContextMenu = (event) => {
-    //     event.preventDefault();
-    //     setContextMenu({
-    //         showMenu: true,
-    //         position: { x: event.clientX, y: event.clientY },
-    //     });
-    // };
-
-    // const handleCloseContextMenu = () => {
-    //     setContextMenu({ showMenu: false, position: { x: 0, y: 0 } });
-    // };
-
-    // const handleClickOutside = useCallback((event) => {
-    //     if (menuRef.current && !menuRef.current.contains(event.target)) {
-    //         handleCloseContextMenu();
-    //     }
-    // },[handleCloseContextMenu]);
-
-    // useEffect(()=>{
-    //   console.log(contextMenu);
-    // },[contextMenu])
 
     useEffect(() => {
-        document.getElementById("chat-bottom-point").scrollIntoView();
+        // chatbottom_ref.current?.scrollIntoView();
+        chatbottom_ref.current?.scrollIntoView({
+            // behavior: "smooth",
+            block: "end",
+          });
     }, [scroll]);
 
     return (
         <div
             className={style.commentsBody}
             style={{
-                backgroundImage:`url(${commentBg})`,
+                backgroundImage: `url(${commentBg})`,
                 // backgroundImage:`url(https://seopage1storage.s3.ap-southeast-1.amazonaws.com/655f048a34e53.jpg)`,
                 width: fullScreenView ? "100vw" : "auto",
                 height: fullScreenView ? "99vh" : "84vh",
@@ -131,7 +108,10 @@ const CommentsBody = ({
                 />
             </header>
 
-            <main className={`${style.commentsBody_commentArea}`}>
+            <main
+                // ref={chatbottom_ref}
+                className={`${style.commentsBody_commentArea}`}
+            >
                 {_.fill(Array(20), "*").map((v, i) => {
                     return (
                         <SingleChat
@@ -143,74 +123,60 @@ const CommentsBody = ({
                         />
                     );
                 })}
-                <div id="chat-bottom-point" />
-                {/* <CustomContextMenu
-                    showMenu={contextMenu.showMenu}
-                    position={contextMenu.position}
-                    onClose={handleCloseContextMenu}
-                    handleClickOutside={handleClickOutside}
-                    menuRef={menuRef}
-                /> */}
+                <div
+                    ref={chatbottom_ref}
+                />
                 {contextMenu}
             </main>
 
             <footer className={`${style.commentsBody_inputField}`}>
                 <ChatInput setScroll={setScroll} />
             </footer>
+
+            {!true && (
+                <div className={`${style.comments_selected_action_controller}`}>
+                    <section
+                        className={`${style.comments_selected_action_controller_btn}`}
+                    >
+                        <span
+                            className={`${style.comments_selected_action_controller_btn_icon}`}
+                        >
+                            {/* icon 1 */}
+                        </span>
+                        <span
+                            className={`${style.comments_selected_action_controller_btn_text}`}
+                        >
+                            Copy
+                        </span>
+                    </section>
+                    <section
+                        className={`${style.comments_selected_action_controller_btn}`}
+                    >
+                        <span
+                            className={`${style.comments_selected_action_controller_btn_icon}`}
+                        >
+                            {/* icon 2 */}
+                        </span>
+                        <span
+                            className={`${style.comments_selected_action_controller_btn_text}`}
+                        >
+                            Remove
+                        </span>
+                    </section>
+                    {/* <section
+                    className={`${style.comments_selected_action_controller_btn}`}
+                >
+                    <span
+                        className={`${style.comments_selected_action_controller_btn_icon}`}
+                    ></span>
+                    <span
+                        className={`${style.comments_selected_action_controller_btn_text}`}
+                    ></span>
+                </section> */}
+                </div>
+            )}
         </div>
     );
 };
 
 export default CommentsBody;
-
-const CustomContextMenu = ({
-    showMenu,
-    position,
-    onClose,
-    handleClickOutside,
-    menuRef,
-}) => {
-    // const menuRef = useRef(null);
-
-    // const handleClickOutside = useCallback((event) => {
-    //     if (menuRef.current && !menuRef.current.contains(event.target)) {
-    //         onClose();
-    //     }
-    // },[onClose]);
-
-    // Close the menu when clicking outside of it
-    useEffect(() => {
-        document.addEventListener("click", handleClickOutside);
-        // document.addEventListener("contextmenu", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("click", handleClickOutside);
-        };
-    }, [onClose]);
-
-    if (!showMenu) return null;
-
-    return (
-        <div
-            ref={menuRef}
-            className={`${style.context_container}`}
-            style={{
-                position: "absolute",
-                left: position.x,
-                top: position.y,
-                backgroundColor: "#fff",
-                border: "1px solid #ccc",
-                padding: "5px",
-                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-                display: "flex",
-                zIndex: "9999",
-            }}
-        >
-            <ul>
-                <li>Action 1</li>
-                <li>Action 2</li>
-                <li>Action 3</li>
-            </ul>
-        </div>
-    );
-};

@@ -80,8 +80,8 @@
   /* gap: 10px; */
   /* border: solid; */
   overflow-y: auto;
-  /* padding-bottom: 20px;
-  padding-top: 20px; */
+  padding-bottom: 10px;
+  /* padding-top: 20px; */
 }
 .singleChat{
   /* width: 100%; */
@@ -175,8 +175,9 @@
   font-size: 12px;
   /* width: 100%; */
 }
-.singleChat_comment_card_text_files{
-  border: none;
+.singleChat_comment_card_files{
+  display: flex;
+  gap: 5px;
 }
 /* ---------------------------------------------------------- */
 .commentsBody_inputField{
@@ -219,6 +220,9 @@
   /* display: flex;
   flex-flow: column nowrap;
   gap: 5px; */
+  box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);
+-webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);
+-moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);
 }
 .chatInput_filePreview__file__fileIcon{
   cursor: pointer;
@@ -292,5 +296,34 @@
   cursor: pointer;
 }
 /* ---------------------------------------------------------- */
+.comments_selected_action_controller{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 77px;
+  background: #DAEDF8;
+  display: flex;
+  gap: 30px;
+  justify-content: right;
+  align-items: center;
+  border-radius: 0px 0px 10px 10px;
+  padding: 0 70px;
+}
+.comments_selected_action_controller_btn{
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 4.5px;
+  align-items: center;
+}
+.comments_selected_action_controller_btn_icon{
+  height: 19px;
+  width: 17px;
+  background-color: #033C7E;
+}
+.comments_selected_action_controller_btn_text{
+  font-size: 12px;
+  color: #000000;
+}
 /* ---------------------------------------------------------- */
 /* ---------------------------------------------------------- */

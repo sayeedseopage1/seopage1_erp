@@ -5,15 +5,17 @@ import { HiReply } from "react-icons/hi";
 import { TbMessage2Check } from "react-icons/tb";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { FaFile } from "react-icons/fa6";
+import _ from "lodash";
 
 const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
     const [showCommentMenu, setShowCommentMenu] = useState(false);
     const menuRef = useRef(null);
     const menuBtnRef = useRef(null);
 
-    const closeContext = ()=>{
+    const closeContext = () => {
         setShowCommentMenu(false);
-    }
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -37,10 +39,10 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
         };
 
         document.addEventListener("click", handleClickOutside);
-        document.addEventListener("contextmenu", closeContext)
+        document.addEventListener("contextmenu", closeContext);
 
         return () => {
-            document.removeEventListener("contextmenu", closeContext)
+            document.removeEventListener("contextmenu", closeContext);
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
@@ -98,7 +100,7 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                         </div>
                         <span
                             onClick={() => {
-                                setScroll((prev) => !prev);
+                                // setScroll((prev) => !prev);
                                 setShowCommentMenu((prev) => !prev);
                             }}
                             style={{
@@ -129,7 +131,9 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                                 <section
                                 // onClick={selectAll}
                                 >
-                                    <HiReply className={`${style.context_icons}`} />
+                                    <HiReply
+                                        className={`${style.context_icons}`}
+                                    />
                                     <span className={`${style.context_title}`}>
                                         Reply
                                     </span>
@@ -171,10 +175,13 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                     </div>
 
                     {/* file will be shown here */}
-                    {/* <span
-                        className={`${style.singleChat_comment_card_text_files}`}
-                    >
-                    </span> */}
+                    <FileView
+                        isCurrentUser={isCurrentUser()}
+                        files={_.fill(Array(3), {
+                            type: "doc",
+                            name: "file_name",
+                        })}
+                    />
                 </article>
             </section>
         </div>
@@ -182,3 +189,118 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
 };
 
 export default SingleChat;
+
+const FileView = ({ files, isCurrentUser }) => {
+    const handlePreviewUrl = (file) => {
+        return URL.createObjectURL(file);
+    };
+
+    const handleFileComponent = (file) => {
+        switch (file?.type) {
+            case "image":
+                console.log(handlePreviewUrl(file));
+                return (
+                    <img
+                        onClick={() =>
+                            window.open(handlePreviewUrl(file), "_blank")
+                        }
+                        style={{
+                            objectFit: "cover",
+                            width: "100%",
+                            height: "100%",
+                        }}
+                        src={handlePreviewUrl(file)}
+                        alt=""
+                    />
+                );
+
+            // case ""
+
+            default:
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexFlow: "column nowrap",
+                            justifyContent: "center",
+                            gap: "5px",
+                        }}
+                        onClick={() =>
+                            window.open(handlePreviewUrl(file), "_blank")
+                        }
+                    >
+                        <FaFile
+                            className={`${style.chatInput_filePreview__file__fileIcon}`}
+                        />
+                        <p
+                            className={
+                                style.chatInput_filePreview__file__fileName
+                            }
+                        >
+                            {file.name}
+                        </p>
+                    </div>
+                );
+        }
+    };
+
+    return files?.length ? (
+        <span
+            style={{
+                alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+            }}
+            className={`${style.singleChat_comment_card_files}`}
+        >
+            {files.map((file, i) => {
+                return (
+                    <div
+                        key={i}
+                        className={`${style.chatInput_filePreview__file}`}
+                    >
+                        {handleFileComponent(file)}
+                        {/* <IoMdCloseCircle
+                            className={`${style.chatInput_filePreview__removeFile}`}
+                            onClick={() => {
+                                const newFiles = [...files];
+                                newFiles.splice(i, 1);
+                                setFiles(newFiles);
+                            }}
+                            style={{
+                                cursor: "pointer",
+                                position: "absolute",
+                                top: "5px",
+                                right: "5px",
+                            }}
+                        /> */}
+                    </div>
+                );
+            })}
+            {/* <label
+                htmlFor="add-file"
+                className={`${style.chatInput_filePreview__addFile}`}
+            >
+                <AiOutlinePlusSquare
+                    style={{
+                        height: "19.42px",
+                        width: "19.42px",
+                        color: "gray",
+                    }}
+                />
+                <input
+                    style={{ display: "none" }}
+                    type="file"
+                    multiple
+                    id="add-file"
+                    onChange={(e) =>
+                        setFiles((prev) => [
+                            ...prev,
+                            ...Object.values(e.target.files),
+                        ])
+                    }
+                />
+            </label> */}
+        </span>
+    ) : (
+        <></>
+    );
+};
