@@ -1031,7 +1031,7 @@ class TaskController extends AccountBaseController
 
     public function TaskRevision(Request $request)
     {
-      //  DB::beginTransaction();
+
         $task_status = Task::find($request->task_id);
         $task_status->status = "incomplete";
         $task_status->task_status = "revision";

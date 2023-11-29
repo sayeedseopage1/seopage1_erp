@@ -227,25 +227,25 @@
 
 
     $(document).ready(function() {
-    function toggleCreateButton() {
-        var selectedServiceType = $('#service_type').val();
-        var createButton = $('.add_milestone');
+        function toggleCreateButton() {
+            var selectedServiceType = $('#service_type').val();
+            var createButton = $('.add_milestone');
 
-        if (selectedServiceType === 'web-development' ||
-            selectedServiceType === 'seo' ||
-            selectedServiceType === 'paid-campaign-setup' ||
-            selectedServiceType === 'social-media-marketing' ||
-            selectedServiceType === 'email-marketing') {
-            createButton.prop('disabled', false);
-        } else {
-            createButton.prop('disabled', true);
+            if (selectedServiceType === 'web-development' ||
+                selectedServiceType === 'seo' ||
+                selectedServiceType === 'paid-campaign-setup' ||
+                selectedServiceType === 'social-media-marketing' ||
+                selectedServiceType === 'email-marketing') {
+                createButton.prop('disabled', false);
+            } else {
+                createButton.prop('disabled', true);
+            }
         }
-    }
 
-    toggleCreateButton();
-
-    $('#service_type').change(function() {
         toggleCreateButton();
+
+        $('#service_type').change(function() {
+            toggleCreateButton();
+        });
     });
-});
 </script>

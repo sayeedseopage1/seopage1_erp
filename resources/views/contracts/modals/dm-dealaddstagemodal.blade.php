@@ -200,13 +200,13 @@
                         </label>
                         <div class="d-flex py-3 align-items-center justify-content-center">
                             <div class="form-check">
-                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="deal_type" value="fixed" id="deal_type_fixed" @if($deal->project_type == null) checked @endif @if($deal->project_type == 'fixed') checked @endif>
+                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="projectType" value="fixed" id="deal_type_fixed" @if($deal->project_type == null) checked @endif @if($deal->project_type == 'fixed') checked @endif>
                                 <label class="form-check-label" for="deal_type_fixed">
                                     Fixed Project
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="deal_type" value="hourly" id="deal_type_hourly" @if($deal->project_type == 'hourly') checked @endif>
+                                <input class="form-control border rounded p-2 h-50 f-14 error" type="radio" name="projectType" value="hourly" id="deal_type_hourly" @if($deal->project_type == 'hourly') checked @endif>
                                 <label class="form-check-label" for="deal_type_hourly">
                                     Hourly Project
                                 </label>
@@ -218,7 +218,7 @@
                         <label for="amount" class="form-label"><strong>Project Budget <span style="color:red;">*<span></strong>
                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Budget" data-html="true" data-trigger="hover"></i>
                         </label>
-                        <input name="amount" value="{{$deal->actual_amount}}" id="project_amount" min="1" type="number" class="form-control height-35 f-14" placeholder="Enter Amount">
+                        <input name="amount" value="{{$deal->actual_amount}}" id="project_budget" min="1" type="number" class="form-control height-35 f-14" placeholder="Enter Amount">
                         <label id="amountError" class="text-danger" for=""></label>
                     </div>
                     <div class="mt-3">
@@ -229,7 +229,7 @@
                         <label for="original_currency_id" class="form-label"><strong>Currency <span style="color:red;">*<span></strong>
                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Currency" data-html="true" data-trigger="hover"></i>
                         </label>
-                        <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" id="original_currency_id">
+                        <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" id="original_currency_id" disabled>
                             <option selected value="{{$currency_active->id}}">({{$currency_active->currency_code}})</option>
                             @foreach ($currencies as $currency)
                                 <option value="{{$currency->id}}">({{$currency->currency_code}})</option>
@@ -265,20 +265,20 @@
     </script>
 @endif
 <script>
-    const projectTypeRadio = document.getElementsByName('deal_type');
-    const amountInput = document.getElementById('project_amount');
+    // const projectTypeRadio = document.getElementsByName('deal_type');
+    // const amountInput = document.getElementById('project_amount');
 
-    for (let i = 0; i < projectTypeRadio.length; i++) {
-        projectTypeRadio[i].addEventListener('change', function() {
-            if (this.value === 'hourly') {
-                amountInput.readOnly = true;
-                amountInput.value = '0';
-            } else {
-                amountInput.readOnly = false;
-                amountInput.value = '';
-            }
-        });
-    }
+    // for (let i = 0; i < projectTypeRadio.length; i++) {
+    //     projectTypeRadio[i].addEventListener('change', function() {
+    //         if (this.value === 'hourly') {
+    //             amountInput.readOnly = true;
+    //             amountInput.value = '0';
+    //         } else {
+    //             amountInput.readOnly = false;
+    //             amountInput.value = '';
+    //         }
+    //     });
+    // }
 </script>
 <script type="text/javascript">
     $(document).ready(function()
@@ -337,7 +337,7 @@
 <script>
     $('#dmWonDealBtn').click(function(e){
         e.preventDefault();
-        var project_type = $('input[name="deal_type"]:checked').val();
+        var project_type = $('input[name="projectType"]:checked').val();
         $('#dmWonDealBtn').attr("disabled", true);
         $('#dmWonDealBtn').html("Processing...");
         var data= {
@@ -356,7 +356,7 @@
             'profile_link': document.getElementById("profile_link_2").value,
             @endif
             'message_link[]': document.getElementById("message_link").value,
-            'amount': document.getElementById("project_amount").value,
+            'amount': document.getElementById("project_budget").value,
             'original_currency_id': document.getElementById("original_currency_id").value,
             'award_time': document.getElementById("dm-date-format").value,
             'project_type': project_type,

@@ -160,13 +160,13 @@
                                         <label for="">Does your competitor's content match exactly to what you do?</label>
                                         <div class="mt-2 d-flex">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="competitor_content" value="1" id="yesBtn1">
+                                                <input class="form-check-input" type="radio" name="competitor_content[]" value="1" id="yesBtn1">
                                                 <label class="form-check-label" for="yesBtn1">
                                                     Yes
                                                 </label>
                                             </div>
                                             <div class="form-check" style="margin-left: 10px;">
-                                                <input class="form-check-input" type="radio" name="competitor_content" value="0" id="noBtn1">
+                                                <input class="form-check-input" type="radio" name="competitor_content[]" value="0" id="noBtn1">
                                                 <label class="form-check-label" for="noBtn1">
                                                     No
                                                 </label>
@@ -415,13 +415,13 @@
         for (var i = 0; i < description3.length; i++) {
             description3_values.push(description3[i].value);
         }
-        // var competitor_content = [];
-        // var competitor_content_inputs = document.getElementsByName("competitor_content");
-        // for (var i = 0; i < competitor_content_inputs.length; i++) {
-        //     if (competitor_content_inputs[i].checked) {
-        //         competitor_content.push(competitor_content_inputs[i].value);
-        //     }
-        // }
+        var competitor_content = [];
+        var competitor_content_inputs = document.getElementsByName("competitor_content");
+        for (var i = 0; i < competitor_content_inputs.length; i++) {
+            if (competitor_content_inputs[i].checked) {
+                competitor_content.push(competitor_content_inputs[i].value);
+            }
+        }
         var page_name = document.getElementsByName("page_name[]");
         var page_name_values = [];
         for (var i = 0; i < page_name.length; i++) {
@@ -439,7 +439,7 @@
         }
 
         var share_file_info = $('input[name="share_file_info"]:checked').val();
-        var competitor_content = $('input[name="competitor_content"]:checked').val();
+        // var competitor_content = $('input[name="competitor_content"]:checked').val();
 
         var data= {
             '_token': "{{ csrf_token() }}",
@@ -675,6 +675,21 @@
             field.append('<span id="linkError_'+total+'" class="text-danger" for="link"></span>');
             $(className + ":last").after($(field));
         }
+        // function addNewField() {
+        //     var total = $('input[name="link[]"]').length;
+        //     count = totalFields() + 1;
+        //     field = $("#dynamic-product-list-1").clone();
+        //     field.attr("id", "dynamic-product-" + count);
+
+        //     field.find('input[type="radio"]').each(function () {
+        //         var oldId = $(this).attr("id");
+        //         var newId = oldId + "_" + count;
+        //         $(this).attr("id", newId);
+        //         $(this).siblings('label[for="' + oldId + '"]').attr("for", newId);
+        //     });
+
+        //     $(className + ":last").after($(field));
+        // }
 
         function removeLastField() {
             if (totalFields() > 1) {
