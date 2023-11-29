@@ -1324,6 +1324,76 @@ class HelperPendingActionController extends AccountBaseController
        
 
    }
+  
+   public function SubmitFirstTask($project)
+   {
+    $client= User::where('id',$project->client_id)->first();
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizer= User::where('id',$project->pm_id)->first();
+       
+        $action = new PendingAction();
+        $action->code = 'SFT';
+        $action->serial = 'SFT'.'x0';
+        $action->item_name= 'Submit your first task';
+        $action->heading= 'Submit your first task!';
+        $action->message = 'Submit your first task for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+     //   $action->deliverable_id = $id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Submit',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('projects.show', $project->id.'?tab=tasks'),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      //  dd($action);
+   //    dd(json_decode($action->button));
+
+       
+
+   }
+   public function CompleteFirstMilestone($project)
+   {
+    $client= User::where('id',$project->client_id)->first();
+    $project_manager= User::where('id',$project->pm_id)->first();
+    $authorizer= User::where('id',$project->pm_id)->first();
+       
+        $action = new PendingAction();
+        $action->code = 'CFM';
+        $action->serial = 'CFM'.'x0';
+        $action->item_name= ' Complete your first milestone';
+        $action->heading= 'Complete your first milestone!';
+        $action->message = 'Complete your first milestone for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+        $action->timeframe= 24;
+        $action->project_id = $project->id;
+        $action->client_id = $client->id;
+     //   $action->deliverable_id = $id;
+        $action->authorization_for= $authorizer->id;
+        $button = [
+            [
+                'button_name' => 'Complete',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('projects.show', $project->id.'?tab=milestones'),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      //  dd($action);
+   //    dd(json_decode($action->button));
+
+       
+
+   }
+ 
  
 
 }

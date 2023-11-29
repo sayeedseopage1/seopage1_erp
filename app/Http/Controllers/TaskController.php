@@ -2822,6 +2822,42 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
         $task_status->save();
+        $actions = PendingAction::where('code','SFT')->where('past_status',0)->where('project_id',$task_status->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $project= Project::where('id',$task_status->project_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message . ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+
+
+        }
+    }
 
         $subtasks = Subtask::where('task_id', $task_status->id)->get();
         foreach ($subtasks as $subtask) {
@@ -5967,20 +6003,6 @@ class TaskController extends AccountBaseController
         }
         $dailySubmission = $dailySubmission->get();
 
-
-
-
-
-
-        // foreach($dailySubmission as $item)
-        // {
-        //     $project_time_logs = ProjectTimeLog::where('task_id',$item->task_id)
-        //     ->whereDate('created_at',$item->created_at)
-        //     ->sum('total_minutes');
-        // $item->total_time_spent = $project_time_logs;
-
-        // }
-        //    / dd($dailySubmission);
 
         return response()->json([
             'dailySubmission' => $dailySubmission,
