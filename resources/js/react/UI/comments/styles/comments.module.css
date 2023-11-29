@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.commentsBody{
+  height: 84vh;
+  padding: 29px 16px 19px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif !important;
+  /* border: solid; */
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: relative;
+  /* background-clip: border-box; */
+}
+
+/* ---------------------------------------------------------- */
+.commentsBody_header{
+  /* height: 57px; */
+  padding: 0 20px;
+  /* border: solid; */
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+  gap: 0 16px;
+}
+
+.commentsBody_header_btn{
+  height: 28px;
+  width: 28px;
+  cursor: pointer;
+  /* border: solid; */
+}
+.commentsBody_header_btn:active{
+  transform: scale(0.95);
+}
+
+.fullscreen_icons{
+  border:solid 1px #727272;
+}
+
+
+/* ---------------------------------------------------------- */
+.commentsBody_commentArea{
+  flex: 1 1 auto;
+  padding-right: 17px;
+  display: flex;
+  flex-flow: column nowrap;
+  /* gap: 10px; */
+  /* border: solid; */
+  overflow-y: auto;
+  /* padding-bottom: 20px;
+  padding-top: 20px; */
+}
+.singleChat{
+  /* width: 100%; */
+  max-width: 75%;
+}
+.singleChat_comment_card{
+  display: flex;
+  gap: 6px;
+}
+.singleChat_comment_card_avator{
+  flex: 0 0 30px;
+  border-radius: 30px;
+  height: 30px;
+  width: 30px;
+  background-color: aquamarine;
+}
+.singleChat_comment_card_text{
+  border: none;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5px;
+}
+.singleChat_comment_card_text_time{
+  font-size: 10px;
+  color: #033C7E;
+}
+.singleChat_comment_card_text_container{
+  position: relative;
+  /* border: solid; */
+}
+.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more{
+  display: block;
+}
+.singleChat_comment_card_text_more{
+  height: 15px;
+  width: 15px;
+  display: none;
+  /* display: block; */
+  position: absolute;
+  top: calc(50% - 7.5px);
+  cursor: pointer;
+}
+.singleChat_comment_card_text_message{
+  padding: 7px 11px;
+  border: 0.15000000596046448px solid #aaaaaa;
+  background-color: #EEF9FF;
+  border-radius: 5px;
+  font-size: 12px;
+  /* width: 100%; */
+}
+.singleChat_comment_card_text_files{
+  border: none;
+}
+/* ---------------------------------------------------------- */
+.commentsBody_inputField{
+  /* border: solid; */
+  display: flex;
+  gap: 18px;
+}
+.chatInput{
+  flex: 1 1 calc(100% - 58px);
+  overflow: auto;
+}
+.chatInput_filePreview{
+  height: 68px;
+  background-color: #DAEDF8;
+  border-radius: 10px 10px 0 0;
+  /* max-width: 80%; */
+  display: flex;
+  padding: 10px 8px 8px;
+  gap: 14px;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
+.chatInput_filePreview__file{
+  height: 51px;
+  width: 69px;
+  position: relative;
+  /* border: solid 0.5px gray; */
+  background: white;
+  border-radius: 4px;
+  padding: 10px 8px;
+  /* display: flex;
+  flex-flow: column nowrap;
+  gap: 5px; */
+}
+.chatInput_filePreview__file__fileIcon{
+  cursor: pointer;
+}
+.chatInput_filePreview__file__fileName{
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  font-size: 8px;
+  font-weight: bold;
+}
+.chatInput_filePreview__file:hover{
+  cursor: pointer !important;
+}
+.chatInput_filePreview__file:hover .chatInput_filePreview__removeFile{
+  color: rgb(0, 0, 0) !important;
+  background: white !important;
+  border-radius: 50%;
+  transform: scale(1.1);
+}
+.chatInput_filePreview__removeFile{
+  color: rgb(177, 177, 177) !important;
+}
+.chatInput_filePreview__addFile{
+  height: 51px;
+  width: 69px;
+  /* border: solid 0.5px gray; */
+  background: white;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.chatInput_text_input{
+  position: relative;
+  background-color: #DAEDF8;
+  /* border-radius: 0 0 10px 10px;
+  overflow: hidden; */
+}
+.chatInput_text_style_icon{
+  position: absolute;
+  right: 22.23px;
+  bottom: calc(50% - 6.4px);
+  height: 12.8px;
+  width: 12.8px;
+}
+.chatInput_file_add_btn{
+  height: 40px;
+  width: 40px;
+  border-radius: 40px;
+  background-color: #DAEDF8;
+  padding: 8px;
+  cursor: pointer;
+}
+/* ---------------------------------------------------------- */
+/* ---------------------------------------------------------- */
+/* ---------------------------------------------------------- */

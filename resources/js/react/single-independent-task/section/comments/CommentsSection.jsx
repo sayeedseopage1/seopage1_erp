@@ -5,6 +5,7 @@ import Button from '../../components/Button';
 import CommentWritingModal from './CommentWritingModal';
 import { useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
 import _ from 'lodash';
+import CommentsContainer from '../../../UI/comments/CommentsContainer';
  
   
 const CommentSection = ({task, isLoading}) => {
@@ -50,12 +51,21 @@ const CommentSection = ({task, isLoading}) => {
             ref={setModalToggleRef} 
             style={{zIndex:modalIsOpen ? '99': '' }}
         >
-            <CommentModal 
+            {/* <CommentModal 
               isOpen={modalIsOpen}
               toggleRef={modalToggleRef} 
               comments={comments}
               task={task}
               close={() => setModalIsOpen(false)}
+              onCommentPost={onCommentPost}
+            /> */}
+
+            <CommentsContainer 
+              isOpen={modalIsOpen}
+              toggleRef={modalToggleRef}
+              comments={comments}
+              task={task}
+              close={()=>setModalIsOpen(false)}
               onCommentPost={onCommentPost}
             />
 
