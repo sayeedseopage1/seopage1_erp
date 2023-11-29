@@ -20,6 +20,9 @@ use App\Models\AuthorizationAction;
 use App\Notifications\PrimaryPageNotification;
 use Illuminate\Support\Facades\Storage;
 use Notification;
+use App\Models\Project;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 
 class SubTaskController extends AccountBaseController
 {
@@ -53,7 +56,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-        // DB::beginTransaction();
+       //  DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
 
@@ -147,10 +150,11 @@ class SubTaskController extends AccountBaseController
         $hours = $request->estimate_hours * 60;
         $minutes = $request->estimate_minutes;
         $total_minutes = $hours + $minutes;
+    //    / dd($total_parent_tasks_minutes,$total_subtasks_minutes,$total_minutes);
         if($task->independent_task_status != 1)
         {
             
-        if (($total_parent_tasks_minutes - $total_subtasks_minutes) - $total_minutes < 2) {
+        if (($total_parent_tasks_minutes - $total_subtasks_minutes) - $total_minutes < 1) {
 
             return response()->json([
                 "message" => "The given data was invalid.",
@@ -206,6 +210,48 @@ class SubTaskController extends AccountBaseController
             $update_parent_task= Task::where('id',$subTask->task_id)->first();
             $update_parent_task->board_column_id = 3;
             $update_parent_task->save();
+           // dd($update_parent_task);
+
+            //need pending action 
+            $actions = PendingAction::where('code','NTA')->where('past_status',0)->where('task_id',$update_parent_task->id)->get();
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+                    $project= Project::where('id',$update_parent_task->id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    // $project_manager= User::where('id',$project->pm_id)->first();
+                    // $client= User::where('id',$project->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = $action->message. ' authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->milestone_id = $action->milestone_id;
+                    $past_action->save();
+                   // dd($past_action);
+
+            }
+        }
+            //need pending action
+
+
 
         }
         
@@ -289,35 +335,6 @@ class SubTaskController extends AccountBaseController
         //     Notification::send($user, new PrimaryPageNotification($task_type));
         // }
 
-        if($task->independent_task_status != 1)
-        {
-
-
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $task_s->getMorphClass();
-        $authorization_action->model_id = $task_s->id;
-        $authorization_action->type = 'task_assign_by_lead_developer';
-        $authorization_action->deal_id = $task_s->project->deal_id;
-        $authorization_action->project_id = $task_s->project->id;
-        $authorization_action->task_id = $task_s->id;
-        $authorization_action->link = route('tasks.show', $task_s->id);
-        $authorization_action->title = Auth::user()->name . ' assign new task to developer';
-        $authorization_action->authorization_for = $request->user_id ;
-        $authorization_action->save();
-
-
-        $parent_task_authorization= AuthorizationAction::where('task_id',$request->task_id)->first();
-        //dd($parent_task_authorization);
-        if($parent_task_authorization != null && $parent_task_authorization->status == 0)
-        {
-            $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $task_authorization= AuthorizationAction::find($parent_task_authorization->id);
-            $task_authorization->authorization_by=  $lead_developer->id;
-            $task_authorization->status = '1';
-            $task_authorization->save();
-
-        }
-    }
 
         // $task_user= new TaskUser();
         // $task_user->task_id= $request->task_id;
@@ -358,6 +375,11 @@ class SubTaskController extends AccountBaseController
             }
         }
         // /dd($parent_task, $subTask,$file);
+        $helper = new HelperPendingActionController();
+
+
+        $helper->NewTaskAssign($task_s);
+
         $task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);
         return Reply::successWithData(__('messages.subTaskAdded'), [
