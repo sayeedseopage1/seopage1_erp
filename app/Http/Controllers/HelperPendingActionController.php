@@ -121,7 +121,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->serial = 'DOA'.'x'.$key;
             $action->item_name= 'Deliverables “Other” authorization';
             $action->heading= 'Deliverables “Other” authorization';
-            $action->message = '"Other" type of <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> require authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+            $action->message = '"Other" type of <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> requires authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
             $action->timeframe= 12;
             $action->project_id = $project->id;
             $action->client_id = $client->id;
@@ -189,7 +189,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->serial = 'DGA'.'x'.$key;
             $action->item_name= 'Deliverables general authorization';
             $action->heading= 'Deliverables authorization';
-            $action->message = '<a href="'.route('projects.show', $project->id.'?tab=deliverables').'">Deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> require authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+            $action->message = '<a href="'.route('projects.show', $project->id.'?tab=deliverables').'">Deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> requires authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
             $action->timeframe= 48;
             $action->project_id = $project->id;
             $action->client_id = $client->id;
