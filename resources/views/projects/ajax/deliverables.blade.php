@@ -711,7 +711,7 @@
                         </td>
                         @if($deliverable->to != null)
                             <td class="text-center icon-container">
-                                Between {{$deliverable->from}} & {{$deliverable->to}}
+                                Between {{\Carbon\Carbon::parse($deliverable->from)->format("jS M, Y")}} & {{\Carbon\Carbon::parse($deliverable->to)->format("jS M, Y")}}
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
                                     $data = \App\Models\DelivarableColumnEdit::where([
@@ -798,7 +798,7 @@
                                 @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
                                     <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
                                 @endif
-                                On {{$deliverable->from}}
+                                On {{\Carbon\Carbon::parse($deliverable->from)->format("jS M, Y")}}
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
                                     $data = \App\Models\DelivarableColumnEdit::where([
