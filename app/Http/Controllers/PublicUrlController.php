@@ -89,7 +89,7 @@ class PublicUrlController extends Controller
     }
     public function projectSign(SignRequest $request, $id)
     {
-        //dd($request,$id);
+        // dd($request->all());
         $this->project = Project::with('signature')->findOrFail($id);
         //dd($this->project);
 
