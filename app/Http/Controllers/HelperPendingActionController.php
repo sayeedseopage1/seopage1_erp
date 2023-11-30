@@ -223,7 +223,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->serial = 'QCA'.'x'.$key;
             $action->item_name= 'QC form submission authorization';
             $action->heading= 'QC form authorization Needed';
-            $action->message = '<a href="'.route('projects.show', $project->id).'">Qc form</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> requires authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+            $action->message = '<a href="'.route('projects.show', $project->id).'">QC form</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> requires authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
             $action->timeframe= 24;
             $action->project_id = $project->id;
             $action->client_id = $client->id;
@@ -482,7 +482,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->item_name= 'Dispute Expiry Warning!';
                 $action->heading= 'Dispute Expiry Warning!';
                 $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show,$raised_against->id').'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
-                $action->timeframe= 48;
+                $action->timeframe= 120;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
                 $action->task_id = $task->id;
@@ -959,7 +959,7 @@ class HelperPendingActionController extends AccountBaseController
        
         $action->item_name= 'QC form';
         $action->heading= 'Submit QC form!';
-        $action->message = 'Submit qc form for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+        $action->message = 'Submit QC form for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
      
         $action->timeframe= 24;
         $action->project_id = $project->id;
@@ -1073,8 +1073,8 @@ class HelperPendingActionController extends AccountBaseController
         $action->code = 'TDQ';
         $action->serial = 'TDQ'.'x0';
        
-        $action->item_name= 'Question aksed about your dispute!';
-        $action->heading= 'Question aksed about your dispute!';
+        $action->item_name= 'Question asked about your dispute!';
+        $action->heading= 'Question asked about your dispute!';
         $action->message = 'You have been asked 1 question about your dispute!';
 
         $action->timeframe= 24;

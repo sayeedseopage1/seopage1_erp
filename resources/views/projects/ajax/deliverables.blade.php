@@ -1174,10 +1174,12 @@
 
         const dp2 = datepicker('#to_add', {
             position: 'bl',
-            minDate: today, // set minimum date to current date
+            minDate: today > maxDate ? maxDate : today, // set minimum date to current date
             onSelect: (instance, date) => {
                dp1.setMax(date);
             },
+            maxDate,
+            disabler: date => date.getDay() === 0 || today > maxDate || date > maxDate,
             ...datepickerConfig
         });
     });

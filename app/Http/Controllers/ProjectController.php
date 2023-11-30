@@ -5606,7 +5606,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Qc form for project <a href="'.route('projects.show',$project_id->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
+                $past_action->message = 'QC form for project <a href="'.route('projects.show',$project_id->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
               //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;

@@ -306,17 +306,25 @@
                 ...datepickerConfig
             });
         }
+
+        
+        const today = new Date(); // get current date
+ 
+        const maxDate = new Date('{{ \Carbon\Carbon::parse($project->deadline)->format("Y-m-d") }}');
+        
         const dp4 = datepicker('#from{{$deliverable->id}}', {
             position: 'bl',
-
+            minDate: today > maxDate ? maxDate : today, // set minimum date to current date
             onSelect: (instance, date) => {
                 dp5.setMin(date);
             },
+            maxDate,
+            disabler: date => date.getDay() === 0 || today > maxDate || date > maxDate,
             ...datepickerConfig
         });
         const dp5 = datepicker('#to{{$deliverable->id}}', {
-            position: 'bl',
-
+            position: 'bl', 
+            minDate: today, // set minimum date to current date
             onSelect: (instance, date) => {
                 dp4.setMax(date);
             },
