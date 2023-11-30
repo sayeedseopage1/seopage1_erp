@@ -1158,8 +1158,7 @@
         const today = new Date(); // get current date
  
         const maxDate = new Date('{{ \Carbon\Carbon::parse($project->deadline)->format("Y-m-d") }}');
-        console.log(maxDate)
-        console.log({!!json_encode($project)!!})
+        
          
         const dp1 = datepicker('#from_add', {
             position: 'bl',
