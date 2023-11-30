@@ -1182,6 +1182,7 @@
             var id = $(this).attr('data-id');
             Swal.fire({
                 title: "Are you sure?",
+                text: "Are you sure you want to delete this item?",
                 icon: 'warning',
                 showCancelButton: true,
                 focusConfirm: false,
