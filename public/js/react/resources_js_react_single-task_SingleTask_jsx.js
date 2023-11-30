@@ -15043,7 +15043,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "d-block font-weight-bold",
-          children: ["Is the client paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
+          children: ["Why client is not paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             children: "*"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
