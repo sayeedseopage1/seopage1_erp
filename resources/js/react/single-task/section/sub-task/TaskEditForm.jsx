@@ -23,6 +23,7 @@ import {
 import { useGetMilestoneDetailsQuery } from "../../../services/api/projectApiSlice";
 import { useUpdateTaskMutation } from "../../../services/api/tasksApiSlice";
 import { convertTime } from "../../../utils/converTime";
+import { calenderOpen } from "./helper/calender_open";
 
 const dayjs = new CompareDate();
 
@@ -401,15 +402,26 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
                                     placeholderText={`Ex: ${dayjs
                                         .dayjs()
                                         .format("DD-MM-YYYY")}`}
-                                    minDate={dayjs
-                                        .dayjs(task?.start_date)
-                                        .toDate()}
+                                    minDate={ dayjs.dayjs(task?.startDate).isBefore(dayjs.dayjs()) ?
+                                        dayjs.dayjs().toDate() :
+                                        dayjs.dayjs(task?.startDate).toDate()}
                                     maxDate={
                                         dueDate ||
                                         dayjs.dayjs(task?.due_date).toDate()
                                     }
                                     date={startDate}
                                     setDate={setStateDate}
+                                    onCalendarOpen={() => {
+                                        const min = dayjs.dayjs(task?.startDate).isBefore(dayjs.dayjs()) ?
+                                        dayjs.dayjs().toDate() :
+                                        dayjs.dayjs(task?.startDate).toDate();
+
+                                        const max = dueDate ||
+                                        dayjs.dayjs(task?.dueDate).toDate();
+
+                                        calenderOpen(min, max);
+
+                                    }}
                                 />
                             </div>
                             {required_error?.start_date?.[0] && (
@@ -431,14 +443,20 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
                                         .dayjs()
                                         .format("DD-MM-YYYY")}`}
                                     minDate={
-                                        startDate ||
-                                        dayjs.dayjs(task?.start_date).toDate()
+                                        dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ?
+                                        startDate : dayjs.dayjs().toDate()
                                     }
                                     maxDate={dayjs
                                         .dayjs(task?.due_date)
                                         .toDate()}
                                     date={dueDate}
                                     setDate={setDueDate}
+                                    onCalendarOpen={() => {
+                                        const min = dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ?
+                                        startDate : dayjs.dayjs().toDate();
+                                        const max = dayjs.dayjs(task?.dueDate).toDate();
+                                        calenderOpen(min, max);
+                                    }}
                                 />
                             </div>
                             {required_error?.due_date?.[0] && (
