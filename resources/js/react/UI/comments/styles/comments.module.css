@@ -32,7 +32,7 @@
   padding: 29px 16px 19px;
   display: flex;
   flex-flow: column nowrap;
-  gap: 10px;
+  /* gap: 10px; */
   font-family: 'Poppins', sans-serif !important;
   /* border: solid; */
   background-repeat: no-repeat;
@@ -48,8 +48,8 @@
 /* ---------------------------------------------------------- */
 .commentsBody_header{
   /* height: 57px; */
-  padding: 0 20px;
-  /* border: solid; */
+  padding: 0 20px 10px;
+  border-bottom: solid 1px #aaaaaa4a;
   display: flex;
   justify-content: right;
   align-items: flex-end;
@@ -81,11 +81,13 @@
   /* border: solid; */
   overflow-y: auto;
   padding-bottom: 10px;
+  margin-bottom: 10px;
   /* padding-top: 20px; */
 }
 .singleChat{
   /* width: 100%; */
   max-width: 75%;
+  /* border: solid; */
 }
 .singleChat_comment_card{
   display: flex;
@@ -99,7 +101,7 @@
   background-color: aquamarine;
 }
 .singleChat_comment_card_text{
-  border: none;
+  /* border: solid; */
   display: flex;
   flex-flow: column nowrap;
   gap: 5px;
@@ -111,6 +113,9 @@
 .singleChat_comment_card_text_container{
   position: relative;
   /* border: solid; */
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 6px;
 }
 .singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more_btn{
   display: block;
@@ -176,7 +181,10 @@
   /* width: 100%; */
 }
 .singleChat_comment_card_files{
+  /* flex: 0 0 75%; */
+  /* border: solid; */
   display: flex;
+  flex-flow: row wrap;
   gap: 5px;
 }
 /* ---------------------------------------------------------- */
@@ -189,6 +197,47 @@
 .chatInput{
   flex: 1 1 calc(100% - 58px);
   overflow: auto;
+}
+.chatInput_mentioned_comment{
+  max-height: 200px;
+  background-color: #DAEDF8;
+  border-radius: 10px 10px 0 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 13.33px 33.66px;
+  position: relative;
+  color: #616365;
+}
+.chatInput_mentioned_comment_icon{
+  width: 11.1px;
+  height: 9.67px;
+}
+.chatInput_mentioned_comment_close_icon{
+  position: absolute;
+  width: 11.1px;
+  height: 11.1px;
+  top: 17px;
+  right: 33.66px;
+  cursor: pointer;
+}
+.chatInput_mentioned_comment_text_area{
+  padding-left: 11px;
+  /* margin-top: 6px; */
+  font-size: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  /* gap: 5px; */
+}
+.chatInput_mentioned_comment_text_area_mssg{
+  font-style: italic !important;
+}
+.chatInput_mentioned_comment_text_area_attachments{
+  display: flex;
+  flex-flow: row wrap;
+  gap: 5px;
+}
+.chatInput_mentioned_comment_text_area_sender_time{
+  margin-top: 9px;
 }
 .chatInput_text_emojis{
   position: absolute;

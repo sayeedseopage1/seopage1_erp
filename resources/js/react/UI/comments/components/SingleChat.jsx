@@ -7,8 +7,11 @@ import { MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaFile } from "react-icons/fa6";
 import _ from "lodash";
+import { useCommentContext } from "../CommentsBody";
+import dayjs from "dayjs";
 
-const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
+const SingleChat = ({ comment, onContextMenu, onKeyDown }) => {
+    const { setContextHolder, setMentionedComment } = useCommentContext();
     const [showCommentMenu, setShowCommentMenu] = useState(false);
     const menuRef = useRef(null);
     const menuBtnRef = useRef(null);
@@ -17,6 +20,7 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
         setShowCommentMenu(false);
     };
 
+    console.log({ comment });
     useEffect(() => {
         const handleClickOutside = (event) => {
             // console.log(event.target);
@@ -48,7 +52,7 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
     }, []);
 
     const isCurrentUser = () => {
-        return index % 2 === 0;
+        return comment.id % 2 === 0;
     };
 
     return (
@@ -80,24 +84,44 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                         }}
                         className={`${style.singleChat_comment_card_text_time}`}
                     >
-                        Nafis, Nov 16,2023, 2:54 PM
+                        {/* Nafis, Nov 16,2023, 2:54 PM */}
+                        {`${comment?.added_by_name}, ${dayjs(comment?.created_at).format('MMM DD, YYYY, hh:mm A')}`} 
                     </span>
                     <div
                         className={`${style.singleChat_comment_card_text_container}`}
                     >
-                        <div
-                            // onContextMenu={handleContextMenu}
-                            onContextMenu={onContextMenu}
-                            onKeyDown={onKeyDown}
-                            style={{
-                                position: "relative",
-                            }}
-                            className={`${style.singleChat_comment_card_text_message}`}
-                        >
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Assumenda, qui quaerat. Atque, odit temporibus
-                            esse excepturi expedita aut eos repellendus.
-                        </div>
+                        {/* comment text */}
+                        {comment?.comment ? (
+                            <div
+                                onContextMenu={(e) => {
+                                    onContextMenu(e);
+                                    setContextHolder(comment);
+                                }}
+                                onKeyDown={onKeyDown}
+                                style={{
+                                    position: "relative",
+                                }}
+                                className={`${style.singleChat_comment_card_text_message}`}
+                            >
+                                {comment.comment}
+                            </div>
+                        ) : (
+                            <></>
+                        )}
+                        {/* file will be shown here */}
+                        {comment?.files ? (
+                            <FileView
+                                onContextMenu={(e) => {
+                                    onContextMenu(e);
+                                    setContextHolder(comment);
+                                }}
+                                onKeyDown={onKeyDown}
+                                isCurrentUser={isCurrentUser()}
+                                files={comment.files}
+                            />
+                        ) : (
+                            <></>
+                        )}
                         <span
                             onClick={() => {
                                 // setScroll((prev) => !prev);
@@ -129,7 +153,10 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                                 }
                             >
                                 <section
-                                // onClick={selectAll}
+                                    onClick={() => {
+                                        setShowCommentMenu(false);
+                                        setMentionedComment(comment);
+                                    }}
                                 >
                                     <HiReply
                                         className={`${style.context_icons}`}
@@ -138,8 +165,11 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                                         Reply
                                     </span>
                                 </section>
+
                                 <section
-                                // onSelect={copyText}
+                                    onClick={() => {
+                                        setShowCommentMenu(false);
+                                    }}
                                 >
                                     <TbMessage2Check
                                         className={`${style.context_icons}`}
@@ -148,8 +178,11 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                                         Select Message
                                     </span>
                                 </section>
+
                                 <section
-                                // onSelect={viewSource}
+                                    onClick={() => {
+                                        setShowCommentMenu(false);
+                                    }}
                                 >
                                     <MdOutlineContentCopy
                                         className={`${style.context_icons}`}
@@ -158,8 +191,11 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                                         Copy
                                     </span>
                                 </section>
+
                                 <section
-                                // onSelect={viewSource}
+                                    onClick={() => {
+                                        setShowCommentMenu(false);
+                                    }}
                                 >
                                     <IoMdCloseCircleOutline
                                         className={`${style.context_icons}`}
@@ -175,13 +211,13 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
                     </div>
 
                     {/* file will be shown here */}
-                    <FileView
+                    {/* <FileView
                         isCurrentUser={isCurrentUser()}
                         files={_.fill(Array(3), {
                             type: "doc",
                             name: "file_name",
                         })}
-                    />
+                    /> */}
                 </article>
             </section>
         </div>
@@ -190,9 +226,11 @@ const SingleChat = ({ index, onContextMenu, onKeyDown, setScroll }) => {
 
 export default SingleChat;
 
-const FileView = ({ files, isCurrentUser }) => {
+const FileView = ({ files, isCurrentUser, onContextMenu, onKeyDown }) => {
+    // console.log({ isCurrentUser });
     const handlePreviewUrl = (file) => {
-        return URL.createObjectURL(file);
+        // return URL.createObjectURL(file);
+        return file;
     };
 
     const handleFileComponent = (file) => {
@@ -237,17 +275,20 @@ const FileView = ({ files, isCurrentUser }) => {
                                 style.chatInput_filePreview__file__fileName
                             }
                         >
-                            {file.name}
+                            {file?.name}
                         </p>
                     </div>
                 );
         }
     };
 
-    return files?.length ? (
+    return (
         <span
+            onContextMenu={onContextMenu}
+            onKeyDown={onKeyDown}
             style={{
-                alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+                // alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+                justifyContent: isCurrentUser ? "right" : "left",
             }}
             className={`${style.singleChat_comment_card_files}`}
         >
@@ -258,49 +299,9 @@ const FileView = ({ files, isCurrentUser }) => {
                         className={`${style.chatInput_filePreview__file}`}
                     >
                         {handleFileComponent(file)}
-                        {/* <IoMdCloseCircle
-                            className={`${style.chatInput_filePreview__removeFile}`}
-                            onClick={() => {
-                                const newFiles = [...files];
-                                newFiles.splice(i, 1);
-                                setFiles(newFiles);
-                            }}
-                            style={{
-                                cursor: "pointer",
-                                position: "absolute",
-                                top: "5px",
-                                right: "5px",
-                            }}
-                        /> */}
                     </div>
                 );
             })}
-            {/* <label
-                htmlFor="add-file"
-                className={`${style.chatInput_filePreview__addFile}`}
-            >
-                <AiOutlinePlusSquare
-                    style={{
-                        height: "19.42px",
-                        width: "19.42px",
-                        color: "gray",
-                    }}
-                />
-                <input
-                    style={{ display: "none" }}
-                    type="file"
-                    multiple
-                    id="add-file"
-                    onChange={(e) =>
-                        setFiles((prev) => [
-                            ...prev,
-                            ...Object.values(e.target.files),
-                        ])
-                    }
-                />
-            </label> */}
         </span>
-    ) : (
-        <></>
     );
 };

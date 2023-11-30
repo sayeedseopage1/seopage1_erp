@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactQuill from "react-quill";
-import 'quill-mention';
+import "quill-mention";
 import "react-quill/dist/quill.snow.css";
 import "../styles/quill.css";
 import style from "../styles/comments.module.css";
@@ -12,6 +12,10 @@ import { AiOutlinePlusSquare } from "react-icons/ai";
 import { FaFile } from "react-icons/fa";
 import { BsEmojiSmile } from "react-icons/bs";
 import EmojiPicker from "emoji-picker-react";
+import { HiReply } from "react-icons/hi";
+import { useCommentContext } from "../CommentsBody";
+import { MdClose } from "react-icons/md";
+import dayjs from "dayjs";
 
 const ChatInput = ({ setScroll }) => {
     const [editorHtml, setEditorHtml] = useState("");
@@ -19,6 +23,7 @@ const ChatInput = ({ setScroll }) => {
     const [files, setFiles] = useState([]);
     const [showEmoji, setShowEmoji] = useState(false);
     const [emoji, setEmoji] = useState("");
+    const { mentionedComment } = useCommentContext();
 
     useEffect(() => {
         console.log(files);
@@ -51,6 +56,7 @@ const ChatInput = ({ setScroll }) => {
                 </div>
             )}
             <section className={`${style.chatInput}`}>
+                {mentionedComment ? <MentionedComment /> : <></>}
                 <FilePreviewer files={files} setFiles={setFiles} />
                 <CommentEditor
                     editorHtml={editorHtml}
@@ -69,6 +75,111 @@ const ChatInput = ({ setScroll }) => {
 };
 
 export default ChatInput;
+
+function MentionedComment({ comment }) {
+    const { mentionedComment,setMentionedComment } = useCommentContext();
+
+    const handlePreviewUrl = (file) => {
+        // return URL.createObjectURL(file);
+        return file;
+    };
+
+    const handleFileComponent = (file) => {
+        switch (file?.type) {
+            case "image":
+                console.log(handlePreviewUrl(file));
+                return (
+                    <img
+                        onClick={() =>
+                            window.open(handlePreviewUrl(file), "_blank")
+                        }
+                        style={{
+                            objectFit: "cover",
+                            width: "100%",
+                            height: "100%",
+                        }}
+                        src={handlePreviewUrl(file)}
+                        alt=""
+                    />
+                );
+
+            // case ""
+
+            default:
+                return (
+                    <div
+                        style={{
+                            display: "flex",
+                            flexFlow: "column nowrap",
+                            justifyContent: "center",
+                            gap: "5px",
+                        }}
+                        onClick={() =>
+                            window.open(handlePreviewUrl(file), "_blank")
+                        }
+                    >
+                        <FaFile
+                            className={`${style.chatInput_filePreview__file__fileIcon}`}
+                        />
+                        <p
+                            className={
+                                style.chatInput_filePreview__file__fileName
+                            }
+                        >
+                            {file.name}
+                        </p>
+                    </div>
+                );
+        }
+    };
+
+
+
+    return (
+        <div className={`${style.chatInput_mentioned_comment}`}>
+            <HiReply className={`${style.chatInput_mentioned_comment_icon}`} />
+            <MdClose
+                onClick={() => {
+                    setMentionedComment(null);
+                }}
+                className={`${style.chatInput_mentioned_comment_close_icon}`}
+            />
+            <article
+                className={`${style.chatInput_mentioned_comment_text_area}`}
+            >
+                <span
+                    className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
+                >
+                    {mentionedComment.comment}
+                </span>
+                <span
+                    className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
+                >
+                    {mentionedComment?.files?.length ? (
+                        mentionedComment?.files?.map((file, i) => {
+                            return (
+                                <div
+                                    key={i}
+                                    className={`${style.chatInput_filePreview__file}`}
+                                >
+                                    {handleFileComponent(file)}
+                                </div>
+                            );
+                        })
+                    ) : (
+                        <></>
+                    )}
+                </span>
+                <span
+                    className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
+                >
+                    {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
+                    {`${mentionedComment?.added_by_name}, ${dayjs(mentionedComment?.created_at).format('MMM DD, YYYY, hh:mm A')}`}
+                </span>
+            </article>
+        </div>
+    );
+}
 
 function FilePreviewer({ files, setFiles }) {
     const handlePreviewUrl = (file) => {
@@ -194,6 +305,7 @@ function CommentEditor({
     // setText,
 }) {
     const quillRef = useRef(null);
+    const { mentionedComment } = useCommentContext();
     const atValues = [
         { id: 1, value: "Fredrik Sundqvist" },
         { id: 2, value: "Patrik Sjölin" },
@@ -262,7 +374,20 @@ function CommentEditor({
         <div
             className={`${style.chatInput_text_input}`}
             style={{
-                borderRadius: !(show || files.length) ? "40px" : "10px",
+                borderRadius: `${(() => {
+                    if (mentionedComment || files.length) {
+                        return "0 0 10px 10px";
+                        // !(show || files.length || mentionedComment)
+                        // ? "40px"
+                        // : "10px"
+                    } else {
+                        if (show) {
+                            return "10px";
+                        } else {
+                            return "40px";
+                        }
+                    }
+                })()}`,
                 // overflow: "hidden",
             }}
         >
@@ -271,7 +396,7 @@ function CommentEditor({
                 theme="snow"
                 value={editorHtml}
                 onChange={(value) => setEditorHtml(value)}
-                modules={{...modules}}
+                modules={{ ...modules }}
                 formats={formats}
                 placeholder="Write your comment..."
             />

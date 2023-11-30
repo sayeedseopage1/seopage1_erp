@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import style from "./styles/comments.module.css";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import { IoMdCloseCircle } from "react-icons/io";
@@ -20,19 +20,47 @@ import { HiReply } from "react-icons/hi";
 import { TbMessage2Check } from "react-icons/tb";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import { useParams } from "react-router-dom";
+import commentDemoData from "./_Data/commentDemoData";
+
+const CommentContext = createContext({
+    setScroll: ()=>{},
+    selectedComments: [],
+    setSecletedComments: () => {},
+    mentionedComment: {},
+    setMentionedComment: () => {},
+    contextHolder: {},
+    setContextHolder: () => {},
+});
+export function useCommentContext() {
+    return useContext(CommentContext);
+}
+
+const comments = commentDemoData(20);
 
 const CommentsBody = ({
     close,
-    comments,
+    // comments,
     fullScreenView,
     setFullScreenView,
 }) => {
+    const param = useParams();
+    console.log({param});
     const chatbottom_ref = useRef(null);
+    
+    // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
+    const [selectedComments, setSecletedComments] = useState([]);
+    const [mentionedComment, setMentionedComment] = useState(null);
+    const [contextHolder, setContextHolder] = useState(null);
+    // =================================================================
+
     const { contextMenu, onContextMenu, onKeyDown } = useContextMenu(
         <>
             <ContextMenuItem
-            // onSelect={selectAll}
+                onSelect={()=>{
+                  setMentionedComment(contextHolder);
+                }}
             >
                 <HiReply className={`context_icons`} />
                 <span className={`context_title`}>Reply</span>
@@ -63,107 +91,126 @@ const CommentsBody = ({
         chatbottom_ref.current?.scrollIntoView({
             // behavior: "smooth",
             block: "end",
-          });
+        });
     }, [scroll]);
 
+    // useEffect(() => {
+    //     console.log({ contextHolder });
+    // }, [contextHolder]);
+
+    useEffect(() => {
+        console.log({ mentionedComment });
+    }, [mentionedComment]);
+
     return (
-        <div
-            className={style.commentsBody}
-            style={{
-                backgroundImage: `url(${commentBg})`,
-                // backgroundImage:`url(https://seopage1storage.s3.ap-southeast-1.amazonaws.com/655f048a34e53.jpg)`,
-                width: fullScreenView ? "100vw" : "auto",
-                height: fullScreenView ? "99vh" : "84vh",
-                maxHeight: fullScreenView ? "99vh" : "auto",
+        <CommentContext.Provider
+            value={{
+                setScroll,
+                selectedComments,
+                setSecletedComments,
+                mentionedComment,
+                setMentionedComment,
+                contextHolder,
+                setContextHolder,
             }}
         >
-            <header className={style.commentsBody_header}>
-                <img
-                    className={style.commentsBody_header_btn}
-                    src={commentRefresh}
-                    alt=""
-                />
-                <img
-                    className={style.commentsBody_header_btn}
-                    src={commentSearch}
-                    alt=""
-                />
-                {!fullScreenView ? (
-                    <AiOutlineFullscreen
-                        onClick={() => setFullScreenView(true)}
-                        className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
-                    />
-                ) : (
-                    <AiOutlineFullscreenExit
-                        onClick={() => setFullScreenView(false)}
-                        className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
-                    />
-                )}
-                <GiCancel
-                    onClick={() => {
-                        setFullScreenView(false);
-                        close();
-                    }}
-                    className={`${style.commentsBody_header_btn} text-danger`}
-                />
-            </header>
-
-            <main
-                // ref={chatbottom_ref}
-                className={`${style.commentsBody_commentArea}`}
+            <div
+                className={style.commentsBody}
+                style={{
+                    backgroundImage: `url(${commentBg})`,
+                    // backgroundImage:`url(https://seopage1storage.s3.ap-southeast-1.amazonaws.com/655f048a34e53.jpg)`,
+                    width: fullScreenView ? "100vw" : "auto",
+                    height: fullScreenView ? "99vh" : "84vh",
+                    maxHeight: fullScreenView ? "99vh" : "auto",
+                }}
             >
-                {_.fill(Array(20), "*").map((v, i) => {
-                    return (
-                        <SingleChat
-                            setScroll={setScroll}
-                            onContextMenu={onContextMenu}
-                            onKeyDown={onKeyDown}
-                            key={i}
-                            index={i + 1}
+                <header className={style.commentsBody_header}>
+                    <img
+                        className={style.commentsBody_header_btn}
+                        src={commentRefresh}
+                        alt=""
+                    />
+                    <img
+                        className={style.commentsBody_header_btn}
+                        src={commentSearch}
+                        alt=""
+                    />
+                    {!fullScreenView ? (
+                        <AiOutlineFullscreen
+                            onClick={() => setFullScreenView(true)}
+                            className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
                         />
-                    );
-                })}
-                <div
-                    ref={chatbottom_ref}
-                />
-                {contextMenu}
-            </main>
+                    ) : (
+                        <AiOutlineFullscreenExit
+                            onClick={() => setFullScreenView(false)}
+                            className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
+                        />
+                    )}
+                    <GiCancel
+                        onClick={() => {
+                            setFullScreenView(false);
+                            close();
+                        }}
+                        className={`${style.commentsBody_header_btn} text-danger`}
+                    />
+                </header>
 
-            <footer className={`${style.commentsBody_inputField}`}>
-                <ChatInput setScroll={setScroll} />
-            </footer>
+                <main
+                    // ref={chatbottom_ref}
+                    className={`${style.commentsBody_commentArea}`}
+                >
+                    {comments.map((comment, i) => {
+                        return (
+                            <SingleChat
+                                setScroll={setScroll}
+                                onContextMenu={onContextMenu}
+                                onKeyDown={onKeyDown}
+                                key={i}
+                                comment={comment}
+                            />
+                        );
+                    })}
+                    <div ref={chatbottom_ref} />
+                    {contextMenu}
+                </main>
 
-            {!true && (
-                <div className={`${style.comments_selected_action_controller}`}>
-                    <section
-                        className={`${style.comments_selected_action_controller_btn}`}
+                <footer className={`${style.commentsBody_inputField}`}>
+                    <ChatInput setScroll={setScroll} />
+                </footer>
+
+                {!true && (
+                    <div
+                        className={`${style.comments_selected_action_controller}`}
                     >
-                        <span
-                            className={`${style.comments_selected_action_controller_btn_icon}`}
+                        <section
+                            className={`${style.comments_selected_action_controller_btn}`}
                         >
-                            {/* icon 1 */}
-                        </span>
-                        <span
-                            className={`${style.comments_selected_action_controller_btn_text}`}
+                            <span
+                                className={`${style.comments_selected_action_controller_btn_icon}`}
+                            >
+                                {/* icon 1 */}
+                            </span>
+                            <span
+                                className={`${style.comments_selected_action_controller_btn_text}`}
+                            >
+                                Copy
+                            </span>
+                        </section>
+                        <section
+                            className={`${style.comments_selected_action_controller_btn}`}
                         >
-                            Copy
-                        </span>
-                    </section>
-                    <section
-                        className={`${style.comments_selected_action_controller_btn}`}
-                    >
-                        <span
-                            className={`${style.comments_selected_action_controller_btn_icon}`}
-                        >
-                            {/* icon 2 */}
-                        </span>
-                        <span
-                            className={`${style.comments_selected_action_controller_btn_text}`}
-                        >
-                            Remove
-                        </span>
-                    </section>
-                    {/* <section
+                            <span
+                                className={`${style.comments_selected_action_controller_btn_icon}`}
+                            >
+                                {/* icon 2 */}
+                            </span>
+                            <span
+                                className={`${style.comments_selected_action_controller_btn_text}`}
+                            >
+                                Remove
+                            </span>
+                        </section>
+                        {/* <section
                     className={`${style.comments_selected_action_controller_btn}`}
                 >
                     <span
@@ -173,9 +220,10 @@ const CommentsBody = ({
                         className={`${style.comments_selected_action_controller_btn_text}`}
                     ></span>
                 </section> */}
-                </div>
-            )}
-        </div>
+                    </div>
+                )}
+            </div>
+        </CommentContext.Provider>
     );
 };
 
