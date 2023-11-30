@@ -1234,6 +1234,8 @@ class HelperPendingActionController extends AccountBaseController
    public function NewTaskAssign($task)
    {
     $task= Task::where('id',$task->id)->first();
+    if($task->independent_task_status == 0)
+   {
     $project= Project::where('id',$task->project_id)->first();
     $client= User::where('id',$project->client_id)->first();
 
@@ -1272,6 +1274,9 @@ class HelperPendingActionController extends AccountBaseController
     $action->button = json_encode($button);
     $action->save();
 
+
+   }
+   
 
 
    }
