@@ -1156,14 +1156,21 @@
         }
 
         const today = new Date(); // get current date
+ 
+        const maxDate = new Date('{{ \Carbon\Carbon::parse($project->deadline)->format("Y-m-d") }}');
+        
+         
         const dp1 = datepicker('#from_add', {
             position: 'bl',
-            minDate: today, // set minimum date to current date
+            minDate: today > maxDate ? maxDate : today, // set minimum date to current date
             onSelect: (instance, date) => {
               dp2.setMin(date);
             },
+            maxDate,
+            disabler: date => date.getDay() === 0 || today > maxDate || date > maxDate,
             ...datepickerConfig
         });
+        
 
         const dp2 = datepicker('#to_add', {
             position: 'bl',
