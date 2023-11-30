@@ -124,7 +124,7 @@ export const WorkStatusConfirmationModal = ({
                                         {/* Daily Task Progress report */}
                                         <li className={`alert ${data?.daily_task_report.daily_submission_status ? 'alert-success d-none': 'alert-danger'}`}>
                                             <div>
-                                                Your Didn't submit last date daily report
+                                                You didn't submit the daily report on <strong>{DateFormat(data?.daily_task_report.data.checking_date).formatted}</strong>
                                                 <Switch.Case condition={!data?.daily_task_report.daily_submission_status}>
                                                     <button
                                                         onClick={() => setShowDailySubmissionForm(true)}

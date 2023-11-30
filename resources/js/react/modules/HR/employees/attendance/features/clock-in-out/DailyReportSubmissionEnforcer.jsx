@@ -9,6 +9,7 @@ import Switch from "../../../../../../global/Switch";
 import { Flex } from "../../../../../../global/styled-component/Flex";
 import { useAuth } from "../../../../../../hooks/useAuth";
 import { convertTime } from '../../../../../../utils/converTime';
+import { useDateFormat } from "../../hooks/useDateFormat";
 import DailyReportSubmissionForm from "./DailyReportSubmissionForm";
 
 /**
@@ -17,10 +18,11 @@ import DailyReportSubmissionForm from "./DailyReportSubmissionForm";
 
 const TASK_DATA_API = "/account/tasks/get-today-tasks";
 
-const DailyReportSubmissionEnforcer = ({ close, reminderDate="today", onSubmit }) => {
+const DailyReportSubmissionEnforcer = ({ close, reminderDate, onSubmit }) => {
     const [tasks, setTasks] = React.useState([]);
     const [reportedDate, setReportedDate] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true);
+    const { date } = useDateFormat();
 
 
     const auth = useAuth();
@@ -79,7 +81,7 @@ const DailyReportSubmissionEnforcer = ({ close, reminderDate="today", onSubmit }
                         className="border-bottom pb-2"
                     >
                         <div className="font-weight-bold f-16">
-                            Daily Task Progress Report
+                            <span className="text-danger">{date(reminderDate).formatted}{": "}</span> Daily Task Progress Report
                         </div>
                         <Button variant="tertiary" onClick={close} className="">
                             <i className="fa-solid fa-xmark" />
@@ -99,6 +101,7 @@ const DailyReportSubmissionEnforcer = ({ close, reminderDate="today", onSubmit }
                                             <th className="sp1_tlr_th">SL No.</th>
                                             <th className="sp1_tlr_th">Task Name</th>
                                             <th className="sp1_tlr_th">Page Link</th>
+                                            <th className="sp1_tlr_th">Tracked Date</th>
                                             <th className="sp1_tlr_th">Total Time Spend on This Task</th>
                                             <th className="sp1_tlr_th">Client Name</th>
                                             <th className="sp1_tlr_th">Action</th>
@@ -138,6 +141,7 @@ const DailyReportSubmissionEnforcer = ({ close, reminderDate="today", onSubmit }
                                                                 : <span style={{color: 'grey'}}>No Link Attached</span>
                                                             }
                                                         </td>
+                                                        <td className="sp1_tlr_td">{date(reminderDate).formatted}</td>
                                                         <td className="sp1_tlr_td"> {convertTime(task.total_time_spent)} </td>
                                                         <td className="sp1_tlr_td"> {task.client_name} </td>
                                                         <td className="sp1_tlr_td">
