@@ -80,8 +80,13 @@ export const WorkStatusConfirmationModal = ({
        <React.Fragment>
             <div style={styles.modal_container}>
                     <div className={styles.work_status_confirmation_modal}>
-
+                        <div className='d-flex align-items-center justify-content-end'>
+                            <Button onClick={() => setWorkStatusConfirmationModalIsOpen(false)}>
+                                <i className='fa-solid fa-xmark' />
+                            </Button>
+                        </div>
                         <Switch>
+
                             <Switch.Case condition={!checkIn && !showReminder}>
                                 <React.Fragment>
                                     <div className='text-center'>
