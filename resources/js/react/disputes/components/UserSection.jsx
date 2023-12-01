@@ -21,7 +21,8 @@ const UserSection = ({
     comment = "",
     questions = [],
     reason = "",
-    getUserById
+    getUserById,
+    additionalInformation= null
 }) => {
     const auth = useAuth();
 
@@ -85,6 +86,31 @@ const UserSection = ({
                             <td className="px-3 py-2 "> {reason} </td>
                         </tr>
                     ) : null}
+
+                    {
+                        additionalInformation?.status ?
+                            <>
+                                <tr>
+                                    <td className="py-2">Is the client paying additional for these change? </td>
+                                    <td className="px-3 py-2">{additionalInformation?.status}</td>
+                                </tr>
+
+                                {additionalInformation?.status?.toLowerCase() === 'yes' ?
+                                    <tr>
+                                        <td className="py-2"> Amount </td>
+                                        <td className="px-3 py-2">{additionalInformation?.amount}</td>
+                                    </tr>
+                                :null}
+
+                                {additionalInformation?.status?.toLowerCase() === 'no' ?
+                                    <tr>
+                                        <td className="py-2"> Why client is not paying additionally for these change?</td>
+                                        <td className="px-3 py-2">{additionalInformation?.denyComment}</td>
+                                    </tr>
+                                :null}
+                            </>
+                        :null
+                    }
 
                     {comment ?
                         <tr>

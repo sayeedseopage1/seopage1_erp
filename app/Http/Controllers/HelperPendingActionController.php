@@ -33,11 +33,11 @@ class HelperPendingActionController extends AccountBaseController
             $action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> has challenge (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
             $action->timeframe= 6;
             $action->project_id = $project->id;
-           
+
             $action->client_id = $client->id;
             $action->authorization_for= $authorizer->id;
             $button= '';
-           
+
             $action->save();
             $button = [
                 [
@@ -58,27 +58,27 @@ class HelperPendingActionController extends AccountBaseController
                             'label'=>'Write a comment',
                             'name'=>'admin_comment',
                             'required'=> true,
-                        ], 
+                        ],
                         [
                             'type'=> 'hidden',
                              'value'=> $project->id,
                              'readonly'=> true,
-                           
+
                             'name'=>'project_id',
                             'required'=> true,
-                        ], 
+                        ],
                          [
                             'type'=> 'hidden',
                             'value'=> $action->id,
                             'readonly'=> true,
-                            
+
                             'name'=>'authorization_id',
-                           
+
                             'required'=> true,
-                            
-                        ], 
-                        
-                    ], 
+
+                        ],
+
+                    ],
                     'form_action'=> [
                         [
                             'type'=> 'button',
@@ -86,17 +86,17 @@ class HelperPendingActionController extends AccountBaseController
                             'label'=> 'Accept Challenge',
                             'color'=> 'success',
                             'url'=> route('project-accept'),
-      
-                        ], 
+
+                        ],
                         [
                             'type'=> 'button',
                             'method'=>'POST',
                             'label'=> 'Deny Challenge',
                             'color'=> 'danger',
                             'url'=> route('project-deny'),
-      
-                        ], 
-                        
+
+                        ],
+
                     ]
                 ],
             ];
@@ -108,7 +108,7 @@ class HelperPendingActionController extends AccountBaseController
        //    dd(json_decode($action->button));
 
            }
-          
+
     }
     public function OthersDeliverableAuthorization($project,$id)
     {
@@ -134,7 +134,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -142,7 +142,7 @@ class HelperPendingActionController extends AccountBaseController
        //    dd(json_decode($action->button));
 
            }
-          
+
     }
     public function DeliverableDeadlineAuthorization($project)
     {
@@ -168,7 +168,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -202,7 +202,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -236,7 +236,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -270,7 +270,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -304,7 +304,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id.'?tab=milestones'),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -339,7 +339,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('award_time_check.index'),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -374,7 +374,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show',$project->id),
                 ],
-              
+
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -413,23 +413,23 @@ class HelperPendingActionController extends AccountBaseController
                         'button_type' => 'redirect_url',
                         'button_url' => route('tasks.index'),
                     ],
-                  
+
                 ];
                 $action->button = json_encode($button);
                 $action->save();
               //  dd($action);
            //    dd(json_decode($action->button));
-    
+
                }
-    
+
 
         }
-       
+
     }
     public function DisputeFormAuthorization($project)
     {
-  
-           
+
+
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
@@ -453,21 +453,22 @@ class HelperPendingActionController extends AccountBaseController
                         'button_type' => 'redirect_url',
                         'button_url' => route('projects.show',$project->id),
                     ],
-                  
+
                 ];
                 $action->button = json_encode($button);
                 $action->save();
               //  dd($action);
            //    dd(json_decode($action->button));
-    
-               }
-    
 
-        
-       
+               }
+
+
+
+
     }
     public function TaskDisputeAuthorization($task,$disputes)
     {
+
             $project= Project::where('id',$task->project_id)->first();
             $raised_by= User::where('id',$disputes->raised_by)->first();
             $raised_against= User::where('id',$disputes->raised_against)->first();
@@ -481,7 +482,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'TDA'.'x'.$key;
                 $action->item_name= 'Dispute Expiry Warning!';
                 $action->heading= 'Dispute Expiry Warning!';
-                $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show,$raised_against->id').'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
+                $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show',$raised_against->id).'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
                 $action->timeframe= 48;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
@@ -494,22 +495,22 @@ class HelperPendingActionController extends AccountBaseController
                         'button_type' => 'redirect_url',
                         'button_url' => route('disputes.index'),
                     ],
-                  
+
                 ];
                 $action->button = json_encode($button);
                 $action->save();
               //  dd($action);
            //    dd(json_decode($action->button));
-    
-               }
-    
 
-        
-       
+               }
+
+
+
+
     }
     public function WonDealAcceptAuthorization($project,$id)
    {
-    
+
     $client= User::where('id',$project->client_id)->first();
    // dd($client);
     $project_manager= User::where('id',$id)->first();
@@ -520,24 +521,24 @@ class HelperPendingActionController extends AccountBaseController
     $timeframe = $different_in_minutes/60;
     $sales= User::where('id',Auth::id())->first();
     // /dd($sales);
-    
-      
+
+
         $action = new PendingAction();
         $action->code = 'PWDA';
         $action->serial = 'PWDA'.'x0';
         $action->item_name= 'Won deals';
         $action->heading= 'Won deal awaiting your acceptance!';
         $action->message = 'Won deal <a href="'.route('contracts.show', $deal->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> is awaiting for your acceptance! (Sales person: <a href="'.route('employees.show',$sales->id).'">'.$sales->name.'</a>)';
-        
+
         $action->timeframe= $timeframe;
-       
+
         $action->project_id = $project->id;
-        
+
         $action->client_id = $client->id;
-       
+
         $action->authorization_for= $id;
     //   / dd($id);
-       
+
         $button = [
             [
                 'button_name' => 'Review',
@@ -545,14 +546,14 @@ class HelperPendingActionController extends AccountBaseController
                 'button_type' => 'redirect_url',
                 'button_url' => route('contracts.show', $deal->id),
             ],
-          
+
         ];
         $action->button = json_encode($button);
         $action->save();
       //  dd($action);
    //    dd(json_decode($action->button));
 
-       
+
 
    }
    public function ProjectDeliverableCreation($id)
@@ -561,27 +562,27 @@ class HelperPendingActionController extends AccountBaseController
     $client= User::where('id',$project->client_id)->first();
     // dd($client);
      $project_manager= User::where('id',$project->pm_id)->first();
-    
-   
+
+
      // /dd($sales);
-     
-       
+
+
          $action = new PendingAction();
          $action->code = 'DCA';
          $action->serial = 'DCA'.'x0';
          $action->item_name= 'Creating deliverables for clients';
          $action->heading= 'Create deliverables!';
          $action->message = 'You need to create deliverable for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
-         
+
          $action->timeframe= 48;
-        
+
          $action->project_id = $project->id;
-         
+
          $action->client_id = $client->id;
-        
+
          $action->authorization_for= $project_manager->id;
      //   / dd($id);
-        
+
          $button = [
              [
                  'button_name' => 'Create',
@@ -589,7 +590,7 @@ class HelperPendingActionController extends AccountBaseController
                  'button_type' => 'redirect_url',
                  'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
              ],
-           
+
          ];
          $action->button = json_encode($button);
          $action->save();
@@ -602,24 +603,24 @@ class HelperPendingActionController extends AccountBaseController
      $project_manager= User::where('id',$project->pm_id)->first();
      $deliverables= ProjectDeliverable::where('id',$id)->first();
 
-       
+
          $action = new PendingAction();
          $action->code = 'DMA';
          $action->serial = 'DMA'.'x0';
          $action->item_name= 'Deliverables revision request';
          $action->heading= 'Revision requested in deliverables (From management)!';
          $action->message = 'Revision requested by management for the deliverables '.$deliverables->title.' for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
-         
+
          $action->timeframe= 24;
-        
+
          $action->project_id = $project->id;
-         
+
          $action->client_id = $client->id;
          $action->deliverable_id = $id;
-        
+
          $action->authorization_for= $project_manager->id;
      //   / dd($id);
-        
+
          $button = [
              [
                  'button_name' => 'Revise',
@@ -627,7 +628,7 @@ class HelperPendingActionController extends AccountBaseController
                  'button_type' => 'redirect_url',
                  'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
              ],
-           
+
          ];
          $action->button = json_encode($button);
          $action->save();
@@ -640,24 +641,24 @@ class HelperPendingActionController extends AccountBaseController
      $project_manager= User::where('id',$project->pm_id)->first();
     // $deliverables= ProjectDeliverable::where('id',$id)->first();
 
-       
+
          $action = new PendingAction();
          $action->code = 'SDCA';
          $action->serial = 'SDCA'.'x0';
          $action->item_name= 'Sending deliverables to the client';
          $action->heading= 'Share deliverables with the client!';
          $action->message = 'Share deliverables for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
-         
+
          $action->timeframe= 24;
-        
+
          $action->project_id = $project->id;
-         
+
          $action->client_id = $client->id;
         // $action->deliverable_id = $id;
-        
+
          $action->authorization_for= $project_manager->id;
      //   / dd($id);
-        
+
          $button = [
              [
                  'button_name' => 'Share',
@@ -665,7 +666,7 @@ class HelperPendingActionController extends AccountBaseController
                  'button_type' => 'redirect_url',
                  'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
              ],
-           
+
          ];
          $action->button = json_encode($button);
          $action->save();
@@ -678,24 +679,24 @@ class HelperPendingActionController extends AccountBaseController
      $project_manager= User::where('id',$project->pm_id)->first();
     // $deliverables= ProjectDeliverable::where('id',$id)->first();
 
-       
+
          $action = new PendingAction();
          $action->code = 'CDDA';
          $action->serial = 'CDDA'.'x0';
          $action->item_name= 'Deliverables revision request';
          $action->heading= 'Revision requested in deliverables (From Client)!';
          $action->message = 'Revision requested by client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> for the deliverables for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a>';
-         
+
          $action->timeframe= 24;
-        
+
          $action->project_id = $project->id;
-         
+
          $action->client_id = $client->id;
         // $action->deliverable_id = $id;
-        
+
          $action->authorization_for= $project_manager->id;
      //   / dd($id);
-        
+
          $button = [
              [
                  'button_name' => 'Revise',
@@ -703,7 +704,7 @@ class HelperPendingActionController extends AccountBaseController
                  'button_type' => 'redirect_url',
                  'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
              ],
-           
+
          ];
          $action->button = json_encode($button);
          $action->save();
@@ -716,7 +717,7 @@ class HelperPendingActionController extends AccountBaseController
     $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
         $authorizer= User::where('id',$project_manager->id)->first();
-        
+
             $action = new PendingAction();
             $action->code = 'CT';
             $action->serial = 'CT'.'x0';
@@ -725,11 +726,11 @@ class HelperPendingActionController extends AccountBaseController
             $action->message = 'Create tasks for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name;
             $action->timeframe= 24;
             $action->project_id = $project->id;
-           
+
             $action->client_id = $client->id;
             $action->authorization_for= $authorizer->id;
             $button= '';
-           
+
             $action->save();
          //   dd($action);
             $button = [
@@ -785,38 +786,38 @@ class HelperPendingActionController extends AccountBaseController
 
                             ],
                             'required'=> true,
-                        ], 
+                        ],
                         [
                             'type'=> 'hidden',
                              'value'=> $project->id,
                              'readonly'=> true,
-                           
+
                             'name'=>'project_id',
                             'required'=> true,
-                        ], 
+                        ],
                          [
                             'type'=> 'hidden',
                             'value'=> $action->id,
                             'readonly'=> true,
-                            
+
                             'name'=>'authorization_id',
-                           
+
                             'required'=> true,
-                            
-                        ], 
+
+                        ],
                         [
                             'type'=> 'textarea',
                             'label'=> 'Write reson',
-                           
+
                             'readonly'=> false,
-                            
+
                             'name'=>'reason',
-                           
+
                             'required'=> true,
-                            
-                        ], 
-                        
-                    ], 
+
+                        ],
+
+                    ],
                     'form_action'=> [
                         [
                             'type'=> 'button',
@@ -824,10 +825,10 @@ class HelperPendingActionController extends AccountBaseController
                             'label'=> 'Submit',
                             'color'=> 'success',
                             'url'=> '',
-      
-                        ], 
-                       
-                        
+
+                        ],
+
+
                     ]
                 ],
                 [
@@ -837,38 +838,38 @@ class HelperPendingActionController extends AccountBaseController
                     'button_url' => '',
                     'modal_form'=> true,
                     'form'=> [
-                        
+
                         [
                             'type'=> 'hidden',
                              'value'=> $project->id,
                              'readonly'=> true,
-                           
+
                             'name'=>'project_id',
                             'required'=> true,
-                        ], 
+                        ],
                          [
                             'type'=> 'hidden',
                             'value'=> $action->id,
                             'readonly'=> true,
-                            
+
                             'name'=>'authorization_id',
-                           
+
                             'required'=> true,
-                            
-                        ], 
+
+                        ],
                         [
                             'type'=> 'textarea',
                             'label' => 'The number of tasks created are too few when compared to the number of deliverables. Why is that?',
-                           
+
                             'readonly'=> false,
-                            
+
                             'name'=>'comment',
-                           
+
                             'required'=> true,
-                            
-                        ], 
-                        
-                    ], 
+
+                        ],
+
+                    ],
                     'form_action'=> [
                         [
                             'type'=> 'button',
@@ -876,10 +877,10 @@ class HelperPendingActionController extends AccountBaseController
                             'label'=> 'Submit',
                             'color'=> 'success',
                             'url'=> '',
-      
-                        ], 
-                       
-                        
+
+                        ],
+
+
                     ]
                     ],
             ];
@@ -890,7 +891,7 @@ class HelperPendingActionController extends AccountBaseController
           //  dd($action);
        //    dd(json_decode($action->button));
 
-           
+
 
    }
    public function TaskApproveAction($task,$sender)
@@ -912,14 +913,14 @@ class HelperPendingActionController extends AccountBaseController
             $action->heading= 'Revision submitted by '.$user_role->name;
             $action->message = 'Review the revision submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
 
-        }else 
+        }else
         {
             $action->item_name= 'Task submitted by '.$user_role->name;
             $action->heading= 'Task submitted by '.$user_role->name;
             $action->message = 'Review the task submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
 
         }
-       
+
         $action->timeframe= 24;
         $action->project_id = $project->id;
         $action->client_id = $client->id;
@@ -932,7 +933,7 @@ class HelperPendingActionController extends AccountBaseController
                 'button_type' => 'redirect_url',
                 'button_url' => route('tasks.show', $task->id),
             ],
-          
+
         ];
         $action->button = json_encode($button);
         $action->save();
@@ -942,25 +943,25 @@ class HelperPendingActionController extends AccountBaseController
        }
 
    }
-    
+
    public function ProjectQcSubmission($project,$milestone)
    {
-   
-   
+
+
     $project= Project::where('id',$project->id)->first();
     $client= User::where('id',$project->client_id)->first();
-   
+
     $project_manager= User::where('id',$project->pm_id)->first();
     $authorizer= User::where('id',$project_manager->id)->first();
-     
+
         $action = new PendingAction();
         $action->code = 'QCSA';
         $action->serial = 'QCSA'.'x0';
-       
+
         $action->item_name= 'QC form';
         $action->heading= 'Submit QC form!';
         $action->message = 'Submit qc form for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
-     
+
         $action->timeframe= 24;
         $action->project_id = $project->id;
         $action->client_id = $client->id;
@@ -973,24 +974,24 @@ class HelperPendingActionController extends AccountBaseController
                 'button_type' => 'redirect_url',
                 'button_url' => route('projects.show', $project->id.'?tab=milestones'),
             ],
-          
+
         ];
         $action->button = json_encode($button);
         $action->save();
-   
 
-    
+
+
    }
    public function ProjectCompletionSubmission($project,$milestone)
    {
-   
-   
+
+
     $project= Project::where('id',$project->id)->first();
     $client= User::where('id',$project->client_id)->first();
-   
+
     $project_manager= User::where('id',$project->pm_id)->first();
     $authorizer= User::where('id',$project_manager->id)->first();
-     
+
         $action = new PendingAction();
         $action->code = 'PCSA';
         $action->serial = 'PCSA'.'x0';
@@ -1009,30 +1010,30 @@ class HelperPendingActionController extends AccountBaseController
                 'button_type' => 'redirect_url',
                 'button_url' => route('projects.show', $project->id.'?tab=milestones'),
             ],
-          
+
         ];
         $action->button = json_encode($button);
         $action->save();
       //  dd($action);
    //    dd(json_decode($action->button));
 
-       
+
 
    }
    public function DisputeSubmitAction($project)
    {
-   
-   
+
+
     $project= Project::where('id',$project->id)->first();
     $client= User::where('id',$project->client_id)->first();
-   
+
     $project_manager= User::where('id',$project->pm_id)->first();
     $authorizer= User::where('id',$project_manager->id)->first();
-     
+
         $action = new PendingAction();
         $action->code = 'DSA';
         $action->serial = 'DSA'.'x0';
-       
+
         $action->item_name= 'Project dispute form ';
         $action->heading= 'Project dispute form!';
         $action->message = 'Submit project dispute form for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
@@ -1049,14 +1050,14 @@ class HelperPendingActionController extends AccountBaseController
                 'button_type' => 'redirect_url',
                 'button_url' => route('projects.show', $project->id),
             ],
-          
+
         ];
         $action->button = json_encode($button);
         $action->save();
       //  dd($action);
    //    dd(json_decode($action->button));
 
-       
+
 
    }
    public function TaskDisputeQuestion($dispute_id,$user_id)
@@ -1066,13 +1067,13 @@ class HelperPendingActionController extends AccountBaseController
         $task= Task::where('id',$task_revision->task_id)->first();
         $project= Project::where('id',$task->project_id)->first();
         $client= User::where('id',$project->client_id)->first();
-   
+
         $project_manager= User::where('id',$project->pm_id)->first();
         $authorizer= User::where('id',$project_manager->id)->first();
         $action = new PendingAction();
         $action->code = 'TDQ';
         $action->serial = 'TDQ'.'x0';
-       
+
         $action->item_name= 'Question aksed about your dispute!';
         $action->heading= 'Question aksed about your dispute!';
         $action->message = 'You have been asked 1 question about your dispute!';
@@ -1091,7 +1092,7 @@ class HelperPendingActionController extends AccountBaseController
                 'button_type' => 'redirect_url',
                 'button_url' => route('disputes.index'),
             ],
-          
+
         ];
         $action->button = json_encode($button);
         $action->save();
@@ -1103,20 +1104,20 @@ class HelperPendingActionController extends AccountBaseController
     $task= Task::where('id',$taskId)->first();
     $project= Project::where('id',$task->project_id)->first();
     $client= User::where('id',$project->client_id)->first();
-   
+
     $commentor= User::where('id',$commentor)->first();
     if($commentor->role_id == 4)
     {
         $authorizers= TaskUser::where('task_id',$task->id)->get();
 
-    }else 
+    }else
     {
         $authorizers= User::where('id',$project->pm_id)->get();
 
     }
    // dd($authorizers);
-   
-    
+
+
     foreach ($authorizers as $key => $authorizer) {
      $action = new PendingAction();
      $action->code = 'TCOA';
@@ -1142,27 +1143,27 @@ class HelperPendingActionController extends AccountBaseController
                      'label'=>'Write a reply',
                      'name'=>'reply',
                      'required'=> true,
-                 ], 
+                 ],
                  [
                      'type'=> 'hidden',
                       'value'=> $task->id,
                       'readonly'=> true,
-                    
+
                      'name'=>'project_id',
                      'required'=> true,
-                 ], 
+                 ],
                   [
                      'type'=> 'hidden',
                      'value'=> $action->id,
                      'readonly'=> true,
-                     
+
                      'name'=>'authorization_id',
-                    
+
                      'required'=> true,
-                     
-                 ], 
-                 
-             ], 
+
+                 ],
+
+             ],
              'form_action'=> [
                  [
                      'type'=> 'button',
@@ -1171,9 +1172,9 @@ class HelperPendingActionController extends AccountBaseController
                      'color'=> 'success',
                      'url'=> '',
 
-                 ], 
-                
-                 
+                 ],
+
+
              ]
          ],
          [
@@ -1188,27 +1189,27 @@ class HelperPendingActionController extends AccountBaseController
                      'label'=>'Are you sure this comment is not relevant to you?',
                      'name'=>'confirmation',
                      'required'=> true,
-                 ], 
+                 ],
                  [
                      'type'=> 'hidden',
                       'value'=> $task->id,
                       'readonly'=> true,
-                    
+
                      'name'=>'project_id',
                      'required'=> true,
-                 ], 
+                 ],
                   [
                      'type'=> 'hidden',
                      'value'=> $action->id,
                      'readonly'=> true,
-                     
+
                      'name'=>'authorization_id',
-                    
+
                      'required'=> true,
-                     
-                 ], 
-                 
-             ], 
+
+                 ],
+
+             ],
              'form_action'=> [
                  [
                      'type'=> 'button',
@@ -1217,12 +1218,12 @@ class HelperPendingActionController extends AccountBaseController
                      'color'=> 'success',
                      'url'=> '',
 
-                 ], 
-                
-                 
+                 ],
+
+
              ]
         ],
-       
+
      ];
      $action->button = json_encode($button);
      $action->save();
@@ -1231,6 +1232,6 @@ class HelperPendingActionController extends AccountBaseController
 
     }
    }
- 
+
 
 }

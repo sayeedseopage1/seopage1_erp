@@ -378,7 +378,7 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* Pending */}
-                            <Switch.Case condition={data?.approval_status === "pending"}>
+                            <Switch.Case condition={data.dispute_between !== 'SPR' ? data?.approval_status === "pending": !actionAlreadyTaken}>
                                 <div className={`${styles.status} ${styles.pending} f-12`}> Pending </div>
                             </Switch.Case>
                        </Switch>
