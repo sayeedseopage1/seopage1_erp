@@ -25,17 +25,17 @@ const ChatInput = ({ setScroll }) => {
     const [emoji, setEmoji] = useState("");
     const { mentionedComment } = useCommentContext();
 
-    useEffect(() => {
-        console.log(files);
-    }, [files]);
+    // useEffect(() => {
+    //     console.log(files);
+    // }, [files]);
 
     // useEffect(()=>{
     //   setScroll(prev=>!prev);
     // },[show,files])
 
-    useEffect(() => {
-        console.log(editorHtml);
-    }, [emoji]);
+    // useEffect(() => {
+    //     console.log(editorHtml);
+    // }, [emoji]);
 
     const handleEmojiSelection = (emoji, e) => {
         console.log(emoji);
@@ -77,7 +77,7 @@ const ChatInput = ({ setScroll }) => {
 export default ChatInput;
 
 function MentionedComment({ comment }) {
-    const { mentionedComment,setMentionedComment } = useCommentContext();
+    const { mentionedComment, setMentionedComment } = useCommentContext();
 
     const handlePreviewUrl = (file) => {
         // return URL.createObjectURL(file);
@@ -133,8 +133,6 @@ function MentionedComment({ comment }) {
         }
     };
 
-
-
     return (
         <div className={`${style.chatInput_mentioned_comment}`}>
             <HiReply className={`${style.chatInput_mentioned_comment_icon}`} />
@@ -147,16 +145,20 @@ function MentionedComment({ comment }) {
             <article
                 className={`${style.chatInput_mentioned_comment_text_area}`}
             >
-                <span
-                    className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
-                >
-                    {mentionedComment.comment}
-                </span>
-                <span
-                    className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
-                >
-                    {mentionedComment?.files?.length ? (
-                        mentionedComment?.files?.map((file, i) => {
+                {mentionedComment?.comment ? (
+                    <span
+                        className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
+                    >
+                        {mentionedComment.comment}
+                    </span>
+                ) : (
+                    <></>
+                )}
+                {mentionedComment?.files?.length ? (
+                    <span
+                        className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
+                    >
+                        {mentionedComment?.files?.map((file, i) => {
                             return (
                                 <div
                                     key={i}
@@ -165,16 +167,18 @@ function MentionedComment({ comment }) {
                                     {handleFileComponent(file)}
                                 </div>
                             );
-                        })
-                    ) : (
-                        <></>
-                    )}
-                </span>
+                        })}
+                    </span>
+                ) : (
+                    <></>
+                )}
                 <span
                     className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
                 >
                     {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                    {`${mentionedComment?.added_by_name}, ${dayjs(mentionedComment?.created_at).format('MMM DD, YYYY, hh:mm A')}`}
+                    {`${mentionedComment?.added_by_name}, ${dayjs(
+                        mentionedComment?.created_at
+                    ).format("MMM DD, YYYY, hh:mm A")}`}
                 </span>
             </article>
         </div>
@@ -311,9 +315,9 @@ function CommentEditor({
         { id: 2, value: "Patrik Sjölin" },
     ];
 
-    useEffect(() => {
-        console.log(editorHtml);
-    }, [editorHtml]);
+    // useEffect(() => {
+    //     console.log(editorHtml);
+    // }, [editorHtml]);
 
     useEffect(() => {
         const quill = quillRef.current.getEditor();

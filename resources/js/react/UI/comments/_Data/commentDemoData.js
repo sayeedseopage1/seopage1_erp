@@ -13,9 +13,11 @@ export default function commentDemoData(count = 10) {
     }) : ''
     
     const files = faker.number.int({ max: 1, min: 0 }) || !comment ? _.fill(Array(faker.number.int({
-      min: 0,
+      min: 1,
       max: 10
     })), faker.image.url()) : null;
+
+    // console.log({comment,files});
 
     return {
       id: i,
@@ -38,7 +40,7 @@ export default function commentDemoData(count = 10) {
 
   for (let i = 0; i < count; i++) {
     commentData.push({
-      ...getData(i),
+      ...getData(i+1),
       mention_comment: faker.number.int({ max: 1, min:0 })? getData(i) : null,
     })
   }
