@@ -23,6 +23,8 @@ const LateExplanationOption = ({
     const [error, setError] = React.useState(null);
     const [durationStart, setDurationStart] = React.useState("08:00 AM");
     const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
+    const [sType, setSType] = React.useState(''); // submission type
+
 
     // setup time field
     React.useEffect(() => {
@@ -65,7 +67,7 @@ const LateExplanationOption = ({
     };
 
     // handle submission
-    const handleSubmission = (e) => {
+    const handleSubmission = (e, submissionType) => {
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
@@ -76,8 +78,9 @@ const LateExplanationOption = ({
             comment,
         };
 
+        setSType(submissionType);
         if (isValid()) {
-            onSubmit(data);
+            onSubmit(data, submissionType, onBack);
         } else {
             Swal.fire({
                 position: "center",
@@ -164,8 +167,22 @@ const LateExplanationOption = ({
                                     Back
                                 </Button>
 
-                                <Button onClick={handleSubmission} isLoading={isLoading} loaderTitle='Processing...'>
+                                <Button
+                                    onClick={e => handleSubmission(e, '')}
+                                    isLoading={sType !== 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
+                                >
                                     Submit
+                                </Button>
+
+                                <Button
+                                    variant='success'
+                                    className='ml-2'
+                                    onClick={e => handleSubmission(e, 'CONTINUE')}
+                                    isLoading={sType === 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
+                                >
+                                    Submit and add more
                                 </Button>
                             </div>
                         </div>

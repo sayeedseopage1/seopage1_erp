@@ -48,7 +48,7 @@ const Option3 = ({
                                 onBack={() => setStep(0)}
                                 lessTrackDate={checkInTime}
                                 parentReason={`I was present less hours at work ${checkInTime}`}
-                                isLoading={false}
+                                isLoading={isLoading}
                             />
                         </Switch.Case>
 
@@ -62,7 +62,7 @@ const Option3 = ({
                                 onBack={() => setStep(0)}
                                 lessTrackDate={checkInTime}
                                 parentReason={`I was present less hours at work ${checkInTime}`}
-                                isLoading={false}
+                                isLoading={isLoading}
                             />
                         </Switch.Case>
 
@@ -76,7 +76,7 @@ const Option3 = ({
                                 onBack={() => setStep(0)}
                                 lessTrackDate={checkInTime}
                                 parentReason={`I was present less hours at work ${checkInTime}`}
-                                isLoading={false}
+                                isLoading={isLoading}
                             />
                         </Switch.Case>
 
@@ -90,7 +90,7 @@ const Option3 = ({
                                 onBack={() => setStep(0)}
                                 lessTrackDate={checkInTime}
                                 parentReason={`I was present less hours at work ${checkInTime}`}
-                                isLoading={false}
+                                isLoading={isLoading}
                             />
                         </Switch.Case>
 

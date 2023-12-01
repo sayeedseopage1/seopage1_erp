@@ -26,7 +26,7 @@ const DidNotWorkForFewHours = ({
 
     // generate random id
     const uniqueId = Math.random().toString(6).slice(2);
-
+    const [sType, setSType] = React.useState(''); // submission type
     // remove duration
     const onRemove = (e, id) => {
         e.preventDefault();
@@ -67,7 +67,7 @@ const DidNotWorkForFewHours = ({
     };
 
     // handle form submit
-    const handleSubmission = (e) => {
+    const handleSubmission = (e, submissionType) => {
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
@@ -76,8 +76,9 @@ const DidNotWorkForFewHours = ({
             comment,
         };
 
+        setSType(submissionType);
         if (isValid()) {
-            onSubmit(data);
+            onSubmit(data, submissionType, onBack);
         } else {
             Swal.fire({
                 position: "center",
@@ -173,11 +174,21 @@ const DidNotWorkForFewHours = ({
                                 </Button>
 
                                 <Button
-                                    onClick={handleSubmission}
-                                    isLoading={isLoading}
-                                    loaderTitle="Processing..."
+                                    onClick={e => handleSubmission(e, '')}
+                                    isLoading={sType !== 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
                                 >
                                     Submit
+                                </Button>
+
+                                <Button
+                                    variant='success'
+                                    className='ml-2'
+                                    onClick={e => handleSubmission(e, 'CONTINUE')}
+                                    isLoading={sType === 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
+                                >
+                                    Submit and add more
                                 </Button>
                             </div>
                         </div>

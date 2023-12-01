@@ -31,13 +31,8 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
 
-    React.useEffect(() => {
-        console.log("mount");
-        return () => console.log("unmount");
-    }, []);
-
     // handle form submission
-    const handleSubmitForm = async (data) => {
+    const handleSubmitForm = async (data, submissionType, cb) => {
         setIsSubmitting(true);
 
         try{
@@ -46,8 +41,12 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDat
                 date: dayjs.dayjs(reminderDate).format('YYYY-MM-DD'),
                 _token: document.querySelector("meta[name='csrf-token']").getAttribute('content')
             }).then(res => {
-                onSubmit();
-                close();
+                if(submissionType !== 'CONTINUE'){
+                    onSubmit();
+                    close();
+                }
+
+                cb();
             })
 
             setIsSubmitting(false);
