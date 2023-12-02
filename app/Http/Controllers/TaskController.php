@@ -173,6 +173,7 @@ class TaskController extends AccountBaseController
             'tasks.client_name as ind_client_name',
             'ind_client.id as ind_client_id',
             'ind_client.name as ind_existing_client_name',
+            'task_submissions.created_at as task_submission_date',
 
             DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id AND DATE(sub_tasks.created_at) >= "' . $startDate . '" AND DATE(sub_tasks.created_at) <= "' . $endDate . '") as subtasks_count')
 
@@ -189,8 +190,17 @@ class TaskController extends AccountBaseController
             ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
             ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
             ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            // ->leftJoin('project_time_logs', function ($join) {
+            //     $join->on('project_time_logs.task_id', '=', 'tasks.id')
+            //         ->orderBy('project_time_logs.created_at', 'desc');
+            // })
             ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
             ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
+            ->leftJoin('task_submissions', function ($join) {
+                $join->on('task_submissions.task_id', '=', 'tasks.id')
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
+            })
             ->groupBy('tasks.id')
             // ->leftJoin('task_approves','task_approves.task_id','tasks.id')
         ;
@@ -411,12 +421,17 @@ class TaskController extends AccountBaseController
 
             ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
             ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
-            ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            // ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            ->leftJoin('project_time_logs', function ($join) {
+                $join->on('project_time_logs.task_id', '=', 'tasks.id')
+                    ->orderBy('project_time_logs.created_at', 'desc');
+            })
             ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
             ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
             ->leftJoin('task_submissions', function ($join) {
                 $join->on('task_submissions.task_id', '=', 'tasks.id')
-                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)');
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
             })
 
             ->groupBy('tasks.id')
@@ -503,13 +518,18 @@ class TaskController extends AccountBaseController
             ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
             ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
             ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
-            ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            // ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            ->leftJoin('project_time_logs', function ($join) {
+                $join->on('project_time_logs.task_id', '=', 'tasks.id')
+                    ->orderBy('project_time_logs.created_at', 'desc');
+            })
             ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
             ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
             ->leftJoin('task_files', 'task_files.task_id', 'tasks.id')
             ->leftJoin('task_submissions', function ($join) {
                 $join->on('task_submissions.task_id', '=', 'tasks.id')
-                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)');
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
             })
 
 
