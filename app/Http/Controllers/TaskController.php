@@ -2935,9 +2935,9 @@ class TaskController extends AccountBaseController
          * * initially responsible person is the "current user"
          */
         if (
-            $dispute_between != 'CPRx01' &&
-            $dispute_between != 'CPRx05' &&
-            $dispute_between != 'CPRx06' &&
+            $request->acknowledgement_id != 'CPRx01' &&
+            $request->acknowledgement_id != 'CPRx05' &&
+            $request->acknowledgement_id != 'CPRx06' &&
             $dispute_between != 'SPR' &&
             $request->is_deniable == false &&
             $auth->role_id != 1
@@ -2975,10 +2975,11 @@ class TaskController extends AccountBaseController
         $clientRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             ->where('acknowledgement_id', 'CPRx06')
-            ->where('task_id', $task_revision->id)
+            // ->where('task_id', $task_revision->id);
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
 
+        // dd($clientRevisionCount);
 
         if ($clientRevisionCount >= 5) {
             $task_revision->dispute_created = true;
@@ -3011,7 +3012,7 @@ class TaskController extends AccountBaseController
         //     $updateTask->board_column_id=1;
         //     $updateTask->save();
         // }
-        // dd($task_revision);
+
         $task_revision->save();
 
 
@@ -4733,7 +4734,6 @@ class TaskController extends AccountBaseController
     public function create_dispute($revision)
     {
 
-        // DB::beginTransaction();
         // dispute between
         $between = $revision->dispute_between;
 
@@ -4767,11 +4767,11 @@ class TaskController extends AccountBaseController
             }
         }
 
+
         $dispute->save();
         $task= Task::where('id',$dispute->task_id)->first();
         $disputes= TaskRevisionDispute::where('id',$dispute->id)->first();
         $helper = new HelperPendingActionController();
-
 
         $helper->TaskDisputeAuthorization($task,$disputes);
 

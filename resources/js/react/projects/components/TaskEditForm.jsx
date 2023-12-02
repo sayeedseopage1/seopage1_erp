@@ -79,7 +79,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setStartDate(null);
         setDueDate(null);
         setAssignedTo(null)
-        setPriority(null);
+        setPriority("Medium");
         setEstimateTimeHour(0);
         setEstimateTimeMin(0);
         setAttachedFiles(null);
@@ -101,7 +101,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
            setStartDate(dayjs.dayjs(row.startDate).toDate());
            setDueDate(dayjs.dayjs(row?.dueDate).toDate());
            setAssignedTo({id: row.assigned_to_id, name: row?.assigned_to_name })
-           setPriority(row?.priority);
+           setPriority(_.startCase(row?.priority));
            setEstimateTimeHour(row.estimate_hours);
            setEstimateTimeMin(row.estimate_minutes);
            setAttachedFiles(row?.files);

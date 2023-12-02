@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+    useCheckWorkingReportMutation,
     useLazyGetTaskDetailsQuery,
     useLazyGetUserTrackTimeQuery,
     useStartTimerApiMutation,
@@ -12,6 +13,7 @@ import { setTaskStatus } from "../../../services/features/subTaskSlice";
 import { CompareDate } from "../../../utils/dateController";
 import { User } from "../../../utils/user-details";
 import Button from "../../components/Button";
+import { workingReportError } from "../helper/timer-start-working-report-error-toaster";
 import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
 import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 
@@ -98,37 +100,64 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const [stopTimerApi, { isLoading: timerStopStatusIsLoading }] =
         useStopTimerApiMutation();
 
-
+    const [checkWorkReport] = useCheckWorkingReportMutation();
 
     // timer start control
     const startTimerControl = async () => {
         setIsOpenConfirmationModal(false);
-        await startTimerApi({
-            task_id: task?.id,
-            project_id: task?.projectId,
-            memo: task?.title,
-            user_id: window?.Laravel?.user?.id,
-        })
-            .unwrap()
-            .then((res) => {
-                  if (res?.status === "success" || res?.status === 200) {
-                    setTimerStart(true);
-                    setTimerId(res?.id);
-                    dispatch(setTaskStatus(res?.task_status));
-                    Toast.fire({
-                        icon: 'success',
-                        title: _.startCase(res?.message),
+
+        try {
+            // check work report is developer submit task report previous date
+            const workReport = await checkWorkReport().unwrap();
+
+            // if submit all required report start timer
+            if(
+                workReport&&
+                workReport.data &&
+                workReport.data.check_in_check_out.check_in_status &&
+                workReport.data.daily_task_report.daily_submission_status &&
+                workReport.data.hours_log_report.hours_log_report_status
+            ){
+
+                // request for start time
+                await startTimerApi({
+                    task_id: task?.id,
+                    project_id: task?.projectId,
+                    memo: task?.title,
+                    user_id: window?.Laravel?.user?.id,
+                })
+                    .unwrap()
+                    .then((res) => {
+                          if (res?.status === "success" || res?.status === 200) {
+                            setTimerStart(true);
+                            setTimerId(res?.id);
+                            dispatch(setTaskStatus(res?.task_status));
+                            Toast.fire({
+                                icon: 'success',
+                                title: _.startCase(res?.message),
+                            });
+                        } else {
+                            Toast.fire({
+                                icon: 'warning',
+                                title: _.startCase(res?.message),
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
                     });
-                } else {
-                    Toast.fire({
-                        icon: 'warning',
-                        title: _.startCase(res?.message),
-                    });
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+
+            }else{
+                workingReportError();
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+        return;
+
     };
 
     // start timer function

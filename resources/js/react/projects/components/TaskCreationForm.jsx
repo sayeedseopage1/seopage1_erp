@@ -67,7 +67,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setStartDate(null);
         setDueDate(null);
         setAssignedTo(null)
-        setPriority(null);
+        setPriority("Medium");
         setEstimateTimeHour(0);
         setEstimateTimeMin(0);
         setFiles([]);

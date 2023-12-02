@@ -80,8 +80,13 @@ export const WorkStatusConfirmationModal = ({
        <React.Fragment>
             <div style={styles.modal_container}>
                     <div className={styles.work_status_confirmation_modal}>
-
+                        <div className='d-flex align-items-center justify-content-end'>
+                            <Button onClick={() => setWorkStatusConfirmationModalIsOpen(false)}>
+                                <i className='fa-solid fa-xmark' />
+                            </Button>
+                        </div>
                         <Switch>
+
                             <Switch.Case condition={!checkIn && !showReminder}>
                                 <React.Fragment>
                                     <div className='text-center'>
@@ -124,7 +129,7 @@ export const WorkStatusConfirmationModal = ({
                                         {/* Daily Task Progress report */}
                                         <li className={`alert ${data?.daily_task_report.daily_submission_status ? 'alert-success d-none': 'alert-danger'}`}>
                                             <div>
-                                                Your Didn't submit last date daily report
+                                                You didn't submit the daily report on <strong>{DateFormat(data?.daily_task_report.data.checking_date).formatted}</strong>
                                                 <Switch.Case condition={!data?.daily_task_report.daily_submission_status}>
                                                     <button
                                                         onClick={() => setShowDailySubmissionForm(true)}

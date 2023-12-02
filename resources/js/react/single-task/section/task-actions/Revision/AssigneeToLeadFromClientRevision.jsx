@@ -276,7 +276,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                     {
                         additionalPaid === 'no' &&
                         <div className="form-group">
-                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label>
+                            <label htmlFor="" className="d-block font-weight-bold">Why client is not paying additionally for these changes? <sup>*</sup></label>
                             <div className="d-block">
                                     <div className="form-check mb-3">
                                         <input

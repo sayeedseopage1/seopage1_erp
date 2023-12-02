@@ -685,6 +685,12 @@ const ResolveModal = ({ state }) => {
                                                     row?.revision_acknowledgement
                                                 }
                                                 getUserById={getUserById}
+                                                additionalInformation={{
+                                                    amount: row?.additional_amount,
+                                                    status: row?.additional_status,
+                                                    isDeny: !!row?.additional_deny_comment,
+                                                    denyComment: row?.additional_deny_comment,
+                                                }}
                                             />
                                         </Switch.Case>
 
