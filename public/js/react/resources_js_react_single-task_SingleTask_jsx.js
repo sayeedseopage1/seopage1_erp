@@ -14967,10 +14967,11 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
   // on blur
   var handleBlurEvent = function handleBlurEvent() {
     Swal.fire({
+      icon: 'question',
       title: 'Do you want to create a milestone?',
-      // showDenyButton: true,
-      confirmButtonText: 'Yes'
-      // denyButtonText: `No`,
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: "No"
     }).then(function (res) {
       if (res.isConfirmed) {
         window.open("/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId, "?tab=milestones"), '_blank');
