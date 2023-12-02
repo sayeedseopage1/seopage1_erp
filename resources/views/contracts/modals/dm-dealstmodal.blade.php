@@ -117,14 +117,12 @@
     <script type="text/javascript">
         $('#lead-convert-button').click(function(e){
             e.preventDefault();
-            // alert('success');
             var message_links = document.getElementsByName("message_link[]");
             var message_links_values = [];
             for (var i = 0; i < message_links.length; i++) {
                 message_links_values.push(message_links[i].value);
             }
             var comments = CKEDITOR.instances.commentsText.getData();
-            // console.log(comments);
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'client_username': document.getElementById("client_username").value,
@@ -133,7 +131,6 @@
                 'comments': comments,
                 'id': document.getElementById("mydata").value,
             }
-            // console.log(data);
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -145,7 +142,6 @@
                 data: data,
                 dataType: "json",
                 success: function (response) {
-                    // console.log(response.status);
                     if (response.status == 400) {
                         $('#errorMsg').html("");
                         $("#lead-convert-button").text("Convert");
@@ -157,7 +153,8 @@
                     }else{
                         $('#lead-convert').trigger("reset");
                         $('#dealstmodal').hide();
-                        $('.table').DataTable().ajax.reload();
+                        window.location.reload();
+                        // $('.table').DataTable().ajax.reload();
                         window.location.href = "/account/deals/" + response.deal_id;
                     }
                 },

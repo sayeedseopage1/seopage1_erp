@@ -376,6 +376,15 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       </div>
                   </div>
                     <div class="col-lg-4 col-md-6 mt-3">
+                        @if($project->deal->project_type == 'hourly')
+                        <x-forms.label fieldId="project_budget" :fieldLabel="__('Hourly Rate')">
+                        </x-forms.label>
+                        <div class="input-group">
+
+                            <input type="number" name="project_budget" value="{{ $project->deal->hourly_rate }}"
+                                class="form-control height-35 f-15 readonly-background" readonly>
+                        </div>
+                        @else
                         <x-forms.label fieldId="project_budget" :fieldLabel="__('modules.projects.projectBudget')">
                         </x-forms.label>
                         <div class="input-group">
@@ -383,6 +392,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             <input type="number" name="project_budget" value="{{ $project->deal->actual_amount }}"
                                 class="form-control height-35 f-15 readonly-background" readonly>
                         </div>
+                        @endif
                     </div>
                     <div class="col-md-6 col-lg-4 d-none" id="clientNotification">
                         <div class="form-group">

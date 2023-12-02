@@ -222,7 +222,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                         Awaiting Approval
                                                         <br>
-                                                        (QC Sumission)
+                                                        (QC Submission)
                                         @endif
                                 @elseif($incomplete_milestone == 0 && $project_completion_count == 0 && $item->id == $last_milestone->id)
                                         @if($item->project_completion_status  == 0)
@@ -259,7 +259,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                                         <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                                 Awaiting Approval
                                                                 <br>
-                                                                (QC Sumission)
+                                                                (QC Submission)
 
 
                                     @elseif($item->qc_status == 1 && $item->invoice_created == 0)
@@ -371,7 +371,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                         <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                 Awaiting Approval
                                 <br>
-                                (QC Sumission)
+                                (QC Submission)
                 @endif
         @elseif($incomplete_milestone == 0 && $project_completion_count == 0 && $item->id == $last_milestone->id)
                 @if($item->project_completion_status  == 0)
@@ -408,7 +408,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                         Awaiting Approval
                                         <br>
-                                        (QC Sumission)
+                                        (QC Submission)
 
 
             @elseif($item->qc_status == 1 && $item->invoice_created == 0)

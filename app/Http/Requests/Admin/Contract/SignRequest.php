@@ -29,7 +29,7 @@ class SignRequest extends FormRequest
         $rules = [
             'first_name' => 'required',
             'last_name' => 'required',
-            'email' => 'required|email:rfc',
+            'email' => 'required|email:rfc|unique:contract_signs,email,'.$this->id,
             'country_code' => 'required',
             'phone_no' => 'required',
         ];

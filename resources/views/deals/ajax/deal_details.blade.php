@@ -909,22 +909,15 @@
 
                                                     </div>
                                                     <div class="wrapper">
-
                                                         <div class="files">
-
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple />
+                                                                <input type="file" name="attach[]" multiple id="fileInput" />
                                                             </span>
-                                                            <input type="submit"
-                                                                class="btn btn-default pull-right comment_btn text-end"
-                                                                value="Comment">
-
+                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
                                                             <br />
-                                                            <ul class="fileList"></ul>
-
+                                                            <ul class="fileList" id="fileList"></ul>
                                                         </div>
-
                                                     </div>
 
                                                     <!-- <div class="wrapper">
@@ -1077,22 +1070,15 @@
 
                                                     </div>
                                                     <div class="wrapper">
-
                                                         <div class="files">
-
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple />
+                                                                <input type="file" name="attach[]" multiple id="fileInput" />
                                                             </span>
-                                                            <input type="submit"
-                                                                class="btn btn-default pull-right comment_btn text-end"
-                                                                value="Comment">
-
+                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
                                                             <br />
-                                                            <ul class="fileList"></ul>
-
+                                                            <ul class="fileList" id="fileList"></ul>
                                                         </div>
-
                                                     </div>
 
                                                     <!-- <div class="wrapper">
@@ -1218,22 +1204,15 @@
 
                                                     </div>
                                                     <div class="wrapper">
-
                                                         <div class="files">
-
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple />
+                                                                <input type="file" name="attach[]" multiple id="fileInput" />
                                                             </span>
-                                                            <input type="submit"
-                                                                class="btn btn-default pull-right comment_btn text-end"
-                                                                value="Comment">
-
+                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
                                                             <br />
-                                                            <ul class="fileList"></ul>
-
+                                                            <ul class="fileList" id="fileList"></ul>
                                                         </div>
-
                                                     </div>
                                                     <!-- <div class="wrapper">
                                                                <input type="file" id="file-input" name="attach[]" multiple>
@@ -1365,22 +1344,15 @@
 
                                                     </div>
                                                     <div class="wrapper">
-
                                                         <div class="files">
-
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple />
+                                                                <input type="file" name="attach[]" multiple id="fileInput" />
                                                             </span>
-                                                            <input type="submit"
-                                                                class="btn btn-default pull-right comment_btn text-end"
-                                                                value="Comment">
-
+                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
                                                             <br />
-                                                            <ul class="fileList"></ul>
-
+                                                            <ul class="fileList" id="fileList"></ul>
                                                         </div>
-
                                                     </div>
                                                     <!-- <div class="wrapper">
                                                                <input type="file" id="file-input" name="attach[]" multiple>
@@ -1515,23 +1487,15 @@
                                                     </div>
 
                                                     <div class="wrapper">
-
                                                         <div class="files">
-
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple />
+                                                                <input type="file" name="attach[]" multiple id="fileInput" />
                                                             </span>
-
-                                                            <input type="submit"
-                                                                class="btn btn-default pull-right comment_btn text-end"
-                                                                value="Comment">
-
+                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
                                                             <br />
-                                                            <ul class="fileList"></ul>
-
+                                                            <ul class="fileList" id="fileList"></ul>
                                                         </div>
-
                                                     </div>
 
                                                     <!-- <div class="wrapper">
@@ -1660,23 +1624,15 @@
                                                     </div>
 
                                                     <div class="wrapper">
-
                                                         <div class="files">
-
                                                             <span class="btn btn-default btn-file">
                                                                 <i class="fa fa-paperclip"></i>
-                                                                <input type="file" name="attach[]" multiple />
+                                                                <input type="file" name="attach[]" multiple id="fileInput" />
                                                             </span>
-
-                                                            <input type="submit"
-                                                                class="btn btn-default pull-right comment_btn text-end"
-                                                                value="Comment">
-
+                                                            <input type="submit" class="btn btn-default pull-right comment_btn text-end" value="Comment">
                                                             <br />
-                                                            <ul class="fileList"></ul>
-
+                                                            <ul class="fileList" id="fileList"></ul>
                                                         </div>
-
                                                     </div>
 
                                                     <!-- <div class="wrapper">
@@ -1866,5 +1822,24 @@
             // });
         })()
     </script>
+
+<script>
+    // fileInput attchment
+    document.addEventListener('DOMContentLoaded', function () {
+        var fileInput = document.getElementById('fileInput');
+        var fileList = document.getElementById('fileList');
+
+        fileInput.addEventListener('change', function () {
+            fileList.innerHTML = ''; 
+
+            var files = fileInput.files;
+            for (var i = 0; i < files.length; i++) {
+                var li = document.createElement('li');
+                li.textContent = files[i].name;
+                fileList.appendChild(li);
+            }
+        });
+    });
+</script>
 
 @endpush

@@ -833,7 +833,7 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-        //        dd($request->all());
+            //    dd($request->all());
         $total_value = $request->input('another_value') * 2;
 
         $project = Project::where('id', $request->project_id)->first();
@@ -863,6 +863,7 @@ class ContractController extends AccountBaseController
             $milestone->milestone_title = $request->title;
             $milestone->project_id = $request->project_id;
             $milestone->milestone_type = $request->milestone_type;
+            $milestone->service_type = $request->service_type;
 
             $milestone->actual_cost =  $request->cost;
             $project = Project::where('id', $request->project_id)->first();
@@ -996,6 +997,7 @@ class ContractController extends AccountBaseController
                 $milestone->summary = $request->summary;
                 $milestone->currency_id = 1;
                 $milestone->milestone_type = $request->milestone_type;
+                $milestone->service_type = $request->service_type;
 
                 $milestone->update();
                 return response()->json([
