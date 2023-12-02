@@ -739,149 +739,149 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id.'?tab=tasks'),
                 ],
-                [
-                    'button_name' => 'Request more time',
-                    'button_color' => 'success',
-                    'button_type' => 'modal',
-                    'button_url' => '',
-                    'modal_form'=> true,
-                    'form'=> [
-                        [
-                            'type'=> 'select',
-                            'label'=>'Select how many hours need you to create tasks',
-                            'name'=>'hours',
-                            'options'=> [
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '6',
-                                    'lable'=> '6',
-                                    'selected'=> true,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '12',
-                                    'lable'=> '12',
-                                    'selected'=> false,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '18',
-                                    'lable'=> '18',
-                                    'selected'=> false,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '24',
-                                    'lable'=> '24',
-                                    'selected'=> false,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '30',
-                                    'lable'=> '30',
-                                    'selected'=> false,
-                                ],
+                // [
+                //     'button_name' => 'Request more time',
+                //     'button_color' => 'success',
+                //     'button_type' => 'modal',
+                //     'button_url' => '',
+                //     'modal_form'=> true,
+                //     'form'=> [
+                //         [
+                //             'type'=> 'select',
+                //             'label'=>'Select how many hours need you to create tasks',
+                //             'name'=>'hours',
+                //             'options'=> [
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '6',
+                //                     'lable'=> '6',
+                //                     'selected'=> true,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '12',
+                //                     'lable'=> '12',
+                //                     'selected'=> false,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '18',
+                //                     'lable'=> '18',
+                //                     'selected'=> false,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '24',
+                //                     'lable'=> '24',
+                //                     'selected'=> false,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '30',
+                //                     'lable'=> '30',
+                //                     'selected'=> false,
+                //                 ],
 
 
-                            ],
-                            'required'=> true,
-                        ], 
-                        [
-                            'type'=> 'hidden',
-                             'value'=> $project->id,
-                             'readonly'=> true,
+                //             ],
+                //             'required'=> true,
+                //         ], 
+                //         [
+                //             'type'=> 'hidden',
+                //              'value'=> $project->id,
+                //              'readonly'=> true,
                            
-                            'name'=>'project_id',
-                            'required'=> true,
-                        ], 
-                         [
-                            'type'=> 'hidden',
-                            'value'=> $action->id,
-                            'readonly'=> true,
+                //             'name'=>'project_id',
+                //             'required'=> true,
+                //         ], 
+                //          [
+                //             'type'=> 'hidden',
+                //             'value'=> $action->id,
+                //             'readonly'=> true,
                             
-                            'name'=>'authorization_id',
+                //             'name'=>'authorization_id',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
-                        [
-                            'type'=> 'textarea',
-                            'label'=> 'Write reson',
+                //         ], 
+                //         [
+                //             'type'=> 'textarea',
+                //             'label'=> 'Write reson',
                            
-                            'readonly'=> false,
+                //             'readonly'=> false,
                             
-                            'name'=>'reason',
+                //             'name'=>'reason',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
+                //         ], 
                         
-                    ], 
-                    'form_action'=> [
-                        [
-                            'type'=> 'button',
-                            'method'=>'POST',
-                            'label'=> 'Submit',
-                            'color'=> 'success',
-                            'url'=> '',
+                //     ], 
+                //     'form_action'=> [
+                //         [
+                //             'type'=> 'button',
+                //             'method'=>'POST',
+                //             'label'=> 'Submit',
+                //             'color'=> 'success',
+                //             'url'=> '',
       
-                        ], 
+                //         ], 
                        
                         
-                    ]
-                ],
-                [
-                    'button_name' => 'All the tasks were already created',
-                    'button_color' => 'success',
-                    'button_type' => 'modal',
-                    'button_url' => '',
-                    'modal_form'=> true,
-                    'form'=> [
+                //     ]
+                // ],
+                // [
+                //     'button_name' => 'All the tasks were already created',
+                //     'button_color' => 'success',
+                //     'button_type' => 'modal',
+                //     'button_url' => '',
+                //     'modal_form'=> true,
+                //     'form'=> [
                         
-                        [
-                            'type'=> 'hidden',
-                             'value'=> $project->id,
-                             'readonly'=> true,
+                //         [
+                //             'type'=> 'hidden',
+                //              'value'=> $project->id,
+                //              'readonly'=> true,
                            
-                            'name'=>'project_id',
-                            'required'=> true,
-                        ], 
-                         [
-                            'type'=> 'hidden',
-                            'value'=> $action->id,
-                            'readonly'=> true,
+                //             'name'=>'project_id',
+                //             'required'=> true,
+                //         ], 
+                //          [
+                //             'type'=> 'hidden',
+                //             'value'=> $action->id,
+                //             'readonly'=> true,
                             
-                            'name'=>'authorization_id',
+                //             'name'=>'authorization_id',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
-                        [
-                            'type'=> 'textarea',
-                            'label' => 'The number of tasks created are too few when compared to the number of deliverables. Why is that?',
+                //         ], 
+                //         [
+                //             'type'=> 'textarea',
+                //             'label' => 'The number of tasks created are too few when compared to the number of deliverables. Why is that?',
                            
-                            'readonly'=> false,
+                //             'readonly'=> false,
                             
-                            'name'=>'comment',
+                //             'name'=>'comment',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
+                //         ], 
                         
-                    ], 
-                    'form_action'=> [
-                        [
-                            'type'=> 'button',
-                            'method'=>'POST',
-                            'label'=> 'Submit',
-                            'color'=> 'success',
-                            'url'=> '',
+                //     ], 
+                //     'form_action'=> [
+                //         [
+                //             'type'=> 'button',
+                //             'method'=>'POST',
+                //             'label'=> 'Submit',
+                //             'color'=> 'success',
+                //             'url'=> '',
       
-                        ], 
+                //         ], 
                        
                         
-                    ]
-                    ],
+                //     ]
+                //     ],
             ];
             $action->button = json_encode($button);
             $action->save();
