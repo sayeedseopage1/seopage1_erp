@@ -481,7 +481,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'TDA'.'x'.$key;
                 $action->item_name= 'Dispute Expiry Warning!';
                 $action->heading= 'Dispute Expiry Warning!';
-                $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show,$raised_against->id').'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
+                $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show',$raised_against->id).'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
                 $action->timeframe= 120;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
