@@ -83,10 +83,11 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
     // on blur
     const handleBlurEvent = () => {
         Swal.fire({
+            icon: 'question',
             title: 'Do you want to create a milestone?',
-            // showDenyButton: true,
+            showCancelButton: true,
             confirmButtonText: 'Yes',
-            // denyButtonText: `No`,
+            cancelButtonText: `No`,
             }).then(res => {
             if(res.isConfirmed){
                 window.open(`/account/projects/${task?.projectId}?tab=milestones`, '_blank');
