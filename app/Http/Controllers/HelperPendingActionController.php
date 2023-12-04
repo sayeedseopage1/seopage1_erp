@@ -1522,6 +1522,41 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
 
         }
+        public function ParentTaskAuthorization($task)
+        {
+            $project= Project::where('id',$task->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $authorizers= User::where('role_id',1)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'PTA';
+                $action->serial = 'PTA'.'x'.$key;
+                $action->item_name= 'PM\'s own work assigning authorization!';
+                $action->heading= 'PM\'s own work assigning authorization!';
+                $action->message = 'Project manager <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> wants to assign task '.$task->heading.' to the team (He should have performed this task on his own)!';
+                $action->timeframe= 24;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+               $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('tasks.index'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            }
+               
+                
+        }
+       
  
 
 }
