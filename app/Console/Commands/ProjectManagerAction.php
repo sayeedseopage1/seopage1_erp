@@ -102,9 +102,11 @@ class ProjectManagerAction extends Command
      //
       $deadline_projects= Project::where('status','in progress')->get();
       foreach ($deadline_projects as $project) {
+        $pro = Project::where('id',324)->first();
         $current_date = Carbon::now();
-        $deadline= $project->deadline;
-        $diffrent_in_hours =  $deadline->diff($deadline);
+        $deadline= $pro->deadline;
+        $diffrent_in_hours =  $deadline->diffInHours($deadline);
+       // dd($diffrent_in_hours);
       }
        
         $this->info('Pending action created');

@@ -362,6 +362,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
     Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
+    Route::post('delete-staging-site', [PendingActionController::class, 'DeleteStagingSite'])->name('delete-staging');
 
     /** DEVELOPER CHECK IN CHECK OUT START*/
     Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);

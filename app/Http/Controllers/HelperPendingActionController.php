@@ -1468,7 +1468,7 @@ class HelperPendingActionController extends AccountBaseController
                             'method'=>'POST',
                             'label'=> 'Confirm Deletion',
                             'color'=> 'danger',
-                            'url'=> '',
+                            'url'=> route('delete-staging'),
       
                         ], 
                        

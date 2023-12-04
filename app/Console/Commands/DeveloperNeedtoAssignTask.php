@@ -50,7 +50,7 @@ class DeveloperNeedtoAssignTask extends Command
         
                 $current_date = Carbon::now();
         
-                if ($current_date == $project_submission_date && $project_submission->dummy_link != null) {
+                if ($current_date >= $project_submission_date && $project_submission->dummy_link != null) {
                     $helper = new HelperPendingActionController();
                     $helper->RemovalofStagingSite($project, $project_submission);
                 }

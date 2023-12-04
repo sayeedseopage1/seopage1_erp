@@ -642,4 +642,8 @@ class PendingActionController extends AccountBaseController
             'status' => 200,
         ]);
     }
+    public function DeleteStagingSite(Request $request)
+    {
+        dd($request);
+    }
 }
