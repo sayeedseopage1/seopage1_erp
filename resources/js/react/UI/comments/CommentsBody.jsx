@@ -62,7 +62,7 @@ const CommentsBody = ({
 
     // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
-    const [selectedComments, setSecletedComments] = useState([]);
+    const [selectedComments, setSecletedComments] = useState({});
     const [mentionedComment, setMentionedComment] = useState(null);
     const [contextHolder, setContextHolder] = useState(null);
     // =================================================================
@@ -78,7 +78,12 @@ const CommentsBody = ({
                 <span className={`context_title`}>Reply</span>
             </ContextMenuItem>
             <ContextMenuItem
-            // onSelect={copyText}
+                onSelect={()=>{
+                  setSecletedComments((prev)=>({
+                    ...prev,
+                    [contextHolder.id]:contextHolder.user_id,
+                }))
+                }}
             >
                 <TbMessage2Check className={`context_icons`} />
                 <span className={`context_title`}>Select Message</span>

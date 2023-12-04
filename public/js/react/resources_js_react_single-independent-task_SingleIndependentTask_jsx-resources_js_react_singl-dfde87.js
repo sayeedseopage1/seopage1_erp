@@ -34,10 +34,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_12__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -122,7 +128,7 @@ var CommentsBody = function CommentsBody(_ref) {
     _useState14 = _slicedToArray(_useState13, 2),
     scroll = _useState14[0],
     setScroll = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
     _useState16 = _slicedToArray(_useState15, 2),
     selectedComments = _useState16[0],
     setSecletedComments = _useState16[1];
@@ -147,9 +153,12 @@ var CommentsBody = function CommentsBody(_ref) {
           className: "context_title",
           children: "Reply"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
-      // onSelect={copyText}
-      , {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+        onSelect: function onSelect() {
+          setSecletedComments(function (prev) {
+            return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, contextHolder.id, contextHolder.user_id));
+          });
+        },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_16__.TbMessage2Check, {
           className: "context_icons"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
@@ -1442,6 +1451,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -1472,7 +1491,9 @@ var SingleChat = function SingleChat(_ref) {
     idMatch = _ref.idMatch;
   var _useCommentContext = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.useCommentContext)(),
     setContextHolder = _useCommentContext.setContextHolder,
-    setMentionedComment = _useCommentContext.setMentionedComment;
+    setMentionedComment = _useCommentContext.setMentionedComment,
+    selectedComments = _useCommentContext.selectedComments,
+    setSecletedComments = _useCommentContext.setSecletedComments;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     showCommentMenu = _useState2[0],
@@ -1569,6 +1590,18 @@ var SingleChat = function SingleChat(_ref) {
       children: "".concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"))
     });
   };
+  var handleSelect = function handleSelect() {
+    setSecletedComments(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, id, comment.user_id));
+    });
+  };
+  var handleUnSelect = function handleUnSelect() {
+    setSecletedComments(function (prev) {
+      var selected = _objectSpread({}, prev);
+      delete selected[id];
+      return selected;
+    });
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     id: id,
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat),
@@ -1580,145 +1613,171 @@ var SingleChat = function SingleChat(_ref) {
         height: "10px"
         // backgroundColor: "black"
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
-      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card),
-      children: [!isCurrentUser() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_avator)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("article", {
-        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text),
-        children: [handleSenderInfo({
-          currentComment: comment,
-          previousComment: prevComment
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-          style: {
-            alignSelf: isCurrentUser() ? "flex-end" : "flex-start"
-          },
-          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_container, " ").concat(idMatch ? "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_match) : ""),
-          children: [comment !== null && comment !== void 0 && comment.mention_comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-            onContextMenu: function onContextMenu(e) {
-              _onContextMenu(e);
-              setContextHolder(comment);
-            },
-            onKeyDown: onKeyDown,
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      style: {
+        display: "inline-flex",
+        // border:"solid",
+        gap: "0 6px",
+        flexDirection: isCurrentUser() ? "row-reverse" : "row"
+      },
+      children: [_toConsumableArray(Object.keys(selectedComments)).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        style: {
+          // border: "solid",
+          height: "28px",
+          // flex: "0 0 28px",
+          borderRadius: "28px"
+        },
+        onClick: function onClick() {
+          if (selectedComments[id]) {
+            handleUnSelect();
+          } else {
+            handleSelect();
+          }
+        },
+        children: selectedComments[id] ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Select, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(UnSelect, {})
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card),
+        children: [!isCurrentUser() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_avator)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("article", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text),
+          children: [handleSenderInfo({
+            currentComment: comment,
+            previousComment: prevComment
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             style: {
-              borderRadius: comment !== null && comment !== void 0 && comment.comment ? "5px 5px 0 0" : "5px",
-              borderBottom: comment !== null && comment !== void 0 && comment.comment ? "solid 1px hsla(0, 0%, 44%, 0.13)" : "0.15px solid #aaaaaa"
+              alignSelf: isCurrentUser() ? "flex-end" : "flex-start"
             },
-            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_mentioned_comment),
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_7__.HiReply, {
-              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_icon)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("article", {
-              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area),
-              children: [comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_mssg),
-                children: comment.comment
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$files = comment.files) !== null && _comment$files !== void 0 && _comment$files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
-                children: comment === null || comment === void 0 || (_comment$files2 = comment.files) === null || _comment$files2 === void 0 ? void 0 : _comment$files2.map(function (file, i) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-                    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
-                    children: handleFileComponent(file)
-                  }, i);
-                })
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                style: {
-                  fontStyle: "italic"
-                },
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_sender_time),
-                children: "".concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"))
-              })]
-            })]
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            onContextMenu: function onContextMenu(e) {
-              _onContextMenu(e);
-              setContextHolder(comment);
-            },
-            onKeyDown: onKeyDown,
-            style: {
-              position: "relative",
-              borderRadius: comment !== null && comment !== void 0 && comment.mention_comment ? "0 0 5px 5px" : "5px",
-              borderTop: comment !== null && comment !== void 0 && comment.mention_comment ? "none" : "0.15px solid #aaaaaa"
-            },
-            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_message),
-            children: comment.comment
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), comment !== null && comment !== void 0 && comment.files ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FileView, {
-            onContextMenu: function onContextMenu(e) {
-              _onContextMenu(e);
-              setContextHolder(comment);
-            },
-            onKeyDown: onKeyDown,
-            isCurrentUser: isCurrentUser(),
-            files: comment.files,
-            topMargin: !!(comment !== null && comment !== void 0 && comment.comment)
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-            onClick: function onClick() {
-              // setScroll((prev) => !prev);
-              setShowCommentMenu(function (prev) {
-                return !prev;
-              });
-            },
-            style: {
-              left: isCurrentUser() ? "-14px" : "auto",
-              right: isCurrentUser() ? "auto" : "-14px"
-            },
-            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_btn),
-            ref: menuBtnRef,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_fi__WEBPACK_IMPORTED_MODULE_8__.FiMoreVertical, {
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_container, " ").concat(idMatch ? "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_match) : ""),
+            children: [comment !== null && comment !== void 0 && comment.mention_comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+              onContextMenu: function onContextMenu(e) {
+                _onContextMenu(e);
+                setContextHolder(comment);
+              },
+              onKeyDown: onKeyDown,
               style: {
-                height: "100%",
-                width: "100%"
-              }
-            })
-          }), showCommentMenu ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-            ref: menuRef,
-            style: {
-              left: isCurrentUser() ? "-98px" : "auto",
-              right: isCurrentUser() ? "auto" : "-98px"
-            },
-            className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_options,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
-              onClick: function onClick() {
-                setShowCommentMenu(false);
-                setMentionedComment(comment);
+                borderRadius: comment !== null && comment !== void 0 && comment.comment ? "5px 5px 0 0" : "5px",
+                borderBottom: comment !== null && comment !== void 0 && comment.comment ? "solid 1px hsla(0, 0%, 44%, 0.13)" : "0.15px solid #aaaaaa"
               },
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_mentioned_comment),
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_7__.HiReply, {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
-                children: "Reply"
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_icon)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("article", {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area),
+                children: [comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_mssg),
+                  children: comment.comment
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$files = comment.files) !== null && _comment$files !== void 0 && _comment$files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
+                  children: comment === null || comment === void 0 || (_comment$files2 = comment.files) === null || _comment$files2 === void 0 ? void 0 : _comment$files2.map(function (file, i) {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
+                      children: handleFileComponent(file)
+                    }, i);
+                  })
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  style: {
+                    fontStyle: "italic"
+                  },
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_sender_time),
+                  children: "".concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"))
+                })]
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
-              onClick: function onClick() {
-                setShowCommentMenu(false);
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              onContextMenu: function onContextMenu(e) {
+                _onContextMenu(e);
+                setContextHolder(comment);
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_9__.TbMessage2Check, {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
-                children: "Select Message"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
-              onClick: function onClick() {
-                setShowCommentMenu(false);
+              onKeyDown: onKeyDown,
+              style: {
+                position: "relative",
+                borderRadius: comment !== null && comment !== void 0 && comment.mention_comment ? "0 0 5px 5px" : "5px",
+                borderTop: comment !== null && comment !== void 0 && comment.mention_comment ? "none" : "0.15px solid #aaaaaa"
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_10__.MdOutlineContentCopy, {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
-                children: "Copy"
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
-              onClick: function onClick() {
-                setShowCommentMenu(false);
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_message),
+              children: comment.comment
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), comment !== null && comment !== void 0 && comment.files ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(FileView, {
+              onContextMenu: function onContextMenu(e) {
+                _onContextMenu(e);
+                setContextHolder(comment);
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_11__.IoMdCloseCircleOutline, {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
-                children: "Remove"
+              onKeyDown: onKeyDown,
+              isCurrentUser: isCurrentUser(),
+              files: comment.files,
+              topMargin: !!(comment !== null && comment !== void 0 && comment.comment)
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+              onClick: function onClick() {
+                // setScroll((prev) => !prev);
+                setShowCommentMenu(function (prev) {
+                  return !prev;
+                });
+              },
+              style: {
+                left: isCurrentUser() ? "-14px" : "auto",
+                right: isCurrentUser() ? "auto" : "-14px"
+              },
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_btn),
+              ref: menuBtnRef,
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_fi__WEBPACK_IMPORTED_MODULE_8__.FiMoreVertical, {
+                style: {
+                  height: "100%",
+                  width: "100%"
+                }
+              })
+            }), showCommentMenu ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+              ref: menuRef,
+              style: {
+                left: isCurrentUser() ? "-98px" : "auto",
+                right: isCurrentUser() ? "auto" : "-98px"
+              },
+              className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_options,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+                onClick: function onClick() {
+                  setShowCommentMenu(false);
+                  setMentionedComment(comment);
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_7__.HiReply, {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                  children: "Reply"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+                onClick: function onClick() {
+                  setShowCommentMenu(false);
+                  setSecletedComments(function (prev) {
+                    return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, id, comment.user_id));
+                  });
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_9__.TbMessage2Check, {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                  children: "Select Message"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+                onClick: function onClick() {
+                  setShowCommentMenu(false);
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_10__.MdOutlineContentCopy, {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                  children: "Copy"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+                onClick: function onClick() {
+                  setShowCommentMenu(false);
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_11__.IoMdCloseCircleOutline, {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+                  children: "Remove"
+                })]
               })]
-            })]
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {})]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {})]
+          })]
         })]
       })]
     })]
@@ -1789,6 +1848,93 @@ var FileView = function FileView(_ref3) {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
         children: handleFileComponent(file)
       }, i);
+    })
+  });
+};
+var Select = function Select() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("svg", {
+    style: {
+      cursor: "pointer"
+    }
+    // onClick={onclick}
+    ,
+    id: "Group_3960",
+    "data-name": "Group 3960",
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "28",
+    height: "28",
+    viewBox: "0 0 28 28",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("circle", {
+      id: "Ellipse_54",
+      "data-name": "Ellipse 54",
+      cx: "14",
+      cy: "14",
+      r: "14",
+      fill: "#009cec"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("g", {
+      id: "Group_3829",
+      "data-name": "Group 3829",
+      transform: "translate(4.278 5.251)",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+        id: "Path_1532",
+        "data-name": "Path 1532",
+        d: "M6.361,6.861,5,8.222l4.861,4.861,9.722-9.722L18.222,2,9.861,10.361Z",
+        transform: "translate(-0.139 -1.028)",
+        fill: "#fff"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("path", {
+        id: "Path_1533",
+        "data-name": "Path 1533",
+        d: "M8.75,16.556a6.806,6.806,0,1,1,0-13.611,7.094,7.094,0,0,1,3.4.875l.972-1.653A8.758,8.758,0,0,0,0,9.75a8.75,8.75,0,0,0,17.5,0H15.556A6.764,6.764,0,0,1,8.75,16.556Z",
+        transform: "translate(0 -1)",
+        fill: "#fff"
+      })]
+    })]
+  });
+};
+var UnSelect = function UnSelect() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("svg", {
+    style: {
+      cursor: "pointer"
+    }
+    // onClick={onClick}
+    ,
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "28",
+    height: "28",
+    viewBox: "0 0 28 28",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("g", {
+      id: "Group_3961",
+      "data-name": "Group 3961",
+      transform: "translate(0 -0.068)",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("circle", {
+        id: "Ellipse_1044",
+        "data-name": "Ellipse 1044",
+        cx: "14",
+        cy: "14",
+        r: "14",
+        transform: "translate(0 0.068)",
+        fill: "#009cec"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("g", {
+        id: "Ellipse_1043",
+        "data-name": "Ellipse 1043",
+        transform: "translate(7 7.068)",
+        fill: "none",
+        stroke: "#fff",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        strokeWidth: "1.5",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("circle", {
+          cx: "7",
+          cy: "7",
+          r: "7",
+          stroke: "none"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("circle", {
+          cx: "7",
+          cy: "7",
+          r: "7.75",
+          fill: "none"
+        })]
+      })]
     })
   });
 };
