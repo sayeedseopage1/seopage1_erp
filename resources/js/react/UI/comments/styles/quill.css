@@ -99,6 +99,17 @@
   padding-top: 14px 0 !important;
   height: 52px;
 }
+/* .open{
+  animation: opening 0.5s steps(100) 0s forwards;
+}
+@keyframes opening {
+  from{
+    max-height: 0;
+  }
+  to {
+    max-height: 100%;
+  }
+} */
 
 .ql-toolbar button {
   border: none;

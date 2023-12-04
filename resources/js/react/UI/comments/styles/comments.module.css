@@ -68,22 +68,42 @@
   border:solid 1px #727272;
 }
 .commentsBody_header_searchBar_container{
-  flex: 1 0 auto;
+  /* flex: 1 0 auto; */
+  flex-grow: 1;
   display: flex;
   /* align-items: center; */
   gap: 5px;
   overflow: hidden;
   /* width: 100%; */
-  /* animation: searchBar 1s steps(100) forwards; */
+  /* max-width: 100px; */
+  /* border: solid; */
 }
-/* @keyframes searchBar {
+.open{
+  animation: opening 0.5s steps(100) 0s forwards;
+}
+@keyframes opening {
   from{
-    width: 0;
+    /* display: none; */
+    max-width: 0;
   }
   to {
-    width: 100%;
+    /* display: flex; */
+    max-width: 100%;
   }
-} */
+}
+.close{
+  animation: closing 0.5s steps(100) 0s forwards;
+}
+@keyframes closing {
+  from{
+    /* display: flex; */
+    max-width: 100%;
+  }
+  to {
+    /* display: none; */
+    max-width: 0%;
+  }
+}
 .commentsBody_header_searchBar{
   flex: 1 1 auto;
   padding: 2px 3px;
@@ -339,6 +359,8 @@
 -moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */
 }
 .chatInput_filePreview__file__fileIcon{
+  height: 12px;
+  width: 12px;
   cursor: pointer;
 }
 .chatInput_filePreview__file__fileName{

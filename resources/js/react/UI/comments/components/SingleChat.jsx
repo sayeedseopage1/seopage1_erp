@@ -10,7 +10,14 @@ import _ from "lodash";
 import { useCommentContext } from "../CommentsBody";
 import dayjs from "dayjs";
 
-const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch, comment_text_id }) => {
+const SingleChat = ({
+    id,
+    comment,
+    prevComment,
+    onContextMenu,
+    onKeyDown,
+    idMatch,
+}) => {
     const { setContextHolder, setMentionedComment } = useCommentContext();
     const [showCommentMenu, setShowCommentMenu] = useState(false);
     const menuRef = useRef(null);
@@ -52,7 +59,7 @@ const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch, comment_te
     }, []);
 
     const isCurrentUser = () => {
-        return comment.id % 2 === 0;
+        return comment.id % 3 !== 0;
     };
 
     // file preview url generator
@@ -111,6 +118,25 @@ const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch, comment_te
         }
     };
 
+    const handleSenderInfo = ({currentComment,previousComment}) => {
+        if (true) {
+        } else {
+        }
+        return (
+            <span
+                style={{
+                    alignSelf: isCurrentUser() ? "flex-end" : "flex-start",
+                }}
+                className={`${style.singleChat_comment_card_text_time}`}
+            >
+                {/* Nafis, Nov 16,2023, 2:54 PM */}
+                {`${comment?.added_by_name}, ${dayjs(
+                    comment?.created_at
+                ).format("MMM DD, YYYY, hh:mm A")}`}
+            </span>
+        );
+    };
+
     return (
         <div
             id={id}
@@ -134,19 +160,7 @@ const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch, comment_te
                 )}
                 <article className={`${style.singleChat_comment_card_text}`}>
                     {/* comment sender info */}
-                    <span
-                        style={{
-                            alignSelf: isCurrentUser()
-                                ? "flex-end"
-                                : "flex-start",
-                        }}
-                        className={`${style.singleChat_comment_card_text_time}`}
-                    >
-                        {/* Nafis, Nov 16,2023, 2:54 PM */}
-                        {`${comment?.added_by_name}, ${dayjs(
-                            comment?.created_at
-                        ).format("MMM DD, YYYY, hh:mm A")}`}
-                    </span>
+                    {handleSenderInfo({currentComment:comment,previousComment:prevComment})}
 
                     {/* comment message box */}
                     <div
@@ -185,7 +199,6 @@ const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch, comment_te
                                 >
                                     {comment?.comment ? (
                                         <span
-                                            id={comment_text_id}
                                             className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                         >
                                             {comment.comment}

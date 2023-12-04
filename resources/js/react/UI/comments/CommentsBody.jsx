@@ -57,8 +57,8 @@ const CommentsBody = ({
     const [searchText, setSearchText] = useState("");
     const [allComments, setAllComments] = useState(comments);
     const [commentIndex, setCommentIndex] = useState(0);
-    const [searchIndexes, setSearchIndexes] = useState(_.fill(Array(20), "*"));
-    const [targetComment, setTargetComment] = useState(null);
+    const [searchIndexes, setSearchIndexes] = useState([]);
+    const [animation, setAnimation] = useState(false);
 
     // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
@@ -98,26 +98,47 @@ const CommentsBody = ({
         </>
     );
 
+    const getTextContent = (element) => {
+        if (typeof element === "string") {
+            return element;
+        }
+
+        if (Array.isArray(element)) {
+            return element.map(getTextContent).join("");
+        }
+
+        if (React.isValidElement(element)) {
+            const children = React.Children.toArray(element.props.children);
+            return getTextContent(children);
+        }
+
+        return "";
+    };
+
     useEffect(() => {
         // console.log("searchText :", searchText);
         if (searchText) {
             setAllComments(() => {
-                return [...comments].filter((comment) => {
-                    // console.dir('comment =>',React.Children.only(comment.comment));
-                    let target;
-                    setTargetComment(comment.comment)
-                    
-                    console.log(target);
-                    if (target) {
-                        const find = target?.textContent?.includes(searchText);
-                        // console.log({ find });
-                        return find;
-                    } else {
-                        return false;
-                    }
+                const filteredComments = [...comments].filter((comment) => {
+                    return getTextContent(comment.comment)
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase());
+                    // const textContent = getTextContent(comment.comment).toLowerCase();
+                    // console.log(textContent);
+                    // return true;
                 });
+                setSearchIndexes(
+                    filteredComments.map((comment) => {
+                        return comment.id;
+                    })
+                );
+                setCommentIndex(0);
+                return filteredComments;
             });
         } else {
+            // setScroll((prev) => !prev);
+            setSearchIndexes([]);
+            setCommentIndex(0);
             setAllComments([...comments]);
         }
     }, [searchText]);
@@ -140,14 +161,18 @@ const CommentsBody = ({
 
     useEffect(() => {
         if (commentIndex) {
-            document.getElementById(commentIndex).scrollIntoView({
-                behavior: "smooth",
-                // block: "",
-            });
+            document
+                .getElementById(
+                    searchIndexes[searchIndexes.length - commentIndex]
+                )
+                .scrollIntoView({
+                    behavior: "smooth",
+                    // block: "",
+                });
         } else {
             setScroll((prev) => !prev);
         }
-        // console.log(window.location);
+        // console.log(searchIndexes.length - commentIndex,searchIndexes[searchIndexes.length - commentIndex]);
     }, [commentIndex]);
 
     return (
@@ -162,7 +187,6 @@ const CommentsBody = ({
                 setContextHolder,
             }}
         >
-            <div id="target_comment" style={{display:'none'}} dangerouslySetInnerHTML={{__html:targetComment}}/>
             <div
                 className={style.commentsBody}
                 style={{
@@ -226,63 +250,69 @@ const CommentsBody = ({
                     </span>
 
                     {showSearchBar ? (
-                        <div
-                            style={
-                                {
-                                    // width: showSearchBar?'auto':'0',
-                                    // animation:showSearchBar?'':'none'
-                                }
-                            }
-                            className={`${style.commentsBody_header_searchBar_container}`}
+                    <div
+                        className={`${
+                            style.commentsBody_header_searchBar_container
+                        } ${animation ? style.open : style.close}`}
+                    >
+                        <input
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            placeholder="Search..."
+                            className={`${style.commentsBody_header_searchBar}`}
+                            type="text"
+                        />
+                        <section
+                            className={`${style.commentsBody_header_searchBar_actions}`}
                         >
-                            <input
-                                value={searchText}
-                                onChange={(e) => setSearchText(e.target.value)}
-                                placeholder="Search..."
-                                className={`${style.commentsBody_header_searchBar}`}
-                                type="text"
+                            <IoIosArrowDown
+                                className={`${style.commentsBody_header_searchBar_actions_btn}`}
+                                onClick={() => {
+                                    setCommentIndex((prev) => {
+                                        if (prev > 0) {
+                                            return prev - 1;
+                                        } else {
+                                            return prev;
+                                        }
+                                    });
+                                }}
                             />
-                            <section
-                                className={`${style.commentsBody_header_searchBar_actions}`}
+                            <span
+                                className={`${style.commentsBody_header_searchBar_actions_text}`}
                             >
-                                <IoIosArrowDown
-                                    className={`${style.commentsBody_header_searchBar_actions_btn}`}
-                                    onClick={() => {
-                                        setCommentIndex((prev) => {
-                                            if (prev > 0) {
-                                                return prev - 1;
-                                            } else {
-                                                return prev;
-                                            }
-                                        });
-                                    }}
-                                />
-                                <span
-                                    className={`${style.commentsBody_header_searchBar_actions_text}`}
-                                >
-                                    {`${commentIndex} of ${searchIndexes.length}`}
-                                </span>
-                                <IoIosArrowUp
-                                    className={`${style.commentsBody_header_searchBar_actions_btn}`}
-                                    onClick={() => {
-                                        setCommentIndex((prev) => {
-                                            if (prev < searchIndexes.length) {
-                                                return prev + 1;
-                                            } else {
-                                                return prev;
-                                            }
-                                        });
-                                    }}
-                                />
-                            </section>
-                        </div>
+                                {`${commentIndex} of ${searchIndexes.length}`}
+                            </span>
+                            <IoIosArrowUp
+                                className={`${style.commentsBody_header_searchBar_actions_btn}`}
+                                onClick={() => {
+                                    setCommentIndex((prev) => {
+                                        if (prev < searchIndexes.length) {
+                                            return prev + 1;
+                                        } else {
+                                            return prev;
+                                        }
+                                    });
+                                }}
+                            />
+                        </section>
+                    </div>
                     ) : (
                         <></>
                     )}
 
                     {/* search btn */}
                     <span
-                        onClick={() => setShowSearchBar((prev) => !prev)}
+                        onClick={()=>{
+                          if (showSearchBar) {
+                            setTimeout(() => {
+                                setShowSearchBar(false);
+                            }, 500);
+                            setAnimation(false);
+                          } else {
+                            setShowSearchBar(true);
+                            setAnimation(true);
+                          }
+                        }}
                         className={style.commentsBody_header_btn}
                     >
                         <svg
@@ -310,13 +340,8 @@ const CommentsBody = ({
                             className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
                         />
                     )}
-                    {/* <GiCancel
-                        onClick={() => {
-                            setFullScreenView(false);
-                            close();
-                        }}
-                        className={`${style.commentsBody_header_btn} text-danger`}
-                    /> */}
+
+                    {/* cancel btn */}
                     <span
                         onClick={() => {
                             setFullScreenView(false);
@@ -390,14 +415,20 @@ const CommentsBody = ({
                     {allComments.map((comment, i) => {
                         return (
                             <SingleChat
-                                idMatch={comment.id === commentIndex}
+                                idMatch={
+                                    comment.id ===
+                                    searchIndexes[
+                                        searchIndexes.length - commentIndex
+                                    ]
+                                }
                                 id={comment.id}
-                                comment_text_id={`${comment.id}_comment`}
+                                // comment_text_id={`${comment.id}_comment`}
                                 setScroll={setScroll}
                                 onContextMenu={onContextMenu}
                                 onKeyDown={onKeyDown}
                                 key={i}
                                 comment={comment}
+                                prevComment={i?allComments[i-1]:null}
                             />
                         );
                     })}

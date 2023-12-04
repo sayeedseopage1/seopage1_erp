@@ -206,6 +206,8 @@ function FilePreviewer({ files, setFiles }) {
     const handleFileComponent = (file) => {
         const [type, ext] = file.type.split("/");
         // console.log({ type, ext });
+        const arr = file.name.split('.')
+        console.log(arr[arr.length-1]);
 
         switch (type) {
             case "image":
