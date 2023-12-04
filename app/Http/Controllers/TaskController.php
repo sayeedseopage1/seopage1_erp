@@ -173,6 +173,7 @@ class TaskController extends AccountBaseController
             'tasks.client_name as ind_client_name',
             'ind_client.id as ind_client_id',
             'ind_client.name as ind_existing_client_name',
+            'task_submissions.created_at as task_submission_date',
 
             DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id AND DATE(sub_tasks.created_at) >= "' . $startDate . '" AND DATE(sub_tasks.created_at) <= "' . $endDate . '") as subtasks_count')
 
@@ -189,8 +190,17 @@ class TaskController extends AccountBaseController
             ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
             ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
             ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            // ->leftJoin('project_time_logs', function ($join) {
+            //     $join->on('project_time_logs.task_id', '=', 'tasks.id')
+            //         ->orderBy('project_time_logs.created_at', 'desc');
+            // })
             ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
             ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
+            ->leftJoin('task_submissions', function ($join) {
+                $join->on('task_submissions.task_id', '=', 'tasks.id')
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
+            })
             ->groupBy('tasks.id')
             // ->leftJoin('task_approves','task_approves.task_id','tasks.id')
         ;
@@ -411,12 +421,17 @@ class TaskController extends AccountBaseController
 
             ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
             ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
-            ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            // ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            ->leftJoin('project_time_logs', function ($join) {
+                $join->on('project_time_logs.task_id', '=', 'tasks.id')
+                    ->orderBy('project_time_logs.created_at', 'desc');
+            })
             ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
             ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
             ->leftJoin('task_submissions', function ($join) {
                 $join->on('task_submissions.task_id', '=', 'tasks.id')
-                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)');
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
             })
 
             ->groupBy('tasks.id')
@@ -503,13 +518,18 @@ class TaskController extends AccountBaseController
             ->leftJoin('project_milestones', 'project_milestones.id', 'tasks.milestone_id')
             ->join('taskboard_columns', 'taskboard_columns.id', 'tasks.board_column_id')
             ->leftJoin('task_category', 'task_category.id', 'tasks.task_category_id')
-            ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            // ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            ->leftJoin('project_time_logs', function ($join) {
+                $join->on('project_time_logs.task_id', '=', 'tasks.id')
+                    ->orderBy('project_time_logs.created_at', 'desc');
+            })
             ->leftJoin('project_deliverables', 'project_deliverables.milestone_id', 'project_milestones.id')
             ->leftJoin('task_approves', 'task_approves.task_id', 'tasks.id')
             ->leftJoin('task_files', 'task_files.task_id', 'tasks.id')
             ->leftJoin('task_submissions', function ($join) {
                 $join->on('task_submissions.task_id', '=', 'tasks.id')
-                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)');
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)')
+                    ->orderBy('task_submissions.created_at', 'desc');
             })
 
 
@@ -1789,6 +1809,11 @@ class TaskController extends AccountBaseController
             $pending_parent_tasks->sub_acknowledgement = $request->sub_acknowledgement;
             $pending_parent_tasks->need_authorization = $request->need_authorization ? 1 : 0;
             $pending_parent_tasks->save();
+
+            $helper = new HelperPendingActionController();
+
+
+            $helper->ParentTaskAuthorization($pending_parent_tasks);
             if ($request->hasFile('file')) {
                 $files = $request->file('file');
                 $destinationPath = storage_path('app/public/');
@@ -1814,19 +1839,7 @@ class TaskController extends AccountBaseController
             if (is_array($request->user_id)) {
                 // $assigned_to = User::find($request->user_id[0]);
 
-                // if ($assigned_to->role_id == 6) {
-                //     $authorization_action = new AuthorizationAction();
-                //     $authorization_action->model_name = $pending_parent_tasks->getMorphClass();
-                //     $authorization_action->model_id = $pending_parent_tasks->id;
-                //     $authorization_action->type = 'task_assigned_on_lead_developer';
-                //     $authorization_action->deal_id = $pending_parent_tasks->project->deal_id;
-                //     $authorization_action->project_id = $pending_parent_tasks->project_id;
-                //     $authorization_action->link = route('projects.show', $pending_parent_tasks->project->id) . '?tab=tasks';
-                //     $authorization_action->title = Auth::user()->name . ' assigned task on you';
-                //     $authorization_action->authorization_for = $assigned_to->id;
-                //     $authorization_action->save();
-                //     //authorization action end
-                // }
+              
                 // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
                 // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
                 // $this->logProjectActivity($project->id, $link);
@@ -1841,20 +1854,7 @@ class TaskController extends AccountBaseController
 
             } else {
                 // $assigned_to = User::find($request->user_id);
-                // if ($assigned_to->role_id == 6) {
-
-                //     $authorization_action = new AuthorizationAction();
-                //     $authorization_action->model_name = $pending_parent_tasks->getMorphClass();
-                //     $authorization_action->model_id = $pending_parent_tasks->id;
-                //     $authorization_action->type = 'task_assigned_on_lead_developer';
-                //     $authorization_action->deal_id = $pending_parent_tasks->project->deal_id;
-                //     $authorization_action->project_id = $pending_parent_tasks->project_id;
-                //     $authorization_action->link = route('projects.show', $pending_parent_tasks->project_id) . '?tab=tasks';
-                //     $authorization_action->title = Auth::user()->name . ' assigned task on you';
-                //     $authorization_action->authorization_for = $assigned_to->id;
-                //     $authorization_action->save();
-                //     //authorization action end
-                // }
+             
                 // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
                 // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
                 // $this->logProjectActivity($project->id, $link);
@@ -6225,6 +6225,48 @@ class TaskController extends AccountBaseController
             $task->created_by = $pendingParentTasks->added_by;
             $task->pp_task_id = $pendingParentTasks->id;
             $task->save();
+            if($task->independent_task_status != 1)
+            {
+                $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
+                if($actions != null)
+                {
+                foreach ($actions as $key => $action) {
+                    $project= Project::where('id',$task->project_id)->first();
+        
+                        $action->authorized_by= Auth::id();
+                        $action->authorized_at= Carbon::now();
+                        $action->past_status = 1;
+                        $action->save();
+        
+                       
+                        $project_manager= User::where('id',$project->pm_id)->first();
+                        $client= User::where('id',$project->client_id)->first();
+                        $authorize_by= User::where('id',$action->authorized_by)->first();
+        
+                        $past_action= new PendingActionPast();
+                        $past_action->item_name = $action->item_name;
+                        $past_action->code = $action->code;
+                        $past_action->serial = $action->serial;
+                        $past_action->action_id = $action->id;
+                        $past_action->heading = $action->heading;
+                        $past_action->message = 'PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>\'s request to assign his own task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> to the team has been authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                      //  $past_action->button = $action->button;
+                        $past_action->timeframe = $action->timeframe;
+                        $past_action->authorization_for = $action->authorization_for;
+                        $past_action->authorized_by = $action->authorized_by;
+                        $past_action->authorized_at = $action->authorized_at;
+                        $past_action->expired_status = $action->expired_status;
+                        $past_action->past_status = $action->past_status;
+                        $past_action->project_id = $action->project_id;
+                        $past_action->task_id = $action->task_id;
+                        $past_action->client_id = $action->client_id;
+                       // $past_action->deliverable_id = $action->deliverable_id;
+                        $past_action->save();
+        
+        
+                }
+            }
+            }
 
 
 
@@ -6259,6 +6301,48 @@ class TaskController extends AccountBaseController
             $pendingParentTasks->comment = $request->comment;
             $pendingParentTasks->authorize_by = Auth::user()->id;
             $pendingParentTasks->save();
+            if($pendingParentTasks->independent_task_status != 1)
+            {
+                $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
+                if($actions != null)
+                {
+                foreach ($actions as $key => $action) {
+                    $project= Project::where('id',$pendingParentTasks->project_id)->first();
+        
+                        $action->authorized_by= Auth::id();
+                        $action->authorized_at= Carbon::now();
+                        $action->past_status = 1;
+                        $action->save();
+        
+                       
+                        $project_manager= User::where('id',$project->pm_id)->first();
+                        $client= User::where('id',$project->client_id)->first();
+                        $authorize_by= User::where('id',$action->authorized_by)->first();
+        
+                        $past_action= new PendingActionPast();
+                        $past_action->item_name = $action->item_name;
+                        $past_action->code = $action->code;
+                        $past_action->serial = $action->serial;
+                        $past_action->action_id = $action->id;
+                        $past_action->heading = $action->heading;
+                        $past_action->message = 'PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>\'s request to assign his own task '.$pendingParentTasks->heading.' to the team has been authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                      //  $past_action->button = $action->button;
+                        $past_action->timeframe = $action->timeframe;
+                        $past_action->authorization_for = $action->authorization_for;
+                        $past_action->authorized_by = $action->authorized_by;
+                        $past_action->authorized_at = $action->authorized_at;
+                        $past_action->expired_status = $action->expired_status;
+                        $past_action->past_status = $action->past_status;
+                        $past_action->project_id = $action->project_id;
+                        $past_action->task_id = $action->task_id;
+                        $past_action->client_id = $action->client_id;
+                       // $past_action->deliverable_id = $action->deliverable_id;
+                        $past_action->save();
+        
+        
+                }
+            }
+            }
         }
         return response()->json(['status' => 200]);
     }

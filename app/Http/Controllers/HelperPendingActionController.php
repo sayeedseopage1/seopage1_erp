@@ -481,7 +481,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'TDA'.'x'.$key;
                 $action->item_name= 'Dispute Expiry Warning!';
                 $action->heading= 'Dispute Expiry Warning!';
-                $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show,$raised_against->id').'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
+                $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show',$raised_against->id).'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
                 $action->timeframe= 120;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
@@ -739,149 +739,149 @@ class HelperPendingActionController extends AccountBaseController
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id.'?tab=tasks'),
                 ],
-                [
-                    'button_name' => 'Request more time',
-                    'button_color' => 'success',
-                    'button_type' => 'modal',
-                    'button_url' => '',
-                    'modal_form'=> true,
-                    'form'=> [
-                        [
-                            'type'=> 'select',
-                            'label'=>'Select how many hours need you to create tasks',
-                            'name'=>'hours',
-                            'options'=> [
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '6',
-                                    'lable'=> '6',
-                                    'selected'=> true,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '12',
-                                    'lable'=> '12',
-                                    'selected'=> false,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '18',
-                                    'lable'=> '18',
-                                    'selected'=> false,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '24',
-                                    'lable'=> '24',
-                                    'selected'=> false,
-                                ],
-                                [
-                                    'type'=> 'option',
-                                    'value'=> '30',
-                                    'lable'=> '30',
-                                    'selected'=> false,
-                                ],
+                // [
+                //     'button_name' => 'Request more time',
+                //     'button_color' => 'success',
+                //     'button_type' => 'modal',
+                //     'button_url' => '',
+                //     'modal_form'=> true,
+                //     'form'=> [
+                //         [
+                //             'type'=> 'select',
+                //             'label'=>'Select how many hours need you to create tasks',
+                //             'name'=>'hours',
+                //             'options'=> [
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '6',
+                //                     'lable'=> '6',
+                //                     'selected'=> true,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '12',
+                //                     'lable'=> '12',
+                //                     'selected'=> false,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '18',
+                //                     'lable'=> '18',
+                //                     'selected'=> false,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '24',
+                //                     'lable'=> '24',
+                //                     'selected'=> false,
+                //                 ],
+                //                 [
+                //                     'type'=> 'option',
+                //                     'value'=> '30',
+                //                     'lable'=> '30',
+                //                     'selected'=> false,
+                //                 ],
 
 
-                            ],
-                            'required'=> true,
-                        ], 
-                        [
-                            'type'=> 'hidden',
-                             'value'=> $project->id,
-                             'readonly'=> true,
+                //             ],
+                //             'required'=> true,
+                //         ], 
+                //         [
+                //             'type'=> 'hidden',
+                //              'value'=> $project->id,
+                //              'readonly'=> true,
                            
-                            'name'=>'project_id',
-                            'required'=> true,
-                        ], 
-                         [
-                            'type'=> 'hidden',
-                            'value'=> $action->id,
-                            'readonly'=> true,
+                //             'name'=>'project_id',
+                //             'required'=> true,
+                //         ], 
+                //          [
+                //             'type'=> 'hidden',
+                //             'value'=> $action->id,
+                //             'readonly'=> true,
                             
-                            'name'=>'authorization_id',
+                //             'name'=>'authorization_id',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
-                        [
-                            'type'=> 'textarea',
-                            'label'=> 'Write reson',
+                //         ], 
+                //         [
+                //             'type'=> 'textarea',
+                //             'label'=> 'Write reson',
                            
-                            'readonly'=> false,
+                //             'readonly'=> false,
                             
-                            'name'=>'reason',
+                //             'name'=>'reason',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
+                //         ], 
                         
-                    ], 
-                    'form_action'=> [
-                        [
-                            'type'=> 'button',
-                            'method'=>'POST',
-                            'label'=> 'Submit',
-                            'color'=> 'success',
-                            'url'=> '',
+                //     ], 
+                //     'form_action'=> [
+                //         [
+                //             'type'=> 'button',
+                //             'method'=>'POST',
+                //             'label'=> 'Submit',
+                //             'color'=> 'success',
+                //             'url'=> '',
       
-                        ], 
+                //         ], 
                        
                         
-                    ]
-                ],
-                [
-                    'button_name' => 'All the tasks were already created',
-                    'button_color' => 'success',
-                    'button_type' => 'modal',
-                    'button_url' => '',
-                    'modal_form'=> true,
-                    'form'=> [
+                //     ]
+                // ],
+                // [
+                //     'button_name' => 'All the tasks were already created',
+                //     'button_color' => 'success',
+                //     'button_type' => 'modal',
+                //     'button_url' => '',
+                //     'modal_form'=> true,
+                //     'form'=> [
                         
-                        [
-                            'type'=> 'hidden',
-                             'value'=> $project->id,
-                             'readonly'=> true,
+                //         [
+                //             'type'=> 'hidden',
+                //              'value'=> $project->id,
+                //              'readonly'=> true,
                            
-                            'name'=>'project_id',
-                            'required'=> true,
-                        ], 
-                         [
-                            'type'=> 'hidden',
-                            'value'=> $action->id,
-                            'readonly'=> true,
+                //             'name'=>'project_id',
+                //             'required'=> true,
+                //         ], 
+                //          [
+                //             'type'=> 'hidden',
+                //             'value'=> $action->id,
+                //             'readonly'=> true,
                             
-                            'name'=>'authorization_id',
+                //             'name'=>'authorization_id',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
-                        [
-                            'type'=> 'textarea',
-                            'label' => 'The number of tasks created are too few when compared to the number of deliverables. Why is that?',
+                //         ], 
+                //         [
+                //             'type'=> 'textarea',
+                //             'label' => 'The number of tasks created are too few when compared to the number of deliverables. Why is that?',
                            
-                            'readonly'=> false,
+                //             'readonly'=> false,
                             
-                            'name'=>'comment',
+                //             'name'=>'comment',
                            
-                            'required'=> true,
+                //             'required'=> true,
                             
-                        ], 
+                //         ], 
                         
-                    ], 
-                    'form_action'=> [
-                        [
-                            'type'=> 'button',
-                            'method'=>'POST',
-                            'label'=> 'Submit',
-                            'color'=> 'success',
-                            'url'=> '',
+                //     ], 
+                //     'form_action'=> [
+                //         [
+                //             'type'=> 'button',
+                //             'method'=>'POST',
+                //             'label'=> 'Submit',
+                //             'color'=> 'success',
+                //             'url'=> '',
       
-                        ], 
+                //         ], 
                        
                         
-                    ]
-                    ],
+                //     ]
+                //     ],
             ];
             $action->button = json_encode($button);
             $action->save();
@@ -1522,6 +1522,41 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
 
         }
+        public function ParentTaskAuthorization($task)
+        {
+            $project= Project::where('id',$task->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $authorizers= User::where('role_id',1)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'PTA';
+                $action->serial = 'PTA'.'x'.$key;
+                $action->item_name= 'PM\'s own work assigning authorization!';
+                $action->heading= 'PM\'s own work assigning authorization!';
+                $action->message = 'Project manager <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> wants to assign task '.$task->heading.' to the team (He should have performed this task on his own)!';
+                $action->timeframe= 24;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+               $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('tasks.index'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            }
+               
+                
+        }
+       
  
 
 }
