@@ -361,7 +361,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->serial = 'TGAA'.'x'.$key;
             $action->item_name= 'Pm task guideline authorization!';
             $action->heading= 'Task guideline authorization needed!';
-            $action->message = 'Task guideline authorization from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            $action->message = 'Task guideline authorization requested from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
             $action->timeframe= 24;
             $action->project_id = $project->id;
             $action->client_id = $client->id;

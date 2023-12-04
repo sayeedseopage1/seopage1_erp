@@ -176,10 +176,15 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     @endif
 
                             @else
+                            @if($item->cancelation_status == 'approved')
+                            <i class="fa fa-circle mr-1 text-red f-10"></i>
+                            Canceled 
+                            @else
                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                   Awaiting Approval
                                                   <br>
                                                   (Milestone Cancelation)
+                                                  @endif
                             @endif
 
                      @endif
@@ -204,10 +209,15 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 
                                     @else
-                                            <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-                                                                Awaiting Approval
-                                                                <br>
-                                                                (Milestone Cancelation)
+                                    @if($item->cancelation_status == 'approved')
+                                    <i class="fa fa-circle mr-1 text-red f-10"></i>
+                                    Canceled 
+                                    @else
+                                        <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                                          Awaiting Approval
+                                                          <br>
+                                                          (Milestone Cancelation)
+                                                          @endif
                                     @endif
 
                             @endif
@@ -353,10 +363,15 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 
             @else
-                    <i class="fa fa-circle mr-1 text-yellow f-10"></i>
-                                        Awaiting Approval
-                                        <br>
-                                        (Milestone Cancelation)
+            @if($item->cancelation_status == 'approved')
+            <i class="fa fa-circle mr-1 text-red f-10"></i>
+            Canceled 
+            @else
+                <i class="fa fa-circle mr-1 text-yellow f-10"></i>
+                                  Awaiting Approval
+                                  <br>
+                                  (Milestone Cancelation)
+                                  @endif
             @endif
 
     @endif

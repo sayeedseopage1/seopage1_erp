@@ -23,6 +23,7 @@ use Notification;
 use App\Models\Project;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
+use App\Models\Role;
 
 class SubTaskController extends AccountBaseController
 {
@@ -256,6 +257,9 @@ class SubTaskController extends AccountBaseController
             {
             foreach ($actions as $key => $action) {
                     $project= Project::where('id',$update_parent_task->id)->first();
+                    $pm= User::where('id',$project->pm_id)->first();
+                    $role= Role::where('id',$pm->role_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
                     $action->authorized_by= Auth::id();
                     $action->authorized_at= Carbon::now();
                     $action->past_status = 1;
@@ -270,7 +274,7 @@ class SubTaskController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = $action->message. ' authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                    $past_action->message =  'New task <a href="'.route('tasks.show',$task->id).'">'.$update_parent_task->name.'</a> assigned from '.$role->name.' <a href="'.route('employees.show',$pm->id).'">'.$pm->name.'</a> for client <a href="'.route('employees.show',$client->id).'">'.$client->name.'</a> has been broken into subtasks and assigned to developers!';
                  //   $past_action->button = $action->button;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
