@@ -144,7 +144,7 @@ class PendingActionController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
-        //DB::beginTransaction();
+        // DB::beginTransaction();
         $authorization_action = AuthorizationAction::findOrFail($id);
         $type = $authorization_action->type;
         $error = true;

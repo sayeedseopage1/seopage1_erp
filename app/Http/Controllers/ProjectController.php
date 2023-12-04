@@ -5276,6 +5276,7 @@ public function updatePmBasicSEO(Request $request){
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
+        $project->admin_authorization_status = 1;
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
@@ -5330,10 +5331,10 @@ public function updatePmBasicSEO(Request $request){
 
     public function ProjectDeny(Request $request)
     {
-        //dd($request);
         $project = Project::find($request->project_id);
         // $project->status = 'canceled';
         // $project->project_status = 'Canceled';
+        $project->admin_authorization_status = 2;
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $user = User::where('id', $project->pm_id)->first();
