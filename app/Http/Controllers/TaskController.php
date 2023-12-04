@@ -968,11 +968,15 @@ class TaskController extends AccountBaseController
         $task->comments = $request->comments;
         $task->save();
         $taskId= Task::where('id',$task->task_id)->first();
+        $task_user= TaskUser::where('task_id',$taskId->id)->orderBy('id','desc')->first();
+        $t_user= User::where('id',$task_user->user_id)->first();
+        $user_role= Role::where('id',$t_user->role_id)->first();
         $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$taskId->id)->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
                 $project= Project::where('id',$taskId->project_id)->first();
+                $client= User::where('id',$project->client_id)->first();
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -987,7 +991,7 @@ class TaskController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' reviewed by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
              //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;

@@ -601,6 +601,7 @@ class HelperPendingActionController extends AccountBaseController
     // dd($client);
      $project_manager= User::where('id',$project->pm_id)->first();
      $deliverables= ProjectDeliverable::where('id',$id)->first();
+     $user= User::where('id',Auth::id())->first();
 
        
          $action = new PendingAction();
@@ -608,7 +609,7 @@ class HelperPendingActionController extends AccountBaseController
          $action->serial = 'DMA'.'x0';
          $action->item_name= 'Deliverables revision request';
          $action->heading= 'Revision requested in deliverables (From management)!';
-         $action->message = 'Revision requested by management for the deliverables '.$deliverables->title.' for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+         $action->message = 'Revision requested by <a href="'.route('employees.show',$user->id).'">'.$user->name.'</a> for the deliverables '.$deliverables->title.' for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
          
          $action->timeframe= 24;
         
@@ -910,13 +911,13 @@ class HelperPendingActionController extends AccountBaseController
         {
             $action->item_name= 'Revision submitted by '.$user_role->name;
             $action->heading= 'Revision submitted by '.$user_role->name;
-            $action->message = 'Review the revision submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            $action->message = 'Review the revision submitted by '.$user_role->name.': <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
 
         }else 
         {
             $action->item_name= 'Task submitted by '.$user_role->name;
             $action->heading= 'Task submitted by '.$user_role->name;
-            $action->message = 'Review the task submitted by <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            $action->message = 'Review the task submitted by '.$user_role->name.': <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
 
         }
        
