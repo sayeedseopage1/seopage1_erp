@@ -10,7 +10,7 @@ import _ from "lodash";
 import { useCommentContext } from "../CommentsBody";
 import dayjs from "dayjs";
 
-const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch }) => {
+const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch, comment_text_id }) => {
     const { setContextHolder, setMentionedComment } = useCommentContext();
     const [showCommentMenu, setShowCommentMenu] = useState(false);
     const menuRef = useRef(null);
@@ -185,6 +185,7 @@ const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch }) => {
                                 >
                                     {comment?.comment ? (
                                         <span
+                                            id={comment_text_id}
                                             className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                         >
                                             {comment.comment}
@@ -200,7 +201,7 @@ const SingleChat = ({ id, comment, onContextMenu, onKeyDown, idMatch }) => {
                                                 return (
                                                     <div
                                                         key={i}
-                                                        className={`${style.chatInput_filePreview__file}`}
+                                                        className={`${style.chatInput_filePreview__file} shadow-sm`}
                                                     >
                                                         {handleFileComponent(
                                                             file
@@ -460,7 +461,7 @@ const FileView = ({
                 return (
                     <div
                         key={i}
-                        className={`${style.chatInput_filePreview__file}`}
+                        className={`${style.chatInput_filePreview__file} shadow-sm`}
                     >
                         {handleFileComponent(file)}
                     </div>

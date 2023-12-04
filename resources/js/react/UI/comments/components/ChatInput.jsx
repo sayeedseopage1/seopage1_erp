@@ -7,7 +7,7 @@ import style from "../styles/comments.module.css";
 import { FaFileCirclePlus } from "react-icons/fa6";
 import { LuPencilLine } from "react-icons/lu";
 import { IoChevronDownOutline } from "react-icons/io5";
-import { IoMdCloseCircle } from "react-icons/io";
+import { IoMdCloseCircle, IoMdSend } from "react-icons/io";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import { FaFile } from "react-icons/fa";
 import { BsEmojiSmile } from "react-icons/bs";
@@ -69,7 +69,18 @@ const ChatInput = ({ setScroll }) => {
                     // setText={setText}
                 />
             </section>
-            <FileUpload files={files} setFiles={setFiles} />
+            <section
+                style={{
+                    flexDirection:
+                        show || files.length || mentionedComment
+                            ? "column"
+                            : "row",
+                }}
+                className={`${style.chatInput_actions_btn_container}`}
+            >
+                <FileUpload files={files} setFiles={setFiles} />
+                <IoMdSend className={`${style.chatInput_actions_btn_send}`} />
+            </section>
         </>
     );
 };
@@ -162,7 +173,7 @@ function MentionedComment({ comment }) {
                             return (
                                 <div
                                     key={i}
-                                    className={`${style.chatInput_filePreview__file}`}
+                                    className={`${style.chatInput_filePreview__file} shadow-sm`}
                                 >
                                     {handleFileComponent(file)}
                                 </div>
@@ -186,6 +197,8 @@ function MentionedComment({ comment }) {
 }
 
 function FilePreviewer({ files, setFiles }) {
+    const { mentionedComment } = useCommentContext();
+
     const handlePreviewUrl = (file) => {
         return URL.createObjectURL(file);
     };
@@ -243,12 +256,15 @@ function FilePreviewer({ files, setFiles }) {
     };
 
     return files.length ? (
-        <div className={`${style.chatInput_filePreview}`}>
+        <div style={{
+            borderTop: mentionedComment?'solid 0.5px white':'0',
+            borderRadius: mentionedComment?'0':'10px 10px 0 0'
+        }} className={`${style.chatInput_filePreview}`}>
             {files.map((file, i) => {
                 return (
                     <div
                         key={i}
-                        className={`${style.chatInput_filePreview__file}`}
+                        className={`${style.chatInput_filePreview__file} shadow-sm`}
                     >
                         {handleFileComponent(file)}
                         <IoMdCloseCircle

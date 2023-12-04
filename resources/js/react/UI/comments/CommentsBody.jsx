@@ -55,8 +55,10 @@ const CommentsBody = ({
     const chatbottom_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchText, setSearchText] = useState("");
+    const [allComments, setAllComments] = useState(comments);
     const [commentIndex, setCommentIndex] = useState(0);
     const [searchIndexes, setSearchIndexes] = useState(_.fill(Array(20), "*"));
+    const [targetComment, setTargetComment] = useState(null);
 
     // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
@@ -97,6 +99,30 @@ const CommentsBody = ({
     );
 
     useEffect(() => {
+        // console.log("searchText :", searchText);
+        if (searchText) {
+            setAllComments(() => {
+                return [...comments].filter((comment) => {
+                    // console.dir('comment =>',React.Children.only(comment.comment));
+                    let target;
+                    setTargetComment(comment.comment)
+                    
+                    console.log(target);
+                    if (target) {
+                        const find = target?.textContent?.includes(searchText);
+                        // console.log({ find });
+                        return find;
+                    } else {
+                        return false;
+                    }
+                });
+            });
+        } else {
+            setAllComments([...comments]);
+        }
+    }, [searchText]);
+
+    useEffect(() => {
         // chatbottom_ref.current?.scrollIntoView();
         chatbottom_ref.current?.scrollIntoView({
             // behavior: "smooth",
@@ -112,17 +138,17 @@ const CommentsBody = ({
     //     console.log({ mentionedComment });
     // }, [mentionedComment]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (commentIndex) {
             document.getElementById(commentIndex).scrollIntoView({
                 behavior: "smooth",
                 // block: "",
-            })
+            });
         } else {
-            setScroll(prev=>!prev);
+            setScroll((prev) => !prev);
         }
         // console.log(window.location);
-    },[commentIndex])
+    }, [commentIndex]);
 
     return (
         <CommentContext.Provider
@@ -136,6 +162,7 @@ const CommentsBody = ({
                 setContextHolder,
             }}
         >
+            <div id="target_comment" style={{display:'none'}} dangerouslySetInnerHTML={{__html:targetComment}}/>
             <div
                 className={style.commentsBody}
                 style={{
@@ -360,11 +387,12 @@ const CommentsBody = ({
                     // ref={chatbottom_ref}
                     className={`${style.commentsBody_commentArea}`}
                 >
-                    {comments.map((comment, i) => {
+                    {allComments.map((comment, i) => {
                         return (
                             <SingleChat
-                                idMatch={comment.id===commentIndex}
+                                idMatch={comment.id === commentIndex}
                                 id={comment.id}
+                                comment_text_id={`${comment.id}_comment`}
                                 setScroll={setScroll}
                                 onContextMenu={onContextMenu}
                                 onKeyDown={onKeyDown}
@@ -373,11 +401,14 @@ const CommentsBody = ({
                             />
                         );
                     })}
-                    <div style={{
-                        minHeight:'10px',
-                        height:'10px',
-                        backgroundColor:'transparent'
-                    }} ref={chatbottom_ref}/>
+                    <div
+                        style={{
+                            minHeight: "10px",
+                            height: "10px",
+                            backgroundColor: "transparent",
+                        }}
+                        ref={chatbottom_ref}
+                    />
                     {contextMenu}
                 </main>
 

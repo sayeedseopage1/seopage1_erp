@@ -7,10 +7,11 @@ export default function commentDemoData(count = 10) {
 
   const getData = (i)=>{
 
-    const comment = faker.number.int({ max: 1, min: 0 }) ? faker.lorem.lines({
-      min: 2,
-      max: 4,
-    }) : ''
+    const comment = <p>s df jas l;df <b>fas ddsf df</b> <small>jfas sdfj aslfdj dfsdf</small></p>;
+    // const comment = faker.number.int({ max: 1, min: 0 }) ? faker.lorem.lines({
+    //   min: 2,
+    //   max: 4,
+    // }) : '';
     
     const files = faker.number.int({ max: 1, min: 0 }) || !comment ? _.fill(Array(faker.number.int({
       min: 1,
