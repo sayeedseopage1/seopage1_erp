@@ -88,7 +88,7 @@ class DeveloperNeedtoAssignTask extends Command
         }
         $actions= PendingAction::where('code','TSA')->where('past_status',0)->get();
         foreach ($actions as $action) {
-           $creation_date = Carbon::parse($action->created_at)->addHours(12);
+           $creation_date = Carbon::parse($action->created_at)->addHours(21);
           //  dd($developer,$logged_minutes,$estimate_total_minutes);
           $current_date = Carbon::now();
           if($current_date >= $creation_date )
