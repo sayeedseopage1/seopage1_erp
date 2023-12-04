@@ -103,6 +103,25 @@ class DeveloperNeedtoAssignTask extends Command
            
         }
         }
+        $actions= PendingAction::where('code','TDQ')->where('past_status',0)->get();
+        foreach ($actions as $action) {
+            $creation_date = Carbon::parse($action->created_at)->addHours(46);
+           //  dd($developer,$logged_minutes,$estimate_total_minutes);
+           $current_date = Carbon::now();
+           if($current_date >= $creation_date )
+           {
+             $update_action= PendingAction::find($action->id);
+             $update_action->created_at = Carbon::now();
+             $update_action->updated_at = Carbon::now();
+             $update_action->timeframe = 2;
+             $update_action->save();
+ 
+          
+            
+         }
+         }
+
+
         
         $this->info('Pending action created');
         

@@ -1077,7 +1077,7 @@ class HelperPendingActionController extends AccountBaseController
         $action->heading= 'Question asked about your dispute!';
         $action->message = 'You have been asked 1 question about your dispute!';
 
-        $action->timeframe= 24;
+        $action->timeframe= 48;
         $action->project_id = $project->id;
         $action->client_id = $client->id;
         $action->dispute_id = $dispute_id;
