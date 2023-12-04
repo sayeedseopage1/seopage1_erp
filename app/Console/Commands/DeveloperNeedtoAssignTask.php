@@ -113,7 +113,7 @@ class DeveloperNeedtoAssignTask extends Command
              $update_action= PendingAction::find($action->id);
              $update_action->created_at = Carbon::now();
              $update_action->updated_at = Carbon::now();
-             $update_action->timeframe = 2;
+             //$update_action->timeframe = 2;
              $update_action->save();
  
           
