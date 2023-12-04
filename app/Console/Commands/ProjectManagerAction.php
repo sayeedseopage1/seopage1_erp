@@ -99,6 +99,8 @@ class ProjectManagerAction extends Command
           
 
         }
+     //
+      //  $deadline_projects
        
         $this->info('Pending action created');
     }
