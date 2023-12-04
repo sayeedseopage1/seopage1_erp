@@ -256,7 +256,7 @@ class SubTaskController extends AccountBaseController
             if($actions != null)
             {
             foreach ($actions as $key => $action) {
-                    $project= Project::where('id',$update_parent_task->id)->first();
+                    $project= Project::where('id',$update_parent_task->project_id)->first();
                     $pm= User::where('id',$project->pm_id)->first();
                     $role= Role::where('id',$pm->role_id)->first();
                     $client= User::where('id',$project->client_id)->first();
