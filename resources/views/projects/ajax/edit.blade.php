@@ -440,10 +440,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                 </div>
                 <div class="col-md-12 col-lg-12 mb-5">
                     <div class="form-group">
-                        <label class="" for="">Comments</label>
+                        <label class="" for="">Comments<sup class="mr-1">*</sup></label>
                         <div class="d-flex">
-                          <textarea id="comments" name="comments" rows="6" cols="180"></textarea>
-
+                          <textarea id="comments" name="comments" rows="6" cols="180" class="form-control @error('comments') is-invalid @enderror"></textarea>
+                          @error('comments')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
                         </div>
                     </div>
                 </div>

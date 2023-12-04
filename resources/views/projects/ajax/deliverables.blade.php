@@ -178,8 +178,17 @@
             @if($project->authorization_status != 'submitted')
             <div class="row mx-3">
                 <div class="mt-3 mr-2">
-                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
-                    @include('projects.modals.clientdeliverableaddmodal')
+                    @if ($project->project_challenge != "No Challenge")
+                        @if ($project->admin_authorization_status == 0)
+                            <button type="button" class="btn btn-primary alertAddDeliverable"><i class="fas fa-plus"></i> Add Deliverable</button>
+                        @else
+                            <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverables_info_Modal"><i class="fas fa-plus"></i> Add Deliverable</button>
+                            @include('projects.modals.deliverable_info_modal')
+                        @endif
+                    @else
+                        <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+                        @include('projects.modals.clientdeliverableaddmodal')
+                    @endif          
                 </div>
                 @php
                     $client_revision = \App\Models\ProjectDeliverablesClientDisagree::where([
@@ -1296,6 +1305,12 @@
                     window.location.href = '/projects/approve-deliverables/'+$(this).attr('data-id');
                 }
             })
+        })
+    })
+    $(document).ready(function() {
+        $('.alertAddDeliverable').click(function(e) {
+            e.preventDefault();
+            Swal.fire("Project challenge authorization is not done yet. Please check this out with your reporting boss");
         })
     })
 </script>

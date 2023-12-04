@@ -33,6 +33,22 @@ class UpdateProject extends CoreRequest
             'start_date' => 'required',
 
             'project_summary'=>'required',
+            'project_challenge'=>'required',
+            'comments' => [
+                function ($attribute, $value, $fail) {
+                    $allowedChallenges = [
+                        'Has Challenge But We Can Do It',
+                        'Has Challenge But We Cannot Do It',
+                        'Has Challenge, But We May/May Not be Able to Do It',
+                    ];
+                    
+                    $projectChallenge = request()->input('project_challenge');
+        
+                    if (in_array($projectChallenge, $allowedChallenges) && empty($value)) {
+                        $fail("The $attribute field is required when selecting certain project challenges.");
+                    }
+                },
+            ],
 
             // 'hours_allocated' => 'required|numeric',
             'client_id' => 'requiredIf:client_view_task,true',

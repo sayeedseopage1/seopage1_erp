@@ -925,7 +925,7 @@ class ProjectController extends AccountBaseController
             //   dd($request->all());
 
         //kpi distribution start from here
-      //  DB::beginTransaction();
+    //    DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
@@ -5276,6 +5276,7 @@ public function updatePmBasicSEO(Request $request){
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
+        $project->admin_authorization_status = 1;
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
@@ -5330,10 +5331,10 @@ public function updatePmBasicSEO(Request $request){
 
     public function ProjectDeny(Request $request)
     {
-        //dd($request);
         $project = Project::find($request->project_id);
         // $project->status = 'canceled';
         // $project->project_status = 'Canceled';
+        $project->admin_authorization_status = 2;
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $user = User::where('id', $project->pm_id)->first();
