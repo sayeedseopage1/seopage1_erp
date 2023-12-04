@@ -1556,6 +1556,70 @@ class HelperPendingActionController extends AccountBaseController
                
                 
         }
+        public function CreateMilestoneInvoice($milestone)
+        {
+            $project= Project::where('id',$milestone->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $authorizer= User::where('id',$project_manager->id)->first();
+           
+                $action = new PendingAction();
+                $action->code = 'CMI';
+                $action->serial = 'CMI'.'x0';
+                $action->item_name= 'Create your last invoice!';
+                $action->heading= 'Create your last invoice!';
+                $action->message = 'Create your last invoice for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+                $action->timeframe= 24;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->milestone_id = $milestone->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Create',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('projects.show', $project->id.'?tab=milestones'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            
+
+        }
+        public function AddLastPayment($milestone)
+        {
+            $project= Project::where('id',$milestone->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $authorizer= User::where('id',$project_manager->id)->first();
+           
+                $action = new PendingAction();
+                $action->code = 'ALP';
+                $action->serial = 'ALP'.'x0';
+                $action->item_name= 'Complete your project';
+                $action->heading= 'Add your last payment and complete your project!';
+                $action->message = 'Add your final payment to complete project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
+                $action->timeframe= 24;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->milestone_id = $milestone->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Add Payment',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('projects.show', $project->id.'?tab=milestones'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+        }
        
  
 

@@ -5439,6 +5439,10 @@ public function updatePmBasicSEO(Request $request){
             $mile = ProjectMilestone::find($milestone->id);
             $mile->project_completion_status = 1;
             $mile->save();
+            $helper = new HelperPendingActionController();
+
+
+            $helper->AddLastPayment($mile);
         }
         $project_id = Project::where('id', $project->project_id)->first();
 
@@ -5640,33 +5644,22 @@ public function updatePmBasicSEO(Request $request){
 
             $qc_submission = QcSubmission::find($request->id);
             $qc_submission->delete();
+         
         } else {
             $milestone = ProjectMilestone::where('id', $project->milestone_id)->first();
             // dd($milestone);
             $mile = ProjectMilestone::find($milestone->id);
             $mile->qc_status = 1;
             $mile->save();
+            $helper = new HelperPendingActionController();
+
+
+            $helper->CreateMilestoneInvoice($mile);
         }
 
         $project_id = Project::where('id', $project->project_id)->first();
 
-        //update authoziation action
-        if (is_null($request->authorization_form)) {
-            $authorization_action = AuthorizationAction::where([
-                'project_id' => $project_id->id,
-                'type' => 'project_qc',
-                'authorization_for' => $this->user->id,
-                'status' => '0'
-            ])->first();
-            if ($authorization_action) {
-                $authorization_action->description = $request->admin_comment;
-                $authorization_action->authorization_by = $this->user->id;
-                $authorization_action->approved_at = Carbon::now();
-                $authorization_action->status = '1';
-                $authorization_action->save();
-            }
-        }
-        //end authorization action
+       
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
