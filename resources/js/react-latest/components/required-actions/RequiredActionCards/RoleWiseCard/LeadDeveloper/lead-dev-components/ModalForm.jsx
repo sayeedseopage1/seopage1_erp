@@ -61,18 +61,20 @@ export default function ModalForm({ setIsOpen, form_data }) {
             return;
         }
 
-        // console.log({ url, method, formData });
         // setIsOpen(false);
         // setLoading(false);
         // return;
-
+        
+        const form = new FormData();
+        
+        for (const key in formData) {
+            form.append(key, formData[key]);
+        }
+        form.append("_token",document.querySelector("meta[name='csrf-token']").getAttribute("content"));
+        
+        console.log({ url, method, formData });
         try {
-            await axios[method.toLowerCase()](url, {
-                ...formData,
-                _token: document
-                    .querySelector("meta[name='csrf-token']")
-                    .getAttribute("content"),
-            });
+            await axios[method.toLowerCase()](url, form);
             Swal.fire({
                 icon: "success",
                 title: "Submitted Sucessfully",
