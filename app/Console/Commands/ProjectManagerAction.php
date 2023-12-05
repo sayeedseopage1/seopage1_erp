@@ -106,7 +106,7 @@ class ProjectManagerAction extends Command
         $current_date = Carbon::now();
         $deadline= $pro->deadline;
         $diffrent_in_hours =  $deadline->diffInHours($deadline);
-        dd($diffrent_in_hours);
+       // dd($diffrent_in_hours);
       }
        
         $this->info('Pending action created');

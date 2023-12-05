@@ -644,6 +644,6 @@ class PendingActionController extends AccountBaseController
     }
     public function DeleteStagingSite(Request $request)
     {
-        dd($request);
+        dd($request->all());
     }
 }
