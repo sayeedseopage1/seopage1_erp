@@ -1009,7 +1009,7 @@ class TaskController extends AccountBaseController
         }
     }
 
-       
+
 
         $text = Auth::user()->name . ' mark task completed';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
@@ -1065,7 +1065,7 @@ class TaskController extends AccountBaseController
 
         $dispute_between = explode('x', $request->acknowledgement_id)[0];
 
-      
+
 
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
@@ -1105,7 +1105,7 @@ class TaskController extends AccountBaseController
         $task_revision->save();
 
 
-      
+
         //need pending action
 
         $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$task_revision->task_id)->get();
@@ -1843,7 +1843,7 @@ class TaskController extends AccountBaseController
             if (is_array($request->user_id)) {
                 // $assigned_to = User::find($request->user_id[0]);
 
-              
+
                 // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
                 // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
                 // $this->logProjectActivity($project->id, $link);
@@ -1858,7 +1858,7 @@ class TaskController extends AccountBaseController
 
             } else {
                 // $assigned_to = User::find($request->user_id);
-             
+
                 // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
                 // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
                 // $this->logProjectActivity($project->id, $link);
@@ -2018,7 +2018,7 @@ class TaskController extends AccountBaseController
 
                     $helper->NewTaskAssign($task);
 
-                  
+
                     //need pending action
                 }
                 $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
@@ -2041,7 +2041,7 @@ class TaskController extends AccountBaseController
 
                     $helper->NewTaskAssign($task);
 
-                 
+
                     //need pending action
                 }
                 $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
@@ -3326,7 +3326,7 @@ class TaskController extends AccountBaseController
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
                 $action->save();
-               
+
                 $authorize_by= User::where('id',$action->authorized_by)->first();
 
                 $past_action= new PendingActionPast();
@@ -6247,17 +6247,17 @@ class TaskController extends AccountBaseController
                 {
                 foreach ($actions as $key => $action) {
                     $project= Project::where('id',$task->project_id)->first();
-        
+
                         $action->authorized_by= Auth::id();
                         $action->authorized_at= Carbon::now();
                         $action->past_status = 1;
                         $action->save();
-        
-                       
+
+
                         $project_manager= User::where('id',$project->pm_id)->first();
                         $client= User::where('id',$project->client_id)->first();
                         $authorize_by= User::where('id',$action->authorized_by)->first();
-        
+
                         $past_action= new PendingActionPast();
                         $past_action->item_name = $action->item_name;
                         $past_action->code = $action->code;
@@ -6277,8 +6277,8 @@ class TaskController extends AccountBaseController
                         $past_action->client_id = $action->client_id;
                        // $past_action->deliverable_id = $action->deliverable_id;
                         $past_action->save();
-        
-        
+
+
                 }
             }
             }
@@ -6323,17 +6323,17 @@ class TaskController extends AccountBaseController
                 {
                 foreach ($actions as $key => $action) {
                     $project= Project::where('id',$pendingParentTasks->project_id)->first();
-        
+
                         $action->authorized_by= Auth::id();
                         $action->authorized_at= Carbon::now();
                         $action->past_status = 1;
                         $action->save();
-        
-                       
+
+
                         $project_manager= User::where('id',$project->pm_id)->first();
                         $client= User::where('id',$project->client_id)->first();
                         $authorize_by= User::where('id',$action->authorized_by)->first();
-        
+
                         $past_action= new PendingActionPast();
                         $past_action->item_name = $action->item_name;
                         $past_action->code = $action->code;
@@ -6353,8 +6353,8 @@ class TaskController extends AccountBaseController
                         $past_action->client_id = $action->client_id;
                        // $past_action->deliverable_id = $action->deliverable_id;
                         $past_action->save();
-        
-        
+
+
                 }
             }
             }
@@ -6481,6 +6481,7 @@ class TaskController extends AccountBaseController
         return response()->json($data, 200);
     }
 
+    // Get task comment replied
     public function getTaskCommentReplies($comment_id)
     {
         $data = TaskComment::where('root', $comment_id)->get();
