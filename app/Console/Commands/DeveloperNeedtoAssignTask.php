@@ -120,6 +120,49 @@ class DeveloperNeedtoAssignTask extends Command
             
          }
          }
+         $deadline_tasks = Task::whereIn('board_column_id', [2, 3])
+    ->whereNotNull('due_date')
+    ->get();
+
+      foreach ($deadline_tasks as $project) {
+        //$pro = Project::where('id', 324)->first();
+        $current_date = Carbon::now();
+        $deadline = $project->due_date;
+        $difference_in_hours = $current_date->diffInHours($deadline);
+        
+        if ($current_date > $deadline) {
+            // Deadline is in the past
+            $difference_in_hours = -$difference_in_hours;
+        }
+        if($difference_in_hours > 0 && $difference_in_hours >= 18)
+        {
+            $pending_action = PendingAction::where('code','DTDA')->where('past_status',0)->count();
+            if($pending_action == 0)
+            {
+                $helper = new HelperPendingActionController();
+ 
+ 
+                $helper->TaskDeadline($project);
+
+            }
+           
+
+
+        }
+      }
+    //   $project_deadlines= PendingAction::where('code','PDA')->where('past_status',0)->get();
+    //   foreach($project_deadlines as $action)
+    //   {
+    //     $oneHourAgo = Carbon::now()->subHour();
+
+    //     // PendingAction::where('id', $action->id)
+    //     // ->where('created_at', '<', $oneHourAgo)
+    //     // ->update(['created_at' => Carbon::now()]);
+    
+    // PendingAction::where('id', $action->id)
+    //     ->update(['timeframe' => $action->timeframe - 1]);
+    //   }
+       
 
 
         

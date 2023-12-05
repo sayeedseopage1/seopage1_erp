@@ -2892,6 +2892,14 @@ class TaskController extends AccountBaseController
             $updateTask->board_column_id = 4;
             $updateTask->save();
         }
+        $task_count= Task::where('project_id',$task_status->project_id)->where('board_coulmn_id','!=',4)->count();
+        if($task_count == 0)
+        {
+            //need pending action past 
+
+
+            //need pending action past
+        }
         return response()->json([
             'status' => 200,
         ]);

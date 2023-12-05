@@ -1511,7 +1511,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_name' => 'Ignore',
                         'button_color' => 'danger',
                         'button_type' => 'redirect_url',
-                        'button_url' => '',
+                        'button_url' => route('ignore-assign-task',$developer->id),
                    
                   
                     
@@ -1614,6 +1614,70 @@ class HelperPendingActionController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('projects.show', $project->id.'?tab=milestones'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+        }
+        public function ProjectDeadline($project)
+        {
+            $project= Project::where('id',$project->id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $authorizer= User::where('id',$project_manager->id)->first();
+          
+                $action = new PendingAction();
+                $action->code = 'PDA';
+                $action->serial = 'PDA'.'x0';
+                $action->item_name= 'Deadline in the next 2 days!';
+                $action->heading= 'Project deadline will be over soon!';
+                $action->message = 'Deadline for your project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next ';
+                $action->timeframe= 48;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+             //  $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Submit',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('projects.show', $project->id.'?tab=tasks'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            
+
+        }
+        public function TaskDeadline($task)
+        {
+            $project= Project::where('id',$task->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $authorizer= User::where('id',$project_manager->id)->first();
+          
+                $action = new PendingAction();
+                $action->code = 'DTDA';
+                $action->serial = 'PDA'.'x0';
+                $action->item_name= 'Deadline in the next 2 days!';
+                $action->heading= 'Task deadline will be over soon!';
+                $action->message = 'Deadline for your task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next';
+                $action->timeframe= 48;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Submit',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('tasks.show', $task->id),
                     ],
                   
                 ];
