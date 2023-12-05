@@ -7,6 +7,7 @@ import ProjectChallenge from "./ProjectChallenge";
 import { useEffect } from "react";
 import style from "../../../../../../styles/required-action-card.module.css";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 // modal form
 export default function ModalForm({ setIsOpen, form_data }) {
@@ -34,6 +35,8 @@ export default function ModalForm({ setIsOpen, form_data }) {
     }, [form_data]);
 
     const handleSubmit = async ({ url, method } = { url: "", method: "" }) => {
+        // console.log({ formData });
+        // return;
         setLoading(true);
         let emptyRequiredField = 0;
         [...form_data.form].forEach((input) => {
@@ -47,7 +50,13 @@ export default function ModalForm({ setIsOpen, form_data }) {
         });
 
         if (emptyRequiredField > 0) {
-            toast.error("Please input all required field");
+            Swal.fire({
+                icon: "warning",
+                title: "Please input all required field",
+                timer: 2000,
+                showConfirmButton: true,
+                timerProgressBar: true,
+            });
             setLoading(false);
             return;
         }
@@ -59,9 +68,21 @@ export default function ModalForm({ setIsOpen, form_data }) {
 
         try {
             await axios[method.toLowerCase()](url, formData);
-            toast.success("Submitted Sucessfully");
+            Swal.fire({
+                icon: "success",
+                title: "Submitted Sucessfully",
+                timer: 2000,
+                showConfirmButton: true,
+                timerProgressBar: true,
+            });
         } catch (err) {
-            toast.error("Not submitted");
+            Swal.fire({
+                icon: "error",
+                title: "Not submitted",
+                timer: 2000,
+                showConfirmButton: true,
+                timerProgressBar: true,
+            });
         } finally {
             handleRefresh();
             setIsOpen(false);
@@ -120,10 +141,12 @@ export default function ModalForm({ setIsOpen, form_data }) {
                                 </div>
                             </div>
                         );
-                    } 
-                    else if (input.type === "select") {
+                    } else if (input.type === "select") {
                         return (
-                            <div key={i} className={style.form_select_area_container}>
+                            <div
+                                key={i}
+                                className={style.form_select_area_container}
+                            >
                                 <span>
                                     <b>{input.label} :</b>{" "}
                                     {input?.required && (
@@ -160,6 +183,69 @@ export default function ModalForm({ setIsOpen, form_data }) {
                                             );
                                         })}
                                     </select>
+                                </span>
+                            </div>
+                        );
+                    } else if (input.type === "file") {
+                        return (
+                            <div
+                                key={i}
+                                className={style.form_file_area_container}
+                            >
+                                <span>
+                                    <b>{input.label} :</b>{" "}
+                                    {input?.required && (
+                                        <b style={{ color: "red" }}>
+                                            * This field is Required
+                                        </b>
+                                    )}
+                                </span>
+                                <span className={style.form_file_container}>
+                                    <div
+                                        className={`sp1_file_upload--input-wrapper ${style.form_file_uploader}`}
+                                    >
+                                        <input
+                                            style={{
+                                                cursor: "pointer",
+                                            }}
+                                            type={input.type}
+                                            required={input.required}
+                                            onChange={(e) =>
+                                                setFormData((prev) => ({
+                                                    ...prev,
+                                                    [input.name]:
+                                                        e.target.files[0],
+                                                }))
+                                            }
+                                            className="sp1_file_upload--input"
+                                        />
+                                        <i className="fa-solid fa-cloud-arrow-up" />
+                                        <span
+                                            style={{
+                                                textTransform: "capitalize",
+                                                textAlign: "center",
+                                            }}
+                                            className="mt-2"
+                                        >
+                                            Upload <br /> {input.name}
+                                        </span>
+                                    </div>
+                                    {formData[input.name] ? (
+                                        <div
+                                            className={
+                                                style.form_file_previewer
+                                            }
+                                        >
+                                            <img
+                                                src={URL.createObjectURL(
+                                                    formData[input.name]
+                                                )}
+                                                alt={input.name}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </span>
                             </div>
                         );

@@ -263,9 +263,30 @@ p{
   font-size: 15px;
 }
 
+.form_file_area_container{
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5px;
+  margin-bottom: 30px;
+}
+.form_file_container{
+  align-self: center;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 5px 0;
+  /* border: solid; */
+}
+.form_file_uploader{
+  align-self: center;
+}
+.form_file_previewer{
+  align-self: center;
+  max-width: 90%;
+}
 
 .form_btn_container{
   display: flex;
+  justify-content: right;
   /* border: solid; */
   gap: 0 10px;
 }
