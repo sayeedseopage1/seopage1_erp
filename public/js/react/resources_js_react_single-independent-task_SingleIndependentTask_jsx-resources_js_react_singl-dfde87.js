@@ -6907,6 +6907,9 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
           children: " Do You Understand The Following Things? "
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("ol", {
           type: "A",
+          style: {
+            marginLeft: '30px'
+          },
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
             children: " Your teams job is not to decide what the look and feel of a website will be based on a few reference websites "
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
