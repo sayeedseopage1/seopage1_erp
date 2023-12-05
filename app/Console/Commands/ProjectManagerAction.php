@@ -81,7 +81,7 @@ class ProjectManagerAction extends Command
            $milestones= ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
             $current_date= Carbon::now();
           
-            if($current_date == $milestone_submission_date) {
+            if($current_date >= $milestone_submission_date) {
                 // dd("true");
                  if($milestones == 0)
              {
@@ -102,11 +102,11 @@ class ProjectManagerAction extends Command
      //
       $deadline_projects= Project::where('status','in progress')->get();
       foreach ($deadline_projects as $project) {
-        $pro = Project::where('id',324)->first();
+        $pro = Project::where('id',840)->first();
         $current_date = Carbon::now();
         $deadline= $pro->deadline;
         $diffrent_in_hours =  $deadline->diffInHours($deadline);
-       // dd($diffrent_in_hours);
+        dd($diffrent_in_hours);
       }
        
         $this->info('Pending action created');

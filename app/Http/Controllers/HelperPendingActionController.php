@@ -921,7 +921,7 @@ class HelperPendingActionController extends AccountBaseController
 
         }
        
-        $action->timeframe= 24;
+        $action->timeframe= 6;
         $action->project_id = $project->id;
         $action->client_id = $client->id;
         $action->task_id = $task->id;
