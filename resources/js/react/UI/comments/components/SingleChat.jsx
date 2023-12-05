@@ -7,7 +7,7 @@ import { MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { FaFile } from "react-icons/fa6";
 import _ from "lodash";
-import { useCommentContext } from "../CommentsBody";
+import { isCurrentUserComment, useCommentContext } from "../CommentsBody";
 import dayjs from "dayjs";
 
 const SingleChat = ({
@@ -62,10 +62,6 @@ const SingleChat = ({
             document.removeEventListener("click", handleClickOutside);
         };
     }, []);
-
-    const isCurrentUser = () => {
-        return comment.id % 3 !== 0;
-    };
 
     // file preview url generator
     const handlePreviewUrl = (file) => {
@@ -130,7 +126,7 @@ const SingleChat = ({
         return (
             <span
                 style={{
-                    alignSelf: isCurrentUser() ? "flex-end" : "flex-start",
+                    alignSelf: isCurrentUserComment(comment) ? "flex-end" : "flex-start",
                 }}
                 className={`${style.singleChat_comment_card_text_time}`}
             >
@@ -142,27 +138,27 @@ const SingleChat = ({
         );
     };
 
-    const handleSelect = ()=>{
-      setSecletedComments((prev)=>({
-        ...prev,
-        [id]:comment.user_id,
-      }))
-    }
+    const handleSelect = () => {
+        setSecletedComments((prev) => ({
+            ...prev,
+            [id]: comment,
+        }));
+    };
 
-    const handleUnSelect = ()=>{
-      setSecletedComments((prev)=>{
-        const selected = {...prev};
-        delete selected[id];
-        return selected;
-      })
-    }
+    const handleUnSelect = () => {
+        setSecletedComments((prev) => {
+            const selected = { ...prev };
+            delete selected[id];
+            return selected;
+        });
+    };
 
     return (
         <div
             id={id}
             className={`${style.singleChat}`}
             style={{
-                alignSelf: isCurrentUser() ? "flex-end" : "flex-start",
+                alignSelf: isCurrentUserComment(comment) ? "flex-end" : "flex-start",
             }}
         >
             <section
@@ -176,7 +172,7 @@ const SingleChat = ({
                     display: "inline-flex",
                     // border:"solid",
                     gap: "0 6px",
-                    flexDirection: isCurrentUser() ? "row-reverse" : "row",
+                    flexDirection: isCurrentUserComment(comment) ? "row-reverse" : "row",
                 }}
             >
                 {[...Object.keys(selectedComments)].length > 0 ? (
@@ -187,25 +183,21 @@ const SingleChat = ({
                             // flex: "0 0 28px",
                             borderRadius: "28px",
                         }}
-                        onClick={()=>{
-                          if (selectedComments[id]) {
-                            handleUnSelect();
-                          } else {
-                            handleSelect();
-                          }
+                        onClick={() => {
+                            if (selectedComments[id]) {
+                                handleUnSelect();
+                            } else {
+                                handleSelect();
+                            }
                         }}
                     >
-                        {selectedComments[id] ? (
-                            <Select />
-                        ) : (
-                            <UnSelect />
-                        )}
+                        {selectedComments[id] ? <Select /> : <UnSelect />}
                     </span>
                 ) : (
                     <></>
                 )}
                 <section className={`${style.singleChat_comment_card}`}>
-                    {!isCurrentUser() && (
+                    {!isCurrentUserComment(comment) && (
                         <span
                             className={`${style.singleChat_comment_card_avator}`}
                         ></span>
@@ -222,7 +214,7 @@ const SingleChat = ({
                         {/* comment message box */}
                         <div
                             style={{
-                                alignSelf: isCurrentUser()
+                                alignSelf: isCurrentUserComment(comment)
                                     ? "flex-end"
                                     : "flex-start",
                             }}
@@ -335,7 +327,7 @@ const SingleChat = ({
                                         setContextHolder(comment);
                                     }}
                                     onKeyDown={onKeyDown}
-                                    isCurrentUser={isCurrentUser()}
+                                    isCurrentUser={isCurrentUserComment(comment)}
                                     files={comment.files}
                                     topMargin={!!comment?.comment}
                                 />
@@ -350,8 +342,8 @@ const SingleChat = ({
                                     setShowCommentMenu((prev) => !prev);
                                 }}
                                 style={{
-                                    left: isCurrentUser() ? "-14px" : "auto",
-                                    right: isCurrentUser() ? "auto" : "-14px",
+                                    left: isCurrentUserComment(comment) ? "-14px" : "auto",
+                                    right: isCurrentUserComment(comment) ? "auto" : "-14px",
                                 }}
                                 className={`${style.singleChat_comment_card_text_more_btn}`}
                                 ref={menuBtnRef}
@@ -369,10 +361,10 @@ const SingleChat = ({
                                 <div
                                     ref={menuRef}
                                     style={{
-                                        left: isCurrentUser()
+                                        left: isCurrentUserComment(comment)
                                             ? "-98px"
                                             : "auto",
-                                        right: isCurrentUser()
+                                        right: isCurrentUserComment(comment)
                                             ? "auto"
                                             : "-98px",
                                     }}
@@ -399,10 +391,7 @@ const SingleChat = ({
                                     <section
                                         onClick={() => {
                                             setShowCommentMenu(false);
-                                            setSecletedComments((prev) => ({
-                                                ...prev,
-                                                [id]: comment.user_id,
-                                            }));
+                                            handleSelect();
                                         }}
                                     >
                                         <TbMessage2Check
@@ -430,20 +419,24 @@ const SingleChat = ({
                                         </span>
                                     </section>
 
-                                    <section
-                                        onClick={() => {
-                                            setShowCommentMenu(false);
-                                        }}
-                                    >
-                                        <IoMdCloseCircleOutline
-                                            className={`${style.context_icons}`}
-                                        />
-                                        <span
-                                            className={`${style.context_title}`}
+                                    {isCurrentUserComment(comment) ? (
+                                        <section
+                                            onClick={() => {
+                                                setShowCommentMenu(false);
+                                            }}
                                         >
-                                            Remove
-                                        </span>
-                                    </section>
+                                            <IoMdCloseCircleOutline
+                                                className={`${style.context_icons}`}
+                                            />
+                                            <span
+                                                className={`${style.context_title}`}
+                                            >
+                                                Remove
+                                            </span>
+                                        </section>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </div>
                             ) : (
                                 <></>

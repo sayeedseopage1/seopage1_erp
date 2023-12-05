@@ -12,6 +12,7 @@
   flex-flow: column;
   /* gap: 7px; */
   padding: 8px 0 6px !important;
+  /* padding:0 !important; */
   /* transform: scale(1.5); */
 }
 

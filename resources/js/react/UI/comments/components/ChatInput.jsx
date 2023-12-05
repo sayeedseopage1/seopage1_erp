@@ -24,6 +24,7 @@ const ChatInput = ({ setScroll }) => {
     const [showEmoji, setShowEmoji] = useState(false);
     const [emoji, setEmoji] = useState("");
     const { mentionedComment } = useCommentContext();
+    const quillRef = useRef(null);
 
     // useEffect(() => {
     //     console.log(files);
@@ -37,14 +38,40 @@ const ChatInput = ({ setScroll }) => {
     //     console.log(editorHtml);
     // }, [emoji]);
 
+    // useEffect(() => {
+    //     // Focus the Quill editor when the component is rendered
+    //     if (quillRef.current && showEmoji) {
+    //       quillRef.current.getEditor().focus();
+    //       quillRef.current?.getEditor()?.setSelection(quillRef.current?.getEditor().getLength());
+    //     }
+    //   }, [showEmoji]);
+
     const handleEmojiSelection = (emoji, e) => {
-        console.log(emoji);
-        setEmoji(emoji.emoji);
+        // console.log(emoji);
+        // setEmoji(emoji.emoji);
+        const quill = quillRef.current?.getEditor();
+        const cursorPosition = quill?.getSelection()?.index;
+
+        if (cursorPosition !== undefined) {
+            // Insert the mention at the cursor position
+            quill?.insertText(cursorPosition, `${emoji.emoji}`);
+        }
+        // else {
+        //     // Get the current length of the editor content
+        //     const contentLength = quill.getLength();
+        //     console.log({contentLength});
+
+        //     // Insert the external text at the end of the editor content
+        //     quill.insertText(contentLength, emoji.emoji);
+
+        //     // Set the cursor position to the end of the inserted text
+        //     quill.setSelection(contentLength);
+        // }
     };
 
     return (
         <>
-            {showEmoji && (
+            {/* {showEmoji && (
                 <div className={`${style.chatInput_text_emojis}`}>
                     <EmojiPicker
                         width={"100%"}
@@ -54,7 +81,7 @@ const ChatInput = ({ setScroll }) => {
                         onEmojiClick={handleEmojiSelection}
                     />
                 </div>
-            )}
+            )} */}
             <section className={`${style.chatInput}`}>
                 {mentionedComment ? <MentionedComment /> : <></>}
                 <FilePreviewer files={files} setFiles={setFiles} />
@@ -65,6 +92,7 @@ const ChatInput = ({ setScroll }) => {
                     show={show}
                     setShow={setShow}
                     setShowEmoji={setShowEmoji}
+                    quillRef={quillRef}
                     // text={text}
                     // setText={setText}
                 />
@@ -145,7 +173,12 @@ function MentionedComment({ comment }) {
     };
 
     return (
-        <div className={`${style.chatInput_mentioned_comment}`}>
+        <div
+            style={{
+                borderBottom: "solid 0.5px white",
+            }}
+            className={`${style.chatInput_mentioned_comment}`}
+        >
             <HiReply className={`${style.chatInput_mentioned_comment_icon}`} />
             <MdClose
                 onClick={() => {
@@ -206,8 +239,8 @@ function FilePreviewer({ files, setFiles }) {
     const handleFileComponent = (file) => {
         const [type, ext] = file.type.split("/");
         // console.log({ type, ext });
-        const arr = file.name.split('.')
-        console.log(arr[arr.length-1]);
+        const arr = file.name.split(".");
+        console.log(arr[arr.length - 1]);
 
         switch (type) {
             case "image":
@@ -258,10 +291,13 @@ function FilePreviewer({ files, setFiles }) {
     };
 
     return files.length ? (
-        <div style={{
-            borderTop: mentionedComment?'solid 0.5px white':'0',
-            borderRadius: mentionedComment?'0':'10px 10px 0 0'
-        }} className={`${style.chatInput_filePreview}`}>
+        <div
+            style={{
+                borderRadius: mentionedComment ? "0" : "10px 10px 0 0",
+                borderBottom: "solid 0.5px white",
+            }}
+            className={`${style.chatInput_filePreview}`}
+        >
             {files.map((file, i) => {
                 return (
                     <div
@@ -322,20 +358,49 @@ function CommentEditor({
     files,
     editorHtml,
     setEditorHtml,
-    setShowEmoji,
+    // setShowEmoji,
+    // quillRef,
     // text,
     // setText,
 }) {
     const quillRef = useRef(null);
     const { mentionedComment } = useCommentContext();
-    const atValues = [
-        { id: 1, value: "Fredrik Sundqvist" },
-        { id: 2, value: "Patrik Sjölin" },
-    ];
+    const [showEmoji, setShowEmoji] = useState(false);
 
     // useEffect(() => {
     //     console.log(editorHtml);
     // }, [editorHtml]);
+
+    useEffect(() => {
+        // Focus the Quill editor when the component is rendered
+        if (quillRef.current && showEmoji) {
+          quillRef.current.getEditor().focus();
+          quillRef.current?.getEditor()?.setSelection(quillRef.current?.getEditor().getLength());
+        }
+      }, [showEmoji]);
+
+    const handleEmojiSelection = (emoji, e) => {
+        // console.log(emoji);
+        // setEmoji(emoji.emoji);
+        const quill = quillRef.current?.getEditor();
+        const cursorPosition = quill?.getSelection()?.index;
+
+        if (cursorPosition !== undefined) {
+            // Insert the mention at the cursor position
+            quill?.insertText(cursorPosition, `${emoji.emoji}`);
+        }
+        // else {
+        //     // Get the current length of the editor content
+        //     const contentLength = quill.getLength();
+        //     console.log({contentLength});
+
+        //     // Insert the external text at the end of the editor content
+        //     quill.insertText(contentLength, emoji.emoji);
+
+        //     // Set the cursor position to the end of the inserted text
+        //     quill.setSelection(contentLength);
+        // }
+    };
 
     useEffect(() => {
         const quill = quillRef.current.getEditor();
@@ -355,13 +420,18 @@ function CommentEditor({
         };
     }, [show]);
 
+    // const atValues = [
+    //     { id: 1, value: "Fredrik Sundqvist" },
+    //     { id: 2, value: "Patrik Sjölin" },
+    //     { id: 3, value: "nafis" },
+    // ];
+
     const modules = {
-        toolbar: [["bold", "italic", "underline"]],
         // mention: {
         //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
         //     mentionDenotationChars: [
         //         "@",
-        //         // '#'
+        //         // "#"
         //     ],
         //     source: function (searchTerm, renderList, mentionChar) {
         //         let values;
@@ -369,17 +439,17 @@ function CommentEditor({
         //         if (mentionChar === "@") {
         //             values = atValues;
         //         }
-        //         //    else {
+        //         // else {
         //         //     values = hashValues;
-        //         //   }
+        //         // }
 
         //         if (searchTerm.length === 0) {
         //             renderList(values, searchTerm);
         //         } else {
         //             const matches = [];
-        //             for (let i = 0; i < values.length; i++)
+        //             for (i = 0; i < values.length; i++)
         //                 if (
-        //                     values[i].value
+        //                     ~values[i].value
         //                         .toLowerCase()
         //                         .indexOf(searchTerm.toLowerCase())
         //                 )
@@ -388,9 +458,10 @@ function CommentEditor({
         //         }
         //     },
         // },
+        toolbar: [["bold", "italic", "underline", "strike", "link"]],
     };
 
-    const formats = ["bold", "italic", "underline"];
+    const formats = ["bold", "italic", "underline", "strike", "link"];
 
     return (
         <div
@@ -413,6 +484,17 @@ function CommentEditor({
                 // overflow: "hidden",
             }}
         >
+            {showEmoji && (
+                <div className={`${style.chatInput_text_emojis}`}>
+                    <EmojiPicker
+                        width={"100%"}
+                        height={"100%"}
+                        skinTonesDisabled
+                        emojiStyle="facebook"
+                        onEmojiClick={handleEmojiSelection}
+                    />
+                </div>
+            )}
             <ReactQuill
                 ref={quillRef}
                 theme="snow"

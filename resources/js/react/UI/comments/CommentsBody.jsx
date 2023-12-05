@@ -23,11 +23,13 @@ import "use-context-menu/styles.css";
 import "./styles/customContextMenu.css";
 import { HiReply } from "react-icons/hi";
 import { TbMessage2Check } from "react-icons/tb";
-import { MdOutlineContentCopy } from "react-icons/md";
+import { MdContentCopy, MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useParams } from "react-router-dom";
 import commentDemoData from "./_Data/commentDemoData";
 import _ from "lodash";
+import Swal from "sweetalert2";
+import dayjs from "dayjs";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -43,6 +45,10 @@ export function useCommentContext() {
 }
 
 const comments = commentDemoData(20);
+
+export const isCurrentUserComment = (comment) => {
+    return comment?.id % 3 !== 0;
+};
 
 const CommentsBody = ({
     close,
@@ -67,6 +73,21 @@ const CommentsBody = ({
     const [contextHolder, setContextHolder] = useState(null);
     // =================================================================
 
+    // useEffect(() => {
+    //     console.log({ contextHolder });
+    // }, [contextHolder]);
+
+    const hnadleSelectComment = useCallback(() => {
+        setSecletedComments((prev) => ({
+            ...prev,
+            [contextHolder.id]: contextHolder,
+        }));
+    }, [contextHolder]);
+
+    // useEffect(() => {
+    //     console.log({ ...selectedComments });
+    // }, [selectedComments]);
+
     const { contextMenu, onContextMenu, onKeyDown } = useContextMenu(
         <>
             <ContextMenuItem
@@ -78,11 +99,9 @@ const CommentsBody = ({
                 <span className={`context_title`}>Reply</span>
             </ContextMenuItem>
             <ContextMenuItem
-                onSelect={()=>{
-                  setSecletedComments((prev)=>({
-                    ...prev,
-                    [contextHolder.id]:contextHolder.user_id,
-                }))
+                onSelect={() => {
+                    // console.log('clicked select');
+                    hnadleSelectComment();
                 }}
             >
                 <TbMessage2Check className={`context_icons`} />
@@ -94,12 +113,16 @@ const CommentsBody = ({
                 <MdOutlineContentCopy className={`context_icons`} />
                 <span className={`context_title`}>Copy</span>
             </ContextMenuItem>
-            <ContextMenuItem
-            // onSelect={viewSource}
-            >
-                <IoMdCloseCircleOutline className={`context_icons`} />
-                <span className={`context_title`}>Remove</span>
-            </ContextMenuItem>
+            {isCurrentUserComment(contextHolder) ? (
+                <ContextMenuItem
+                // onSelect={viewSource}
+                >
+                    <IoMdCloseCircleOutline className={`context_icons`} />
+                    <span className={`context_title`}>Remove</span>
+                </ContextMenuItem>
+            ) : (
+                <></>
+            )}
         </>
     );
 
@@ -180,6 +203,48 @@ const CommentsBody = ({
         // console.log(searchIndexes.length - commentIndex,searchIndexes[searchIndexes.length - commentIndex]);
     }, [commentIndex]);
 
+    const handleCopyComments = () => {
+        const allSelectedComments = _.orderBy(
+            Object.values(selectedComments),
+            ["id"],
+            ["asc"]
+        );
+        // console.log({ allSelectedComments });
+        const allSelectedCommentsString = allSelectedComments.reduce(
+            (total, comment, i, arr) => {
+                total += `${getTextContent(comment.comment)}\n\n${comment?.added_by_name}, ${dayjs(comment?.created_at).format("MMM DD, YYYY, hh:mm A")}`;
+                
+                if (i < arr.length - 1) {
+                    total += "\n\n\n";
+                }
+                return total;
+            },
+            ``
+        );
+        // console.log({ allSelectedCommentsString });
+        window.navigator.clipboard
+            .writeText(allSelectedCommentsString)
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Comments copied successfully",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+                setSecletedComments({});
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Comments didn't copied",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+            });
+    };
+
     return (
         <CommentContext.Provider
             value={{
@@ -255,68 +320,68 @@ const CommentsBody = ({
                     </span>
 
                     {showSearchBar ? (
-                    <div
-                        className={`${
-                            style.commentsBody_header_searchBar_container
-                        } ${animation ? style.open : style.close}`}
-                    >
-                        <input
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                            placeholder="Search..."
-                            className={`${style.commentsBody_header_searchBar}`}
-                            type="text"
-                        />
-                        <section
-                            className={`${style.commentsBody_header_searchBar_actions}`}
+                        <div
+                            className={`${
+                                style.commentsBody_header_searchBar_container
+                            } ${animation ? style.open : style.close}`}
                         >
-                            <IoIosArrowDown
-                                className={`${style.commentsBody_header_searchBar_actions_btn}`}
-                                onClick={() => {
-                                    setCommentIndex((prev) => {
-                                        if (prev > 0) {
-                                            return prev - 1;
-                                        } else {
-                                            return prev;
-                                        }
-                                    });
-                                }}
+                            <input
+                                value={searchText}
+                                onChange={(e) => setSearchText(e.target.value)}
+                                placeholder="Search..."
+                                className={`${style.commentsBody_header_searchBar}`}
+                                type="text"
                             />
-                            <span
-                                className={`${style.commentsBody_header_searchBar_actions_text}`}
+                            <section
+                                className={`${style.commentsBody_header_searchBar_actions}`}
                             >
-                                {`${commentIndex} of ${searchIndexes.length}`}
-                            </span>
-                            <IoIosArrowUp
-                                className={`${style.commentsBody_header_searchBar_actions_btn}`}
-                                onClick={() => {
-                                    setCommentIndex((prev) => {
-                                        if (prev < searchIndexes.length) {
-                                            return prev + 1;
-                                        } else {
-                                            return prev;
-                                        }
-                                    });
-                                }}
-                            />
-                        </section>
-                    </div>
+                                <IoIosArrowDown
+                                    className={`${style.commentsBody_header_searchBar_actions_btn}`}
+                                    onClick={() => {
+                                        setCommentIndex((prev) => {
+                                            if (prev > 0) {
+                                                return prev - 1;
+                                            } else {
+                                                return prev;
+                                            }
+                                        });
+                                    }}
+                                />
+                                <span
+                                    className={`${style.commentsBody_header_searchBar_actions_text}`}
+                                >
+                                    {`${commentIndex} of ${searchIndexes.length}`}
+                                </span>
+                                <IoIosArrowUp
+                                    className={`${style.commentsBody_header_searchBar_actions_btn}`}
+                                    onClick={() => {
+                                        setCommentIndex((prev) => {
+                                            if (prev < searchIndexes.length) {
+                                                return prev + 1;
+                                            } else {
+                                                return prev;
+                                            }
+                                        });
+                                    }}
+                                />
+                            </section>
+                        </div>
                     ) : (
                         <></>
                     )}
 
                     {/* search btn */}
                     <span
-                        onClick={()=>{
-                          if (showSearchBar) {
-                            setTimeout(() => {
-                                setShowSearchBar(false);
-                            }, 500);
-                            setAnimation(false);
-                          } else {
-                            setShowSearchBar(true);
-                            setAnimation(true);
-                          }
+                        onClick={() => {
+                            if (showSearchBar) {
+                                setTimeout(() => {
+                                    setShowSearchBar(false);
+                                }, 500);
+                                setAnimation(false);
+                            } else {
+                                setShowSearchBar(true);
+                                setAnimation(true);
+                            }
                         }}
                         className={style.commentsBody_header_btn}
                     >
@@ -433,7 +498,7 @@ const CommentsBody = ({
                                 onKeyDown={onKeyDown}
                                 key={i}
                                 comment={comment}
-                                prevComment={i?allComments[i-1]:null}
+                                prevComment={i ? allComments[i - 1] : null}
                             />
                         );
                     })}
@@ -452,38 +517,58 @@ const CommentsBody = ({
                     <ChatInput setScroll={setScroll} />
                 </footer>
 
-                {!true && (
+                {Object.keys(selectedComments).length > 0 ? (
                     <div
-                        className={`${style.comments_selected_action_controller}`}
+                        className={`${style.comments_selected_action_controller} ${style.open_action_controller}`}
                     >
                         <section
                             className={`${style.comments_selected_action_controller_btn}`}
                         >
                             <span
+                                onClick={handleCopyComments}
                                 className={`${style.comments_selected_action_controller_btn_icon}`}
                             >
                                 {/* icon 1 */}
+                                <MdContentCopy
+                                    style={{
+                                        height: "19.02px",
+                                        width: "16.01px",
+                                    }}
+                                />
                             </span>
                             <span
+                                onClick={handleCopyComments}
                                 className={`${style.comments_selected_action_controller_btn_text}`}
                             >
                                 Copy
                             </span>
                         </section>
-                        <section
-                            className={`${style.comments_selected_action_controller_btn}`}
-                        >
-                            <span
-                                className={`${style.comments_selected_action_controller_btn_icon}`}
+                        {Object.values(selectedComments).every((comment) => {
+                            return isCurrentUserComment(comment);
+                        }) ? (
+                            <section
+                                className={`${style.comments_selected_action_controller_btn}`}
                             >
-                                {/* icon 2 */}
-                            </span>
-                            <span
-                                className={`${style.comments_selected_action_controller_btn_text}`}
-                            >
-                                Remove
-                            </span>
-                        </section>
+                                <span
+                                    className={`${style.comments_selected_action_controller_btn_icon}`}
+                                >
+                                    {/* icon 2 */}
+                                    <IoMdCloseCircleOutline
+                                        style={{
+                                            height: "18.54px",
+                                            width: "18.54px",
+                                        }}
+                                    />
+                                </span>
+                                <span
+                                    className={`${style.comments_selected_action_controller_btn_text}`}
+                                >
+                                    Remove
+                                </span>
+                            </section>
+                        ) : (
+                            <></>
+                        )}
                         {/* <section
                     className={`${style.comments_selected_action_controller_btn}`}
                 >
@@ -495,6 +580,8 @@ const CommentsBody = ({
                     ></span>
                 </section> */}
                     </div>
+                ) : (
+                    <></>
                 )}
             </div>
         </CommentContext.Provider>

@@ -42,6 +42,7 @@
   -o-background-size: cover;
   background-size: cover;
   position: relative;
+  overflow: hidden;
   /* background-clip: border-box; */
 }
 
@@ -281,7 +282,7 @@
 }
 .chatInput{
   flex: 1 1 calc(100% - 58px);
-  overflow: auto;
+  /* overflow-y: auto; */
 }
 .chatInput_mentioned_comment{
   max-height: 200px;
@@ -326,11 +327,24 @@
 }
 .chatInput_text_emojis{
   position: absolute;
-  top: -400px;
+  /* top: -300px; */
+  /* bottom: 20px; */
+  bottom: calc(50% + 20px);
   left: 0;
-  height: 400px;
+  height: 300px;
   max-width: 300px;
   z-index: 99;
+}
+.chatInput_text_emojis::after{
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 10px;
+  rotate: 45deg;
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border-radius: 3px;
 }
 .chatInput_filePreview{
   height: 68px;
@@ -396,17 +410,10 @@
 .chatInput_text_input{
   position: relative;
   background-color: #DAEDF8;
+  /* border: solid; */
   /* border-radius: 10px; */
-  /* overflow: hidden; */
+  /* overflow: visible; */
 }
-/* .chatInput_text_emojis{
-  position: fixed;
-  top: -500px;
-  left: 0;
-  height: 500px;
-  max-width: 300px;
-  z-index: 99;
-} */
 .chatInput_text_emoji_icon{
   position: absolute;
   left: 8.34px;
@@ -428,6 +435,7 @@
   padding-top: 5px;
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
   gap: 8px;
 }
 .chatInput_actions_btn_send{
@@ -467,16 +475,44 @@
   border-radius: 0px 0px 10px 10px;
   padding: 0 70px;
 }
+.open_action_controller{
+  animation: opening_action_controller 0.5s steps(100) 0s forwards;
+}
+@keyframes opening_action_controller {
+  from{
+    /* display: none; */
+    max-height: 0;
+  }
+  to {
+    /* display: flex; */
+    max-height: 100%;
+  }
+}
+.close_action_controller{
+  animation: closing_action_controller 0.5s steps(100) 0s forwards;
+}
+@keyframes closing_action_controller {
+  from{
+    /* display: flex; */
+    max-height: 100%;
+  }
+  to {
+    /* display: none; */
+    max-height: 0%;
+  }
+}
 .comments_selected_action_controller_btn{
   display: flex;
   flex-flow: column nowrap;
   gap: 4.5px;
   align-items: center;
+  cursor: pointer;
+  /* border: solid; */
 }
 .comments_selected_action_controller_btn_icon{
-  height: 19px;
-  width: 17px;
-  background-color: #033C7E;
+  height: 20px;
+  width: 20px;
+  /* background-color: #033C7E; */
 }
 .comments_selected_action_controller_btn_text{
   font-size: 12px;

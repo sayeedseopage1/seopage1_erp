@@ -10,13 +10,14 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   isCurrentUserComment: () => (/* binding */ isCurrentUserComment),
 /* harmony export */   useCommentContext: () => (/* binding */ useCommentContext)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
-/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
-/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
 /* harmony import */ var _media_comment_refresh_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./media/comment_refresh.svg */ "./resources/js/react/UI/comments/media/comment_refresh.svg");
 /* harmony import */ var _media_comment_search_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./media/comment_search.svg */ "./resources/js/react/UI/comments/media/comment_search.svg");
 /* harmony import */ var _media_comments_body_bg_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./media/comments_body_bg.svg */ "./resources/js/react/UI/comments/media/comments_body_bg.svg");
@@ -26,14 +27,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var use_context_menu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! use-context-menu */ "./node_modules/use-context-menu/dist/use-context-menu.esm.js");
 /* harmony import */ var use_context_menu_styles_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! use-context-menu/styles.css */ "./node_modules/use-context-menu/styles.css");
 /* harmony import */ var _styles_customContextMenu_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./styles/customContextMenu.css */ "./resources/js/react/UI/comments/styles/customContextMenu.css");
-/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
-/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
-/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _Data_commentDemoData__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./_Data/commentDemoData */ "./resources/js/react/UI/comments/_Data/commentDemoData.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -78,6 +83,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var CommentContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
   setScroll: function setScroll() {},
   selectedComments: [],
@@ -91,11 +98,14 @@ function useCommentContext() {
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(CommentContext);
 }
 var comments = (0,_Data_commentDemoData__WEBPACK_IMPORTED_MODULE_11__["default"])(20);
+var isCurrentUserComment = function isCurrentUserComment(comment) {
+  return (comment === null || comment === void 0 ? void 0 : comment.id) % 3 !== 0;
+};
 var CommentsBody = function CommentsBody(_ref) {
   var close = _ref.close,
     fullScreenView = _ref.fullScreenView,
     setFullScreenView = _ref.setFullScreenView;
-  var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_14__.useParams)();
+  var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_16__.useParams)();
   // console.log({ param });
   var chatbottom_ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
@@ -142,48 +152,61 @@ var CommentsBody = function CommentsBody(_ref) {
     setContextHolder = _useState20[1];
   // =================================================================
 
-  var _useContextMenu = (0,use_context_menu__WEBPACK_IMPORTED_MODULE_8__.useContextMenu)( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+  // useEffect(() => {
+  //     console.log({ contextHolder });
+  // }, [contextHolder]);
+
+  var hnadleSelectComment = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
+    setSecletedComments(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, contextHolder.id, contextHolder));
+    });
+  }, [contextHolder]);
+
+  // useEffect(() => {
+  //     console.log({ ...selectedComments });
+  // }, [selectedComments]);
+
+  var _useContextMenu = (0,use_context_menu__WEBPACK_IMPORTED_MODULE_8__.useContextMenu)( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
         onSelect: function onSelect() {
           setMentionedComment(contextHolder);
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_15__.HiReply, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_17__.HiReply, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           className: "context_title",
           children: "Reply"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
         onSelect: function onSelect() {
-          setSecletedComments(function (prev) {
-            return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, contextHolder.id, contextHolder.user_id));
-          });
+          // console.log('clicked select');
+          hnadleSelectComment();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_16__.TbMessage2Check, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_18__.TbMessage2Check, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           className: "context_title",
           children: "Select Message"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
       // onSelect={viewSource}
       , {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_17__.MdOutlineContentCopy, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_19__.MdOutlineContentCopy, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           className: "context_title",
           children: "Copy"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
+      }), isCurrentUserComment(contextHolder) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
       // onSelect={viewSource}
       , {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_18__.IoMdCloseCircleOutline, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoMdCloseCircleOutline, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           className: "context_title",
           children: "Remove"
         })]
-      })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {})]
     })),
     contextMenu = _useContextMenu.contextMenu,
     onContextMenu = _useContextMenu.onContextMenu,
@@ -255,7 +278,37 @@ var CommentsBody = function CommentsBody(_ref) {
     }
     // console.log(searchIndexes.length - commentIndex,searchIndexes[searchIndexes.length - commentIndex]);
   }, [commentIndex]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(CommentContext.Provider, {
+  var handleCopyComments = function handleCopyComments() {
+    var allSelectedComments = lodash__WEBPACK_IMPORTED_MODULE_12___default().orderBy(Object.values(selectedComments), ["id"], ["asc"]);
+    // console.log({ allSelectedComments });
+    var allSelectedCommentsString = allSelectedComments.reduce(function (total, comment, i, arr) {
+      total += "".concat(getTextContent(comment.comment), "\n\n").concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_14___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"));
+      if (i < arr.length - 1) {
+        total += "\n\n\n";
+      }
+      return total;
+    }, "");
+    // console.log({ allSelectedCommentsString });
+    window.navigator.clipboard.writeText(allSelectedCommentsString).then(function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_13___default().fire({
+        icon: "success",
+        title: "Comments copied successfully",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+      setSecletedComments({});
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_13___default().fire({
+        icon: "error",
+        title: "Comments didn't copied",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(CommentContext.Provider, {
     value: {
       setScroll: setScroll,
       selectedComments: selectedComments,
@@ -265,7 +318,7 @@ var CommentsBody = function CommentsBody(_ref) {
       contextHolder: contextHolder,
       setContextHolder: setContextHolder
     },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
       className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody,
       style: {
         backgroundImage: "url(".concat(_media_comments_body_bg_svg__WEBPACK_IMPORTED_MODULE_4__["default"], ")"),
@@ -274,20 +327,20 @@ var CommentsBody = function CommentsBody(_ref) {
         height: fullScreenView ? "99vh" : "84vh",
         maxHeight: fullScreenView ? "99vh" : "auto"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("header", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("header", {
         className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("svg", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             width: "28",
             height: "28",
             viewBox: "0 0 28 28",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("g", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("g", {
               id: "Group_3837",
               "data-name": "Group 3837",
               transform: "translate(-837 -108)",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("circle", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("circle", {
                 id: "Ellipse_1045",
                 "data-name": "Ellipse 1045",
                 cx: "14",
@@ -295,20 +348,20 @@ var CommentsBody = function CommentsBody(_ref) {
                 r: "14",
                 transform: "translate(837 108)",
                 fill: "#1d82f5"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("g", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("g", {
                 id: "reload",
                 transform: "translate(822.039 113.273)",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("g", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("g", {
                   id: "Group_3836",
                   "data-name": "Group 3836",
                   transform: "translate(20.982 0)",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("path", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("path", {
                     id: "Path_1534",
                     "data-name": "Path 1534",
                     d: "M24.232,3.461a6.958,6.958,0,0,1,9.045-.239L31.206,3.3a.481.481,0,0,0,.018.962h.018l3.179-.118a.48.48,0,0,0,.463-.481V3.607h0L34.767.464A.481.481,0,1,0,33.8.5l.075,1.971a7.913,7.913,0,0,0-10.293.278,7.916,7.916,0,0,0-2.381,7.737.479.479,0,0,0,.467.367.417.417,0,0,0,.114-.014.482.482,0,0,0,.353-.581A6.954,6.954,0,0,1,24.232,3.461Z",
                     transform: "translate(-20.982 0)",
                     fill: "#fff"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("path", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("path", {
                     id: "Path_1535",
                     "data-name": "Path 1535",
                     d: "M91.023,185.581a.481.481,0,0,0-.934.228A6.952,6.952,0,0,1,78.895,192.8l2.1-.189a.481.481,0,1,0-.089-.959l-3.168.285a.481.481,0,0,0-.435.524l.285,3.168a.48.48,0,0,0,.478.438.175.175,0,0,0,.043,0,.481.481,0,0,0,.435-.524l-.171-1.928a7.86,7.86,0,0,0,4.573,1.743c.135.007.271.011.4.011a7.915,7.915,0,0,0,7.68-9.783Z",
@@ -319,9 +372,9 @@ var CommentsBody = function CommentsBody(_ref) {
               })]
             })
           })
-        }), showSearchBar ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+        }), showSearchBar ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_container, " ").concat(animation ? _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].open : _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].close),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("input", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
             value: searchText,
             onChange: function onChange(e) {
               return setSearchText(e.target.value);
@@ -329,9 +382,9 @@ var CommentsBody = function CommentsBody(_ref) {
             placeholder: "Search...",
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar),
             type: "text"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("section", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("section", {
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions),
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_18__.IoIosArrowDown, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoIosArrowDown, {
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_btn),
               onClick: function onClick() {
                 setCommentIndex(function (prev) {
@@ -342,10 +395,10 @@ var CommentsBody = function CommentsBody(_ref) {
                   }
                 });
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_text),
               children: "".concat(commentIndex, " of ").concat(searchIndexes.length)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_18__.IoIosArrowUp, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoIosArrowUp, {
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_btn),
               onClick: function onClick() {
                 setCommentIndex(function (prev) {
@@ -358,7 +411,7 @@ var CommentsBody = function CommentsBody(_ref) {
               }
             })]
           })]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           onClick: function onClick() {
             if (showSearchBar) {
               setTimeout(function () {
@@ -371,70 +424,70 @@ var CommentsBody = function CommentsBody(_ref) {
             }
           },
           className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("svg", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             width: "29",
             height: "29",
             viewBox: "0 0 29 29",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("path", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("path", {
               id: "Search",
               d: "M19.362,8.871a.674.674,0,1,1-.954.954,6.077,6.077,0,0,0-8.584,0,.674.674,0,0,1-.954-.954A7.427,7.427,0,0,1,19.362,8.871ZM33,30.3a2.7,2.7,0,0,1-4.6,1.907l-7.081-7.081a.674.674,0,0,1,0-.954l.954-.954-1.5-1.5a10.134,10.134,0,1,1,.954-.954l1.5,1.5.954-.954a.674.674,0,0,1,.954,0L32.21,28.4A2.678,2.678,0,0,1,33,30.3ZM22.884,14.116a8.767,8.767,0,1,0-8.767,8.767A8.777,8.777,0,0,0,22.884,14.116ZM31.651,30.3a1.34,1.34,0,0,0-.4-.954l-6.6-6.6-1.907,1.907,6.6,6.6a1.38,1.38,0,0,0,1.907,0,1.34,1.34,0,0,0,.4-.954Z",
               transform: "translate(-4 -4)",
               fill: "#727272"
             })
           })
-        }), !fullScreenView ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_19__.AiOutlineFullscreen, {
+        }), !fullScreenView ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_21__.AiOutlineFullscreen, {
           onClick: function onClick() {
             return setFullScreenView(true);
           },
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].fullscreen_icons)
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_19__.AiOutlineFullscreenExit, {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_21__.AiOutlineFullscreenExit, {
           onClick: function onClick() {
             return setFullScreenView(false);
           },
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].fullscreen_icons)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           onClick: function onClick() {
             setFullScreenView(false);
             close();
           },
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn),
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("svg", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             xlink: "http://www.w3.org/1999/xlink",
             viewBox: "15 7 28 28",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("defs", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("filter", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("defs", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("filter", {
                 id: "Ellipse_58",
                 x: "0",
                 y: "0",
                 width: "58",
                 height: "58",
                 filterUnits: "userSpaceOnUse",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("feOffset", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("feOffset", {
                   dy: "8",
                   input: "SourceAlpha"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("feGaussianBlur", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("feGaussianBlur", {
                   stdDeviation: "5",
                   result: "blur"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("feFlood", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("feFlood", {
                   floodColor: "#757575",
                   floodOpacity: "0.161"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("feComposite", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("feComposite", {
                   operator: "in",
                   in2: "blur"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("feComposite", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("feComposite", {
                   "in": "SourceGraphic"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("g", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("g", {
               id: "Group_3644",
               "data-name": "Group 3644",
               transform: "translate(-976 -145)",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("g", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("g", {
                 transform: "matrix(1, 0, 0, 1, 976, 145)",
                 filter: "url(#Ellipse_58)",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("circle", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("circle", {
                   id: "Ellipse_58-2",
                   "data-name": "Ellipse 58",
                   cx: "14",
@@ -443,7 +496,7 @@ var CommentsBody = function CommentsBody(_ref) {
                   transform: "translate(15 7)",
                   fill: "#df0b0b"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("path", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("path", {
                 id: "remove_1_",
                 "data-name": "remove (1)",
                 d: "M5.059,13A7.941,7.941,0,1,1,13,20.941,7.941,7.941,0,0,1,5.059,13ZM13,4a9,9,0,0,0,0,18,9.139,9.139,0,0,0,6.911-3.235A8.762,8.762,0,0,0,22,13,9,9,0,0,0,13,4ZM9.256,15.995,12.251,13,9.256,10.005,10,9.257,13,12.251l3-3,.748.748-3,3,3,3-.748.748-3-2.995L10,16.743Z",
@@ -454,11 +507,11 @@ var CommentsBody = function CommentsBody(_ref) {
             })]
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("main", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("main", {
         // ref={chatbottom_ref}
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_commentArea),
         children: [allComments.map(function (comment, i) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_SingleChat__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_SingleChat__WEBPACK_IMPORTED_MODULE_6__["default"], {
             idMatch: comment.id === searchIndexes[searchIndexes.length - commentIndex],
             id: comment.id
             // comment_text_id={`${comment.id}_comment`}
@@ -469,7 +522,7 @@ var CommentsBody = function CommentsBody(_ref) {
             comment: comment,
             prevComment: i ? allComments[i - 1] : null
           }, i);
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
           style: {
             minHeight: "10px",
             height: "10px",
@@ -477,12 +530,47 @@ var CommentsBody = function CommentsBody(_ref) {
           },
           ref: chatbottom_ref
         }), contextMenu]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("footer", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("footer", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_inputField),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_ChatInput__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_ChatInput__WEBPACK_IMPORTED_MODULE_7__["default"], {
           setScroll: setScroll
         })
-      }),  false && /*#__PURE__*/0]
+      }), Object.keys(selectedComments).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].open_action_controller),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("section", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+            onClick: handleCopyComments,
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_icon),
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_19__.MdContentCopy, {
+              style: {
+                height: "19.02px",
+                width: "16.01px"
+              }
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+            onClick: handleCopyComments,
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_text),
+            children: "Copy"
+          })]
+        }), Object.values(selectedComments).every(function (comment) {
+          return isCurrentUserComment(comment);
+        }) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("section", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_icon),
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoMdCloseCircleOutline, {
+              style: {
+                height: "18.54px",
+                width: "18.54px"
+              }
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_text),
+            children: "Remove"
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {})]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {})]
     })
   });
 };
@@ -857,6 +945,7 @@ var ChatInput = function ChatInput(_ref) {
     setEmoji = _useState10[1];
   var _useCommentContext = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext.mentionedComment;
+  var quillRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
 
   // useEffect(() => {
   //     console.log(files);
@@ -870,21 +959,39 @@ var ChatInput = function ChatInput(_ref) {
   //     console.log(editorHtml);
   // }, [emoji]);
 
+  // useEffect(() => {
+  //     // Focus the Quill editor when the component is rendered
+  //     if (quillRef.current && showEmoji) {
+  //       quillRef.current.getEditor().focus();
+  //       quillRef.current?.getEditor()?.setSelection(quillRef.current?.getEditor().getLength());
+  //     }
+  //   }, [showEmoji]);
+
   var handleEmojiSelection = function handleEmojiSelection(emoji, e) {
-    console.log(emoji);
-    setEmoji(emoji.emoji);
+    var _quillRef$current, _quill$getSelection;
+    // console.log(emoji);
+    // setEmoji(emoji.emoji);
+    var quill = (_quillRef$current = quillRef.current) === null || _quillRef$current === void 0 ? void 0 : _quillRef$current.getEditor();
+    var cursorPosition = quill === null || quill === void 0 || (_quill$getSelection = quill.getSelection()) === null || _quill$getSelection === void 0 ? void 0 : _quill$getSelection.index;
+    if (cursorPosition !== undefined) {
+      // Insert the mention at the cursor position
+      quill === null || quill === void 0 || quill.insertText(cursorPosition, "".concat(emoji.emoji));
+    }
+    // else {
+    //     // Get the current length of the editor content
+    //     const contentLength = quill.getLength();
+    //     console.log({contentLength});
+
+    //     // Insert the external text at the end of the editor content
+    //     quill.insertText(contentLength, emoji.emoji);
+
+    //     // Set the cursor position to the end of the inserted text
+    //     quill.setSelection(contentLength);
+    // }
   };
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-    children: [showEmoji && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emojis),
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        width: "100%",
-        height: "100%",
-        skinTonesDisabled: true,
-        emojiStyle: "facebook",
-        onEmojiClick: handleEmojiSelection
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("section", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("section", {
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput),
       children: [mentionedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(MentionedComment, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(FilePreviewer, {
         files: files,
@@ -895,7 +1002,8 @@ var ChatInput = function ChatInput(_ref) {
         files: files,
         show: show,
         setShow: setShow,
-        setShowEmoji: setShowEmoji
+        setShowEmoji: setShowEmoji,
+        quillRef: quillRef
         // text={text}
         // setText={setText}
       })]
@@ -964,6 +1072,9 @@ function MentionedComment(_ref2) {
     }
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    style: {
+      borderBottom: "solid 0.5px white"
+    },
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_icon)
@@ -1006,7 +1117,7 @@ function FilePreviewer(_ref3) {
       type = _file$type$split2[0],
       ext = _file$type$split2[1];
     // console.log({ type, ext });
-    var arr = file.name.split('.');
+    var arr = file.name.split(".");
     console.log(arr[arr.length - 1]);
     switch (type) {
       case "image":
@@ -1048,8 +1159,8 @@ function FilePreviewer(_ref3) {
   };
   return files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
     style: {
-      borderTop: mentionedComment ? 'solid 0.5px white' : '0',
-      borderRadius: mentionedComment ? '0' : '10px 10px 0 0'
+      borderRadius: mentionedComment ? "0" : "10px 10px 0 0",
+      borderBottom: "solid 0.5px white"
     },
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview),
     children: [files.map(function (file, i) {
@@ -1100,22 +1211,49 @@ function CommentEditor(_ref4) {
     setShow = _ref4.setShow,
     files = _ref4.files,
     editorHtml = _ref4.editorHtml,
-    setEditorHtml = _ref4.setEditorHtml,
-    setShowEmoji = _ref4.setShowEmoji;
+    setEditorHtml = _ref4.setEditorHtml;
   var quillRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useCommentContext4 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext4.mentionedComment;
-  var atValues = [{
-    id: 1,
-    value: "Fredrik Sundqvist"
-  }, {
-    id: 2,
-    value: "Patrik Sjölin"
-  }];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    showEmoji = _useState12[0],
+    setShowEmoji = _useState12[1];
 
   // useEffect(() => {
   //     console.log(editorHtml);
   // }, [editorHtml]);
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // Focus the Quill editor when the component is rendered
+    if (quillRef.current && showEmoji) {
+      var _quillRef$current2, _quillRef$current3;
+      quillRef.current.getEditor().focus();
+      (_quillRef$current2 = quillRef.current) === null || _quillRef$current2 === void 0 || (_quillRef$current2 = _quillRef$current2.getEditor()) === null || _quillRef$current2 === void 0 || _quillRef$current2.setSelection((_quillRef$current3 = quillRef.current) === null || _quillRef$current3 === void 0 ? void 0 : _quillRef$current3.getEditor().getLength());
+    }
+  }, [showEmoji]);
+  var handleEmojiSelection = function handleEmojiSelection(emoji, e) {
+    var _quillRef$current4, _quill$getSelection2;
+    // console.log(emoji);
+    // setEmoji(emoji.emoji);
+    var quill = (_quillRef$current4 = quillRef.current) === null || _quillRef$current4 === void 0 ? void 0 : _quillRef$current4.getEditor();
+    var cursorPosition = quill === null || quill === void 0 || (_quill$getSelection2 = quill.getSelection()) === null || _quill$getSelection2 === void 0 ? void 0 : _quill$getSelection2.index;
+    if (cursorPosition !== undefined) {
+      // Insert the mention at the cursor position
+      quill === null || quill === void 0 || quill.insertText(cursorPosition, "".concat(emoji.emoji));
+    }
+    // else {
+    //     // Get the current length of the editor content
+    //     const contentLength = quill.getLength();
+    //     console.log({contentLength});
+
+    //     // Insert the external text at the end of the editor content
+    //     quill.insertText(contentLength, emoji.emoji);
+
+    //     // Set the cursor position to the end of the inserted text
+    //     quill.setSelection(contentLength);
+    // }
+  };
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     var quill = quillRef.current.getEditor();
@@ -1134,13 +1272,19 @@ function CommentEditor(_ref4) {
       quill.off("text-change"); // Optional: Unsubscribe from any event listeners
     };
   }, [show]);
+
+  // const atValues = [
+  //     { id: 1, value: "Fredrik Sundqvist" },
+  //     { id: 2, value: "Patrik Sjölin" },
+  //     { id: 3, value: "nafis" },
+  // ];
+
   var modules = {
-    toolbar: [["bold", "italic", "underline"]]
     // mention: {
     //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
     //     mentionDenotationChars: [
     //         "@",
-    //         // '#'
+    //         // "#"
     //     ],
     //     source: function (searchTerm, renderList, mentionChar) {
     //         let values;
@@ -1148,17 +1292,17 @@ function CommentEditor(_ref4) {
     //         if (mentionChar === "@") {
     //             values = atValues;
     //         }
-    //         //    else {
+    //         // else {
     //         //     values = hashValues;
-    //         //   }
+    //         // }
 
     //         if (searchTerm.length === 0) {
     //             renderList(values, searchTerm);
     //         } else {
     //             const matches = [];
-    //             for (let i = 0; i < values.length; i++)
+    //             for (i = 0; i < values.length; i++)
     //                 if (
-    //                     values[i].value
+    //                     ~values[i].value
     //                         .toLowerCase()
     //                         .indexOf(searchTerm.toLowerCase())
     //                 )
@@ -1167,9 +1311,9 @@ function CommentEditor(_ref4) {
     //         }
     //     },
     // },
+    toolbar: [["bold", "italic", "underline", "strike", "link"]]
   };
-
-  var formats = ["bold", "italic", "underline"];
+  var formats = ["bold", "italic", "underline", "strike", "link"];
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_input),
     style: {
@@ -1189,7 +1333,16 @@ function CommentEditor(_ref4) {
       }())
       // overflow: "hidden",
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react_quill__WEBPACK_IMPORTED_MODULE_1___default()), {
+    children: [showEmoji && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emojis),
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        width: "100%",
+        height: "100%",
+        skinTonesDisabled: true,
+        emojiStyle: "facebook",
+        onEmojiClick: handleEmojiSelection
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react_quill__WEBPACK_IMPORTED_MODULE_1___default()), {
       ref: quillRef,
       theme: "snow",
       value: editorHtml,
@@ -1528,9 +1681,6 @@ var SingleChat = function SingleChat(_ref) {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-  var isCurrentUser = function isCurrentUser() {
-    return comment.id % 3 !== 0;
-  };
 
   // file preview url generator
   var handlePreviewUrl = function handlePreviewUrl(file) {
@@ -1584,7 +1734,7 @@ var SingleChat = function SingleChat(_ref) {
     if (true) {} else {}
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
       style: {
-        alignSelf: isCurrentUser() ? "flex-end" : "flex-start"
+        alignSelf: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "flex-end" : "flex-start"
       },
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_time),
       children: "".concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"))
@@ -1592,7 +1742,7 @@ var SingleChat = function SingleChat(_ref) {
   };
   var handleSelect = function handleSelect() {
     setSecletedComments(function (prev) {
-      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, id, comment.user_id));
+      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, id, comment));
     });
   };
   var handleUnSelect = function handleUnSelect() {
@@ -1606,7 +1756,7 @@ var SingleChat = function SingleChat(_ref) {
     id: id,
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat),
     style: {
-      alignSelf: isCurrentUser() ? "flex-end" : "flex-start"
+      alignSelf: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "flex-end" : "flex-start"
     },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("section", {
       style: {
@@ -1618,7 +1768,7 @@ var SingleChat = function SingleChat(_ref) {
         display: "inline-flex",
         // border:"solid",
         gap: "0 6px",
-        flexDirection: isCurrentUser() ? "row-reverse" : "row"
+        flexDirection: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "row-reverse" : "row"
       },
       children: [_toConsumableArray(Object.keys(selectedComments)).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
         style: {
@@ -1637,7 +1787,7 @@ var SingleChat = function SingleChat(_ref) {
         children: selectedComments[id] ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Select, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(UnSelect, {})
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card),
-        children: [!isCurrentUser() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+        children: [!(0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_avator)
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("article", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text),
@@ -1646,7 +1796,7 @@ var SingleChat = function SingleChat(_ref) {
             previousComment: prevComment
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             style: {
-              alignSelf: isCurrentUser() ? "flex-end" : "flex-start"
+              alignSelf: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "flex-end" : "flex-start"
             },
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_container, " ").concat(idMatch ? "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_match) : ""),
             children: [comment !== null && comment !== void 0 && comment.mention_comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -1702,7 +1852,7 @@ var SingleChat = function SingleChat(_ref) {
                 setContextHolder(comment);
               },
               onKeyDown: onKeyDown,
-              isCurrentUser: isCurrentUser(),
+              isCurrentUser: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment),
               files: comment.files,
               topMargin: !!(comment !== null && comment !== void 0 && comment.comment)
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
@@ -1713,8 +1863,8 @@ var SingleChat = function SingleChat(_ref) {
                 });
               },
               style: {
-                left: isCurrentUser() ? "-14px" : "auto",
-                right: isCurrentUser() ? "auto" : "-14px"
+                left: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "-14px" : "auto",
+                right: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "auto" : "-14px"
               },
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_btn),
               ref: menuBtnRef,
@@ -1727,8 +1877,8 @@ var SingleChat = function SingleChat(_ref) {
             }), showCommentMenu ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
               ref: menuRef,
               style: {
-                left: isCurrentUser() ? "-98px" : "auto",
-                right: isCurrentUser() ? "auto" : "-98px"
+                left: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "-98px" : "auto",
+                right: (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? "auto" : "-98px"
               },
               className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_options,
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
@@ -1745,9 +1895,7 @@ var SingleChat = function SingleChat(_ref) {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
                 onClick: function onClick() {
                   setShowCommentMenu(false);
-                  setSecletedComments(function (prev) {
-                    return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, id, comment.user_id));
-                  });
+                  handleSelect();
                 },
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_9__.TbMessage2Check, {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
@@ -1765,7 +1913,7 @@ var SingleChat = function SingleChat(_ref) {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
                   children: "Copy"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
+              }), (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.isCurrentUserComment)(comment) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("section", {
                 onClick: function onClick() {
                   setShowCommentMenu(false);
                 },
@@ -1775,7 +1923,7 @@ var SingleChat = function SingleChat(_ref) {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
                   children: "Remove"
                 })]
-              })]
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {})]
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {})]
           })]
         })]
@@ -19240,7 +19388,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 ___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Poppins&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "/* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.xKTA64JpPBJ8Ut9ZDbn9rg\\=\\={\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  background-size: cover;\r\n  position: relative;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.lNdp1uhUVwyTMS8gXh\\+ukw\\=\\={\r\n  /* height: 57px; */\r\n  padding: 0 20px 10px;\r\n  border-bottom: solid 1px #aaaaaa4a;\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\={\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n.W3912K8vxyr9Jqu9BSeJmg\\=\\={\r\n  border:solid 1px #727272;\r\n}\r\n.dtoYKAVX1AaeSxRjjoMSxA\\=\\={\r\n  /* flex: 1 0 auto; */\r\n  flex-grow: 1;\r\n  display: flex;\r\n  /* align-items: center; */\r\n  gap: 5px;\r\n  overflow: hidden;\r\n  /* width: 100%; */\r\n  /* max-width: 100px; */\r\n  /* border: solid; */\r\n}\r\n.fKU16kBo1Qmtce7l43-HuA\\=\\={\r\n  animation: ZQdC4FMRqeETrYmgX5dlXw\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes ZQdC4FMRqeETrYmgX5dlXw\\=\\= {\r\n  from{\r\n    /* display: none; */\r\n    max-width: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n}\r\n.RSRvd4EzQhSo8tEk1xfqTg\\=\\={\r\n  animation: G9e1R4rYy7AuLehHuTkQIw\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes G9e1R4rYy7AuLehHuTkQIw\\=\\= {\r\n  from{\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-width: 0%;\r\n  }\r\n}\r\n.xphoAuNibDod8P95ANKOxw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding: 2px 3px;\r\n  border-radius: 5px;\r\n  outline: none;\r\n  border: solid 0.5px #aaaaaa;\r\n}\r\n._0Ka7DovjQ7lrVCOSf2hYdQ\\=\\={\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 3px;\r\n}\r\n.i\\+2bPq8rIRUzxD7JxDasGQ\\=\\={\r\n  height: 18px;\r\n  width: 18px;\r\n  cursor: pointer;\r\n  /* align-self: baseline; */\r\n}\r\n.i\\+2bPq8rIRUzxD7JxDasGQ\\=\\=:active{\r\n  transform: scale(0.9);\r\n}\r\n.uIC61\\+vXTTqzJrGb6ey53w\\=\\={\r\n  /* align-self: center; */\r\n  color: gray;\r\n  font-weight: bold;\r\n  font-size: 15px;\r\n  user-select: none;\r\n  -webkit-user-select: none;\r\n  -moz-user-select: none;\r\n  /* border: solid; */\r\n  width: 70px;\r\n  text-align: center;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.hwrDAUbLAFvk3tT5O8yUWw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 10px; */\r\n  margin-bottom: 10px;\r\n  /* padding-top: 20px; */\r\n  /* scroll-padding-bottom: 5px; */\r\n  \r\n}\r\n.AHrh7nNelyFOlX8D-8vVOg\\=\\={\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n  /* border: solid; */\r\n  scroll-snap-align: center;\r\n}\r\n.Ei8\\+fdUr5qspbMUd8v2a1A\\=\\={\r\n  outline: 4px solid skyblue;\r\n  outline-offset: 5px;\r\n  /* scroll-margin-bottom: 5px; */\r\n  /* transform: scale(1.2); */\r\n}\r\n.WXR6qxKTISGZx4u40qK\\+Aw\\=\\={\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.lzG-A5LIYcFnh0Ffq18x3A\\=\\={\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.M6c3Wn9AMARvfa1tdaWY-w\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n._3Ww24uW4\\+XDNVrun81m4eQ\\=\\={\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\={\r\n  position: relative;\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  border-radius: 5px;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\=:hover .b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\={\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  width: 94px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.S59xMzZAdnSxfMKxhWYluQ\\=\\={\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n._9eTdcW7EtRqzqd-9Sx0beA\\=\\={\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n.i7e-ZRoTPtdM-Xd6fRXRPQ\\=\\={\r\n  padding: 7px 11px;\r\n  font-style: italic;\r\n  font-size: 10px;\r\n  color: #6F6F6F;\r\n  background-color: #EEF9FF;\r\n  border: 0.15px solid #aaaaaa;\r\n  border-radius: 5px 5px 0 0;\r\n  border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\={\r\n  padding: 7px 11px;\r\n  border: 0.15px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n._74ptsqCavibfvgxpYkl\\+MA\\=\\={\r\n  /* flex: 0 0 75%; */\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.zrdgoGyh2d-jYHAdcQ6zRw\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.RwrF3vIc7qZnuBaQOCCGtw\\=\\={\r\n  flex: 1 1 calc(100% - 58px);\r\n  overflow: auto;\r\n}\r\n.oyVP27hk-yx7bf6gIZI97A\\=\\={\r\n  max-height: 200px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  overflow-y: auto;\r\n  overflow-x: hidden;\r\n  padding: 13.33px 33.66px;\r\n  position: relative;\r\n  color: #616365;\r\n}\r\n.WvqpvluPc6n2SnoZNViB3w\\=\\={\r\n  width: 11.1px;\r\n  height: 9.67px;\r\n}\r\n.dAEoOn-7aqYBjsPL0u9jow\\=\\={\r\n  position: absolute;\r\n  width: 11.1px;\r\n  height: 11.1px;\r\n  top: 17px;\r\n  right: 33.66px;\r\n  cursor: pointer;\r\n}\r\n.rqeZltLL9VBzpngK5CuBNg\\=\\={\r\n  padding-left: 11px;\r\n  /* margin-top: 6px; */\r\n  font-size: 10px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 5px; */\r\n}\r\n.pc\\+r0LCRA\\+u6\\+EC1IkM\\+Iw\\=\\={\r\n  font-style: italic !important;\r\n}\r\n.-v023bgpIZZRqFfN2HiI8w\\=\\={\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n.kJDLHiEb5luetCsd5qbQGA\\=\\={\r\n  margin-top: 9px;\r\n}\r\n.QNBcto9P7B0fe75qKKERxg\\=\\={\r\n  position: absolute;\r\n  top: -400px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.MU\\+2fsRtd-fYkwtfChCZ5Q\\=\\={\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n  /* box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */\r\n}\r\n.BA94bXFVSLRqwsaHI-WPbg\\=\\={\r\n  height: 12px;\r\n  width: 12px;\r\n  cursor: pointer;\r\n}\r\n.DZoHasb9fTH95vYwijQvYg\\=\\={\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover{\r\n  cursor: pointer !important;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover .XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.Uy9qarsT3oxliXUpdMTp7g\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.EHoh9kHBfS25-lsSApkjcA\\=\\={\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border-radius: 10px; */\r\n  /* overflow: hidden; */\r\n}\r\n/* .chatInput_text_emojis{\r\n  position: fixed;\r\n  top: -500px;\r\n  left: 0;\r\n  height: 500px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n} */\r\n._9xtGbNPYWLNVvodQc9Zexw\\=\\={\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  height: 15.32px;\r\n  width: 15.32px;\r\n  cursor: pointer;\r\n}\r\n.Z4idHPZ\\+Jg5FhKPogy5vLA\\=\\={\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.cDxECmJkcQKexCVYE\\+xUdg\\=\\={\r\n  /* border: solid; */\r\n  padding-top: 5px;\r\n  display: flex;\r\n  flex-direction: row;\r\n  gap: 8px;\r\n}\r\n._4PrZ4kZ2lmKWJOsI6-hTtg\\=\\={\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #49b9fa;\r\n  color: white;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.d9ImWwRcKSCeTIhL5iIcSQ\\=\\={\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n._4PrZ4kZ2lmKWJOsI6-hTtg\\=\\=:active , .d9ImWwRcKSCeTIhL5iIcSQ\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n/* ---------------------------------------------------------- */\r\n.cMgFfi2lmDxSJqCcm1xYWw\\=\\={\r\n  position: fixed;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 77px;\r\n  background: #DAEDF8;\r\n  display: flex;\r\n  gap: 30px;\r\n  justify-content: right;\r\n  align-items: center;\r\n  border-radius: 0px 0px 10px 10px;\r\n  padding: 0 70px;\r\n}\r\n._46gxeP54f8ksCaSAI8sMRw\\=\\={\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 4.5px;\r\n  align-items: center;\r\n}\r\n.ZiORtGFOdrPYo3IiYwLcNw\\=\\={\r\n  height: 19px;\r\n  width: 17px;\r\n  background-color: #033C7E;\r\n}\r\n.hx-uqiFHB-iVqkLXXbD7fw\\=\\={\r\n  font-size: 12px;\r\n  color: #000000;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/comments.module.css"],"names":[],"mappings":"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","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n /* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.commentsBody{\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  -webkit-background-size: cover;\r\n  -moz-background-size: cover;\r\n  -o-background-size: cover;\r\n  background-size: cover;\r\n  position: relative;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_header{\r\n  /* height: 57px; */\r\n  padding: 0 20px 10px;\r\n  border-bottom: solid 1px #aaaaaa4a;\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n.commentsBody_header_btn{\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.commentsBody_header_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n.fullscreen_icons{\r\n  border:solid 1px #727272;\r\n}\r\n.commentsBody_header_searchBar_container{\r\n  /* flex: 1 0 auto; */\r\n  flex-grow: 1;\r\n  display: flex;\r\n  /* align-items: center; */\r\n  gap: 5px;\r\n  overflow: hidden;\r\n  /* width: 100%; */\r\n  /* max-width: 100px; */\r\n  /* border: solid; */\r\n}\r\n.open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    /* display: none; */\r\n    max-width: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n}\r\n.close{\r\n  animation: closing 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes closing {\r\n  from{\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-width: 0%;\r\n  }\r\n}\r\n.commentsBody_header_searchBar{\r\n  flex: 1 1 auto;\r\n  padding: 2px 3px;\r\n  border-radius: 5px;\r\n  outline: none;\r\n  border: solid 0.5px #aaaaaa;\r\n}\r\n.commentsBody_header_searchBar_actions{\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 3px;\r\n}\r\n.commentsBody_header_searchBar_actions_btn{\r\n  height: 18px;\r\n  width: 18px;\r\n  cursor: pointer;\r\n  /* align-self: baseline; */\r\n}\r\n.commentsBody_header_searchBar_actions_btn:active{\r\n  transform: scale(0.9);\r\n}\r\n.commentsBody_header_searchBar_actions_text{\r\n  /* align-self: center; */\r\n  color: gray;\r\n  font-weight: bold;\r\n  font-size: 15px;\r\n  user-select: none;\r\n  -webkit-user-select: none;\r\n  -moz-user-select: none;\r\n  /* border: solid; */\r\n  width: 70px;\r\n  text-align: center;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_commentArea{\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 10px; */\r\n  margin-bottom: 10px;\r\n  /* padding-top: 20px; */\r\n  /* scroll-padding-bottom: 5px; */\r\n  \r\n}\r\n.singleChat{\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n  /* border: solid; */\r\n  scroll-snap-align: center;\r\n}\r\n.singleChat_match{\r\n  outline: 4px solid skyblue;\r\n  outline-offset: 5px;\r\n  /* scroll-margin-bottom: 5px; */\r\n  /* transform: scale(1.2); */\r\n}\r\n.singleChat_comment_card{\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.singleChat_comment_card_avator{\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.singleChat_comment_card_text{\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n.singleChat_comment_card_text_time{\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.singleChat_comment_card_text_container{\r\n  position: relative;\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  border-radius: 5px;\r\n}\r\n.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more_btn{\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.singleChat_comment_card_text_more_btn{\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.singleChat_comment_card_text_more_options{\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  width: 94px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.singleChat_comment_card_text_more_options > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.singleChat_comment_card_text_more_options > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.context_icons{\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n.context_title{\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n.singleChat_comment_card_mentioned_comment{\r\n  padding: 7px 11px;\r\n  font-style: italic;\r\n  font-size: 10px;\r\n  color: #6F6F6F;\r\n  background-color: #EEF9FF;\r\n  border: 0.15px solid #aaaaaa;\r\n  border-radius: 5px 5px 0 0;\r\n  border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);\r\n}\r\n.singleChat_comment_card_text_message{\r\n  padding: 7px 11px;\r\n  border: 0.15px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n.singleChat_comment_card_files{\r\n  /* flex: 0 0 75%; */\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_inputField{\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.chatInput{\r\n  flex: 1 1 calc(100% - 58px);\r\n  overflow: auto;\r\n}\r\n.chatInput_mentioned_comment{\r\n  max-height: 200px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  overflow-y: auto;\r\n  overflow-x: hidden;\r\n  padding: 13.33px 33.66px;\r\n  position: relative;\r\n  color: #616365;\r\n}\r\n.chatInput_mentioned_comment_icon{\r\n  width: 11.1px;\r\n  height: 9.67px;\r\n}\r\n.chatInput_mentioned_comment_close_icon{\r\n  position: absolute;\r\n  width: 11.1px;\r\n  height: 11.1px;\r\n  top: 17px;\r\n  right: 33.66px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_mentioned_comment_text_area{\r\n  padding-left: 11px;\r\n  /* margin-top: 6px; */\r\n  font-size: 10px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 5px; */\r\n}\r\n.chatInput_mentioned_comment_text_area_mssg{\r\n  font-style: italic !important;\r\n}\r\n.chatInput_mentioned_comment_text_area_attachments{\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n.chatInput_mentioned_comment_text_area_sender_time{\r\n  margin-top: 9px;\r\n}\r\n.chatInput_text_emojis{\r\n  position: absolute;\r\n  top: -400px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.chatInput_filePreview{\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.chatInput_filePreview__file{\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n  /* box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */\r\n}\r\n.chatInput_filePreview__file__fileIcon{\r\n  height: 12px;\r\n  width: 12px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_filePreview__file__fileName{\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.chatInput_filePreview__file:hover{\r\n  cursor: pointer !important;\r\n}\r\n.chatInput_filePreview__file:hover .chatInput_filePreview__removeFile{\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.chatInput_filePreview__removeFile{\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.chatInput_filePreview__addFile{\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_input{\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border-radius: 10px; */\r\n  /* overflow: hidden; */\r\n}\r\n/* .chatInput_text_emojis{\r\n  position: fixed;\r\n  top: -500px;\r\n  left: 0;\r\n  height: 500px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n} */\r\n.chatInput_text_emoji_icon{\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  height: 15.32px;\r\n  width: 15.32px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_style_icon{\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_actions_btn_container{\r\n  /* border: solid; */\r\n  padding-top: 5px;\r\n  display: flex;\r\n  flex-direction: row;\r\n  gap: 8px;\r\n}\r\n.chatInput_actions_btn_send{\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #49b9fa;\r\n  color: white;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_file_add_btn{\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_actions_btn_send:active , .chatInput_file_add_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n/* ---------------------------------------------------------- */\r\n.comments_selected_action_controller{\r\n  position: fixed;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 77px;\r\n  background: #DAEDF8;\r\n  display: flex;\r\n  gap: 30px;\r\n  justify-content: right;\r\n  align-items: center;\r\n  border-radius: 0px 0px 10px 10px;\r\n  padding: 0 70px;\r\n}\r\n.comments_selected_action_controller_btn{\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 4.5px;\r\n  align-items: center;\r\n}\r\n.comments_selected_action_controller_btn_icon{\r\n  height: 19px;\r\n  width: 17px;\r\n  background-color: #033C7E;\r\n}\r\n.comments_selected_action_controller_btn_text{\r\n  font-size: 12px;\r\n  color: #000000;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "/* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.xKTA64JpPBJ8Ut9ZDbn9rg\\=\\={\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  background-size: cover;\r\n  position: relative;\r\n  overflow: hidden;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.lNdp1uhUVwyTMS8gXh\\+ukw\\=\\={\r\n  /* height: 57px; */\r\n  padding: 0 20px 10px;\r\n  border-bottom: solid 1px #aaaaaa4a;\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\={\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n.W3912K8vxyr9Jqu9BSeJmg\\=\\={\r\n  border:solid 1px #727272;\r\n}\r\n.dtoYKAVX1AaeSxRjjoMSxA\\=\\={\r\n  /* flex: 1 0 auto; */\r\n  flex-grow: 1;\r\n  display: flex;\r\n  /* align-items: center; */\r\n  gap: 5px;\r\n  overflow: hidden;\r\n  /* width: 100%; */\r\n  /* max-width: 100px; */\r\n  /* border: solid; */\r\n}\r\n.fKU16kBo1Qmtce7l43-HuA\\=\\={\r\n  animation: ZQdC4FMRqeETrYmgX5dlXw\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes ZQdC4FMRqeETrYmgX5dlXw\\=\\= {\r\n  from{\r\n    /* display: none; */\r\n    max-width: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n}\r\n.RSRvd4EzQhSo8tEk1xfqTg\\=\\={\r\n  animation: G9e1R4rYy7AuLehHuTkQIw\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes G9e1R4rYy7AuLehHuTkQIw\\=\\= {\r\n  from{\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-width: 0%;\r\n  }\r\n}\r\n.xphoAuNibDod8P95ANKOxw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding: 2px 3px;\r\n  border-radius: 5px;\r\n  outline: none;\r\n  border: solid 0.5px #aaaaaa;\r\n}\r\n._0Ka7DovjQ7lrVCOSf2hYdQ\\=\\={\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 3px;\r\n}\r\n.i\\+2bPq8rIRUzxD7JxDasGQ\\=\\={\r\n  height: 18px;\r\n  width: 18px;\r\n  cursor: pointer;\r\n  /* align-self: baseline; */\r\n}\r\n.i\\+2bPq8rIRUzxD7JxDasGQ\\=\\=:active{\r\n  transform: scale(0.9);\r\n}\r\n.uIC61\\+vXTTqzJrGb6ey53w\\=\\={\r\n  /* align-self: center; */\r\n  color: gray;\r\n  font-weight: bold;\r\n  font-size: 15px;\r\n  user-select: none;\r\n  -webkit-user-select: none;\r\n  -moz-user-select: none;\r\n  /* border: solid; */\r\n  width: 70px;\r\n  text-align: center;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.hwrDAUbLAFvk3tT5O8yUWw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 10px; */\r\n  margin-bottom: 10px;\r\n  /* padding-top: 20px; */\r\n  /* scroll-padding-bottom: 5px; */\r\n  \r\n}\r\n.AHrh7nNelyFOlX8D-8vVOg\\=\\={\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n  /* border: solid; */\r\n  scroll-snap-align: center;\r\n}\r\n.Ei8\\+fdUr5qspbMUd8v2a1A\\=\\={\r\n  outline: 4px solid skyblue;\r\n  outline-offset: 5px;\r\n  /* scroll-margin-bottom: 5px; */\r\n  /* transform: scale(1.2); */\r\n}\r\n.WXR6qxKTISGZx4u40qK\\+Aw\\=\\={\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.lzG-A5LIYcFnh0Ffq18x3A\\=\\={\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.M6c3Wn9AMARvfa1tdaWY-w\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n._3Ww24uW4\\+XDNVrun81m4eQ\\=\\={\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\={\r\n  position: relative;\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  border-radius: 5px;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\=:hover .b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\={\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  width: 94px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.S59xMzZAdnSxfMKxhWYluQ\\=\\={\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n._9eTdcW7EtRqzqd-9Sx0beA\\=\\={\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n.i7e-ZRoTPtdM-Xd6fRXRPQ\\=\\={\r\n  padding: 7px 11px;\r\n  font-style: italic;\r\n  font-size: 10px;\r\n  color: #6F6F6F;\r\n  background-color: #EEF9FF;\r\n  border: 0.15px solid #aaaaaa;\r\n  border-radius: 5px 5px 0 0;\r\n  border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\={\r\n  padding: 7px 11px;\r\n  border: 0.15px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n._74ptsqCavibfvgxpYkl\\+MA\\=\\={\r\n  /* flex: 0 0 75%; */\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.zrdgoGyh2d-jYHAdcQ6zRw\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.RwrF3vIc7qZnuBaQOCCGtw\\=\\={\r\n  flex: 1 1 calc(100% - 58px);\r\n  /* overflow-y: auto; */\r\n}\r\n.oyVP27hk-yx7bf6gIZI97A\\=\\={\r\n  max-height: 200px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  overflow-y: auto;\r\n  overflow-x: hidden;\r\n  padding: 13.33px 33.66px;\r\n  position: relative;\r\n  color: #616365;\r\n}\r\n.WvqpvluPc6n2SnoZNViB3w\\=\\={\r\n  width: 11.1px;\r\n  height: 9.67px;\r\n}\r\n.dAEoOn-7aqYBjsPL0u9jow\\=\\={\r\n  position: absolute;\r\n  width: 11.1px;\r\n  height: 11.1px;\r\n  top: 17px;\r\n  right: 33.66px;\r\n  cursor: pointer;\r\n}\r\n.rqeZltLL9VBzpngK5CuBNg\\=\\={\r\n  padding-left: 11px;\r\n  /* margin-top: 6px; */\r\n  font-size: 10px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 5px; */\r\n}\r\n.pc\\+r0LCRA\\+u6\\+EC1IkM\\+Iw\\=\\={\r\n  font-style: italic !important;\r\n}\r\n.-v023bgpIZZRqFfN2HiI8w\\=\\={\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n.kJDLHiEb5luetCsd5qbQGA\\=\\={\r\n  margin-top: 9px;\r\n}\r\n.QNBcto9P7B0fe75qKKERxg\\=\\={\r\n  position: absolute;\r\n  /* top: -300px; */\r\n  /* bottom: 20px; */\r\n  bottom: calc(50% + 20px);\r\n  left: 0;\r\n  height: 300px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.QNBcto9P7B0fe75qKKERxg\\=\\=::after{\r\n  content: \"\";\r\n  position: absolute;\r\n  bottom: -5px;\r\n  left: 10px;\r\n  rotate: 45deg;\r\n  height: 20px;\r\n  width: 20px;\r\n  background-color: white;\r\n  border-radius: 3px;\r\n}\r\n.MU\\+2fsRtd-fYkwtfChCZ5Q\\=\\={\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n  /* box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */\r\n}\r\n.BA94bXFVSLRqwsaHI-WPbg\\=\\={\r\n  height: 12px;\r\n  width: 12px;\r\n  cursor: pointer;\r\n}\r\n.DZoHasb9fTH95vYwijQvYg\\=\\={\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover{\r\n  cursor: pointer !important;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover .XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.Uy9qarsT3oxliXUpdMTp7g\\=\\={\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.EHoh9kHBfS25-lsSApkjcA\\=\\={\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border: solid; */\r\n  /* border-radius: 10px; */\r\n  /* overflow: visible; */\r\n}\r\n._9xtGbNPYWLNVvodQc9Zexw\\=\\={\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  height: 15.32px;\r\n  width: 15.32px;\r\n  cursor: pointer;\r\n}\r\n.Z4idHPZ\\+Jg5FhKPogy5vLA\\=\\={\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.cDxECmJkcQKexCVYE\\+xUdg\\=\\={\r\n  /* border: solid; */\r\n  padding-top: 5px;\r\n  display: flex;\r\n  flex-direction: row;\r\n  justify-content: flex-end;\r\n  gap: 8px;\r\n}\r\n._4PrZ4kZ2lmKWJOsI6-hTtg\\=\\={\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #49b9fa;\r\n  color: white;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.d9ImWwRcKSCeTIhL5iIcSQ\\=\\={\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n._4PrZ4kZ2lmKWJOsI6-hTtg\\=\\=:active , .d9ImWwRcKSCeTIhL5iIcSQ\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n/* ---------------------------------------------------------- */\r\n.cMgFfi2lmDxSJqCcm1xYWw\\=\\={\r\n  position: fixed;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 77px;\r\n  background: #DAEDF8;\r\n  display: flex;\r\n  gap: 30px;\r\n  justify-content: right;\r\n  align-items: center;\r\n  border-radius: 0px 0px 10px 10px;\r\n  padding: 0 70px;\r\n}\r\n.j7gCYq5fh7PDw2dOm4hJMA\\=\\={\r\n  animation: R4\\+x5WnjsKReKncdPl3k1A\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes R4\\+x5WnjsKReKncdPl3k1A\\=\\= {\r\n  from{\r\n    /* display: none; */\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n}\r\n.GvsV57ZpZ1k8hbpOsdb0Pg\\=\\={\r\n  animation: XOsLvWaX4SMD9-71EWvvsA\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes XOsLvWaX4SMD9-71EWvvsA\\=\\= {\r\n  from{\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-height: 0%;\r\n  }\r\n}\r\n._46gxeP54f8ksCaSAI8sMRw\\=\\={\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 4.5px;\r\n  align-items: center;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.ZiORtGFOdrPYo3IiYwLcNw\\=\\={\r\n  height: 20px;\r\n  width: 20px;\r\n  /* background-color: #033C7E; */\r\n}\r\n.hx-uqiFHB-iVqkLXXbD7fw\\=\\={\r\n  font-size: 12px;\r\n  color: #000000;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/comments.module.css"],"names":[],"mappings":"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","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n /* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.commentsBody{\r\n  height: 84vh;\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  -webkit-background-size: cover;\r\n  -moz-background-size: cover;\r\n  -o-background-size: cover;\r\n  background-size: cover;\r\n  position: relative;\r\n  overflow: hidden;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_header{\r\n  /* height: 57px; */\r\n  padding: 0 20px 10px;\r\n  border-bottom: solid 1px #aaaaaa4a;\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n.commentsBody_header_btn{\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.commentsBody_header_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n.fullscreen_icons{\r\n  border:solid 1px #727272;\r\n}\r\n.commentsBody_header_searchBar_container{\r\n  /* flex: 1 0 auto; */\r\n  flex-grow: 1;\r\n  display: flex;\r\n  /* align-items: center; */\r\n  gap: 5px;\r\n  overflow: hidden;\r\n  /* width: 100%; */\r\n  /* max-width: 100px; */\r\n  /* border: solid; */\r\n}\r\n.open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    /* display: none; */\r\n    max-width: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n}\r\n.close{\r\n  animation: closing 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes closing {\r\n  from{\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-width: 0%;\r\n  }\r\n}\r\n.commentsBody_header_searchBar{\r\n  flex: 1 1 auto;\r\n  padding: 2px 3px;\r\n  border-radius: 5px;\r\n  outline: none;\r\n  border: solid 0.5px #aaaaaa;\r\n}\r\n.commentsBody_header_searchBar_actions{\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 3px;\r\n}\r\n.commentsBody_header_searchBar_actions_btn{\r\n  height: 18px;\r\n  width: 18px;\r\n  cursor: pointer;\r\n  /* align-self: baseline; */\r\n}\r\n.commentsBody_header_searchBar_actions_btn:active{\r\n  transform: scale(0.9);\r\n}\r\n.commentsBody_header_searchBar_actions_text{\r\n  /* align-self: center; */\r\n  color: gray;\r\n  font-weight: bold;\r\n  font-size: 15px;\r\n  user-select: none;\r\n  -webkit-user-select: none;\r\n  -moz-user-select: none;\r\n  /* border: solid; */\r\n  width: 70px;\r\n  text-align: center;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_commentArea{\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 10px; */\r\n  margin-bottom: 10px;\r\n  /* padding-top: 20px; */\r\n  /* scroll-padding-bottom: 5px; */\r\n  \r\n}\r\n.singleChat{\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n  /* border: solid; */\r\n  scroll-snap-align: center;\r\n}\r\n.singleChat_match{\r\n  outline: 4px solid skyblue;\r\n  outline-offset: 5px;\r\n  /* scroll-margin-bottom: 5px; */\r\n  /* transform: scale(1.2); */\r\n}\r\n.singleChat_comment_card{\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.singleChat_comment_card_avator{\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n}\r\n.singleChat_comment_card_text{\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px;\r\n}\r\n.singleChat_comment_card_text_time{\r\n  font-size: 10px;\r\n  color: #033C7E;\r\n}\r\n.singleChat_comment_card_text_container{\r\n  position: relative;\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  border-radius: 5px;\r\n}\r\n.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more_btn{\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.singleChat_comment_card_text_more_btn{\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.singleChat_comment_card_text_more_options{\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  width: 94px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.singleChat_comment_card_text_more_options > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.singleChat_comment_card_text_more_options > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.context_icons{\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n.context_title{\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n.singleChat_comment_card_mentioned_comment{\r\n  padding: 7px 11px;\r\n  font-style: italic;\r\n  font-size: 10px;\r\n  color: #6F6F6F;\r\n  background-color: #EEF9FF;\r\n  border: 0.15px solid #aaaaaa;\r\n  border-radius: 5px 5px 0 0;\r\n  border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);\r\n}\r\n.singleChat_comment_card_text_message{\r\n  padding: 7px 11px;\r\n  border: 0.15px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 12px;\r\n  /* width: 100%; */\r\n}\r\n.singleChat_comment_card_files{\r\n  /* flex: 0 0 75%; */\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_inputField{\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.chatInput{\r\n  flex: 1 1 calc(100% - 58px);\r\n  /* overflow-y: auto; */\r\n}\r\n.chatInput_mentioned_comment{\r\n  max-height: 200px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  overflow-y: auto;\r\n  overflow-x: hidden;\r\n  padding: 13.33px 33.66px;\r\n  position: relative;\r\n  color: #616365;\r\n}\r\n.chatInput_mentioned_comment_icon{\r\n  width: 11.1px;\r\n  height: 9.67px;\r\n}\r\n.chatInput_mentioned_comment_close_icon{\r\n  position: absolute;\r\n  width: 11.1px;\r\n  height: 11.1px;\r\n  top: 17px;\r\n  right: 33.66px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_mentioned_comment_text_area{\r\n  padding-left: 11px;\r\n  /* margin-top: 6px; */\r\n  font-size: 10px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 5px; */\r\n}\r\n.chatInput_mentioned_comment_text_area_mssg{\r\n  font-style: italic !important;\r\n}\r\n.chatInput_mentioned_comment_text_area_attachments{\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n.chatInput_mentioned_comment_text_area_sender_time{\r\n  margin-top: 9px;\r\n}\r\n.chatInput_text_emojis{\r\n  position: absolute;\r\n  /* top: -300px; */\r\n  /* bottom: 20px; */\r\n  bottom: calc(50% + 20px);\r\n  left: 0;\r\n  height: 300px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.chatInput_text_emojis::after{\r\n  content: \"\";\r\n  position: absolute;\r\n  bottom: -5px;\r\n  left: 10px;\r\n  rotate: 45deg;\r\n  height: 20px;\r\n  width: 20px;\r\n  background-color: white;\r\n  border-radius: 3px;\r\n}\r\n.chatInput_filePreview{\r\n  height: 68px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  /* max-width: 80%; */\r\n  display: flex;\r\n  padding: 10px 8px 8px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.chatInput_filePreview__file{\r\n  height: 51px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  padding: 10px 8px;\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n  /* box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */\r\n}\r\n.chatInput_filePreview__file__fileIcon{\r\n  height: 12px;\r\n  width: 12px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_filePreview__file__fileName{\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 8px;\r\n  font-weight: bold;\r\n}\r\n.chatInput_filePreview__file:hover{\r\n  cursor: pointer !important;\r\n}\r\n.chatInput_filePreview__file:hover .chatInput_filePreview__removeFile{\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.chatInput_filePreview__removeFile{\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.chatInput_filePreview__addFile{\r\n  height: 51px;\r\n  width: 69px;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_input{\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border: solid; */\r\n  /* border-radius: 10px; */\r\n  /* overflow: visible; */\r\n}\r\n.chatInput_text_emoji_icon{\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  height: 15.32px;\r\n  width: 15.32px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_style_icon{\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_actions_btn_container{\r\n  /* border: solid; */\r\n  padding-top: 5px;\r\n  display: flex;\r\n  flex-direction: row;\r\n  justify-content: flex-end;\r\n  gap: 8px;\r\n}\r\n.chatInput_actions_btn_send{\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #49b9fa;\r\n  color: white;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_file_add_btn{\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_actions_btn_send:active , .chatInput_file_add_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n/* ---------------------------------------------------------- */\r\n.comments_selected_action_controller{\r\n  position: fixed;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 77px;\r\n  background: #DAEDF8;\r\n  display: flex;\r\n  gap: 30px;\r\n  justify-content: right;\r\n  align-items: center;\r\n  border-radius: 0px 0px 10px 10px;\r\n  padding: 0 70px;\r\n}\r\n.open_action_controller{\r\n  animation: opening_action_controller 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening_action_controller {\r\n  from{\r\n    /* display: none; */\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n}\r\n.close_action_controller{\r\n  animation: closing_action_controller 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes closing_action_controller {\r\n  from{\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-height: 0%;\r\n  }\r\n}\r\n.comments_selected_action_controller_btn{\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 4.5px;\r\n  align-items: center;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.comments_selected_action_controller_btn_icon{\r\n  height: 20px;\r\n  width: 20px;\r\n  /* background-color: #033C7E; */\r\n}\r\n.comments_selected_action_controller_btn_text{\r\n  font-size: 12px;\r\n  color: #000000;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"commentsBody": "xKTA64JpPBJ8Ut9ZDbn9rg==",
@@ -19294,6 +19442,10 @@ ___CSS_LOADER_EXPORT___.locals = {
 	"chatInput_actions_btn_send": "_4PrZ4kZ2lmKWJOsI6-hTtg==",
 	"chatInput_file_add_btn": "d9ImWwRcKSCeTIhL5iIcSQ==",
 	"comments_selected_action_controller": "cMgFfi2lmDxSJqCcm1xYWw==",
+	"open_action_controller": "j7gCYq5fh7PDw2dOm4hJMA==",
+	"opening_action_controller": "R4+x5WnjsKReKncdPl3k1A==",
+	"close_action_controller": "GvsV57ZpZ1k8hbpOsdb0Pg==",
+	"closing_action_controller": "XOsLvWaX4SMD9-71EWvvsA==",
 	"comments_selected_action_controller_btn": "_46gxeP54f8ksCaSAI8sMRw==",
 	"comments_selected_action_controller_btn_icon": "ZiORtGFOdrPYo3IiYwLcNw==",
 	"comments_selected_action_controller_btn_text": "hx-uqiFHB-iVqkLXXbD7fw=="
@@ -19323,7 +19475,7 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 ___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Poppins&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".useContextMenu_Backdrop {\r\n  z-index: 99999;\r\n}\r\n\r\n.useContextMenu_ContextMenu{\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  display: flex;\r\n  flex-flow: column;\r\n  /* gap: 7px; */\r\n  padding: 8px 0 6px !important;\r\n  /* transform: scale(1.5); */\r\n}\r\n\r\n.useContextMenu_ContextMenuItem {\r\n  /* background-color: #FFFFFF; */\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.useContextMenu_ContextMenuItem:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_icons{\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_title{\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/customContextMenu.css"],"names":[],"mappings":"AAEA;EACE,cAAc;AAChB;;AAEA;EACE,6CAA6C;EAC7C,yBAAyB;EACzB,kBAAkB;EAClB,aAAa;EACb,iBAAiB;EACjB,cAAc;EACd,6BAA6B;EAC7B,2BAA2B;AAC7B;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,6BAA6B;EAC7B,oBAAoB;EACpB,YAAY;AACd;AACA;EACE,YAAY;EACZ,yBAAyB;AAC3B;;AAEA;EACE,YAAY;EACZ,WAAW;AACb;;AAEA;EACE,cAAc;EACd,cAAc;EACd,6CAA6C;EAC7C,cAAc;AAChB","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n.useContextMenu_Backdrop {\r\n  z-index: 99999;\r\n}\r\n\r\n.useContextMenu_ContextMenu{\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  display: flex;\r\n  flex-flow: column;\r\n  /* gap: 7px; */\r\n  padding: 8px 0 6px !important;\r\n  /* transform: scale(1.5); */\r\n}\r\n\r\n.useContextMenu_ContextMenuItem {\r\n  /* background-color: #FFFFFF; */\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.useContextMenu_ContextMenuItem:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_icons{\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_title{\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".useContextMenu_Backdrop {\r\n  z-index: 99999;\r\n}\r\n\r\n.useContextMenu_ContextMenu{\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  display: flex;\r\n  flex-flow: column;\r\n  /* gap: 7px; */\r\n  padding: 8px 0 6px !important;\r\n  /* padding:0 !important; */\r\n  /* transform: scale(1.5); */\r\n}\r\n\r\n.useContextMenu_ContextMenuItem {\r\n  /* background-color: #FFFFFF; */\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.useContextMenu_ContextMenuItem:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_icons{\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_title{\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/customContextMenu.css"],"names":[],"mappings":"AAEA;EACE,cAAc;AAChB;;AAEA;EACE,6CAA6C;EAC7C,yBAAyB;EACzB,kBAAkB;EAClB,aAAa;EACb,iBAAiB;EACjB,cAAc;EACd,6BAA6B;EAC7B,0BAA0B;EAC1B,2BAA2B;AAC7B;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,6BAA6B;EAC7B,oBAAoB;EACpB,YAAY;AACd;AACA;EACE,YAAY;EACZ,yBAAyB;AAC3B;;AAEA;EACE,YAAY;EACZ,WAAW;AACb;;AAEA;EACE,cAAc;EACd,cAAc;EACd,6CAA6C;EAC7C,cAAc;AAChB","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n.useContextMenu_Backdrop {\r\n  z-index: 99999;\r\n}\r\n\r\n.useContextMenu_ContextMenu{\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  display: flex;\r\n  flex-flow: column;\r\n  /* gap: 7px; */\r\n  padding: 8px 0 6px !important;\r\n  /* padding:0 !important; */\r\n  /* transform: scale(1.5); */\r\n}\r\n\r\n.useContextMenu_ContextMenuItem {\r\n  /* background-color: #FFFFFF; */\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.useContextMenu_ContextMenuItem:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_icons{\r\n  height: 10px;\r\n  width: 10px;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_title{\r\n  font-size: 8px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -19349,7 +19501,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  border-top: solid 0.5px white !important;\r\n  padding-right: 33.66px;\r\n  padding-left: 33.66px;\r\n  font-size: 12px;\r\n  color: black;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 35%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n/* .open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    max-height: 100%;\r\n  }\r\n} */\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/quill.css"],"names":[],"mappings":"AAAA;EACE,uBAAuB;EACvB,yBAAyB;EACzB,wBAAwB;EACxB,wBAAwB;EACxB,qBAAqB;AACvB;;AAEA,yCAAyC;AACzC;kDACkD;AAClD,MAAM;;AAEN;sDACsD;EACpD,+DAA+D;AACjE,MAAM;;AAEN;sDACsD;AACtD,MAAM;;AAEN,gBAAgB;AAChB;qEACqE;EACnE,kEAAkE;AACpE,MAAM;;AAEN,mCAAmC;AACnC;;GAEG;;AAEH;;iEAEiE;AACjE,MAAM;;AAEN;;GAEG;;AAEH,mCAAmC;AACnC;;GAEG;;AAEH;;;GAGG;;AAEH;;GAEG;AACH,oDAAoD;;AAEpD;EACE,uBAAuB;EACvB,kCAAkC;EAClC,+BAA+B;EAC/B,wCAAwC;EACxC,kCAAkC;EAClC,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;EAChB,iBAAiB;EACjB,gBAAgB;AAClB;AACA;EACE,6BAA6B;EAC7B,uBAAuB;EACvB,wCAAwC;EACxC,sBAAsB;EACtB,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ;qBACmB;AACrB;AACA;EACE,aAAa;EACb,QAAQ;AACV;AACA;;;GAGG;;AAEH;EACE,6BAA6B;EAC7B,4BAA4B;EAC5B,8BAA8B;EAC9B,uCAAuC;EACvC,aAAa;EACb,mBAAmB;EACnB,cAAc;EACd,uBAAuB;EACvB,8BAA8B;EAC9B,YAAY;AACd;AACA;;;;;;;;;;GAUG;;AAEH;EACE,YAAY;EACZ,uBAAuB;EACvB,sBAAsB;EACtB,qBAAqB;EACrB,0BAA0B;AAC5B","sourcesContent":[":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  border-top: solid 0.5px white !important;\r\n  padding-right: 33.66px;\r\n  padding-left: 33.66px;\r\n  font-size: 12px;\r\n  color: black;\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 35%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n/* .open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    max-height: 100%;\r\n  }\r\n} */\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  /* padding-right: 33.66px; */\r\n  padding-left: 33.66px;\r\n  font-size: 12px;\r\n  color: black;\r\n  max-height: 100px; \r\n  overflow-y: auto;\r\n  margin-right: 33.66px;\r\n  /* margin-top: 5px;\r\n  margin-bottom: 5px; */\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 35%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n/* .open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    max-height: 100%;\r\n  }\r\n} */\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n\r\n\r\n/* style for emoji */\r\n.EmojiPickerReact .epr-preview{\r\n  display: none !important;\r\n}\r\n\r\naside.EmojiPickerReact.epr-main{\r\n  /* position: absolute;\r\n  top: -0px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px; */\r\n  z-index: 99;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/quill.css"],"names":[],"mappings":"AAAA;EACE,uBAAuB;EACvB,yBAAyB;EACzB,wBAAwB;EACxB,wBAAwB;EACxB,qBAAqB;AACvB;;AAEA,yCAAyC;AACzC;kDACkD;AAClD,MAAM;;AAEN;sDACsD;EACpD,+DAA+D;AACjE,MAAM;;AAEN;sDACsD;AACtD,MAAM;;AAEN,gBAAgB;AAChB;qEACqE;EACnE,kEAAkE;AACpE,MAAM;;AAEN,mCAAmC;AACnC;;GAEG;;AAEH;;iEAEiE;AACjE,MAAM;;AAEN;;GAEG;;AAEH,mCAAmC;AACnC;;GAEG;;AAEH;;;GAGG;;AAEH;;GAEG;AACH,oDAAoD;;AAEpD;EACE,uBAAuB;EACvB,kCAAkC;EAClC,+BAA+B;EAC/B,wCAAwC;EACxC,kCAAkC;EAClC,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;EAChB,iBAAiB;EACjB,gBAAgB;AAClB;AACA;EACE,6BAA6B;EAC7B,uBAAuB;EACvB,8CAA8C;EAC9C,4BAA4B;EAC5B,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ,iBAAiB;EACjB,gBAAgB;EAChB,qBAAqB;EACrB;uBACqB;EACrB;qBACmB;AACrB;AACA;EACE,aAAa;EACb,QAAQ;AACV;AACA;;;GAGG;;AAEH;EACE,6BAA6B;EAC7B,4BAA4B;EAC5B,8BAA8B;EAC9B,8CAA8C;EAC9C,uCAAuC;EACvC,aAAa;EACb,mBAAmB;EACnB,cAAc;EACd,uBAAuB;EACvB,8BAA8B;EAC9B,YAAY;AACd;AACA;;;;;;;;;;GAUG;;AAEH;EACE,YAAY;EACZ,uBAAuB;EACvB,sBAAsB;EACtB,qBAAqB;EACrB,0BAA0B;AAC5B;;;AAGA,oBAAoB;AACpB;EACE,wBAAwB;AAC1B;;AAEA;EACE;;;;qBAImB;EACnB,WAAW;AACb","sourcesContent":[":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  /* padding-right: 33.66px; */\r\n  padding-left: 33.66px;\r\n  font-size: 12px;\r\n  color: black;\r\n  max-height: 100px; \r\n  overflow-y: auto;\r\n  margin-right: 33.66px;\r\n  /* margin-top: 5px;\r\n  margin-bottom: 5px; */\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 35%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n/* .open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    max-height: 100%;\r\n  }\r\n} */\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n\r\n\r\n/* style for emoji */\r\n.EmojiPickerReact .epr-preview{\r\n  display: none !important;\r\n}\r\n\r\naside.EmojiPickerReact.epr-main{\r\n  /* position: absolute;\r\n  top: -0px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px; */\r\n  z-index: 99;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
