@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Button from "../../components/Button";
 import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
 import {
+    useCheckWorkingReportMutation,
     useLazyGetTaskDetailsQuery,
     useLazyGetUserTrackTimeQuery,
     useStartTimerApiMutation,
@@ -14,6 +15,7 @@ import { setLessTrackModal, setTaskStatus } from "../../../services/features/sub
 import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 import { User } from "../../../utils/user-details";
 import { useNavigate } from "react-router-dom";
+import { workingReportError } from "../helper/timer-start-working-report-error-toaster";
 
 
 
@@ -98,11 +100,58 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const [stopTimerApi, { isLoading: timerStopStatusIsLoading }] =
         useStopTimerApiMutation();
     
-    
+    const [checkWorkReport] = useCheckWorkingReportMutation();
 
     // timer start control
-    const startTimerControl = () => {
+    const startTimerControl = async() => {
         setIsOpenConfirmationModal(false);
+
+        // check is developer submit their daily working report on previous day
+
+        try {
+           // check 
+           const workReport = await checkWorkReport().unwrap();
+
+           // if submit all required report start timer
+           if(
+                workReport&&
+                workReport.data &&
+                workReport.data.check_in_check_out.check_in_status &&
+                workReport.data.daily_task_report.daily_submission_status &&
+                workReport.data.hours_log_report.hours_log_report_status
+           ){
+                await startTimerApi({
+                    task_id: task?.id,
+                    project_id: task?.projectId,
+                    memo: task?.title,
+                    user_id: window?.Laravel?.user?.id,
+                })
+                .unwrap()
+                .then(res => {
+                    if (res?.status === "success" || res?.status === 200) {
+                        setTimerStart(true);
+                        setTimerId(res?.id);
+                        dispatch(setTaskStatus(res?.task_status));
+                        Toast.fire({
+                            icon: 'success',
+                            title: _.startCase(res?.message),
+                        });
+                    } else {
+                        Toast.fire({
+                            icon: 'warning',
+                            title: _.startCase(res?.message),
+                        });
+                    }
+                }) 
+           }else{
+            workingReportError();
+           }
+
+        } catch (error) {
+          console.log(error);  
+        }
+
+        /*
         startTimerApi({
             task_id: task?.id,
             project_id: task?.projectId,
@@ -136,7 +185,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                             denyButtonText: `Close`,
                             icon: 'warning'
                           }).then((result) => {
-                            /* Read more about isConfirmed, isDenied below */
+                            // Read more about isConfirmed, isDenied below
                             if (result.isConfirmed) {
                                 dispatch(setLessTrackModal({
                                     show: true, 
@@ -155,7 +204,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                             denyButtonText: `Close`,
                             icon: 'warning'
                           }).then((result) => {
-                            /* Read more about isConfirmed, isDenied below */
+                            // Read more about isConfirmed, isDenied below 
                             if (result.isConfirmed) {
                                 navigate(`?modal=daily-submission&date_type=last-date`)
                             } 
@@ -164,6 +213,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     
                 } 
             });
+        */
     };
 
     // start timer function

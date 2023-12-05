@@ -4436,11 +4436,14 @@ class TaskController extends AccountBaseController
         } elseif ($request->mode == 'developer_first_task_check') {
             $user = Auth::user();
             if (Auth::user()->role_id == 5) {
-                $data = ProjectTimeLog::where([
-                    'project_id' => $request->project_id,
-                    // 'task_id' => $id,
-                    'user_id' => Auth::id()
-                ])->first();
+                $task_check = Task::where('id',$id)->first();
+                $data = '';
+                if($task_check->pp_task_id != null){
+                    $data = ProjectTimeLog::where([
+                        'task_id' => $id,
+                        'user_id' => Auth::id()
+                    ])->first();
+                }
                 return response()->json([
                     'is_first_task' => ($data) ? false : true,
                 ]);
