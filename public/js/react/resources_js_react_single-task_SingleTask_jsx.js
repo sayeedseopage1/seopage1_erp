@@ -3457,7 +3457,7 @@ var Comment = function Comment(_ref) {
           return setShowDeletedComment(true);
         },
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
-          className: "fa-solid fa-eye"
+          className: "fa-solid fa-eye-slash"
         })
       }) : null]
     });
@@ -3479,17 +3479,28 @@ var Comment = function Comment(_ref) {
           })
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-        className: "sp1_comment",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
-          className: "sp1_comment_user--name",
-          children: [user === null || user === void 0 ? void 0 : user.getName(), " (", user === null || user === void 0 ? void 0 : user.getDesignationName(), ")"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          className: "sp1_comment_time",
-          style: {
-            color: "#888"
+        className: "w-100 d-flex align-items-center justify-between",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          className: "sp1_comment",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+            className: "sp1_comment_user--name",
+            children: [user === null || user === void 0 ? void 0 : user.getName(), " (", user === null || user === void 0 ? void 0 : user.getDesignationName(), ")"]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+            className: "sp1_comment_time",
+            style: {
+              color: "#888"
+            },
+            children: (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_3__.timeCalculate)(comment.last_updated_date)
+          })]
+        }), comment.is_deleted && auth.getRoleId() === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+          className: "ml-auto",
+          onClick: function onClick() {
+            return setShowDeletedComment(!showDeletedComment);
           },
-          children: (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_3__.timeCalculate)(comment.last_updated_date)
-        })]
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+            className: "fa-solid fa-eye"
+          })
+        }) : null]
       }), comment.is_deleted || user.getId() !== auth.getId() ? null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu, {
         as: "div",
         className: "sp1_comment_extend_menu",

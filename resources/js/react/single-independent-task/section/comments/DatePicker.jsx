@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DatePicker from 'react-datepicker';
 
-const DatePickerComponent = ({date, selected, setDate, minDate, maxDate, placeholderText}) => {
+const DatePickerComponent = ({date, selected, setDate, minDate, maxDate, placeholderText,...rest}) => {
 
   return (
         <DatePicker
@@ -12,6 +12,7 @@ const DatePickerComponent = ({date, selected, setDate, minDate, maxDate, placeho
             minDate={minDate}
             maxDate={maxDate}
             placeholderText={placeholderText}
+            {...rest}
         />
   )
 }

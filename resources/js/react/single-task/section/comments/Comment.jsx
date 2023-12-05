@@ -17,7 +17,7 @@ const Comment = ({ comment, onDelete }) => {
                 This Comment has been deleted
                 {auth.getRoleId() === 1 ? (
                     <button onClick={() => setShowDeletedComment(true)}>
-                        <i className="fa-solid fa-eye" />
+                        <i className="fa-solid fa-eye-slash" />
                     </button>
                 ) : null}
             </div>
@@ -39,16 +39,26 @@ const Comment = ({ comment, onDelete }) => {
                         />
                     </div>
                 </div>
-                <div className="sp1_comment">
-                    <span className="sp1_comment_user--name">
-                        {user?.getName()} ({user?.getDesignationName()})
-                    </span>
-                    <span
-                        className="sp1_comment_time"
-                        style={{ color: "#888" }}
-                    >
-                        {timeCalculate(comment.last_updated_date)}
-                    </span>
+
+                
+                <div className="w-100 d-flex align-items-center justify-between">
+                    <div className="sp1_comment">
+                        <span className="sp1_comment_user--name">
+                            {user?.getName()} ({user?.getDesignationName()})
+                        </span>
+                        <span
+                            className="sp1_comment_time"
+                            style={{ color: "#888" }}
+                        >
+                            {timeCalculate(comment.last_updated_date)}
+                        </span>
+                    </div>
+
+                    {comment.is_deleted && auth.getRoleId() === 1 ? (
+                        <button className="ml-auto" onClick={() => setShowDeletedComment(!showDeletedComment)}>
+                            <i className="fa-solid fa-eye" />
+                        </button>
+                    ) : null}
                 </div>
 
                 {/* <Dropdown className="sp1_comment_extend_menu_dd">
