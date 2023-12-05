@@ -21,6 +21,9 @@ use App\Notifications\ProjectDelivarableFinalAuthorizationClientNotification;
 use App\Notifications\ProjectDeliverableFinalAuthorizationNotificationAccept;
 use App\Notifications\DeliverableOthersAuthorizationAcceptNotification;
 use DB;
+use App\Models\Role;
+use Toastr;
+use App\Models\ProjectSubmission;
 
 class PendingActionController extends AccountBaseController
 {
@@ -643,11 +646,80 @@ class PendingActionController extends AccountBaseController
         ]);
     }
     public function DeleteStagingSite(Request $request)
-    {
-        dd($request->all());
+    {   
+        
+        $action= PendingAction::where('id',$request->id)->first();
+        $project=Project::where('id',$action->project_id)->first();
+        $dummy_link = ProjectSubmission::where('project_id',$project->id)->first();
+        $client= User::where('id',$project->client_id)->first();
+        $lead_developer= User::where('id',Auth::id())->first();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $past_action= new PendingActionPast();
+        $past_action->item_name = $action->item_name;
+        $past_action->code = $action->code;
+        $past_action->serial = $action->serial;
+        $past_action->action_id = $action->id;
+        $past_action->heading = $action->heading;
+        $past_action->message = 'Staging site '.$dummy_link->dummy_link.' for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> has been Deleted by lead developer <a>'.$lead_developer->name.'</a> (PM: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+     //   $past_action->button = $action->button;
+        $past_action->timeframe = $action->timeframe;
+        $past_action->authorization_for = $action->authorization_for;
+        $past_action->authorized_by = $action->authorized_by;
+        $past_action->authorized_at = $action->authorized_at;
+        $past_action->expired_status = $action->expired_status;
+        $past_action->past_status = $action->past_status;
+        $past_action->project_id = $action->project_id;
+        $past_action->task_id = $action->task_id;
+        $past_action->client_id = $action->client_id;
+        $past_action->developer_id = $action->developer_id;
+        $past_action->save();
+
     }
     public function AssignTaskIgnore($id)
     {
-        dd($id);
+        $actions= PendingAction::where('code','NTTA')->where('past_status',0)->where('developer_id',$id)->orderBy('id','desc')->get();
+       
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+    
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                   
+                    $developer= User::where('id',$id)->first();
+                    
+                   
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+                    $user_role= Role::where('id',$authorize_by->role_id)->first();
+    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = $user_role->name.' <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> ignored assigning task to Developer <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a>';
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->developer_id = $action->developer_id;
+                    $past_action->save();
+                    Toastr::success('Action marked as completed successfully', 'Success', ["positionClass" => "toast-top-right"]);
+                    return back();
+    
+    
+            
+        }
+            # code...
+        }
     }
 }

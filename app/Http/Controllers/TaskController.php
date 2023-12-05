@@ -2892,14 +2892,43 @@ class TaskController extends AccountBaseController
             $updateTask->board_column_id = 4;
             $updateTask->save();
         }
-        $task_count= Task::where('project_id',$task_status->project_id)->where('board_coulmn_id','!=',4)->count();
-        if($task_count == 0)
-        {
+       $actions= PendingAction::where('code','PDA')->where('project_id',$task_status->project_id)->get();
+       if($actions != null)
+       {
+       foreach ($actions as $key => $action) {
+    
             //need pending action past 
-
+            $action= PendingAction::where('id',$request->id)->first();
+            $project=Project::where('id',$action->project_id)->first();
+          
+            $client= User::where('id',$project->client_id)->first();
+            $lead_developer= User::where('id',Auth::id())->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $past_action= new PendingActionPast();
+            $past_action->item_name = $action->item_name;
+            $past_action->code = $action->code;
+            $past_action->serial = $action->serial;
+            $past_action->action_id = $action->id;
+            $past_action->heading = $action->heading;
+            $past_action->message = 'Need to update';
+         //   $past_action->button = $action->button;
+            $past_action->timeframe = $action->timeframe;
+            $past_action->authorization_for = $action->authorization_for;
+            $past_action->authorized_by = $action->authorized_by;
+            $past_action->authorized_at = $action->authorized_at;
+            $past_action->expired_status = $action->expired_status;
+            $past_action->past_status = $action->past_status;
+            $past_action->project_id = $action->project_id;
+            $past_action->task_id = $action->task_id;
+            $past_action->client_id = $action->client_id;
+            $past_action->developer_id = $action->developer_id;
+            $past_action->save();
 
             //need pending action past
         }
+       }
+
+      
         return response()->json([
             'status' => 200,
         ]);
