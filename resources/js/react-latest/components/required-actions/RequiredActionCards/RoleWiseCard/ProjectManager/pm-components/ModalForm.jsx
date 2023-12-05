@@ -34,6 +34,8 @@ export default function ModalForm({ setIsOpen, form_data }) {
     }, [form_data]);
 
     const handleSubmit = async ({ url, method } = { url: "", method: "" }) => {
+        // console.log({ formData });
+        // return;
         setLoading(true);
         let emptyRequiredField = 0;
         [...form_data.form].forEach((input) => {
@@ -47,26 +49,46 @@ export default function ModalForm({ setIsOpen, form_data }) {
         });
 
         if (emptyRequiredField > 0) {
-            toast.error("Please input all required field");
+            Swal.fire({
+                icon: "warning",
+                title: "Please input all required field",
+                timer: 2000,
+                showConfirmButton: true,
+                timerProgressBar: true,
+            });
             setLoading(false);
             return;
         }
 
-        // console.log({ url, method, formData });
         // setIsOpen(false);
         // setLoading(false);
         // return;
-
+        
+        const form = new FormData();
+        
+        for (const key in formData) {
+            form.append(key, formData[key]);
+        }
+        form.append("_token",document.querySelector("meta[name='csrf-token']").getAttribute("content"));
+        
+        // console.log({ url, method, form });
         try {
-            await axios[method.toLowerCase()](url, {
-                ...formData,
-                _token: document
-                    .querySelector("meta[name='csrf-token']")
-                    .getAttribute("content"),
+            await axios[method.toLowerCase()](url, form);
+            Swal.fire({
+                icon: "success",
+                title: "Submitted Sucessfully",
+                timer: 2000,
+                showConfirmButton: true,
+                timerProgressBar: true,
             });
-            toast.success("Submitted Sucessfully");
         } catch (err) {
-            toast.error("Not submitted");
+            Swal.fire({
+                icon: "error",
+                title: "Not submitted",
+                timer: 2000,
+                showConfirmButton: true,
+                timerProgressBar: true,
+            });
         } finally {
             handleRefresh();
             setIsOpen(false);
