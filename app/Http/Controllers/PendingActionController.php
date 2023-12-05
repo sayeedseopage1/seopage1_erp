@@ -646,4 +646,8 @@ class PendingActionController extends AccountBaseController
     {
         dd($request->all());
     }
+    public function AssignTaskIgnore($id)
+    {
+        dd($id);
+    }
 }
