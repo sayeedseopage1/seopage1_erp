@@ -139,17 +139,17 @@
                         </div>
                         <div class="col-md-12">
                             @if($deal->message_link != null)
-                                <?php
-                                $mystring = $deal->message_link;
-
-                                $output = str_replace('<br>',' ', $mystring);
-
-                                $output_final= (trim($output));
-                                $data= explode("  ", $output_final);
-                                //  dd(($data));
-
-                                ?>
-                                @foreach($data as $message)
+                                @php
+                                    if (is_string($deal->message_link) && is_array(json_decode($deal->message_link, true))) {
+                                        $array = json_decode($deal->message_link, true);
+                                        $message_links = implode(', ', $array);
+                                    }
+                                    else {
+                                        $message_links = '';
+                                    }
+                                    $message_links_array = explode(', ', $message_links);
+                                @endphp
+                                @foreach($message_links_array as $message)
                                     <div class="mt-3">
                                         <label for="message_link" class="form-label"><strong>Message Link</strong>
                                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Message Link" data-html="true" data-trigger="hover"></i>

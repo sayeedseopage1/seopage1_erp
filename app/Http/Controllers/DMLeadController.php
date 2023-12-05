@@ -528,14 +528,7 @@ class DMLeadController extends AccountBaseController
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $message_links = $request->message_link;
-        $value= '';
-
-        if (is_array($message_links) || is_object($message_links)) {
-            foreach ($message_links as $link) {
-                $value= $value  . $link .' <br> ';
-
-            }
-        }
+        $value= json_encode($request['message_link']);
         // DB::beginTransaction();
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;

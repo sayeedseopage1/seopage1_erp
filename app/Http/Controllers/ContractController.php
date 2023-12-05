@@ -1194,7 +1194,7 @@ class ContractController extends AccountBaseController
             $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
             $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
-            $project->project_summary = $request->project_summary;
+          //  $project->project_summary = $request->project_summary;
             $project->save();
 
             if ($deal->project_type == 'hourly') {
@@ -1727,7 +1727,7 @@ class ContractController extends AccountBaseController
             $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
             $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
-            $project->project_summary = $request->project_summary;
+          //  $project->project_summary = $request->project_summary;
             $project->save();
 
             if ($deal->project_type == 'hourly') {
