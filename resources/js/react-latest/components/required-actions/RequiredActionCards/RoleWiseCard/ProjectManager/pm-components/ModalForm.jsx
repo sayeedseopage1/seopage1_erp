@@ -58,7 +58,12 @@ export default function ModalForm({ setIsOpen, form_data }) {
         // return;
 
         try {
-            await axios[method.toLowerCase()](url, formData);
+            await axios[method.toLowerCase()](url, {
+                ...formData,
+                _token: document
+                    .querySelector("meta[name='csrf-token']")
+                    .getAttribute("content"),
+            });
             toast.success("Submitted Sucessfully");
         } catch (err) {
             toast.error("Not submitted");
