@@ -380,8 +380,11 @@ class IndependentTaskController extends AccountBaseController
                             ->leftJoin('users as client','tasks.client_id','client.id')
                             ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
                             ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
-                            ->select('tasks.id','tasks.u_id','tasks.heading','tasks.description','tasks.start_date','tasks.due_date','taskboard_columns.id as board_column_id','taskboard_columns.column_name as board_column_name','taskboard_columns.label_color as board_column_label_color','assignedBy.id as assigned_by_id','assignedBy.name as assigned_by_name','assignedBy.image as assigned_by_avator','assignedTo.id as assigned_to_id','assignedTo.name as assigned_to_name','assignedTo.image as assigned_to_avator','client.id as existing_client_id','client.name as existing_client_name','client.image as existing_client_avator','tasks.client_name as new_client','pending_parent_tasks.created_at as creation_date')
-                            ->where('tasks.independent_task_status',1);
+                            ->select('tasks.id','tasks.u_id','tasks.heading','tasks.description','tasks.start_date','tasks.due_date','taskboard_columns.id as board_column_id','taskboard_columns.column_name as board_column_name','taskboard_columns.label_color as board_column_label_color','assignedBy.id as assigned_by_id','assignedBy.name as assigned_by_name','assignedBy.image as assigned_by_avator','assignedTo.id as assigned_to_id','assignedTo.name as assigned_to_name','assignedTo.image as assigned_to_avator','client.id as existing_client_id','client.name as existing_client_name','client.image as existing_client_avator','tasks.client_name as new_client','pending_parent_tasks.created_at as creation_date',
+                            DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id) as subtasks_count'),
+                            )
+                            ->where('tasks.independent_task_status',1)
+                            ->whereNull('tasks.subtask_id');
                           //  ->get();
 
                             if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
@@ -450,15 +453,14 @@ class IndependentTaskController extends AccountBaseController
                                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
                             }
 
-        $independent_sub_task_count = DB::table('tasks')
-                                ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
-                                ->whereNotNull('tasks.pp_task_id')
-                                ->whereNotNull('tasks.subtask_id')
-                                ->count();
+        // $independent_sub_task_count = DB::table('tasks')
+        //                         ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
+        //                         ->whereNotNull('tasks.pp_task_id')
+        //                         ->whereNotNull('tasks.subtask_id')
+        //                         ->count();
 
         return response()->json([
             'data'=>$tasks,
-            'indeptSubTask'=>$independent_sub_task_count,
             'status'=>200
         ]);
     }
