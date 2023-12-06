@@ -326,7 +326,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->serial = 'WDADA'.'x'.$key;
             $action->item_name= 'Won deals acceptance delay authorization';
             $action->heading= 'Project acceptance deadline authorization needed';
-            $action->message = 'PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> requested more time to accept deal <a href="'.route('contracts.show', $project->deal_id).'">'.$project->project_name.'</a> cancel authorization for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>(Deal awarded on: '.$deal->award_time.')';
+            $action->message = 'PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> requested more time to accept deal <a href="'.route('contracts.show', $project->deal_id).'">'.$project->project_name.'</a>  from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>(Deal awarded on: '.$deal->award_time.')';
             $action->timeframe= 12;
             $action->project_id = $project->id;
             $action->client_id = $client->id;
