@@ -111,7 +111,7 @@ class ProjectManagerAction extends Command
             // Deadline is in the past
             $difference_in_hours = -$difference_in_hours;
         }
-        if($difference_in_hours > 0 && $difference_in_hours >= 48)
+        if($difference_in_hours > 0 && $difference_in_hours <= 48)
         {
             $pending_action = PendingAction::where('code','PDA')->where('past_status',0)->count();
             if($pending_action == 0)
