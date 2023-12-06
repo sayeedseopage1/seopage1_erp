@@ -21,6 +21,7 @@ const FilterSidebar = ({
     setDateType,
     close,
     isDev,
+    isTopManagement
 }) => {
     return (
         <div className="sp1_filter_sidebar">
