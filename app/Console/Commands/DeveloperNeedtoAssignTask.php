@@ -136,7 +136,7 @@ class DeveloperNeedtoAssignTask extends Command
         }
         if($difference_in_hours > 0 && $difference_in_hours <= 18)
         {
-            $pending_action = PendingAction::where('code','DTDA')->where('past_status',0)->count();
+            $pending_action = PendingAction::where('code','DTDA')->where('task_id',$project->id)->where('past_status',0)->count();
             if($pending_action == 0)
             {
                 $helper = new HelperPendingActionController();
