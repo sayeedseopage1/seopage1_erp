@@ -3,8 +3,20 @@ import style from "../../../../../styles/required-action-card.module.css";
 import dayjs from "dayjs";
 import ShowTimer from "./admin-components/ShowTimer";
 import ActionsButton from "./admin-components/ActionsButton";
+import { useCallback } from "react";
 
 export default function RequiredActionsCard_Admin_Expire({ data }) {
+    
+    const handleMessageShow = useCallback(
+        (type) => {
+            if (type === "PDA" || type === "DTDA") {
+                return `${data.message} 0 hours (Deadline already crossed)`;
+            } else {
+                return data.message;
+            }
+        },
+        [data]
+    );
 
     return (
         <div className={style.card_container}>
@@ -18,7 +30,9 @@ export default function RequiredActionsCard_Admin_Expire({ data }) {
                     {/* card subtitle */}
                     <p className={style.subtitle}>
                         <span
-                            dangerouslySetInnerHTML={{ __html: data.message }}
+                            dangerouslySetInnerHTML={{
+                                __html: handleMessageShow(data?.code),
+                            }}
                         />{" "}
                         {/* from */}
                     </p>
@@ -43,20 +57,20 @@ export default function RequiredActionsCard_Admin_Expire({ data }) {
                             className={style.action_expire_time_icon}
                         /> */}
                         {/* <article> */}
-                            <span className={style.highlight}>
-                                Generated on
-                            </span>
-                            <span>
-                                {dayjs(data.created_at).format("DD-MM-YYYY")}
-                                {" "}
-                                {dayjs(data.created_at).format("h a")}
-                            </span>
+                        <span className={style.highlight}>Generated on</span>
+                        <span>
+                            {dayjs(data.created_at).format("DD-MM-YYYY")}{" "}
+                            {dayjs(data.created_at).format("h a")}
+                        </span>
                         {/* </article> */}
                     </div>
 
                     {/* action count down */}
                     <ShowTimer
-                        targetTime={dayjs(data.created_at).add(Number(data.timeframe), "hours")}
+                        targetTime={dayjs(data.created_at).add(
+                            Number(data.timeframe),
+                            "hours"
+                        )}
                     />
                 </aside>
             </div>
