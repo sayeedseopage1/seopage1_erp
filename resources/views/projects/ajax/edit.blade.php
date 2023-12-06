@@ -665,8 +665,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         });
 
         $('#save-project-form').click(function() {
+            @if ($task == null || Auth::user()->role_id !=4)
             var note = CKEDITOR.instances.description.getData();
             document.getElementById('description').value = note;
+            @endif
 
             const url = "{{ route('projects.update', $project->id) }}";
 
