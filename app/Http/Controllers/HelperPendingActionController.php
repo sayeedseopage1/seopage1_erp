@@ -1680,12 +1680,13 @@ class HelperPendingActionController extends AccountBaseController
             $project= Project::where('id',$task->project_id)->first();
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
-            $authorizer= User::where('id',$project_manager->id)->first();
+            $task_user= TaskUser::where('task_id',$task->id)->first();
+            $authorizer= User::where('id',$task_user->user_id)->first();
           
                 $action = new PendingAction();
                 $action->code = 'DTDA';
                 $action->serial = 'DTDA'.'x0';
-                $action->item_name= 'Deadline in the next 2 days!';
+                $action->item_name= 'Deadline in the next 18 hours';
                 $action->heading= 'Task deadline will be over soon!';
                 $action->message = 'Deadline for your task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next';
                 $action->timeframe= 48;
@@ -1704,6 +1705,7 @@ class HelperPendingActionController extends AccountBaseController
                 ];
                 $action->button = json_encode($button);
                 $action->save();
+             //   dd($action);
 
            }
            

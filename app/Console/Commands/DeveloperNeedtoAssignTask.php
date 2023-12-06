@@ -134,6 +134,7 @@ class DeveloperNeedtoAssignTask extends Command
             // Deadline is in the past
             $difference_in_hours = -$difference_in_hours;
         }
+       // dd($difference_in_hours)
         if($difference_in_hours > 0 && $difference_in_hours <= 18)
         {
             $pending_action = PendingAction::where('code','DTDA')->where('task_id',$project->id)->where('past_status',0)->count();
