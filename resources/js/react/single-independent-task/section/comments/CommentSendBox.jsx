@@ -41,7 +41,9 @@ const CommentSendBox = ({onCommentPost, task}) => {
         fd.append('file[]', file);
     });
 
-    await storeComment({data: fd, task_id: task?.id}).unwrap().then(res=>{
+    await storeComment({data: fd, task_id: task?.id})
+    .unwrap()
+    .then(res=>{
       setEditMode(false);
       setComment("");
       setFiles('');

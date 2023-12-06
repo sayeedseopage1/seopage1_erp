@@ -14,28 +14,27 @@ import { ExpandTask } from "./table/ExpandTask";
 // import { storeTasks } from "../../services/features/tasksSlice";
 // import { useDispatch, useSelector } from "react-redux";
 // import Popover from '../../global/Popover';
-import ActionDropdown from "./ActionDropdown";
 import { CompareDate } from "../../utils/dateController";
-import { convertTime } from "../../utils/converTime";
+import ActionDropdown from "./ActionDropdown";
 
 const compareDate = new CompareDate();
 
 export const TaskTableColumns = [
     // expand
-    // {
-    //   id:'expend',
-    //   header: '',
-    //   cell: ({row, table}) => { 
-    //     const {pageIndex} = table.getState();
-    //     return(
-    //       <ExpandTask
-    //         row={row} 
-    //         table={table}
-    //         pageIndex={pageIndex}
-    //       />
-    //     )
-    //   }
-    // },
+    {
+      id:'expend',
+      header: '',
+      cell: ({row, table}) => {
+        const {pageIndex} = table.getState();
+        return(
+          <ExpandTask
+            row={row}
+            table={table}
+            pageIndex={pageIndex}
+          />
+        )
+      }
+    },
 
     // unique id
     // {
@@ -43,14 +42,14 @@ export const TaskTableColumns = [
     //   header: 'IndependentTaskId',
     //   accessorFn: row => `${row.u_id}}`,
     //   cell: ({row}) => {
-    //     const data = row?.original;  
+    //     const data = row?.original;
     //     return (
     //       <>
     //           <abbr title={data?.heading} style={{textDecoration: 'none'}}>
     //             <div className='d-flex align-items-center' style={{gap: '10px'}}>
     //                 <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.u_id} </a>
     //             </div>
-    //           </abbr>  
+    //           </abbr>
     //       </>
     //     )
     //   }
@@ -62,7 +61,7 @@ export const TaskTableColumns = [
       header: 'Task',
       accessorFn: row => `${row.id}${row.heading}`,
       cell: ({row}) => {
-        const data = row?.original;  
+        const data = row?.original;
         return (
           <>
           <abbr title={data?.heading} style={{ textDecoration: 'none' }}>
@@ -105,13 +104,13 @@ export const TaskTableColumns = [
          }
 
         const clockIsRunning = data?.start_time && _.isNull(data?.end_time)
-         
+
         const color = (isActive || clockIsRunning) ? '#54B688' : '#DCDEE1'
         return(
           <div style={{color}} className='d-flex align-items-center'>
             <i className="fa-solid fa-stopwatch f-18"/>
             {row.parentId === undefined && subtaskCount === 0 && !clockIsRunning && <span className='ml-2'><strong>{count}</strong></span>}
-            {clockIsRunning && 
+            {clockIsRunning &&
               <span className='ml-1 badge badge-primary text-white' style={{fontSize: '11px'}}>
                 {<StopWatch time={timer} run={clockIsRunning} />}
               </span>
@@ -119,7 +118,7 @@ export const TaskTableColumns = [
           </div>
         )
       }
-    }, 
+    },
 
     // client
     {
@@ -134,12 +133,12 @@ export const TaskTableColumns = [
               url={data?.existing_client_id?`/account/clients/${data?.existing_client_id}`:''}
               avatar={data?.existing_client_avator}
               name={data?.existing_client_name?data?.existing_client_name:data?.new_client}
-            /> 
+            />
           </div>
         )
       }
     },
-    
+
     // creation date
     {
       id: 'creation_date',
@@ -154,7 +153,7 @@ export const TaskTableColumns = [
         )
       }
     },
-    
+
     // start date
     {
       id: 'start_date',
@@ -166,7 +165,7 @@ export const TaskTableColumns = [
           <strong>
             {data?.start_date ? (
               <>
-                {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/> 
+                {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/>
               </>
             ): '--'}
           </strong>
@@ -193,17 +192,17 @@ export const TaskTableColumns = [
         }
 
         if(Number(data?.board_column_id) === 4) color = '#0F9D58'
-        
-        
+
+
         date = date === 'Today' ? date : dayjs(date).format('DD-MM-YYYY');
         return(
           <span style={{color: color}}>
-           <strong>{date ?? '--'}</strong> 
+           <strong>{date ?? '--'}</strong>
           </span>
         )
       }
     },
-    
+
     // approved on
     {
       id: 'approved_on',
@@ -212,7 +211,7 @@ export const TaskTableColumns = [
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <strong> 
+          <strong>
             {/* {data?.task_approval_date ? (
               <>
                 {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
@@ -223,7 +222,7 @@ export const TaskTableColumns = [
         )
       }
     },
-    
+
     // hours logged
     {
       id: 'hours_logged',
@@ -238,22 +237,22 @@ export const TaskTableColumns = [
           </div>
         )
       }
-    }, 
-    
+    },
+
     // assigned by
     {
       id: 'assigned_by_id',
-      header: 'Assigned By', 
+      header: 'Assigned By',
       accessorKey: 'added_by_name',
       cell: ({row}) => {
         const data = row?.original;
-        
+
         return(
           <Person
             url={`/account/employees/${data?.assigned_by_id}` }
             avatar={data?.assigned_by_avator}
             name={data?.assigned_by_name}
-          /> 
+          />
         )
       }
     },
@@ -266,12 +265,12 @@ export const TaskTableColumns = [
       cell: ({row}) => {
         const data = row?.original;
         // console.log(data);
-        return( 
+        return(
           <Person
             url={`/account/employees/${data?.assigned_to_id}` }
             avatar={data?.assigned_to_avator}
             name={data?.assigned_to_name}
-          /> 
+          />
         )
       }
     },
@@ -286,7 +285,7 @@ export const TaskTableColumns = [
         // console.log('from independent task table column',data?.column_name);
         return(
           <span
-            className='badge text-white' 
+            className='badge text-white'
             style={{background: data?.board_column_label_color}}
           >
             {data?.board_column_name}
@@ -294,7 +293,7 @@ export const TaskTableColumns = [
         )
       }
     },
-    
+
     // report
     {
       id: 'report',
@@ -304,7 +303,7 @@ export const TaskTableColumns = [
         return <ReportButton row={data} />
       }
     },
-     
+
     // action
     {
       id: 'action',
@@ -312,6 +311,6 @@ export const TaskTableColumns = [
       cell: ({row}) => {
         const data = row?.original;
         return <ActionDropdown row={data}/>
-      },  
+      },
     }
   ]
