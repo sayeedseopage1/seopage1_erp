@@ -1639,7 +1639,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
 
         }
-        public function ProjectDeadline($project)
+        public function ProjectDeadline($project, $difference_in_hours)
         {
             $project= Project::where('id',$project->id)->first();
             $client= User::where('id',$project->client_id)->first();
@@ -1652,7 +1652,16 @@ class HelperPendingActionController extends AccountBaseController
                 $action->item_name= 'Deadline in the next 2 days!';
                 $action->heading= 'Project deadline will be over soon!';
                 $action->message = 'Deadline for your project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next ';
-                $action->timeframe= 48;
+               if($difference_in_hours > 0)
+               {
+                $action->timeframe= $difference_in_hours;
+
+               }else 
+               {
+                $action->timeframe= 0;
+
+               }
+              
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
              //  $action->task_id = $task->id;
@@ -1672,7 +1681,7 @@ class HelperPendingActionController extends AccountBaseController
             
 
         }
-        public function TaskDeadline($task)
+        public function TaskDeadline($task, $difference_in_hours)
         {
            // dd($task);
            if($task->independent_task_status != 1)
@@ -1689,7 +1698,15 @@ class HelperPendingActionController extends AccountBaseController
                 $action->item_name= 'Deadline in the next 18 hours';
                 $action->heading= 'Task deadline will be over soon!';
                 $action->message = 'Deadline for your task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next';
-                $action->timeframe= 18;
+                if($difference_in_hours > 0)
+                {
+                 $action->timeframe= $difference_in_hours;
+ 
+                }else 
+                {
+                 $action->timeframe= 0;
+ 
+                }
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
                 $action->task_id = $task->id;
