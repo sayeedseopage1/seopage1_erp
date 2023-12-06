@@ -535,6 +535,15 @@ class PendingActionController extends AccountBaseController
     }
     public function get_pending_active_live_action(Request $request)
     {
+        
+        $authorization_for = $request->input('user_id', null);
+        if (!is_null($authorization_for)) {
+           $user = $authorization_for;
+        }else 
+        {
+            $user = Auth::id();
+        }
+        // dd($authorization_for);
         $startDate = $request->input('startDate', null);
         $endDate = $request->input('endDate', null);
         $actions = PendingAction::
@@ -542,7 +551,7 @@ class PendingActionController extends AccountBaseController
         ->leftJoin('projects','projects.id','pending_actions.project_id')
         ->leftJoin('users as client','client.id','pending_actions.client_id')
         ->leftJoin('users as pm','pm.id','projects.pm_id')
-        ->where('pending_actions.authorization_for',Auth::id())
+        ->where('pending_actions.authorization_for',$user)
         ->where('pending_actions.past_status',0)
         ->where('pending_actions.expired_status',0);
         if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
@@ -563,6 +572,11 @@ class PendingActionController extends AccountBaseController
                 ;
             }
         }
+       
+           
+
+        
+      
         $actions= $actions->orderBy('pending_actions.id','desc')
         ->get();
         
@@ -577,6 +591,15 @@ class PendingActionController extends AccountBaseController
     }
     public function get_pending_expired_live_action(Request $request)
     {
+       
+        $authorization_for = $request->input('user_id', null);
+    //   dd($authorization_for);
+    if (!is_null($authorization_for)) {
+        $user = $authorization_for;
+     }else 
+     {
+         $user = Auth::id();
+     }
         $startDate = $request->input('startDate', null);
         $endDate = $request->input('endDate', null);
         $actions = PendingAction::
@@ -584,7 +607,7 @@ class PendingActionController extends AccountBaseController
         ->leftJoin('projects','projects.id','pending_actions.project_id')
         ->leftJoin('users as client','client.id','pending_actions.client_id')
         ->leftJoin('users as pm','pm.id','projects.pm_id')
-        ->where('pending_actions.authorization_for',Auth::id())
+        ->where('pending_actions.authorization_for',$user)
         ->where('pending_actions.past_status',0)
         ->where('pending_actions.expired_status',1);
         if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
@@ -599,6 +622,7 @@ class PendingActionController extends AccountBaseController
                 $actions = $actions->whereDate('pending_actions.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
             }
         }
+      
         $actions= $actions->orderBy('pending_actions.id','desc')
         ->get();
        
@@ -612,6 +636,14 @@ class PendingActionController extends AccountBaseController
     }
     public function get_pending_past_action(Request $request)
     {
+        $authorization_for = $request->input('user_id', null);
+        if (!is_null($authorization_for)) {
+            $user = $authorization_for;
+         }else 
+         {
+             $user = Auth::id();
+         }
+        
         $startDate = $request->input('startDate', null);
         $endDate = $request->input('endDate', null);
         $actions = PendingActionPast::
@@ -621,7 +653,7 @@ class PendingActionController extends AccountBaseController
         ->leftJoin('users as client','client.id','pending_action_pasts.client_id')
         ->leftJoin('users as pm','pm.id','projects.pm_id')
         ->leftJoin('users as authorize_by','authorize_by.id','pending_action_pasts.authorized_by')
-        ->where('pending_action_pasts.authorization_for',Auth::id())
+        ->where('pending_action_pasts.authorization_for',$user)
         ->where('pending_action_pasts.past_status',1);
         if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
 
@@ -635,6 +667,7 @@ class PendingActionController extends AccountBaseController
                 $actions = $actions->whereDate('pending_action_pasts.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
             }
         }
+       
         $actions= $actions->orderBy('pending_action_pasts.id','desc')
         ->get();
         foreach ($actions as $key => $action) {
