@@ -1,15 +1,21 @@
-import React, {useState} from 'react'
-import Dropdown from '../Dropdown';
-import {User} from '../../../utils/user-details';
 import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
 import { useUsers } from '../../../hooks/useUsers';
-import Search from '../Searchbox';
+import { User } from '../../../utils/user-details';
+import Dropdown from '../Dropdown';
 import Loader from '../Loader';
+import Search from '../Searchbox';
 
-const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 9, 10]}) => {
-    const [query, setQuery] = useState(''); 
+const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 9, 10], disabled, currentUser}) => {
+    const [query, setQuery] = useState('');
     const { users, usersIsFetching } = useUsers();
     let _users;
+
+    useEffect(() => {
+        if(window && currentUser){
+            setState(window.Laravel.user)
+        }
+    }, [currentUser])
 
     if(roleIds === null){
         _users = _.filter(users, user => user.role_id === null)
@@ -22,27 +28,29 @@ const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 
 
 
     const name = _.size(state?.name) > 16 ? `${state?.name?.slice(0, 16)}...` : state?.name
+
+
   return (
     <div className='sp1_task_filter_item'>
             <span className='mr-2 f-13 d-flex flex-nowrap'>{title} :</span>
             <Dropdown>
-                <Dropdown.Toggle className={`sp1_filter_toggle ${selectionBoxClassName ?? ''}`}>
+                <Dropdown.Toggle disabled={disabled} className={`sp1_filter_toggle ${selectionBoxClassName ?? ''}`}>
                     <span
                         data-toggle={name ? 'tooltip' : ''}
                         title={state?.name ?? ''}
                     >
                         <strong>{name ?? 'All'}</strong>
-                    </span> 
+                    </span>
                 </Dropdown.Toggle>
                 <Dropdown.Menu >
                     <div>
                         <Search autoFocus={true} value={query} onChange={setQuery} />
                     </div>
-                    {usersIsFetching && 
+                    {usersIsFetching &&
                         <Loader title="Loading..." />
                     }
                     <div className="sp1_filter--users">
-                        {!usersIsFetching && 
+                        {!usersIsFetching &&
                             <Dropdown.Item onClick={() => setState(null)} className={state === null ? 'sp1_filter--user active' : 'sp1_filter--user'}>
                                 All
                             </Dropdown.Item>}
