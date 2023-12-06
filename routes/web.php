@@ -864,7 +864,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-independent-task',[IndependentTaskController::class,'independentTaskGet'])->name('independent-task-get');
     Route::get('independent-task-show',[IndependentTaskController::class,'independentTaskShow'])->name('independent-task-show');
     Route::get('get-all-independent-task',[IndependentTaskController::class,'independentTaskAll'])->name('get-all-independent-task');
-    Route::get('independent-task/{task_id}/subtask',[IndependentTaskController::class,'independentSubTask'])->name('get-all-independent-sub-task');
+    Route::get('independent-task/{task_id}/subtask',[IndependentTaskController::class,'independentSubTask'])->name('get-independent-subtask');
+    Route::get('independent-subtasks',[IndependentTaskController::class,'independentAllSubTask'])->name('get-independent-all-sub-task');
      /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */

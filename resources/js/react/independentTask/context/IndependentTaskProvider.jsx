@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useGetIndependentSubtaskByTaskIdMutation } from '../../services/api/independentTaskApiSlice';
 
 export const Ctx = React.createContext(null); // independent task content
 
@@ -7,23 +8,27 @@ export default function IndependentTaskProvider({children}){
     const [tableData, setTableData] = React.useState([]);
     const [subTaskTableData, setSubtaskTableData] = React.useState([]);
 
+    const [getIndependentSubtaskByTaskId] = useGetIndependentSubtaskByTaskIdMutation();
+
 
     // fetch subtask
     const getSubtasksByTaskId = async({taskId, query}) => {
-        console.log({taskId, query})
-        // getSubTasks({
-        //     taskId: data?.id,
-        //     query: new URLSearchParams(filter).toString()
-        //   })
-        //   .unwrap()
-        //   .then( res => {
-        //     const _data = {...data, subtasks: res?.tasks};
-        //     dispatch(addSubtaskToParenttask({id: data?.id, task: _data}));
+        try {
+            const res = await getIndependentSubtaskByTaskId({taskId, query}).unwrap();
+            if(res && res.data){
+                const _tableData = [...tableData];
+                const newTableData = _tableData.map(d => {
+                    if(d.id === taskId){
+                        return {...d, subtasks: [...res.data]}
+                    }
+                    return d;
+                })
 
-        //     setLoading(false);
-        //     row.toggleExpanded();
-        //   })
-        //   .catch(err => console.error(err))
+                setTableData(newTableData);
+            }
+        } catch (error) {
+            console.error(error);
+        }
     }
 
 
