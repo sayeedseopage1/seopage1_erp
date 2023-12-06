@@ -258,8 +258,8 @@
   min-width: 0;
   width: 100%;
   min-width: 150px;
-  max-width: 150px;
-  padding: 10px;
+  /* max-width: 150px; */
+  padding: 10px 30px 10px 10px;
   font-size: 16px;
   color: var(--placeholder);
   outline: none;
