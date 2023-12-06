@@ -865,6 +865,46 @@ class TaskController extends AccountBaseController
         $task->task_status = "submitted";
 
         $task->save();
+        if($task->subtask_id == null)
+        {
+            $actions = PendingAction::where('code','NSPT')->where('past_status',0)->where('task_id',$task->id)->get();
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+                    $project= Project::where('id',$task->project_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $project_manager= User::where('id',$project->pm_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+    
+                    $past_action->save();
+    
+    
+            }
+        }
+        }
         //  dd($task);
 
         $board_column = TaskBoardColumn::where('id', $task->board_column_id)->first();
@@ -1014,10 +1054,33 @@ class TaskController extends AccountBaseController
         $task->rating3 = $request->rating3;
         $task->comments = $request->comments;
         $task->save();
+        if($task->subtask_id != null)
+        {
+            $parent_task= Subtask::where('id',$task->subtask_id)->first();
+            $sub_tasks_count = Subtask::select('tasks.*')
+            ->join('tasks','tasks.subtask_id','sub_tasks.id')
+            
+            ->where('sub_tasks.task_id',$parent_task->task_id)->count();
+            $sub_tasks__finished_count = Subtask::select('tasks.*')
+            ->join('tasks','tasks.subtask_id','sub_tasks.id')
+            
+            ->where('sub_tasks.task_id',$parent_task->task_id)
+            ->where('tasks.board_column_id',8)
+            ->count();
+            if( $sub_tasks_count == $sub_tasks__finished_count)
+            {
+                $p_task= Task::where('id',$parent_task->task_id)->first();
+                $helper = new HelperPendingActionController();
+ 
+ 
+                $helper->NeedtoSubmitParentTask($$p_task);
+            }
+        }
         $taskId= Task::where('id',$task->task_id)->first();
         $task_user= TaskUser::where('task_id',$taskId->id)->orderBy('id','desc')->first();
         $t_user= User::where('id',$task_user->user_id)->first();
         $user_role= Role::where('id',$t_user->role_id)->first();
+        $revision_status= TaskRevision::where('task_id',$taskId->id)->first(); 
         $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$taskId->id)->get();
         if($actions != null)
         {
@@ -1038,7 +1101,15 @@ class TaskController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                if($revision_status != null)
+                {
+                    $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+
+                }else 
+                {
+                    $past_action->message = 'Task submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                }
+               
              //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
@@ -1161,6 +1232,10 @@ class TaskController extends AccountBaseController
         foreach ($actions as $key => $action) {
                 $taskId= Task::where('id',$task_revision->task_id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
+                $revision_status= TaskRevision::where('task_id',$taskId->id)->first();
+                $task_user= TaskUser::where('task_id',$taskId->id)->first();
+                $user= User::where('id',$task_user->id)->first();
+                $user_role= Role::where('id',$user->role_id)->first();
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -1175,7 +1250,14 @@ class TaskController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' submitted by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                if($revision_status != null)
+                {
+                    $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+
+                }else 
+                {
+                    $past_action->message = 'Task submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                }
              //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
