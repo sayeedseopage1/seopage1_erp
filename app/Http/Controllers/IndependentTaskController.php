@@ -452,6 +452,7 @@ class IndependentTaskController extends AccountBaseController
                             }else {
                                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
                             }
+
         return response()->json([
             'data'=>$tasks,
             'status'=>200
@@ -473,6 +474,7 @@ class IndependentTaskController extends AccountBaseController
 
     // GET All INDEPENDENT SUB TASKS
     public function independentAllSubTask(Request $request){
+
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
         $assignee_to = $request->input('assignee_to', null);
@@ -492,74 +494,69 @@ class IndependentTaskController extends AccountBaseController
             ->leftJoin('users as client','tasks.client_id','client.id')
             ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
             ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
-            ->where('tasks.independent_task_status',1)
-            ->get();
+            ->where('tasks.independent_task_status',1);
+            // ->get();
 
             if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
-                            {
+            {
+                $sub_task = $sub_task->whereDate('sub_tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
 
+            }else
+            {
+                if (!is_null($startDate)) {
+                    $sub_task = $sub_task->whereDate('sub_tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                }
+                if (!is_null($endDate)) {
+                    $sub_task = $sub_task->whereDate('sub_tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                }
 
-                                $tasks = $sub_task->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
 
-                            }else
-                            {
-                                if (!is_null($startDate)) {
-                                    $tasks = $sub_task->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
-                                }
-                                if (!is_null($endDate)) {
-                                    $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
-                                }
+            if (!is_null($assignee_to)) {
+                $sub_task = $sub_task->where('task_users.user_id', $assignee_to);
+            }
+            if (!is_null($assignee_by)) {
+                $sub_task = $sub_task->where('sub_tasks.added_by', $assignee_by);
+            }
+            if (!is_null($clientId)) {
+                $sub_task = $sub_task->where('tasks.client_name', $clientId)->orWhere('client.name',$clientId);
+            }
 
-                            }
+            if(!is_null($status))
+            {
+                if($status == 11)
+                {
+                    $sub_task = $sub_task;
 
-                            if (!is_null($assignee_to)) {
-                                $tasks = $tasks->where('task_users.user_id', $assignee_to);
-                            }
-                            if (!is_null($assignee_by)) {
-                                $tasks = $tasks->where('tasks.added_by', $assignee_by);
-                            }
-                            // if (!is_null($pmId)) {
-                            //     $tasks = $tasks->where('projects.pm_id', $pmId);
-                            // }
-                            if (!is_null($clientId)) {
-                                $tasks = $tasks->where('tasks.client_name', $clientId)->orWhere('client.name',$clientId);
-                            }
+                }elseif ($status== 10) {
+                    $sub_task = $sub_task->where('tasks.board_column_id','!=',4);
+                }elseif ($status == 1) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',1);
+                }elseif ($status == 2) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',2);
+                }elseif ($status == 3) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',3);
+                }elseif ($status == 4) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',4);
+                }elseif ($status == 6) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',6);
+                }elseif ($status == 7) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',7);
+                }elseif ($status == 8) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',8);
+                }
+                elseif($status == 9) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',9);
+                }
 
-                            if(!is_null($status))
-                            {
-                                if($status == 11)
-                                {
-                                    $tasks = $tasks;
-
-                                }elseif ($status== 10) {
-                                    $tasks = $tasks->where('tasks.board_column_id','!=',4);
-                                }elseif ($status == 1) {
-                                    $tasks = $tasks->where('tasks.board_column_id',1);
-                                }elseif ($status == 2) {
-                                    $tasks = $tasks->where('tasks.board_column_id',2);
-                                }elseif ($status == 3) {
-                                    $tasks = $tasks->where('tasks.board_column_id',3);
-                                }elseif ($status == 4) {
-                                    $tasks = $tasks->where('tasks.board_column_id',4);
-                                }elseif ($status == 6) {
-                                    $tasks = $tasks->where('tasks.board_column_id',6);
-                                }elseif ($status == 7) {
-                                    $tasks = $tasks->where('tasks.board_column_id',7);
-                                }elseif ($status == 8) {
-                                    $tasks = $tasks->where('tasks.board_column_id',8);
-                                }
-                                elseif($status == 9) {
-                                    $tasks = $tasks->where('tasks.board_column_id',9);
-                                }
-
-                            }
-                            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
-                            {
-                                $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
-
-                            }else {
-                                $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
-                            }
+            }
+            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+            {
+                $sub_task = $sub_task->where('task_users.user_id',Auth::id())->orderBy('sub_tasks.created_at', 'desc')->get();
+            }
+            else {
+                $sub_task = $sub_task->orderBy('sub_tasks.created_at', 'desc')->get();
+            }
 
         return response()->json([
             'data'=>$sub_task,
@@ -588,7 +585,5 @@ class IndependentTaskController extends AccountBaseController
             'status'=>200
         ]);
     }
-
-
 
 }
