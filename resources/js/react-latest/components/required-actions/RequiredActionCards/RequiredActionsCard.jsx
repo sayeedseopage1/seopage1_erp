@@ -18,9 +18,9 @@ import RequiredActionsCard_TeamLead_Expire from "./RoleWiseCard/TeamLead/Require
 import RequiredActionsCard_TeamLead_Live from "./RoleWiseCard/TeamLead/RequiredActionsCard_TeamLead_Live";
 import RequiredActionsCard_TeamLead_Past from "./RoleWiseCard/TeamLead/RequiredActionsCard_TeamLead_Past";
 
-const currentUser = new User(window.Laravel.user);
+// const currentUser = new User(window.Laravel.user);
 
-export default function RequiredActionsCard({ data, status }) {
+export default function RequiredActionsCard({ role, data, status }) {
     const handleCard = (role) => {
         switch (role) {
             case 1: // management or admin
@@ -73,7 +73,7 @@ export default function RequiredActionsCard({ data, status }) {
         }
     };
 
-    return handleCard(currentUser.roleId);
+    return handleCard(role);
 }
 
 // export default function RequiredActionsCard({ data, temp = true }) {
