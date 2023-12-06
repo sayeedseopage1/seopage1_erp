@@ -81,7 +81,7 @@ class ProjectManagerAction extends Command
            $milestones= ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
             $current_date= Carbon::now();
           
-            if($current_date == $milestone_submission_date) {
+            if($current_date >= $milestone_submission_date) {
                 // dd("true");
                  if($milestones == 0)
              {
@@ -102,12 +102,43 @@ class ProjectManagerAction extends Command
      //
       $deadline_projects= Project::where('status','in progress')->get();
       foreach ($deadline_projects as $project) {
-        $pro = Project::where('id',324)->first();
+        //$pro = Project::where('id', 324)->first();
         $current_date = Carbon::now();
-        $deadline= $pro->deadline;
-        $diffrent_in_hours =  $deadline->diffInHours($deadline);
-       // dd($diffrent_in_hours);
+        $deadline = $project->deadline;
+        $difference_in_hours = $current_date->diffInHours($deadline);
+        
+        if ($current_date > $deadline) {
+            // Deadline is in the past
+            $difference_in_hours = -$difference_in_hours;
+        }
+        if($difference_in_hours > 0 && $difference_in_hours <= 48)
+        {
+            $pending_action = PendingAction::where('code','PDA')->where('project_id',$project->id)->where('past_status',0)->count();
+            if($pending_action == 0)
+            {
+                $helper = new HelperPendingActionController();
+ 
+ 
+                $helper->ProjectDeadline($project);
+
+            }
+           
+
+
+        }
       }
+    //   $project_deadlines= PendingAction::where('code','PDA')->where('past_status',0)->get();
+    //   foreach($project_deadlines as $action)
+    //   {
+    //     $oneHourAgo = Carbon::now()->subHour();
+
+    //     PendingAction::where('id', $action->id)
+    //     ->where('created_at', '<', $oneHourAgo)
+    //     ->update(['created_at' => Carbon::now()]);
+    
+    // PendingAction::where('id', $action->id)
+    //     ->update(['timeframe' => $action->timeframe - 1]);
+    //   }
        
         $this->info('Pending action created');
     }

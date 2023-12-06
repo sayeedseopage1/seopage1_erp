@@ -41,7 +41,7 @@ const LeadConfirmationModal = ({isOpen, onConfirm}) => {
            <div className="subtask-timer-confirmation--content">
                 <h4 className='mb-3'> Do You Understand The Following Things? </h4>
                 
-                <ol type='A'>
+                <ol type='A' style={{marginLeft: '30px'}}>
                     <li> Your teams job is not to decide what the look and feel of a website will be based on a few reference websites </li>
                     <li>Your teams job is not to research a theme based on an instruction shared by the PM. </li>
                     <li>Your teams job is not to research a plugin based on a problem shared by PM.</li>

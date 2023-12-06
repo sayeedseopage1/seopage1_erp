@@ -44,15 +44,21 @@ class DeveloperNeedtoAssignTask extends Command
         foreach ($projects_tasks as $project) {
             $project_submission = ProjectSubmission::where('project_id', $project->id)->first();
         
-            if ($project_submission !== null) {
+            if ($project_submission != null) {
                 $creation_date = $project_submission->created_at;
                 $project_submission_date = Carbon::parse($project_submission->created_at)->addDay(14);
         
                 $current_date = Carbon::now();
         
                 if ($current_date >= $project_submission_date && $project_submission->dummy_link != null) {
-                    $helper = new HelperPendingActionController();
-                    $helper->RemovalofStagingSite($project, $project_submission);
+                    $pending_action = PendingAction::where('code','STR')->where('project_id',$project->id)->where('past_status',0)->count();
+                    if($pending_action == 0)
+                    {
+                        $helper = new HelperPendingActionController();
+                        $helper->RemovalofStagingSite($project, $project_submission);
+
+                    }
+                   
                 }
             }
         }
@@ -120,6 +126,39 @@ class DeveloperNeedtoAssignTask extends Command
             
          }
          }
+         $deadline_tasks = Task::whereIn('board_column_id', [2, 3])
+    ->whereNotNull('due_date')
+    ->get();
+
+      foreach ($deadline_tasks as $project) {
+        //$pro = Project::where('id', 324)->first();
+        $current_date = Carbon::now();
+        $deadline = $project->due_date;
+        $difference_in_hours = $current_date->diffInHours($deadline);
+        
+        if ($current_date > $deadline) {
+            // Deadline is in the past
+            $difference_in_hours = -$difference_in_hours;
+        }
+       // dd($difference_in_hours)
+        if($difference_in_hours > 0 && $difference_in_hours <= 18)
+        {
+            $pending_action = PendingAction::where('code','DTDA')->where('task_id',$project->id)->where('past_status',0)->count();
+            if($pending_action == 0)
+            {
+                $helper = new HelperPendingActionController();
+ 
+ 
+                $helper->TaskDeadline($project);
+
+            }
+           
+
+
+        }
+      }
+    
+       
 
 
         

@@ -921,7 +921,7 @@ class HelperPendingActionController extends AccountBaseController
 
         }
        
-        $action->timeframe= 24;
+        $action->timeframe= 6;
         $action->project_id = $project->id;
         $action->client_id = $client->id;
         $action->task_id = $task->id;
@@ -1102,7 +1102,9 @@ class HelperPendingActionController extends AccountBaseController
    {
     //dd($taskId,$commentor);
     $task= Task::where('id',$taskId)->first();
-    $project= Project::where('id',$task->project_id)->first();
+    if($task->independent_task_status == 0)
+    {
+        $project= Project::where('id',$task->project_id)->first();
     $client= User::where('id',$project->client_id)->first();
    
     $commentor= User::where('id',$commentor)->first();
@@ -1231,6 +1233,9 @@ class HelperPendingActionController extends AccountBaseController
 //    dd(json_decode($action->button));
 
     }
+
+    }
+    
    }
    public function NewTaskAssign($task)
    {
@@ -1239,6 +1244,7 @@ class HelperPendingActionController extends AccountBaseController
    {
     $project= Project::where('id',$task->project_id)->first();
     $client= User::where('id',$project->client_id)->first();
+    $project_manager= User::where('id',$project->pm_id)->first();
 
     $task_user= TaskUser::where('task_id',$task->id)->first();
     $added_by= User::where('id',$task->added_by)->first();
@@ -1249,9 +1255,21 @@ class HelperPendingActionController extends AccountBaseController
     $action->serial = 'NTA'.'x0';
    
     $action->item_name= 'Taking actions on new task';
-    $action->heading= 'New task has been assigned!';
+    if(Auth::user()->role_id == 4)
+    {
+        $action->heading= 'New task has been assigned!';
    
-     $action->message = 'New task has been assigned from '.$user_role->name.' <a href="'.route('employees.show',$added_by->id).'">'.$added_by->name.'</a> for client <a href="'.route('employees.show',$client->id).'">'.$client->name.'</a>!';
+        $action->message = 'New task has been assigned from '.$user_role->name.' <a href="'.route('employees.show',$added_by->id).'">'.$added_by->name.'</a> for client <a href="'.route('employees.show',$client->id).'">'.$client->name.'</a>!';
+
+    }else 
+    {
+        $action->heading= 'A new task has been assigned!!';
+   
+        $action->message = 'A new task named <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> has been assigned for client <a href="'.route('employees.show',$client->id).'">'.$client->name.'</a> (PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)!';
+
+       
+    }
+   
 
     
    
@@ -1511,7 +1529,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_name' => 'Ignore',
                         'button_color' => 'danger',
                         'button_type' => 'redirect_url',
-                        'button_url' => '',
+                        'button_url' => route('ignore-assign-task',$developer->id),
                    
                   
                     
@@ -1619,6 +1637,78 @@ class HelperPendingActionController extends AccountBaseController
                 ];
                 $action->button = json_encode($button);
                 $action->save();
+
+        }
+        public function ProjectDeadline($project)
+        {
+            $project= Project::where('id',$project->id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $authorizer= User::where('id',$project_manager->id)->first();
+          
+                $action = new PendingAction();
+                $action->code = 'PDA';
+                $action->serial = 'PDA'.'x0';
+                $action->item_name= 'Deadline in the next 2 days!';
+                $action->heading= 'Project deadline will be over soon!';
+                $action->message = 'Deadline for your project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next ';
+                $action->timeframe= 48;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+             //  $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Submit',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('projects.show', $project->id.'?tab=tasks'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+            
+
+        }
+        public function TaskDeadline($task)
+        {
+           // dd($task);
+           if($task->independent_task_status != 1)
+           {
+            $project= Project::where('id',$task->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $task_user= TaskUser::where('task_id',$task->id)->first();
+            $authorizer= User::where('id',$task_user->user_id)->first();
+          
+                $action = new PendingAction();
+                $action->code = 'DTDA';
+                $action->serial = 'DTDA'.'x0';
+                $action->item_name= 'Deadline in the next 18 hours';
+                $action->heading= 'Task deadline will be over soon!';
+                $action->message = 'Deadline for your task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next';
+                $action->timeframe= 48;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Submit',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('tasks.show', $task->id),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+             //   dd($action);
+
+           }
+           
 
         }
        

@@ -948,6 +948,53 @@ class TaskController extends AccountBaseController
         }
 
         $task_status->save();
+        $actions= PendingAction::where('code','DTDA')->where('task_id',$task_status->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+     
+             //need pending action past 
+             $action= PendingAction::where('id',$action->id)->first();
+             $project=Project::where('id',$action->project_id)->first();
+             $current_date= Carbon::now();
+           
+             $client= User::where('id',$project->client_id)->first();
+             $lead_developer= User::where('id',Auth::id())->first();
+             $project_manager= User::where('id',$project->pm_id)->first();
+             $task_user= TaskUser::where('task_id',$task_status->id)->first();
+             $developer= User::where('id',$task_user->user_id)->first();
+             $user_role= Role::where('id',$developer->role_id)->first();
+             $past_action= new PendingActionPast();
+             $past_action->item_name = $action->item_name;
+             $past_action->code = $action->code;
+             $past_action->serial = $action->serial;
+             $past_action->action_id = $action->id;
+             $past_action->heading = $action->heading;
+             if($current_date > $task->due_date)
+             {
+                 $past_action->message = 'Task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> & client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by '.$user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> after the deadline was over!';
+ 
+             }else 
+             {
+                 $past_action->message = 'Task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> & client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by '.$user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> before the deadline was over';
+             }
+             
+          //   $past_action->button = $action->button;
+             $past_action->timeframe = $action->timeframe;
+             $past_action->authorization_for = $action->authorization_for;
+             $past_action->authorized_by = $action->authorized_by;
+             $past_action->authorized_at = $action->authorized_at;
+             $past_action->expired_status = $action->expired_status;
+             $past_action->past_status = $action->past_status;
+             $past_action->project_id = $action->project_id;
+             $past_action->task_id = $action->task_id;
+             $past_action->client_id = $action->client_id;
+             $past_action->developer_id = $action->developer_id;
+             $past_action->save();
+ 
+             //need pending action past
+         }
+        }
         $board_column = TaskBoardColumn::where('id', $task_status->board_column_id)->first();
         // dd($task_status);
 
@@ -1009,7 +1056,7 @@ class TaskController extends AccountBaseController
         }
     }
 
-       
+
 
         $text = Auth::user()->name . ' mark task completed';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
@@ -1065,7 +1112,7 @@ class TaskController extends AccountBaseController
 
         $dispute_between = explode('x', $request->acknowledgement_id)[0];
 
-      
+
 
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
@@ -1105,7 +1152,7 @@ class TaskController extends AccountBaseController
         $task_revision->save();
 
 
-      
+
         //need pending action
 
         $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$task_revision->task_id)->get();
@@ -1843,7 +1890,7 @@ class TaskController extends AccountBaseController
             if (is_array($request->user_id)) {
                 // $assigned_to = User::find($request->user_id[0]);
 
-              
+
                 // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
                 // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
                 // $this->logProjectActivity($project->id, $link);
@@ -1858,7 +1905,7 @@ class TaskController extends AccountBaseController
 
             } else {
                 // $assigned_to = User::find($request->user_id);
-             
+
                 // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
                 // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
                 // $this->logProjectActivity($project->id, $link);
@@ -2018,7 +2065,7 @@ class TaskController extends AccountBaseController
 
                     $helper->NewTaskAssign($task);
 
-                  
+
                     //need pending action
                 }
                 $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
@@ -2041,7 +2088,7 @@ class TaskController extends AccountBaseController
 
                     $helper->NewTaskAssign($task);
 
-                 
+
                     //need pending action
                 }
                 $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
@@ -2892,6 +2939,52 @@ class TaskController extends AccountBaseController
             $updateTask->board_column_id = 4;
             $updateTask->save();
         }
+       $actions= PendingAction::where('code','PDA')->where('project_id',$task_status->project_id)->get();
+       if($actions != null)
+       {
+       foreach ($actions as $key => $action) {
+    
+            //need pending action past 
+            $action= PendingAction::where('id',$request->id)->first();
+            $project=Project::where('id',$action->project_id)->first();
+            $current_date= Carbon::now();
+          
+            $client= User::where('id',$project->client_id)->first();
+            $lead_developer= User::where('id',Auth::id())->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $past_action= new PendingActionPast();
+            $past_action->item_name = $action->item_name;
+            $past_action->code = $action->code;
+            $past_action->serial = $action->serial;
+            $past_action->action_id = $action->id;
+            $past_action->heading = $action->heading;
+            if($current_date > $project->deadline)
+            {
+                $past_action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> after the deadline was over!"';
+
+            }else 
+            {
+                $past_action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> before the deadline was over!';
+            }
+            
+         //   $past_action->button = $action->button;
+            $past_action->timeframe = $action->timeframe;
+            $past_action->authorization_for = $action->authorization_for;
+            $past_action->authorized_by = $action->authorized_by;
+            $past_action->authorized_at = $action->authorized_at;
+            $past_action->expired_status = $action->expired_status;
+            $past_action->past_status = $action->past_status;
+            $past_action->project_id = $action->project_id;
+            $past_action->task_id = $action->task_id;
+            $past_action->client_id = $action->client_id;
+            $past_action->developer_id = $action->developer_id;
+            $past_action->save();
+
+            //need pending action past
+        }
+       }
+
+      
         return response()->json([
             'status' => 200,
         ]);
@@ -3041,6 +3134,46 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
+        $actions = PendingAction::where('code','TRA')->where('past_status',0)->where('task_id',$task_status->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $taskId= Task::where('id',$task_status->task_id)->first();
+                $project= Project::where('id',$taskId->project_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $developer= User::where('id',Auth::user()->id)->first();
+                $user_role= Role::where('id',$developer->role_id)->first();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> has started working on revision request for task <a href="'.route('tasks.show',$taskId->id).'">'.$taskId->heading.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+
+        }
+    }
         //  dd($request->revision_id);
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
         if ($request->subTask != null) {
@@ -3158,6 +3291,46 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
+        $actions = PendingAction::where('code','TRA')->where('past_status',0)->where('task_id',$task_status->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $taskId= Task::where('id',$task_status->task_id)->first();
+                $project= Project::where('id',$taskId->project_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $developer= User::where('id',Auth::user()->id)->first();
+                $user_role= Role::where('id',$developer->role_id)->first();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> has started working on revision request for task <a href="'.route('tasks.show',$taskId->id).'">'.$taskId->heading.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+
+        }
+    }
         //  dd($request->revision_id);
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
         if ($request->subTask != null) {
@@ -3270,6 +3443,46 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
+        $actions = PendingAction::where('code','TRA')->where('past_status',0)->where('task_id',$task_status->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $taskId= Task::where('id',$task_status->task_id)->first();
+                $project= Project::where('id',$taskId->project_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $developer= User::where('id',Auth::user()->id)->first();
+                $user_role= Role::where('id',$developer->role_id)->first();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> has started working on revision request for task <a href="'.route('tasks.show',$taskId->id).'">'.$taskId->heading.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+
+        }
+    }
 
         $tasks_accept = TaskRevision::find($request->revision_id);
 
@@ -3308,42 +3521,7 @@ class TaskController extends AccountBaseController
         $tasks_accept->save();
         // dd($tasks_accept);
 
-        $actions = PendingAction::where('code','TRA')->where('past_status',0)->where('task_id',$tasks_accept->task_id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$tasks_accept->task_id)->first();
-                $project= Project::where('id',$taskId->project_id)->first();
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
-                $action->past_status = 1;
-                $action->save();
-               
-                $authorize_by= User::where('id',$action->authorized_by)->first();
-
-                $past_action= new PendingActionPast();
-                $past_action->item_name = $action->item_name;
-                $past_action->code = $action->code;
-                $past_action->serial = $action->serial;
-                $past_action->action_id = $action->id;
-                $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
-             //   $past_action->button = $action->button;
-                $past_action->timeframe = $action->timeframe;
-                $past_action->authorization_for = $action->authorization_for;
-                $past_action->authorized_by = $action->authorized_by;
-                $past_action->authorized_at = $action->authorized_at;
-                $past_action->expired_status = $action->expired_status;
-                $past_action->past_status = $action->past_status;
-                $past_action->project_id = $action->project_id;
-                $past_action->task_id = $action->task_id;
-                $past_action->client_id = $action->client_id;
-                $past_action->milestone_id = $action->milestone_id;
-                $past_action->save();
-
-
-        }
-    }
+     
         $board_column = TaskBoardColumn::where('id', $task_status->board_column_id)->first();
 
 
@@ -4428,11 +4606,19 @@ class TaskController extends AccountBaseController
         } elseif ($request->mode == 'developer_first_task_check') {
             $user = Auth::user();
             if (Auth::user()->role_id == 5) {
-                $data = ProjectTimeLog::where([
-                    'project_id' => $request->project_id,
-                    // 'task_id' => $id,
-                    'user_id' => Auth::id()
-                ])->first();
+                $task_check = Task::where('id',$id)->first();
+                $data = '';
+                if($task_check->pp_task_id != null){
+                    $data = ProjectTimeLog::where([
+                        'task_id' => $id,
+                        'user_id' => Auth::id()
+                    ])->first();
+                }else{
+                    $data = ProjectTimeLog::where([
+                        'project_id' => $request->project_id,
+                        'user_id' => Auth::id()
+                    ])->first();
+                }
                 return response()->json([
                     'is_first_task' => ($data) ? false : true,
                 ]);
@@ -6236,17 +6422,17 @@ class TaskController extends AccountBaseController
                 {
                 foreach ($actions as $key => $action) {
                     $project= Project::where('id',$task->project_id)->first();
-        
+
                         $action->authorized_by= Auth::id();
                         $action->authorized_at= Carbon::now();
                         $action->past_status = 1;
                         $action->save();
-        
-                       
+
+
                         $project_manager= User::where('id',$project->pm_id)->first();
                         $client= User::where('id',$project->client_id)->first();
                         $authorize_by= User::where('id',$action->authorized_by)->first();
-        
+
                         $past_action= new PendingActionPast();
                         $past_action->item_name = $action->item_name;
                         $past_action->code = $action->code;
@@ -6266,8 +6452,8 @@ class TaskController extends AccountBaseController
                         $past_action->client_id = $action->client_id;
                        // $past_action->deliverable_id = $action->deliverable_id;
                         $past_action->save();
-        
-        
+
+
                 }
             }
             }
@@ -6312,17 +6498,17 @@ class TaskController extends AccountBaseController
                 {
                 foreach ($actions as $key => $action) {
                     $project= Project::where('id',$pendingParentTasks->project_id)->first();
-        
+
                         $action->authorized_by= Auth::id();
                         $action->authorized_at= Carbon::now();
                         $action->past_status = 1;
                         $action->save();
-        
-                       
+
+
                         $project_manager= User::where('id',$project->pm_id)->first();
                         $client= User::where('id',$project->client_id)->first();
                         $authorize_by= User::where('id',$action->authorized_by)->first();
-        
+
                         $past_action= new PendingActionPast();
                         $past_action->item_name = $action->item_name;
                         $past_action->code = $action->code;
@@ -6342,8 +6528,8 @@ class TaskController extends AccountBaseController
                         $past_action->client_id = $action->client_id;
                        // $past_action->deliverable_id = $action->deliverable_id;
                         $past_action->save();
-        
-        
+
+
                 }
             }
             }
@@ -6470,6 +6656,7 @@ class TaskController extends AccountBaseController
         return response()->json($data, 200);
     }
 
+    // Get task comment replied
     public function getTaskCommentReplies($comment_id)
     {
         $data = TaskComment::where('root', $comment_id)->get();

@@ -4,6 +4,8 @@ import _ from 'lodash';
 import React from 'react';
 import { LuChevronsUpDown } from 'react-icons/lu';
 import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import Button from '../../../../../../global/Button';
 import Modal from '../../../../../../global/Modal';
 import Switch from '../../../../../../global/Switch';
@@ -16,6 +18,8 @@ import ShowClock from '../../components/ShowClock';
 import AcknowledgementReminderModal from './AcknowledgementReminderModal';
 import DailyReportSubmissionEnforcer from './DailyReportSubmissionEnforcer';
 import styles from './WorkStatusConfirmationModal.module.css';
+
+
 /**
  * * Individual features component
  * * Responsible for displays a modal for confirming the status of work hours and daily reports.
@@ -224,6 +228,7 @@ const CheckInForm = ({onCheckIn}) => {
 
     // handle user clock in form submit
     const onClockIn = async (e) => {
+
         const data = {
             clock_status: true,
             type: "CLOCK_IN",
@@ -254,6 +259,26 @@ const CheckInForm = ({onCheckIn}) => {
                 setIsSubmitting(false);
             }
         }
+    }
+
+    // handle clock in button
+    const handleClockInButton = () => {
+        withReactContent(Swal).fire({
+           icon: 'question',
+           title: 'Are you sure!',
+           showConfirmButton: true,
+           confirmButtonText: 'Yes',
+           showCancelButton: true,
+           cancelButtonText: 'No',
+           customClass: {
+            confirmButton: 'btn btn-primary px-5',
+            cancelButton: 'btn btn-danger px-5'
+           }
+        }).then(res => {
+            if(res.isConfirmed){
+                onClockIn();
+            }
+        })
     }
 
     // on Log out
@@ -304,14 +329,28 @@ const CheckInForm = ({onCheckIn}) => {
                         </div>
                     </Listbox>
                 </FormGroup>
+            </Flex>
 
+            <Flex className='mt-3' justifyContent="flex-end">
                 <Button
-                    onClick={onClockIn}
+                    onClick={handleClockInButton}
                     isLoading={isSubmitting}
                     loaderTitle='Processing...'
-                    className='mt-auto font-weight-normal height-40'
+                    className='mt-auto font-weight-normal height-44'
                 >
                     <i className="fa-solid fa-arrow-right-to-bracket" /> Clock In
+                </Button>
+
+                <Button
+                    onClick={handleLogOut}
+                    loaderTitle=''
+                    variant='tertiary'
+                    className='mt-auto font-weight-normal height-44 px-3 bg-info text-white'
+                >
+                   <span className='d-flex flex-column'>
+                        <span>Browser</span>
+                        <span>[No Clock In Required]</span>
+                   </span>
                 </Button>
 
                 <Button
@@ -319,9 +358,9 @@ const CheckInForm = ({onCheckIn}) => {
                     isLoading={isSubmitting}
                     loaderTitle=''
                     variant='danger'
-                    className='mt-auto font-weight-normal height-40 px-3'
+                    className='mt-auto font-weight-normal height-44 px-3'
                 >
-                    <i className="fa-solid fa-power-off" />
+                    <i className="fa-solid fa-power-off" /> Log Out
                 </Button>
             </Flex>
        </div>
