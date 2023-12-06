@@ -5836,7 +5836,12 @@ class TaskController extends AccountBaseController
 
         $date = Carbon::parse($request->date_type);
 
-        // dd($date);
+        $totalTimeSpentSubquery = DB::table('project_time_logs')
+                                ->select(DB::raw('SUM(total_minutes)'))
+                                ->where('user_id', '=', $id)
+                                ->where('task_id', '=', DB::raw('tasks.id'))
+                                ->whereDate('start_time', '>=', $date)
+                                ->whereDate('end_time', '<=', $date);
 
         $tasks = ProjectTimeLog::select(
             'tasks.id',
@@ -5850,8 +5855,9 @@ class TaskController extends AccountBaseController
             'developers.id as developer_id',
             'project_time_logs.created_at as project_time_logs_created_at',
 
-            DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . $date . '" AND DATE(project_time_logs.end_time) <= "' . $date . '"), 0) as total_time_spent'),
+            DB::raw('(' . $totalTimeSpentSubquery->toSql() . ') as total_time_spent'),
         )
+            ->mergeBindings($totalTimeSpentSubquery)
             ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
             ->join('projects', 'projects.id', 'tasks.project_id')
             ->join('users as clients', 'clients.id', 'projects.client_id')
