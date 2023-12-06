@@ -857,6 +857,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('working-environment/task/{task_id}', [TaskController::class, 'taskWorkingEnvironment']);
 
      /******* Independent TASK Start ******** */
+    Route::get('independent/{any?}', [IndependentTaskController::class, 'index'])
+    ->where('any', '^(?!api\/)[\/\w\.-]*')
+    ->where('any', '^(?:(?!\d+).)*');
     Route::resource('independent-task',IndependentTaskController::class);
     Route::get('get-independent-task',[IndependentTaskController::class,'independentTaskGet'])->name('independent-task-get');
     Route::get('independent-task-show',[IndependentTaskController::class,'independentTaskShow'])->name('independent-task-show');

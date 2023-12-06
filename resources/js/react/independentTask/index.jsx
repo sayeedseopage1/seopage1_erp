@@ -159,11 +159,11 @@ const IndependentTask = () => {
 
     return (
             <RefreshContext.Provider value={{ refreshState:refresh,refresh:isLoading||isFetching, handleRefresh }}>
-                <BrowserRouter basename="/account/independent-task">
+                <BrowserRouter basename="/account/independent">
                     <Routes>
                         <Route path="/" element={<Container />}>
                             <Route
-                                index
+                                path="/tasks"
                                 element={
                                     <Tasks
                                         tableData={tableData}
@@ -173,6 +173,32 @@ const IndependentTask = () => {
                                     />
                                 }
                             />
+
+                            <Route
+                                path="/subtasks"
+                                element={
+                                    <Tasks
+                                        tableData={tableData}
+                                        isLoading={isLoading || isFetching}
+                                        onFilter={onFilter}
+                                        filter={filter}
+                                    />
+                                }
+                            />
+
+                            <Route
+                                path="/my-tasks"
+                                element={
+                                    <Tasks
+                                        tableData={tableData}
+                                        isLoading={isLoading || isFetching}
+                                        onFilter={onFilter}
+                                        filter={filter}
+                                    />
+                                }
+                            />
+
+
                             {/* <Route
                                 path="/subtasks"
                                 element={<SubtasksContainer />}

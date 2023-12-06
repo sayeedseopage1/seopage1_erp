@@ -1,25 +1,25 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
+import React from "react";
 // import { useDispatch, useSelector } from "react-redux";
 // import { useCheckUnAuthorizedTaskTypeQuery, useLazyGetTaskTypeDataQuery, useLazyGetTasksQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
 // import { storeTasks } from "../../services/features/tasksSlice";
+import { useState } from "react";
+import CKEditorComponent from "../../ckeditor";
+import { User } from "../../utils/user-details";
 import Button from "../components/Button";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
 import Filterbar from "../components/Filter-bar/Filterbar";
+import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import SearchBox from "../components/Searchbox";
+import SubmitButton from "../components/SubmitButton";
 import Tabbar from "../components/Tabbar";
 import { TaskTableColumns } from "../components/TaskTableColumns";
 import TasksTable from "../components/TasksTable";
-import { User } from "../../utils/user-details";
-import CKEditorComponent from "../../ckeditor";
-import Loader from "../components/Loader";
+import IndependentTaskCreationForm from "../components/authorized-task/IndependentTaskCreationForm";
+import TaskAuthorization from "../components/authorized-task/TaskAuthorization";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
-import TaskAuthorization from "../components/authorized-task/TaskAuthorization";
-import SubmitButton from "../components/SubmitButton";
-import { useState } from "react";
-import IndependentTaskCreationForm from "../components/authorized-task/IndependentTaskCreationForm";
 import { useRefresh } from "../index";
 
 const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
@@ -147,7 +147,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                 </section>
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
-                        {/* <Tabbar /> */}
+                        <Tabbar />
 
                         {/* {
                             _.includes([1, 8], auth?.getRoleId()) &&
