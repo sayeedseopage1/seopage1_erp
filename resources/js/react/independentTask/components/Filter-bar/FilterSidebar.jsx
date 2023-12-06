@@ -1,9 +1,8 @@
 import React from "react";
 import Button from "../Button";
-import UserFilter from "./UserFilter";
-import StatusFilter from "./StatusFilter";
-import DateTypeFilter from "./DateTypeFilter";
 import ClientFilter from "./ClientFilter";
+import StatusFilter from "./StatusFilter";
+import UserFilter from "./UserFilter";
 
 const FilterSidebar = ({
     developer,
@@ -42,8 +41,8 @@ const FilterSidebar = ({
                     roleIds={null}
                 />
 
-                {/* <UserFilter 
-                title="Project Manager" 
+                {/* <UserFilter
+                title="Project Manager"
                 state={pm}
                 setState={setPm}
                 roleIds={[4]}
@@ -54,6 +53,8 @@ const FilterSidebar = ({
                     state={leadDeveloper}
                     setState={setLeadDeveloper}
                     roleIds={[1, 4]}
+                    disabled={!isTopManagement}
+                    currentUser={!isTopManagement}
                 />
 
                 {/* <UserFilter

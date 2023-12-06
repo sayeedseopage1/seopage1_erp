@@ -164,7 +164,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                             </Button>
                         } */}
                         <div
-                            className="d-flex align-items-center flex-wrap"
+                            className="d-flex align-items-center flex-wrap mb-2"
                             style={{ gap: "10px" }}
                         >
                             {_.includes([1, 4, 8], auth?.getRoleId()) && (
