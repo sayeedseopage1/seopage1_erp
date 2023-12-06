@@ -648,7 +648,12 @@ class PendingActionController extends AccountBaseController
     public function DeleteStagingSite(Request $request)
     {   
         
-        $action= PendingAction::where('id',$request->id)->first();
+        $action= PendingAction::where('id',$request->authorization_id)->first();
+        $action->authorized_by= Auth::id();
+        $action->authorized_at= Carbon::now();
+        $action->past_status = 1;
+        $action->save();
+       
         $project=Project::where('id',$action->project_id)->first();
         $dummy_link = ProjectSubmission::where('project_id',$project->id)->first();
         $client= User::where('id',$project->client_id)->first();
@@ -673,6 +678,9 @@ class PendingActionController extends AccountBaseController
         $past_action->client_id = $action->client_id;
         $past_action->developer_id = $action->developer_id;
         $past_action->save();
+        Toastr::success('Action marked as completed successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return back();
+
 
     }
     public function AssignTaskIgnore($id)

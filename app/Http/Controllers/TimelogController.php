@@ -667,6 +667,8 @@ class TimelogController extends AccountBaseController
         {
         foreach ($actions as $key => $action) {
                 $project= Project::where('id',$task_status->id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $project_manager= User::where('id',$project->pm_id)->first();
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -681,7 +683,7 @@ class TimelogController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                $past_action->message = 'New task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> assigned for client <a>'.$client->name.'</a> (PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) has been started by developer <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>!';
              //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;

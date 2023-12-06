@@ -150,18 +150,7 @@ class DeveloperNeedtoAssignTask extends Command
 
         }
       }
-    //   $project_deadlines= PendingAction::where('code','PDA')->where('past_status',0)->get();
-    //   foreach($project_deadlines as $action)
-    //   {
-    //     $oneHourAgo = Carbon::now()->subHour();
-
-    //     // PendingAction::where('id', $action->id)
-    //     // ->where('created_at', '<', $oneHourAgo)
-    //     // ->update(['created_at' => Carbon::now()]);
     
-    // PendingAction::where('id', $action->id)
-    //     ->update(['timeframe' => $action->timeframe - 1]);
-    //   }
        
 
 
