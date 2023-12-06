@@ -44,15 +44,21 @@ class DeveloperNeedtoAssignTask extends Command
         foreach ($projects_tasks as $project) {
             $project_submission = ProjectSubmission::where('project_id', $project->id)->first();
         
-            if ($project_submission !== null) {
+            if ($project_submission != null) {
                 $creation_date = $project_submission->created_at;
                 $project_submission_date = Carbon::parse($project_submission->created_at)->addDay(14);
         
                 $current_date = Carbon::now();
         
                 if ($current_date >= $project_submission_date && $project_submission->dummy_link != null) {
-                    $helper = new HelperPendingActionController();
-                    $helper->RemovalofStagingSite($project, $project_submission);
+                    $pending_action = PendingAction::where('code','STR')->where('project_id',$project->id)->where('past_status',0)->count();
+                    if($pending_action == 0)
+                    {
+                        $helper = new HelperPendingActionController();
+                        $helper->RemovalofStagingSite($project, $project_submission);
+
+                    }
+                   
                 }
             }
         }
