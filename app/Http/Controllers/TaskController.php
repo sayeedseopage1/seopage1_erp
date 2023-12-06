@@ -865,8 +865,7 @@ class TaskController extends AccountBaseController
         $task->task_status = "submitted";
 
         $task->save();
-        if($task->subtask_id == null)
-        {
+       
             $actions = PendingAction::where('code','NSPT')->where('past_status',0)->where('task_id',$task->id)->get();
             if($actions != null)
             {
@@ -887,7 +886,7 @@ class TaskController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
+                    $past_action->message = 'Task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> has been submitted to PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> by lead developer <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
                  //   $past_action->button = $action->button;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
@@ -903,7 +902,7 @@ class TaskController extends AccountBaseController
     
     
             }
-        }
+        
         }
         //  dd($task);
 
