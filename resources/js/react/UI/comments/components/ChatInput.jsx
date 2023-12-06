@@ -374,10 +374,12 @@ function CommentEditor({
     useEffect(() => {
         // Focus the Quill editor when the component is rendered
         if (quillRef.current && showEmoji) {
-          quillRef.current.getEditor().focus();
-          quillRef.current?.getEditor()?.setSelection(quillRef.current?.getEditor().getLength());
+            quillRef.current.getEditor().focus();
+            quillRef.current
+                ?.getEditor()
+                ?.setSelection(quillRef.current?.getEditor().getLength());
         }
-      }, [showEmoji]);
+    }, [showEmoji]);
 
     const handleEmojiSelection = (emoji, e) => {
         // console.log(emoji);
@@ -484,7 +486,7 @@ function CommentEditor({
                 // overflow: "hidden",
             }}
         >
-            {showEmoji && (
+            {/* {showEmoji && (
                 <div className={`${style.chatInput_text_emojis}`}>
                     <EmojiPicker
                         width={"100%"}
@@ -494,7 +496,7 @@ function CommentEditor({
                         onEmojiClick={handleEmojiSelection}
                     />
                 </div>
-            )}
+            )} */}
             <ReactQuill
                 ref={quillRef}
                 theme="snow"
@@ -504,13 +506,32 @@ function CommentEditor({
                 formats={formats}
                 placeholder="Write your comment..."
             />
-            <BsEmojiSmile
-                onClick={() => setShowEmoji((prev) => !prev)}
+            <span
+                // onClick={() => setShowEmoji((prev) => !prev)}
                 style={{
                     bottom: show ? "14.16px" : "calc(50% - 7.66px)",
                 }}
                 className={`${style.chatInput_text_emoji_icon}`}
-            />
+            >
+                <BsEmojiSmile
+                    onClick={() => setShowEmoji((prev) => !prev)}
+                    style={{
+                        height: "15.32px",
+                        width: "15.32px",
+                    }}
+                />
+                {showEmoji && (
+                    <div className={`${style.chatInput_text_emojis}`}>
+                        <EmojiPicker
+                            width={"100%"}
+                            height={"100%"}
+                            skinTonesDisabled
+                            emojiStyle="facebook"
+                            onEmojiClick={handleEmojiSelection}
+                        />
+                    </div>
+                )}
+            </span>
             {!show ? (
                 <LuPencilLine
                     onClick={() => setShow(true)}

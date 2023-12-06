@@ -329,8 +329,9 @@
   position: absolute;
   /* top: -300px; */
   /* bottom: 20px; */
-  bottom: calc(50% + 20px);
-  left: 0;
+  /* bottom: calc(50% + 20px); */
+  bottom: 25px;
+  left: -12.5px;
   height: 300px;
   max-width: 300px;
   z-index: 99;
@@ -415,12 +416,16 @@
   /* overflow: visible; */
 }
 .chatInput_text_emoji_icon{
+  /* border: solid; */
   position: absolute;
   left: 8.34px;
   bottom: calc(50% - 7.66px);
-  height: 15.32px;
-  width: 15.32px;
+  /* height: 15.32px; */
+  /* width: 15.32px; */
   cursor: pointer;
+  overflow: visible;
+  display: inline-flex;
+  align-items: center;
 }
 .chatInput_text_style_icon{
   position: absolute;
