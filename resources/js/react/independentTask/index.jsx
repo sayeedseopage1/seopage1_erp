@@ -20,6 +20,7 @@ import { createContext, useCallback, useEffect, useState } from "react";
 import Toaster from "../global/Toaster";
 import { useLazyGetIndependentTaskQuery } from "../services/api/independentTaskApiSlice";
 import { User } from "../utils/user-details";
+import Subtasks from "./pages/Subtasks";
 
 // custom drag layer
 const DragLayer = () => {
@@ -177,7 +178,7 @@ const IndependentTask = () => {
                             <Route
                                 path="/subtasks"
                                 element={
-                                    <Tasks
+                                    <Subtasks
                                         tableData={tableData}
                                         isLoading={isLoading || isFetching}
                                         onFilter={onFilter}
@@ -189,7 +190,7 @@ const IndependentTask = () => {
                             <Route
                                 path="/my-tasks"
                                 element={
-                                    <Tasks
+                                    <Subtasks
                                         tableData={tableData}
                                         isLoading={isLoading || isFetching}
                                         onFilter={onFilter}

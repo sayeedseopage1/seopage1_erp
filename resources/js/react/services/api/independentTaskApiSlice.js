@@ -89,6 +89,14 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
         invalidatesTags: ["IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS", "INDEPENDENT_TASK"]
     }),
 
+    // get all independent subtasks
+    getIndependentSubtasks: builder.mutation({
+        query: (query) => ({
+            url: `/account/independent-subtasks?${query}`,
+            method: 'GET',
+        })
+    }),
+
 
     // get independent subtasks
     getIndependentSubtaskByTaskId: builder.mutation({
@@ -115,4 +123,5 @@ export const {
   useUpdateIndependentTaskAuthorizationConversationMutation,
   useUpdateIndependentTaskStatusMutation,
   useGetIndependentSubtaskByTaskIdMutation,
+  useGetIndependentSubtasksMutation,
 } = independentTaskApiSlice;
