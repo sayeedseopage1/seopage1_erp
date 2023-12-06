@@ -102,6 +102,32 @@ export const SubTasksTableColumns = [
           )
         }
       },
+      {
+        id: 'parent_task',
+        header: 'Parent Task',
+        accessorFn: row => `${row.task_id}${row.task_heading}`,
+        cell: ({row}) => {
+          const data = row?.original;
+          return (
+            <>
+            <abbr title={data?.task_heading} style={{ textDecoration: 'none' }}>
+              <div className='d-flex align-items-center' style={{ gap: '10px'}}>
+                <a href={`/account/tasks/${data?.task_id}`} className='hover-underline multine-ellipsis'> {data?.task_heading} </a>
+                {
+                  <span
+                  className="badge badge-success"
+                  style={{
+                    display:`${data?.u_id?'inline-block':'none'}`,
+                    fontSize:'8px'
+                  }}>
+                    Parent Task
+                  </span>}
+              </div>
+            </abbr>
+          </>
+          )
+        }
+      },
 
       // client
       {
