@@ -8,6 +8,9 @@ import { useEffect } from "react";
 import { useLazyGetLiveRequiredActionQuery } from "../../../services/api/requiredActionApiSlice";
 import RequiredActionCard_Loader from "../RequiredActionCards/RequiredActionCard_Loader";
 import { useRefresh } from "../Index";
+import { User } from "../../../utils/user-details";
+
+const currentUser = new User(window.Laravel.user);
 
 const LiveRequiredAction = () => {
     const { currentPage, perPageItem, setTotalItem } = usePagination();
@@ -16,6 +19,7 @@ const LiveRequiredAction = () => {
     const [filterData, setFilterData] = useState([]);
     const [slicedData, setSlicedData] = useState([]);
     const [dateFilter, setDateFilter] = useState({});
+    const [userFilter, setUserFilter] = useState(null);
     const [searchFilter, setSearchFilter] = useState("");
     const [viewFilter, setViewFilter] = useState("");
     const [getLiveRequiredAction, { isLoading, isFetching }] =
@@ -28,14 +32,15 @@ const LiveRequiredAction = () => {
 
     // data fetching according to filter
     useEffect(() => {
-        const queryObj = _.pickBy(dateFilter, Boolean);
+        const queryObj = _.pickBy({...dateFilter,user_id:userFilter?.id}, Boolean);
         const query = new URLSearchParams(queryObj).toString();
+        // console.log({query});
         getLiveRequiredAction(query)
             .unwrap()
             .then(({ pending_actions }) => {
                 setData(pending_actions);
             });
-    }, [dateFilter, refresh]);
+    }, [dateFilter, refresh, userFilter]);
 
     // filter data according to search
     useEffect(() => {
@@ -73,10 +78,11 @@ const LiveRequiredAction = () => {
     }, [currentPage, perPageItem, filterData]);
 
     // on filter function
-    const onFilter = ({ search, date, view }) => {
+    const onFilter = ({ search, date, view, user }) => {
         if (JSON.stringify(date) !== JSON.stringify(dateFilter)) {
             setDateFilter({ ...date });
         }
+        setUserFilter(user);
         setSearchFilter(search);
         setViewFilter(view);
     };
@@ -94,6 +100,7 @@ const LiveRequiredAction = () => {
                     return (
                         <RequiredActionsCard
                             key={i}
+                            role={userFilter?userFilter.role_id:currentUser.roleId}
                             data={data}
                             status={"live"}
                         />

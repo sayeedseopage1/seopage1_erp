@@ -238,6 +238,36 @@
   /* background-color: #F7F7F7; */
 }
 /* ---------- view bar (end) ---------- */
+
+
+
+/* ---------- user bar (start) ---------- */
+.user_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user_label{
+  font-size: 16px;
+  /* width: 80px; */
+}
+.user_field{
+  flex: 0 1 150px;
+  min-width: 0;
+  /* max-width: 150px; */
+  padding: 10px;
+  font-size: 16px;
+  color: var(--placeholder);
+  outline: none;
+  border: none;
+  /* background-color: #F7F7F7; */
+}
+/* ---------- user bar (end) ---------- */
+
+
+
 .custom_bg{
   background-color: #F7F7F7;
   border-radius: 5px;
