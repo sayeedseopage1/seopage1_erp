@@ -865,8 +865,7 @@ class TaskController extends AccountBaseController
         $task->task_status = "submitted";
 
         $task->save();
-        if($task->subtask_id == null)
-        {
+       
             $actions = PendingAction::where('code','NSPT')->where('past_status',0)->where('task_id',$task->id)->get();
             if($actions != null)
             {
@@ -903,7 +902,7 @@ class TaskController extends AccountBaseController
     
     
             }
-        }
+        
         }
         //  dd($task);
 
