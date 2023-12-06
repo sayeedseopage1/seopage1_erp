@@ -1014,6 +1014,28 @@ class TaskController extends AccountBaseController
         $task->rating3 = $request->rating3;
         $task->comments = $request->comments;
         $task->save();
+        if($task->subtask_id != null)
+        {
+            $parent_task= Subtask::where('id',$task->subtask_id)->first();
+            $sub_tasks_count = Subtask::select('tasks.*')
+            ->join('tasks','tasks.subtask_id','sub_tasks.id')
+            
+            ->where('sub_tasks.task_id',$parent_task->task_id)->count();
+            $sub_tasks__finished_count = Subtask::select('tasks.*')
+            ->join('tasks','tasks.subtask_id','sub_tasks.id')
+            
+            ->where('sub_tasks.task_id',$parent_task->task_id)
+            ->where('tasks.board_column_id',8)
+            ->count();
+            if( $sub_tasks_count == $sub_tasks__finished_count)
+            {
+                $p_task= Task::where('id',$parent_task->task_id)->first();
+                $helper = new HelperPendingActionController();
+ 
+ 
+                $helper->NeedtoSubmitParentTask($$p_task);
+            }
+        }
         $taskId= Task::where('id',$task->task_id)->first();
         $task_user= TaskUser::where('task_id',$taskId->id)->orderBy('id','desc')->first();
         $t_user= User::where('id',$task_user->user_id)->first();
