@@ -666,7 +666,7 @@ class TimelogController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $project= Project::where('id',$task_status->id)->first();
+                $project= Project::where('id',$task_status->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $project_manager= User::where('id',$project->pm_id)->first();
                 $action->authorized_by= Auth::id();

@@ -39,20 +39,28 @@ class DeveloperNeedtoAssignTask extends Command
      */
     public function handle()
     {
-        $projects_tasks = Project::where('status', 'finished')->get();
+        $month = '2023-09-01';
+        $projects_tasks = Project::where('status', 'finished')->whereDate('created_at','>=',$month)->get();
+        //dd(count($projects_tasks));
 
         foreach ($projects_tasks as $project) {
             $project_submission = ProjectSubmission::where('project_id', $project->id)->first();
         
-            if ($project_submission !== null) {
+            if ($project_submission != null) {
                 $creation_date = $project_submission->created_at;
                 $project_submission_date = Carbon::parse($project_submission->created_at)->addDay(14);
         
                 $current_date = Carbon::now();
         
                 if ($current_date >= $project_submission_date && $project_submission->dummy_link != null) {
-                    $helper = new HelperPendingActionController();
-                    $helper->RemovalofStagingSite($project, $project_submission);
+                    $pending_action = PendingAction::where('code','STR')->where('project_id',$project->id)->where('past_status',0)->count();
+                    if($pending_action == 0)
+                    {
+                        $helper = new HelperPendingActionController();
+                        $helper->RemovalofStagingSite($project, $project_submission);
+
+                    }
+                   
                 }
             }
         }
@@ -94,6 +102,7 @@ class DeveloperNeedtoAssignTask extends Command
           if($current_date >= $creation_date )
           {
             $update_action= PendingAction::find($action->id);
+            $update_action->heading = 'New Submission Expiry Warning!';
             $update_action->created_at = Carbon::now();
             $update_action->updated_at = Carbon::now();
            // $update_action->timeframe = 48;
@@ -134,15 +143,17 @@ class DeveloperNeedtoAssignTask extends Command
             // Deadline is in the past
             $difference_in_hours = -$difference_in_hours;
         }
-        if($difference_in_hours > 0 && $difference_in_hours >= 18)
+       // dd($difference_in_hours)
+      //  if($difference_in_hours > 0 && $difference_in_hours <= 18)
+       if($difference_in_hours <= 18)
         {
-            $pending_action = PendingAction::where('code','DTDA')->where('past_status',0)->count();
+            $pending_action = PendingAction::where('code','DTDA')->where('task_id',$project->id)->where('past_status',0)->count();
             if($pending_action == 0)
             {
                 $helper = new HelperPendingActionController();
  
  
-                $helper->TaskDeadline($project);
+                $helper->TaskDeadline($project, $difference_in_hours);
 
             }
            
