@@ -102,6 +102,7 @@ class DeveloperNeedtoAssignTask extends Command
           if($current_date >= $creation_date )
           {
             $update_action= PendingAction::find($action->id);
+            $update_action->heading = 'New Submission Expiry Warning!';
             $update_action->created_at = Carbon::now();
             $update_action->updated_at = Carbon::now();
            // $update_action->timeframe = 48;
