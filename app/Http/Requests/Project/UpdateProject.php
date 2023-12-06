@@ -33,7 +33,6 @@ class UpdateProject extends CoreRequest
             'start_date' => 'required',
 
             'project_summary'=>'required',
-            'project_challenge'=>'required',
             'comments' => [
                 function ($attribute, $value, $fail) {
                     $allowedChallenges = [
@@ -54,6 +53,9 @@ class UpdateProject extends CoreRequest
             'client_id' => 'requiredIf:client_view_task,true',
             'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
         ];
+        if ($this->project_challenge) {
+            $rules['project_challenge'] = 'required';
+        }
 
         // if (!$this->has('without_deadline')) {
         //     $rules['deadline'] = 'required';
