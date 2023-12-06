@@ -331,7 +331,7 @@ const CheckInForm = ({onCheckIn}) => {
                 </FormGroup>
             </Flex>
 
-            <Flex className='mt-3' justifyContent="flex-end">
+            <Flex className='mt-3' justifyContent="flex-center">
                 <Button
                     onClick={handleClockInButton}
                     isLoading={isSubmitting}
@@ -348,7 +348,7 @@ const CheckInForm = ({onCheckIn}) => {
                     className='mt-auto font-weight-normal height-44 px-3 bg-info text-white'
                 >
                    <span className='d-flex flex-column'>
-                        <span>Browser</span>
+                        <span>Browse</span>
                         <span>[No Clock In Required]</span>
                    </span>
                 </Button>

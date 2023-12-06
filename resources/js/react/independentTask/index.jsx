@@ -1,29 +1,26 @@
-import React, { Suspense, useContext } from "react";
-import ReactDOM from "react-dom/client";
-import "./tasks.css";
-import "./table.css";
+import React, { useContext } from "react";
 import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { store } from "../services/store";
 import Loading from "./components/Loading";
+import IndependentTaskProvider, { useIndependentTask } from "./context/IndependentTaskProvider";
 import Tasks from "./pages/Tasks";
-import { useLocalStorage, useMouse } from "react-use";
+import "./table.css";
+import "./tasks.css";
 // const SingleTask = React.lazy(() => import('../single-task/SingleTask'));
 // const Subtasks = React.lazy(() => import("./pages/Subtasks"));
 
 const container = document.getElementById("independent-task-container");
 
-import Toaster from "../global/Toaster";
-import ErrorContextProvider from "../context/ErrorHandleServiceContextProvider";
-import { useLazyGetIndependentTaskQuery } from "../services/api/independentTaskApiSlice";
-import { createContext } from "react";
-import { useState } from "react";
-import { useEffect } from "react";
-import { User } from "../utils/user-details";
 import _ from "lodash";
-import { useCallback } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
+import Toaster from "../global/Toaster";
+import { useLazyGetIndependentTaskQuery } from "../services/api/independentTaskApiSlice";
+import { User } from "../utils/user-details";
+import Subtasks from "./pages/Subtasks";
 
 // custom drag layer
 const DragLayer = () => {
@@ -99,7 +96,7 @@ export function useRefresh(){
 const IndependentTask = () => {
     const [refresh, setRefresh] = useState(false);
     const [filter, setFilter] = useState(null);
-    const [tableData, setTableData] = useState([]);
+    const { tableData, setTableData } = useIndependentTask();
     // console.log(data);
     // const { data: tasks } = useGetIndependentTaskQuery();
     const [getIndependentTask, { isFetching, isLoading, }] = useLazyGetIndependentTaskQuery();
@@ -151,7 +148,7 @@ const IndependentTask = () => {
     }
 
     //   return (
-    //     
+    //
     //         {/* <IndependentTaskDataTable tableData={tableData} isLoading={isLoading || isFetching} onFilter={onFilter} filter={filter} /> */}
     //         <Tasks tableData={tableData} isLoading={isLoading || isFetching} onFilter={onFilter} filter={filter} />
     //     </RefreshContext.Provider>
@@ -162,23 +159,59 @@ const IndependentTask = () => {
     },[setRefresh]) ;
 
     return (
-        <RefreshContext.Provider value={{ refreshState:refresh,refresh:isLoading||isFetching, handleRefresh }}>
-            <BrowserRouter basename="/account/independent-task">
-                <Routes>
-                    <Route path="/" element={<Container />}>
-                        <Route index element={<Tasks tableData={tableData} isLoading={isLoading || isFetching} onFilter={onFilter} filter={filter} />} />
-                        {/* <Route
-                            path="/subtasks"
-                            element={<SubtasksContainer />}
-                        />
-                        <Route
-                            path="/my-tasks"
-                            element={<SubtasksContainer />}
-                        /> */}
-                    </Route>
-                </Routes>
-            </BrowserRouter>
-        </RefreshContext.Provider>
+            <RefreshContext.Provider value={{ refreshState:refresh,refresh:isLoading||isFetching, handleRefresh }}>
+                <BrowserRouter basename="/account/independent">
+                    <Routes>
+                        <Route path="/" element={<Container />}>
+                            <Route
+                                path="/tasks"
+                                element={
+                                    <Tasks
+                                        tableData={tableData}
+                                        isLoading={isLoading || isFetching}
+                                        onFilter={onFilter}
+                                        filter={filter}
+                                    />
+                                }
+                            />
+
+                            <Route
+                                path="/subtasks"
+                                element={
+                                    <Subtasks
+                                        tableData={tableData}
+                                        isLoading={isLoading || isFetching}
+                                        onFilter={onFilter}
+                                        filter={filter}
+                                    />
+                                }
+                            />
+
+                            <Route
+                                path="/my-tasks"
+                                element={
+                                    <Subtasks
+                                        tableData={tableData}
+                                        isLoading={isLoading || isFetching}
+                                        onFilter={onFilter}
+                                        filter={filter}
+                                    />
+                                }
+                            />
+
+
+                            {/* <Route
+                                path="/subtasks"
+                                element={<SubtasksContainer />}
+                            />
+                            <Route
+                                path="/my-tasks"
+                                element={<SubtasksContainer />}
+                            /> */}
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </RefreshContext.Provider>
     )
 };
 
@@ -189,7 +222,9 @@ if (container) {
         <React.StrictMode>
             <Provider store={store}>
                 <DndProvider backend={HTML5Backend}>
-                    <IndependentTask />
+                    <IndependentTaskProvider>
+                        <IndependentTask />
+                    </IndependentTaskProvider>
                 </DndProvider>
             </Provider>
         </React.StrictMode>

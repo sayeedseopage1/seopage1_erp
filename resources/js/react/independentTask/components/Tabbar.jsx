@@ -16,18 +16,18 @@ const Tabbar = () => {
 
   return (
     <div className='d-flex flex-wrap align-items-center px-3 mb-2' style={{gap: '10px'}}>
-        {!isDev && <NavLink to='/' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"} > 
+        {!isDev && <NavLink to='/tasks' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"} >
           Tasks
-       </NavLink>} 
+       </NavLink>}
        {
         isDev ?
-          <NavLink to='/my-tasks' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"}> 
+          <NavLink to='/my-tasks' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"}>
             My Tasks
           </NavLink> :
-          <NavLink to='/subtasks' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"}> 
+          <NavLink to='/subtasks' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"}>
             Subtasks
-         </NavLink> 
-       }  
+         </NavLink>
+       }
     </div>
   )
 }
