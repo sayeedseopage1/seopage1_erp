@@ -20,7 +20,7 @@ const Subtasks = () => {
     const [columnVisibility, setColumnVisibility] = React.useState(defaultColumnVisibility)
 
     // const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
-    const [ getIndependentSubtasks, { isFetching }] = useGetIndependentSubtasksMutation();
+    const [ getIndependentSubtasks, { isLoading, isFetching }] = useGetIndependentSubtasksMutation();
 
     const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
@@ -39,6 +39,10 @@ const Subtasks = () => {
         }
     }
 
+    const handleRefresh = () => {
+        onFilter(filter);
+    }
+
 
     let tableColumns = SubTasksTableColumns;
 
@@ -54,6 +58,24 @@ const Subtasks = () => {
                 <Filterbar onFilter={onFilter} page="subtasks"/>
             </FilterContainer>
             <div className="sp1_tlr_container">
+            <section className="pt-3 pr-3 d-flex justify-content-end">
+                    <button
+                        onClick={handleRefresh}
+                        className="btn btn-primary"
+                        type="button"
+                        disabled={isLoading}
+                        style={{paddingTop:"5px",paddingBottom:"5px"}}
+                    >
+                        {isLoading && (
+                            <span
+                                className="spinner-border spinner-border-sm mr-1"
+                                role="status"
+                                aria-hidden="true"
+                            />
+                        )}
+                        Refresh
+                    </button>
+                </section>
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         <Tabbar/>
@@ -71,7 +93,7 @@ const Subtasks = () => {
                     </div>
 
                     <SubTasksTable
-                        isLoading={isFetching}
+                        isLoading={isLoading}
                         filter={filter}
                         tableName="independent_subtask_table"
                         search={search}
