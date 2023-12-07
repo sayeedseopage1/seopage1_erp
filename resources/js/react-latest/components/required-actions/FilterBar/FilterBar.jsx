@@ -18,7 +18,7 @@ const FilterBar = ({ onFilter, change = false }) => {
     const [date, setDate] = useState({});
     const [show, setShow] = useState(0);
     const [view, setView] = useState("all");
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
     // ------- filter state (end) -------
 
     useEffect(() => {
@@ -27,9 +27,14 @@ const FilterBar = ({ onFilter, change = false }) => {
             search,
             date,
             view,
-            user,
+            // user
         });
-    }, [search, date, view, user]);
+    }, [
+        search,
+        date,
+        view, 
+        //user
+    ]);
 
     useEffect(() => {
         if (search) {
@@ -46,10 +51,10 @@ const FilterBar = ({ onFilter, change = false }) => {
         setSearch("");
     }, [view]);
 
-    useEffect(() => {
-        setSearch("");
-        // console.log({user});
-    }, [user]);
+    // useEffect(() => {
+    //     setSearch("");
+    //     console.log({user});
+    // }, [user]);
 
     useEffect(() => {
         setPerPageItem(show);
@@ -61,10 +66,10 @@ const FilterBar = ({ onFilter, change = false }) => {
             <DateField setDate={setDate} change={change} />
             <Show show={show} setShow={setShow} change={change} />
             {/* <View view={view} setView={setView} change={change} /> */}
-            {(currentUser.getRoleId() === 1 ||
+            {/* {(currentUser.getRoleId() === 1 ||
                 currentUser.getRoleId() === 8) && (
                 <User user={user} setUser={setUser} change={change} />
-            )}
+            )} */}
         </div>
     );
 };
