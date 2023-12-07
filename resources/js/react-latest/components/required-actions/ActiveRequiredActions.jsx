@@ -12,7 +12,7 @@ import { useRefresh } from "./Index";
 const ActiveRequiredActions = () => {
     const [action, setAction] = useState("live");
     const {user} = useRefresh();
-    const { data } = useGetExpiredRequiredActionQuery(`user_id=${user?.id}`);
+    const { data } = useGetExpiredRequiredActionQuery(user?.id?`user_id=${user?.id}`:'');
 
     return (
         <div>
