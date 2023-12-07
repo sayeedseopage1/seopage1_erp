@@ -3,6 +3,7 @@ import DataTable from '../../ui/basic-table/DataTable';
 import { taskReportTableData } from '../../__fake_data__/task-report-page/data';
 import { TaskReportDataTableColumn } from './TaskReportDataTableColumn';
 import TaskReportTableLoader from './TaskReportTableLoader';
+import _ from 'lodash';
 
 const TaskReportDataTable = ({isLoading,tableData}) => {
 
@@ -11,7 +12,7 @@ const TaskReportDataTable = ({isLoading,tableData}) => {
 
       <section className="sp1_tlr_tbl_container">
         <DataTable
-          tableData={[...tableData]}
+          tableData={_.orderBy([...tableData],["report_date"],["desc"])}
           tableColumns={TaskReportDataTableColumn}
           isLoading={isLoading}
           tableName='task-report-table'
