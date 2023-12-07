@@ -2648,13 +2648,9 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 var StartTimerWorkingReport = function StartTimerWorkingReport() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Title, {
-      children: "You haven't submitted the last day's working report."
+      children: "You haven't clocked in today."
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(Text, {
-      children: " Do you want to submit the working report?"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)(Note, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("strong", {
-        children: "Note:"
-      }), " If you didn't submit last day's working report, you won't be able to start the timer"]
+      children: " Do you want to clock in now?"
     })]
   });
 };
