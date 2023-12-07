@@ -168,6 +168,10 @@ p{
   background-color: transparent;
   color: var(--primary);
 }
+.action_btn:disabled{
+  cursor: not-allowed;
+  opacity: 0.3;
+}
 .authorized_info{
   /* max-width: 40rem; */
   /* border: solid; */

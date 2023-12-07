@@ -98,6 +98,7 @@ const User = ({ user: userState, setUser, change }) => {
                 >
                     <input
                         type="text"
+                        value={searchUser}
                         onChange={(e) => setSearchUser(e.target.value)}
                         className={`${style.user_field_dropdown_container_search}`}
                         placeholder="Search user..."
@@ -116,7 +117,10 @@ const User = ({ user: userState, setUser, change }) => {
                         className={`${style.user_field_dropdown_container_btn_group}`}
                     >
                         <button
-                            onClick={() => setUser(window.Laravel.user)}
+                            onClick={() => {
+                                setSearchUser("");
+                                setUser(window.Laravel.user);
+                            }}
                             className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
                         >
                             Admin
@@ -129,7 +133,10 @@ const User = ({ user: userState, setUser, change }) => {
                                     // </option>
                                     <button
                                         key={user.id}
-                                        onClick={() => setUser(user)}
+                                        onClick={() => {
+                                            setSearchUser("");
+                                            setUser(user);
+                                        }}
                                         className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
                                     >
                                         {user.name}

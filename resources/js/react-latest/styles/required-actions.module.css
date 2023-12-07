@@ -25,7 +25,12 @@
   gap: 10px;
   font-family: 'Poppins', sans-serif !important;
 }
-
+.refresh_container{
+  display: inline-flex;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif !important;
+  align-items: center;
+}
 .btn{
   border: solid var(--primary) 2px;
   border-radius: 5px;
