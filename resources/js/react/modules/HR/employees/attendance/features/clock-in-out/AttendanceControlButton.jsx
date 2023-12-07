@@ -77,6 +77,7 @@ export const AttendanceControlButton = () => {
                     {/* check in control button */}
                     <Switch.Case condition={!checkIn}>
                         <Button
+                            onClick={() => window.location.reload()}
                             className={styles.check_button}
                         >
                             <i className="fa-solid fa-arrow-right-to-bracket" />
