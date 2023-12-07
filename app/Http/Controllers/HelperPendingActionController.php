@@ -1654,7 +1654,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->message = 'Deadline for your project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next ';
                if($difference_in_hours > 0)
                {
-                $action->timeframe= $difference_in_hours;
+                $action->timeframe= $difference_in_hours +24;
 
                }else 
                {
@@ -1700,7 +1700,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->message = 'Deadline for your task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next';
                 if($difference_in_hours > 0)
                 {
-                 $action->timeframe= $difference_in_hours;
+                 $action->timeframe= $difference_in_hours+24;
  
                 }else 
                 {

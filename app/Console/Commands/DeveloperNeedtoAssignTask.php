@@ -39,7 +39,7 @@ class DeveloperNeedtoAssignTask extends Command
      */
     public function handle()
     {
-        $month = '2023-09-01';
+        $month = '2023-12-01';
         $projects_tasks = Project::where('status', 'finished')->whereDate('created_at','>=',$month)->get();
         //dd(count($projects_tasks));
 

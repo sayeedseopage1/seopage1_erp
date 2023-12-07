@@ -40,7 +40,8 @@ class ProjectManagerAction extends Command
      */
     public function handle()
     {
-        $projects_tasks = Project::where('status','in progress')->get();
+        $month = '2023-12-07';
+        $projects_tasks = Project::where('status', 'in progress')->whereDate('created_at','>=',$month)->get();
         foreach ($projects_tasks as $project) {
             $pm_project= PMProject::where('project_id',$project->id)->orderBy('id','desc')->first();
             $creation_date= $pm_project->created_at;
@@ -56,12 +57,16 @@ class ProjectManagerAction extends Command
                // dd("true");
                 if($task == 0)
             {
+                $pending_action = PendingAction::where('code','SFT')->where('project_id',$project->id)->where('past_status',0)->count();
+                if($pending_action == 0)
+                {
                 $helper = new HelperPendingActionController();
 
 
                 $helper->SubmitFirstTask($project);
 
             }
+        }
 
 
             } 
@@ -71,7 +76,8 @@ class ProjectManagerAction extends Command
           
 
         }
-        $projects = Project::where('status','in progress')->get();
+        $month = '2023-12-07';
+        $projects =  Project::where('status', 'in progress')->whereDate('created_at','>=',$month)->get();
         foreach ($projects as $project) {
             $pm_project= PMProject::where('project_id',$project->id)->orderBy('id','desc')->first();
             $creation_date= $pm_project->created_at;
@@ -85,10 +91,16 @@ class ProjectManagerAction extends Command
                 // dd("true");
                  if($milestones == 0)
              {
-                 $helper = new HelperPendingActionController();
+                 $pending_action = PendingAction::where('code','CFM')->where('project_id',$project->id)->where('past_status',0)->count();
+                 if($pending_action == 0)
+                 {
+                    $helper = new HelperPendingActionController();
  
  
-                 $helper->CompleteFirstMilestone($project);
+                    $helper->CompleteFirstMilestone($project);
+
+                 }
+               
  
              }
  
