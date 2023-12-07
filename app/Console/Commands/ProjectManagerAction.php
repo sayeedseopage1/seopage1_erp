@@ -112,7 +112,7 @@ class ProjectManagerAction extends Command
 
         }
      //
-    // $month = '2023-12-07';
+     $month = '2023-12-07';
    //  $projects =  Project::where('status', 'in progress')->whereDate('created_at','>=',$month)->get();
       $deadline_projects= Project::where('status', 'in progress')->whereDate('created_at','>=',$month)->get();
       foreach ($deadline_projects as $project) {
