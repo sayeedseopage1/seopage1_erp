@@ -26,7 +26,6 @@ const CommentsContainer = ({
                             width: "100vw",
                             height: "100vh",
                             maxHeight: "100vh",
-                            // zIndex:'9999999999999999999999999999999999999999999999999999999999'
                         }}
                     >
                         {/* modal body (start) */}

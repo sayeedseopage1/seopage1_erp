@@ -5,6 +5,17 @@ import dayjs from "dayjs";
 export default function commentDemoData(count = 10) {
   const commentData = [];
 
+  const getFileUrls = ()=>{
+    const files = [];
+    for (let i=0;i<faker.number.int({
+      min: 1,
+      max: 10
+    });i++) {
+      files.push(`${faker.image.url()}.${faker.system.commonFileExt()}`)
+    }
+    return files;
+  }
+
   const getData = (i)=>{
 
     const comment = <p>{faker.lorem.lines(1)} <b>{faker.lorem.words(5)} <small>{faker.lorem.words(3)}</small> {faker.lorem.words(2)}</b> <small>{faker.lorem.words(4)}</small></p>;
@@ -92,10 +103,7 @@ export default function commentDemoData(count = 10) {
     //   max: 4,
     // }) : '';
     
-    const files = faker.number.int({ max: 1, min: 0 }) || !comment ? _.fill(Array(faker.number.int({
-      min: 1,
-      max: 10
-    })), faker.image.url()) : null;
+    const files = faker.number.int({ max: 1, min: 0 }) || !comment ? getFileUrls() : null;
 
     // console.log({comment,files});
 

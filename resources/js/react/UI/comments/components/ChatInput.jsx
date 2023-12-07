@@ -16,72 +16,39 @@ import { HiReply } from "react-icons/hi";
 import { useCommentContext } from "../CommentsBody";
 import { MdClose } from "react-icons/md";
 import dayjs from "dayjs";
+import HandleFileIcon from "../utils/HandleFileIcon";
+import Swal from "sweetalert2";
 
 const ChatInput = ({ setScroll }) => {
     const [editorHtml, setEditorHtml] = useState("");
     const [show, setShow] = useState(false);
     const [files, setFiles] = useState([]);
-    const [showEmoji, setShowEmoji] = useState(false);
-    const [emoji, setEmoji] = useState("");
-    const { mentionedComment } = useCommentContext();
-    const quillRef = useRef(null);
+    const {
+        mentionedComment,
+        setMentionedComment,
+        setContextHolder,
+        setSecletedComments,
+    } = useCommentContext();
 
-    // useEffect(() => {
-    //     console.log(files);
-    // }, [files]);
-
-    // useEffect(()=>{
-    //   setScroll(prev=>!prev);
-    // },[show,files])
-
-    // useEffect(() => {
-    //     console.log(editorHtml);
-    // }, [emoji]);
-
-    // useEffect(() => {
-    //     // Focus the Quill editor when the component is rendered
-    //     if (quillRef.current && showEmoji) {
-    //       quillRef.current.getEditor().focus();
-    //       quillRef.current?.getEditor()?.setSelection(quillRef.current?.getEditor().getLength());
-    //     }
-    //   }, [showEmoji]);
-
-    const handleEmojiSelection = (emoji, e) => {
-        // console.log(emoji);
-        // setEmoji(emoji.emoji);
-        const quill = quillRef.current?.getEditor();
-        const cursorPosition = quill?.getSelection()?.index;
-
-        if (cursorPosition !== undefined) {
-            // Insert the mention at the cursor position
-            quill?.insertText(cursorPosition, `${emoji.emoji}`);
-        }
-        // else {
-        //     // Get the current length of the editor content
-        //     const contentLength = quill.getLength();
-        //     console.log({contentLength});
-
-        //     // Insert the external text at the end of the editor content
-        //     quill.insertText(contentLength, emoji.emoji);
-
-        //     // Set the cursor position to the end of the inserted text
-        //     quill.setSelection(contentLength);
-        // }
+    const handleSendComment = () => {
+        Swal.fire({
+            icon: "success",
+            title: "Comment Sent",
+            showConfirmButton: true,
+            timer: 2000,
+            timerProgressBar: true,
+        });
+        setSecletedComments({});
+        setMentionedComment(null);
+        setContextHolder(null);
+        setEditorHtml("");
+        setShow(false);
+        setFiles([]);
+        setScroll(prev=>!prev);
     };
 
     return (
         <>
-            {/* {showEmoji && (
-                <div className={`${style.chatInput_text_emojis}`}>
-                    <EmojiPicker
-                        width={"100%"}
-                        height={"100%"}
-                        skinTonesDisabled
-                        emojiStyle="facebook"
-                        onEmojiClick={handleEmojiSelection}
-                    />
-                </div>
-            )} */}
             <section className={`${style.chatInput}`}>
                 {mentionedComment ? <MentionedComment /> : <></>}
                 <FilePreviewer files={files} setFiles={setFiles} />
@@ -91,8 +58,8 @@ const ChatInput = ({ setScroll }) => {
                     files={files}
                     show={show}
                     setShow={setShow}
-                    setShowEmoji={setShowEmoji}
-                    quillRef={quillRef}
+                    // setShowEmoji={setShowEmoji}
+                    // quillRef={quillRef}
                     // text={text}
                     // setText={setText}
                 />
@@ -107,7 +74,10 @@ const ChatInput = ({ setScroll }) => {
                 className={`${style.chatInput_actions_btn_container}`}
             >
                 <FileUpload files={files} setFiles={setFiles} />
-                <IoMdSend className={`${style.chatInput_actions_btn_send}`} />
+                <IoMdSend
+                    onClick={handleSendComment}
+                    className={`${style.chatInput_actions_btn_send}`}
+                />
             </section>
         </>
     );
@@ -115,62 +85,8 @@ const ChatInput = ({ setScroll }) => {
 
 export default ChatInput;
 
-function MentionedComment({ comment }) {
+function MentionedComment() {
     const { mentionedComment, setMentionedComment } = useCommentContext();
-
-    const handlePreviewUrl = (file) => {
-        // return URL.createObjectURL(file);
-        return file;
-    };
-
-    const handleFileComponent = (file) => {
-        switch (file?.type) {
-            case "image":
-                console.log(handlePreviewUrl(file));
-                return (
-                    <img
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                        style={{
-                            objectFit: "cover",
-                            width: "100%",
-                            height: "100%",
-                        }}
-                        src={handlePreviewUrl(file)}
-                        alt=""
-                    />
-                );
-
-            // case ""
-
-            default:
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexFlow: "column nowrap",
-                            justifyContent: "center",
-                            gap: "5px",
-                        }}
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                    >
-                        <FaFile
-                            className={`${style.chatInput_filePreview__file__fileIcon}`}
-                        />
-                        <p
-                            className={
-                                style.chatInput_filePreview__file__fileName
-                            }
-                        >
-                            {file.name}
-                        </p>
-                    </div>
-                );
-        }
-    };
 
     return (
         <div
@@ -208,7 +124,7 @@ function MentionedComment({ comment }) {
                                     key={i}
                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                 >
-                                    {handleFileComponent(file)}
+                                    <HandleFileIcon fileName={file} />
                                 </div>
                             );
                         })}
@@ -232,64 +148,6 @@ function MentionedComment({ comment }) {
 function FilePreviewer({ files, setFiles }) {
     const { mentionedComment } = useCommentContext();
 
-    const handlePreviewUrl = (file) => {
-        return URL.createObjectURL(file);
-    };
-
-    const handleFileComponent = (file) => {
-        const [type, ext] = file.type.split("/");
-        // console.log({ type, ext });
-        const arr = file.name.split(".");
-        console.log(arr[arr.length - 1]);
-
-        switch (type) {
-            case "image":
-                console.log(handlePreviewUrl(file));
-                return (
-                    <img
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                        style={{
-                            objectFit: "cover",
-                            width: "100%",
-                            height: "100%",
-                        }}
-                        src={handlePreviewUrl(file)}
-                        alt=""
-                    />
-                );
-
-            // case ""
-
-            default:
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexFlow: "column nowrap",
-                            justifyContent: "center",
-                            gap: "5px",
-                        }}
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                    >
-                        <FaFile
-                            className={`${style.chatInput_filePreview__file__fileIcon}`}
-                        />
-                        <p
-                            className={
-                                style.chatInput_filePreview__file__fileName
-                            }
-                        >
-                            {file.name}
-                        </p>
-                    </div>
-                );
-        }
-    };
-
     return files.length ? (
         <div
             style={{
@@ -304,7 +162,7 @@ function FilePreviewer({ files, setFiles }) {
                         key={i}
                         className={`${style.chatInput_filePreview__file} shadow-sm`}
                     >
-                        {handleFileComponent(file)}
+                        <HandleFileIcon file={file} />
                         <IoMdCloseCircle
                             className={`${style.chatInput_filePreview__removeFile}`}
                             onClick={() => {
@@ -422,48 +280,40 @@ function CommentEditor({
         };
     }, [show]);
 
-    // const atValues = [
-    //     { id: 1, value: "Fredrik Sundqvist" },
-    //     { id: 2, value: "Patrik Sjölin" },
-    //     { id: 3, value: "nafis" },
-    // ];
+    async function suggestPeople(searchTerm) {
+        const allPeople = [
+            {
+                id: 1,
+                value: "Fredrik Sundqvist",
+            },
+            {
+                id: 2,
+                value: "Patrik Sjölin",
+            },
+        ];
+        return allPeople.filter((person) => person.value.includes(searchTerm));
+    }
 
     const modules = {
+        toolbar: [["bold", "italic", "underline", "strike", "link"]],
         // mention: {
         //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
-        //     mentionDenotationChars: [
-        //         "@",
-        //         // "#"
-        //     ],
-        //     source: function (searchTerm, renderList, mentionChar) {
-        //         let values;
-
-        //         if (mentionChar === "@") {
-        //             values = atValues;
-        //         }
-        //         // else {
-        //         //     values = hashValues;
-        //         // }
-
-        //         if (searchTerm.length === 0) {
-        //             renderList(values, searchTerm);
-        //         } else {
-        //             const matches = [];
-        //             for (i = 0; i < values.length; i++)
-        //                 if (
-        //                     ~values[i].value
-        //                         .toLowerCase()
-        //                         .indexOf(searchTerm.toLowerCase())
-        //                 )
-        //                     matches.push(values[i]);
-        //             renderList(matches, searchTerm);
-        //         }
+        //     mentionDenotationChars: ["@", "#"],
+        //     source: async function (searchTerm, renderList) {
+        //         const matchedPeople = await suggestPeople(searchTerm);
+        //         renderList(matchedPeople);
         //     },
         // },
-        toolbar: [["bold", "italic", "underline", "strike", "link"]],
     };
 
-    const formats = ["bold", "italic", "underline", "strike", "link"];
+    const formats = [
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "link",
+        // "mention",
+    ];
 
     return (
         <div

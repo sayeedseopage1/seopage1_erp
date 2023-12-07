@@ -9,6 +9,7 @@ import { FaFile } from "react-icons/fa6";
 import _ from "lodash";
 import { isCurrentUserComment, useCommentContext } from "../CommentsBody";
 import dayjs from "dayjs";
+import HandleFileIcon from "../utils/HandleFileIcon";
 
 const SingleChat = ({
     id,
@@ -63,62 +64,7 @@ const SingleChat = ({
         };
     }, []);
 
-    // file preview url generator
-    const handlePreviewUrl = (file) => {
-        // return URL.createObjectURL(file);
-        return file;
-    };
-
-    // conditionally render component according to file type
-    const handleFileComponent = (file) => {
-        switch (file?.type) {
-            case "image":
-                console.log(handlePreviewUrl(file));
-                return (
-                    <img
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                        style={{
-                            objectFit: "cover",
-                            width: "100%",
-                            height: "100%",
-                        }}
-                        src={handlePreviewUrl(file)}
-                        alt=""
-                    />
-                );
-
-            // case ""
-
-            default:
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexFlow: "column nowrap",
-                            justifyContent: "center",
-                            gap: "5px",
-                        }}
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                    >
-                        <FaFile
-                            className={`${style.chatInput_filePreview__file__fileIcon}`}
-                        />
-                        <p
-                            className={
-                                style.chatInput_filePreview__file__fileName
-                            }
-                        >
-                            {file.name}
-                        </p>
-                    </div>
-                );
-        }
-    };
-
+    // comment sender info showing handler
     const handleSenderInfo = ({ currentComment, previousComment }) => {
         if (true) {
         } else {
@@ -126,7 +72,9 @@ const SingleChat = ({
         return (
             <span
                 style={{
-                    alignSelf: isCurrentUserComment(comment) ? "flex-end" : "flex-start",
+                    alignSelf: isCurrentUserComment(comment)
+                        ? "flex-end"
+                        : "flex-start",
                 }}
                 className={`${style.singleChat_comment_card_text_time}`}
             >
@@ -158,7 +106,9 @@ const SingleChat = ({
             id={id}
             className={`${style.singleChat}`}
             style={{
-                alignSelf: isCurrentUserComment(comment) ? "flex-end" : "flex-start",
+                alignSelf: isCurrentUserComment(comment)
+                    ? "flex-end"
+                    : "flex-start",
             }}
         >
             <section
@@ -172,7 +122,9 @@ const SingleChat = ({
                     display: "inline-flex",
                     // border:"solid",
                     gap: "0 6px",
-                    flexDirection: isCurrentUserComment(comment) ? "row-reverse" : "row",
+                    flexDirection: isCurrentUserComment(comment)
+                        ? "row-reverse"
+                        : "row",
                 }}
             >
                 {[...Object.keys(selectedComments)].length > 0 ? (
@@ -246,29 +198,35 @@ const SingleChat = ({
                                     <article
                                         className={`${style.chatInput_mentioned_comment_text_area}`}
                                     >
-                                        {comment?.comment ? (
+                                        {comment?.mention_comment?.comment ? (
                                             <span
                                                 className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                             >
-                                                {comment.comment}
+                                                {
+                                                    comment?.mention_comment
+                                                        .comment
+                                                }
                                             </span>
                                         ) : (
                                             <></>
                                         )}
-                                        {comment?.files?.length ? (
+                                        {comment?.mention_comment?.files
+                                            ?.length ? (
                                             <span
                                                 className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
                                             >
-                                                {comment?.files?.map(
+                                                {comment?.mention_comment?.files?.map(
                                                     (file, i) => {
                                                         return (
                                                             <div
                                                                 key={i}
                                                                 className={`${style.chatInput_filePreview__file} shadow-sm`}
                                                             >
-                                                                {handleFileComponent(
-                                                                    file
-                                                                )}
+                                                                <HandleFileIcon
+                                                                    fileName={
+                                                                        file
+                                                                    }
+                                                                />
                                                             </div>
                                                         );
                                                     }
@@ -283,9 +241,11 @@ const SingleChat = ({
                                         >
                                             {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
                                             {`${
-                                                comment?.added_by_name
+                                                comment?.mention_comment
+                                                    ?.added_by_name
                                             }, ${dayjs(
-                                                comment?.created_at
+                                                comment?.mention_comment
+                                                    ?.created_at
                                             ).format("MMM DD, YYYY, hh:mm A")}`}
                                         </span>
                                     </article>
@@ -327,7 +287,9 @@ const SingleChat = ({
                                         setContextHolder(comment);
                                     }}
                                     onKeyDown={onKeyDown}
-                                    isCurrentUser={isCurrentUserComment(comment)}
+                                    isCurrentUser={isCurrentUserComment(
+                                        comment
+                                    )}
                                     files={comment.files}
                                     topMargin={!!comment?.comment}
                                 />
@@ -342,8 +304,12 @@ const SingleChat = ({
                                     setShowCommentMenu((prev) => !prev);
                                 }}
                                 style={{
-                                    left: isCurrentUserComment(comment) ? "-14px" : "auto",
-                                    right: isCurrentUserComment(comment) ? "auto" : "-14px",
+                                    left: isCurrentUserComment(comment)
+                                        ? "-14px"
+                                        : "auto",
+                                    right: isCurrentUserComment(comment)
+                                        ? "auto"
+                                        : "-14px",
                                 }}
                                 className={`${style.singleChat_comment_card_text_more_btn}`}
                                 ref={menuBtnRef}
@@ -476,59 +442,6 @@ const FileView = ({
     topMargin,
 }) => {
     // console.log({ isCurrentUser });
-    const handlePreviewUrl = (file) => {
-        // return URL.createObjectURL(file);
-        return file;
-    };
-
-    const handleFileComponent = (file) => {
-        switch (file?.type) {
-            case "image":
-                console.log(handlePreviewUrl(file));
-                return (
-                    <img
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                        style={{
-                            objectFit: "cover",
-                            width: "100%",
-                            height: "100%",
-                        }}
-                        src={handlePreviewUrl(file)}
-                        alt=""
-                    />
-                );
-
-            // case ""
-
-            default:
-                return (
-                    <div
-                        style={{
-                            display: "flex",
-                            flexFlow: "column nowrap",
-                            justifyContent: "center",
-                            gap: "5px",
-                        }}
-                        onClick={() =>
-                            window.open(handlePreviewUrl(file), "_blank")
-                        }
-                    >
-                        <FaFile
-                            className={`${style.chatInput_filePreview__file__fileIcon}`}
-                        />
-                        <p
-                            className={
-                                style.chatInput_filePreview__file__fileName
-                            }
-                        >
-                            {file?.name}
-                        </p>
-                    </div>
-                );
-        }
-    };
 
     return (
         <span
@@ -547,7 +460,7 @@ const FileView = ({
                         key={i}
                         className={`${style.chatInput_filePreview__file} shadow-sm`}
                     >
-                        {handleFileComponent(file)}
+                        <HandleFileIcon fileName={file} />
                     </div>
                 );
             })}

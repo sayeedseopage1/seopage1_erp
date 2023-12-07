@@ -281,7 +281,8 @@
   position: relative;
 }
 .chatInput{
-  flex: 1 1 calc(100% - 58px);
+  /* flex: 0 1 calc(100% - 58px); */
+  width: calc(100% - 58px)
   /* overflow-y: auto; */
 }
 .chatInput_mentioned_comment{
@@ -348,12 +349,12 @@
   border-radius: 3px;
 }
 .chatInput_filePreview{
-  height: 68px;
+  /* height: 68px; */
   background-color: #DAEDF8;
   border-radius: 10px 10px 0 0;
-  /* max-width: 80%; */
+  max-width: 100%;
   display: flex;
-  padding: 10px 8px 8px;
+  padding: 10px 8px 0px;
   gap: 14px;
   overflow-y: hidden;
   overflow-x: auto;
@@ -365,7 +366,7 @@
   /* border: solid 0.5px gray; */
   background: white;
   border-radius: 4px;
-  padding: 10px 8px;
+  /* padding: 10px 8px; */
   /* display: flex;
   flex-flow: column nowrap;
   gap: 5px; */
@@ -373,10 +374,24 @@
 -webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);
 -moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */
 }
+.filePreview__notImg{
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  gap: 1px;
+  /* padding: 10px 8px; */
+  padding: 5px;
+}
 .chatInput_filePreview__file__fileIcon{
-  height: 12px;
-  width: 12px;
+  width: 20px;
+  display: inline-flex;
+  align-items: center;
   cursor: pointer;
+}
+.chatInput_filePreview__file__fileExt{
+    font-size: 10px !important;
+    font-weight: bold;
+    line-height: 0;
 }
 .chatInput_filePreview__file__fileName{
   white-space: nowrap; 
@@ -399,7 +414,8 @@
 }
 .chatInput_filePreview__addFile{
   height: 51px;
-  width: 69px;
+  min-width: 69px !important;
+  max-width: 69px !important;
   /* border: solid 0.5px gray; */
   background: white;
   border-radius: 4px;
