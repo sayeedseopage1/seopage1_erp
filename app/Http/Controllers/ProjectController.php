@@ -2036,11 +2036,12 @@ class ProjectController extends AccountBaseController
 
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
         if ($project->deal->project_type != 'hourly') {
-            if (!$request->has('without_deadline')) {
-                $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
-            } else {
-                $project->deadline = null;
-            }
+            // if (!$request->has('without_deadline')) {
+            //     $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
+                $project->deadline = $project->deal->deadline;
+            // } else {
+            //     $project->deadline = null;
+            // }
         }
 
         if ($request->notes != '') {
@@ -2363,7 +2364,8 @@ class ProjectController extends AccountBaseController
             || ($this->viewPermission == 'both' && (in_array(user()->id, $memberIds) || user()->id == $this->project->added_by) && in_array('employee', user_roles()))
         ));
 
-        $this->pageTitle = ucfirst($this->project->project_name);
+        $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 100, " ..."));
+
 
         if (!empty($this->project->getCustomFieldGroupsWithFields())) {
             $this->fields = $this->project->getCustomFieldGroupsWithFields()->fields;
