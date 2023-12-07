@@ -112,7 +112,9 @@ class ProjectManagerAction extends Command
 
         }
      //
-      $deadline_projects= Project::where('status','in progress')->get();
+    // $month = '2023-12-07';
+   //  $projects =  Project::where('status', 'in progress')->whereDate('created_at','>=',$month)->get();
+      $deadline_projects= Project::where('status', 'in progress')->whereDate('created_at','>=',$month)->get();
       foreach ($deadline_projects as $project) {
         //$pro = Project::where('id', 324)->first();
         $current_date = Carbon::now();
