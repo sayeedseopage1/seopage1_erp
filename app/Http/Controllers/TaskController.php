@@ -5299,7 +5299,7 @@ class TaskController extends AccountBaseController
             $query->replied_by = $question['replied_by'];
             $query->replied_date = Carbon::now();
             $query->save();
-            $actions = PendingAction::where('code','TDQ')->where('past_status',0)->where('dispute_id',$query->dispute_id)->get();
+            $actions = PendingAction::where('code','TDQ')->where('past_status',0)->where('dispute_id',$query->dispute_id)->where('authorization_for',Auth::id())->get();
             if($actions != null)
             {
             foreach ($actions as $key => $action) {
