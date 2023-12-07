@@ -68,14 +68,14 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         <x-forms.datepicker fieldId="start_date" fieldRequired="true"
                             :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
                             :fieldValue="$project->start_date->format(global_setting()->date_format)"
-                            :fieldPlaceholder="__('placeholders.date')" />
+                            :fieldPlaceholder="__('placeholders.date')"/>
                     </div>
 
                     <div class="col-md-6 col-lg-6" id="deadlineBox">
-                        <x-forms.datepicker fieldId="deadline" fieldRequired="true"
-                            :fieldLabel="__('modules.projects.deadline')" fieldName="deadline"
-                            :fieldValue="($project->deadline ? $project->deadline->format(global_setting()->date_format) : '')"
-                            :fieldPlaceholder="__('placeholders.date')" />
+                        <div class="form-group my-3" style="position: relative;">
+                            <label class="f-14 text-dark-grey mb-12" data-label="true" for="deadline">Deadline<sup class="f-14 mr-1">*</sup></label>
+                                <input type="text" class="form-control  date-picker height-35 f-14" placeholder="Select Date" value="$project->deadline->format(global_setting()->date_format)" name="deadline" id="deadline" autocomplete="off" disabled>
+                        </div>
                     </div>
 
                   {{--  <div class="col-md-6 col-lg-3">
