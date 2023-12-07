@@ -922,7 +922,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-            //   dd($request->all());
+            //   dd($request->project_challenge);
 
         //kpi distribution start from here
     //    DB::beginTransaction();
@@ -2125,7 +2125,7 @@ class ProjectController extends AccountBaseController
         $project->project_challenge = $request->project_challenge;
         $project->comments = $request->comments;
         $project->save();
-       // dd($project);
+    //    dd($project);
 
        $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
         if($actions != null)
@@ -2171,27 +2171,28 @@ class ProjectController extends AccountBaseController
         }
     }
 
-
-        if ($request->project_challenge != 'No Challenge') {
-            $project_update = Project::find($request->project_id);
-             $project->status = 'in progress';
-            $project_update->save();
-
-
-            $helper = new HelperPendingActionController();
+        if($project->status == 'not started'){
+            if ($request->project_challenge != 'No Challenge') {
+                $project_update = Project::find($request->project_id);
+                $project->status = 'in progress';
+                $project_update->save();
 
 
-            $helper->ProjectChallengeAuthorization($project);
-
-           // pending action
+                $helper = new HelperPendingActionController();
 
 
-           //pending action
-             $users = User::where('role_id', 1)->get();
-             foreach ($users as $user) {
-                 Notification::send($user, new ProjectReviewNotification($project));
-             }
-         }
+                $helper->ProjectChallengeAuthorization($project);
+
+            // pending action
+
+
+            //pending action
+                $users = User::where('role_id', 1)->get();
+                foreach ($users as $user) {
+                    Notification::send($user, new ProjectReviewNotification($project));
+                }
+            }
+        }
 
 
         // $this->logProjectActivity($project->id, 'Project accepted by ');
