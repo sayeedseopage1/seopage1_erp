@@ -79,13 +79,15 @@ export const WorkStatusConfirmationModal = ({
     }
   }
 
+  const close = () => setWorkStatusConfirmationModalIsOpen(false);
+
   return (
     <Modal isOpen={workStatusConfirmationModalIsOpen}>
        <React.Fragment>
             <div style={styles.modal_container}>
                     <div className={styles.work_status_confirmation_modal}>
                         <div className='d-flex align-items-center justify-content-end'>
-                            <Button onClick={() => setWorkStatusConfirmationModalIsOpen(false)}>
+                            <Button onClick={close}>
                                 <i className='fa-solid fa-xmark' />
                             </Button>
                         </div>
@@ -98,7 +100,7 @@ export const WorkStatusConfirmationModal = ({
                                         <ShowClock className={styles.clock} />
                                     </div>
                                     {/* Check In Form */}
-                                    <CheckInForm onCheckIn={handleCheckInButton}/>
+                                    <CheckInForm onCheckIn={handleCheckInButton} close={close}/>
                                 </React.Fragment>
                             </Switch.Case>
                             <Switch.Case condition={showReminder && data}>
@@ -221,7 +223,7 @@ export const WorkStatusConfirmationModal = ({
 
 
 // user check-in form
-const CheckInForm = ({onCheckIn}) => {
+const CheckInForm = ({onCheckIn, close}) => {
     const [location, setLocation] = React.useState("erp");
     const [workFrom, setWorkForm] = React.useState("office");
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -331,7 +333,7 @@ const CheckInForm = ({onCheckIn}) => {
                 </FormGroup>
             </Flex>
 
-            <Flex className='mt-3' justifyContent="flex-center">
+            <Flex className='mt-3' justifyContent="center">
                 <Button
                     onClick={handleClockInButton}
                     isLoading={isSubmitting}
@@ -342,7 +344,7 @@ const CheckInForm = ({onCheckIn}) => {
                 </Button>
 
                 <Button
-                    onClick={handleLogOut}
+                    onClick={close}
                     loaderTitle=''
                     variant='tertiary'
                     className='mt-auto font-weight-normal height-44 px-3 bg-info text-white'
