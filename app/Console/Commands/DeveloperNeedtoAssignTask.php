@@ -134,7 +134,7 @@ class DeveloperNeedtoAssignTask extends Command
     ->get();
 
       foreach ($deadline_tasks as $project) {
-        //$pro = Project::where('id', 324)->first();
+        $pro = Project::where('id', $project->project_id)->first();
         $current_date = Carbon::now();
         $deadline = $project->due_date;
         $difference_in_hours = $current_date->diffInHours($deadline);
@@ -148,7 +148,7 @@ class DeveloperNeedtoAssignTask extends Command
        if($difference_in_hours <= 18)
         {
             $pending_action = PendingAction::where('code','DTDA')->where('task_id',$project->id)->where('past_status',0)->count();
-            if($pending_action == 0)
+            if($pending_action == 0 && $pro->status == 'in progress')
             {
                 $helper = new HelperPendingActionController();
  
