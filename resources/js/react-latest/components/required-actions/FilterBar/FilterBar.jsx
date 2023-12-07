@@ -16,7 +16,7 @@ const FilterBar = ({ onFilter, change = false }) => {
     // ------- filter state (start) -------
     const [search, setSearch] = useState("");
     const [date, setDate] = useState({});
-    const [show, setShow] = useState(6);
+    const [show, setShow] = useState(0);
     const [view, setView] = useState("all");
     const [user, setUser] = useState(null);
     // ------- filter state (end) -------
