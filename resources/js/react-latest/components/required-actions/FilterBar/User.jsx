@@ -4,6 +4,10 @@ import { useUsers } from "../../../hooks/useUsers";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { FaAngleDown } from "react-icons/fa";
+import { User as USER } from "../../../utils/user-details";
+import Person from "../utils/Person";
+
+const currentUser = new USER(window.Laravel.user);
 
 const User = ({ user: userState, setUser, change }) => {
     const { users, usersIsFetching: isFetching } = useUsers();
@@ -22,7 +26,8 @@ const User = ({ user: userState, setUser, change }) => {
                 user.role_id === 1 ||
                 user.role_id === 2 ||
                 user.role_id === 3 ||
-                user.role_id === 8 ||
+                // user.role_id === 8 ||
+                user.role_id === currentUser.roleId ||
                 !user.role_id
             ) {
                 return false;
@@ -49,34 +54,6 @@ const User = ({ user: userState, setUser, change }) => {
     return (
         <div className={`${style.user_container}`}>
             <span className={style.user_label}>Employee:</span>
-            {/* <select
-                value={userState?.id}
-                onChange={(e) => {
-                    setUser(() => {
-                        if (window.Laravel.user.id === Number(e.target.value)) {
-                            return window.Laravel.user;
-                        } else {
-                            return showUser().find(
-                                (user) => user.id === Number(e.target.value)
-                            );
-                        }
-                    });
-                }}
-                className={`${style.user_field} ${
-                    change ? style.white_bg : style.custom_bg
-                }`}
-                // defaultValue={"Admin"}
-            >
-                <option value={window.Laravel.user.id}>Admin</option>
-                {!isFetching &&
-                    showUser().map((user) => {
-                        return (
-                            <option key={user.id} value={user.id}>
-                                {user.name}
-                            </option>
-                        );
-                    })}
-            </select> */}
 
             {/* drop down */}
             <div className={`dropdown `}>
@@ -103,16 +80,6 @@ const User = ({ user: userState, setUser, change }) => {
                         className={`${style.user_field_dropdown_container_search}`}
                         placeholder="Search user..."
                     />
-                    {/* <button
-                        className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
-                    >
-                        Action
-                    </button>
-                    <button
-                        className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
-                    >
-                        Another action
-                    </button> */}
                     <section
                         className={`${style.user_field_dropdown_container_btn_group}`}
                     >
@@ -123,7 +90,8 @@ const User = ({ user: userState, setUser, change }) => {
                             }}
                             className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
                         >
-                            Admin
+                            {/* Admin */}
+                            <Person name={"Admin"} avatar={'http://127.0.0.1:8000/user-uploads/avatar/avatar_blank.png'}/>
                         </button>
                         {!isFetching &&
                             [...filteredUser].map((user) => {
@@ -139,7 +107,8 @@ const User = ({ user: userState, setUser, change }) => {
                                         }}
                                         className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
                                     >
-                                        {user.name}
+                                        {/* {user.name} */}
+                                        <Person name={user.name} avatar={user.image_url}/>
                                     </button>
                                 );
                             })}

@@ -396,6 +396,7 @@ const ActionButton = ({ ...props }) => {
                         Primary Page Development
                     </Card.Head>
                     <Card.Body className={`${styles.card_body} pt-3 px-4`}>
+                        {console.log({row})}
                         <div className={styles.items}>
 
                             <div className={styles.item}>
