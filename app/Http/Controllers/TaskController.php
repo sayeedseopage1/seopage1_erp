@@ -3692,7 +3692,7 @@ class TaskController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' authorized by '.Auth::user()->name;
+                $past_action->message = 'Deliverables for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> were shared with the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>!';
               //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
