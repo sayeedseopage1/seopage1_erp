@@ -2124,6 +2124,7 @@ class ProjectController extends AccountBaseController
 
         $project->project_challenge = $request->project_challenge;
         $project->comments = $request->comments;
+        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         $project->save();
     //    dd($project);
 
@@ -2249,7 +2250,7 @@ class ProjectController extends AccountBaseController
         $pmproject = PMProject::where('project_id', $project->id)->first();
         $pmproject->status = 'Accepted';
         $pmproject->save();
-        $project->project_summary = $request->proejct_summary;
+      //  $project->project_summary = $request->proejct_summary;
 
 
 
