@@ -922,7 +922,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-            //   dd($request->project_challenge);
+           //    dd($request->project_summary);
 
         //kpi distribution start from here
     //    DB::beginTransaction();
@@ -2002,7 +2002,6 @@ class ProjectController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->dept_status = $request->dept_status;
         $project->project_short_code = $request->project_code;
-        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         if ($project->status == 'not started') {
             $project->requirement_defined = $request->requirement_defined;
             $project->deadline_meet = $request->deadline_meet;
@@ -2031,15 +2030,8 @@ class ProjectController extends AccountBaseController
 
         }
 
-        if($request->project_summary != null)
-        {
-            $project->project_summary = $project->project_summary;
-        }else 
-        {
-            $project->project_summary = $request->project_summary;
 
-        }
-       // $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
 
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
