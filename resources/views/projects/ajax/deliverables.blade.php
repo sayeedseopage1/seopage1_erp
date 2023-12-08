@@ -178,7 +178,7 @@
             @if($project->authorization_status != 'submitted')
             <div class="row mx-3">
                 <div class="mt-3 mr-2">
-                    @if ($project->project_challenge != "No Challenge" || $project->project_challenge == null  $project->project_challenge == '')
+                    @if ($project->project_challenge != "No Challenge" || $project->project_challenge == null  || $project->project_challenge == '')
                         @if ($project->admin_authorization_status == 0)
                             <button type="button" class="btn btn-primary alertAddDeliverable"><i class="fas fa-plus"></i> Add Deliverable</button>
                         @else
