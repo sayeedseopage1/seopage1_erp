@@ -189,7 +189,7 @@
                     @include('projects.modals.deliverable_info_modal')
                 @endif
 
-              
+              @endif
                
                 @php
                     $client_revision = \App\Models\ProjectDeliverablesClientDisagree::where([
