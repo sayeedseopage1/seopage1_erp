@@ -42,7 +42,15 @@
                     @foreach ($total_tasks_assigned_this_cycle_get as $item)
                         @php
                             $project = \App\Models\Project::where('id',$item->project_id)->first();
-                            $user = \App\Models\User::where('id',$project->client_id)->first();
+                            if($project != null)
+                            {
+                                $user = \App\Models\User::where('id',$project->client_id)->first();
+
+                            }else 
+                            {
+                                $user = null;
+                            }
+                            
                             $taskboard_column = \App\Models\TaskboardColumn::where('id',$item->board_column_id)->first();
                         @endphp
                     <tr>
@@ -56,7 +64,7 @@
                             @endif
                         </td>
                         <td>
-                            @if($item->independent_task_status == 0)
+                            @if($user != null)
                             <a href="{{ route('clients.show',$user->id) }}">{{ $user->name }}</a>
                             @else 
                             {{$item->client_name}}
