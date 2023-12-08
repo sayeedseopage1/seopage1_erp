@@ -2122,13 +2122,14 @@ class ProjectController extends AccountBaseController
             $project->membersMany()->sync($request->member_id);
         }
 
-
+        if($project->status == 'not started'){
         $project->project_challenge = $request->project_challenge;
         if($request->project_challenge != 'No Challenge' || $request->project_challenge != null)
         {
             $project->admin_authorization_status = 0;
 
         }
+    }
         $project->comments = $request->comments;
        // $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         $project->save();
