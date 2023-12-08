@@ -49,17 +49,17 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->heading }}</td>
                         <td>
-                            @if($task->independent_task_status == 0)
+                            @if($item->independent_task_status == 0)
                             <a href="{{ route('projects.show',$project->id) }}">{{ $project->project_name }}</a>
                             @else 
                             -- 
                             @endif
                         </td>
                         <td>
-                            @if($task->independent_task_status == 0)
+                            @if($item->independent_task_status == 0)
                             <a href="{{ route('clients.show',$user->id) }}">{{ $user->name }}</a>
                             @else 
-                            {{$task->client_name}}
+                            {{$item->client_name}}
 
                             @endif
                         </td>
