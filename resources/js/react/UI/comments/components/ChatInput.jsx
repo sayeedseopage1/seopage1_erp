@@ -31,6 +31,7 @@ const ChatInput = ({ setScroll }) => {
     } = useCommentContext();
 
     const handleSendComment = () => {
+        console.log({comment:editorHtml,files,mentioned:mentionedComment});
         Swal.fire({
             icon: "success",
             title: "Comment Sent",
@@ -279,6 +280,16 @@ function CommentEditor({
             quill.off("text-change"); // Optional: Unsubscribe from any event listeners
         };
     }, [show]);
+    
+const atValues = [
+    { id: 1, value: 'Fredrik Sundqvist' },
+    { id: 2, value: 'Patrik Sjölin' },
+  ];
+  const hashValues = [
+    { id: 3, value: 'Fredrik Sundqvist 2' },
+    { id: 4, value: 'Patrik Sjölin 2' },
+  ];
+  
 
     async function suggestPeople(searchTerm) {
         const allPeople = [
@@ -300,10 +311,36 @@ function CommentEditor({
         //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
         //     mentionDenotationChars: ["@", "#"],
         //     source: async function (searchTerm, renderList) {
+        //         console.log({searchTerm, renderList});
         //         const matchedPeople = await suggestPeople(searchTerm);
         //         renderList(matchedPeople);
         //     },
         // },
+        // mention: {
+        //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+        //     mentionDenotationChars: ['@', '#'],
+        //     source: function (searchTerm, renderList, mentionChar) {
+        //       let values;
+      
+        //       if (mentionChar === '@') {
+        //         values = atValues;
+        //       } else {
+        //         values = hashValues;
+        //       }
+      
+        //       if (searchTerm.length === 0) {
+        //         renderList(values, searchTerm);
+        //       } else {
+        //         const matches = [];
+        //         for (let i = 0; i < values.length; i++)
+        //           if (
+        //             ~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
+        //           )
+        //             matches.push(values[i]);
+        //         renderList(matches, searchTerm);
+        //       }
+        //     },
+        //   },
     };
 
     const formats = [
@@ -355,6 +392,14 @@ function CommentEditor({
                 modules={{ ...modules }}
                 formats={formats}
                 placeholder="Write your comment..."
+                // onKeyUp={(e) => {
+                //     console.log(e, quillRef?.current);
+                //     if (quillRef?.current?.editor) {
+                //       const delta = quillRef.current.editor.getContents();
+                //       const html = quillRef.current.editor.root.innerHTML;
+                //       console.log({ delta, html });
+                //     }
+                //   }}
             />
             <span
                 // onClick={() => setShowEmoji((prev) => !prev)}

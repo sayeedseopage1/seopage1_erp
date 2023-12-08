@@ -25,11 +25,11 @@ import { HiReply } from "react-icons/hi";
 import { TbMessage2Check } from "react-icons/tb";
 import { MdContentCopy, MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-import { useParams } from "react-router-dom";
-import commentDemoData from "./_Data/commentDemoData";
 import _ from "lodash";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
+import isCurrentUser from "./utils/isCurrentUser";
+import CommentsPlaceholder from "./utils/CommentsPlaceholder";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -44,20 +44,14 @@ export function useCommentContext() {
     return useContext(CommentContext);
 }
 
-const comments = commentDemoData(20);
-
-export const isCurrentUserComment = (comment) => {
-    return comment?.id % 3 !== 0;
-};
-
 const CommentsBody = ({
-    close,
-    // comments,
     fullScreenView,
     setFullScreenView,
+    close,
+    comments,
+    loading,
+    refetch,
 }) => {
-    const param = useParams();
-    // console.log({ param });
     const chatbottom_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchText, setSearchText] = useState("");
@@ -65,6 +59,7 @@ const CommentsBody = ({
     const [commentIndex, setCommentIndex] = useState(0);
     const [searchIndexes, setSearchIndexes] = useState([]);
     const [animation, setAnimation] = useState(false);
+    const [isloading, setIsLoading] = useState(false);
 
     // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
@@ -113,7 +108,7 @@ const CommentsBody = ({
                 <MdOutlineContentCopy className={`context_icons`} />
                 <span className={`context_title`}>Copy</span>
             </ContextMenuItem>
-            {isCurrentUserComment(contextHolder) ? (
+            {isCurrentUser(contextHolder?.user_id) ? (
                 <ContextMenuItem
                 // onSelect={viewSource}
                 >
@@ -143,6 +138,7 @@ const CommentsBody = ({
         return "";
     };
 
+    // search result filtering
     useEffect(() => {
         // console.log("searchText :", searchText);
         if (searchText) {
@@ -171,13 +167,14 @@ const CommentsBody = ({
         }
     }, [searchText]);
 
+    // scroll to bottom feature
     useEffect(() => {
         // chatbottom_ref.current?.scrollIntoView();
         chatbottom_ref.current?.scrollIntoView({
             // behavior: "smooth",
             block: "end",
         });
-    }, [scroll]);
+    }, [scroll,loading]);
 
     // useEffect(() => {
     //     console.log({ contextHolder });
@@ -187,6 +184,7 @@ const CommentsBody = ({
     //     console.log({ mentionedComment });
     // }, [mentionedComment]);
 
+    // scrolling to linked comment of search result
     useEffect(() => {
         if (commentIndex) {
             document
@@ -204,6 +202,7 @@ const CommentsBody = ({
     }, [commentIndex]);
 
     const handleCopyComments = () => {
+        // setIsLoading(true);
         const allSelectedComments = _.orderBy(
             Object.values(selectedComments),
             ["id"],
@@ -212,8 +211,12 @@ const CommentsBody = ({
         // console.log({ allSelectedComments });
         const allSelectedCommentsString = allSelectedComments.reduce(
             (total, comment, i, arr) => {
-                total += `${getTextContent(comment.comment)}\n\n${comment?.added_by_name}, ${dayjs(comment?.created_at).format("MMM DD, YYYY, hh:mm A")}`;
-                
+                total += `${getTextContent(comment.comment)}\n\n${
+                    comment?.added_by_name
+                }, ${dayjs(comment?.created_at).format(
+                    "MMM DD, YYYY, hh:mm A"
+                )}`;
+
                 if (i < arr.length - 1) {
                     total += "\n\n\n";
                 }
@@ -233,6 +236,7 @@ const CommentsBody = ({
                     timerProgressBar: true,
                 });
                 setSecletedComments({});
+                setScroll(prev=>!prev);
             })
             .catch(() => {
                 Swal.fire({
@@ -242,8 +246,25 @@ const CommentsBody = ({
                     showConfirmButton: true,
                     timerProgressBar: true,
                 });
+            }).finally(()=>{
+            //   setIsLoading(false);
             });
     };
+
+    const handleDeleteComments = () => {
+        setIsLoading(true),
+        Swal.fire({
+            icon: "success",
+            title: "Comments deleted successfully",
+            timer: 2000,
+            showConfirmButton: true,
+            timerProgressBar: true,
+        });
+        setSecletedComments({});
+        // setScroll(prev=>!prev);
+        refetch();
+        setIsLoading(false);
+    }
 
     return (
         <CommentContext.Provider
@@ -269,7 +290,10 @@ const CommentsBody = ({
             >
                 <header className={style.commentsBody_header}>
                     {/* refresh btn */}
-                    <span className={style.commentsBody_header_btn}>
+                    <span
+                        onClick={refetch}
+                        className={style.commentsBody_header_btn}
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="28"
@@ -482,35 +506,44 @@ const CommentsBody = ({
                     // ref={chatbottom_ref}
                     className={`${style.commentsBody_commentArea}`}
                 >
-                    {allComments.map((comment, i) => {
-                        return (
-                            <SingleChat
-                                idMatch={
-                                    comment.id ===
-                                    searchIndexes[
-                                        searchIndexes.length - commentIndex
-                                    ]
-                                }
-                                id={comment.id}
-                                // comment_text_id={`${comment.id}_comment`}
-                                setScroll={setScroll}
-                                onContextMenu={onContextMenu}
-                                onKeyDown={onKeyDown}
-                                key={i}
-                                comment={comment}
-                                prevComment={i ? allComments[i - 1] : null}
+                    {(loading || isloading) ? (
+                        <CommentsPlaceholder />
+                    ) : (
+                        <>
+                            {allComments.map((comment, i) => {
+                                return (
+                                    <SingleChat
+                                        idMatch={
+                                            comment.id ===
+                                            searchIndexes[
+                                                searchIndexes.length -
+                                                    commentIndex
+                                            ]
+                                        }
+                                        id={comment.id}
+                                        // comment_text_id={`${comment.id}_comment`}
+                                        setScroll={setScroll}
+                                        onContextMenu={onContextMenu}
+                                        onKeyDown={onKeyDown}
+                                        key={i}
+                                        comment={comment}
+                                        prevComment={
+                                            i ? allComments[i - 1] : null
+                                        }
+                                    />
+                                );
+                            })}
+                            <div
+                                style={{
+                                    minHeight: "10px",
+                                    height: "10px",
+                                    backgroundColor: "transparent",
+                                }}
+                                ref={chatbottom_ref}
                             />
-                        );
-                    })}
-                    <div
-                        style={{
-                            minHeight: "10px",
-                            height: "10px",
-                            backgroundColor: "transparent",
-                        }}
-                        ref={chatbottom_ref}
-                    />
-                    {contextMenu}
+                            {contextMenu}
+                        </>
+                    )}
                 </main>
 
                 <footer className={`${style.commentsBody_inputField}`}>
@@ -544,12 +577,13 @@ const CommentsBody = ({
                             </span>
                         </section>
                         {Object.values(selectedComments).every((comment) => {
-                            return isCurrentUserComment(comment);
+                            return isCurrentUser(comment?.user_id);
                         }) ? (
                             <section
                                 className={`${style.comments_selected_action_controller_btn}`}
                             >
                                 <span
+                                    onClick={handleDeleteComments}
                                     className={`${style.comments_selected_action_controller_btn_icon}`}
                                 >
                                     {/* icon 2 */}

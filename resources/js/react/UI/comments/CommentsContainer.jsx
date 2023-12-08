@@ -4,17 +4,31 @@ import CustomModal from "./components/CustomModal";
 import Modal from "./components/Modal";
 import CommentsBody from "./CommentsBody";
 import { useState } from "react";
+import commentDemoData from "./_Data/commentDemoData";
+import { useParams } from "react-router-dom";
+import { useGetCommentsQuery } from "../../services/api/commentsApiSlice";
+
+const demoComments = commentDemoData(20);
 
 const CommentsContainer = ({
     toggleRef = null,
     isOpen,
     close,
     task,
-    comments = [],
+    comments = null,
     onCommentPost,
 }) => {
+    // ---------------------------------------------------------
+    const param = useParams();
+    // console.log({ param });
+
+    // ---------------------------------------------------------
+
     const { width } = useWindowSize();
     const [fullScreenView, setFullScreenView] = useState(false);
+    const { data, isFetching, isLoading, refetch } = useGetCommentsQuery(
+        param?.taskId
+    );
 
     if (fullScreenView) {
         return (
@@ -34,7 +48,10 @@ const CommentsContainer = ({
                                 fullScreenView={fullScreenView}
                                 setFullScreenView={setFullScreenView}
                                 close={close}
-                                comments={comments}
+                                // comments={param?.taskId?data:comments}
+                                comments={demoComments}
+                                loading={isFetching || isLoading}
+                                refetch={refetch}
                             />
                         )}
                         {/* modal body (end) */}
@@ -79,7 +96,10 @@ const CommentsContainer = ({
                                 fullScreenView={fullScreenView}
                                 setFullScreenView={setFullScreenView}
                                 close={close}
-                                comments={comments}
+                                // comments={param?.taskId?data:comments}
+                                comments={demoComments}
+                                loading={isFetching || isLoading}
+                                refetch={refetch}
                             />
                         )}
                         {/* modal body (end) */}
@@ -120,7 +140,10 @@ const CommentsContainer = ({
                                         fullScreenView={fullScreenView}
                                         setFullScreenView={setFullScreenView}
                                         close={close}
-                                        comments={comments}
+                                        // comments={param?.taskId?data:comments}
+                                        comments={demoComments}
+                                        loading={isFetching || isLoading}
+                                        refetch={refetch}
                                     />
                                 )}
                                 {/* modal body (end) */}

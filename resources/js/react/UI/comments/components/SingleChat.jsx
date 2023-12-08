@@ -5,11 +5,15 @@ import { HiReply } from "react-icons/hi";
 import { TbMessage2Check } from "react-icons/tb";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-import { FaFile } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaFile } from "react-icons/fa6";
 import _ from "lodash";
-import { isCurrentUserComment, useCommentContext } from "../CommentsBody";
+import { useCommentContext } from "../CommentsBody";
 import dayjs from "dayjs";
 import HandleFileIcon from "../utils/HandleFileIcon";
+import isCurrentUser from "../utils/isCurrentUser";
+import { User } from "../utils/user-details";
+
+const currentUser = new User(window.Laravel.user);
 
 const SingleChat = ({
     id,
@@ -26,6 +30,7 @@ const SingleChat = ({
         setSecletedComments,
     } = useCommentContext();
     const [showCommentMenu, setShowCommentMenu] = useState(false);
+    const [showDeletedComment, setShowDeletedComment] = useState(false);
     const menuRef = useRef(null);
     const menuBtnRef = useRef(null);
 
@@ -33,7 +38,7 @@ const SingleChat = ({
         setShowCommentMenu(false);
     };
 
-    // console.log({ comment });
+    // comment more btn clicked menu
     useEffect(() => {
         const handleClickOutside = (event) => {
             // console.log(event.target);
@@ -66,24 +71,119 @@ const SingleChat = ({
 
     // comment sender info showing handler
     const handleSenderInfo = ({ currentComment, previousComment }) => {
-        if (true) {
+        if (
+            Number(currentComment?.user_id) === Number(previousComment?.user_id)
+        ) {
+            if (
+                dayjs(currentComment?.created_at).diff(
+                    dayjs(previousComment?.created_at),
+                    "minutes"
+                ) <= 10
+            ) {
+                return <></>;
+            } else {
+                return (
+                    <span
+                        style={{
+                            alignSelf: isCurrentUser(comment?.user_id)
+                                ? "flex-end"
+                                : "flex-start",
+                        }}
+                        className={`${style.singleChat_comment_card_text_time}`}
+                    >
+                        {/* 2:54 PM */}
+                        {`${dayjs(comment?.created_at).format("hh:mm A")}`}
+                    </span>
+                );
+            }
         } else {
+            return (
+                <span
+                    style={{
+                        alignSelf: isCurrentUser(comment?.user_id)
+                            ? "flex-end"
+                            : "flex-start",
+                    }}
+                    className={`${style.singleChat_comment_card_text_time}`}
+                >
+                    {/* Nafis, Nov 16,2023, 2:54 PM */}
+                    {`${comment?.added_by_name}, ${dayjs(
+                        comment?.created_at
+                    ).format("MMM DD, YYYY, hh:mm A")}`}
+                </span>
+            );
         }
-        return (
-            <span
-                style={{
-                    alignSelf: isCurrentUserComment(comment)
-                        ? "flex-end"
-                        : "flex-start",
-                }}
-                className={`${style.singleChat_comment_card_text_time}`}
-            >
-                {/* Nafis, Nov 16,2023, 2:54 PM */}
-                {`${comment?.added_by_name}, ${dayjs(
-                    comment?.created_at
-                ).format("MMM DD, YYYY, hh:mm A")}`}
-            </span>
-        );
+    };
+
+    // comment sender avator showing handler
+    const handleSenderAvator = ({ currentComment, previousComment }) => {
+        if (
+            Number(currentComment?.user_id) === Number(previousComment?.user_id)
+        ) {
+            if (isCurrentUser(comment?.user_id)) {
+                return <></>;
+            } else {
+                return (
+                    <span
+                        style={{
+                            visibility: "hidden",
+                        }}
+                        className={`${style.singleChat_comment_card_avator}`}
+                    ></span>
+                );
+            }
+        } else {
+            if (isCurrentUser(comment?.user_id)) {
+                return <></>;
+            } else {
+                return (
+                    <span
+                        className={`${style.singleChat_comment_card_avator}`}
+                    ></span>
+                );
+            }
+        }
+    };
+
+    // comment field top space handler
+    const handleTopSpace = ({ currentComment, previousComment }) => {
+        if (
+            Number(currentComment?.user_id) === Number(previousComment?.user_id)
+        ) {
+            if (
+                dayjs(currentComment?.created_at).diff(
+                    dayjs(previousComment?.created_at),
+                    "minutes"
+                ) <= 10
+            ) {
+                return (
+                    <section
+                        style={{
+                            height: "5px",
+                            // backgroundColor: "black"
+                        }}
+                    />
+                );
+            } else {
+                return (
+                    <section
+                        style={{
+                            height: "10px",
+                            // backgroundColor: "black"
+                        }}
+                    />
+                );
+            }
+        } else {
+            return (
+                <section
+                    style={{
+                        height: "10px",
+                        // backgroundColor: "black"
+                    }}
+                />
+            );
+        }
     };
 
     const handleSelect = () => {
@@ -106,23 +206,29 @@ const SingleChat = ({
             id={id}
             className={`${style.singleChat}`}
             style={{
-                alignSelf: isCurrentUserComment(comment)
+                alignSelf: isCurrentUser(comment?.user_id)
                     ? "flex-end"
                     : "flex-start",
             }}
         >
-            <section
-                style={{
-                    height: "10px",
-                    // backgroundColor: "black"
-                }}
-            />
+            {
+                // <section
+                //     style={{
+                //         height: "10px",
+                //         // backgroundColor: "black"
+                //     }}
+                // />
+                handleTopSpace({
+                    currentComment: comment,
+                    previousComment: prevComment,
+                })
+            }
             <div
                 style={{
                     display: "inline-flex",
                     // border:"solid",
                     gap: "0 6px",
-                    flexDirection: isCurrentUserComment(comment)
+                    flexDirection: isCurrentUser(comment?.user_id)
                         ? "row-reverse"
                         : "row",
                 }}
@@ -149,11 +255,15 @@ const SingleChat = ({
                     <></>
                 )}
                 <section className={`${style.singleChat_comment_card}`}>
-                    {!isCurrentUserComment(comment) && (
+                    {/* {!isCurrentUser(comment?.user_id) && (
                         <span
                             className={`${style.singleChat_comment_card_avator}`}
                         ></span>
-                    )}
+                    )} */}
+                    {handleSenderAvator({
+                        currentComment: comment,
+                        previousComment: prevComment,
+                    })}
                     <article
                         className={`${style.singleChat_comment_card_text}`}
                     >
@@ -164,261 +274,459 @@ const SingleChat = ({
                         })}
 
                         {/* comment message box */}
-                        <div
-                            style={{
-                                alignSelf: isCurrentUserComment(comment)
-                                    ? "flex-end"
-                                    : "flex-start",
-                            }}
-                            className={`${
-                                style.singleChat_comment_card_text_container
-                            } ${idMatch ? `${style.singleChat_match}` : ""}`}
-                        >
-                            {/* mentioned comment */}
-                            {comment?.mention_comment ? (
-                                <div
-                                    onContextMenu={(e) => {
-                                        onContextMenu(e);
-                                        setContextHolder(comment);
-                                    }}
-                                    onKeyDown={onKeyDown}
-                                    style={{
-                                        borderRadius: comment?.comment
-                                            ? "5px 5px 0 0"
-                                            : "5px",
-                                        borderBottom: comment?.comment
-                                            ? "solid 1px hsla(0, 0%, 44%, 0.13)"
-                                            : "0.15px solid #aaaaaa",
-                                    }}
-                                    className={`${style.singleChat_comment_card_mentioned_comment}`}
-                                >
-                                    <HiReply
-                                        className={`${style.chatInput_mentioned_comment_icon}`}
-                                    />
-                                    <article
-                                        className={`${style.chatInput_mentioned_comment_text_area}`}
-                                    >
-                                        {comment?.mention_comment?.comment ? (
-                                            <span
-                                                className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
-                                            >
-                                                {
-                                                    comment?.mention_comment
-                                                        .comment
-                                                }
-                                            </span>
-                                        ) : (
-                                            <></>
-                                        )}
-                                        {comment?.mention_comment?.files
-                                            ?.length ? (
-                                            <span
-                                                className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
-                                            >
-                                                {comment?.mention_comment?.files?.map(
-                                                    (file, i) => {
-                                                        return (
-                                                            <div
-                                                                key={i}
-                                                                className={`${style.chatInput_filePreview__file} shadow-sm`}
-                                                            >
-                                                                <HandleFileIcon
-                                                                    fileName={
-                                                                        file
-                                                                    }
-                                                                />
-                                                            </div>
-                                                        );
-                                                    }
-                                                )}
-                                            </span>
-                                        ) : (
-                                            <></>
-                                        )}
-                                        <span
-                                            style={{ fontStyle: "italic" }}
-                                            className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
-                                        >
-                                            {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                                            {`${
-                                                comment?.mention_comment
-                                                    ?.added_by_name
-                                            }, ${dayjs(
-                                                comment?.mention_comment
-                                                    ?.created_at
-                                            ).format("MMM DD, YYYY, hh:mm A")}`}
-                                        </span>
-                                    </article>
-                                </div>
-                            ) : (
-                                <></>
-                            )}
-
-                            {/* comment text */}
-                            {comment?.comment ? (
-                                <div
-                                    onContextMenu={(e) => {
-                                        onContextMenu(e);
-                                        setContextHolder(comment);
-                                    }}
-                                    onKeyDown={onKeyDown}
-                                    style={{
-                                        position: "relative",
-                                        borderRadius: comment?.mention_comment
-                                            ? "0 0 5px 5px"
-                                            : "5px",
-                                        borderTop: comment?.mention_comment
-                                            ? "none"
-                                            : "0.15px solid #aaaaaa",
-                                    }}
-                                    className={`${style.singleChat_comment_card_text_message}`}
-                                >
-                                    {comment.comment}
-                                </div>
-                            ) : (
-                                <></>
-                            )}
-
-                            {/* file will be shown here */}
-                            {comment?.files ? (
-                                <FileView
-                                    onContextMenu={(e) => {
-                                        onContextMenu(e);
-                                        setContextHolder(comment);
-                                    }}
-                                    onKeyDown={onKeyDown}
-                                    isCurrentUser={isCurrentUserComment(
-                                        comment
-                                    )}
-                                    files={comment.files}
-                                    topMargin={!!comment?.comment}
-                                />
-                            ) : (
-                                <></>
-                            )}
-
-                            {/* comment more btn */}
-                            <span
-                                onClick={() => {
-                                    // setScroll((prev) => !prev);
-                                    setShowCommentMenu((prev) => !prev);
-                                }}
-                                style={{
-                                    left: isCurrentUserComment(comment)
-                                        ? "-14px"
-                                        : "auto",
-                                    right: isCurrentUserComment(comment)
-                                        ? "auto"
-                                        : "-14px",
-                                }}
-                                className={`${style.singleChat_comment_card_text_more_btn}`}
-                                ref={menuBtnRef}
+                        {comment?.is_deleted ? (
+                            <div
+                                title={`${dayjs(comment?.created_at).format(
+                                    "MMM DD, YYYY, hh:mm A"
+                                )}`}
+                                className={`${style.single_comment_deleted_container}`}
                             >
-                                <FiMoreVertical
+                                <section
                                     style={{
-                                        height: "100%",
-                                        width: "100%",
+                                        borderBottom: showDeletedComment
+                                            ? "0.15px solid #f17b7d86"
+                                            : "0",
                                     }}
-                                />
-                            </span>
-
-                            {/* comment more options */}
-                            {showCommentMenu ? (
-                                <div
-                                    ref={menuRef}
-                                    style={{
-                                        left: isCurrentUserComment(comment)
-                                            ? "-98px"
-                                            : "auto",
-                                        right: isCurrentUserComment(comment)
-                                            ? "auto"
-                                            : "-98px",
-                                    }}
-                                    className={
-                                        style.singleChat_comment_card_text_more_options
-                                    }
+                                    className={`${style.single_comment_deleted_title}`}
                                 >
+                                    <span>This Comment has been deleted</span>
+                                    {currentUser.roleId === 1 ||
+                                    currentUser.roleId === 8 ? (
+                                        showDeletedComment ? (
+                                            <FaEyeSlash
+                                                onClick={() =>
+                                                    setShowDeletedComment(false)
+                                                }
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        ) : (
+                                            <FaEye
+                                                onClick={() =>
+                                                    setShowDeletedComment(true)
+                                                }
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        )
+                                    ) : (
+                                        <></>
+                                    )}
+                                </section>
+                                {showDeletedComment ? (
                                     <section
-                                        onClick={() => {
-                                            setShowCommentMenu(false);
-                                            setMentionedComment(comment);
+                                        className={`${style.single_comment_deleted_comment_body}`}
+                                    >
+                                        {/* mentioned comment */}
+                                        {comment?.mention_comment ? (
+                                            <div
+                                                // onContextMenu={(e) => {
+                                                //     onContextMenu(e);
+                                                //     setContextHolder(comment);
+                                                // }}
+                                                // onKeyDown={onKeyDown}
+                                                style={{
+                                                    // borderRadius:
+                                                    //     comment?.comment
+                                                    //         ? "5px 5px 0 0"
+                                                    //         : "5px",
+                                                    backgroundColor: "#FFF3F4",
+                                                    color: "#F17B7C",
+                                                    // border: "0.15px solid #f17b7dbb",
+                                                    border: "none",
+                                                    // borderBottom:
+                                                    //     comment?.comment
+                                                    //         ? "solid 1px #f17b7dbb"
+                                                    //         : "solid 0.15px #f17b7dbb",
+                                                }}
+                                                className={`${style.singleChat_comment_card_mentioned_comment}`}
+                                            >
+                                                <HiReply
+                                                    style={{ color: "#F17B7C" }}
+                                                    className={`${style.chatInput_mentioned_comment_icon}`}
+                                                />
+                                                <article
+                                                    className={`${style.chatInput_mentioned_comment_text_area}`}
+                                                >
+                                                    {comment?.mention_comment
+                                                        ?.comment ? (
+                                                        <span
+                                                            className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
+                                                        >
+                                                            {
+                                                                comment
+                                                                    ?.mention_comment
+                                                                    .comment
+                                                            }
+                                                        </span>
+                                                    ) : (
+                                                        <></>
+                                                    )}
+                                                    {comment?.mention_comment
+                                                        ?.files?.length ? (
+                                                        <span
+                                                            className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
+                                                        >
+                                                            {comment?.mention_comment?.files?.map(
+                                                                (file, i) => {
+                                                                    return (
+                                                                        <div
+                                                                            key={
+                                                                                i
+                                                                            }
+                                                                            className={`${style.chatInput_filePreview__file} shadow-sm`}
+                                                                            style={{
+                                                                                color: "#F17B7C",
+                                                                            }}
+                                                                        >
+                                                                            <HandleFileIcon
+                                                                                fileName={
+                                                                                    file
+                                                                                }
+                                                                            />
+                                                                        </div>
+                                                                    );
+                                                                }
+                                                            )}
+                                                        </span>
+                                                    ) : (
+                                                        <></>
+                                                    )}
+                                                    <span
+                                                        style={{
+                                                            fontStyle: "italic",
+                                                        }}
+                                                        className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
+                                                    >
+                                                        {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
+                                                        {`${
+                                                            comment
+                                                                ?.mention_comment
+                                                                ?.added_by_name
+                                                        }, ${dayjs(
+                                                            comment
+                                                                ?.mention_comment
+                                                                ?.created_at
+                                                        ).format(
+                                                            "MMM DD, YYYY, hh:mm A"
+                                                        )}`}
+                                                    </span>
+                                                </article>
+                                            </div>
+                                        ) : (
+                                            <></>
+                                        )}
+
+                                        {/* comment text */}
+                                        {comment?.comment ? (
+                                            <div
+                                                // onContextMenu={(e) => {
+                                                //     onContextMenu(e);
+                                                //     setContextHolder(comment);
+                                                // }}
+                                                // onKeyDown={onKeyDown}
+                                                style={{
+                                                    backgroundColor: "#FFF3F4",
+                                                    color: "#F17B7C",
+                                                    position: "relative",
+                                                    // borderRadius:
+                                                    //     comment?.mention_comment
+                                                    //         ? "0 0 5px 5px"
+                                                    //         : "5px",
+                                                    // border: "0.15px solid #f17b7dbb",
+                                                    // borderTop:
+                                                    // comment?.mention_comment
+                                                    // ? "none"
+                                                    // : "0.15px solid #f17b7dbb",
+                                                    border: "none",
+                                                }}
+                                                className={`${style.singleChat_comment_card_text_message}`}
+                                            >
+                                                {comment.comment}
+                                            </div>
+                                        ) : (
+                                            <></>
+                                        )}
+
+                                        {/* file will be shown here */}
+                                        {comment?.files ? (
+                                            <FileView
+                                                // onContextMenu={(e) => {
+                                                //     onContextMenu(e);
+                                                //     setContextHolder(comment);
+                                                // }}
+                                                // onKeyDown={onKeyDown}
+                                                isCurrentUser={isCurrentUser(
+                                                    comment?.user_id
+                                                )}
+                                                files={comment.files}
+                                                topMargin={!!comment?.comment}
+                                            />
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </section>
+                                ) : (
+                                    <></>
+                                )}
+                            </div>
+                        ) : (
+                            <div
+                                title={`${dayjs(comment?.created_at).format(
+                                    "MMM DD, YYYY, hh:mm A"
+                                )}`}
+                                style={{
+                                    alignSelf: isCurrentUser(comment?.user_id)
+                                        ? "flex-end"
+                                        : "flex-start",
+                                }}
+                                className={`${
+                                    style.singleChat_comment_card_text_container
+                                } ${
+                                    idMatch ? `${style.singleChat_match}` : ""
+                                }`}
+                            >
+                                {/* mentioned comment */}
+                                {comment?.mention_comment ? (
+                                    <div
+                                        onContextMenu={(e) => {
+                                            onContextMenu(e);
+                                            setContextHolder(comment);
                                         }}
+                                        onKeyDown={onKeyDown}
+                                        style={{
+                                            borderRadius: comment?.comment
+                                                ? "5px 5px 0 0"
+                                                : "5px",
+                                            borderBottom: comment?.comment
+                                                ? "solid 1px hsla(0, 0%, 44%, 0.13)"
+                                                : "0.15px solid #aaaaaa",
+                                        }}
+                                        className={`${style.singleChat_comment_card_mentioned_comment}`}
                                     >
                                         <HiReply
-                                            className={`${style.context_icons}`}
+                                            className={`${style.chatInput_mentioned_comment_icon}`}
                                         />
-                                        <span
-                                            className={`${style.context_title}`}
+                                        <article
+                                            className={`${style.chatInput_mentioned_comment_text_area}`}
                                         >
-                                            Reply
-                                        </span>
-                                    </section>
+                                            {comment?.mention_comment
+                                                ?.comment ? (
+                                                <span
+                                                    className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
+                                                >
+                                                    {
+                                                        comment?.mention_comment
+                                                            .comment
+                                                    }
+                                                </span>
+                                            ) : (
+                                                <></>
+                                            )}
+                                            {comment?.mention_comment?.files
+                                                ?.length ? (
+                                                <span
+                                                    className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
+                                                >
+                                                    {comment?.mention_comment?.files?.map(
+                                                        (file, i) => {
+                                                            return (
+                                                                <div
+                                                                    key={i}
+                                                                    className={`${style.chatInput_filePreview__file} shadow-sm`}
+                                                                >
+                                                                    <HandleFileIcon
+                                                                        fileName={
+                                                                            file
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                            );
+                                                        }
+                                                    )}
+                                                </span>
+                                            ) : (
+                                                <></>
+                                            )}
+                                            <span
+                                                style={{ fontStyle: "italic" }}
+                                                className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
+                                            >
+                                                {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
+                                                {`${
+                                                    comment?.mention_comment
+                                                        ?.added_by_name
+                                                }, ${dayjs(
+                                                    comment?.mention_comment
+                                                        ?.created_at
+                                                ).format(
+                                                    "MMM DD, YYYY, hh:mm A"
+                                                )}`}
+                                            </span>
+                                        </article>
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
 
-                                    <section
-                                        onClick={() => {
-                                            setShowCommentMenu(false);
-                                            handleSelect();
+                                {/* comment text */}
+                                {comment?.comment ? (
+                                    <div
+                                        onContextMenu={(e) => {
+                                            onContextMenu(e);
+                                            setContextHolder(comment);
                                         }}
-                                    >
-                                        <TbMessage2Check
-                                            className={`${style.context_icons}`}
-                                        />
-                                        <span
-                                            className={`${style.context_title}`}
-                                        >
-                                            Select Message
-                                        </span>
-                                    </section>
-
-                                    <section
-                                        onClick={() => {
-                                            setShowCommentMenu(false);
+                                        onKeyDown={onKeyDown}
+                                        style={{
+                                            position: "relative",
+                                            borderRadius:
+                                                comment?.mention_comment
+                                                    ? "0 0 5px 5px"
+                                                    : "5px",
+                                            borderTop: comment?.mention_comment
+                                                ? "none"
+                                                : "0.15px solid #aaaaaa",
                                         }}
+                                        className={`${style.singleChat_comment_card_text_message}`}
                                     >
-                                        <MdOutlineContentCopy
-                                            className={`${style.context_icons}`}
-                                        />
-                                        <span
-                                            className={`${style.context_title}`}
-                                        >
-                                            Copy
-                                        </span>
-                                    </section>
+                                        {comment.comment}
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
 
-                                    {isCurrentUserComment(comment) ? (
+                                {/* file will be shown here */}
+                                {comment?.files ? (
+                                    <FileView
+                                        onContextMenu={(e) => {
+                                            onContextMenu(e);
+                                            setContextHolder(comment);
+                                        }}
+                                        onKeyDown={onKeyDown}
+                                        isCurrentUser={isCurrentUser(
+                                            comment?.user_id
+                                        )}
+                                        files={comment.files}
+                                        topMargin={!!comment?.comment}
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+
+                                {/* comment more btn */}
+                                <span
+                                    onClick={() => {
+                                        // setScroll((prev) => !prev);
+                                        setShowCommentMenu((prev) => !prev);
+                                    }}
+                                    style={{
+                                        left: isCurrentUser(comment?.user_id)
+                                            ? "-14px"
+                                            : "auto",
+                                        right: isCurrentUser(comment?.user_id)
+                                            ? "auto"
+                                            : "-14px",
+                                    }}
+                                    className={`${style.singleChat_comment_card_text_more_btn}`}
+                                    ref={menuBtnRef}
+                                >
+                                    <FiMoreVertical
+                                        style={{
+                                            height: "100%",
+                                            width: "100%",
+                                        }}
+                                    />
+                                </span>
+
+                                {/* comment more options */}
+                                {showCommentMenu ? (
+                                    <div
+                                        ref={menuRef}
+                                        style={{
+                                            left: isCurrentUser(
+                                                comment?.user_id
+                                            )
+                                                ? "-98px"
+                                                : "auto",
+                                            right: isCurrentUser(
+                                                comment?.user_id
+                                            )
+                                                ? "auto"
+                                                : "-98px",
+                                        }}
+                                        className={
+                                            style.singleChat_comment_card_text_more_options
+                                        }
+                                    >
                                         <section
                                             onClick={() => {
                                                 setShowCommentMenu(false);
+                                                setMentionedComment(comment);
                                             }}
                                         >
-                                            <IoMdCloseCircleOutline
+                                            <HiReply
                                                 className={`${style.context_icons}`}
                                             />
                                             <span
                                                 className={`${style.context_title}`}
                                             >
-                                                Remove
+                                                Reply
                                             </span>
                                         </section>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </div>
-                            ) : (
-                                <></>
-                            )}
-                        </div>
 
-                        {/* {idMatch ? <div style={{height:'10px'}} /> : <></>} */}
+                                        <section
+                                            onClick={() => {
+                                                setShowCommentMenu(false);
+                                                handleSelect();
+                                            }}
+                                        >
+                                            <TbMessage2Check
+                                                className={`${style.context_icons}`}
+                                            />
+                                            <span
+                                                className={`${style.context_title}`}
+                                            >
+                                                Select Message
+                                            </span>
+                                        </section>
 
-                        {/* file will be shown here */}
-                        {/* <FileView
-                        isCurrentUser={isCurrentUser()}
-                        files={_.fill(Array(3), {
-                            type: "doc",
-                            name: "file_name",
-                        })}
-                    /> */}
+                                        <section
+                                            onClick={() => {
+                                                setShowCommentMenu(false);
+                                            }}
+                                        >
+                                            <MdOutlineContentCopy
+                                                className={`${style.context_icons}`}
+                                            />
+                                            <span
+                                                className={`${style.context_title}`}
+                                            >
+                                                Copy
+                                            </span>
+                                        </section>
+
+                                        {isCurrentUser(comment?.user_id) ? (
+                                            <section
+                                                onClick={() => {
+                                                    setShowCommentMenu(false);
+                                                }}
+                                            >
+                                                <IoMdCloseCircleOutline
+                                                    className={`${style.context_icons}`}
+                                                />
+                                                <span
+                                                    className={`${style.context_title}`}
+                                                >
+                                                    Remove
+                                                </span>
+                                            </section>
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
+                            </div>
+                        )}
                     </article>
                 </section>
             </div>

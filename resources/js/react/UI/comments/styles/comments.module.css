@@ -186,6 +186,28 @@
   font-size: 10px;
   color: #033C7E;
 }
+.single_comment_deleted_container{
+  color: #F17B7C;
+  background-color: #FFF3F4;
+  border: 0.15px solid #F17B7C;
+  border-radius: 5px;
+  font-size: 12px;
+  overflow: hidden;
+}
+.single_comment_deleted_title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0 20px;
+  padding: 7px 11px;
+}
+.single_comment_deleted_comment_body{
+  padding: 7px 11px;
+  /* color: #f17b7d86; */
+  color: #F17B7C;
+  background-color: #FFF3F4;
+  font-size: 12px;
+}
 .singleChat_comment_card_text_container{
   position: relative;
   /* border: solid; */

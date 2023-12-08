@@ -22,13 +22,16 @@ const commentsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["COMMENTS"]
     }),
-    
+
     // update a comment
-    
-    
+
+
     // delete a comment
 
   })
 })
 
 
+
+
+export const { useGetCommentsQuery, useLazyGetCommentsQuery } = commentsApiSlice;
