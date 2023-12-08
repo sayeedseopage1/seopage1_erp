@@ -5802,6 +5802,7 @@ class TaskController extends AccountBaseController
             $task = Task::where('id', $item->task_id)->first();
             $sub_task = SubTask::where('id', $task->subtask_id)->first();
             $added_by = User::where('id', $sub_task->added_by)->first();
+            $parent_task= Task::where('id',$sub_task->task_id)->first();
             $assigned_to = User::where('id', $sub_task->assigned_to)->first();
             $project = Project::where('id', $task->project_id)->first();
             if ($project != null) {
@@ -5813,9 +5814,10 @@ class TaskController extends AccountBaseController
                 'id' => $item->id,
                 'page_name' => $item->page_name,
                 'page_url' => $item->page_url,
-                'task_id' => $task->id,
-                'task' => $task->heading,
-                'sub_task_id' => $sub_task->id,
+            //    'task_id' => $task->id,
+                'task' => $parent_task->heading,
+                'parent_task_id' => $parent_task->id,
+                'sub_task_id' => $task->id,
                 'sub_task' => $sub_task->title,
                 'added_by_id' => $added_by->id,
                 'added_by_name' => $added_by->name,
@@ -5829,6 +5831,8 @@ class TaskController extends AccountBaseController
                 'client_name' => $client->name ?? '',
                 'client_image' => $client->image ?? '',
                 'authorization_status' => $item->authorization_status,
+                'created_at' => $item->created_at,
+                'description'=> $task->description,
                 'updated_at' => $item->updated_at
             ];
         }
