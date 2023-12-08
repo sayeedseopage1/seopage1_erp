@@ -2124,7 +2124,7 @@ class ProjectController extends AccountBaseController
 
         $project->project_challenge = $request->project_challenge;
         $project->comments = $request->comments;
-        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+    //    $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         $project->save();
     //    dd($project);
 
