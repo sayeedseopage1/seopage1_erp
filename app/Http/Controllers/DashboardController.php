@@ -561,13 +561,14 @@ class DashboardController extends AccountBaseController
     }
     public function clockInStatus()
     {
+    //    / dd()
         $user_id = Auth::user()->id;
         $today = Carbon::now();
 
         if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
             $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
             $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-            
+        //    / dd($user,$userClockIn);
 
             // dd($userClockIn);
             $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
@@ -635,6 +636,7 @@ class DashboardController extends AccountBaseController
 
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
+        $userDailyTaskSubmission = true;
 
         return response()->json([
             'data' => [
