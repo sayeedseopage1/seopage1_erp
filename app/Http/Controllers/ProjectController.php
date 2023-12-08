@@ -2124,6 +2124,11 @@ class ProjectController extends AccountBaseController
 
 
         $project->project_challenge = $request->project_challenge;
+        if($request->project_challenge != 'No Challenge' || $request->project_challenge != null)
+        {
+            $project->admin_authorization_status = 0;
+
+        }
         $project->comments = $request->comments;
        // $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         $project->save();
@@ -5321,7 +5326,7 @@ public function updatePmBasicSEO(Request $request){
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
-        $project->admin_authorization_status = 1;
+      //  $project->admin_authorization_status = 1;
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
