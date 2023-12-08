@@ -2002,6 +2002,7 @@ class ProjectController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->dept_status = $request->dept_status;
         $project->project_short_code = $request->project_code;
+        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         if ($project->status == 'not started') {
             $project->requirement_defined = $request->requirement_defined;
             $project->deadline_meet = $request->deadline_meet;
@@ -2124,7 +2125,7 @@ class ProjectController extends AccountBaseController
 
         $project->project_challenge = $request->project_challenge;
         $project->comments = $request->comments;
-        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+       // $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         $project->save();
     //    dd($project);
 
