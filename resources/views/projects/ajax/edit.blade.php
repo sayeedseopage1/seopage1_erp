@@ -220,10 +220,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                         </div>
                         <!-- BUDGET VS SPENT END -->
-                        @php
+                        <!-- @php
                             $task = App\Models\Task::where('project_id',$project->id)->first();
                         @endphp
-                        @if ($task == null || Auth::user()->role_id !=4)
+                        @if ($task == null || Auth::user()->role_id !=4) -->
                         <div class="col-md-12 col-lg-12">
                             <div class="form-group mt-3">
                                 <label class="text-dark-grey" data-label="true" for="description">Project General Guidelines
@@ -239,7 +239,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                 @enderror
                             </div>
                         </div>
-                        @endif
+                        <!-- @endif -->
 
 
                     @if ($project->dept_status !='DM')
@@ -665,10 +665,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         });
 
         $('#save-project-form').click(function() {
-            @if ($task == null || Auth::user()->role_id !=4)
+            //@if ($task == null || Auth::user()->role_id !=4)
             var note = CKEDITOR.instances.description.getData();
             document.getElementById('description').value = note;
-            @endif
+           // @endif
 
             const url = "{{ route('projects.update', $project->id) }}";
 
