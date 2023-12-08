@@ -122,7 +122,7 @@
     display: -ms-grid;
     display: -moz-grid;
     display: grid;
-    grid-template-columns: 130px 1fr;
+    grid-template-columns: 180px 1fr;
     gap: 1rem;
 }
 
@@ -149,4 +149,11 @@
 .item div[data-type = 'data'] a:hover {
     color: #161616;
     text-decoration: underline;
+}
+
+.description{
+    margin-top: -15px;
+    background-color: #F1F3F6;
+    padding: 10px;
+    border-radius: 4px;
 }

@@ -10,7 +10,10 @@ import Spinner from "../../global/Loader";
 import Modal from "../../global/Modal";
 import { Placeholder } from "../../global/Placeholder";
 import Table from "../../global/table/DataTable";
-import { useGetTaskTypeDataQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
+import {
+    useGetTaskTypeDataQuery,
+    useUpdateTasktypeAuthStatusMutation,
+} from "../../services/api/tasksApiSlice";
 import styles from "./PrimaryPageAuthorization.module.css";
 
 const PrimaryPageAuthorizationTable = () => {
@@ -26,38 +29,39 @@ const PrimaryPageAuthorizationTable = () => {
 
     const tasksType = data ? data.data : [];
 
-
     // filter data
     const getData = (type) => {
-        let _data = _.orderBy(tasksType, 'authorization_status', 'asc');
+        let _data = _.orderBy(tasksType, "authorization_status", "asc");
         switch (type) {
-            case 'all':
+            case "all":
                 return _data;
-            case 'pending':
-                return _.filter(_data, d => !d.authorization_status);
-            case 'denied':
-                return _.filter(_data, d => d.authorization_status === 2);
-            case 'authorized':
-                return _.filter(_data, d => d.authorization_status === 1);
+            case "pending":
+                return _.filter(_data, (d) => !d.authorization_status);
+            case "denied":
+                return _.filter(_data, (d) => d.authorization_status === 2);
+            case "authorized":
+                return _.filter(_data, (d) => d.authorization_status === 1);
             default:
                 return _data;
         }
-    }
-
+    };
 
     const _data = {
-        'all': getData('all'),
-        'pending': getData('pending'),
-        'denied' : getData('denied'),
-        'authorized': getData('authorized'),
-    }
+        all: getData("all"),
+        pending: getData("pending"),
+        denied: getData("denied"),
+        authorized: getData("authorized"),
+    };
 
     const tableData = (type) => {
-        if(type){
-            return _.orderBy(_data[type], ['authorization_status', 'updated_at'], ['asc', 'desc'])
-        }else return []
-    }
-
+        if (type) {
+            return _.orderBy(
+                _data[type],
+                ["authorization_status", "updated_at"],
+                ["asc", "desc"]
+            );
+        } else return [];
+    };
 
     return (
         <Modal isOpen={isOpen}>
@@ -70,7 +74,7 @@ const PrimaryPageAuthorizationTable = () => {
                     <Tabs data={_data} />
 
                     <Table
-                        tableData={tableData(searchParams.get('show'))}
+                        tableData={tableData(searchParams.get("show"))}
                         tableColumns={Columns}
                         tableName="primary_page_authorization_table"
                         isLoading={isLoading}
@@ -94,22 +98,22 @@ const Tabs = (props) => {
             searchParams.set(key, value);
         }
         setSearchParams(searchParams);
-    }
-
+    };
 
     const badge = (type) => {
         return _.size(data[type]);
-    }
+    };
     return (
         <ul className={styles.tabs}>
             <li>
                 <Link
                     to="#"
                     data-type="all"
-                    onClick={e => handleRouteChange(e, {show: 'all'})}
+                    onClick={(e) => handleRouteChange(e, { show: "all" })}
                     data-active={searchParams.get("show") === "all"}
                 >
-                    All <span className="badge badge-light">{badge('all')}</span>
+                    All{" "}
+                    <span className="badge badge-light">{badge("all")}</span>
                 </Link>
             </li>
 
@@ -117,10 +121,13 @@ const Tabs = (props) => {
                 <Link
                     to="#"
                     data-type="pending"
-                    onClick={e => handleRouteChange(e, {show: 'pending'})}
+                    onClick={(e) => handleRouteChange(e, { show: "pending" })}
                     data-active={searchParams.get("show") === "pending"}
                 >
-                    Pending <span className="badge badge-light">{badge('pending')}</span>
+                    Pending{" "}
+                    <span className="badge badge-light">
+                        {badge("pending")}
+                    </span>
                 </Link>
             </li>
 
@@ -128,10 +135,15 @@ const Tabs = (props) => {
                 <Link
                     to="#"
                     data-type="authorized"
-                    onClick={e => handleRouteChange(e, {show: 'authorized'})}
+                    onClick={(e) =>
+                        handleRouteChange(e, { show: "authorized" })
+                    }
                     data-active={searchParams.get("show") === "authorized"}
                 >
-                    Authorized <span className="badge badge-light">{badge('authorized')}</span>
+                    Authorized{" "}
+                    <span className="badge badge-light">
+                        {badge("authorized")}
+                    </span>
                 </Link>
             </li>
 
@@ -139,10 +151,11 @@ const Tabs = (props) => {
                 <Link
                     to="#"
                     data-type="denied"
-                    onClick={e => handleRouteChange(e, {show: 'denied'})}
+                    onClick={(e) => handleRouteChange(e, { show: "denied" })}
                     data-active={searchParams.get("show") === "denied"}
                 >
-                    Denied <span className="badge badge-light">{badge('denied')}</span>
+                    Denied{" "}
+                    <span className="badge badge-light">{badge("denied")}</span>
                 </Link>
             </li>
         </ul>
@@ -170,13 +183,17 @@ export const Columns = [
         cell: ({ row }) => {
             const data = row.original;
             // return `P${data?.project_id}T${data?.task_id}S${data?.sub_task_id}O${data?.id}`;
-            return <span className="d-block" style={{width: '120px'}}>{dayjs(data.updated_at).format('MMM DD, YYYY [at] hh:mm A')}</span>
+            return (
+                <span className="d-block" style={{ width: "120px" }}>
+                    {dayjs(data.updated_at).format("MMM DD, YYYY [at] hh:mm A")}
+                </span>
+            );
         },
     },
     {
         id: "page_name",
         header: "Page Name",
-        accessorKey: 'page_name',
+        accessorKey: "page_name",
         draggable: true,
         cell: ({ row }) => {
             return row.original?.page_name;
@@ -185,26 +202,29 @@ export const Columns = [
     {
         id: "page_url",
         header: "Page URL",
-        accessorKey: 'page_url',
+        accessorKey: "page_url",
         draggable: true,
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <abbr title={data?.page_url}> (
+                <abbr title={data?.page_url}>
+                    {" "}
+                    (
                     <a
                         href={data?.page_url}
                         style={{ color: "#4285F4 !important" }}
                     >
                         <span className="text-primary px-1">View</span>
                     </a>
-                )</abbr>
+                    )
+                </abbr>
             );
         },
     },
     {
         id: "task",
         header: "Sub Task",
-        accessorKey: 'task',
+        accessorKey: "task",
         draggable: true,
         cell: ({ row }) => {
             const data = row.original;
@@ -243,7 +263,7 @@ export const Columns = [
     {
         id: "assigned_by",
         header: "Assigned By",
-        accessorKey: 'added_by_name',
+        accessorKey: "added_by_name",
         draggable: true,
         cell: ({ row }) => {
             const data = row.original;
@@ -262,7 +282,7 @@ export const Columns = [
     {
         id: "assigned_to",
         header: "Assigned To",
-        accessorKey: 'assigned_to_name',
+        accessorKey: "assigned_to_name",
         draggable: true,
         cell: ({ row }) => {
             const data = row.original;
@@ -281,7 +301,7 @@ export const Columns = [
     {
         id: "project",
         header: "Project",
-        accessorKey: 'project_name',
+        accessorKey: "project_name",
         draggable: true,
         cell: ({ row }) => {
             const data = row.original;
@@ -301,7 +321,7 @@ export const Columns = [
     {
         id: "client",
         header: "Client",
-        accessorKey: 'client_name',
+        accessorKey: "client_name",
         draggable: true,
         cell: ({ row }) => {
             const data = row.original;
@@ -339,40 +359,42 @@ const ActionButton = ({ ...props }) => {
         setIsOpen(false);
         setComment("");
         setIsDeny(false);
-    }
+    };
 
     const authorization_status = row?.authorization_status;
 
-
     // update data
-    const [updateTasktypeAuthStatus, {isLoading}] = useUpdateTasktypeAuthStatusMutation();
+    const [updateTasktypeAuthStatus, { isLoading }] =
+        useUpdateTasktypeAuthStatusMutation();
 
     const handleSubmission = async (type) => {
-        if(type === denied && !comment){
-            setError({comment: 'You have to write a comment'})
+        if (type === denied && !comment) {
+            setError({ comment: "You have to write a comment" });
             return;
         }
 
         // submit form
-        await updateTasktypeAuthStatus({status: type, task_type_id: row.id, comment })
-        .then(() => (
-            toast.success('Action taken successfully')
-        )).catch(err => console.log(err))
-        .finally(() => {
-            close();
+        await updateTasktypeAuthStatus({
+            status: type,
+            task_type_id: row.id,
+            comment,
         })
-
-    }
+            .then(() => toast.success("Action taken successfully"))
+            .catch((err) => console.log(err))
+            .finally(() => {
+                close();
+            });
+    };
 
     const approve = (e) => {
         e.preventDefault;
-        handleSubmission('approved')
-    }
+        handleSubmission("approved");
+    };
 
     const denied = (e) => {
         e.preventDefault;
-        handleSubmission('denied')
-    }
+        handleSubmission("denied");
+    };
 
     return (
         <React.Fragment>
@@ -396,43 +418,50 @@ const ActionButton = ({ ...props }) => {
                         Primary Page Development
                     </Card.Head>
                     <Card.Body className={`${styles.card_body} pt-3 px-4`}>
-                        {console.log({row})}
                         <div className={styles.items}>
-
                             <div className={styles.item}>
-                                <div data-type='label'>Page Name: </div>
+                                <div data-type="label">Page Name: </div>
                                 <div data-type="data"> {row?.page_name} </div>
                             </div>
 
                             <div className={styles.item}>
-                                <div data-type='label'>Page URL </div>
+                                <div data-type="label">Page URL </div>
                                 <div data-type="data">
-                                    <a href={row?.page_url}>
-                                        {row?.page_url}
-                                    </a>
+                                    <a href={row?.page_url}>{row?.page_url}</a>
                                 </div>
                             </div>
 
                             <div className={styles.item}>
-                                <div data-type='label'>Task </div>
+                                <div data-type="label">Task </div>
                                 <div data-type="data">
-                                    <a href={row?.task_id}>
+                                    <a href={row?.parent_task_id}>
                                         {row?.task}
                                     </a>
                                 </div>
                             </div>
 
                             <div className={styles.item}>
-                                <div data-type='label'>Subtask </div>
+                                <div data-type="label">Subtask </div>
                                 <div data-type="data">
-                                    <a href={row?.task_id}>
+                                    <a href={row?.sub_task_id}>
                                         {row?.sub_task}
                                     </a>
                                 </div>
                             </div>
 
                             <div className={styles.item}>
-                                <div data-type='label'>Assigned By </div>
+                                <div data-type="label">
+                                    Assign date and time{" "}
+                                </div>
+                                <div data-type="data">
+                                    {dayjs(row?.created_at).format(
+                                        "DD-MM-YYYY; h:mm a"
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className={styles.item}>
+                                <div data-type="label">Assigned By </div>
                                 <div data-type="data">
                                     <a href={row?.task_id}>
                                         {row?.added_by_name}
@@ -441,16 +470,16 @@ const ActionButton = ({ ...props }) => {
                             </div>
 
                             <div className={styles.item}>
-                                <div data-type='label'>Assigned To </div>
+                                <div data-type="label">Assigned To </div>
                                 <div data-type="data">
                                     <a href={row?.task_id}>
-                                    {row?.assigned_to_name}
+                                        {row?.assigned_to_name}
                                     </a>
                                 </div>
                             </div>
 
                             <div className={styles.item}>
-                                <div data-type='label'>Project Name </div>
+                                <div data-type="label">Project Name </div>
                                 <div data-type="data">
                                     <a href={row?.task_id}>
                                         {row?.project_name}
@@ -458,29 +487,49 @@ const ActionButton = ({ ...props }) => {
                                 </div>
                             </div>
 
-
                             <div className={styles.item}>
-                                <div data-type='label'>Client Name </div>
+                                <div data-type="label">Client Name </div>
                                 <div data-type="data">
                                     <a href={row?.task_id}>
-                                    {row?.client_name}
+                                        {row?.client_name}
                                     </a>
                                 </div>
                             </div>
+
+                            <div className={styles.item}>
+                                <div data-type="label">Task description </div>
+                                {/* <div data-type="data"></div> */}
+                            </div>
+                            <div
+                                className={styles.description}
+                                dangerouslySetInnerHTML={{
+                                    __html: row?.description,
+                                }}
+                            />
                         </div>
                     </Card.Body>
 
                     <Card.Footer>
-                        {isLoading ?
+                        {isLoading ? (
                             <div className="badge badge-dark f-14 py-2 px-3 font-weight-normal">
-                                <Spinner title="Processing..." borderRightColor="white"/>
+                                <Spinner
+                                    title="Processing..."
+                                    borderRightColor="white"
+                                />
                             </div>
-                        :
+                        ) : (
                             <>
-                                 <Button variant="danger" onClick={() => setIsDeny(true)}>Deny</Button>
-                                 <Button variant="success" onClick={approve}>Approve</Button>
+                                <Button
+                                    variant="danger"
+                                    onClick={() => setIsDeny(true)}
+                                >
+                                    Deny
+                                </Button>
+                                <Button variant="success" onClick={approve}>
+                                    Approve
+                                </Button>
                             </>
-                        }
+                        )}
                     </Card.Footer>
 
                     {/* deny reason form */}
@@ -499,7 +548,6 @@ const ActionButton = ({ ...props }) => {
     );
 };
 
-
 const DenyReasonExplanationForm = ({
     comment,
     setComment,
@@ -507,45 +555,56 @@ const DenyReasonExplanationForm = ({
     close,
     error,
     isLoading,
-    onSubmit
+    onSubmit,
 }) => {
-    return(
+    return (
         <Modal isOpen={isOpen}>
-                <Card className={`${styles.card} ${styles.card_auth_form}`}>
-                    <Card.Body className={`${styles.card_body} pt-3 px-4`}>
-                        <div className="form-group pt-4">
-                            <label className="font-weight-bold f-16 mb-2">
-                                Please explain why you decided to deny this: <sup>*</sup>
-                            </label>
-                            <div className="ck-editor-holder stop-timer-options primary_page_auth_deny_reason_rich_editor">
-                                <CKEditorComponent
-                                    data={comment}
-                                    onChange={(e, editor) => {
-                                        const d = editor.getData();
-                                        setComment(d);
-                                    }}
-                                />
-                            </div>
-                            {error && error.comment ? <div className="text-danger mt-1">{error.comment}</div>: null}
+            <Card className={`${styles.card} ${styles.card_auth_form}`}>
+                <Card.Body className={`${styles.card_body} pt-3 px-4`}>
+                    <div className="form-group pt-4">
+                        <label className="font-weight-bold f-16 mb-2">
+                            Please explain why you decided to deny this:{" "}
+                            <sup>*</sup>
+                        </label>
+                        <div className="ck-editor-holder stop-timer-options primary_page_auth_deny_reason_rich_editor">
+                            <CKEditorComponent
+                                data={comment}
+                                onChange={(e, editor) => {
+                                    const d = editor.getData();
+                                    setComment(d);
+                                }}
+                            />
                         </div>
-                    </Card.Body>
-
-                    <Card.Footer>
-                        {isLoading ?
-                            <div className="badge badge-dark f-14 py-2 px-3 font-weight-normal">
-                                <Spinner title="Processing..." borderRightColor="white"/>
+                        {error && error.comment ? (
+                            <div className="text-danger mt-1">
+                                {error.comment}
                             </div>
-                        :
-                            <>
-                                <Button variant="tertiary" onClick={close}>Close</Button>
-                                <Button variant="primary" onClick={onSubmit}>Submit</Button>
-                            </>
-                        }
-                    </Card.Footer>
+                        ) : null}
+                    </div>
+                </Card.Body>
 
-                    {/* deny reason form */}
+                <Card.Footer>
+                    {isLoading ? (
+                        <div className="badge badge-dark f-14 py-2 px-3 font-weight-normal">
+                            <Spinner
+                                title="Processing..."
+                                borderRightColor="white"
+                            />
+                        </div>
+                    ) : (
+                        <>
+                            <Button variant="tertiary" onClick={close}>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={onSubmit}>
+                                Submit
+                            </Button>
+                        </>
+                    )}
+                </Card.Footer>
 
-                </Card>
-            </Modal>
-    )
-}
+                {/* deny reason form */}
+            </Card>
+        </Modal>
+    );
+};
