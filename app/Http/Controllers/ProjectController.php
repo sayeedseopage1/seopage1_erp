@@ -3260,7 +3260,8 @@ class ProjectController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Deliverable creation for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> has been authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>';
+                    $past_action->message = 'Deliverables for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was created by  <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>
+                    ';
                  //   $past_action->button = $action->button;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
