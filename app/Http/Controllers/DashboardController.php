@@ -590,6 +590,7 @@ class DashboardController extends AccountBaseController
                                             -> get();
 
                                             
+                                            // dd($report->count(), $userTaskCount);
                     if($report->count() === $userTaskCount){
                         $userDailyTaskSubmission = true;
                     }else {
@@ -642,8 +643,7 @@ class DashboardController extends AccountBaseController
 
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
-        $userDailyTaskSubmission = true;
-
+        // $userDailyTaskSubmission = true;
         return response()->json([
             'data' => [
                 'check_in_check_out' => [

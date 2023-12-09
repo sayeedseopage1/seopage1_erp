@@ -7017,4 +7017,15 @@ class TaskController extends AccountBaseController
 
     /*************** END TASK COMMENT ************/
     /*********************************************/
+
+    // SERVER STATUS
+    public function dailyServerStatus(){
+        $today = Carbon::now();
+
+        return response()->json([
+            'data' => $today,
+            'status'=>200
+        ]);
+    }
+
 }

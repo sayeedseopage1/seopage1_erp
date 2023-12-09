@@ -224,7 +224,9 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             $task = App\Models\Task::where('project_id',$project->id)->first();
                         @endphp
 
+
                         @if ($task == null || Auth::user()->role_id ==4)
+
 
                         <div class="col-md-12 col-lg-12">
                             <div class="form-group mt-3">

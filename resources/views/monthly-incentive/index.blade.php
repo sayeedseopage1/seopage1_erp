@@ -23,21 +23,32 @@
             </div>
         </div>
 
-        {{-- <!-- SEARCH BY TASK START -->
-        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
-            <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
-                <div class="input-group bg-grey rounded">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text border-0 bg-additional-grey">
-                            <i class="fa fa-search f-13 text-dark-grey"></i>
-                        </span>
-                    </div>
-                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
-                        placeholder="@lang('app.startTyping')">
-                </div>
-            </form>
+        <!-- DATE START -->
+        <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.month')</p>
+            <div class="select-month">
+                <select class="form-control select-picker" name="month" id="month" data-live-search="true" data-size="8">
+                    @foreach ($months as $month)
+                        <option @if ($currentMonth == $loop->iteration) selected @endif value="{{ $loop->iteration }}">{{ ucfirst($month) }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-        <!-- SEARCH BY TASK END --> --}}
+        <!-- MONTH END -->
+
+        <!-- YEAR START -->
+        <div class="select-box d-flex py-2 px-lg-2 px-md-2 px-0 border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.year')</p>
+            <div class="select-year">
+                <select class="form-control select-picker" name="year" id="year" data-live-search="true" data-size="8">
+                    @foreach ($years as $year)
+                        <option @if ($year == $currentYear) selected @endif
+                            value="{{ $year }}">{{ $year }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <!-- YEAR END -->
 
         <!-- RESET START -->
         <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
