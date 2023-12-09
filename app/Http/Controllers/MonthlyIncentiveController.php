@@ -12,6 +12,7 @@ use App\Models\IncentiveSetting;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
+use App\DataTables\MonthlyIncentiveDataTable;
 
 class MonthlyIncentiveController extends AccountBaseController
 {
@@ -20,94 +21,96 @@ class MonthlyIncentiveController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Monthly Incentive';
         $this->activeSettingMenu = 'monthly-incentive';
-        
+
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    { 
-        if (Auth::user()->role_id == 1) {
-            $this->user_incentive = UserIncentive::where([
-                // ['point_earned' , '>', 0],
-                'status' => '0'
-            ])->orderBy('id', 'desc')->get();
-        } else {
-            $this->user_incentive = UserIncentive::where([
-                // ['point_earned' , '>', 0],
-                'status' => '0'
-            ])->orderBy('id', 'desc')->where('user_id',Auth::id())->get();
-        }
+    public function index(MonthlyIncentiveDataTable $dataTable)
+    {
+        $this->users = User::where('role_id', 7)->orWhere('role_id', 8)->orWhere('role_id', 11)->orWhere('role_id',12)->get();
+        // if (Auth::user()->role_id == 1) {
+        //     $this->user_incentive = UserIncentive::where([
+        //         // ['point_earned' , '>', 0],
+        //         'status' => '0'
+        //     ])->orderBy('id', 'desc')->get();
+        // } else {
+        //     $this->user_incentive = UserIncentive::where([
+        //         // ['point_earned' , '>', 0],
+        //         'status' => '0'
+        //     ])->orderBy('id', 'desc')->where('user_id',Auth::id())->get();
+        // }
 
-        foreach ($this->user_incentive as $value) {
-            $shift = Seopage1Team::where('members', 'LIKE', '%'.$value->user_id.'%')->where('id', '!=', 1)->get()->pluck('id');
-            
-            $value->shift_point = CashPoint::whereIn('user_id', $shift)
-            ->whereDate('created_at', '>=', Carbon::parse($value->month)->startOfMonth())
-            ->whereDate('created_at', '<=', Carbon::parse($value->month)->endOfMonth())
-            ->sum('points');
+        // foreach ($this->user_incentive as $value) {
+        //     $shift = Seopage1Team::where('members', 'LIKE', '%'.$value->user_id.'%')->where('id', '!=', 1)->get()->pluck('id');
 
-            $value->minimum_goal = GoalSetting::where([
-                'goalType' => 'Minimum',
-            ])->whereIn('team_id', $shift)
-            ->whereDate('startDate', '>=', $value->month)
-            ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-            ->get()
-            ->count();
+        //     $value->shift_point = CashPoint::whereIn('user_id', $shift)
+        //     ->whereDate('created_at', '>=', Carbon::parse($value->month)->startOfMonth())
+        //     ->whereDate('created_at', '<=', Carbon::parse($value->month)->endOfMonth())
+        //     ->sum('points');
 
-            $value->minimum_goal_achieved = GoalSetting::where([
-                'goalType' => 'Minimum',
-                'goal_status' => 1
-            ])->whereIn('team_id', $shift)
-            ->whereDate('startDate', '>=', $value->month)
-            ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-            ->get()
-            ->count();
+        //     $value->minimum_goal = GoalSetting::where([
+        //         'goalType' => 'Minimum',
+        //     ])->whereIn('team_id', $shift)
+        //     ->whereDate('startDate', '>=', $value->month)
+        //     ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+        //     ->get()
+        //     ->count();
 
-            $value->milestone_goal = GoalSetting::where([
-                'goalType' => 'Milestone',
-            ])->whereIn('team_id', $shift)
-            ->whereDate('startDate', '>=', $value->month)
-            ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-            ->get()
-            ->count();
+        //     $value->minimum_goal_achieved = GoalSetting::where([
+        //         'goalType' => 'Minimum',
+        //         'goal_status' => 1
+        //     ])->whereIn('team_id', $shift)
+        //     ->whereDate('startDate', '>=', $value->month)
+        //     ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+        //     ->get()
+        //     ->count();
 
-            $value->milestone_goal_achieved = GoalSetting::where([
-                'goalType' => 'Milestone',
-                'goal_status' => 1
-            ])->whereIn('team_id', $shift)
-            ->whereDate('startDate', '>=', $value->month)
-            ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-            ->get()
-            ->count();
+        //     $value->milestone_goal = GoalSetting::where([
+        //         'goalType' => 'Milestone',
+        //     ])->whereIn('team_id', $shift)
+        //     ->whereDate('startDate', '>=', $value->month)
+        //     ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+        //     ->get()
+        //     ->count();
 
-            $team_shift = Seopage1Team::where('members', 'LIKE', '%'.$value->user_id.'%')->get()->pluck('id');
+        //     $value->milestone_goal_achieved = GoalSetting::where([
+        //         'goalType' => 'Milestone',
+        //         'goal_status' => 1
+        //     ])->whereIn('team_id', $shift)
+        //     ->whereDate('startDate', '>=', $value->month)
+        //     ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+        //     ->get()
+        //     ->count();
 
-            $value->team_goal = GoalSetting::whereIn('team_id', [1])
-            ->whereDate('startDate', '>=', $value->month)
-            ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-            ->get()
-            ->count();
+        //     $team_shift = Seopage1Team::where('members', 'LIKE', '%'.$value->user_id.'%')->get()->pluck('id');
+
+        //     $value->team_goal = GoalSetting::whereIn('team_id', [1])
+        //     ->whereDate('startDate', '>=', $value->month)
+        //     ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+        //     ->get()
+        //     ->count();
 
 
-            $value->team_goal_achieved = GoalSetting::whereIn('team_id', $team_shift)
-            ->whereDate('startDate', '>=', $value->month)
-            ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-            ->get()
-            ->count();
+        //     $value->team_goal_achieved = GoalSetting::whereIn('team_id', $team_shift)
+        //     ->whereDate('startDate', '>=', $value->month)
+        //     ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+        //     ->get()
+        //     ->count();
 
-            $value->team_goal_achieved_last = GoalSetting::where('goal_status', 1)
-            ->whereIn('team_id', $team_shift)
-            ->whereDate('startDate', '>=', $value->month)
-            ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-            ->get()
-            ->count();
+        //     $value->team_goal_achieved_last = GoalSetting::where('goal_status', 1)
+        //     ->whereIn('team_id', $team_shift)
+        //     ->whereDate('startDate', '>=', $value->month)
+        //     ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
+        //     ->get()
+        //     ->count();
 
-        }
+        // }
 
-        return view('monthly-incentive.index', $this->data);
+        // return view('monthly-incentive.index', $this->data);
+        return $dataTable->render('monthly-incentive.index',$this->data);
     }
 
     public function get_index_json()
@@ -160,7 +163,7 @@ class MonthlyIncentiveController extends AccountBaseController
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
-        
+
         $pdfString = $dom_pdf->output();
 
         return response($pdfString)->header('Content-Type', 'application/pdf');

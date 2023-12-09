@@ -1,123 +1,114 @@
 @extends('layouts.app')
+@push('datatable-styles')
+    @include('sections.datatable_css')
+@endpush
+@section('filter-section')
+<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
+    <x-filters.filter-box>
+        <div class="select-box {{ !in_array('user', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Select User')</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="user_id" id="user_id" data-live-search="true"
+                    data-size="8">
+                    @if (!in_array('user', user_roles()))
+                        <option value="all">@lang('app.all')</option>
+                    @endif
+                    @foreach ($users as $user)
+                        <option
+                            data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $user->image_url }}' ></div> {{ ucfirst($user->name) }}"
+                            value="{{ $user->id }}">{{ ucfirst($user->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        {{-- <!-- SEARCH BY TASK START -->
+        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
+            <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
+                <div class="input-group bg-grey rounded">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text border-0 bg-additional-grey">
+                            <i class="fa fa-search f-13 text-dark-grey"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
+                        placeholder="@lang('app.startTyping')">
+                </div>
+            </form>
+        </div>
+        <!-- SEARCH BY TASK END --> --}}
+
+        <!-- RESET START -->
+        <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
+            <x-forms.button-secondary class="btn-xs d-none" id="reset-filters" icon="times-circle">
+                @lang('app.clearFilters')
+            </x-forms.button-secondary>
+        </div>
+        <!-- RESET END -->
+    </x-filters.filter-box>
+
+@endsection
 @section('content')
     <div class="row mx-0">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Incentive Lists</div>
-                </div>
+            <div class="card mt-3" style="border: none">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <th>SL. No</th>
-                                <th>Month</th>
-                                <th>Name</th>
-                                <th>Non Incentive Points</th>
-                                <th>Shift's Achieved Point</th>
-                                <th>Shift's Incentive Achievable Point</th>
-                                <th>User Contribution</th>
-                                <th>User's Achieved Point</th>
-                                {{-- <th>Incentive Deduction</th> --}}
-                                <th>Amount Before Deduction</th>
-                                <th>User's Deducted Point</th>
-                                <th>User's Point's After Deduction</th>
-                                <th>Amount After Deduction</th>
-                                <th>Deducted Incentive Amount</th>
-                                <th>Incentive Amount After 20% Held</th>
-                                <th>Incentive Held Amount</th>
-                                <th>Final Payable Incentive Amount</th>
-                                <th>Minimum Shift Goal</th>
-                                <th>Minimum Shift Goal Achieved</th>
-                                <th>Shift Milestone</th>
-                                <th>Shift Milestone Achieved</th>
-                                <th>Total Team Goal</th>
-                                <th>Team Goal Achieved</th>
-                                <th>Total Goals</th>
-                                <th>Achieved Goals</th>
-                                <th>Action</th>
-                            </thead>
-                            <tbody>
-                                @php $i = 0; @endphp
-                                @forelse($user_incentive as $value)
-                                <tr>
-                                    <td>{{++$i}}</td>
-                                    <td>{{\Carbon\Carbon::parse($value->month)->format('M (Y)')}}</td>
-                                    <td>
-                                        <a href="{{route('employees.show', $value->user_id)}}">{{$value->user->name}}</a>
-                                    </td>
-                                    <td>
-                                        @php
-                                            $non_incentive_point = App\Models\IncentiveSetting::where('start_month', $value->month)->first();
-                                        @endphp
-                                        {{$non_incentive_point->every_shift_every_point_above}}
-                                    </td>
-                                    <td>{{$value->shift_achieved_points}}</td>
-                                    <td>{{$value->shift_incentive_achievable_point}}</td>
-                                    <td>{{$value->contribution}}%</td>
-                                    <td>{{$value->user_achieved_points}}</td>
-                                    <td>{{$value->amount_before_deduction}}</td>
-                                    
-                                    <td>{{$value->user_deducted_points}}</td>
-                                    <td>{{$value->user_point_after_deduction}}</td>
-                                    <td>{{$value->amount_after_deduction}} BDT</td>
-                                    <td>{{$value->deducted_incentive_amount}} BDT</td>
-                                    <td>{{$value->incentive_amount_after_20_percent_held}} BDT</td>
-                                    <td>{{$value->incentive_held_amount}} BDT</td>
-                                    <td>{{$value->final_payable_incentive_amount}} BDT</td>
-                                    <td>{{$value->minimum_shift_goals}}</td>
-                                    <td>{{$value->minimum_shift_goals_achieved}}</td>
-                                    <td>{{$value->milestone_goals}}</td>
-                                    <td>{{$value->milestone_goals_achieved}}</td>
-                                    <td>{{$value->team_goal}}</td>
-                                    <td>{{$value->total_team_goal_achieved}}</td>
-                                    <td>{{$value->total_goals}}</td>
-                                    <td>{{$value->total_goals_achieved}}</td>
-
-                                    {{-- <td>{{$value->deduction_incentive_amount}} BDT</td> --}}
-                                
-                                    <td>
-                                        <div class="task_view">
-                                            <div class="dropdown">
-                                                <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
-                                                    id="dropdownMenuLink-{{ $value->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="icon-options-vertical icons"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-{{ $value->id }}" tabindex="0">
-                                                    <a class="dropdown-item text-primary mx-1" href="{{route('monthly-incentive.download', $value->id)}}">
-                                                        <i class="fa fa-download mr-2"></i>Download
-                                                    </a>
-                                                    <a class="dropdown-item text-dark mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
-                                                        <i class="fa fa-eye mr-2"></i>View
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {{-- <a class="text-primary f-20 mx-1" href="{{route('monthly-incentive.download', $value->id)}}">
-                                            <i class="fa fa-download"></i>
-                                        </a>
-                                        <a class="text-dark f-20 mx-1" href="{{route('monthly-incentive.show', $value->id)}}">
-                                            <i class="fa fa-eye"></i>
-                                        </a> --}}
-                                        {{-- <a class="text-danger f-20 mx-1" href="{{route('monthly-incentive.destroy', $value->id)}}">
-                                            <i class="fa fa-trash"></i>
-                                        </a> --}}
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">
-                                        <p class="badge badge-danger">You are not eligible</p>
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                    {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+@include('sections.datatable_js')
+<script>
+    $('#monthlyincentive-table').on('preXhr.dt', function(e, settings, data) {
+
+        var role_id = {{ Auth::user()->role_id }};
+        var user_id = $('#user_id').val();
+        var searchText = $('#search-text-field').val();
+        data['role_id'] = role_id;
+        data['user_id'] = user_id;
+        data['searchText'] = searchText;
+
+    });
+
+    const showTable = () => {
+        window.LaravelDataTables["monthlyincentive-table"].draw();
+    }
+
+
+
+    $('#user_id,#search-text-field').on('change keyup', function() {
+         if ($('#user_id').val() != "all") {
+            $('#reset-filters').removeClass('d-none');
+            showTable();
+        } else if ($('#search-text-field').val() != "") {
+            $('#reset-filters').removeClass('d-none');
+            showTable();
+        } else {
+            $('#reset-filters').addClass('d-none');
+            showTable();
+        }
+    });
+
+    $('#reset-filters').click(function() {
+        $('#filter-form')[0].reset();
+        $('.filter-box #status').val('not finished');
+        $('.filter-box .select-picker').selectpicker("refresh");
+        $('#reset-filters').addClass('d-none');
+        showTable();
+    });
+
+    $('#reset-filters-2').click(function() {
+        $('#filter-form')[0].reset();
+        $('.filter-box #status').val('not finished');
+        $('.filter-box .select-picker').selectpicker("refresh");
+        $('#reset-filters').addClass('d-none');
+        showTable();
+    });
+
+</script>
+@endpush

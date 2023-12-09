@@ -922,7 +922,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-           //    dd($request->project_summary);
+
 
         //kpi distribution start from here
     //    DB::beginTransaction();
@@ -2032,9 +2032,6 @@ class ProjectController extends AccountBaseController
         }
 
 
-        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
-
-
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
         if ($project->deal->project_type != 'hourly') {
             // if (!$request->has('without_deadline')) {
@@ -2131,9 +2128,10 @@ class ProjectController extends AccountBaseController
         }
     }
         $project->comments = $request->comments;
+
        // $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+
         $project->save();
-    //    dd($project);
 
        $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
         if($actions != null)

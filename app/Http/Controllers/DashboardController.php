@@ -579,22 +579,28 @@ class DashboardController extends AccountBaseController
 
 
 
+
             $userTaskCount = $userGetTasks->count();
+
 
             $userDailyTaskSubmission = true;
                 if ($userTaskCount > 0) {
                     $report = DailySubmission::where('user_id', $userClockIn->user_id)
                                             -> whereDate('report_date',$userClockIn->created_at)
                                             -> get();
+
+                                            
                     if($report->count() === $userTaskCount){
                         $userDailyTaskSubmission = true;
                     }else {
                         $userDailyTaskSubmission = false;
                     }
 
+
                 }else{
                     // dd('2');
                     $userDailyTaskSubmission = true;
+                    
                 }
 
                
@@ -772,3 +778,4 @@ class DashboardController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
   }
+    

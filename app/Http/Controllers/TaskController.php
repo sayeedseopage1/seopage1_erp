@@ -5955,9 +5955,12 @@ class TaskController extends AccountBaseController
             ->whereDate('project_time_logs.created_at', $date)
             ->groupBy('project_time_logs.task_id')
             ->get();
+
+            // dd($tasks);
             foreach($tasks as $task)
             {
-                $dalysubmission = DailySubmission::where('task_id',$task->id)->where('report_date',$date)->first();
+                // dd($task);
+                $dalysubmission = DailySubmission::where('task_id',$task->id)->whereDate('report_date',$date)->first();
                 if($dalysubmission != null)
                 {
                     $task->daily_submission_status = $dalysubmission->status;
@@ -6090,7 +6093,7 @@ class TaskController extends AccountBaseController
         // } else {
         //     $tasks = $todayData;
         // }
-        // /dd($tasks );
+        // dd($tasks ,$date);
         return response()->json([
             'date' => $date,
             'data' => $tasks,
