@@ -28,8 +28,9 @@
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.month')</p>
             <div class="select-month">
                 <select class="form-control select-picker" name="month" id="month" data-live-search="true" data-size="8">
+                    <option></option>
                     @foreach ($months as $month)
-                        <option @if ($currentMonth == $loop->iteration) selected @endif value="{{ $loop->iteration }}">{{ ucfirst($month) }}</option>
+                        <option  value="{{ $loop->iteration }}">{{ ucfirst($month) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -41,8 +42,9 @@
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.year')</p>
             <div class="select-year">
                 <select class="form-control select-picker" name="year" id="year" data-live-search="true" data-size="8">
+                    <option></option>
                     @foreach ($years as $year)
-                        <option @if ($year == $currentYear) selected @endif
+                        <option 
                             value="{{ $year }}">{{ $year }}</option>
                     @endforeach
                 </select>
@@ -72,16 +74,20 @@
     </div>
 @endsection
 
-@push('scripts')
+{{-- @push('scripts')
 @include('sections.datatable_js')
 <script>
     $('#monthlyincentive-table').on('preXhr.dt', function(e, settings, data) {
 
         var role_id = {{ Auth::user()->role_id }};
         var user_id = $('#user_id').val();
+        var month = $('#month').val();
+        var year = $('#year').val();
         var searchText = $('#search-text-field').val();
         data['role_id'] = role_id;
         data['user_id'] = user_id;
+        data['month'] = month;
+        data['year'] = year;
         data['searchText'] = searchText;
 
     });
@@ -92,8 +98,14 @@
 
 
 
-    $('#user_id,#search-text-field').on('change keyup', function() {
+    $('#user_id,#search-text-field,#month, #year').on('change', function() {
          if ($('#user_id').val() != "all") {
+            $('#reset-filters').removeClass('d-none');
+            showTable();
+        }else if ($('#month').val() != "") {
+            $('#reset-filters').removeClass('d-none');
+            showTable();
+        } else if ($('#year').val() != "") {
             $('#reset-filters').removeClass('d-none');
             showTable();
         } else if ($('#search-text-field').val() != "") {
@@ -107,14 +119,8 @@
 
     $('#reset-filters').click(function() {
         $('#filter-form')[0].reset();
-        $('.filter-box #status').val('not finished');
-        $('.filter-box .select-picker').selectpicker("refresh");
-        $('#reset-filters').addClass('d-none');
-        showTable();
-    });
-
-    $('#reset-filters-2').click(function() {
-        $('#filter-form')[0].reset();
+        $('#month').val('{{ $currentMonth }}');
+        $('#year').val('{{ $currentYear }}');
         $('.filter-box #status').val('not finished');
         $('.filter-box .select-picker').selectpicker("refresh");
         $('#reset-filters').addClass('d-none');
@@ -122,4 +128,53 @@
     });
 
 </script>
+@endpush --}}
+
+@push('scripts')
+
+    @include('sections.datatable_js')
+
+    <script>
+        $('#monthlyincentive-table').on('preXhr.dt', function(e, settings, data) {
+            var role_id = {{ Auth::user()->role_id }};
+            var user_id = $('#user_id').val();
+            var month = $('#month').val();
+            var year = $('#year').val();
+
+            data['role_id'] = role_id;
+            data['user_id'] = user_id;
+            data['month'] = month;
+            data['year'] = year;
+        });
+
+        const showTable = () => {
+            window.LaravelDataTables["monthlyincentive-table"].draw();
+        }
+
+        $('#month, #year, #user_id').on('change keyup',
+            function() {
+                if ($('#month').val() != "") {
+                    $('#reset-filters').removeClass('d-none');
+                    showTable();
+                } else if ($('#year').val() != "") {
+                    $('#reset-filters').removeClass('d-none');
+                    showTable();
+                } else if ($('#user_id').val() != "") {
+                    $('#reset-filters').removeClass('d-none');
+                    showTable();
+                } else {
+                    $('#reset-filters').addClass('d-none');
+                    showTable();
+                }
+            });
+
+        $('#reset-filters').click(function() {
+            $('#filter-form')[0].reset();
+            $('#month').val('{{ $currentMonth }}');
+            $('#year').val('{{ $currentYear }}');
+            $('.filter-box .select-picker').selectpicker("refresh");
+            $('#reset-filters').addClass('d-none');
+            showTable();
+        });
+    </script>
 @endpush
