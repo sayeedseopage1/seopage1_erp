@@ -2129,7 +2129,7 @@ class ProjectController extends AccountBaseController
     }
         $project->comments = $request->comments;
 
-       // $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
 
