@@ -987,7 +987,7 @@ class TaskController extends AccountBaseController
         }
 
         $task_status->save();
-        $actions= PendingAction::where('code','DTDA')->where('task_id',$task_status->id)->get();
+        $actions= PendingAction::where('code','DTDA')->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
@@ -3692,7 +3692,7 @@ class TaskController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = $action->message. ' authorized by '.Auth::user()->name;
+                $past_action->message = 'Deliverables for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> were shared with the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>!';
               //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
@@ -4598,19 +4598,21 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
             //    DB::beginTransaction();
+           // dd($request);
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
             $data->task_id = $request->task_id;
             $data->added_by = $this->user->id;
             $data->last_updated_by = $this->user->id;
+           // $data->mention_id = $request->mention_id;
 
             $data->save();
             //need pedning action
-            $helper = new HelperPendingActionController();
+            // $helper = new HelperPendingActionController();
 
 
-            $helper->NewCommentAdded($data->task_id,$data->user_id);
+            // $helper->NewCommentAdded($data->task_id,$data->user_id);
 
             //need pending action
             $taskID = Task::where('id', $request->task_id)->first();
@@ -5299,7 +5301,7 @@ class TaskController extends AccountBaseController
             $query->replied_by = $question['replied_by'];
             $query->replied_date = Carbon::now();
             $query->save();
-            $actions = PendingAction::where('code','TDQ')->where('past_status',0)->where('dispute_id',$query->dispute_id)->get();
+            $actions = PendingAction::where('code','TDQ')->where('past_status',0)->where('dispute_id',$query->dispute_id)->where('authorization_for',Auth::id())->get();
             if($actions != null)
             {
             foreach ($actions as $key => $action) {
@@ -5802,6 +5804,7 @@ class TaskController extends AccountBaseController
             $task = Task::where('id', $item->task_id)->first();
             $sub_task = SubTask::where('id', $task->subtask_id)->first();
             $added_by = User::where('id', $sub_task->added_by)->first();
+            $parent_task= Task::where('id',$sub_task->task_id)->first();
             $assigned_to = User::where('id', $sub_task->assigned_to)->first();
             $project = Project::where('id', $task->project_id)->first();
             if ($project != null) {
@@ -5813,9 +5816,10 @@ class TaskController extends AccountBaseController
                 'id' => $item->id,
                 'page_name' => $item->page_name,
                 'page_url' => $item->page_url,
-                'task_id' => $task->id,
-                'task' => $task->heading,
-                'sub_task_id' => $sub_task->id,
+            //    'task_id' => $task->id,
+                'task' => $parent_task->heading,
+                'parent_task_id' => $parent_task->id,
+                'sub_task_id' => $task->id,
                 'sub_task' => $sub_task->title,
                 'added_by_id' => $added_by->id,
                 'added_by_name' => $added_by->name,
@@ -5829,6 +5833,8 @@ class TaskController extends AccountBaseController
                 'client_name' => $client->name ?? '',
                 'client_image' => $client->image ?? '',
                 'authorization_status' => $item->authorization_status,
+                'created_at' => $item->created_at,
+                'description'=> $task->description,
                 'updated_at' => $item->updated_at
             ];
         }
