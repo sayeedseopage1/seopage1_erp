@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Models\MonthlyIncentive;
 use App\Models\User;
 use App\Models\UserIncentive;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -129,6 +130,7 @@ class MonthlyIncentiveDataTable extends DataTable
     public function query(UserIncentive $model)
     {
         $request = $this->request();
+        // dd($request->month);
         $model = $model->newQuery()->where('status', '0')->orderBy('id', 'desc')->when(auth()->user()->role_id != 1, function ($query) {
                 return $query->where('user_id', auth()->id());
             });
@@ -137,13 +139,13 @@ class MonthlyIncentiveDataTable extends DataTable
             $model->where('user_incentives.user_id', $request->user_id);
         }
 
-        // if ($request->searchText != '') {
-        //     $model->where(function ($query) {
-        //         $query->where('user_incentives.project_name', 'like', '%' . request('searchText') . '%')
-        //             ->orWhere('users.name', 'like', '%' . request('searchText') . '%')
-        //             ->orWhere('projects.project_short_code', 'like', '%' . request('searchText') . '%'); // project short code
-        //     });
-        // }
+        if ($request->year !=null) {
+            $model->whereYear('user_incentives.month', $request->year);
+        }
+
+        if ($request->month !=null) {
+            $model->whereMonth('user_incentives.month', $request->month);
+        }
 
         return $model;
     }
