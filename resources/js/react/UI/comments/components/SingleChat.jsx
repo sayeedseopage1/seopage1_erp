@@ -284,7 +284,7 @@ const SingleChat = ({
                                 <section
                                     style={{
                                         borderBottom: showDeletedComment
-                                            ? "0.15px solid #f17b7d86"
+                                            ? "0.15px solid #f8d0d39a"
                                             : "0",
                                     }}
                                     className={`${style.single_comment_deleted_title}`}
@@ -436,6 +436,7 @@ const SingleChat = ({
                                                     // comment?.mention_comment
                                                     // ? "none"
                                                     // : "0.15px solid #f17b7dbb",
+                                                    padding:"0",
                                                     border: "none",
                                                 }}
                                                 className={`${style.singleChat_comment_card_text_message}`}

@@ -144,7 +144,7 @@ const CommentsBody = ({
         if (searchText) {
             setAllComments(() => {
                 const filteredComments = [...comments].filter((comment) => {
-                    return getTextContent(comment.comment)
+                    return !comment.is_deleted && getTextContent(comment.comment)
                         .toLowerCase()
                         .includes(searchText.toLowerCase());
                     // const textContent = getTextContent(comment.comment).toLowerCase();

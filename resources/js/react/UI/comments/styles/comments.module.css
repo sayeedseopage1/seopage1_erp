@@ -162,9 +162,21 @@
 .singleChat_match{
   outline: 4px solid skyblue;
   outline-offset: 5px;
-  /* scroll-margin-bottom: 5px; */
+  position: relative;
+  z-index: 999;
+  scroll-margin-top: 10px;
   /* transform: scale(1.2); */
 }
+/* .singleChat_match::after{
+  content: '';
+  position: absolute;
+  outline: 4px solid skyblue;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+} */
 .singleChat_comment_card{
   display: flex;
   gap: 6px;
@@ -189,7 +201,8 @@
 .single_comment_deleted_container{
   color: #F17B7C;
   background-color: #FFF3F4;
-  border: 0.15px solid #F17B7C;
+  /* border: 0.15px solid #F17B7C; */
+  border: 0.15px solid #f8d0d3;
   border-radius: 5px;
   font-size: 12px;
   overflow: hidden;

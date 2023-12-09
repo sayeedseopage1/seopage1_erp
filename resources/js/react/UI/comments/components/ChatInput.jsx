@@ -217,18 +217,10 @@ function CommentEditor({
     files,
     editorHtml,
     setEditorHtml,
-    // setShowEmoji,
-    // quillRef,
-    // text,
-    // setText,
 }) {
     const quillRef = useRef(null);
     const { mentionedComment } = useCommentContext();
     const [showEmoji, setShowEmoji] = useState(false);
-
-    // useEffect(() => {
-    //     console.log(editorHtml);
-    // }, [editorHtml]);
 
     useEffect(() => {
         // Focus the Quill editor when the component is rendered
@@ -241,8 +233,6 @@ function CommentEditor({
     }, [showEmoji]);
 
     const handleEmojiSelection = (emoji, e) => {
-        // console.log(emoji);
-        // setEmoji(emoji.emoji);
         const quill = quillRef.current?.getEditor();
         const cursorPosition = quill?.getSelection()?.index;
 
@@ -250,17 +240,6 @@ function CommentEditor({
             // Insert the mention at the cursor position
             quill?.insertText(cursorPosition, `${emoji.emoji}`);
         }
-        // else {
-        //     // Get the current length of the editor content
-        //     const contentLength = quill.getLength();
-        //     console.log({contentLength});
-
-        //     // Insert the external text at the end of the editor content
-        //     quill.insertText(contentLength, emoji.emoji);
-
-        //     // Set the cursor position to the end of the inserted text
-        //     quill.setSelection(contentLength);
-        // }
     };
 
     useEffect(() => {
@@ -271,9 +250,6 @@ function CommentEditor({
 
         // Hide the toolbar
         toolbar.style.display = show ? "block" : "none";
-
-        // You can show the toolbar by changing 'none' to 'block' or any other display value
-        // toolbar.style.display = 'block';
 
         // Clean up when component unmounts
         return () => {
@@ -373,17 +349,6 @@ const atValues = [
                 // overflow: "hidden",
             }}
         >
-            {/* {showEmoji && (
-                <div className={`${style.chatInput_text_emojis}`}>
-                    <EmojiPicker
-                        width={"100%"}
-                        height={"100%"}
-                        skinTonesDisabled
-                        emojiStyle="facebook"
-                        onEmojiClick={handleEmojiSelection}
-                    />
-                </div>
-            )} */}
             <ReactQuill
                 ref={quillRef}
                 theme="snow"
