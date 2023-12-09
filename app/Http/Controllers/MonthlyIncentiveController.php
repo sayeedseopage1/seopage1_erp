@@ -31,6 +31,23 @@ class MonthlyIncentiveController extends AccountBaseController
     public function index(MonthlyIncentiveDataTable $dataTable)
     {
         $this->users = User::where('role_id', 7)->orWhere('role_id', 8)->orWhere('role_id', 11)->orWhere('role_id',12)->get();
+        
+        $this->currentYear = now()->format('Y');
+        $this->currentMonth = now()->month;
+
+        /* year range from last 5 year to next year */
+        $years = [];
+        $latestFifthYear = (int)Carbon::now()->subYears(5)->format('Y');
+        $nextYear = (int)Carbon::now()->addYear()->format('Y');
+
+        for ($i = $latestFifthYear; $i <= $nextYear; $i++) {
+            $years[] = $i;
+        }
+
+        $this->years = $years;
+
+        /* months */
+        $this->months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
         // if (Auth::user()->role_id == 1) {
         //     $this->user_incentive = UserIncentive::where([
         //         // ['point_earned' , '>', 0],
