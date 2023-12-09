@@ -4598,12 +4598,14 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
             //    DB::beginTransaction();
+           // dd($request);
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
             $data->task_id = $request->task_id;
             $data->added_by = $this->user->id;
             $data->last_updated_by = $this->user->id;
+           // $data->mention_id = $request->mention_id;
 
             $data->save();
             //need pedning action
