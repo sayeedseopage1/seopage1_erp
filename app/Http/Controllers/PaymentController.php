@@ -243,7 +243,7 @@ class PaymentController extends AccountBaseController
         {
 
         
-        $actions = PendingAction::where('code','ALP')->where('past_status',0)->where('milestone_id',$milestoneId->id)->get();
+        $actions = PendingAction::where('code','ALP')->where('past_status',0)->where('milestone_id',$milestoneId->id)->where('authorization_for',Auth::id())->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {

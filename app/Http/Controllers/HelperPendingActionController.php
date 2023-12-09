@@ -114,7 +114,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'DOA';
@@ -148,7 +148,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'DDA';
@@ -182,7 +182,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'DGA';
@@ -216,7 +216,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'QCA';
@@ -250,7 +250,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'PCA';
@@ -284,7 +284,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'MCA';
@@ -319,7 +319,7 @@ class HelperPendingActionController extends AccountBaseController
         $deal= Deal::where('id',$project->id)->first();
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'WDADA';
@@ -354,7 +354,7 @@ class HelperPendingActionController extends AccountBaseController
         $deal= Deal::where('id',$project->id)->first();
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+        $authorizers= User::where('role_id',1)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'TGA';
@@ -393,7 +393,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+            $authorizers= User::where('role_id',8)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'PPA';
@@ -433,7 +433,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+            $authorizers= User::where('role_id',8)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'DFA';
@@ -474,7 +474,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+            $authorizers= User::where('role_id',1)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'TDA';
