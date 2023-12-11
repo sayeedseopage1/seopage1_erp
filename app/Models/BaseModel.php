@@ -15,6 +15,7 @@ use Froiden\RestAPI\ApiModel;
  */
 class BaseModel extends ApiModel
 {
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     public static function options($items, $group = null, $columnName = null)
     {
