@@ -2,14 +2,14 @@ import React from "react";
 import { FileIcon, defaultStyles } from "react-file-icon";
 import style from "../styles/comments.module.css";
 
-const handleFileUrl = (fileName, file) => {
+const handleFileUrl = (url,fileName, file) => {
     if (fileName) {
         const file_name = fileName.split(".");
         const [name, ext] = [
             file_name.slice(0, file_name.length - 1).join("."),
             file_name[file_name.length - 1],
         ];
-        return [`${name}.${ext}`, name, ext];
+        return [url, name, ext];
     } else if (file) {
         const file_name = file.name.split(".");
         const [name, ext] = [
@@ -20,9 +20,9 @@ const handleFileUrl = (fileName, file) => {
     }
 };
 
-const HandleFileIcon = ({ fileName = "", file = null }) => {
+const HandleFileIcon = ({ URL= "", fileName = "", file = null }) => {
     const selectFileComponent = ({ fileName = "", file = null }) => {
-        const [url, name, ext] = handleFileUrl(fileName, file);
+        const [url, name, ext] = handleFileUrl(URL,fileName, file);
         if (
             // false
             ext === "img" ||

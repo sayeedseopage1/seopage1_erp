@@ -70,9 +70,9 @@ const CommentsBody = ({
     const [contextHolder, setContextHolder] = useState(null);
     // =================================================================
 
-    useEffect(()=>{
-      setAllComments(comments);
-    },[comments])
+    useEffect(() => {
+        setAllComments(comments);
+    }, [comments]);
 
     const hnadleSelectComment = useCallback(() => {
         setSecletedComments((prev) => ({
@@ -100,15 +100,14 @@ const CommentsBody = ({
                 <TbMessage2Check className={`context_icons`} />
                 <span className={`context_title`}>Select Message</span>
             </ContextMenuItem>
-            <ContextMenuItem 
-                onSelect={()=>handleCopySingleComment(contextHolder)}>
+            <ContextMenuItem
+                onSelect={() => handleCopySingleComment(contextHolder)}
+            >
                 <MdOutlineContentCopy className={`context_icons`} />
                 <span className={`context_title`}>Copy</span>
             </ContextMenuItem>
             {isCurrentUser(contextHolder?.user_id) ? (
-                <ContextMenuItem
-                    onSelect={handleDeleteSingleComment}
-                >
+                <ContextMenuItem onSelect={handleDeleteSingleComment}>
                     <IoMdCloseCircleOutline className={`context_icons`} />
                     <span className={`context_title`}>Remove</span>
                 </ContextMenuItem>
@@ -295,9 +294,7 @@ const CommentsBody = ({
             });
     };
 
-    const handleDeleteSingleComment = (comment)=>{
-      
-    }
+    const handleDeleteSingleComment = (comment) => {};
 
     // console.log({allComments});
     return (
@@ -536,10 +533,7 @@ const CommentsBody = ({
                     </span>
                 </header>
 
-                <main
-                    // ref={chatbottom_ref}
-                    className={`${style.commentsBody_commentArea}`}
-                >
+                <main className={`${style.commentsBody_commentArea}`}>
                     {loading || isloading ? (
                         <CommentsPlaceholder />
                     ) : (
@@ -567,17 +561,18 @@ const CommentsBody = ({
                                     />
                                 );
                             })}
-                            <div
-                                style={{
-                                    minHeight: "10px",
-                                    height: "10px",
-                                    backgroundColor: "transparent",
-                                }}
-                                ref={chatbottom_ref}
-                            />
                             {contextMenu}
                         </>
                     )}
+                    <div
+                        style={{
+                            minHeight: "10px",
+                            height: "10px",
+                            backgroundColor: "transparent",
+                            // backgroundColor: "black",
+                        }}
+                        ref={chatbottom_ref}
+                    />
                 </main>
 
                 <footer className={`${style.commentsBody_inputField}`}>

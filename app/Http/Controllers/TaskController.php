@@ -4319,7 +4319,7 @@ class TaskController extends AccountBaseController
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                    dd($file);
+                  //  dd($file);
                     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                     array_push($file_name, $filename);
 
@@ -6326,26 +6326,24 @@ class TaskController extends AccountBaseController
 
     public function getTaskComments($task_id)
     {
-        $data = TaskComment::where('task_id', $task_id)->where('root', null)->get();
+        $data = TaskComment::select('task_comments.*','task_comments.created_at as created_date')->where('task_comments.task_id', $task_id)->where('task_comments.root', null)->get();
 
         foreach ($data as $value) {
 
-            $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
-            $value->total_replies = $replies->count();
-            $value->last_updated_at = strtotime($value->created_at);
-            $value->replies_users = User::whereIn('id', $replies->unique())->get()->map(function ($row) {
-                return [
-                    'id' => $row->id,
-                    'image_url' => $row->image_url,
-                    'name' => $row->name
-                ];
-            });
-            $value->last_updated_date = $value->created_at;
-            $value->replies = [];
+           $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
+        //   $value->files_data = $value->files;
         }
+        
+        // return response()->json([
+           
+        //     'data' => $data,
+        //   //  'mention'=> $data->mention,
+        //     'status' => 200
+        // ]);
 
         // dd($data);
-        return response()->json($data, 200);
+        $data = json_decode(json_encode($data));
+        return response()->json($data,200);
     }
 
     public function getTaskCommentReplies($comment_id)

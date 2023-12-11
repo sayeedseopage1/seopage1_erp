@@ -78,8 +78,8 @@ const SingleChat = ({
             Number(previousComment?.user?.id)
         ) {
             if (
-                dayjs(currentComment?.last_updated_date).diff(
-                    dayjs(previousComment?.last_updated_date),
+                dayjs(currentComment?.created_date).diff(
+                    dayjs(previousComment?.created_date),
                     "minutes"
                 ) <= 10
             ) {
@@ -95,7 +95,7 @@ const SingleChat = ({
                         className={`${style.singleChat_comment_card_text_time}`}
                     >
                         {/* 2:54 PM */}
-                        {`${dayjs(comment?.last_updated_date).format(
+                        {`${dayjs(comment?.created_date).format(
                             "hh:mm A"
                         )}`}
                     </span>
@@ -113,7 +113,7 @@ const SingleChat = ({
                 >
                     {/* Nafis, Nov 16,2023, 2:54 PM */}
                     {`${comment?.user?.name}, ${dayjs(
-                        comment?.last_updated_date
+                        comment?.created_date
                     ).format("MMM DD, YYYY, hh:mm A")}`}
                 </span>
             );
@@ -143,13 +143,15 @@ const SingleChat = ({
                 return <></>;
             } else {
                 return (
-                    <span
-                        className={`${style.singleChat_comment_card_avator}`}
-                    >
-                        <img style={{
-                            height:"100%",
-                            width:"100%",
-                        }} src={`/user-uploads/avatar/${comment?.user?.image}`} alt="" />
+                    <span className={`${style.singleChat_comment_card_avator}`}>
+                        <img
+                            style={{
+                                height: "100%",
+                                width: "100%",
+                            }}
+                            src={`/user-uploads/avatar/${comment?.user?.image}`}
+                            alt=""
+                        />
                     </span>
                 );
             }
@@ -163,8 +165,8 @@ const SingleChat = ({
             Number(previousComment?.user?.id)
         ) {
             if (
-                dayjs(currentComment?.last_updated_date).diff(
-                    dayjs(previousComment?.last_updated_date),
+                dayjs(currentComment?.created_date).diff(
+                    dayjs(previousComment?.created_date),
                     "minutes"
                 ) <= 10
             ) {
@@ -180,7 +182,7 @@ const SingleChat = ({
                 return (
                     <section
                         style={{
-                            height: "10px",
+                            height: "0px",
                             // backgroundColor: "black"
                         }}
                     />
@@ -218,7 +220,7 @@ const SingleChat = ({
             (total, comment, i, arr) => {
                 total += `${htmlToString(comment?.comment)}\n\n${
                     comment?.user?.name
-                }, ${dayjs(comment?.last_updated_date).format(
+                }, ${dayjs(comment?.created_date).format(
                     "MMM DD, YYYY, hh:mm A"
                 )}`;
 
@@ -336,7 +338,7 @@ const SingleChat = ({
                         {comment?.is_deleted ? (
                             <div
                                 title={`${dayjs(
-                                    comment?.last_updated_date
+                                    comment?.created_date
                                 ).format("MMM DD, YYYY, hh:mm A")}`}
                                 className={`${style.single_comment_deleted_container}`}
                             >
@@ -375,7 +377,7 @@ const SingleChat = ({
                                         className={`${style.single_comment_deleted_comment_body}`}
                                     >
                                         {/* mentioned comment */}
-                                        {comment?.mention_comment ? (
+                                        {comment?.mention ? (
                                             <div
                                                 // onContextMenu={(e) => {
                                                 //     onContextMenu(e);
@@ -405,7 +407,7 @@ const SingleChat = ({
                                                 <article
                                                     className={`${style.chatInput_mentioned_comment_text_area}`}
                                                 >
-                                                    {comment?.mention_comment
+                                                    {comment?.mention
                                                         ?.comment ? (
                                                         <span
                                                             className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
@@ -413,7 +415,7 @@ const SingleChat = ({
                                                             <span
                                                                 dangerouslySetInnerHTML={{
                                                                     __html: comment
-                                                                        ?.mention_comment
+                                                                        ?.mention
                                                                         ?.comment,
                                                                 }}
                                                             />
@@ -421,12 +423,12 @@ const SingleChat = ({
                                                     ) : (
                                                         <></>
                                                     )}
-                                                    {comment?.mention_comment
-                                                        ?.files?.length ? (
+                                                    {comment?.mention?.files_data
+                                                        ?.length ? (
                                                         <span
                                                             className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
                                                         >
-                                                            {comment?.mention_comment?.files?.map(
+                                                            {comment?.mention?.files_data?.map(
                                                                 (file, i) => {
                                                                     return (
                                                                         <div
@@ -438,11 +440,7 @@ const SingleChat = ({
                                                                                 color: "#F17B7C",
                                                                             }}
                                                                         >
-                                                                            <HandleFileIcon
-                                                                                fileName={
-                                                                                    file
-                                                                                }
-                                                                            />
+                                                                            <HandleFileIcon fileName={file?.name} URL={file?.url} />
                                                                         </div>
                                                                     );
                                                                 }
@@ -459,13 +457,11 @@ const SingleChat = ({
                                                     >
                                                         {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
                                                         {`${
-                                                            comment
-                                                                ?.mention_comment
+                                                            comment?.mention
                                                                 ?.user?.name
                                                         }, ${dayjs(
-                                                            comment
-                                                                ?.mention_comment
-                                                                ?.last_updated_date
+                                                            comment?.mention
+                                                                ?.created_date
                                                         ).format(
                                                             "MMM DD, YYYY, hh:mm A"
                                                         )}`}
@@ -489,12 +485,12 @@ const SingleChat = ({
                                                     color: "#F17B7C",
                                                     position: "relative",
                                                     // borderRadius:
-                                                    //     comment?.mention_comment
+                                                    //     comment?.mention
                                                     //         ? "0 0 5px 5px"
                                                     //         : "5px",
                                                     // border: "0.15px solid #f17b7dbb",
                                                     // borderTop:
-                                                    // comment?.mention_comment
+                                                    // comment?.mention
                                                     // ? "none"
                                                     // : "0.15px solid #f17b7dbb",
                                                     padding: "0",
@@ -513,7 +509,7 @@ const SingleChat = ({
                                         )}
 
                                         {/* file will be shown here */}
-                                        {comment?.files?.length ? (
+                                        {comment?.files_data?.length ? (
                                             <FileView
                                                 // onContextMenu={(e) => {
                                                 //     onContextMenu(e);
@@ -523,7 +519,7 @@ const SingleChat = ({
                                                 isCurrentUser={isCurrentUser(
                                                     comment?.user?.id
                                                 )}
-                                                files={comment?.files}
+                                                files={comment?.files_data}
                                                 topMargin={!!comment?.comment}
                                             />
                                         ) : (
@@ -537,7 +533,7 @@ const SingleChat = ({
                         ) : (
                             <div
                                 title={`${dayjs(
-                                    comment?.last_updated_date
+                                    comment?.created_date
                                 ).format("MMM DD, YYYY, hh:mm A")}`}
                                 style={{
                                     alignSelf: isCurrentUser(comment?.user?.id)
@@ -551,7 +547,7 @@ const SingleChat = ({
                                 }`}
                             >
                                 {/* mentioned comment */}
-                                {comment?.mention_comment ? (
+                                {comment?.mention ? (
                                     <div
                                         onContextMenu={(e) => {
                                             onContextMenu(e);
@@ -574,36 +570,33 @@ const SingleChat = ({
                                         <article
                                             className={`${style.chatInput_mentioned_comment_text_area}`}
                                         >
-                                            {comment?.mention_comment
-                                                ?.comment ? (
+                                            {comment?.mention?.comment ? (
                                                 <span
                                                     className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                 >
-                                                    {
-                                                        comment?.mention_comment
-                                                            .comment
-                                                    }
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: comment
+                                                                ?.mention
+                                                                .comment,
+                                                        }}
+                                                    />
                                                 </span>
                                             ) : (
                                                 <></>
                                             )}
-                                            {comment?.mention_comment?.files
-                                                ?.length ? (
+                                            {comment?.mention?.files_data?.length ? (
                                                 <span
                                                     className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
                                                 >
-                                                    {comment?.mention_comment?.files?.map(
+                                                    {comment?.mention?.files_data?.map(
                                                         (file, i) => {
                                                             return (
                                                                 <div
                                                                     key={i}
                                                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                                                 >
-                                                                    <HandleFileIcon
-                                                                        fileName={
-                                                                            file
-                                                                        }
-                                                                    />
+                                                                    <HandleFileIcon fileName={file?.name} URL={file?.url} />
                                                                 </div>
                                                             );
                                                         }
@@ -618,11 +611,9 @@ const SingleChat = ({
                                             >
                                                 {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
                                                 {`${
-                                                    comment?.mention_comment
-                                                        ?.user?.name
+                                                    comment?.mention?.user?.name
                                                 }, ${dayjs(
-                                                    comment?.mention_comment
-                                                        ?.last_updated_date
+                                                    comment?.mention?.mention_created_at
                                                 ).format(
                                                     "MMM DD, YYYY, hh:mm A"
                                                 )}`}
@@ -643,24 +634,27 @@ const SingleChat = ({
                                         onKeyDown={onKeyDown}
                                         style={{
                                             position: "relative",
-                                            borderRadius:
-                                                comment?.mention_comment
-                                                    ? "0 0 5px 5px"
-                                                    : "5px",
-                                            borderTop: comment?.mention_comment
+                                            borderRadius: comment?.mention
+                                                ? "0 0 5px 5px"
+                                                : "5px",
+                                            borderTop: comment?.mention
                                                 ? "none"
                                                 : "0.15px solid #aaaaaa",
                                         }}
                                         className={`${style.singleChat_comment_card_text_message}`}
                                     >
-                                        <div dangerouslySetInnerHTML={{__html:comment?.comment}}/>
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: comment?.comment,
+                                            }}
+                                        />
                                     </div>
                                 ) : (
                                     <></>
                                 )}
 
                                 {/* file will be shown here */}
-                                {comment?.files?.length ? (
+                                {comment?.files_data?.length ? (
                                     <FileView
                                         onContextMenu={(e) => {
                                             onContextMenu(e);
@@ -670,7 +664,7 @@ const SingleChat = ({
                                         isCurrentUser={isCurrentUser(
                                             comment?.user?.id
                                         )}
-                                        files={comment?.files}
+                                        files={comment?.files_data}
                                         topMargin={!!comment?.comment}
                                     />
                                 ) : (
@@ -841,7 +835,7 @@ const FileView = ({
                             key={i}
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
-                            <HandleFileIcon fileName={file} />
+                            <HandleFileIcon fileName={file?.name} URL={file?.url} />
                         </div>
                     );
                 })

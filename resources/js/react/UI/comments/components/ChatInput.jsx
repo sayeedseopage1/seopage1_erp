@@ -25,7 +25,8 @@ import getTextContent, { htmlToString } from "../utils/getTextContent";
 const currentUser = new User(window.Laravel.user);
 
 const ChatInput = ({ setScroll, taskId }) => {
-    const [postComment,{isLoading}] = usePostCommentMutation();
+    const [postComment, { isLoading }] = usePostCommentMutation();
+    const [showEmoji, setShowEmoji] = useState(false);
     const [editorHtml, setEditorHtml] = useState("");
     const [show, setShow] = useState(false);
     const [files, setFiles] = useState([]);
@@ -55,7 +56,7 @@ const ChatInput = ({ setScroll, taskId }) => {
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-        formdata.append("comment", htmlToString(editorHtml)?editorHtml:"");
+        formdata.append("comment", htmlToString(editorHtml) ? editorHtml : "");
         formdata.append("user_id", currentUser.id);
         formdata.append("task_id", taskId);
         formdata.append("added_by", currentUser.id);
@@ -66,7 +67,7 @@ const ChatInput = ({ setScroll, taskId }) => {
                 formdata.append(`file[]`, file);
             });
         }
-        const result = {}
+        const result = {};
         for (const data of formdata.entries()) {
             result[data[0]] = data[1];
             // console.log(`${data[0]} : ${data[1]}`);
@@ -74,7 +75,7 @@ const ChatInput = ({ setScroll, taskId }) => {
         console.log(result);
 
         try {
-            await postComment({taskId, data:formdata});
+            await postComment({ taskId, data: formdata });
             Swal.fire({
                 icon: "success",
                 title: "Comment Sent",
@@ -97,6 +98,7 @@ const ChatInput = ({ setScroll, taskId }) => {
         setContextHolder(null);
         setEditorHtml("");
         setShow(false);
+        setShowEmoji(false);
         setFiles([]);
         setScroll((prev) => !prev);
     };
@@ -112,10 +114,8 @@ const ChatInput = ({ setScroll, taskId }) => {
                     files={files}
                     show={show}
                     setShow={setShow}
-                    // setShowEmoji={setShowEmoji}
-                    // quillRef={quillRef}
-                    // text={text}
-                    // setText={setText}
+                    setShowEmoji={setShowEmoji}
+                    showEmoji={showEmoji}
                 />
             </section>
             <section
@@ -128,10 +128,28 @@ const ChatInput = ({ setScroll, taskId }) => {
                 className={`${style.chatInput_actions_btn_container}`}
             >
                 <FileUpload files={files} setFiles={setFiles} />
-                <IoMdSend
-                    onClick={handleSendComment}
-                    className={`${style.chatInput_actions_btn_send}`}
-                />
+                {isLoading ? (
+                    <div
+                        style={{
+                            flex: "0 0 40px",
+                            height: "40px",
+                            width: "40px",
+                            borderRadius: "40px",
+                            padding: "8px",
+                            cursor: "progress",
+                            backgroundColor: "#49b9fa",
+                        }}
+                        className={`spinner-border text-light`}
+                        role="status"
+                    >
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                ) : (
+                    <IoMdSend
+                        onClick={handleSendComment}
+                        className={`${style.chatInput_actions_btn_send}`}
+                    />
+                )}
             </section>
         </>
     );
@@ -165,24 +183,28 @@ function MentionedComment() {
                     <span
                         className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                     >
-                        <div dangerouslySetInnerHTML={{__html:mentionedComment?.comment}}/>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: mentionedComment?.comment,
+                            }}
+                        />
                     </span>
                 ) : (
                     <></>
                 )}
 
-                {mentionedComment?.files?.length ? (
+                {mentionedComment?.files_data?.length ? (
                     <span
                         className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
                     >
-                        {console.log("=>",mentionedComment)}
-                        {mentionedComment?.files?.map((file, i) => {
+                        {/* {console.log("=>", mentionedComment)} */}
+                        {mentionedComment?.files_data?.map((file, i) => {
                             return (
                                 <div
                                     key={i}
                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                 >
-                                    <HandleFileIcon fileName={file} />
+                                    <HandleFileIcon fileName={file?.name} URL={file?.url} />
                                 </div>
                             );
                         })}
@@ -195,7 +217,7 @@ function MentionedComment() {
                 >
                     {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
                     {`${mentionedComment?.user?.name}, ${dayjs(
-                        mentionedComment?.last_updated_date
+                        mentionedComment?.mention_created_at
                     ).format("MMM DD, YYYY, hh:mm A")}`}
                 </span>
             </article>
@@ -268,10 +290,18 @@ function FilePreviewer({ files, setFiles }) {
     );
 }
 
-function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
+function CommentEditor({
+    show,
+    setShow,
+    files,
+    editorHtml,
+    setEditorHtml,
+    showEmoji,
+    setShowEmoji,
+}) {
     const quillRef = useRef(null);
     const { mentionedComment } = useCommentContext();
-    const [showEmoji, setShowEmoji] = useState(false);
+    // const [showEmoji, setShowEmoji] = useState(false);
 
     useEffect(() => {
         // Focus the Quill editor when the component is rendered
@@ -284,15 +314,16 @@ function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
     }, [showEmoji]);
 
     const handleEmojiSelection = (emoji, e) => {
-        console.log(emoji);
-        console.log(quillRef?.current);
+        // console.log(emoji);
+        // console.log(quillRef?.current);
 
         const quill = quillRef.current?.getEditor();
         const cursorPosition = quill?.getSelection()?.index;
 
-        if (cursorPosition !== undefined) {
+        if (cursorPosition !== undefined && emoji.imageUrl) {
             // Insert the mention at the cursor position
             quill?.insertText(cursorPosition, `${emoji.emoji}`);
+            // quill?.insertEmbed(cursorPosition, 'image', emoji.imageUrl);
             // <img src="" alt="" />
         }
     };
@@ -477,15 +508,13 @@ function FileUpload({ files, setFiles }) {
                 }}
             />
             {/* {!files.length ? ( */}
-                <input
-                    type="file"
-                    id="file-input"
-                    multiple
-                    onChange={(e) =>
-                        setFiles([...Object.values(e.target.files)])
-                    }
-                    style={{ display: "none" }}
-                />
+            <input
+                type="file"
+                id="file-input"
+                multiple
+                onChange={(e) => setFiles([...Object.values(e.target.files)])}
+                style={{ display: "none" }}
+            />
             {/* ) : (
                 <></>
             )} */}

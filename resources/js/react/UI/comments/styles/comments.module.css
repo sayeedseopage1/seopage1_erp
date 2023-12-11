@@ -193,10 +193,14 @@
   /* border: solid; */
   display: flex;
   flex-flow: column nowrap;
-  gap: 5px;
+  justify-content: flex-start;
+  /* gap: 5px; */
 }
 .singleChat_comment_card_text_time{
   font-size: 10px;
+  line-height: 15px;
+  /* margin-bottom: 5px; */
+  /* margin-top: 5px; */
   color: #033C7E;
 }
 .single_comment_deleted_container{
