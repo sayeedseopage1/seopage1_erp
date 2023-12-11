@@ -131,6 +131,7 @@ class DeveloperNeedtoAssignTask extends Command
             
          }
          }
+         $month = '2023-11-01';
          $deadline_tasks = Task::whereIn('board_column_id', [2, 3])->where('created_at','>=',$month)
     ->whereNotNull('due_date')
     ->get();
