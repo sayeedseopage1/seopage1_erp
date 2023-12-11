@@ -134,7 +134,7 @@ const TaskAction = ({ task, status }) => {
 
             {/* daily submission control */}
             
-            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && isEnable && (
+            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && (
                 <DailySubmissionControl />
             )}
 
