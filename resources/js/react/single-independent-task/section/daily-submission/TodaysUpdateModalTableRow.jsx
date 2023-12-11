@@ -20,7 +20,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading, 
     const [updatedValue,] = useState(null);
     const [completedSection, setCompletedSection] = useState('');
     const [submitDailySubmission, { isLoading: isSubmitting }] = useSubmitDailySubmissionMutation();
-
+    
 
     // error state
     const [attachmentLinkError, setAttachmentLinkError] = useState('');
