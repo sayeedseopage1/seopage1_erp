@@ -187,6 +187,7 @@
   height: 30px;
   width: 30px;
   background-color: aquamarine;
+  overflow: hidden;
 }
 .singleChat_comment_card_text{
   /* border: solid; */
@@ -465,6 +466,10 @@
   /* border: solid; */
   /* border-radius: 10px; */
   /* overflow: visible; */
+}
+.chatInput_text_input_emoji{
+  width: 12px;
+  height: 12px;
 }
 .chatInput_text_emoji_icon{
   /* border: solid; */

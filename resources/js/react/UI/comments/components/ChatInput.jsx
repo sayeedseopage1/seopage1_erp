@@ -11,7 +11,7 @@ import { IoMdCloseCircle, IoMdSend } from "react-icons/io";
 import { AiOutlinePlusSquare } from "react-icons/ai";
 import { FaFile } from "react-icons/fa";
 import { BsEmojiSmile } from "react-icons/bs";
-import EmojiPicker from "emoji-picker-react";
+import EmojiPicker, { Emoji } from "emoji-picker-react";
 import { HiReply } from "react-icons/hi";
 import { useCommentContext } from "../CommentsBody";
 import { MdClose } from "react-icons/md";
@@ -55,7 +55,7 @@ const ChatInput = ({ setScroll, taskId }) => {
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-        formdata.append("comment", editorHtml || "");
+        formdata.append("comment", htmlToString(editorHtml)?editorHtml:"");
         formdata.append("user_id", currentUser.id);
         formdata.append("task_id", taskId);
         formdata.append("added_by", currentUser.id);
@@ -63,10 +63,8 @@ const ChatInput = ({ setScroll, taskId }) => {
         formdata.append("mention_id", mentionedComment?.id || null);
         if (files.length) {
             Array.from(files).forEach((file) => {
-                formdata.append(`file`, file);
+                formdata.append(`file[]`, file);
             });
-        } else {
-            formdata.append("file", null);
         }
         const result = {}
         for (const data of formdata.entries()) {
@@ -144,6 +142,8 @@ export default ChatInput;
 function MentionedComment() {
     const { mentionedComment, setMentionedComment } = useCommentContext();
 
+    // console.log({mentionedComment});
+
     return (
         <div
             style={{
@@ -165,15 +165,17 @@ function MentionedComment() {
                     <span
                         className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                     >
-                        {mentionedComment.comment}
+                        <div dangerouslySetInnerHTML={{__html:mentionedComment?.comment}}/>
                     </span>
                 ) : (
                     <></>
                 )}
+
                 {mentionedComment?.files?.length ? (
                     <span
                         className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
                     >
+                        {console.log("=>",mentionedComment)}
                         {mentionedComment?.files?.map((file, i) => {
                             return (
                                 <div
@@ -192,8 +194,8 @@ function MentionedComment() {
                     className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
                 >
                     {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                    {`${mentionedComment?.added_by_name}, ${dayjs(
-                        mentionedComment?.created_at
+                    {`${mentionedComment?.user?.name}, ${dayjs(
+                        mentionedComment?.last_updated_date
                     ).format("MMM DD, YYYY, hh:mm A")}`}
                 </span>
             </article>
@@ -282,12 +284,16 @@ function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
     }, [showEmoji]);
 
     const handleEmojiSelection = (emoji, e) => {
+        console.log(emoji);
+        console.log(quillRef?.current);
+
         const quill = quillRef.current?.getEditor();
         const cursorPosition = quill?.getSelection()?.index;
 
         if (cursorPosition !== undefined) {
             // Insert the mention at the cursor position
             quill?.insertText(cursorPosition, `${emoji.emoji}`);
+            // <img src="" alt="" />
         }
     };
 
@@ -470,7 +476,7 @@ function FileUpload({ files, setFiles }) {
                     width: "100%",
                 }}
             />
-            {!files.length ? (
+            {/* {!files.length ? ( */}
                 <input
                     type="file"
                     id="file-input"
@@ -480,9 +486,9 @@ function FileUpload({ files, setFiles }) {
                     }
                     style={{ display: "none" }}
                 />
-            ) : (
+            {/* ) : (
                 <></>
-            )}
+            )} */}
         </label>
     );
 }

@@ -30,7 +30,7 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import isCurrentUser from "./utils/isCurrentUser";
 import CommentsPlaceholder from "./utils/CommentsPlaceholder";
-import getTextContent from "./utils/getTextContent";
+import getTextContent, { htmlToString } from "./utils/getTextContent";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -57,7 +57,7 @@ const CommentsBody = ({
     const chatbottom_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchText, setSearchText] = useState("");
-    const [allComments, setAllComments] = useState(comments);
+    const [allComments, setAllComments] = useState([]);
     const [commentIndex, setCommentIndex] = useState(0);
     const [searchIndexes, setSearchIndexes] = useState([]);
     const [animation, setAnimation] = useState(false);
@@ -70,9 +70,9 @@ const CommentsBody = ({
     const [contextHolder, setContextHolder] = useState(null);
     // =================================================================
 
-    // useEffect(() => {
-    //     console.log({ contextHolder });
-    // }, [contextHolder]);
+    useEffect(()=>{
+      setAllComments(comments);
+    },[comments])
 
     const hnadleSelectComment = useCallback(() => {
         setSecletedComments((prev) => ({
@@ -80,10 +80,6 @@ const CommentsBody = ({
             [contextHolder.id]: contextHolder,
         }));
     }, [contextHolder]);
-
-    // useEffect(() => {
-    //     console.log({ ...selectedComments });
-    // }, [selectedComments]);
 
     const { contextMenu, onContextMenu, onKeyDown } = useContextMenu(
         <>
@@ -129,8 +125,8 @@ const CommentsBody = ({
             setAllComments(() => {
                 const filteredComments = [...comments].filter((comment) => {
                     return (
-                        !comment.is_deleted &&
-                        getTextContent(comment.comment)
+                        !comment?.is_deleted &&
+                        getTextContent(comment?.comment)
                             .toLowerCase()
                             .includes(searchText.toLowerCase())
                     );
@@ -140,7 +136,7 @@ const CommentsBody = ({
                 });
                 setSearchIndexes(
                     filteredComments.map((comment) => {
-                        return comment.id;
+                        return comment?.id;
                     })
                 );
                 setCommentIndex(0);
@@ -150,7 +146,7 @@ const CommentsBody = ({
             // setScroll((prev) => !prev);
             setSearchIndexes([]);
             setCommentIndex(0);
-            setAllComments([...comments]);
+            setAllComments(comments);
         }
     }, [searchText]);
 
@@ -198,9 +194,9 @@ const CommentsBody = ({
         // console.log({ allSelectedComments });
         const allSelectedCommentsString = allSelectedComments.reduce(
             (total, comment, i, arr) => {
-                total += `${getTextContent(comment.comment)}\n\n${
-                    comment?.added_by_name
-                }, ${dayjs(comment?.created_at).format(
+                total += `${htmlToString(comment?.comment)}\n\n${
+                    comment?.user?.name
+                }, ${dayjs(comment?.last_updated_date).format(
                     "MMM DD, YYYY, hh:mm A"
                 )}`;
 
@@ -257,9 +253,9 @@ const CommentsBody = ({
     const handleCopySingleComment = (comment) => {
         const SelectedCommentsString = [comment].reduce(
             (total, comment, i, arr) => {
-                total += `${getTextContent(comment.comment)}\n\n${
-                    comment?.added_by_name
-                }, ${dayjs(comment?.created_at).format(
+                total += `${htmlToString(comment?.comment)}\n\n${
+                    comment?.user?.name
+                }, ${dayjs(comment?.last_updated_date).format(
                     "MMM DD, YYYY, hh:mm A"
                 )}`;
 
@@ -303,6 +299,7 @@ const CommentsBody = ({
       
     }
 
+    // console.log({allComments});
     return (
         <CommentContext.Provider
             value={{
@@ -547,17 +544,17 @@ const CommentsBody = ({
                         <CommentsPlaceholder />
                     ) : (
                         <>
-                            {allComments.map((comment, i) => {
+                            {allComments?.map((comment, i) => {
                                 return (
                                     <SingleChat
                                         idMatch={
-                                            comment.id ===
+                                            comment?.id ===
                                             searchIndexes[
                                                 searchIndexes.length -
                                                     commentIndex
                                             ]
                                         }
-                                        id={comment.id}
+                                        id={comment?.id}
                                         // comment_text_id={`${comment.id}_comment`}
                                         setScroll={setScroll}
                                         onContextMenu={onContextMenu}
@@ -614,7 +611,7 @@ const CommentsBody = ({
                             </span>
                         </section>
                         {Object.values(selectedComments).every((comment) => {
-                            return isCurrentUser(comment?.user_id);
+                            return isCurrentUser(comment?.user?.id);
                         }) ? (
                             <section
                                 className={`${style.comments_selected_action_controller_btn}`}

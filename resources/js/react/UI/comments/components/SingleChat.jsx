@@ -13,7 +13,7 @@ import HandleFileIcon from "../utils/HandleFileIcon";
 import isCurrentUser from "../utils/isCurrentUser";
 import { User } from "../utils/user-details";
 import Swal from "sweetalert2";
-import getTextContent from "../utils/getTextContent";
+import getTextContent, { htmlToString } from "../utils/getTextContent";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -74,11 +74,12 @@ const SingleChat = ({
     // comment sender info showing handler
     const handleSenderInfo = ({ currentComment, previousComment }) => {
         if (
-            Number(currentComment?.user_id) === Number(previousComment?.user_id)
+            Number(currentComment?.user?.id) ===
+            Number(previousComment?.user?.id)
         ) {
             if (
-                dayjs(currentComment?.created_at).diff(
-                    dayjs(previousComment?.created_at),
+                dayjs(currentComment?.last_updated_date).diff(
+                    dayjs(previousComment?.last_updated_date),
                     "minutes"
                 ) <= 10
             ) {
@@ -87,14 +88,16 @@ const SingleChat = ({
                 return (
                     <span
                         style={{
-                            alignSelf: isCurrentUser(comment?.user_id)
+                            alignSelf: isCurrentUser(comment?.user?.id)
                                 ? "flex-end"
                                 : "flex-start",
                         }}
                         className={`${style.singleChat_comment_card_text_time}`}
                     >
                         {/* 2:54 PM */}
-                        {`${dayjs(comment?.created_at).format("hh:mm A")}`}
+                        {`${dayjs(comment?.last_updated_date).format(
+                            "hh:mm A"
+                        )}`}
                     </span>
                 );
             }
@@ -102,15 +105,15 @@ const SingleChat = ({
             return (
                 <span
                     style={{
-                        alignSelf: isCurrentUser(comment?.user_id)
+                        alignSelf: isCurrentUser(comment?.user?.id)
                             ? "flex-end"
                             : "flex-start",
                     }}
                     className={`${style.singleChat_comment_card_text_time}`}
                 >
                     {/* Nafis, Nov 16,2023, 2:54 PM */}
-                    {`${comment?.added_by_name}, ${dayjs(
-                        comment?.created_at
+                    {`${comment?.user?.name}, ${dayjs(
+                        comment?.last_updated_date
                     ).format("MMM DD, YYYY, hh:mm A")}`}
                 </span>
             );
@@ -120,9 +123,10 @@ const SingleChat = ({
     // comment sender avator showing handler
     const handleSenderAvator = ({ currentComment, previousComment }) => {
         if (
-            Number(currentComment?.user_id) === Number(previousComment?.user_id)
+            Number(currentComment?.user?.id) ===
+            Number(previousComment?.user?.id)
         ) {
-            if (isCurrentUser(comment?.user_id)) {
+            if (isCurrentUser(comment?.user?.id)) {
                 return <></>;
             } else {
                 return (
@@ -135,13 +139,18 @@ const SingleChat = ({
                 );
             }
         } else {
-            if (isCurrentUser(comment?.user_id)) {
+            if (isCurrentUser(comment?.user?.id)) {
                 return <></>;
             } else {
                 return (
                     <span
                         className={`${style.singleChat_comment_card_avator}`}
-                    ></span>
+                    >
+                        <img style={{
+                            height:"100%",
+                            width:"100%",
+                        }} src={`/user-uploads/avatar/${comment?.user?.image}`} alt="" />
+                    </span>
                 );
             }
         }
@@ -150,11 +159,12 @@ const SingleChat = ({
     // comment field top space handler
     const handleTopSpace = ({ currentComment, previousComment }) => {
         if (
-            Number(currentComment?.user_id) === Number(previousComment?.user_id)
+            Number(currentComment?.user?.id) ===
+            Number(previousComment?.user?.id)
         ) {
             if (
-                dayjs(currentComment?.created_at).diff(
-                    dayjs(previousComment?.created_at),
+                dayjs(currentComment?.last_updated_date).diff(
+                    dayjs(previousComment?.last_updated_date),
                     "minutes"
                 ) <= 10
             ) {
@@ -206,9 +216,9 @@ const SingleChat = ({
     const handleCopySingleComment = (comment) => {
         const SelectedCommentsString = [comment].reduce(
             (total, comment, i, arr) => {
-                total += `${getTextContent(comment.comment)}\n\n${
-                    comment?.added_by_name
-                }, ${dayjs(comment?.created_at).format(
+                total += `${htmlToString(comment?.comment)}\n\n${
+                    comment?.user?.name
+                }, ${dayjs(comment?.last_updated_date).format(
                     "MMM DD, YYYY, hh:mm A"
                 )}`;
 
@@ -248,16 +258,14 @@ const SingleChat = ({
             });
     };
 
-    const handleDeleteSingleComment = (comment)=>{
-      
-    }
+    const handleDeleteSingleComment = (comment) => {};
 
     return (
         <div
             id={id}
             className={`${style.singleChat}`}
             style={{
-                alignSelf: isCurrentUser(comment?.user_id)
+                alignSelf: isCurrentUser(comment?.user?.id)
                     ? "flex-end"
                     : "flex-start",
             }}
@@ -279,7 +287,7 @@ const SingleChat = ({
                     display: "inline-flex",
                     // border:"solid",
                     gap: "0 6px",
-                    flexDirection: isCurrentUser(comment?.user_id)
+                    flexDirection: isCurrentUser(comment?.user?.id)
                         ? "row-reverse"
                         : "row",
                 }}
@@ -306,7 +314,7 @@ const SingleChat = ({
                     <></>
                 )}
                 <section className={`${style.singleChat_comment_card}`}>
-                    {/* {!isCurrentUser(comment?.user_id) && (
+                    {/* {!isCurrentUser(comment?.user?.id) && (
                         <span
                             className={`${style.singleChat_comment_card_avator}`}
                         ></span>
@@ -327,9 +335,9 @@ const SingleChat = ({
                         {/* comment message box */}
                         {comment?.is_deleted ? (
                             <div
-                                title={`${dayjs(comment?.created_at).format(
-                                    "MMM DD, YYYY, hh:mm A"
-                                )}`}
+                                title={`${dayjs(
+                                    comment?.last_updated_date
+                                ).format("MMM DD, YYYY, hh:mm A")}`}
                                 className={`${style.single_comment_deleted_container}`}
                             >
                                 <section
@@ -402,11 +410,13 @@ const SingleChat = ({
                                                         <span
                                                             className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                         >
-                                                            {
-                                                                comment
-                                                                    ?.mention_comment
-                                                                    .comment
-                                                            }
+                                                            <span
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: comment
+                                                                        ?.mention_comment
+                                                                        ?.comment,
+                                                                }}
+                                                            />
                                                         </span>
                                                     ) : (
                                                         <></>
@@ -451,11 +461,11 @@ const SingleChat = ({
                                                         {`${
                                                             comment
                                                                 ?.mention_comment
-                                                                ?.added_by_name
+                                                                ?.user?.name
                                                         }, ${dayjs(
                                                             comment
                                                                 ?.mention_comment
-                                                                ?.created_at
+                                                                ?.last_updated_date
                                                         ).format(
                                                             "MMM DD, YYYY, hh:mm A"
                                                         )}`}
@@ -487,19 +497,23 @@ const SingleChat = ({
                                                     // comment?.mention_comment
                                                     // ? "none"
                                                     // : "0.15px solid #f17b7dbb",
-                                                    padding:"0",
+                                                    padding: "0",
                                                     border: "none",
                                                 }}
                                                 className={`${style.singleChat_comment_card_text_message}`}
                                             >
-                                                {comment.comment}
+                                                <div
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: comment?.comment,
+                                                    }}
+                                                />
                                             </div>
                                         ) : (
                                             <></>
                                         )}
 
                                         {/* file will be shown here */}
-                                        {comment?.files ? (
+                                        {comment?.files?.length ? (
                                             <FileView
                                                 // onContextMenu={(e) => {
                                                 //     onContextMenu(e);
@@ -507,9 +521,9 @@ const SingleChat = ({
                                                 // }}
                                                 // onKeyDown={onKeyDown}
                                                 isCurrentUser={isCurrentUser(
-                                                    comment?.user_id
+                                                    comment?.user?.id
                                                 )}
-                                                files={comment.files}
+                                                files={comment?.files}
                                                 topMargin={!!comment?.comment}
                                             />
                                         ) : (
@@ -522,11 +536,11 @@ const SingleChat = ({
                             </div>
                         ) : (
                             <div
-                                title={`${dayjs(comment?.created_at).format(
-                                    "MMM DD, YYYY, hh:mm A"
-                                )}`}
+                                title={`${dayjs(
+                                    comment?.last_updated_date
+                                ).format("MMM DD, YYYY, hh:mm A")}`}
                                 style={{
-                                    alignSelf: isCurrentUser(comment?.user_id)
+                                    alignSelf: isCurrentUser(comment?.user?.id)
                                         ? "flex-end"
                                         : "flex-start",
                                 }}
@@ -605,10 +619,10 @@ const SingleChat = ({
                                                 {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
                                                 {`${
                                                     comment?.mention_comment
-                                                        ?.added_by_name
+                                                        ?.user?.name
                                                 }, ${dayjs(
                                                     comment?.mention_comment
-                                                        ?.created_at
+                                                        ?.last_updated_date
                                                 ).format(
                                                     "MMM DD, YYYY, hh:mm A"
                                                 )}`}
@@ -639,14 +653,14 @@ const SingleChat = ({
                                         }}
                                         className={`${style.singleChat_comment_card_text_message}`}
                                     >
-                                        {comment.comment}
+                                        <div dangerouslySetInnerHTML={{__html:comment?.comment}}/>
                                     </div>
                                 ) : (
                                     <></>
                                 )}
 
                                 {/* file will be shown here */}
-                                {comment?.files ? (
+                                {comment?.files?.length ? (
                                     <FileView
                                         onContextMenu={(e) => {
                                             onContextMenu(e);
@@ -654,9 +668,9 @@ const SingleChat = ({
                                         }}
                                         onKeyDown={onKeyDown}
                                         isCurrentUser={isCurrentUser(
-                                            comment?.user_id
+                                            comment?.user?.id
                                         )}
-                                        files={comment.files}
+                                        files={comment?.files}
                                         topMargin={!!comment?.comment}
                                     />
                                 ) : (
@@ -670,10 +684,10 @@ const SingleChat = ({
                                         setShowCommentMenu((prev) => !prev);
                                     }}
                                     style={{
-                                        left: isCurrentUser(comment?.user_id)
+                                        left: isCurrentUser(comment?.user?.id)
                                             ? "-14px"
                                             : "auto",
-                                        right: isCurrentUser(comment?.user_id)
+                                        right: isCurrentUser(comment?.user?.id)
                                             ? "auto"
                                             : "-14px",
                                     }}
@@ -694,12 +708,12 @@ const SingleChat = ({
                                         ref={menuRef}
                                         style={{
                                             left: isCurrentUser(
-                                                comment?.user_id
+                                                comment?.user?.id
                                             )
                                                 ? "-98px"
                                                 : "auto",
                                             right: isCurrentUser(
-                                                comment?.user_id
+                                                comment?.user?.id
                                             )
                                                 ? "auto"
                                                 : "-98px",
@@ -743,7 +757,9 @@ const SingleChat = ({
                                         <section
                                             onClick={() => {
                                                 setShowCommentMenu(false);
-                                                handleCopySingleComment(comment);
+                                                handleCopySingleComment(
+                                                    comment
+                                                );
                                             }}
                                         >
                                             <MdOutlineContentCopy
@@ -756,11 +772,13 @@ const SingleChat = ({
                                             </span>
                                         </section>
 
-                                        {isCurrentUser(comment?.user_id) ? (
+                                        {isCurrentUser(comment?.user?.id) ? (
                                             <section
                                                 onClick={() => {
                                                     setShowCommentMenu(false);
-                                                    handleDeleteSingleComment(comment);
+                                                    handleDeleteSingleComment(
+                                                        comment
+                                                    );
                                                 }}
                                             >
                                                 <IoMdCloseCircleOutline
@@ -816,16 +834,20 @@ const FileView = ({
             }}
             className={`${style.singleChat_comment_card_files}`}
         >
-            {files.map((file, i) => {
-                return (
-                    <div
-                        key={i}
-                        className={`${style.chatInput_filePreview__file} shadow-sm`}
-                    >
-                        <HandleFileIcon fileName={file} />
-                    </div>
-                );
-            })}
+            {[...files]?.length ? (
+                [...files]?.map((file, i) => {
+                    return (
+                        <div
+                            key={i}
+                            className={`${style.chatInput_filePreview__file} shadow-sm`}
+                        >
+                            <HandleFileIcon fileName={file} />
+                        </div>
+                    );
+                })
+            ) : (
+                <></>
+            )}
         </span>
     );
 };

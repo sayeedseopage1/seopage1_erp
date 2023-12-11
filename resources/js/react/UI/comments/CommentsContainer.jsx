@@ -21,16 +21,16 @@ const CommentsContainer = ({
 }) => {
     // ---------------------------------------------------------
     const param = useParams();
-    // console.log({ param });
-
+    
     // ---------------------------------------------------------
-
+    
     const { width } = useWindowSize();
     const [fullScreenView, setFullScreenView] = useState(false);
     const { data, isFetching, isLoading, refetch } = useGetCommentsQuery(
         param?.taskId
-    );
-
+        );
+        
+    // console.log({ param,data });
     if (fullScreenView) {
         return (
             <Modal isOpen={isOpen}>
@@ -49,8 +49,8 @@ const CommentsContainer = ({
                                 fullScreenView={fullScreenView}
                                 setFullScreenView={setFullScreenView}
                                 close={close}
-                                // comments={param?.taskId?data:comments}
-                                comments={demoComments}
+                                comments={param?.taskId?data:comments}
+                                // comments={demoComments}
                                 loading={isFetching || isLoading}
                                 refetch={refetch}
                                 taskId={taskId?taskId:param?.taskId}
@@ -98,8 +98,8 @@ const CommentsContainer = ({
                                 fullScreenView={fullScreenView}
                                 setFullScreenView={setFullScreenView}
                                 close={close}
-                                // comments={param?.taskId?data:comments}
-                                comments={demoComments}
+                                comments={param?.taskId?data:comments}
+                                // comments={demoComments}
                                 loading={isFetching || isLoading}
                                 refetch={refetch}
                                 taskId={taskId?taskId:param?.taskId}
@@ -143,8 +143,8 @@ const CommentsContainer = ({
                                         fullScreenView={fullScreenView}
                                         setFullScreenView={setFullScreenView}
                                         close={close}
-                                        // comments={param?.taskId?data:comments}
-                                        comments={demoComments}
+                                        comments={param?.taskId?data:comments}
+                                        // comments={demoComments}
                                         loading={isFetching || isLoading}
                                         refetch={refetch}
                                         taskId={taskId?taskId:param?.taskId}
