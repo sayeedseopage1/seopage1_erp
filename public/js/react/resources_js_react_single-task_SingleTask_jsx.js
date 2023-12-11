@@ -10959,9 +10959,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
               date: startDate,
               setDate: setStateDate,
               onCalendarOpen: function onCalendarOpen() {
-                var min = dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate).isBefore(dayjs.dayjs()) ? dayjs.dayjs().toDate() : dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate).toDate();
                 var max = dueDate || dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate).toDate();
-                (0,_helper_calender_open__WEBPACK_IMPORTED_MODULE_18__.calenderOpen)(min, max);
+                (0,_helper_calender_open__WEBPACK_IMPORTED_MODULE_18__.calenderOpen)(max);
               }
             })
           }), (required_error === null || required_error === void 0 || (_required_error$start = required_error.start_date) === null || _required_error$start === void 0 ? void 0 : _required_error$start[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
@@ -10995,9 +10994,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
               date: dueDate,
               setDate: setDueDate,
               onCalendarOpen: function onCalendarOpen() {
-                var min = dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ? startDate : dayjs.dayjs().toDate();
                 var max = dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate).toDate();
-                (0,_helper_calender_open__WEBPACK_IMPORTED_MODULE_18__.calenderOpen)(min, max);
+                (0,_helper_calender_open__WEBPACK_IMPORTED_MODULE_18__.calenderOpen)(max);
               }
             })
           }), (required_error === null || required_error === void 0 || (_required_error$due_d = required_error.due_date) === null || _required_error$due_d === void 0 ? void 0 : _required_error$due_d[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
@@ -12827,21 +12825,15 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var d = new _utils_dateController__WEBPACK_IMPORTED_MODULE_1__.CompareDate();
-var calenderOpen = function calenderOpen(minDate, maxDate) {
-  var today = d.dayjs();
+var calenderOpen = function calenderOpen(maxDate) {
+  var today = d.dayjs().toDate();
   var isBefore = d.dayjs(maxDate).isBefore(today, 'day');
   var isEqual = d.dayjs(maxDate).isSame(today, 'day');
-  var isMaxDateGreaterThenMinDate = d.dayjs(maxDate).isBefore(minDate, 'day');
-
-  // if min > max date
-  if (isMaxDateGreaterThenMinDate) {
-    react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error("Minimum date must be less then maximum date");
-  }
   if (isEqual) {
     react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.warn('Task deadline today! Parent task running out of time. No alternative date chosen.');
   }
-  if (!isBefore && !isEqual) {
-    react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error('Parent task running out of time.');
+  if (isBefore) {
+    react_toastify__WEBPACK_IMPORTED_MODULE_0__.toast.error('The parent task deadline has already been exceeded.');
   }
 };
 

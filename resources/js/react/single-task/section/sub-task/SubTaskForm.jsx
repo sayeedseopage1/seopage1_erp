@@ -479,14 +479,10 @@ const SubTaskForm = ({ close }) => {
                                 date={startDate}
                                 setDate={setStateDate}
                                 onCalendarOpen={() => {
-                                    const min = dayjs.dayjs(task?.startDate).isBefore(dayjs.dayjs()) ?
-                                    dayjs.dayjs().toDate() :
-                                    dayjs.dayjs(task?.startDate).toDate();
-
                                     const max = dueDate ||
                                     dayjs.dayjs(task?.dueDate).toDate();
 
-                                    calenderOpen(min, max);
+                                    calenderOpen(max);
 
                                 }}
                             />
@@ -524,10 +520,8 @@ const SubTaskForm = ({ close }) => {
                                 date={dueDate}
                                 setDate={setDueDate}
                                 onCalendarOpen={() => {
-                                    const min = dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ?
-                                    startDate : dayjs.dayjs().toDate();
                                     const max = dayjs.dayjs(task?.dueDate).toDate();
-                                    calenderOpen(min, max);
+                                    calenderOpen(max);
                                 }}
                             />
                         </div>
