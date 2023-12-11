@@ -434,7 +434,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',8)->get();
+            $authorizers= User::where('role_id',1)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'DFA';
