@@ -2168,15 +2168,22 @@ class ProjectController extends AccountBaseController
            //     $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
 
-                $helper = new HelperPendingActionController();
-
-
-                $helper->ProjectDeliverableCreation($past_action->project_id);
+               
 
 
         }
     }
+    $pending_actions = PendingAction::where('code','DCA')->where('project_id',$project->id)->where('authorization_for',$project->pm_id)->count();
+    if($pending_actions == 0)
+    {
+        $helper = new HelperPendingActionController();
 
+
+        $helper->ProjectDeliverableCreation($project->id);
+    
+
+    }
+   
         if($project->status == 'not started'){
             if ($request->project_challenge != 'No Challenge') {
                 $project_update = Project::find($request->project_id);
