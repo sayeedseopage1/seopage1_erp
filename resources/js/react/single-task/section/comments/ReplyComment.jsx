@@ -1,15 +1,16 @@
 import React from "react";
+import { toast } from "react-toastify";
 import CKEditorComponent from "../../../ckeditor";
+import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
 import Button from "../../../global/Button";
 import Switch from "../../../global/Switch";
-import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
-import _ from "lodash";
-import { toast } from "react-toastify";
 import { useReplyTaskCommentMutation } from "../../../services/api/TaskCommentApiSlice";
+import { ErrorText } from '../../components/form/ErrorText';
 
 const ReplyComment = ({ comment, close, onReply }) => {
     const [text, setText] = React.useState("");
     const [files, setFiles] = React.useState([]);
+    const [error, setError] = React.useState(null);
 
     // comment reply api hook from redux toolkit
     const [replyTaskComment, { isLoading }] = useReplyTaskCommentMutation();
@@ -32,6 +33,13 @@ const ReplyComment = ({ comment, close, onReply }) => {
     // handle update
     const onReplied = async (e) => {
         e.preventDefault();
+
+        // validate
+        // if comment text is not provided show validation message
+        if(!text){
+            setError(s => ({...s, comment: "Please provide a comment before submitting."}))
+            return ;
+        }
 
         const formData = new FormData();
         formData.append("reply_text", text);
@@ -72,6 +80,7 @@ const ReplyComment = ({ comment, close, onReply }) => {
                             onChange={handleEditor}
                         />
                     </div>
+                    {error?.comment? <ErrorText>{error?.comment}</ErrorText> :null}
 
                     <div className="mt-3">
                         <h6>Attach Files:</h6>

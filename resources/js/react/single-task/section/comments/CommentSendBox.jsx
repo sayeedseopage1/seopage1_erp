@@ -1,11 +1,11 @@
-import * as React from 'react' 
+import dayjs from 'dayjs';
+import * as React from 'react';
 import CKEditorComponent from '../../../ckeditor';
-import Button from '../../components/Button';  
 import UploadFilesInLine from '../../../file-upload/UploadFilesInLine';
-import { useSelector } from 'react-redux';
 import { useStoreCommentMutation } from '../../../services/api/SingleTaskPageApi';
 import { User } from '../../../utils/user-details';
-import dayjs from 'dayjs';
+import Button from '../../components/Button';
+import { ErrorText } from '../../components/form/ErrorText';
 
 const CommentSendBox = ({onCommentPost, task}) => {
   const [editMode, setEditMode] = React.useState(false);
@@ -15,16 +15,26 @@ const CommentSendBox = ({onCommentPost, task}) => {
   const auth = new User(window?.Laravel?.user);
 
   const [storeComment, {isLoading}] = useStoreCommentMutation();
- 
+
+  // error
+  const [error, setError] = React.useState(null);
+
   const handleEditorChange = (e, editor) => {
     const data = editor.getData();
     setComment(data);
-  } 
+  }
 
-  console.log(files)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // is text is not provide show error message
+    if(!comment){
+        setError(s => ({...s, comment: "Please provide a comment before submitting."}));
+        return;
+    }
+
+    // make form data
     const fd = new FormData();
     fd.append('comment', comment);
     fd.append('task_id', task?.id);
@@ -33,7 +43,7 @@ const CommentSendBox = ({onCommentPost, task}) => {
         fd.append('file[]', file);
     });
 
-    storeComment({data: fd, task_id: task?.id}).unwrap().then(res=>{
+    await storeComment({data: fd, task_id: task?.id}).unwrap().then(res=>{
       setEditMode(false);
       setComment("");
       setFiles('');
@@ -50,32 +60,35 @@ const CommentSendBox = ({onCommentPost, task}) => {
         <div className='w-100'>
           <div className='ck-editor-holder'>
               <CKEditorComponent data={comment} onChange={handleEditorChange} />
-            </div> 
+            </div>
+
+            {/* Show validation error */}
+            {error?.comment ? <ErrorText >{error?.comment}</ErrorText> : null}
 
             <div className='mt-2'>
               <h6>Attach Files</h6>
-              <UploadFilesInLine 
-                files={files} 
-                setFiles={setFiles} 
+              <UploadFilesInLine
+                files={files}
+                setFiles={setFiles}
                 uploadInputClass='comment-file-upload'
                 fileWrapperClass='comment-uploaded-file'
               />
             </div>
           <div className='mt-3 d-flex align-items-center'>
-            {isLoading ? 
+            {isLoading ?
                   <Button className='cursor-processing mr-2'>
-                      <div 
-                          className="spinner-border text-white" 
+                      <div
+                          className="spinner-border text-white"
                           role="status"
                           style={{width: '18px', height: '18px' }}
                       >
                       </div>
                       Processing...
-                  </Button> : 
+                  </Button> :
                 <Button className='mr-2' onClick={handleSubmit}>Send</Button>}
-            
-            <Button 
-              variant='secondary' 
+
+            <Button
+              variant='secondary'
               onClick={() => setEditMode(false)}
             >Close</Button>
           </div>
@@ -83,27 +96,27 @@ const CommentSendBox = ({onCommentPost, task}) => {
       )
     }
 
-    return <div 
-      onClick={() => setEditMode(true)} 
+    return <div
+      onClick={() => setEditMode(true)}
       className='__box'
-    ><span>Write a comment ...</span></div> 
+    ><span>Write a comment ...</span></div>
   }
 
   return (
     <div className='sp1_task_comment_send_box'>
         <>
             <div className='__avatar rounded-circle mr-2' style={{width: '36px', height: '36px'}}>
-                <img 
+                <img
                   src={auth?.getAvatar()}
                   alt='sender_name'
                   width="36px"
                   height="36px"
                   className='rounded-circle'
                 />
-            </div> 
+            </div>
         </>
           <div className='__send-box'>
-            {commentMode()}  
+            {commentMode()}
           </div>
     </div>
   )

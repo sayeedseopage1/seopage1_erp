@@ -1,33 +1,31 @@
-import React, { useEffect, useMemo } from "react";
-import TimerControl from "./TimerControl";
-import MarkAsComplete from "./MarkAsComplete";
-import {
-    timeControlPermision,
-    markAsCompletedButtonPermission,
-    taskEditPermision,
-    approveButtonPermission,
-    needRevisionPermision,
-    revisionButtonPermission,
-} from "../../permissions";
-import RevisionControl from "./Revision/RevisionControl";
-import RevisionViewControl from "./Revision/RevisionViewControl";
-import ApproveTask from "./approve-task/ApproveTask";
-import ClientApproval from "./client-approval/ClientApproval";
-import ReportControl from "./report/Report";
-import { User } from "../../../utils/user-details";
 import _ from "lodash";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
     useDeveloperCanCompleteTaskQuery,
     useLazyCheckSubTaskTimerQuery,
 } from "../../../services/api/SingleTaskPageApi";
-import DailySubmissionControl from "./DailySubmissionControl";
-import SubtaskCreationControl from "./SubtaskCreationControl";
-import { Link, useNavigate } from "react-router-dom";
-import Dropdown from "../../components/Dropdown";
-import { toast } from "react-toastify";
-import { useBattery, useIdle, useNetworkState, usePageLeave, usePermission } from "react-use";
+import { User } from "../../../utils/user-details";
 import Button from "../../components/Button";
+import Dropdown from "../../components/Dropdown";
 import { useDailySubmission } from "../../hooks/useDailySubmission";
+import {
+    approveButtonPermission,
+    markAsCompletedButtonPermission,
+    needRevisionPermision,
+    revisionButtonPermission,
+    taskEditPermision,
+    timeControlPermision,
+} from "../../permissions";
+import DailySubmissionControl from "./DailySubmissionControl";
+import MarkAsComplete from "./MarkAsComplete";
+import RevisionControl from "./Revision/RevisionControl";
+import RevisionViewControl from "./Revision/RevisionViewControl";
+import SubtaskCreationControl from "./SubtaskCreationControl";
+import TimerControl from "./TimerControl";
+import ApproveTask from "./approve-task/ApproveTask";
+import ClientApproval from "./client-approval/ClientApproval";
+import ReportControl from "./report/Report";
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
@@ -36,7 +34,7 @@ const TaskAction = ({ task, status }) => {
     const [timerStart, setTimerStart] = React.useState(false);
 
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
-
+  
     const {
         data: checkMarkAsCompleteEnableStatus,
         isLoading: isLoadingCompleteCheck,
@@ -136,7 +134,7 @@ const TaskAction = ({ task, status }) => {
 
             {/* daily submission control */}
             
-            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && isEnable && ( 
+            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && (
                 <DailySubmissionControl />
             )}
 

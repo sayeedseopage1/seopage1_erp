@@ -45,8 +45,7 @@ const SingleTaskPage = () => {
 
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
-
-
+  
 
     useEffect(() => {
         (() => {
@@ -79,9 +78,7 @@ const SingleTaskPage = () => {
 
     // console.log({ task });
 
-    if (!task) return null;
-
-
+    if (!task) return null;     
 
     return (
         <div className="position-relative">

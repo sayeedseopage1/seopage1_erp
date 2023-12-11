@@ -1,10 +1,10 @@
 import { useState } from "react";
-import TodaysUpdateModalTableRow from "./TodaysUpdateModalTableRow";
-import style from "./styles/DailySubmission.module.css";
-import "./styles/DataTable.css";
-import { useGetDailySubmissionQuery } from "../../../services/api/dailySubmissionApiSlice";
 import { useSearchParams } from "react-router-dom";
+import { useGetDailySubmissionQuery } from "../../../services/api/dailySubmissionApiSlice";
 import { User } from "../../../utils/user-details";
+import TodaysUpdateModalTableRow from "./TodaysUpdateModalTableRow";
+import "./styles/DataTable.css";
+import dayjs from "dayjs";
 
 const TodaysUpdateModalTable = () => {
     const [open, setOpen] = useState(null);
@@ -12,11 +12,11 @@ const TodaysUpdateModalTable = () => {
     const date_type = searchParams.get("data_type");
 
     const loggedUser = new User(window.Laravel?.user);
-
+    const today = dayjs().format('YYYY-MM-DD');
     const { data, isLoading } = useGetDailySubmissionQuery(
-        `${loggedUser?.id}?date_type=${date_type}`
-    ); 
-
+        `${loggedUser?.id}?date_type=${today}`
+    );
+   
     return (
         <div className={`sp1_tlr_tbl_wrapper`} style={{ overflow: "auto" }}>
             <table className={`sp1_tlr_table`} style={{ minWidth: "0" }}>
