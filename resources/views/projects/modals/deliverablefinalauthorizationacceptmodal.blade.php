@@ -40,8 +40,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    @foreach ($milestones as $mItem)
+                                @foreach ($milestones as $mItem)
+                                    <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $mItem->created_at }}</td>
                                         <td>{{ $mItem->milestone_title }}</td>
@@ -60,8 +60,8 @@
                                                 <a href="{{ route('employees.show',$milestonCreatedBy->id) }}" class="pl-2 ">{{ $milestonCreatedBy->name }}</a>
                                             </div>
                                         </td>
-                                    @endforeach
-                                </tr>
+                                    </tr>
+                                @endforeach
                                 </tbody>
                             </table>
                         @endif
@@ -81,11 +81,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
                                     @foreach ($deliverables as $dItem)
-                                        @php
-                                            $dMilestone = App\Models\ProjectMilestone::where('id',$dItem->milestone_id)->first();
-                                        @endphp
+                                    @php
+                                        $dMilestone = App\Models\ProjectMilestone::where('id',$dItem->milestone_id)->first();
+                                    @endphp
+                                    <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $dItem->deliverable_type }}</td>
                                         <td>{{ $dItem->title }}</td>
@@ -104,8 +104,8 @@
                                                 <a href="{{ route('employees.show',$milestonCreatedBy->id) }}" class="pl-2 ">{{ $milestonCreatedBy->name }}</a>
                                             </div>
                                         </td>
+                                    </tr>
                                     @endforeach
-                                </tr>
                                 </tbody>
                             </table>
                         @endif

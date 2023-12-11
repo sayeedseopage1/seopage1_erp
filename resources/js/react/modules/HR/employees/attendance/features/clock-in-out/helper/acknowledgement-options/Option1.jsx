@@ -20,6 +20,7 @@ const Option1 = ({
   const [comment, setComment] = React.useState("");
   const [error, setError] = React.useState(null);
   const [durations, setDurations] = React.useState([{start: '00:00 AM', end: '00:00 AM', id: 'd32sew'}])
+  const [sType, setSType] = React.useState(''); // submission type
 
   // unique id
   const uniqueId = Math.random().toString(6).slice(2);
@@ -50,7 +51,7 @@ const Option1 = ({
   }
 
   // handle form submit
-  const handleSubmission = (e) => {
+  const handleSubmission = (e, submissionType) => {
     e.preventDefault();
     const data = {
         reason_for_less_tracked_hours_a_day_task:
@@ -69,7 +70,8 @@ const Option1 = ({
 
         return setError({comment: 'Please explain the reason here!'})
     }
-    onSubmit(data);
+    setSType(submissionType);
+    onSubmit(data, submissionType, onBack);
   }
 
 
@@ -154,9 +156,24 @@ const Option1 = ({
                                 Back
                             </Button>
 
-                            <Button onClick={handleSubmission} isLoading={isLoading} loaderTitle='Processing...'>
+                            <Button
+                                onClick={(e) => handleSubmission(e, '')}
+                                isLoading={sType !== 'CONTINUE' && isLoading}
+                                loaderTitle='Processing...'
+                            >
                                 Submit
                             </Button>
+
+                            <Button
+                                variant='success'
+                                className='ml-2'
+                                onClick={(e) => handleSubmission(e, 'CONTINUE')}
+                                isLoading={sType === 'CONTINUE' && isLoading}
+                                loaderTitle='Processing...'
+                            >
+                                Submit and add more
+                            </Button>
+
                         </div>
                     </div>
                 </Switch.Case>

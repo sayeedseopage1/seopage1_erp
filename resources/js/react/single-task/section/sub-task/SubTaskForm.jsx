@@ -25,6 +25,7 @@ import { checkIsURL } from "../../../utils/check-is-url";
 import { CompareDate } from "../../../utils/dateController";
 import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
+import { calenderOpen } from "./helper/calender_open";
 
 const SubTaskForm = ({ close }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
@@ -477,6 +478,17 @@ const SubTaskForm = ({ close }) => {
                                 }
                                 date={startDate}
                                 setDate={setStateDate}
+                                onCalendarOpen={() => {
+                                    const min = dayjs.dayjs(task?.startDate).isBefore(dayjs.dayjs()) ?
+                                    dayjs.dayjs().toDate() :
+                                    dayjs.dayjs(task?.startDate).toDate();
+
+                                    const max = dueDate ||
+                                    dayjs.dayjs(task?.dueDate).toDate();
+
+                                    calenderOpen(min, max);
+
+                                }}
                             />
                         </div>
                         {required_error?.start_date?.[0] && (
@@ -505,11 +517,18 @@ const SubTaskForm = ({ close }) => {
                                     .dayjs()
                                     .format("DD-MM-YYYY")}`}
                                 minDate={
-                                    startDate || dayjs.dayjs(task?.startDate).toDate()
+                                    dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ?
+                                    startDate : dayjs.dayjs().toDate()
                                 }
                                 maxDate={dayjs.dayjs(task?.dueDate).toDate()}
                                 date={dueDate}
                                 setDate={setDueDate}
+                                onCalendarOpen={() => {
+                                    const min = dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ?
+                                    startDate : dayjs.dayjs().toDate();
+                                    const max = dayjs.dayjs(task?.dueDate).toDate();
+                                    calenderOpen(min, max);
+                                }}
                             />
                         </div>
                         {required_error?.due_date?.[0] && (

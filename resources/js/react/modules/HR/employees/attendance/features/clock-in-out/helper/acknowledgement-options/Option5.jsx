@@ -22,6 +22,7 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         let filtered = durations.filter((d) => d.id !== id);
         setDurations([...filtered]);
     };
+    const [sType, setSType] = React.useState(''); // submission type
 
     // add duration
     const addDurationForm = () => {
@@ -49,7 +50,7 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     }
 
     // handle form submit
-    const handleSubmission = (e) => {
+    const handleSubmission = (e, submissionType) => {
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task:
@@ -58,8 +59,9 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             durations: JSON.stringify(durations),
         };
 
+        setSType(submissionType)
         if (isValid()){
-            onSubmit(data);
+            onSubmit(data, submissionType, onBack);
         }else{
             Swal.fire({
                 position: "center",
@@ -161,11 +163,21 @@ const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 </Button>
 
                                 <Button
-                                    onClick={handleSubmission}
-                                    isLoading={isLoading}
-                                    loaderTitle="Processing..."
+                                    onClick={e => handleSubmission(e, '')}
+                                    isLoading={sType !== 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
                                 >
                                     Submit
+                                </Button>
+
+                                <Button
+                                    variant='success'
+                                    className='ml-2'
+                                    onClick={e => handleSubmission(e, 'CONTINUE')}
+                                    isLoading={sType === 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
+                                >
+                                    Submit and add more
                                 </Button>
                             </div>
                         </div>

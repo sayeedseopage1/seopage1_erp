@@ -68,14 +68,14 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         <x-forms.datepicker fieldId="start_date" fieldRequired="true"
                             :fieldLabel="__('modules.projects.startDate')" fieldName="start_date"
                             :fieldValue="$project->start_date->format(global_setting()->date_format)"
-                            :fieldPlaceholder="__('placeholders.date')" />
+                            :fieldPlaceholder="__('placeholders.date')"/>
                     </div>
 
                     <div class="col-md-6 col-lg-6" id="deadlineBox">
                         <x-forms.datepicker fieldId="deadline" fieldRequired="true"
                             :fieldLabel="__('modules.projects.deadline')" fieldName="deadline"
                             :fieldValue="($project->deadline ? $project->deadline->format(global_setting()->date_format) : '')"
-                            :fieldPlaceholder="__('placeholders.date')" />
+                            :fieldPlaceholder="__('placeholders.date')" disabled="true"/>
                     </div>
 
                   {{--  <div class="col-md-6 col-lg-3">
@@ -223,7 +223,11 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         @php
                             $task = App\Models\Task::where('project_id',$project->id)->first();
                         @endphp
-                        @if ($task == null || Auth::user()->role_id !=4)
+
+
+                        @if ($task == null || Auth::user()->role_id ==4)
+
+
                         <div class="col-md-12 col-lg-12">
                             <div class="form-group mt-3">
                                 <label class="text-dark-grey" data-label="true" for="description">Project General Guidelines
@@ -376,6 +380,15 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                       </div>
                   </div>
                     <div class="col-lg-4 col-md-6 mt-3">
+                        @if($project->deal->project_type == 'hourly')
+                        <x-forms.label fieldId="project_budget" :fieldLabel="__('Hourly Rate')">
+                        </x-forms.label>
+                        <div class="input-group">
+
+                            <input type="number" name="project_budget" value="{{ $project->deal->hourly_rate }}"
+                                class="form-control height-35 f-15 readonly-background" readonly>
+                        </div>
+                        @else
                         <x-forms.label fieldId="project_budget" :fieldLabel="__('modules.projects.projectBudget')">
                         </x-forms.label>
                         <div class="input-group">
@@ -383,6 +396,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                             <input type="number" name="project_budget" value="{{ $project->deal->actual_amount }}"
                                 class="form-control height-35 f-15 readonly-background" readonly>
                         </div>
+                        @endif
                     </div>
                     <div class="col-md-6 col-lg-4 d-none" id="clientNotification">
                         <div class="form-group">
@@ -430,10 +444,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                 </div>
                 <div class="col-md-12 col-lg-12 mb-5">
                     <div class="form-group">
-                        <label class="" for="">Comments</label>
+                        <label class="" for="">Comments<sup class="mr-1">*</sup></label>
                         <div class="d-flex">
-                          <textarea id="comments" name="comments" rows="6" cols="180"></textarea>
-
+                          <textarea id="comments" name="comments" rows="6" cols="180" class="form-control @error('comments') is-invalid @enderror"></textarea>
+                          @error('comments')
+                        <div class="text-danger">{{ $message }}</div>
+                        @enderror
                         </div>
                     </div>
                 </div>
@@ -653,8 +669,12 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         });
 
         $('#save-project-form').click(function() {
+
+            @if ($task == null || Auth::user()->role_id == 4)
+
             var note = CKEDITOR.instances.description.getData();
             document.getElementById('description').value = note;
+            @endif
 
             const url = "{{ route('projects.update', $project->id) }}";
 

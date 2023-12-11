@@ -1434,6 +1434,7 @@ class HomeController extends Controller
     }
     // ==================== STORE WEB CONTENT START ==================
     public function storeWebContent(Request $request){
+        DB::beginTransaction();
         $data = $request->all();
         $folder_links = json_encode($data['folder_link']);
         $reference_websites = json_encode($data['reference_website']);
@@ -1485,11 +1486,19 @@ class HomeController extends Controller
                     Notification::send($user, new ClientFormSubmitNotification($web_content));
                 }
         }else{
-            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-            foreach($users as $user)
-                {
-                    Notification::send($user, new ClientFormSubmitNotification($web_content));
-                }
+            if(Auth::user()->role_id==11 || Auth::user()->role_id==12){
+                $users = User::where('role_id',1)->orWhere('role_id',11)->orWhere('role_id',12)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientFormSubmitNotification($web_content));
+                    }
+            }else{
+                $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientFormSubmitNotification($web_content));
+                    }
+            }
         }
 
         return response()->json(['status'=>200]);
@@ -1533,10 +1542,18 @@ class HomeController extends Controller
                     Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
                 }
         }else{
+            if(Auth::user()->role_id==11 || Auth::user()->role_id==12){
+                $users = User::where('role_id',1)->orWhere('role_id',11)->orWhere('role_id',12)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
+                    }
+            }else{
             $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-            foreach($users as $user)
-                {
-                    Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
+                foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
+                    }
                 }
         }
 
@@ -1578,11 +1595,19 @@ class HomeController extends Controller
                      Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
                 }
         }else{
-            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-            foreach($users as $user)
-                {
-                     Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
-                }
+            if(Auth::user()->role_id==11 || Auth::user()->role_id==12){
+                $users = User::where('role_id',1)->orWhere('role_id',11)->orWhere('role_id',12)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
+                    }
+            }else{
+                $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
+                    }
+            }
         }
 
         return response()->json(['status'=>200]);
@@ -1624,11 +1649,19 @@ class HomeController extends Controller
                     Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
                 }
         }else{
-            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-            foreach($users as $user)
-                {
-                    Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
-                }
+            if(Auth::user()->role_id==11 || Auth::user()->role_id==12){
+                $users = User::where('role_id',1)->orWhere('role_id',11)->orWhere('role_id',12)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
+                    }
+            }else{
+                $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
+                    }
+            }
         }
         return response()->json(['status'=>200]);
     }
@@ -1672,11 +1705,19 @@ class HomeController extends Controller
                     Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
                 }
         }else{
-            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-            foreach($users as $user)
-                {
-                    Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
-                }
+            if(Auth::user()->role_id==11 || Auth::user()->role_id==12){
+                $users = User::where('role_id',1)->orWhere('role_id',11)->orWhere('role_id',12)->get();
+                    foreach($users as $user)
+                    {
+                        Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
+                    }
+            }else{
+                $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+                    foreach($users as $user)
+                        {
+                            Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
+                        }
+            }
         }
 
         return response()->json(['status'=>200]);

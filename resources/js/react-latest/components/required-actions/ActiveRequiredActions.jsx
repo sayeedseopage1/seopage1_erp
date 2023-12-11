@@ -7,10 +7,12 @@ import LiveRequiredAction from "./ActiveRequiredAction/LiveRequiredAction";
 import ExpireRequiredAction from "./ActiveRequiredAction/ExpireRequiredAction";
 import style from "../../styles/required-actions.module.css";
 import { useGetExpiredRequiredActionQuery } from "../../services/api/requiredActionApiSlice";
+import { useRefresh } from "./Index";
 
 const ActiveRequiredActions = () => {
     const [action, setAction] = useState("live");
-    const { data } = useGetExpiredRequiredActionQuery();
+    const {user} = useRefresh();
+    const { data } = useGetExpiredRequiredActionQuery(user?.id?`user_id=${user?.id}`:'');
 
     return (
         <div>

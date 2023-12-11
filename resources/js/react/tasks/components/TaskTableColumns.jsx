@@ -299,6 +299,27 @@ export const TaskTableColumns = [
     }
   },
 
+
+  {
+    id: 'submission_data',
+    header: 'Submission Date',
+    accessorFn: row => `${row?.task_submission_date ? dayjs(row?.task_submission_date).format('DD-MM-YYYY') : '--'}`,
+    cell: ({ row }) => {
+      const data = row?.original;
+      return (
+        <strong>
+          {
+            data?.task_submission_date ? (
+              <>
+                {dayjs(data?.task_submission_date).format('DD-MM-YYYY')} <br />
+                {dayjs(data?.task_submission_date).format('hh:mm A')} <br />
+              </>
+            ) : '--'
+          }
+        </strong>
+      )
+    }
+  },
   {
     id: 'approved_on',
     header: 'Approved On',

@@ -177,10 +177,20 @@
         @else
             @if($project->authorization_status != 'submitted')
             <div class="row mx-3">
-                <div class="mt-3 mr-2">
-                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
-                    @include('projects.modals.clientdeliverableaddmodal')
-                </div>
+                @if($project->project_challenge == null || $project->project_challenge != "No Challenge" )
+                <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+                @include('projects.modals.clientdeliverableaddmodal')
+                @else 
+             
+                @if ($project->admin_authorization_status == 0)
+                    <button type="button" class="btn btn-primary alertAddDeliverable"><i class="fas fa-plus"></i> Add Deliverable</button>
+                @else
+                    <button type="button" class="btn btn-primary"  data-toggle="modal" data-target="#deliverables_info_Modal"><i class="fas fa-plus"></i> Add Deliverable</button>
+                    @include('projects.modals.deliverable_info_modal')
+                @endif
+
+              @endif
+               
                 @php
                     $client_revision = \App\Models\ProjectDeliverablesClientDisagree::where([
                         'project_id' => $project->id,
@@ -711,7 +721,7 @@
                         </td>
                         @if($deliverable->to != null)
                             <td class="text-center icon-container">
-                                Between {{$deliverable->from}} & {{$deliverable->to}}
+                                Between {{\Carbon\Carbon::parse($deliverable->from)->format("jS M, Y")}} & {{\Carbon\Carbon::parse($deliverable->to)->format("jS M, Y")}}
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
                                     $data = \App\Models\DelivarableColumnEdit::where([
@@ -798,7 +808,7 @@
                                 @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
                                     <i class="fa fa-check-circle show_i_on_top" aria-hidden="true" title="Request for change"></i>
                                 @endif
-                                On {{$deliverable->from}}
+                                On {{\Carbon\Carbon::parse($deliverable->from)->format("jS M, Y")}}
                                 @if(\Auth::user()->role_id == 1 || \Auth::user()->role_id = 4)
                                 @php
                                     $data = \App\Models\DelivarableColumnEdit::where([
@@ -1156,21 +1166,30 @@
         }
 
         const today = new Date(); // get current date
+ 
+        const maxDate = new Date('{{ \Carbon\Carbon::parse($project->deadline)->format("Y-m-d") }}');
+        
+         
         const dp1 = datepicker('#from_add', {
             position: 'bl',
-            minDate: today, // set minimum date to current date
+            minDate: today > maxDate ? maxDate : today, // set minimum date to current date
             onSelect: (instance, date) => {
               dp2.setMin(date);
             },
+            maxDate,
+            disabler: date => date.getDay() === 0 || today > maxDate || date > maxDate,
             ...datepickerConfig
         });
+        
 
         const dp2 = datepicker('#to_add', {
             position: 'bl',
-            minDate: today, // set minimum date to current date
+            minDate: today > maxDate ? maxDate : today, // set minimum date to current date
             onSelect: (instance, date) => {
                dp1.setMax(date);
             },
+            maxDate,
+            disabler: date => date.getDay() === 0 || today > maxDate || date > maxDate,
             ...datepickerConfig
         });
     });
@@ -1182,7 +1201,7 @@
             var id = $(this).attr('data-id');
             Swal.fire({
                 title: "Are you sure?",
-                text: "You won't be delete this item!",
+                text: "You want to delete this item!",
                 icon: 'warning',
                 showCancelButton: true,
                 focusConfirm: false,
@@ -1287,6 +1306,12 @@
                     window.location.href = '/projects/approve-deliverables/'+$(this).attr('data-id');
                 }
             })
+        })
+    })
+    $(document).ready(function() {
+        $('.alertAddDeliverable').click(function(e) {
+            e.preventDefault();
+            Swal.fire("Project challenge authorization is not done yet. Please check this out with your reporting boss");
         })
     })
 </script>

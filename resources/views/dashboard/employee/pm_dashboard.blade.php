@@ -400,7 +400,7 @@
                                                 @include('dashboard.card-data-modal.value_of_upsale_crosssale')
                                         </h5>
                                         <div class="d-flex flex-wrap">
-                                            <a href="#" data-toggle="modal" data-target="#valueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects) }}">
+                                            <a href="#" data-toggle="modal" data-target="#valueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects_value_get) }}">
                                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                                     {{round($no_of_new_milestones_added_on_old_projects_value,2)}}$ ({{ $pm_core_metrics->value_of_upsale ?? ''}} usd)<span
                                                         class="f-12 font-weight-normal text-lightest"></span>

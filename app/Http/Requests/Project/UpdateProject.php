@@ -31,13 +31,32 @@ class UpdateProject extends CoreRequest
         $rules = [
             'project_name' => 'required|max:150',
             'start_date' => 'required',
-
-            'project_summary'=>'required',
+            'comments' => [
+                function ($attribute, $value, $fail) {
+                    $allowedChallenges = [
+                        'Has Challenge But We Can Do It',
+                        'Has Challenge But We Cannot Do It',
+                        'Has Challenge, But We May/May Not be Able to Do It',
+                    ];
+                    
+                    $projectChallenge = request()->input('project_challenge');
+        
+                    if (in_array($projectChallenge, $allowedChallenges) && empty($value)) {
+                        $fail("The $attribute field is required when selecting certain project challenges.");
+                    }
+                },
+            ],
 
             // 'hours_allocated' => 'required|numeric',
             'client_id' => 'requiredIf:client_view_task,true',
             'project_code' => 'required|unique:projects,project_short_code,'.$this->route('project'),
         ];
+        if ($this->project_summary) {
+            $rules['project_summary'] = 'required';
+        }
+        if ($this->project_challenge) {
+            $rules['project_challenge'] = 'required';
+        }
 
         // if (!$this->has('without_deadline')) {
         //     $rules['deadline'] = 'required';
@@ -65,11 +84,11 @@ class UpdateProject extends CoreRequest
         if (!request()->private && !request()->public && $project->public == 0 && request()->member_id) {
             $rules['member_id.0'] = 'required';
         }
-      //  dd($project->deal->project_type);
-        if($project->deal->project_type != 'hourly')
-        {
-            $rules['deadline'] = 'required';
-        }
+    //    dd($project->deadline);
+        // if($project->deal->project_type != 'hourly')
+        // {
+        //    $rules['deadline'] = 'required';
+        // }
 
         if (request()->get('custom_fields_data')) {
             $fields = request()->get('custom_fields_data');

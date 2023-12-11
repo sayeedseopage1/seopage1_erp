@@ -561,12 +561,14 @@ class DashboardController extends AccountBaseController
     }
     public function clockInStatus()
     {
+    //    / dd()
         $user_id = Auth::user()->id;
         $today = Carbon::now();
 
         if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
             $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
             $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
+        //    / dd($user,$userClockIn);
 
             // dd($userClockIn);
             $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
@@ -577,22 +579,29 @@ class DashboardController extends AccountBaseController
 
 
 
+
             $userTaskCount = $userGetTasks->count();
+
 
             $userDailyTaskSubmission = true;
                 if ($userTaskCount > 0) {
                     $report = DailySubmission::where('user_id', $userClockIn->user_id)
                                             -> whereDate('report_date',$userClockIn->created_at)
                                             -> get();
+
+                                            
+                                            // dd($report->count(), $userTaskCount);
                     if($report->count() === $userTaskCount){
                         $userDailyTaskSubmission = true;
                     }else {
                         $userDailyTaskSubmission = false;
                     }
 
+
                 }else{
                     // dd('2');
                     $userDailyTaskSubmission = true;
+                    
                 }
 
                
@@ -634,7 +643,7 @@ class DashboardController extends AccountBaseController
 
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
-
+        // $userDailyTaskSubmission = true;
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
@@ -769,3 +778,4 @@ class DashboardController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
   }
+    

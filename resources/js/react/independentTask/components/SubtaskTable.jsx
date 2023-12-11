@@ -1,37 +1,31 @@
 import * as React from 'react';
-import { convertTime } from '../../utils/converTime';
 import { CompareDate } from '../../utils/dateController';
 const compareDate = new CompareDate();
 
 import {
-  useReactTable, getCoreRowModel,
-  getPaginationRowModel,
-  getFilteredRowModel,
-  getExpandedRowModel,
-  getSortedRowModel,
-  flexRender
+    flexRender,
+    getCoreRowModel,
+    getExpandedRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    useReactTable
 } from '@tanstack/react-table';
 
 import _ from 'lodash';
-import TasksTablePagination from './TasksTablePagination';
-import dayjs from 'dayjs';
-import TaskTableLoader from './loader/TaskTableLoader';
-import { useSelector } from 'react-redux';
-import Dropdown from './Dropdown';
-import Button from './Button';
-import StopWatch from './Timer';
-import EmptyTable from '../../global/EmptyTable';
-import Person from './Person';
-import { DragableColumnHeader } from './table/DragableColumnHeader';
-import ReportButton from './ReportButton';
-import { User } from '../../utils/user-details';
 import { useLocalStorage } from 'react-use';
+import EmptyTable from '../../global/EmptyTable';
+import { User } from '../../utils/user-details';
+import TasksTablePagination from './TasksTablePagination';
+import TaskTableLoader from './loader/TaskTableLoader';
+import { DragableColumnHeader } from './table/DragableColumnHeader';
 
 
 export default function SubTasksTable({
     isLoading,
     filter,
     tableName,
+    tableData,
     search,
     reportPermission,
     hideColumns,
@@ -39,7 +33,6 @@ export default function SubTasksTable({
     columnVisibility,
     setColumnVisibility
 }){
-  const { subtasks } = useSelector(s => s.tasks);
   const [data, setData] = React.useState([])
   const [expanded, setExpanded] = React.useState({});
   const [sorting, setSorting] = React.useState([]);
@@ -48,7 +41,7 @@ export default function SubTasksTable({
   const [ globalFilter, setGlobalFilter ] = React.useState('');
 
 
-  const _tasks = React.useMemo(()=> subtasks, [subtasks]);
+  const _tasks = React.useMemo(()=> tableData, [tableData]);
 
   React.useEffect(() => {
     if(_.size(_tasks) === _.size(data)){

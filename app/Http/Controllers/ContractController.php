@@ -833,7 +833,7 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-        //        dd($request->all());
+            //    dd($request->all());
         $total_value = $request->input('another_value') * 2;
 
         $project = Project::where('id', $request->project_id)->first();
@@ -863,6 +863,7 @@ class ContractController extends AccountBaseController
             $milestone->milestone_title = $request->title;
             $milestone->project_id = $request->project_id;
             $milestone->milestone_type = $request->milestone_type;
+            $milestone->service_type = $request->service_type;
 
             $milestone->actual_cost =  $request->cost;
             $project = Project::where('id', $request->project_id)->first();
@@ -996,6 +997,7 @@ class ContractController extends AccountBaseController
                 $milestone->summary = $request->summary;
                 $milestone->currency_id = 1;
                 $milestone->milestone_type = $request->milestone_type;
+                $milestone->service_type = $request->service_type;
 
                 $milestone->update();
                 return response()->json([
@@ -1192,7 +1194,7 @@ class ContractController extends AccountBaseController
             $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
             $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
-            $project->project_summary = $request->project_summary;
+          //  $project->project_summary = $request->project_summary;
             $project->save();
 
             if ($deal->project_type == 'hourly') {
@@ -1725,7 +1727,7 @@ class ContractController extends AccountBaseController
             $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
             $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
-            $project->project_summary = $request->project_summary;
+          //  $project->project_summary = $request->project_summary;
             $project->save();
 
             if ($deal->project_type == 'hourly') {

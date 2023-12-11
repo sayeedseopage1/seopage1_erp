@@ -34,7 +34,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [isEnableEmployeeSelectionList, setIsEnableEmployeeSelectionList] =
         React.useState(false);
     const [isOutsideOfErp, setIsOutsideOfErp] = React.useState(false);
-
+    const [sType, setSType] = React.useState(''); // submission type
     const auth = useAuth();
 
     // editor data change
@@ -131,15 +131,16 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
 
 
     // handle submission
-    const handleSubmission = (e) => {
+    const handleSubmission = (e,submissionType) => {
         e.preventDefault();
         const fd = {
             ...data,
             durations: JSON.stringify([{id: 'de2sew', start: durationStart, end: durationEnd}]),
         }
 
+        setSType(submissionType)
         if(isValid()){
-            onSubmit(fd);
+            onSubmit(fd, submissionType, onBack);
         }else {
             Swal.fire({
                 position: "center",
@@ -432,8 +433,22 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     Back
                                 </Button>
 
-                                <Button onClick={handleSubmission} isLoading={isLoading} loaderTitle='Processing...'>
+                                <Button
+                                    onClick={e => handleSubmission(e, '')}
+                                    isLoading={sType !== 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
+                                >
                                     Submit
+                                </Button>
+
+                                <Button
+                                    variant='success'
+                                    className='ml-2'
+                                    onClick={e => handleSubmission(e, 'CONTINUE')}
+                                    isLoading={sType === 'CONTINUE' && isLoading}
+                                    loaderTitle='Processing...'
+                                >
+                                    Submit and add more
                                 </Button>
                             </div>
                         </div>

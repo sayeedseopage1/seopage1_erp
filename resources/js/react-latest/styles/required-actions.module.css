@@ -25,7 +25,12 @@
   gap: 10px;
   font-family: 'Poppins', sans-serif !important;
 }
-
+.refresh_container{
+  display: inline-flex;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif !important;
+  align-items: center;
+}
 .btn{
   border: solid var(--primary) 2px;
   border-radius: 5px;
@@ -238,6 +243,80 @@
   /* background-color: #F7F7F7; */
 }
 /* ---------- view bar (end) ---------- */
+
+
+
+/* ---------- user bar (start) ---------- */
+.user_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.user_label{
+  font-size: 16px;
+  /* width: 80px; */
+}
+.user_field{
+  flex: 0 1 150px;
+  min-width: 0;
+  width: 100%;
+  min-width: 150px;
+  /* max-width: 150px; */
+  padding: 10px 30px 10px 10px;
+  font-size: 16px;
+  color: var(--placeholder);
+  outline: none;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  /* background-color: #F7F7F7; */
+}
+.user_field_down_arrow{
+  position: absolute;
+  height: 13px;
+  width: 13px;
+  right: 5px;
+  top: calc(50% - 6.5px);
+}
+.user_field_dropdown_container{
+  /* max-height: 350px; */
+  border: solid 0.5px rgb(182, 182, 182);
+  /* overflow-y: auto; */
+}
+.user_field_dropdown_container_search{
+  width: calc(100% - 6px);
+  min-width: 0;
+  padding: 10px;
+  font-size: 16px;
+  color: #28313c;
+  outline: none;
+  border: solid 1px #E9ECEF;
+  border-radius: 3px;
+  margin: 0 3px;
+}
+.user_field_dropdown_container_btn_group{
+  max-height: 350px;
+  overflow-y: auto;
+}
+.user_field_dropdown_container_btn{
+  color: #28313c;
+  background-color: white;
+}
+.user_field_dropdown_container_btn:active{
+  color: #28313c;
+  background-color: #E9ECEF;
+}
+.user_field_dropdown_container_btn_active{
+  color: #28313c;
+  background-color: #E9ECEF;
+}
+/* ---------- user bar (end) ---------- */
+
+
+
 .custom_bg{
   background-color: #F7F7F7;
   border-radius: 5px;

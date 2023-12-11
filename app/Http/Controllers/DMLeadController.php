@@ -167,12 +167,14 @@ class DMLeadController extends AccountBaseController
                 'bid_value' => 'required',
                 'bid_value2' => 'required',
                 'value' => 'required',
+                'lead_source' => 'required',
                 'project_type' => 'required',
                 'description' => 'required',
                 'cover_letter' => 'required',
             ], [
                 'client_name.required' => 'Please enter the project name!',
                 'country.required' => 'Please select client country!',
+                'lead_source.required' => 'Please select lead source!',
                 'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
                 'deadline.required' => 'Please select project deadline from Freelancer.com!',
                 'original_currency_id.required' => 'Please select correct currency!',
@@ -187,21 +189,21 @@ class DMLeadController extends AccountBaseController
         }else{
             $request->validate([
                 'client_name' => 'required|max:255',
-                'project_id' => 'required|unique:leads,project_id,'.$request->project_id.'|numeric',
                 'country' => 'required',
                 'project_link' => 'required|url',
                 'original_currency_id' => 'required',
                 'bid_value' => 'required',
                 'bid_value2' => 'required',
                 'value' => 'required',
+                'lead_source' => 'required',
                 'project_type' => 'required',
                 'description' => 'required',
                 'cover_letter' => 'required',
             ], [
                 'client_name.required' => 'Please enter the project name!',
-                'project_id.required' => 'The project id has already been taken!',
                 'project_type.required' => 'The project type field is required!',
                 'country.required' => 'Please select client country!',
+                'lead_source.required' => 'Please select lead source!',
                 'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
                 'original_currency_id.required' => 'Please select correct currency!',
                 'bid_value.required' => 'Please enter minimum project budget!',
@@ -256,6 +258,7 @@ class DMLeadController extends AccountBaseController
         $lead->currency_id= 1;
         $lead->cover_letter= $request->cover_letter;
         $lead->status= 'DM';
+        $lead->lead_source= $request->lead_source;
 
         $lead->save();
         $lead_agent= new LeadAgent();
@@ -423,6 +426,7 @@ class DMLeadController extends AccountBaseController
       $lead->cover_letter= $request->cover_letter;
       $lead->currency_id= 1;
       $lead->total_spent= $request->total_spent;
+      $lead->lead_source= $request->lead_source;
       $lead->save();
 
       foreach ($originalValues as $attribute => $originalValue) {
@@ -524,14 +528,7 @@ class DMLeadController extends AccountBaseController
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $message_links = $request->message_link;
-        $value= '';
-
-        if (is_array($message_links) || is_object($message_links)) {
-            foreach ($message_links as $link) {
-                $value= $value  . $link .' <br> ';
-
-            }
-        }
+        $value= json_encode($request['message_link']);
         // DB::beginTransaction();
         $deal= new DealStage();
         $deal->short_code= 'DSEOP1'. $suffle;

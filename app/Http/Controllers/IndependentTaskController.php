@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Helper\Files;
 use App\Models\PendingParentTaskConversation;
+use App\Models\SubTask;
 use App\Models\Task;
 use App\Models\TaskUser;
 use App\Models\User;
@@ -49,8 +50,6 @@ class IndependentTaskController extends AccountBaseController
                             'pending_parent_tasks.id','pending_parent_tasks.heading','pending_parent_tasks.description','pending_parent_tasks.start_date','pending_parent_tasks.due_date','pending_parent_tasks.category_id','pending_parent_tasks.board_column_id','pending_parent_tasks.need_authorization','pending_parent_tasks.approval_status','user.id as assign_to_id','user.name as assign_to_name','user.image as assign_to_avator','userRole.name as assign_to_designation','pending_parent_tasks.u_id','pending_parent_tasks.independent_task_status','addedBy.id as assign_by_id','addedBy.name as assign_by_name','addedBy.image as assign_by_avator','addedByRole.name as assign_by_designation','authorizeBy.id as authorize_by_id','authorizeBy.name as authorize_by_name','authorizeBy.image as authorize_by_avator','client.id as existing_client_id','client.name as existing_client_name','pending_parent_tasks.client_name as new_client','pending_parent_tasks.comment','pending_parent_tasks.created_at as creation_date')
                             ->where('pending_parent_tasks.independent_task_status', '1')
                             ->get();
-
-
 
         return response()->json([
             'pendingParentTask'=> $pendingParentTask,
@@ -381,8 +380,11 @@ class IndependentTaskController extends AccountBaseController
                             ->leftJoin('users as client','tasks.client_id','client.id')
                             ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
                             ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
-                            ->select('tasks.id','tasks.u_id','tasks.heading','tasks.description','tasks.start_date','tasks.due_date','taskboard_columns.id as board_column_id','taskboard_columns.column_name as board_column_name','taskboard_columns.label_color as board_column_label_color','assignedBy.id as assigned_by_id','assignedBy.name as assigned_by_name','assignedBy.image as assigned_by_avator','assignedTo.id as assigned_to_id','assignedTo.name as assigned_to_name','assignedTo.image as assigned_to_avator','client.id as existing_client_id','client.name as existing_client_name','client.image as existing_client_avator','tasks.client_name as new_client','pending_parent_tasks.created_at as creation_date')
-                            ->where('tasks.independent_task_status',1);
+                            ->select('tasks.id','tasks.u_id','tasks.heading','tasks.description','tasks.start_date','tasks.due_date','taskboard_columns.id as board_column_id','taskboard_columns.column_name as board_column_name','taskboard_columns.label_color as board_column_label_color','assignedBy.id as assigned_by_id','assignedBy.name as assigned_by_name','assignedBy.image as assigned_by_avator','assignedTo.id as assigned_to_id','assignedTo.name as assigned_to_name','assignedTo.image as assigned_to_avator','client.id as existing_client_id','client.name as existing_client_name','client.image as existing_client_avator','tasks.client_name as new_client','pending_parent_tasks.created_at as creation_date',
+                            DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id) as subtasks_count'),
+                            )
+                            ->where('tasks.independent_task_status',1)
+                            ->whereNull('tasks.subtask_id');
                           //  ->get();
 
                             if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
@@ -450,6 +452,7 @@ class IndependentTaskController extends AccountBaseController
                             }else {
                                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
                             }
+
         return response()->json([
             'data'=>$tasks,
             'status'=>200
@@ -469,5 +472,121 @@ class IndependentTaskController extends AccountBaseController
         ]);
     }
 
+    // GET All INDEPENDENT SUB TASKS
+    public function independentAllSubTask(Request $request){
+
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $assignee_to = $request->input('assignee_to', null);
+        $assignee_by = $request->input('assignee_by', null);
+
+
+        $clientId = $request->input('client_name', null);
+      //  $projectId = $request->input('project_id', null);
+        $status = $request->input('status', null);
+
+        $sub_task = DB::table('sub_tasks')
+            ->select('tasks.id','tasks.u_id','sub_tasks.title as heading','sub_tasks.description','sub_tasks.start_date','sub_tasks.due_date','taskboard_columns.id as board_column_id','taskboard_columns.column_name as board_column_name','taskboard_columns.label_color as board_column_label_color','assignedBy.id as assigned_by_id','assignedBy.name as assigned_by_name','assignedBy.image as assigned_by_avator','assignedTo.id as assigned_to_id','assignedTo.name as assigned_to_name','assignedTo.image as assigned_to_avator','client.id as existing_client_id','client.name as existing_client_name','client.image as existing_client_avator','tasks.client_name as new_client','pending_parent_tasks.created_at as creation_date',
+            DB::raw('(SELECT (tasks.id) FROM tasks WHERE sub_tasks.task_id = tasks.id) as task_id'),
+            DB::raw('(SELECT (tasks.heading) FROM tasks WHERE sub_tasks.task_id = tasks.id) as task_heading')
+            )
+            ->leftJoin('tasks','tasks.subtask_id','sub_tasks.id')
+            ->leftJoin('users as assignedBy','sub_tasks.added_by','assignedBy.id')
+            ->leftJoin('task_users','tasks.id','task_users.task_id')
+            ->leftJoin('users as assignedTo','sub_tasks.assigned_to','assignedTo.id')
+            ->leftJoin('users as client','tasks.client_id','client.id')
+            ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
+            ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
+            ->where('tasks.independent_task_status',1);
+            // ->get();
+
+            if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+            {
+                $sub_task = $sub_task->whereDate('sub_tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
+            }else
+            {
+                if (!is_null($startDate)) {
+                    $sub_task = $sub_task->whereDate('sub_tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                }
+                if (!is_null($endDate)) {
+                    $sub_task = $sub_task->whereDate('sub_tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                }
+
+            }
+
+            if (!is_null($assignee_to)) {
+                $sub_task = $sub_task->where('task_users.user_id', $assignee_to);
+            }
+            if (!is_null($assignee_by)) {
+                $sub_task = $sub_task->where('sub_tasks.added_by', $assignee_by);
+            }
+            if (!is_null($clientId)) {
+                $sub_task = $sub_task->where('tasks.client_name', $clientId)->orWhere('client.name',$clientId);
+            }
+
+            if(!is_null($status))
+            {
+                if($status == 11)
+                {
+                    $sub_task = $sub_task;
+
+                }elseif ($status== 10) {
+                    $sub_task = $sub_task->where('tasks.board_column_id','!=',4);
+                }elseif ($status == 1) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',1);
+                }elseif ($status == 2) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',2);
+                }elseif ($status == 3) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',3);
+                }elseif ($status == 4) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',4);
+                }elseif ($status == 6) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',6);
+                }elseif ($status == 7) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',7);
+                }elseif ($status == 8) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',8);
+                }
+                elseif($status == 9) {
+                    $sub_task = $sub_task->where('tasks.board_column_id',9);
+                }
+
+            }
+            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+            {
+                $sub_task = $sub_task->where('task_users.user_id',Auth::id())->orderBy('sub_tasks.created_at', 'desc')->get();
+            }
+            else {
+                $sub_task = $sub_task->orderBy('sub_tasks.created_at', 'desc')->get();
+            }
+
+        return response()->json([
+            'data'=>$sub_task,
+            'status'=>200
+        ]);
+    }
+
+
+    // GET INDEPENDENT SUB TASKS BY TASK ID
+    public function independentSubTask($task_id){
+        $sub_task = DB::table('sub_tasks')
+            ->select('tasks.id','tasks.u_id','sub_tasks.title as heading','sub_tasks.description','sub_tasks.start_date','sub_tasks.due_date','taskboard_columns.id as board_column_id','taskboard_columns.column_name as board_column_name','taskboard_columns.label_color as board_column_label_color','assignedBy.id as assigned_by_id','assignedBy.name as assigned_by_name','assignedBy.image as assigned_by_avator','assignedTo.id as assigned_to_id','assignedTo.name as assigned_to_name','assignedTo.image as assigned_to_avator','client.id as existing_client_id','client.name as existing_client_name','client.image as existing_client_avator','tasks.client_name as new_client','pending_parent_tasks.created_at as creation_date')
+            ->leftJoin('tasks','tasks.subtask_id','sub_tasks.id')
+            ->leftJoin('users as assignedBy','sub_tasks.added_by','assignedBy.id')
+            ->leftJoin('task_users','tasks.id','task_users.task_id')
+            ->leftJoin('users as assignedTo','sub_tasks.assigned_to','assignedTo.id')
+            ->leftJoin('users as client','tasks.client_id','client.id')
+            ->leftJoin('taskboard_columns','tasks.board_column_id','taskboard_columns.id')
+            ->leftJoin('pending_parent_tasks','tasks.pp_task_id','pending_parent_tasks.id')
+            ->where('tasks.independent_task_status',1)
+            ->where('sub_tasks.task_id',$task_id)
+            ->get();
+
+        return response()->json([
+            'data'=>$sub_task,
+            'status'=>200
+        ]);
+    }
 
 }

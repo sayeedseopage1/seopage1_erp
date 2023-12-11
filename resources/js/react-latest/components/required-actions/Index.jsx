@@ -5,16 +5,21 @@ import ActiveRequiredActions from "./ActiveRequiredActions";
 import PastRequiredActions from "./PastRequiredActions";
 import Pagination, { PaginationContext } from "./Pagination";
 import { ToastContainer } from "react-toastify";
+import { User as USER } from "../../utils/user-details";
+import User from "./FilterBar/User";
 
 const RefreshContext = createContext({
     refresh: false,
     setRefresh: () => {},
     setLoading: () => {},
+    user:{},
 });
 export function useRefresh() {
-    const { refresh, handleRefresh, setLoading } = useContext(RefreshContext);
-    return { refresh, handleRefresh, setLoading };
+    const { refresh, handleRefresh, setLoading, user } = useContext(RefreshContext);
+    return { refresh, handleRefresh, setLoading, user };
 }
+
+const currentUser = new USER(window.Laravel.user);
 
 export default function Index() {
     // pagination related state
@@ -23,15 +28,16 @@ export default function Index() {
     const [perPageItem, setPerPageItem] = useState(1);
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
 
     const [action, setAction] = useState("active");
 
     const handleRefresh = useCallback(() => {
         setRefresh((prev) => !prev);
-    },[setRefresh]);
+    }, [setRefresh]);
 
     return (
-        <RefreshContext.Provider value={{ refresh, handleRefresh, setLoading }}>
+        <RefreshContext.Provider value={{ refresh, handleRefresh, setLoading, user }}>
             <PaginationContext.Provider
                 value={{
                     currentPage,
@@ -71,33 +77,35 @@ export default function Index() {
                             </button>
                         </div>
 
-                        {/* <button
-                            onClick={() => handleRefresh()}
-                            className={`${style.btn} ${style.btn_active}`}
-                            style={{
-                                fontWeight: "bold",
-                                letterSpacing: "1px",
-                                // textTransform: "uppercase",
-                            }}
-                        >
-                            Refresh
-                        </button> */}
-                        <button
-                        onClick={handleRefresh}
-                        className="btn btn-primary"
-                        type="button"
-                        disabled={loading}
-                        style={{paddingTop:"5px",paddingBottom:"5px"}}
-                    >
-                        {loading && (
-                            <span
-                                className="spinner-border spinner-border-sm mr-1"
-                                role="status"
-                                aria-hidden="true"
-                            ></span>
-                        )}
-                        Refresh
-                    </button>
+                        <div className={`${style.refresh_container}`}>
+                            {(currentUser.getRoleId() === 1 ||
+                                currentUser.getRoleId() === 8) && (
+                                <User
+                                    user={user}
+                                    setUser={setUser}
+                                    change={false}
+                                />
+                            )}
+                            <button
+                                onClick={handleRefresh}
+                                className="btn btn-primary"
+                                type="button"
+                                disabled={loading}
+                                style={{
+                                    paddingTop: "5px",
+                                    paddingBottom: "5px",
+                                }}
+                            >
+                                {loading && (
+                                    <span
+                                        className="spinner-border spinner-border-sm mr-1"
+                                        role="status"
+                                        aria-hidden="true"
+                                    ></span>
+                                )}
+                                Refresh
+                            </button>
+                        </div>
                     </section>
 
                     <div className={style.outlet_container}>

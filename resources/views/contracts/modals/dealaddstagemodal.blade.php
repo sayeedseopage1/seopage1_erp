@@ -229,7 +229,7 @@
                         <label for="original_currency_id" class="form-label"><strong>Currency <span style="color:red;">*<span></strong>
                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Currency" data-html="true" data-trigger="hover"></i>
                         </label>
-                        <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" id="original_currency_id">
+                        <select class="form-control height-35 f-14 form-select mb-3" aria-label=".form-select-lg example" name="original_currency_id" id="original_currency_id" disabled>
                             <option selected value="{{$currency_active->id}}">({{$currency_active->currency_code}})</option>
                             @foreach ($currencies as $currency)
                                 <option value="{{$currency->id}}">({{$currency->currency_code}})</option>

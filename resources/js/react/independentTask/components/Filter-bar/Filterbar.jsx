@@ -1,12 +1,12 @@
-import React from "react";
-import JqueryDateRangePicker from "./JqueryDateRangePicker";
-import UserFilter from "./UserFilter";
 import _ from "lodash";
-import StatusFilter from "./StatusFilter";
-import FilterSidebar from "./FilterSidebar";
+import React from "react";
 import { useWindowSize } from "react-use";
-import DateTypeFilter from "./DateTypeFilter";
+import { useAuth } from '../../../hooks/useAuth';
 import ClientFilter from "./ClientFilter";
+import FilterSidebar from "./FilterSidebar";
+import JqueryDateRangePicker from "./JqueryDateRangePicker";
+import StatusFilter from "./StatusFilter";
+import UserFilter from "./UserFilter";
 
 const Filterbar = ({ onFilter }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -27,6 +27,8 @@ const Filterbar = ({ onFilter }) => {
     const { width } = useWindowSize();
 
     const isDev = _.includes([5], Number(window?.Laravel?.user?.role_id));
+    const auth = useAuth();
+    const isTopManagement = _.includes([1, 8], auth.getRoleId());
 
     // MEMORIZE VALUES
     const start_date = React.useMemo(() => startDate, [startDate]);
@@ -106,8 +108,10 @@ const Filterbar = ({ onFilter }) => {
                         state={leadDeveloper}
                         setState={setLeadDeveloper}
                         roleIds={[1, 4]}
+                        disabled={!isTopManagement}
+                        currentUser={!isTopManagement}
                     />
-                    
+
 
                     <HDivider />
 
@@ -166,6 +170,7 @@ const Filterbar = ({ onFilter }) => {
                                 setDateType={setDateType}
                                 close={() => setIsOpen(false)}
                                 isDev={isDev}
+                                isTopManagement={isTopManagement}
                             />
                         )}
                     </div>

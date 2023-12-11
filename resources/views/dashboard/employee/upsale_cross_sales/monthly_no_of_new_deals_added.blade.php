@@ -37,7 +37,7 @@
                             <a href="{{ route('clients.show',$client->id) }}">{{ $client->name }}</a>
                         </td>
                         <td>{{ substr($item->profile_link,0,50).('...') }}</td>
-                        <td>{{ $item->upsell_amount}}$</td>
+                        <td>{{ number_format($item->upsell_amount, 2) }}$</td>
                         <td>{{ $item->created_at }}</td>
                     </tr>
                     @endforeach
