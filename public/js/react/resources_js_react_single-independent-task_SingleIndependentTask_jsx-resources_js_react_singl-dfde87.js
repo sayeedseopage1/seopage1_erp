@@ -5950,6 +5950,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
+  var _data$client_name;
   var data = _ref.data,
     date = _ref.date,
     index = _ref.index,
@@ -6094,7 +6095,7 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
         children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_4__.convertTime)(data.total_time_spent)
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
-        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : data.client_name
+        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : (_data$client_name = data === null || data === void 0 ? void 0 : data.client_name) !== null && _data$client_name !== void 0 ? _data$client_name : 'N/A'
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
         children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {

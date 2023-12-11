@@ -4,6 +4,7 @@ import { useGetDailySubmissionQuery } from "../../../services/api/dailySubmissio
 import { User } from "../../../utils/user-details";
 import TodaysUpdateModalTableRow from "./TodaysUpdateModalTableRow";
 import "./styles/DataTable.css";
+import dayjs from "dayjs";
 
 const TodaysUpdateModalTable = () => {
     const [open, setOpen] = useState(null);
