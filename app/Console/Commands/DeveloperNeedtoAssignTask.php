@@ -139,7 +139,7 @@ class DeveloperNeedtoAssignTask extends Command
       foreach ($deadline_tasks as $project) {
         $pro = Project::where('id', $project->project_id)->first();
         $current_date = Carbon::now();
-        $deadline = $project->due_date;
+        $deadline = Carbon::parse($project->due_date)->addDay(1);
         $difference_in_hours = $current_date->diffInHours($deadline);
         
         if ($current_date > $deadline) {
