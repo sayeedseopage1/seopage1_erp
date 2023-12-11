@@ -84,7 +84,9 @@ class DeveloperNeedtoAssignTask extends Command
             if ($logged_minutes/$estimate_total_minutes*100 >= 90) {
                 $pending_action= PendingAction::where('developer_id',$developer->id)->where('past_status',0)->count();
                 $pending_action_past= PendingAction::where('developer_id',$developer->id)->orderBy('id','desc')->first();
-                $last_time= Carbon::parse($pending_action_past->created_at)->addHours(1);
+                if($pending_action_past != null)
+                {
+                    $last_time= Carbon::parse($pending_action_past->created_at)->addHours(1);
                 if($pending_action == 0 && Carbon::now() > $last_time)
                 {
                     $helper = new HelperPendingActionController();
@@ -92,6 +94,18 @@ class DeveloperNeedtoAssignTask extends Command
 
                 }
              
+
+                }else 
+                {
+                    if($pending_action == 0)
+                    {
+                        $helper = new HelperPendingActionController();
+                        $helper->NeedtoTaskAssign($developer);
+    
+                    }
+
+                }
+                
                 
             }
         }
