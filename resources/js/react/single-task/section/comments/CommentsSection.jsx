@@ -7,8 +7,7 @@ import { useLazyGetTaskDetailsQuery } from "../../../services/api/SingleTaskPage
 import _ from "lodash";
 import Widget from "./Widget";
 import { useGetTaskCommentsQuery } from "../../../services/api/TaskCommentApiSlice";
-
-
+import CommentsContainer from "../../../UI/comments/CommentsContainer";
 
 const CommentSection = ({ task, isLoading }) => {
     // const [comments, setComments] = React.useState([]);
@@ -22,10 +21,11 @@ const CommentSection = ({ task, isLoading }) => {
     const closeAddCommentModal = () => setOpenAddCommentModal(false);
 
     // const [getTaskDetails, { isFetching }] = useLazyGetTaskDetailsQuery();
-    const { data, isLoading: isFetching} = useGetTaskCommentsQuery(task.id, {skip: !task.id});
+    const { data, isLoading: isFetching } = useGetTaskCommentsQuery(task.id, {
+        skip: !task.id,
+    });
 
-
-    const comments = _.orderBy(data, 'id', 'desc');
+    const comments = _.orderBy(data, "id", "desc");
 
     // console.log({comments})
     // // if task notes fetch completed store data into redux store
@@ -50,12 +50,13 @@ const CommentSection = ({ task, isLoading }) => {
         // setComments(_comments);
     };
 
-
     const updateComments = (comment) => {
         let _comments = comments;
-        _comments = _.map(_comments, c => c.id === comment.id  ? comment : c)
+        _comments = _.map(_comments, (c) =>
+            c.id === comment.id ? comment : c
+        );
         // setComments(_comments);
-    }
+    };
 
     return (
         <>
@@ -64,7 +65,7 @@ const CommentSection = ({ task, isLoading }) => {
                 ref={setModalToggleRef}
                 style={{ zIndex: modalIsOpen ? "99" : "" }}
             >
-                <CommentModal
+                {/* <CommentModal
                     isOpen={modalIsOpen}
                     toggleRef={modalToggleRef}
                     comments={comments}
@@ -73,6 +74,15 @@ const CommentSection = ({ task, isLoading }) => {
                     close={() => setModalIsOpen(false)}
                     onCommentPost={onCommentPost}
                     updateComments={updateComments}
+                /> */}
+
+                <CommentsContainer
+                    isOpen={modalIsOpen}
+                    toggleRef={modalToggleRef}
+                    comments={comments}
+                    task={task}
+                    close={() => setModalIsOpen(false)}
+                    onCommentPost={onCommentPost}
                 />
 
                 <button
@@ -125,7 +135,7 @@ const CommentSection = ({ task, isLoading }) => {
                 <div className="sp1_task_right_card--body">
                     <Widget task={task} />
 
-{/*
+                    {/*
                     {!isFetching && !isLoading ? (
                         comments?.length > 0 ? (
                             comments?.map((comment) => (

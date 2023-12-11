@@ -15,8 +15,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
-/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
-/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
 /* harmony import */ var _media_comment_refresh_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./media/comment_refresh.svg */ "./resources/js/react/UI/comments/media/comment_refresh.svg");
 /* harmony import */ var _media_comment_search_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./media/comment_search.svg */ "./resources/js/react/UI/comments/media/comment_search.svg");
 /* harmony import */ var _media_comments_body_bg_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./media/comments_body_bg.svg */ "./resources/js/react/UI/comments/media/comments_body_bg.svg");
@@ -26,9 +26,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var use_context_menu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! use-context-menu */ "./node_modules/use-context-menu/dist/use-context-menu.esm.js");
 /* harmony import */ var use_context_menu_styles_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! use-context-menu/styles.css */ "./node_modules/use-context-menu/styles.css");
 /* harmony import */ var _styles_customContextMenu_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./styles/customContextMenu.css */ "./resources/js/react/UI/comments/styles/customContextMenu.css");
-/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
-/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
-/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
@@ -37,7 +37,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_13__);
 /* harmony import */ var _utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./utils/isCurrentUser */ "./resources/js/react/UI/comments/utils/isCurrentUser.js");
 /* harmony import */ var _utils_CommentsPlaceholder__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./utils/CommentsPlaceholder */ "./resources/js/react/UI/comments/utils/CommentsPlaceholder.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./utils/getTextContent */ "./resources/js/react/UI/comments/utils/getTextContent.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -84,6 +85,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var CommentContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
   setScroll: function setScroll() {},
   selectedComments: [],
@@ -102,7 +104,8 @@ var CommentsBody = function CommentsBody(_ref) {
     close = _ref.close,
     comments = _ref.comments,
     loading = _ref.loading,
-    refetch = _ref.refetch;
+    refetch = _ref.refetch,
+    taskId = _ref.taskId;
   var chatbottom_ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
@@ -166,64 +169,51 @@ var CommentsBody = function CommentsBody(_ref) {
   //     console.log({ ...selectedComments });
   // }, [selectedComments]);
 
-  var _useContextMenu = (0,use_context_menu__WEBPACK_IMPORTED_MODULE_8__.useContextMenu)( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+  var _useContextMenu = (0,use_context_menu__WEBPACK_IMPORTED_MODULE_8__.useContextMenu)( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
         onSelect: function onSelect() {
           setMentionedComment(contextHolder);
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_17__.HiReply, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_18__.HiReply, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
           className: "context_title",
           children: "Reply"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
         onSelect: function onSelect() {
           // console.log('clicked select');
           hnadleSelectComment();
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_18__.TbMessage2Check, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_19__.TbMessage2Check, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
           className: "context_title",
           children: "Select Message"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
-      // onSelect={viewSource}
-      , {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_19__.MdOutlineContentCopy, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+        onSelect: function onSelect() {
+          return handleCopySingleComment(contextHolder);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_20__.MdOutlineContentCopy, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
           className: "context_title",
           children: "Copy"
         })]
-      }), (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_14__["default"])(contextHolder === null || contextHolder === void 0 ? void 0 : contextHolder.user_id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem
-      // onSelect={viewSource}
-      , {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoMdCloseCircleOutline, {
+      }), (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_14__["default"])(contextHolder === null || contextHolder === void 0 ? void 0 : contextHolder.user_id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+        onSelect: handleDeleteSingleComment,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_21__.IoMdCloseCircleOutline, {
           className: "context_icons"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
           className: "context_title",
           children: "Remove"
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {})]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {})]
     })),
     contextMenu = _useContextMenu.contextMenu,
     onContextMenu = _useContextMenu.onContextMenu,
     onKeyDown = _useContextMenu.onKeyDown;
-  var getTextContent = function getTextContent(element) {
-    if (typeof element === "string") {
-      return element;
-    }
-    if (Array.isArray(element)) {
-      return element.map(getTextContent).join("");
-    }
-    if ( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().isValidElement(element)) {
-      var children = react__WEBPACK_IMPORTED_MODULE_0___default().Children.toArray(element.props.children);
-      return getTextContent(children);
-    }
-    return "";
-  };
 
   // search result filtering
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
@@ -231,7 +221,7 @@ var CommentsBody = function CommentsBody(_ref) {
     if (searchText) {
       setAllComments(function () {
         var filteredComments = _toConsumableArray(comments).filter(function (comment) {
-          return !comment.is_deleted && getTextContent(comment.comment).toLowerCase().includes(searchText.toLowerCase());
+          return !comment.is_deleted && (0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__["default"])(comment.comment).toLowerCase().includes(searchText.toLowerCase());
           // const textContent = getTextContent(comment.comment).toLowerCase();
           // console.log(textContent);
           // return true;
@@ -288,7 +278,7 @@ var CommentsBody = function CommentsBody(_ref) {
     var allSelectedComments = lodash__WEBPACK_IMPORTED_MODULE_11___default().orderBy(Object.values(selectedComments), ["id"], ["asc"]);
     // console.log({ allSelectedComments });
     var allSelectedCommentsString = allSelectedComments.reduce(function (total, comment, i, arr) {
-      total += "".concat(getTextContent(comment.comment), "\n\n").concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_13___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"));
+      total += "".concat((0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__["default"])(comment.comment), "\n\n").concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_13___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"));
       if (i < arr.length - 1) {
         total += "\n\n\n";
       }
@@ -332,7 +322,40 @@ var CommentsBody = function CommentsBody(_ref) {
     refetch();
     setIsLoading(false);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(CommentContext.Provider, {
+  var handleCopySingleComment = function handleCopySingleComment(comment) {
+    var SelectedCommentsString = [comment].reduce(function (total, comment, i, arr) {
+      total += "".concat((0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__["default"])(comment.comment), "\n\n").concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_13___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"));
+      if (i < arr.length - 1) {
+        total += "\n\n\n";
+      }
+      return total;
+    }, "");
+    // console.log({ allSelectedCommentsString });
+    window.navigator.clipboard.writeText(SelectedCommentsString).then(function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "success",
+        title: "Comments copied successfully",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+      // setSecletedComments({});
+      // setScroll(prev=>!prev);
+      setContextHolder(null);
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "error",
+        title: "Comments didn't copied",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    })["finally"](function () {
+      //   setIsLoading(false);
+    });
+  };
+  var handleDeleteSingleComment = function handleDeleteSingleComment(comment) {};
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(CommentContext.Provider, {
     value: {
       setScroll: setScroll,
       selectedComments: selectedComments,
@@ -342,7 +365,7 @@ var CommentsBody = function CommentsBody(_ref) {
       contextHolder: contextHolder,
       setContextHolder: setContextHolder
     },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
       className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody,
       style: {
         backgroundImage: "url(".concat(_media_comments_body_bg_svg__WEBPACK_IMPORTED_MODULE_4__["default"], ")"),
@@ -351,21 +374,21 @@ var CommentsBody = function CommentsBody(_ref) {
         height: fullScreenView ? "99vh" : "84vh",
         maxHeight: fullScreenView ? "99vh" : "auto"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("header", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("header", {
         className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
           onClick: refetch,
           className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("svg", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             width: "28",
             height: "28",
             viewBox: "0 0 28 28",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("g", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("g", {
               id: "Group_3837",
               "data-name": "Group 3837",
               transform: "translate(-837 -108)",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("circle", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("circle", {
                 id: "Ellipse_1045",
                 "data-name": "Ellipse 1045",
                 cx: "14",
@@ -373,20 +396,20 @@ var CommentsBody = function CommentsBody(_ref) {
                 r: "14",
                 transform: "translate(837 108)",
                 fill: "#1d82f5"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("g", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("g", {
                 id: "reload",
                 transform: "translate(822.039 113.273)",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("g", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("g", {
                   id: "Group_3836",
                   "data-name": "Group 3836",
                   transform: "translate(20.982 0)",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("path", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("path", {
                     id: "Path_1534",
                     "data-name": "Path 1534",
                     d: "M24.232,3.461a6.958,6.958,0,0,1,9.045-.239L31.206,3.3a.481.481,0,0,0,.018.962h.018l3.179-.118a.48.48,0,0,0,.463-.481V3.607h0L34.767.464A.481.481,0,1,0,33.8.5l.075,1.971a7.913,7.913,0,0,0-10.293.278,7.916,7.916,0,0,0-2.381,7.737.479.479,0,0,0,.467.367.417.417,0,0,0,.114-.014.482.482,0,0,0,.353-.581A6.954,6.954,0,0,1,24.232,3.461Z",
                     transform: "translate(-20.982 0)",
                     fill: "#fff"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("path", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("path", {
                     id: "Path_1535",
                     "data-name": "Path 1535",
                     d: "M91.023,185.581a.481.481,0,0,0-.934.228A6.952,6.952,0,0,1,78.895,192.8l2.1-.189a.481.481,0,1,0-.089-.959l-3.168.285a.481.481,0,0,0-.435.524l.285,3.168a.48.48,0,0,0,.478.438.175.175,0,0,0,.043,0,.481.481,0,0,0,.435-.524l-.171-1.928a7.86,7.86,0,0,0,4.573,1.743c.135.007.271.011.4.011a7.915,7.915,0,0,0,7.68-9.783Z",
@@ -397,9 +420,9 @@ var CommentsBody = function CommentsBody(_ref) {
               })]
             })
           })
-        }), showSearchBar ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
+        }), showSearchBar ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_container, " ").concat(animation ? _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].open : _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].close),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("input", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("input", {
             value: searchText,
             onChange: function onChange(e) {
               return setSearchText(e.target.value);
@@ -407,9 +430,9 @@ var CommentsBody = function CommentsBody(_ref) {
             placeholder: "Search...",
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar),
             type: "text"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("section", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("section", {
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions),
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoIosArrowDown, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_21__.IoIosArrowDown, {
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_btn),
               onClick: function onClick() {
                 setCommentIndex(function (prev) {
@@ -420,10 +443,10 @@ var CommentsBody = function CommentsBody(_ref) {
                   }
                 });
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_text),
               children: "".concat(commentIndex, " of ").concat(searchIndexes.length)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoIosArrowUp, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_21__.IoIosArrowUp, {
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_btn),
               onClick: function onClick() {
                 setCommentIndex(function (prev) {
@@ -436,7 +459,7 @@ var CommentsBody = function CommentsBody(_ref) {
               }
             })]
           })]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
           onClick: function onClick() {
             if (showSearchBar) {
               setTimeout(function () {
@@ -449,70 +472,70 @@ var CommentsBody = function CommentsBody(_ref) {
             }
           },
           className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("svg", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             width: "29",
             height: "29",
             viewBox: "0 0 29 29",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("path", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("path", {
               id: "Search",
               d: "M19.362,8.871a.674.674,0,1,1-.954.954,6.077,6.077,0,0,0-8.584,0,.674.674,0,0,1-.954-.954A7.427,7.427,0,0,1,19.362,8.871ZM33,30.3a2.7,2.7,0,0,1-4.6,1.907l-7.081-7.081a.674.674,0,0,1,0-.954l.954-.954-1.5-1.5a10.134,10.134,0,1,1,.954-.954l1.5,1.5.954-.954a.674.674,0,0,1,.954,0L32.21,28.4A2.678,2.678,0,0,1,33,30.3ZM22.884,14.116a8.767,8.767,0,1,0-8.767,8.767A8.777,8.777,0,0,0,22.884,14.116ZM31.651,30.3a1.34,1.34,0,0,0-.4-.954l-6.6-6.6-1.907,1.907,6.6,6.6a1.38,1.38,0,0,0,1.907,0,1.34,1.34,0,0,0,.4-.954Z",
               transform: "translate(-4 -4)",
               fill: "#727272"
             })
           })
-        }), !fullScreenView ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_21__.AiOutlineFullscreen, {
+        }), !fullScreenView ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_22__.AiOutlineFullscreen, {
           onClick: function onClick() {
             return setFullScreenView(true);
           },
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].fullscreen_icons)
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_21__.AiOutlineFullscreenExit, {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_22__.AiOutlineFullscreenExit, {
           onClick: function onClick() {
             return setFullScreenView(false);
           },
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].fullscreen_icons)
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
           onClick: function onClick() {
             setFullScreenView(false);
             close();
           },
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn),
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("svg", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("svg", {
             xmlns: "http://www.w3.org/2000/svg",
             xlink: "http://www.w3.org/1999/xlink",
             viewBox: "15 7 28 28",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("defs", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("filter", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("defs", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("filter", {
                 id: "Ellipse_58",
                 x: "0",
                 y: "0",
                 width: "58",
                 height: "58",
                 filterUnits: "userSpaceOnUse",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("feOffset", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("feOffset", {
                   dy: "8",
                   input: "SourceAlpha"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("feGaussianBlur", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("feGaussianBlur", {
                   stdDeviation: "5",
                   result: "blur"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("feFlood", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("feFlood", {
                   floodColor: "#757575",
                   floodOpacity: "0.161"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("feComposite", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("feComposite", {
                   operator: "in",
                   in2: "blur"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("feComposite", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("feComposite", {
                   "in": "SourceGraphic"
                 })]
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("g", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("g", {
               id: "Group_3644",
               "data-name": "Group 3644",
               transform: "translate(-976 -145)",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("g", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("g", {
                 transform: "matrix(1, 0, 0, 1, 976, 145)",
                 filter: "url(#Ellipse_58)",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("circle", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("circle", {
                   id: "Ellipse_58-2",
                   "data-name": "Ellipse 58",
                   cx: "14",
@@ -521,7 +544,7 @@ var CommentsBody = function CommentsBody(_ref) {
                   transform: "translate(15 7)",
                   fill: "#df0b0b"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("path", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("path", {
                 id: "remove_1_",
                 "data-name": "remove (1)",
                 d: "M5.059,13A7.941,7.941,0,1,1,13,20.941,7.941,7.941,0,0,1,5.059,13ZM13,4a9,9,0,0,0,0,18,9.139,9.139,0,0,0,6.911-3.235A8.762,8.762,0,0,0,22,13,9,9,0,0,0,13,4ZM9.256,15.995,12.251,13,9.256,10.005,10,9.257,13,12.251l3-3,.748.748-3,3,3,3-.748.748-3-2.995L10,16.743Z",
@@ -532,12 +555,12 @@ var CommentsBody = function CommentsBody(_ref) {
             })]
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("main", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("main", {
         // ref={chatbottom_ref}
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_commentArea),
-        children: loading || isloading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_utils_CommentsPlaceholder__WEBPACK_IMPORTED_MODULE_15__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {
+        children: loading || isloading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_utils_CommentsPlaceholder__WEBPACK_IMPORTED_MODULE_15__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {
           children: [allComments.map(function (comment, i) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_components_SingleChat__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_SingleChat__WEBPACK_IMPORTED_MODULE_6__["default"], {
               idMatch: comment.id === searchIndexes[searchIndexes.length - commentIndex],
               id: comment.id
               // comment_text_id={`${comment.id}_comment`}
@@ -548,7 +571,7 @@ var CommentsBody = function CommentsBody(_ref) {
               comment: comment,
               prevComment: i ? allComments[i - 1] : null
             }, i);
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
             style: {
               minHeight: "10px",
               height: "10px",
@@ -557,48 +580,49 @@ var CommentsBody = function CommentsBody(_ref) {
             ref: chatbottom_ref
           }), contextMenu]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("footer", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("footer", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_inputField),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_components_ChatInput__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_ChatInput__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          taskId: taskId,
           setScroll: setScroll
         })
-      }), Object.keys(selectedComments).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
+      }), Object.keys(selectedComments).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].open_action_controller),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("section", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("section", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
             onClick: handleCopyComments,
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_icon),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_19__.MdContentCopy, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_20__.MdContentCopy, {
               style: {
                 height: "19.02px",
                 width: "16.01px"
               }
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
             onClick: handleCopyComments,
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_text),
             children: "Copy"
           })]
         }), Object.values(selectedComments).every(function (comment) {
           return (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_14__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id);
-        }) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("section", {
+        }) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("section", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn),
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
             onClick: handleDeleteComments,
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_icon),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_20__.IoMdCloseCircleOutline, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_21__.IoMdCloseCircleOutline, {
               style: {
                 height: "18.54px",
                 width: "18.54px"
               }
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_text),
             children: "Remove"
           })]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {})]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {})]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {})]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {})]
     })
   });
 };
@@ -651,7 +675,8 @@ var CommentsContainer = function CommentsContainer(_ref) {
     task = _ref.task,
     _ref$comments = _ref.comments,
     comments = _ref$comments === void 0 ? null : _ref$comments,
-    onCommentPost = _ref.onCommentPost;
+    onCommentPost = _ref.onCommentPost,
+    taskId = _ref.taskId;
   // ---------------------------------------------------------
   var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useParams)();
   // console.log({ param });
@@ -689,7 +714,8 @@ var CommentsContainer = function CommentsContainer(_ref) {
             ,
             comments: demoComments,
             loading: isFetching || isLoading,
-            refetch: refetch
+            refetch: refetch,
+            taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId
           })
         })
       })
@@ -709,7 +735,8 @@ var CommentsContainer = function CommentsContainer(_ref) {
           ,
           comments: demoComments,
           loading: isFetching || isLoading,
-          refetch: refetch
+          refetch: refetch,
+          taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId
         })
       })
     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
@@ -727,7 +754,8 @@ var CommentsContainer = function CommentsContainer(_ref) {
               ,
               comments: demoComments,
               loading: isFetching || isLoading,
-              refetch: refetch
+              refetch: refetch,
+              taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId
             })
           })
         })
@@ -940,35 +968,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_quill_dist_quill_snow_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-quill/dist/quill.snow.css */ "./node_modules/react-quill/dist/quill.snow.css");
 /* harmony import */ var _styles_quill_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/quill.css */ "./resources/js/react/UI/comments/styles/quill.css");
 /* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
-/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
-/* harmony import */ var react_icons_lu__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-icons/lu */ "./node_modules/react-icons/lu/index.esm.js");
-/* harmony import */ var react_icons_io5__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-icons/io5 */ "./node_modules/react-icons/io5/index.esm.js");
-/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
-/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
-/* harmony import */ var react_icons_bs__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-icons/bs */ "./node_modules/react-icons/bs/index.esm.js");
+/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
+/* harmony import */ var react_icons_lu__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-icons/lu */ "./node_modules/react-icons/lu/index.esm.js");
+/* harmony import */ var react_icons_io5__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-icons/io5 */ "./node_modules/react-icons/io5/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
+/* harmony import */ var react_icons_bs__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/bs */ "./node_modules/react-icons/bs/index.esm.js");
 /* harmony import */ var emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! emoji-picker-react */ "./node_modules/emoji-picker-react/dist/emoji-picker-react.esm.js");
-/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
 /* harmony import */ var _CommentsBody__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
-/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/HandleFileIcon */ "./resources/js/react/UI/comments/utils/HandleFileIcon.jsx");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../utils/user-details */ "./resources/js/react/UI/comments/utils/user-details.js");
+/* harmony import */ var _utils_getTextContent__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../utils/getTextContent */ "./resources/js/react/UI/comments/utils/getTextContent.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -998,8 +1030,17 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
+var currentUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(window.Laravel.user);
 var ChatInput = function ChatInput(_ref) {
-  var setScroll = _ref.setScroll;
+  var setScroll = _ref.setScroll,
+    taskId = _ref.taskId;
+  var _usePostCommentMutati = (0,_services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_11__.usePostCommentMutation)(),
+    _usePostCommentMutati2 = _slicedToArray(_usePostCommentMutati, 2),
+    postComment = _usePostCommentMutati2[0],
+    isLoading = _usePostCommentMutati2[1].isLoading;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState2 = _slicedToArray(_useState, 2),
     editorHtml = _useState2[0],
@@ -1017,36 +1058,107 @@ var ChatInput = function ChatInput(_ref) {
     setMentionedComment = _useCommentContext.setMentionedComment,
     setContextHolder = _useCommentContext.setContextHolder,
     setSecletedComments = _useCommentContext.setSecletedComments;
-  var handleSendComment = function handleSendComment() {
-    console.log({
-      comment: editorHtml,
-      files: files,
-      mentioned: mentionedComment
-    });
-    sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().fire({
-      icon: "success",
-      title: "Comment Sent",
-      showConfirmButton: true,
-      timer: 2000,
-      timerProgressBar: true
-    });
-    setSecletedComments({});
-    setMentionedComment(null);
-    setContextHolder(null);
-    setEditorHtml("");
-    setShow(false);
-    setFiles([]);
-    setScroll(function (prev) {
-      return !prev;
-    });
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("section", {
+  var handleSendComment = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var formdata, result, _iterator, _step, data;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            if (!(!(0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_13__.htmlToString)(editorHtml) && !files.length)) {
+              _context.next = 3;
+              break;
+            }
+            sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().fire({
+              icon: "warning",
+              title: "Enter your comment or attachment",
+              showConfirmButton: true,
+              timer: 2000,
+              timerProgressBar: true
+            });
+            return _context.abrupt("return");
+          case 3:
+            formdata = new FormData();
+            formdata.append("_token", document.querySelector("meta[name='csrf-token']").getAttribute("content"));
+            formdata.append("comment", editorHtml || "");
+            formdata.append("user_id", currentUser.id);
+            formdata.append("task_id", taskId);
+            formdata.append("added_by", currentUser.id);
+            formdata.append("last_updated_by", currentUser.id);
+            formdata.append("mention_id", (mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.id) || null);
+            if (files.length) {
+              Array.from(files).forEach(function (file) {
+                formdata.append("file", file);
+              });
+            } else {
+              formdata.append("file", null);
+            }
+            result = {};
+            _iterator = _createForOfIteratorHelper(formdata.entries());
+            try {
+              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                data = _step.value;
+                result[data[0]] = data[1];
+                // console.log(`${data[0]} : ${data[1]}`);
+              }
+            } catch (err) {
+              _iterator.e(err);
+            } finally {
+              _iterator.f();
+            }
+            console.log(result);
+            _context.prev = 16;
+            _context.next = 19;
+            return postComment({
+              taskId: taskId,
+              data: formdata
+            });
+          case 19:
+            sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().fire({
+              icon: "success",
+              title: "Comment Sent",
+              showConfirmButton: true,
+              timer: 2000,
+              timerProgressBar: true
+            });
+            _context.next = 25;
+            break;
+          case 22:
+            _context.prev = 22;
+            _context.t0 = _context["catch"](16);
+            sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().fire({
+              icon: "error",
+              title: "Comment not sent",
+              showConfirmButton: true,
+              timer: 2000,
+              timerProgressBar: true
+            });
+          case 25:
+            setSecletedComments({});
+            setMentionedComment(null);
+            setContextHolder(null);
+            setEditorHtml("");
+            setShow(false);
+            setFiles([]);
+            setScroll(function (prev) {
+              return !prev;
+            });
+          case 32:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[16, 22]]);
+    }));
+    return function handleSendComment() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("section", {
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput),
-      children: [mentionedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(MentionedComment, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(FilePreviewer, {
+      children: [mentionedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(MentionedComment, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(FilePreviewer, {
         files: files,
         setFiles: setFiles
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(CommentEditor, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(CommentEditor, {
         editorHtml: editorHtml,
         setEditorHtml: setEditorHtml,
         files: files,
@@ -1057,15 +1169,15 @@ var ChatInput = function ChatInput(_ref) {
         // text={text}
         // setText={setText}
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("section", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("section", {
       style: {
         flexDirection: show || files.length || mentionedComment ? "column" : "row"
       },
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_actions_btn_container),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(FileUpload, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(FileUpload, {
         files: files,
         setFiles: setFiles
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_12__.IoMdSend, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_15__.IoMdSend, {
         onClick: handleSendComment,
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_actions_btn_send)
       })]
@@ -1078,57 +1190,57 @@ function MentionedComment() {
   var _useCommentContext2 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext2.mentionedComment,
     setMentionedComment = _useCommentContext2.setMentionedComment;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
     style: {
       borderBottom: "solid 0.5px white"
     },
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_13__.HiReply, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_16__.HiReply, {
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_icon)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_14__.MdClose, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_17__.MdClose, {
       onClick: function onClick() {
         setMentionedComment(null);
       },
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_close_icon)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("article", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("article", {
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area),
-      children: [mentionedComment !== null && mentionedComment !== void 0 && mentionedComment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      children: [mentionedComment !== null && mentionedComment !== void 0 && mentionedComment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area_mssg),
         children: mentionedComment.comment
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {}), mentionedComment !== null && mentionedComment !== void 0 && (_mentionedComment$fil = mentionedComment.files) !== null && _mentionedComment$fil !== void 0 && _mentionedComment$fil.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {}), mentionedComment !== null && mentionedComment !== void 0 && (_mentionedComment$fil = mentionedComment.files) !== null && _mentionedComment$fil !== void 0 && _mentionedComment$fil.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area_attachments),
         children: mentionedComment === null || mentionedComment === void 0 || (_mentionedComment$fil2 = mentionedComment.files) === null || _mentionedComment$fil2 === void 0 ? void 0 : _mentionedComment$fil2.map(function (file, i) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file, " shadow-sm"),
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
               fileName: file
             })
           }, i);
         })
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area_sender_time),
         children: "".concat(mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_8___default()(mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.created_at).format("MMM DD, YYYY, hh:mm A"))
       })]
     })]
   });
 }
-function FilePreviewer(_ref2) {
-  var files = _ref2.files,
-    setFiles = _ref2.setFiles;
+function FilePreviewer(_ref3) {
+  var files = _ref3.files,
+    setFiles = _ref3.setFiles;
   var _useCommentContext3 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext3.mentionedComment;
-  return files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
     style: {
       borderRadius: mentionedComment ? "0" : "10px 10px 0 0",
       borderBottom: "solid 0.5px white"
     },
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview),
     children: [files.map(function (file, i) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file, " shadow-sm"),
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
           file: file
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_12__.IoMdCloseCircle, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_15__.IoMdCloseCircle, {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__removeFile),
           onClick: function onClick() {
             var newFiles = _toConsumableArray(files);
@@ -1143,16 +1255,16 @@ function FilePreviewer(_ref2) {
           }
         })]
       }, i);
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("label", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
       htmlFor: "add-file",
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__addFile),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_15__.AiOutlinePlusSquare, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_18__.AiOutlinePlusSquare, {
         style: {
           height: "19.42px",
           width: "19.42px",
           color: "gray"
         }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("input", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
         style: {
           display: "none"
         },
@@ -1166,14 +1278,14 @@ function FilePreviewer(_ref2) {
         }
       })]
     })]
-  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {});
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {});
 }
-function CommentEditor(_ref3) {
-  var show = _ref3.show,
-    setShow = _ref3.setShow,
-    files = _ref3.files,
-    editorHtml = _ref3.editorHtml,
-    setEditorHtml = _ref3.setEditorHtml;
+function CommentEditor(_ref4) {
+  var show = _ref4.show,
+    setShow = _ref4.setShow,
+    files = _ref4.files,
+    editorHtml = _ref4.editorHtml,
+    setEditorHtml = _ref4.setEditorHtml;
   var quillRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useCommentContext4 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext4.mentionedComment;
@@ -1214,26 +1326,26 @@ function CommentEditor(_ref3) {
   }, [show]);
   var atValues = [{
     id: 1,
-    value: 'Fredrik Sundqvist'
+    value: "Fredrik Sundqvist"
   }, {
     id: 2,
-    value: 'Patrik Sjölin'
+    value: "Patrik Sjölin"
   }];
   var hashValues = [{
     id: 3,
-    value: 'Fredrik Sundqvist 2'
+    value: "Fredrik Sundqvist 2"
   }, {
     id: 4,
-    value: 'Patrik Sjölin 2'
+    value: "Patrik Sjölin 2"
   }];
   function suggestPeople(_x) {
     return _suggestPeople.apply(this, arguments);
   }
   function _suggestPeople() {
-    _suggestPeople = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(searchTerm) {
+    _suggestPeople = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(searchTerm) {
       var allPeople;
-      return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) switch (_context.prev = _context.next) {
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
           case 0:
             allPeople = [{
               id: 1,
@@ -1242,14 +1354,14 @@ function CommentEditor(_ref3) {
               id: 2,
               value: "Patrik Sjölin"
             }];
-            return _context.abrupt("return", allPeople.filter(function (person) {
+            return _context2.abrupt("return", allPeople.filter(function (person) {
               return person.value.includes(searchTerm);
             }));
           case 2:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
-      }, _callee);
+      }, _callee2);
     }));
     return _suggestPeople.apply(this, arguments);
   }
@@ -1295,7 +1407,7 @@ function CommentEditor(_ref3) {
   // "mention",
   ];
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_input),
     style: {
       borderRadius: "".concat(function () {
@@ -1314,7 +1426,7 @@ function CommentEditor(_ref3) {
       }())
       // overflow: "hidden",
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((react_quill__WEBPACK_IMPORTED_MODULE_1___default()), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)((react_quill__WEBPACK_IMPORTED_MODULE_1___default()), {
       ref: quillRef,
       theme: "snow",
       value: editorHtml,
@@ -1332,13 +1444,13 @@ function CommentEditor(_ref3) {
       //       console.log({ delta, html });
       //     }
       //   }}
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("span", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
       // onClick={() => setShowEmoji((prev) => !prev)}
       style: {
         bottom: show ? "14.16px" : "calc(50% - 7.66px)"
       },
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emoji_icon),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_bs__WEBPACK_IMPORTED_MODULE_16__.BsEmojiSmile, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_bs__WEBPACK_IMPORTED_MODULE_19__.BsEmojiSmile, {
         onClick: function onClick() {
           return setShowEmoji(function (prev) {
             return !prev;
@@ -1348,9 +1460,9 @@ function CommentEditor(_ref3) {
           height: "15.32px",
           width: "15.32px"
         }
-      }), showEmoji && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), showEmoji && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emojis),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
           width: "100%",
           height: "100%",
           skinTonesDisabled: true,
@@ -1358,12 +1470,12 @@ function CommentEditor(_ref3) {
           onEmojiClick: handleEmojiSelection
         })
       })]
-    }), !show ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_lu__WEBPACK_IMPORTED_MODULE_17__.LuPencilLine, {
+    }), !show ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_lu__WEBPACK_IMPORTED_MODULE_20__.LuPencilLine, {
       onClick: function onClick() {
         return setShow(true);
       },
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_style_icon)
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_io5__WEBPACK_IMPORTED_MODULE_18__.IoChevronDownOutline, {
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_io5__WEBPACK_IMPORTED_MODULE_21__.IoChevronDownOutline, {
       onClick: function onClick() {
         return setShow(false);
       },
@@ -1374,18 +1486,18 @@ function CommentEditor(_ref3) {
     })]
   });
 }
-function FileUpload(_ref4) {
-  var files = _ref4.files,
-    setFiles = _ref4.setFiles;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("label", {
+function FileUpload(_ref5) {
+  var files = _ref5.files,
+    setFiles = _ref5.setFiles;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_file_add_btn),
     htmlFor: "file-input",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_19__.FaFileCirclePlus, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_22__.FaFileCirclePlus, {
       style: {
         height: "100%",
         width: "100%"
       }
-    }), !files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("input", {
+    }), !files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
       type: "file",
       id: "file-input",
       multiple: true,
@@ -1395,7 +1507,7 @@ function FileUpload(_ref4) {
       style: {
         display: "none"
       }
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {})]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {})]
   });
 }
 
@@ -1588,12 +1700,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
-/* harmony import */ var react_icons_fi__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-icons/fi */ "./node_modules/react-icons/fi/index.esm.js");
-/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
-/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
-/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
-/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
-/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
+/* harmony import */ var react_icons_fi__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-icons/fi */ "./node_modules/react-icons/fi/index.esm.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _CommentsBody__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
@@ -1602,7 +1714,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/HandleFileIcon */ "./resources/js/react/UI/comments/utils/HandleFileIcon.jsx");
 /* harmony import */ var _utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/isCurrentUser */ "./resources/js/react/UI/comments/utils/isCurrentUser.js");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/user-details */ "./resources/js/react/UI/comments/utils/user-details.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _utils_getTextContent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/getTextContent */ "./resources/js/react/UI/comments/utils/getTextContent.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1619,6 +1734,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -1695,9 +1812,9 @@ var SingleChat = function SingleChat(_ref) {
       previousComment = _ref2.previousComment;
     if (Number(currentComment === null || currentComment === void 0 ? void 0 : currentComment.user_id) === Number(previousComment === null || previousComment === void 0 ? void 0 : previousComment.user_id)) {
       if (dayjs__WEBPACK_IMPORTED_MODULE_4___default()(currentComment === null || currentComment === void 0 ? void 0 : currentComment.created_at).diff(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(previousComment === null || previousComment === void 0 ? void 0 : previousComment.created_at), "minutes") <= 10) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {});
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {});
       } else {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
           style: {
             alignSelf: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? "flex-end" : "flex-start"
           },
@@ -1706,7 +1823,7 @@ var SingleChat = function SingleChat(_ref) {
         });
       }
     } else {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
         style: {
           alignSelf: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? "flex-end" : "flex-start"
         },
@@ -1722,9 +1839,9 @@ var SingleChat = function SingleChat(_ref) {
       previousComment = _ref3.previousComment;
     if (Number(currentComment === null || currentComment === void 0 ? void 0 : currentComment.user_id) === Number(previousComment === null || previousComment === void 0 ? void 0 : previousComment.user_id)) {
       if ((0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id)) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {});
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {});
       } else {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
           style: {
             visibility: "hidden"
           },
@@ -1733,9 +1850,9 @@ var SingleChat = function SingleChat(_ref) {
       }
     } else {
       if ((0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id)) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {});
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {});
       } else {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_avator)
         });
       }
@@ -1748,14 +1865,14 @@ var SingleChat = function SingleChat(_ref) {
       previousComment = _ref4.previousComment;
     if (Number(currentComment === null || currentComment === void 0 ? void 0 : currentComment.user_id) === Number(previousComment === null || previousComment === void 0 ? void 0 : previousComment.user_id)) {
       if (dayjs__WEBPACK_IMPORTED_MODULE_4___default()(currentComment === null || currentComment === void 0 ? void 0 : currentComment.created_at).diff(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(previousComment === null || previousComment === void 0 ? void 0 : previousComment.created_at), "minutes") <= 10) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("section", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("section", {
           style: {
             height: "5px"
             // backgroundColor: "black"
           }
         });
       } else {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("section", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("section", {
           style: {
             height: "10px"
             // backgroundColor: "black"
@@ -1763,7 +1880,7 @@ var SingleChat = function SingleChat(_ref) {
         });
       }
     } else {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("section", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("section", {
         style: {
           height: "10px"
           // backgroundColor: "black"
@@ -1784,7 +1901,40 @@ var SingleChat = function SingleChat(_ref) {
       return selected;
     });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  var handleCopySingleComment = function handleCopySingleComment(comment) {
+    var SelectedCommentsString = [comment].reduce(function (total, comment, i, arr) {
+      total += "".concat((0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_9__["default"])(comment.comment), "\n\n").concat(comment === null || comment === void 0 ? void 0 : comment.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A"));
+      if (i < arr.length - 1) {
+        total += "\n\n\n";
+      }
+      return total;
+    }, "");
+    // console.log({ allSelectedCommentsString });
+    window.navigator.clipboard.writeText(SelectedCommentsString).then(function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_8___default().fire({
+        icon: "success",
+        title: "Comments copied successfully",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+      // setSecletedComments({});
+      // setScroll(prev=>!prev);
+      setContextHolder(null);
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_8___default().fire({
+        icon: "error",
+        title: "Comments didn't copied",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    })["finally"](function () {
+      //   setIsLoading(false);
+    });
+  };
+  var handleDeleteSingleComment = function handleDeleteSingleComment(comment) {};
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     id: id,
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat),
     style: {
@@ -1800,14 +1950,14 @@ var SingleChat = function SingleChat(_ref) {
     handleTopSpace({
       currentComment: comment,
       previousComment: prevComment
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       style: {
         display: "inline-flex",
         // border:"solid",
         gap: "0 6px",
         flexDirection: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? "row-reverse" : "row"
       },
-      children: [_toConsumableArray(Object.keys(selectedComments)).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      children: [_toConsumableArray(Object.keys(selectedComments)).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
         style: {
           // border: "solid",
           height: "28px",
@@ -1821,45 +1971,45 @@ var SingleChat = function SingleChat(_ref) {
             handleSelect();
           }
         },
-        children: selectedComments[id] ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(Select, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(UnSelect, {})
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+        children: selectedComments[id] ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Select, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(UnSelect, {})
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card),
         children: [handleSenderAvator({
           currentComment: comment,
           previousComment: prevComment
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("article", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("article", {
           className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text),
           children: [handleSenderInfo({
             currentComment: comment,
             previousComment: prevComment
-          }), comment !== null && comment !== void 0 && comment.is_deleted ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), comment !== null && comment !== void 0 && comment.is_deleted ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             title: "".concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A")),
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].single_comment_deleted_container),
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
               style: {
                 borderBottom: showDeletedComment ? "0.15px solid #f8d0d39a" : "0"
               },
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].single_comment_deleted_title),
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                 children: "This Comment has been deleted"
-              }), currentUser.roleId === 1 || currentUser.roleId === 8 ? showDeletedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_9__.FaEyeSlash, {
+              }), currentUser.roleId === 1 || currentUser.roleId === 8 ? showDeletedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__.FaEyeSlash, {
                 onClick: function onClick() {
                   return setShowDeletedComment(false);
                 },
                 style: {
                   cursor: "pointer"
                 }
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_9__.FaEye, {
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__.FaEye, {
                 onClick: function onClick() {
                   return setShowDeletedComment(true);
                 },
                 style: {
                   cursor: "pointer"
                 }
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {})]
-            }), showDeletedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+            }), showDeletedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].single_comment_deleted_comment_body),
-              children: [comment !== null && comment !== void 0 && comment.mention_comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              children: [comment !== null && comment !== void 0 && comment.mention_comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                 // onContextMenu={(e) => {
                 //     onContextMenu(e);
                 //     setContextHolder(comment);
@@ -1881,30 +2031,30 @@ var SingleChat = function SingleChat(_ref) {
                 },
 
                 className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_mentioned_comment),
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_10__.HiReply, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
                   style: {
                     color: "#F17B7C"
                   },
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_icon)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("article", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("article", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area),
-                  children: [comment !== null && comment !== void 0 && (_comment$mention_comm = comment.mention_comment) !== null && _comment$mention_comm !== void 0 && _comment$mention_comm.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  children: [comment !== null && comment !== void 0 && (_comment$mention_comm = comment.mention_comment) !== null && _comment$mention_comm !== void 0 && _comment$mention_comm.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_mssg),
                     children: comment === null || comment === void 0 ? void 0 : comment.mention_comment.comment
-                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention_comm2 = comment.mention_comment) !== null && _comment$mention_comm2 !== void 0 && (_comment$mention_comm2 = _comment$mention_comm2.files) !== null && _comment$mention_comm2 !== void 0 && _comment$mention_comm2.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention_comm2 = comment.mention_comment) !== null && _comment$mention_comm2 !== void 0 && (_comment$mention_comm2 = _comment$mention_comm2.files) !== null && _comment$mention_comm2 !== void 0 && _comment$mention_comm2.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
                     children: comment === null || comment === void 0 || (_comment$mention_comm3 = comment.mention_comment) === null || _comment$mention_comm3 === void 0 || (_comment$mention_comm3 = _comment$mention_comm3.files) === null || _comment$mention_comm3 === void 0 ? void 0 : _comment$mention_comm3.map(function (file, i) {
-                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
                         style: {
                           color: "#F17B7C"
                         },
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
                           fileName: file
                         })
                       }, i);
                     })
-                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                     style: {
                       fontStyle: "italic"
                     },
@@ -1912,7 +2062,7 @@ var SingleChat = function SingleChat(_ref) {
                     children: "".concat(comment === null || comment === void 0 || (_comment$mention_comm4 = comment.mention_comment) === null || _comment$mention_comm4 === void 0 ? void 0 : _comment$mention_comm4.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention_comm5 = comment.mention_comment) === null || _comment$mention_comm5 === void 0 ? void 0 : _comment$mention_comm5.created_at).format("MMM DD, YYYY, hh:mm A"))
                   })]
                 })]
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                 // onContextMenu={(e) => {
                 //     onContextMenu(e);
                 //     setContextHolder(comment);
@@ -1936,7 +2086,7 @@ var SingleChat = function SingleChat(_ref) {
                 },
                 className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_message),
                 children: comment.comment
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), comment !== null && comment !== void 0 && comment.files ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(FileView
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.files ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(FileView
               // onContextMenu={(e) => {
               //     onContextMenu(e);
               //     setContextHolder(comment);
@@ -1946,15 +2096,15 @@ var SingleChat = function SingleChat(_ref) {
                 isCurrentUser: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id),
                 files: comment.files,
                 topMargin: !!(comment !== null && comment !== void 0 && comment.comment)
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {})]
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {})]
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             title: "".concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_at).format("MMM DD, YYYY, hh:mm A")),
             style: {
               alignSelf: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? "flex-end" : "flex-start"
             },
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_container, " ").concat(idMatch ? "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_match) : ""),
-            children: [comment !== null && comment !== void 0 && comment.mention_comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            children: [comment !== null && comment !== void 0 && comment.mention_comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               onContextMenu: function onContextMenu(e) {
                 _onContextMenu(e);
                 setContextHolder(comment);
@@ -1965,24 +2115,24 @@ var SingleChat = function SingleChat(_ref) {
                 borderBottom: comment !== null && comment !== void 0 && comment.comment ? "solid 1px hsla(0, 0%, 44%, 0.13)" : "0.15px solid #aaaaaa"
               },
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_mentioned_comment),
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_10__.HiReply, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
                 className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_icon)
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("article", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("article", {
                 className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area),
-                children: [comment !== null && comment !== void 0 && (_comment$mention_comm6 = comment.mention_comment) !== null && _comment$mention_comm6 !== void 0 && _comment$mention_comm6.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                children: [comment !== null && comment !== void 0 && (_comment$mention_comm6 = comment.mention_comment) !== null && _comment$mention_comm6 !== void 0 && _comment$mention_comm6.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_mssg),
                   children: comment === null || comment === void 0 ? void 0 : comment.mention_comment.comment
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention_comm7 = comment.mention_comment) !== null && _comment$mention_comm7 !== void 0 && (_comment$mention_comm7 = _comment$mention_comm7.files) !== null && _comment$mention_comm7 !== void 0 && _comment$mention_comm7.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention_comm7 = comment.mention_comment) !== null && _comment$mention_comm7 !== void 0 && (_comment$mention_comm7 = _comment$mention_comm7.files) !== null && _comment$mention_comm7 !== void 0 && _comment$mention_comm7.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
                   children: comment === null || comment === void 0 || (_comment$mention_comm8 = comment.mention_comment) === null || _comment$mention_comm8 === void 0 || (_comment$mention_comm8 = _comment$mention_comm8.files) === null || _comment$mention_comm8 === void 0 ? void 0 : _comment$mention_comm8.map(function (file, i) {
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
                         fileName: file
                       })
                     }, i);
                   })
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   style: {
                     fontStyle: "italic"
                   },
@@ -1990,7 +2140,7 @@ var SingleChat = function SingleChat(_ref) {
                   children: "".concat(comment === null || comment === void 0 || (_comment$mention_comm9 = comment.mention_comment) === null || _comment$mention_comm9 === void 0 ? void 0 : _comment$mention_comm9.added_by_name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention_comm10 = comment.mention_comment) === null || _comment$mention_comm10 === void 0 ? void 0 : _comment$mention_comm10.created_at).format("MMM DD, YYYY, hh:mm A"))
                 })]
               })]
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
               onContextMenu: function onContextMenu(e) {
                 _onContextMenu(e);
                 setContextHolder(comment);
@@ -2003,7 +2153,7 @@ var SingleChat = function SingleChat(_ref) {
               },
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_message),
               children: comment.comment
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), comment !== null && comment !== void 0 && comment.files ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(FileView, {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.files ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(FileView, {
               onContextMenu: function onContextMenu(e) {
                 _onContextMenu(e);
                 setContextHolder(comment);
@@ -2012,7 +2162,7 @@ var SingleChat = function SingleChat(_ref) {
               isCurrentUser: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id),
               files: comment.files,
               topMargin: !!(comment !== null && comment !== void 0 && comment.comment)
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
               onClick: function onClick() {
                 // setScroll((prev) => !prev);
                 setShowCommentMenu(function (prev) {
@@ -2025,63 +2175,65 @@ var SingleChat = function SingleChat(_ref) {
               },
               className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_btn),
               ref: menuBtnRef,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_fi__WEBPACK_IMPORTED_MODULE_11__.FiMoreVertical, {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_fi__WEBPACK_IMPORTED_MODULE_13__.FiMoreVertical, {
                 style: {
                   height: "100%",
                   width: "100%"
                 }
               })
-            }), showCommentMenu ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            }), showCommentMenu ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               ref: menuRef,
               style: {
                 left: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? "-98px" : "auto",
                 right: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? "auto" : "-98px"
               },
               className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_options,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
                 onClick: function onClick() {
                   setShowCommentMenu(false);
                   setMentionedComment(comment);
                 },
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_10__.HiReply, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
                   children: "Reply"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
                 onClick: function onClick() {
                   setShowCommentMenu(false);
                   handleSelect();
                 },
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_12__.TbMessage2Check, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_14__.TbMessage2Check, {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
                   children: "Select Message"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
                 onClick: function onClick() {
                   setShowCommentMenu(false);
+                  handleCopySingleComment(comment);
                 },
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_13__.MdOutlineContentCopy, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_15__.MdOutlineContentCopy, {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
                   children: "Copy"
                 })]
-              }), (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("section", {
+              }), (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 ? void 0 : comment.user_id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
                 onClick: function onClick() {
                   setShowCommentMenu(false);
+                  handleDeleteSingleComment(comment);
                 },
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_14__.IoMdCloseCircleOutline, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_16__.IoMdCloseCircleOutline, {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
                   children: "Remove"
                 })]
-              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {})]
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {})]
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
           })]
         })]
       })]
@@ -2097,7 +2249,7 @@ var FileView = function FileView(_ref5) {
     topMargin = _ref5.topMargin;
   // console.log({ isCurrentUser });
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
     onContextMenu: onContextMenu,
     onKeyDown: onKeyDown,
     style: {
@@ -2107,9 +2259,9 @@ var FileView = function FileView(_ref5) {
     },
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_files),
     children: files.map(function (file, i) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
           fileName: file
         })
       }, i);
@@ -2117,7 +2269,7 @@ var FileView = function FileView(_ref5) {
   });
 };
 var Select = function Select() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("svg", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("svg", {
     style: {
       cursor: "pointer"
     }
@@ -2129,24 +2281,24 @@ var Select = function Select() {
     width: "28",
     height: "28",
     viewBox: "0 0 28 28",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("circle", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
       id: "Ellipse_54",
       "data-name": "Ellipse 54",
       cx: "14",
       cy: "14",
       r: "14",
       fill: "#009cec"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("g", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("g", {
       id: "Group_3829",
       "data-name": "Group 3829",
       transform: "translate(4.278 5.251)",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("path", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("path", {
         id: "Path_1532",
         "data-name": "Path 1532",
         d: "M6.361,6.861,5,8.222l4.861,4.861,9.722-9.722L18.222,2,9.861,10.361Z",
         transform: "translate(-0.139 -1.028)",
         fill: "#fff"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("path", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("path", {
         id: "Path_1533",
         "data-name": "Path 1533",
         d: "M8.75,16.556a6.806,6.806,0,1,1,0-13.611,7.094,7.094,0,0,1,3.4.875l.972-1.653A8.758,8.758,0,0,0,0,9.75a8.75,8.75,0,0,0,17.5,0H15.556A6.764,6.764,0,0,1,8.75,16.556Z",
@@ -2157,7 +2309,7 @@ var Select = function Select() {
   });
 };
 var UnSelect = function UnSelect() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("svg", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("svg", {
     style: {
       cursor: "pointer"
     }
@@ -2167,11 +2319,11 @@ var UnSelect = function UnSelect() {
     width: "28",
     height: "28",
     viewBox: "0 0 28 28",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("g", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("g", {
       id: "Group_3961",
       "data-name": "Group 3961",
       transform: "translate(0 -0.068)",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("circle", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
         id: "Ellipse_1044",
         "data-name": "Ellipse 1044",
         cx: "14",
@@ -2179,7 +2331,7 @@ var UnSelect = function UnSelect() {
         r: "14",
         transform: "translate(0 0.068)",
         fill: "#009cec"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("g", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("g", {
         id: "Ellipse_1043",
         "data-name": "Ellipse 1043",
         transform: "translate(7 7.068)",
@@ -2188,12 +2340,12 @@ var UnSelect = function UnSelect() {
         strokeLinecap: "round",
         strokeLinejoin: "round",
         strokeWidth: "1.5",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("circle", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
           cx: "7",
           cy: "7",
           r: "7",
           stroke: "none"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("circle", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
           cx: "7",
           cy: "7",
           r: "7.75",
@@ -2456,6 +2608,47 @@ var Placeholder = function Placeholder(_ref) {
     }, style)
   });
 };
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/utils/getTextContent.jsx":
+/*!*****************************************************************!*\
+  !*** ./resources/js/react/UI/comments/utils/getTextContent.jsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getTextContent),
+/* harmony export */   htmlToString: () => (/* binding */ htmlToString)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function getTextContent(element) {
+  // console.log('element type',typeof element);
+  // console.log('check isArray',Array.isArray(element));
+  // console.log('check isValidElement',React.isValidElement(element));
+
+  if (typeof element === "string") {
+    return element;
+  }
+  if (Array.isArray(element)) {
+    return element.map(getTextContent).join("");
+  }
+  if ( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().isValidElement(element)) {
+    var children = react__WEBPACK_IMPORTED_MODULE_0___default().Children.toArray(element.props.children);
+    return getTextContent(children);
+  }
+  return "";
+}
+;
+function htmlToString(html) {
+  var tag = document.createElement('div');
+  tag.innerHTML = html;
+  var text = tag.textContent;
+  return text || "";
+}
 
 /***/ }),
 
@@ -3014,7 +3207,8 @@ var useSingleTask = function useSingleTask() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useGetCommentsQuery: () => (/* binding */ useGetCommentsQuery),
-/* harmony export */   useLazyGetCommentsQuery: () => (/* binding */ useLazyGetCommentsQuery)
+/* harmony export */   useLazyGetCommentsQuery: () => (/* binding */ useLazyGetCommentsQuery),
+/* harmony export */   usePostCommentMutation: () => (/* binding */ usePostCommentMutation)
 /* harmony export */ });
 /* harmony import */ var _apiSlice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiSlice */ "./resources/js/react/services/api/apiSlice.js");
 
@@ -3030,12 +3224,14 @@ var commentsApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEnd
       }),
       // post a comment
       postComment: build.mutation({
-        query: function query(data) {
+        query: function query(_ref) {
+          var taskId = _ref.taskId,
+            data = _ref.data;
           return {
-            url: "/account/tasks/comment-edit",
+            url: "account/task/".concat(taskId, "/json?mode=comment_store"),
             method: "POST",
             body: data,
-            formData: false
+            formData: true
           };
         },
         invalidatesTags: ["COMMENTS"]
@@ -3049,7 +3245,8 @@ var commentsApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEnd
 });
 
 var useGetCommentsQuery = commentsApiSlice.useGetCommentsQuery,
-  useLazyGetCommentsQuery = commentsApiSlice.useLazyGetCommentsQuery;
+  useLazyGetCommentsQuery = commentsApiSlice.useLazyGetCommentsQuery,
+  usePostCommentMutation = commentsApiSlice.usePostCommentMutation;
 
 
 /***/ }),

@@ -30,6 +30,7 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import isCurrentUser from "./utils/isCurrentUser";
 import CommentsPlaceholder from "./utils/CommentsPlaceholder";
+import getTextContent from "./utils/getTextContent";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -51,6 +52,7 @@ const CommentsBody = ({
     comments,
     loading,
     refetch,
+    taskId,
 }) => {
     const chatbottom_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
@@ -102,15 +104,14 @@ const CommentsBody = ({
                 <TbMessage2Check className={`context_icons`} />
                 <span className={`context_title`}>Select Message</span>
             </ContextMenuItem>
-            <ContextMenuItem
-            // onSelect={viewSource}
-            >
+            <ContextMenuItem 
+                onSelect={()=>handleCopySingleComment(contextHolder)}>
                 <MdOutlineContentCopy className={`context_icons`} />
                 <span className={`context_title`}>Copy</span>
             </ContextMenuItem>
             {isCurrentUser(contextHolder?.user_id) ? (
                 <ContextMenuItem
-                // onSelect={viewSource}
+                    onSelect={handleDeleteSingleComment}
                 >
                     <IoMdCloseCircleOutline className={`context_icons`} />
                     <span className={`context_title`}>Remove</span>
@@ -121,32 +122,18 @@ const CommentsBody = ({
         </>
     );
 
-    const getTextContent = (element) => {
-        if (typeof element === "string") {
-            return element;
-        }
-
-        if (Array.isArray(element)) {
-            return element.map(getTextContent).join("");
-        }
-
-        if (React.isValidElement(element)) {
-            const children = React.Children.toArray(element.props.children);
-            return getTextContent(children);
-        }
-
-        return "";
-    };
-
     // search result filtering
     useEffect(() => {
         // console.log("searchText :", searchText);
         if (searchText) {
             setAllComments(() => {
                 const filteredComments = [...comments].filter((comment) => {
-                    return !comment.is_deleted && getTextContent(comment.comment)
-                        .toLowerCase()
-                        .includes(searchText.toLowerCase());
+                    return (
+                        !comment.is_deleted &&
+                        getTextContent(comment.comment)
+                            .toLowerCase()
+                            .includes(searchText.toLowerCase())
+                    );
                     // const textContent = getTextContent(comment.comment).toLowerCase();
                     // console.log(textContent);
                     // return true;
@@ -174,7 +161,7 @@ const CommentsBody = ({
             // behavior: "smooth",
             block: "end",
         });
-    }, [scroll,loading]);
+    }, [scroll, loading]);
 
     // useEffect(() => {
     //     console.log({ contextHolder });
@@ -236,7 +223,7 @@ const CommentsBody = ({
                     timerProgressBar: true,
                 });
                 setSecletedComments({});
-                setScroll(prev=>!prev);
+                setScroll((prev) => !prev);
             })
             .catch(() => {
                 Swal.fire({
@@ -246,24 +233,74 @@ const CommentsBody = ({
                     showConfirmButton: true,
                     timerProgressBar: true,
                 });
-            }).finally(()=>{
-            //   setIsLoading(false);
+            })
+            .finally(() => {
+                //   setIsLoading(false);
             });
     };
 
     const handleDeleteComments = () => {
         setIsLoading(true),
-        Swal.fire({
-            icon: "success",
-            title: "Comments deleted successfully",
-            timer: 2000,
-            showConfirmButton: true,
-            timerProgressBar: true,
-        });
+            Swal.fire({
+                icon: "success",
+                title: "Comments deleted successfully",
+                timer: 2000,
+                showConfirmButton: true,
+                timerProgressBar: true,
+            });
         setSecletedComments({});
         // setScroll(prev=>!prev);
         refetch();
         setIsLoading(false);
+    };
+
+    const handleCopySingleComment = (comment) => {
+        const SelectedCommentsString = [comment].reduce(
+            (total, comment, i, arr) => {
+                total += `${getTextContent(comment.comment)}\n\n${
+                    comment?.added_by_name
+                }, ${dayjs(comment?.created_at).format(
+                    "MMM DD, YYYY, hh:mm A"
+                )}`;
+
+                if (i < arr.length - 1) {
+                    total += "\n\n\n";
+                }
+                return total;
+            },
+            ``
+        );
+        // console.log({ allSelectedCommentsString });
+        window.navigator.clipboard
+            .writeText(SelectedCommentsString)
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Comments copied successfully",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+                // setSecletedComments({});
+                // setScroll(prev=>!prev);
+                setContextHolder(null);
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Comments didn't copied",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+            })
+            .finally(() => {
+                //   setIsLoading(false);
+            });
+    };
+
+    const handleDeleteSingleComment = (comment)=>{
+      
     }
 
     return (
@@ -506,7 +543,7 @@ const CommentsBody = ({
                     // ref={chatbottom_ref}
                     className={`${style.commentsBody_commentArea}`}
                 >
-                    {(loading || isloading) ? (
+                    {loading || isloading ? (
                         <CommentsPlaceholder />
                     ) : (
                         <>
@@ -547,7 +584,7 @@ const CommentsBody = ({
                 </main>
 
                 <footer className={`${style.commentsBody_inputField}`}>
-                    <ChatInput setScroll={setScroll} />
+                    <ChatInput taskId={taskId} setScroll={setScroll} />
                 </footer>
 
                 {Object.keys(selectedComments).length > 0 ? (

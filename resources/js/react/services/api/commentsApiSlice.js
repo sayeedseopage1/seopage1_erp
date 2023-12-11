@@ -14,14 +14,15 @@ const commentsApiSlice = apiSlice.injectEndpoints({
 
     // post a comment
     postComment: build.mutation({
-      query: (data) => ({
-        url: `/account/tasks/comment-edit`,
+      query: ({taskId, data}) => ({
+        url: `account/task/${taskId}/json?mode=comment_store`,
         method: "POST",
         body: data,
-        formData: false,
+        formData: true,
       }),
       invalidatesTags: ["COMMENTS"]
     }),
+
 
     // update a comment
 
@@ -34,4 +35,4 @@ const commentsApiSlice = apiSlice.injectEndpoints({
 
 
 
-export const { useGetCommentsQuery, useLazyGetCommentsQuery } = commentsApiSlice;
+export const { useGetCommentsQuery, useLazyGetCommentsQuery,usePostCommentMutation } = commentsApiSlice;

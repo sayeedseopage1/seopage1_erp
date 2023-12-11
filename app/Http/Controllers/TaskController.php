@@ -4281,13 +4281,14 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-            //    DB::beginTransaction();
+               DB::beginTransaction();
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
             $data->task_id = $request->task_id;
             $data->added_by = $this->user->id;
             $data->last_updated_by = $this->user->id;
+            $data->mention_id = $request->mention_id;
 
             $data->save();
             //need pedning action
@@ -4318,6 +4319,7 @@ class TaskController extends AccountBaseController
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
+                    dd($file);
                     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                     array_push($file_name, $filename);
 
@@ -4326,6 +4328,7 @@ class TaskController extends AccountBaseController
                 }
                 $data->files = $file_name;
                 $data->save();
+                dd($data);
             }
 
             $data = TaskComment::find($data->id);
@@ -4342,9 +4345,11 @@ class TaskController extends AccountBaseController
             }
 
 
-            return response()->json($data);
+            return response()->json([
+                'status'=>200,
+                'success'=>true
+            ]);
         } elseif ($request->mode == 'comment_reply_store') {
-
             $data = new TaskReply();
             $data->comment_id = $request->comment_id;
             $data->reply = $request->comment;

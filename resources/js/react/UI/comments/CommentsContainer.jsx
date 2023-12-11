@@ -17,6 +17,7 @@ const CommentsContainer = ({
     task,
     comments = null,
     onCommentPost,
+    taskId,
 }) => {
     // ---------------------------------------------------------
     const param = useParams();
@@ -52,6 +53,7 @@ const CommentsContainer = ({
                                 comments={demoComments}
                                 loading={isFetching || isLoading}
                                 refetch={refetch}
+                                taskId={taskId?taskId:param?.taskId}
                             />
                         )}
                         {/* modal body (end) */}
@@ -100,6 +102,7 @@ const CommentsContainer = ({
                                 comments={demoComments}
                                 loading={isFetching || isLoading}
                                 refetch={refetch}
+                                taskId={taskId?taskId:param?.taskId}
                             />
                         )}
                         {/* modal body (end) */}
@@ -144,6 +147,7 @@ const CommentsContainer = ({
                                         comments={demoComments}
                                         loading={isFetching || isLoading}
                                         refetch={refetch}
+                                        taskId={taskId?taskId:param?.taskId}
                                     />
                                 )}
                                 {/* modal body (end) */}

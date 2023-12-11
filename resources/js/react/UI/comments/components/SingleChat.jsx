@@ -12,6 +12,8 @@ import dayjs from "dayjs";
 import HandleFileIcon from "../utils/HandleFileIcon";
 import isCurrentUser from "../utils/isCurrentUser";
 import { User } from "../utils/user-details";
+import Swal from "sweetalert2";
+import getTextContent from "../utils/getTextContent";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -200,6 +202,55 @@ const SingleChat = ({
             return selected;
         });
     };
+
+    const handleCopySingleComment = (comment) => {
+        const SelectedCommentsString = [comment].reduce(
+            (total, comment, i, arr) => {
+                total += `${getTextContent(comment.comment)}\n\n${
+                    comment?.added_by_name
+                }, ${dayjs(comment?.created_at).format(
+                    "MMM DD, YYYY, hh:mm A"
+                )}`;
+
+                if (i < arr.length - 1) {
+                    total += "\n\n\n";
+                }
+                return total;
+            },
+            ``
+        );
+        // console.log({ allSelectedCommentsString });
+        window.navigator.clipboard
+            .writeText(SelectedCommentsString)
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Comments copied successfully",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+                // setSecletedComments({});
+                // setScroll(prev=>!prev);
+                setContextHolder(null);
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Comments didn't copied",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+            })
+            .finally(() => {
+                //   setIsLoading(false);
+            });
+    };
+
+    const handleDeleteSingleComment = (comment)=>{
+      
+    }
 
     return (
         <div
@@ -692,6 +743,7 @@ const SingleChat = ({
                                         <section
                                             onClick={() => {
                                                 setShowCommentMenu(false);
+                                                handleCopySingleComment(comment);
                                             }}
                                         >
                                             <MdOutlineContentCopy
@@ -708,6 +760,7 @@ const SingleChat = ({
                                             <section
                                                 onClick={() => {
                                                     setShowCommentMenu(false);
+                                                    handleDeleteSingleComment(comment);
                                                 }}
                                             >
                                                 <IoMdCloseCircleOutline

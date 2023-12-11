@@ -18,8 +18,14 @@ import { MdClose } from "react-icons/md";
 import dayjs from "dayjs";
 import HandleFileIcon from "../utils/HandleFileIcon";
 import Swal from "sweetalert2";
+import { usePostCommentMutation } from "../../../services/api/commentsApiSlice";
+import { User } from "../utils/user-details";
+import getTextContent, { htmlToString } from "../utils/getTextContent";
 
-const ChatInput = ({ setScroll }) => {
+const currentUser = new User(window.Laravel.user);
+
+const ChatInput = ({ setScroll, taskId }) => {
+    const [postComment,{isLoading}] = usePostCommentMutation();
     const [editorHtml, setEditorHtml] = useState("");
     const [show, setShow] = useState(false);
     const [files, setFiles] = useState([]);
@@ -30,22 +36,71 @@ const ChatInput = ({ setScroll }) => {
         setSecletedComments,
     } = useCommentContext();
 
-    const handleSendComment = () => {
-        console.log({comment:editorHtml,files,mentioned:mentionedComment});
-        Swal.fire({
-            icon: "success",
-            title: "Comment Sent",
-            showConfirmButton: true,
-            timer: 2000,
-            timerProgressBar: true,
-        });
+    const handleSendComment = async () => {
+        if (!htmlToString(editorHtml) && !files.length) {
+            Swal.fire({
+                icon: "warning",
+                title: "Enter your comment or attachment",
+                showConfirmButton: true,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+            return;
+        }
+
+        const formdata = new FormData();
+        formdata.append(
+            "_token",
+            document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content")
+        );
+        formdata.append("comment", editorHtml || "");
+        formdata.append("user_id", currentUser.id);
+        formdata.append("task_id", taskId);
+        formdata.append("added_by", currentUser.id);
+        formdata.append("last_updated_by", currentUser.id);
+        formdata.append("mention_id", mentionedComment?.id || null);
+        if (files.length) {
+            Array.from(files).forEach((file) => {
+                formdata.append(`file`, file);
+            });
+        } else {
+            formdata.append("file", null);
+        }
+        const result = {}
+        for (const data of formdata.entries()) {
+            result[data[0]] = data[1];
+            // console.log(`${data[0]} : ${data[1]}`);
+        }
+        console.log(result);
+
+        try {
+            await postComment({taskId, data:formdata});
+            Swal.fire({
+                icon: "success",
+                title: "Comment Sent",
+                showConfirmButton: true,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Comment not sent",
+                showConfirmButton: true,
+                timer: 2000,
+                timerProgressBar: true,
+            });
+        }
+
         setSecletedComments({});
         setMentionedComment(null);
         setContextHolder(null);
         setEditorHtml("");
         setShow(false);
         setFiles([]);
-        setScroll(prev=>!prev);
+        setScroll((prev) => !prev);
     };
 
     return (
@@ -211,13 +266,7 @@ function FilePreviewer({ files, setFiles }) {
     );
 }
 
-function CommentEditor({
-    show,
-    setShow,
-    files,
-    editorHtml,
-    setEditorHtml,
-}) {
+function CommentEditor({ show, setShow, files, editorHtml, setEditorHtml }) {
     const quillRef = useRef(null);
     const { mentionedComment } = useCommentContext();
     const [showEmoji, setShowEmoji] = useState(false);
@@ -256,16 +305,15 @@ function CommentEditor({
             quill.off("text-change"); // Optional: Unsubscribe from any event listeners
         };
     }, [show]);
-    
-const atValues = [
-    { id: 1, value: 'Fredrik Sundqvist' },
-    { id: 2, value: 'Patrik Sjölin' },
-  ];
-  const hashValues = [
-    { id: 3, value: 'Fredrik Sundqvist 2' },
-    { id: 4, value: 'Patrik Sjölin 2' },
-  ];
-  
+
+    const atValues = [
+        { id: 1, value: "Fredrik Sundqvist" },
+        { id: 2, value: "Patrik Sjölin" },
+    ];
+    const hashValues = [
+        { id: 3, value: "Fredrik Sundqvist 2" },
+        { id: 4, value: "Patrik Sjölin 2" },
+    ];
 
     async function suggestPeople(searchTerm) {
         const allPeople = [
@@ -297,13 +345,13 @@ const atValues = [
         //     mentionDenotationChars: ['@', '#'],
         //     source: function (searchTerm, renderList, mentionChar) {
         //       let values;
-      
+
         //       if (mentionChar === '@') {
         //         values = atValues;
         //       } else {
         //         values = hashValues;
         //       }
-      
+
         //       if (searchTerm.length === 0) {
         //         renderList(values, searchTerm);
         //       } else {
