@@ -112,6 +112,7 @@ use App\Models\BlogArticle;
 use App\Models\DeliverableReAuthorization;
 use App\Models\PmBasicSeo;
 use App\Models\PmBlogArticle;
+use App\Models\PmGoalSetting;
 use App\Models\PmProductCategory;
 use App\Models\PmProductDescription;
 use App\Models\PmWebContent;
@@ -2132,6 +2133,23 @@ class ProjectController extends AccountBaseController
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
+
+        // PROJECT PM GOAL SETTINGS START
+        if($project->status = 'not started'){
+            if($request->project_budget){
+                $findProject = Project::where('id',$request->project_id)->first();
+                $findDeal = Deal::where('id',$findProject->deal_id)->first();
+                    $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $request->project_budget)
+                                ->where('end_value', '>=', $request->project_budget)
+                                ->first();
+                                
+                    if($pmGoalSetting !=null){
+                        $project_status_helper = new HelperPmProjectStatusController();
+                        $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
+                    }
+            }
+        }
+    // PROJECT PM GOAL SETTINGS END
 
        $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
         if($actions != null)

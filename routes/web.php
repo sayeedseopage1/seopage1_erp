@@ -198,6 +198,7 @@ use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
+use App\Http\Controllers\PmGoalSetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1053,6 +1054,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
 
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
+
+    //Pm goal Settings
+    Route::resource('pm-goal-setting', PmGoalSetingController::class);
+    Route::post('pm-goal-setting-update',[PmGoalSetingController::class,'pmGoalUpdate'])->name('pm-goal-setting-update');
+
     //qualified sales Settings
 
 
