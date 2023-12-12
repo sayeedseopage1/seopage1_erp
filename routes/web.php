@@ -199,6 +199,7 @@ use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
 use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\ProjectStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1058,6 +1059,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //Pm goal Settings
     Route::resource('pm-goal-setting', PmGoalSetingController::class);
     Route::post('pm-goal-setting-update',[PmGoalSetingController::class,'pmGoalUpdate'])->name('pm-goal-setting-update');
+
+    /* PM PROJECT STATUS */
+    Route::resource('project-status',ProjectStatusController::class);
 
     //qualified sales Settings
 

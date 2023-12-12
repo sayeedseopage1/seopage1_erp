@@ -3,28 +3,43 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\PmGoalSetting;
+use App\DataTables\HolidayDataTable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class PmGoalSetingController extends AccountBaseController
+class ProjectStatusController extends AccountBaseController
 {
+
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'PM Goal Settings';
+        $this->pageTitle = 'Project Status';
     }
-
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(HolidayDataTable $dataTable)
     {
-        $this->pm_goals = PmGoalSetting::all();
-        return view('pm-goal-setting.index',$this->data);
+        $this->currentYear = now()->format('Y');
+        $this->currentMonth = now()->month;
+
+        /* year range from last 5 year to next year */
+        $years = [];
+        $latestFifthYear = (int)Carbon::now()->subYears(5)->format('Y');
+        $nextYear = (int)Carbon::now()->addYear()->format('Y');
+
+        for ($i = $latestFifthYear; $i <= $nextYear; $i++) {
+            $years[] = $i;
+        }
+
+        $this->years = $years;
+
+        /* months */
+        $this->months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+        return $dataTable->render('project-status.index',$this->data);
     }
 
     /**
@@ -79,20 +94,7 @@ class PmGoalSetingController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
-        // 
-    }
-
-    public function pmGoalUpdate(Request $request){
-        $pmGoal = PmGoalSetting::where('id',$request->id)->first();
-        $pmGoal->initial_value = $request->initial_value;
-        $pmGoal->end_value = $request->end_value;
-        $pmGoal->no_of_goal = $request->no_of_goal;
-        $pmGoal->save();
-
-        return response()->json([
-            'status'=>200,
-            'pmGoal'=>$pmGoal,
-        ]);
+        //
     }
 
     /**

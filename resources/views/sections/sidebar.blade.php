@@ -319,6 +319,7 @@
                             )
                                 <x-sub-menu-item :link="url('account/independent/tasks')" :text="__('Independent Task')" />
                             @endif
+                            <x-sub-menu-item :link="route('project-status.index')" :text="__('Projects Status')" />
                                 {{-- <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" /> --}}
 
 
