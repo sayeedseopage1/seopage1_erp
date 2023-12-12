@@ -4597,12 +4597,7 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-<<<<<<< HEAD
             //    DB::beginTransaction();
-=======
-
-
->>>>>>> 6ec21b8b3a349e978bd67f420e34b4bd80da58e5
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
