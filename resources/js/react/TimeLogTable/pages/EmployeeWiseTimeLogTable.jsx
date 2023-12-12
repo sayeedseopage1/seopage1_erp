@@ -10,6 +10,8 @@ import { RefreshButton } from "../components/RefreshButton";
 import Tabbar from "../components/Tabbar";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { EmployeeTableCtx } from "../context/EmployeeTableContext";
+import { ExportToExcel } from "../components/ExportToExcel";
+import ExportEmployeeWiseTableDataToExcel from "../export/excel/ExportEmployeeWiseTableDataToExcel";
 
 
 
@@ -43,7 +45,6 @@ const EmployeeWiseTimeLogTable = () => {
             const sortedData = orderBy(res?.data, ["employee_id"], ["desc"]);
             const totalSession = _.sumBy(sortedData, (d) => Number(d.number_of_session));
             const totalTrackTime = _.sumBy(sortedData, d => Number(d.total_minutes));
-
             handleData(sortedData, currentPage, perPageData);
             setData(sortedData);
             setNSession(totalSession);
@@ -80,11 +81,25 @@ const EmployeeWiseTimeLogTable = () => {
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
                     <Tabbar/>
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} >
-                        {isLoading ?
-                            <Loader title="Refreshing..."  borderRightColor="white" />
-                        : 'Refresh'}
-                    </RefreshButton>
+                    <div className="d-flex align-items-center" style={{gap: '10px'}}>
+                        <RefreshButton onClick={handleRefresh} isLoading={isLoading} >
+                            {isLoading ?
+                                <Loader title="Refreshing..."  borderRightColor="white" />
+                            : 'Refresh'}
+                        </RefreshButton>
+
+                        <ExportEmployeeWiseTableDataToExcel
+                             data = {data}
+                             filter={filter}
+                             button = {
+                                 <ExportToExcel>
+                                     <i className="fa-solid fa-download" />
+                                     Export to Excel
+                                 </ExportToExcel>
+                             }
+                             filename={`employee_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
+                        />
+                    </div>
                 </div>
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
                     <span className="mx-auto">
