@@ -2388,7 +2388,7 @@ class ProjectController extends AccountBaseController
 
         $this->messageSetting = MessageSetting::first();
         $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
-        $this->deliverables = ProjectDeliverable::where('project_id', $this->project->id)->orderBy('id','desc')->get();
+        $this->deliverables = ProjectDeliverable::where('project_id', $this->project->id)->get();
 
         $tab = request('tab');
 
