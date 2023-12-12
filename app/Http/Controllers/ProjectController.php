@@ -3244,7 +3244,8 @@ class ProjectController extends AccountBaseController
             $deliverable->description = $request->description;
             $deliverable->save();
             $project= Project::where('id',$deliverable->project_id)->first();
-            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$deliverable->project_id)->where('authorization_for',Auth::id())->get();
+
             if($actions != null)
             {
             foreach ($actions as $key => $action) {
