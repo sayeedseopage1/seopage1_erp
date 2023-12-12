@@ -2410,6 +2410,7 @@ class ProjectController extends AccountBaseController
                 break;
             case 'tasks':
                 $this->taskBoardStatus = TaskboardColumn::all();
+                $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 100, " ..."));
                 return (!$this->project->trashed()) ? $this->tasks($this->project->project_admin == user()->id) : $this->archivedTasks($this->project->project_admin == user()->id);
             case 'gantt':
                 $this->taskBoardStatus = TaskboardColumn::all();
@@ -2611,6 +2612,7 @@ class ProjectController extends AccountBaseController
 
         $tab = request('tab');
         ($tab == '') ? $this->activeTab = 'overview' : $this->activeTab = $tab;
+        $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 100, " ..."));
         $this->view = 'projects.ajax.tasks';
        // dd($this->data);
         return $dataTable->render('projects.show', $this->data);
