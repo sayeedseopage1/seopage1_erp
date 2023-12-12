@@ -4602,14 +4602,15 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
             //    DB::beginTransaction();
-           // dd($request);
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
             $data->task_id = $request->task_id;
             $data->added_by = $this->user->id;
             $data->last_updated_by = $this->user->id;
-           // $data->mention_id = $request->mention_id;
+
+            $data->mention_id = $request->mention_id;
+
 
             $data->save();
             //need pedning action
@@ -4640,6 +4641,7 @@ class TaskController extends AccountBaseController
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
+                  //  dd($file);
                     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                     array_push($file_name, $filename);
 
@@ -4664,9 +4666,11 @@ class TaskController extends AccountBaseController
             }
 
 
-            return response()->json($data);
+            return response()->json([
+                'status'=>200,
+                'success'=>true
+            ]);
         } elseif ($request->mode == 'comment_reply_store') {
-
             $data = new TaskReply();
             $data->comment_id = $request->comment_id;
             $data->reply = $request->comment;
@@ -6739,26 +6743,24 @@ class TaskController extends AccountBaseController
 
     public function getTaskComments($task_id)
     {
-        $data = TaskComment::where('task_id', $task_id)->where('root', null)->get();
+        $data = TaskComment::select('task_comments.*','task_comments.created_at as created_date')->where('task_comments.task_id', $task_id)->where('task_comments.root', null)->get();
 
         foreach ($data as $value) {
 
-            $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
-            $value->total_replies = $replies->count();
-            $value->last_updated_at = strtotime($value->created_at);
-            $value->replies_users = User::whereIn('id', $replies->unique())->get()->map(function ($row) {
-                return [
-                    'id' => $row->id,
-                    'image_url' => $row->image_url,
-                    'name' => $row->name
-                ];
-            });
-            $value->last_updated_date = $value->created_at;
-            $value->replies = [];
+           $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
+        //   $value->files_data = $value->files;
         }
+        
+        // return response()->json([
+           
+        //     'data' => $data,
+        //   //  'mention'=> $data->mention,
+        //     'status' => 200
+        // ]);
 
         // dd($data);
-        return response()->json($data, 200);
+        $data = json_decode(json_encode($data));
+        return response()->json($data,200);
     }
 
     // Get task comment replied
@@ -7022,6 +7024,29 @@ class TaskController extends AccountBaseController
 
 
         return response()->json(["message" => 'Comment Deleted Successfully'], 200);
+    }
+
+    public function multipleCommentDelete(Request $request){
+        $task_comments = TaskComment::whereIn('id',$request->comments_id)->get();
+        if($task_comments !=null){
+            foreach($task_comments as $item){
+                $delete_cmnt = TaskComment::where('id',$item->id)->first();
+                $delete_cmnt->status = 'deleted';
+                $delete_cmnt->is_deleted = 1;
+                $delete_cmnt->deleted_by = Auth::user()->id;
+                $delete_cmnt->deleted_at = Carbon::now();
+                $delete_cmnt->save();
+            }
+            return response()->json([
+                "message" => 'Comment Deleted Successfully',
+                "status" => 200,
+            ], 200);
+        }else{
+            return response()->json([
+                "message" => 'Comment Not Found!',
+                "status" => 400
+            ], 400);
+        }
     }
 
     /*************** END TASK COMMENT ************/
