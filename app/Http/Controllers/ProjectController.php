@@ -362,212 +362,212 @@ class ProjectController extends AccountBaseController
      * @return array|mixed
      * @throws \Throwable
      */
-    public function store(StoreProject $request)
-    {
-        $this->addPermission = user()->permission('add_projects');
+    // public function store(StoreProject $request)
+    // {
+    //     $this->addPermission = user()->permission('add_projects');
 
-        abort_403(!in_array($this->addPermission, ['all', 'added']));
+    //     abort_403(!in_array($this->addPermission, ['all', 'added']));
 
-        DB::beginTransaction();
+    //     DB::beginTransaction();
 
-        try {
-            $this->addPermission = user()->permission('add_projects');
+    //     try {
+    //         $this->addPermission = user()->permission('add_projects');
 
-            $startDate = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
-            $deadline = !$request->has('without_deadline') ? Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d') : null;
-            $project = new Project();
-            $notes = new ProjectNote();
-            $project->project_name = $request->project_name;
-            $project->project_short_code = $request->project_code;
+    //         $startDate = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+    //         $deadline = !$request->has('without_deadline') ? Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d') : null;
+    //         $project = new Project();
+    //         $notes = new ProjectNote();
+    //         $project->project_name = $request->project_name;
+    //         $project->project_short_code = $request->project_code;
 
-            $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+    //         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
-            $project->start_date = $startDate;
-            $project->deadline = $deadline;
+    //         $project->start_date = $startDate;
+    //         $project->deadline = $deadline;
 
-            if ($request->notes != '') {
-                $project->notes = str_replace('<p><br></p>', '', trim($request->notes));
-                $notes->title = 'Note';
-                $notes->details = $request->notes;
-                $notes->client_id = $request->client_id;
-            }
+    //         if ($request->notes != '') {
+    //             $project->notes = str_replace('<p><br></p>', '', trim($request->notes));
+    //             $notes->title = 'Note';
+    //             $notes->details = $request->notes;
+    //             $notes->client_id = $request->client_id;
+    //         }
 
-            if ($request->category_id != '') {
-                $project->category_id = $request->category_id;
-            }
+    //         if ($request->category_id != '') {
+    //             $project->category_id = $request->category_id;
+    //         }
 
-            $project->client_id = $request->client_id;
-            $request->client_view_task = $request->client_view_task ? 'enable' : 'disable';
-            $project->allow_client_notification = ($request->client_view_task) && ($request->client_task_notification) ? 'enable' : 'disable';
-            $request->manual_timelog = $request->manual_timelog ? 'enable' : 'disable';
+    //         $project->client_id = $request->client_id;
+    //         $request->client_view_task = $request->client_view_task ? 'enable' : 'disable';
+    //         $project->allow_client_notification = ($request->client_view_task) && ($request->client_task_notification) ? 'enable' : 'disable';
+    //         $request->manual_timelog = $request->manual_timelog ? 'enable' : 'disable';
 
-            if ($request->team_id > 0) {
-                $project->team_id = $request->team_id;
-            }
+    //         if ($request->team_id > 0) {
+    //             $project->team_id = $request->team_id;
+    //         }
 
-            $project->project_budget = $request->project_budget;
-            $project->currency_id = $request->currency_id != '' ? $request->currency_id : global_setting()->currency_id;
-            $project->hours_allocated = $request->hours_allocated;
+    //         $project->project_budget = $request->project_budget;
+    //         $project->currency_id = $request->currency_id != '' ? $request->currency_id : global_setting()->currency_id;
+    //         $project->hours_allocated = $request->hours_allocated;
 
-            $defualtStatus = ProjectStatusSetting::where('default_status', 1)->get();
+    //         $defualtStatus = ProjectStatusSetting::where('default_status', 1)->get();
 
-            foreach ($defualtStatus as $defualt) {
-                $project->status = $defualt->status_name;
-            }
+    //         foreach ($defualtStatus as $defualt) {
+    //             $project->status = $defualt->status_name;
+    //         }
 
-            if ($request->public) {
-                $project->public = $request->public ? 1 : 0;
-            }
-
-
-            $project->save();
-            $lead_developer_id = RoleUser::where('role_id', 6)->get();
-            //dd($lead_developer_id);
-            foreach ($lead_developer_id as $lead) {
-                $lead_developer = new ProjectMember();
-                $lead_developer->user_id = $lead->user_id;
-                $lead_developer->project_id = $project->id;
-                $lead_developer->lead_developer_id = $lead->user_id;
-                $lead_developer->hourly_rate = 0;
-                $lead_developer->save();
-            }
+    //         if ($request->public) {
+    //             $project->public = $request->public ? 1 : 0;
+    //         }
 
 
-            //seopage1 custom module
-            $pm_count = PMAssign::select('project_count')->min('project_count');
-            $pm_user = PMAssign::where('project_count', $pm_count)->first();
-            if ($pm_count < 2) {
-                if ($pm_user != null) {
-                    $pmassign = new PMProject();
-                    $pmassign->project_id = $project->id;
-                    $pmassign->status = $project->status;
-                    $pmassign->pm_id = $pm_user->pm_id;
-
-                    $pmassign->save();
-                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                    $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
-                    $pm_project_update = PMAssign::find($pm_project_find->id);
-                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                    $pm_project_update->amount = $pm_project_update->amount + $project->project_budget;
-                    $pm_project_update->save();
-                }
-            } else {
-                $items = PMAssign::all();
-                $pm_amount =  $items->min('amount');
-                $pm_count_id =  $items->min('project_count');
-
-                $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
-                $pm_min_pro = PMAssign::where('project_count',  $pm_count_id)->first();
-                $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
-
-                $fin_min = $find_rest->min('amount');
-
-                $final_id = PMAssign::where('amount', $fin_min)->first();
-
-                //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
-
-                if (($pm_find_id->project_count + 1) <= $pm_count_id * 1.5) {
-                    $pmassign = new PMProject();
-                    $pmassign->project_id = $project->id;
-                    $pmassign->status = $project->status;
-
-                    $pmassign->pm_id = $pm_find_id->pm_id;
-                    $pmassign->save();
-                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                    $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
-                    $pm_project_update = PMAssign::find($pm_project_find->id);
-                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                    $pm_project_update->amount = $pm_project_update->amount + $project->project_budget;
-                    $pm_project_update->save();
-                } else {
-
-                    $pmassign = new PMProject();
-                    $pmassign->project_id = $project->id;
-                    $pmassign->status = $project->status;
-
-                    $pmassign->pm_id =  $final_id->pm_id;
-                    $pmassign->save();
-                    //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
-                    $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
-                    $pm_project_update = PMAssign::find($pm_project_find->id);
-                    $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                    $pm_project_update->amount = $pm_project_update->amount + $project->project_budget;
-                    $pm_project_update->save();
-                }
-            }
+    //         $project->save();
+    //         $lead_developer_id = RoleUser::where('role_id', 6)->get();
+    //         //dd($lead_developer_id);
+    //         foreach ($lead_developer_id as $lead) {
+    //             $lead_developer = new ProjectMember();
+    //             $lead_developer->user_id = $lead->user_id;
+    //             $lead_developer->project_id = $project->id;
+    //             $lead_developer->lead_developer_id = $lead->user_id;
+    //             $lead_developer->hourly_rate = 0;
+    //             $lead_developer->save();
+    //         }
 
 
+    //         //seopage1 custom module
+    //         $pm_count = PMAssign::select('project_count')->min('project_count');
+    //         $pm_user = PMAssign::where('project_count', $pm_count)->first();
+    //         if ($pm_count < 2) {
+    //             if ($pm_user != null) {
+    //                 $pmassign = new PMProject();
+    //                 $pmassign->project_id = $project->id;
+    //                 $pmassign->status = $project->status;
+    //                 $pmassign->pm_id = $pm_user->pm_id;
 
-            $project_id = $project->latest()->first();
-            $notes->project_id = $project_id->id;
-            $notes->save();
+    //                 $pmassign->save();
+    //                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+    //                 $pm_project_find = PMAssign::where('pm_id', $pm_user->pm_id)->first();
+    //                 $pm_project_update = PMAssign::find($pm_project_find->id);
+    //                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
+    //                 $pm_project_update->amount = $pm_project_update->amount + $project->project_budget;
+    //                 $pm_project_update->save();
+    //             }
+    //         } else {
+    //             $items = PMAssign::all();
+    //             $pm_amount =  $items->min('amount');
+    //             $pm_count_id =  $items->min('project_count');
+
+    //             $pm_find_id = PMAssign::where('amount', $pm_amount)->first();
+    //             $pm_min_pro = PMAssign::where('project_count',  $pm_count_id)->first();
+    //             $find_rest = PMAssign::where('project_count', $pm_count_id)->get();
+
+    //             $fin_min = $find_rest->min('amount');
+
+    //             $final_id = PMAssign::where('amount', $fin_min)->first();
+
+    //             //  $exceptional =   $pm_count= PMAssign::select('project_count')->where('')->get();
+
+    //             if (($pm_find_id->project_count + 1) <= $pm_count_id * 1.5) {
+    //                 $pmassign = new PMProject();
+    //                 $pmassign->project_id = $project->id;
+    //                 $pmassign->status = $project->status;
+
+    //                 $pmassign->pm_id = $pm_find_id->pm_id;
+    //                 $pmassign->save();
+    //                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+    //                 $pm_project_find = PMAssign::where('pm_id', $pm_find_id->pm_id)->first();
+    //                 $pm_project_update = PMAssign::find($pm_project_find->id);
+    //                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
+    //                 $pm_project_update->amount = $pm_project_update->amount + $project->project_budget;
+    //                 $pm_project_update->save();
+    //             } else {
+
+    //                 $pmassign = new PMProject();
+    //                 $pmassign->project_id = $project->id;
+    //                 $pmassign->status = $project->status;
+
+    //                 $pmassign->pm_id =  $final_id->pm_id;
+    //                 $pmassign->save();
+    //                 //  $pm_project= PMAssign::where('pm_id',$pm_id->pm_id)->first();
+    //                 $pm_project_find = PMAssign::where('pm_id', $final_id->pm_id)->first();
+    //                 $pm_project_update = PMAssign::find($pm_project_find->id);
+    //                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
+    //                 $pm_project_update->amount = $pm_project_update->amount + $project->project_budget;
+    //                 $pm_project_update->save();
+    //             }
+    //         }
 
 
-            $this->logSearchEntry($project->id, $project->project_name, 'projects.show', 'project');
 
-            $this->logProjectActivity($project->id, 'messages.addedAsNewProject');
-
-            if ($request->template_id) {
-                $template = ProjectTemplate::with('membersMany')->findOrFail($request->template_id);
-
-                foreach ($template->tasks as $task) {
-                    $projectTask = new Task();
-
-                    $projectTask->project_id = $project->id;
-                    $projectTask->heading = $task->heading;
-                    $projectTask->task_category_id = $task->project_template_task_category_id;
-                    $projectTask->description = str_replace('<p><br></p>', '', trim($task->description));
-                    $projectTask->start_date = $startDate;
-                    $projectTask->due_date = $deadline;
-                    $projectTask->is_private = 0;
-                    $projectTask->save();
-
-                    foreach ($task->usersMany as $value) {
-                        TaskUser::create(
-                            [
-                                'user_id' => $value->id,
-                                'task_id' => $projectTask->id
-                            ]
-                        );
-                    }
-
-                    foreach ($task->subtasks as $value) {
-                        SubTask::create(
-                            [
-                                'title' => $value->title,
-                                'task_id' => $projectTask->id
-                            ]
-                        );
-                    }
-                }
-            }
-
-            // To add custom fields data
-            if ($request->get('custom_fields_data')) {
-                $project->updateCustomFieldData($request->get('custom_fields_data'));
-            }
-
-            // Commit Transaction
-            DB::commit();
+    //         $project_id = $project->latest()->first();
+    //         $notes->project_id = $project_id->id;
+    //         $notes->save();
 
 
-            $redirectUrl = urldecode($request->redirect_url);
+    //         $this->logSearchEntry($project->id, $project->project_name, 'projects.show', 'project');
 
-            if ($redirectUrl == '') {
-                $redirectUrl = route('projects.index');
-            }
+    //         $this->logProjectActivity($project->id, 'messages.addedAsNewProject');
 
-            return Reply::dataOnly(['projectID' => $project->id, 'redirectUrl' => $redirectUrl]);
-        } catch (\Swift_TransportException $e) {
-            // Rollback Transaction
-            DB::rollback();
-            return Reply::error('Please configure SMTP details to add project. Visit Settings -> notification setting to set smtp', 'smtp_error');
-        } catch (\Exception $e) {
-            // Rollback Transaction
-            DB::rollback();
-            return Reply::error('Some error occured when inserting the data. Please try again or contact support');
-        }
-    }
+    //         if ($request->template_id) {
+    //             $template = ProjectTemplate::with('membersMany')->findOrFail($request->template_id);
+
+    //             foreach ($template->tasks as $task) {
+    //                 $projectTask = new Task();
+
+    //                 $projectTask->project_id = $project->id;
+    //                 $projectTask->heading = $task->heading;
+    //                 $projectTask->task_category_id = $task->project_template_task_category_id;
+    //                 $projectTask->description = str_replace('<p><br></p>', '', trim($task->description));
+    //                 $projectTask->start_date = $startDate;
+    //                 $projectTask->due_date = $deadline;
+    //                 $projectTask->is_private = 0;
+    //                 $projectTask->save();
+
+    //                 foreach ($task->usersMany as $value) {
+    //                     TaskUser::create(
+    //                         [
+    //                             'user_id' => $value->id,
+    //                             'task_id' => $projectTask->id
+    //                         ]
+    //                     );
+    //                 }
+
+    //                 foreach ($task->subtasks as $value) {
+    //                     SubTask::create(
+    //                         [
+    //                             'title' => $value->title,
+    //                             'task_id' => $projectTask->id
+    //                         ]
+    //                     );
+    //                 }
+    //             }
+    //         }
+
+    //         // To add custom fields data
+    //         if ($request->get('custom_fields_data')) {
+    //             $project->updateCustomFieldData($request->get('custom_fields_data'));
+    //         }
+
+    //         // Commit Transaction
+    //         DB::commit();
+
+
+    //         $redirectUrl = urldecode($request->redirect_url);
+
+    //         if ($redirectUrl == '') {
+    //             $redirectUrl = route('projects.index');
+    //         }
+
+    //         return Reply::dataOnly(['projectID' => $project->id, 'redirectUrl' => $redirectUrl]);
+    //     } catch (\Swift_TransportException $e) {
+    //         // Rollback Transaction
+    //         DB::rollback();
+    //         return Reply::error('Please configure SMTP details to add project. Visit Settings -> notification setting to set smtp', 'smtp_error');
+    //     } catch (\Exception $e) {
+    //         // Rollback Transaction
+    //         DB::rollback();
+    //         return Reply::error('Some error occured when inserting the data. Please try again or contact support');
+    //     }
+    // }
 
     public function edit($id)
     {
@@ -922,10 +922,10 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-            //   dd($request->all());
+
 
         //kpi distribution start from here
-      //  DB::beginTransaction();
+    //    DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
@@ -2002,6 +2002,7 @@ class ProjectController extends AccountBaseController
         $project->project_name = $request->project_name;
         $project->dept_status = $request->dept_status;
         $project->project_short_code = $request->project_code;
+        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
         if ($project->status == 'not started') {
             $project->requirement_defined = $request->requirement_defined;
             $project->deadline_meet = $request->deadline_meet;
@@ -2031,16 +2032,14 @@ class ProjectController extends AccountBaseController
         }
 
 
-        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
-
-
         $project->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
         if ($project->deal->project_type != 'hourly') {
-            if (!$request->has('without_deadline')) {
-                $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
-            } else {
-                $project->deadline = null;
-            }
+            // if (!$request->has('without_deadline')) {
+            //     $project->deadline = Carbon::createFromFormat($this->global->date_format, $request->deadline)->format('Y-m-d');
+                $project->deadline = $project->deal->deadline;
+            // } else {
+            //     $project->deadline = null;
+            // }
         }
 
         if ($request->notes != '') {
@@ -2120,11 +2119,19 @@ class ProjectController extends AccountBaseController
             $project->membersMany()->sync($request->member_id);
         }
 
-
+        if($project->status == 'not started'){
         $project->project_challenge = $request->project_challenge;
+        if($request->project_challenge != 'No Challenge' || $request->project_challenge != null)
+        {
+            $project->admin_authorization_status = 0;
+
+        }
+    }
         $project->comments = $request->comments;
+
+        $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
+
         $project->save();
-       // dd($project);
 
        $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
         if($actions != null)
@@ -2170,27 +2177,28 @@ class ProjectController extends AccountBaseController
         }
     }
 
-
-        if ($request->project_challenge != 'No Challenge') {
-            $project_update = Project::find($request->project_id);
-             $project->status = 'in progress';
-            $project_update->save();
-
-
-            $helper = new HelperPendingActionController();
+        if($project->status == 'not started'){
+            if ($request->project_challenge != 'No Challenge') {
+                $project_update = Project::find($request->project_id);
+                $project->status = 'in progress';
+                $project_update->save();
 
 
-            $helper->ProjectChallengeAuthorization($project);
-
-           // pending action
+                $helper = new HelperPendingActionController();
 
 
-           //pending action
-             $users = User::where('role_id', 1)->get();
-             foreach ($users as $user) {
-                 Notification::send($user, new ProjectReviewNotification($project));
-             }
-         }
+                $helper->ProjectChallengeAuthorization($project);
+
+            // pending action
+
+
+            //pending action
+                $users = User::where('role_id', 1)->get();
+                foreach ($users as $user) {
+                    Notification::send($user, new ProjectReviewNotification($project));
+                }
+            }
+        }
 
 
         // $this->logProjectActivity($project->id, 'Project accepted by ');
@@ -2247,6 +2255,7 @@ class ProjectController extends AccountBaseController
         $pmproject = PMProject::where('project_id', $project->id)->first();
         $pmproject->status = 'Accepted';
         $pmproject->save();
+      //  $project->project_summary = $request->proejct_summary;
 
 
 
@@ -2363,7 +2372,8 @@ class ProjectController extends AccountBaseController
             || ($this->viewPermission == 'both' && (in_array(user()->id, $memberIds) || user()->id == $this->project->added_by) && in_array('employee', user_roles()))
         ));
 
-        $this->pageTitle = ucfirst($this->project->project_name);
+        $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 100, " ..."));
+
 
         if (!empty($this->project->getCustomFieldGroupsWithFields())) {
             $this->fields = $this->project->getCustomFieldGroupsWithFields()->fields;
@@ -3153,6 +3163,45 @@ class ProjectController extends AccountBaseController
         $sign->signature = $imageName;
         $sign->save();
 
+        $actions = PendingAction::where('code','SDCA')->where('past_status',0)->where('project_id',$sign->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $project=Project::where('id',$sign->project_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $project_manager= User::where('id',$project->client_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = 'Deliverables for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> were shared with the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>!';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+
+        }
+    }
+
 
 
         event(new ProjectSignedEvent($this->project, $sign));
@@ -3209,7 +3258,8 @@ class ProjectController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Deliverable creation for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> has been authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>';
+                    $past_action->message = 'Deliverables for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was created by  <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>
+                    ';
                  //   $past_action->button = $action->button;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
@@ -5276,6 +5326,7 @@ public function updatePmBasicSEO(Request $request){
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
+      //  $project->admin_authorization_status = 1;
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
@@ -5330,10 +5381,10 @@ public function updatePmBasicSEO(Request $request){
 
     public function ProjectDeny(Request $request)
     {
-        //dd($request);
         $project = Project::find($request->project_id);
         // $project->status = 'canceled';
         // $project->project_status = 'Canceled';
+        $project->admin_authorization_status = 2;
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $user = User::where('id', $project->pm_id)->first();
@@ -5439,6 +5490,10 @@ public function updatePmBasicSEO(Request $request){
             $mile = ProjectMilestone::find($milestone->id);
             $mile->project_completion_status = 1;
             $mile->save();
+            $helper = new HelperPendingActionController();
+
+
+            $helper->AddLastPayment($mile);
         }
         $project_id = Project::where('id', $project->project_id)->first();
 
@@ -5606,7 +5661,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $past_action->message = 'Qc form for project <a href="'.route('projects.show',$project_id->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
+                $past_action->message = 'QC form for project <a href="'.route('projects.show',$project_id->id).'">'.$project_id->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
               //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
@@ -5640,33 +5695,22 @@ public function updatePmBasicSEO(Request $request){
 
             $qc_submission = QcSubmission::find($request->id);
             $qc_submission->delete();
+         
         } else {
             $milestone = ProjectMilestone::where('id', $project->milestone_id)->first();
             // dd($milestone);
             $mile = ProjectMilestone::find($milestone->id);
             $mile->qc_status = 1;
             $mile->save();
+            $helper = new HelperPendingActionController();
+
+
+            $helper->CreateMilestoneInvoice($mile);
         }
 
         $project_id = Project::where('id', $project->project_id)->first();
 
-        //update authoziation action
-        if (is_null($request->authorization_form)) {
-            $authorization_action = AuthorizationAction::where([
-                'project_id' => $project_id->id,
-                'type' => 'project_qc',
-                'authorization_for' => $this->user->id,
-                'status' => '0'
-            ])->first();
-            if ($authorization_action) {
-                $authorization_action->description = $request->admin_comment;
-                $authorization_action->authorization_by = $this->user->id;
-                $authorization_action->approved_at = Carbon::now();
-                $authorization_action->status = '1';
-                $authorization_action->save();
-            }
-        }
-        //end authorization action
+       
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
@@ -5876,7 +5920,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $action->message = '<a href="'.route('projects.show', $project->id.'?tab=deliverables').'">Deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorize by <a href="'.route('employees.show',$authorize_by->name).'">'.$authorize_by->name.'</a>)';
+                $past_action->message = '<a href="'.route('projects.show', $project->id.'?tab=deliverables').'">Deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> required authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) (Authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>)';
               //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;

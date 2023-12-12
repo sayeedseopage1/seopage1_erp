@@ -21,6 +21,7 @@ const Option2 = ({
   const [comment, setComment] = React.useState("");
   const [error, setError] = React.useState(null);
 
+  const [sType, setSType] = React.useState(''); // submission type
 
   // editor data change
   const handleEditorChange = (e, editor) => {
@@ -49,7 +50,7 @@ const Option2 = ({
 
 
    // handle form submit
-   const handleSubmission = (e) => {
+   const handleSubmission = (e, submissionType) => {
     e.preventDefault();
     const data = {
         reason_for_less_tracked_hours_a_day_task:
@@ -59,8 +60,9 @@ const Option2 = ({
         comment,
     };
 
+    setSType(submissionType);
     if(isValid()) {
-        onSubmit(data);
+        onSubmit(data, submissionType, onBack);
     }else{
         Swal.fire({
             position: "center",
@@ -161,8 +163,22 @@ const Option2 = ({
                                 Back
                             </Button>
 
-                            <Button onClick={handleSubmission} isLoading={isLoading} loaderTitle='Processing...'>
+                            <Button
+                                onClick={e => handleSubmission(e, '')}
+                                isLoading={sType !== 'CONTINUE' && isLoading}
+                                loaderTitle='Processing...'
+                            >
                                 Submit
+                            </Button>
+
+                            <Button
+                                variant='success'
+                                className='ml-2'
+                                onClick={e => handleSubmission(e, 'CONTINUE')}
+                                isLoading={sType === 'CONTINUE' && isLoading}
+                                loaderTitle='Processing...'
+                            >
+                                Submit and add more
                             </Button>
                         </div>
                     </div>

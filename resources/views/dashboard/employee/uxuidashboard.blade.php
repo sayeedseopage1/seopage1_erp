@@ -119,6 +119,8 @@
         </div>
         @endif
         <!-- CLOCK IN CLOCK OUT END -->
+        <!-- User check in checkout button -->
+        <div id="employee-check-in-out-button" class="ml-auto d-flex clock-in-out mb-3 mb-lg-0 mb-md-0 m mt-4 mt-lg-0 mt-md-0 justify-content-between"></div>
     </div>
     <div class="emp-dash-detail">
         @if(count(array_intersect(['profile', 'shift_schedule', 'birthday', 'notices'], $activeWidgets)) > 0)
@@ -1621,7 +1623,7 @@
                                             </ul>
 
                                         </div>
-                                        <div class="col-sm-12 pt-3 text-right">
+                                        {{-- <div class="col-sm-12 pt-3 text-right">
                                             @if ($editTimelogPermission == 'all' || ($editTimelogPermission == 'added' && $myActiveTimer->added_by == user()->id) || ($editTimelogPermission == 'owned' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id)) || ($editTimelogPermission == 'both' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id || $myActiveTimer->added_by == user()->id)))
                                                 @if (is_null($myActiveTimer->activeBreak))
                                                     <x-forms.button-secondary icon="pause-circle"
@@ -1636,7 +1638,7 @@
                                                         @lang('modules.timeLogs.resumeTimer')</x-forms.button-primary>
                                                 @endif
                                             @endif
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </x-cards.data>
                             </div>

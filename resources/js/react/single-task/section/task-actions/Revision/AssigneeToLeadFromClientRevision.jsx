@@ -83,10 +83,11 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
     // on blur
     const handleBlurEvent = () => {
         Swal.fire({
+            icon: 'question',
             title: 'Do you want to create a milestone?',
-            // showDenyButton: true,
+            showCancelButton: true,
             confirmButtonText: 'Yes',
-            // denyButtonText: `No`,
+            cancelButtonText: `No`,
             }).then(res => {
             if(res.isConfirmed){
                 window.open(`/account/projects/${task?.projectId}?tab=milestones`, '_blank');
@@ -276,7 +277,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                     {
                         additionalPaid === 'no' &&
                         <div className="form-group">
-                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label>
+                            <label htmlFor="" className="d-block font-weight-bold">Why client is not paying additionally for these changes? <sup>*</sup></label>
                             <div className="d-block">
                                     <div className="form-check mb-3">
                                         <input

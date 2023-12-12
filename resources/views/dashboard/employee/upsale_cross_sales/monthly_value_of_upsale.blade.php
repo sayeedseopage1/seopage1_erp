@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="monthlyValueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="monthlyValueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects_value_month_get) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -25,9 +25,13 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($no_of_new_milestones_added_on_old_projects as $item)
+                    @foreach ($no_of_new_milestones_added_on_old_projects_value_month_get as $item)
                         @php
                             $client = \App\Models\User::where('id',$item->client_id)->first();
+                            $project = \App\Models\Project::where('id',$item->project_id)->first();
+                            $deal = \App\Models\Deal::where('id',$project->deal_id)->first();
+                            $displayBudget = ($item->project_budget == 0) ? $deal->upsell_amount : $item->project_budget;
+                            $displayBadge = ($item->project_budget == 0) ? true : false;
                         @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
@@ -38,7 +42,13 @@
                             <a href="{{ route('projects.show',$item->project_id) }}">{{ $item->project_name }}</a>
                         </td>
                         <td>{{ $item->milestone_title }}</td>
-                        <td>{{ $item->project_budget }} $</td>
+                        <td>
+                          @if ($displayBadge)
+                          <span class="badge badge-success">Upsell Amount: {{ $displayBudget }} $</span>
+                          @else
+                              {{ $displayBudget }} $
+                          @endif
+                        </td>
                         <td>{{ $item->cost }}</td>
                         <td>{{ $item->created_at }}</td>
                         <td>

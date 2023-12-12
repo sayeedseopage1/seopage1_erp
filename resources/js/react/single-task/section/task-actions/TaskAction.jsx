@@ -27,10 +27,12 @@ import Dropdown from "../../components/Dropdown";
 import { toast } from "react-toastify";
 import { useBattery, useIdle, useNetworkState, usePageLeave, usePermission } from "react-use";
 import Button from "../../components/Button";
+import { useDailySubmission } from "../../hooks/useDailySubmission";
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const navigate = useNavigate();
+    const {isEnable} = useDailySubmission();
     const [timerStart, setTimerStart] = React.useState(false);
 
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
@@ -93,6 +95,7 @@ const TaskAction = ({ task, status }) => {
         })
     }
 
+
     return (
         <div
             className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group"
@@ -132,7 +135,8 @@ const TaskAction = ({ task, status }) => {
             <ClientApproval task={task} status={status} auth={loggedUser} />
 
             {/* daily submission control */}
-            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && (
+            
+            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && isEnable && ( 
                 <DailySubmissionControl />
             )}
 

@@ -1895,7 +1895,7 @@ if (list && list.length > 0) {
         e.preventDefault();
         Swal.fire({
             title: "Are you sure?",
-            text: "You won't be mark as incomplete!",
+            text: "If you click Yes, This project will be marked as incomplete!",
             icon: 'warning',
             showCancelButton: true,
             focusConfirm: false,

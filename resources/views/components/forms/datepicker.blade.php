@@ -3,7 +3,7 @@
 
     <input type="text" class="form-control {{ $custom ? 'custom-date-picker' : '' }} date-picker height-35 f-14"
         placeholder="{{ $fieldPlaceholder }}" value="{{ $fieldValue }}" name="{{ $fieldName }}"
-        id="{{ $fieldId }}">
+        id="{{ $fieldId }}" {{$disabled== 'true' ? 'disabled' : ''}}>
 
     @if ($fieldHelp)
         <small id="{{ $fieldId }}Help" class="form-text text-muted">{{ $fieldHelp }}</small>

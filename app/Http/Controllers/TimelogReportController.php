@@ -275,8 +275,8 @@ class TimelogReportController extends AccountBaseController
             ->leftJoin('users as employee', 'project_time_logs.user_id', 'employee.id')
             ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
 
-            ->join('users as client', 'projects.client_id', 'client.id')
-            ->join('deals', 'client.id', '=', 'deals.client_id')
+            ->leftJoin('users as client', 'projects.client_id', 'client.id')
+            ->leftJoin('deals', 'client.id', '=', 'deals.client_id')
 
            	//->where('projects.status',$status)
            // ->where('total_minutes', '>', 0)
@@ -786,7 +786,7 @@ class TimelogReportController extends AccountBaseController
              DB::raw('(select sum(total_minutes) from project_time_logs where project_id = '.$project_id.') as project_total_time_log')
         ])
 
-        ->join('projects','project_time_logs.project_id','projects.id')
+        ->leftJoin('projects','project_time_logs.project_id','projects.id')
         ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
 
         ->join('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')

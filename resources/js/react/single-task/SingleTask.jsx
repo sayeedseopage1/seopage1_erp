@@ -7,7 +7,6 @@ import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
 import FileUploader from "../file-upload/FileUploader";
 import Popover from "../global/Popover";
 import Switch from "../global/Switch";
-import Toaster from "../global/Toaster";
 import {
     useGetTaskDetailsQuery,
     useGetTaskStatusQuery,
@@ -845,7 +844,7 @@ const SingleTaskPage = () => {
                     </div>
                 </div>
             </div>
-            <Toaster />
+
             <ShowEditModals task={task} auth={loggedUser} />
         </div>
     );

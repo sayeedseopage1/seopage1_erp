@@ -502,6 +502,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             // providesTags : ["SINGLE_INDEPENDENT_TASK_WORKING_ENVIRONMENT"]
         }),
 
+        // check attendance
+        checkWorkingReport: build.mutation({
+            query: () =>({
+                url: `/account/check-in-status`,
+                method: "GET",
+            })
+        })
+
     }),
 });
 
@@ -556,4 +564,5 @@ export const {
     useCheckRestrictedWordsMutation,
     useGetWorkingEnvironmentQuery,
     useLazyGetWorkingEnvironmentQuery,
+    useCheckWorkingReportMutation,
 } = singleTaskPageApiSlice;

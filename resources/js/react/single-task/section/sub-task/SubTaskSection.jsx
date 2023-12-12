@@ -21,6 +21,8 @@ import { subTaskCreationPermision } from "../../permissions";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
 import SubTaskFormController from "./SubTaskFormModal";
+import MySwal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content'
 
 const SubTaskSection = ({ status }) => {
     const { task, subTask } = useSelector((s) => s.subTask);
@@ -39,6 +41,19 @@ const SubTaskSection = ({ status }) => {
         useLazyGetInProgressTaskStatusQuery();
 
     const toggleAddButton = async () => {
+        if(status?.id && Number(status.id)=== 1){
+            withReactContent(MySwal).fire({
+                icon: 'error',
+                title: 'You cannot create any sub task under this parent task now because the parent task is under revision.',
+                customClass: {
+                    confirmButton: 'btn btn-primary px-4'
+                }
+            });
+        }else{
+            setIsTaskModalOpen(!isTaskModalOpen);
+        }
+
+
         // try{
         //     const res = await getInProgressTaskStatus(`/${auth?.getId()}`).unwrap();
         //     if(res.status === 400){
@@ -50,8 +65,6 @@ const SubTaskSection = ({ status }) => {
         // }catch(err){
         //     console.log(err)
         // }
-
-        setIsTaskModalOpen(!isTaskModalOpen);
     };
 
     const closeAddModal = () => {

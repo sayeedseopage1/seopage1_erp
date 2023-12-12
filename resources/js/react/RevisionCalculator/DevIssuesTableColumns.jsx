@@ -1,5 +1,6 @@
 import Switch from "../global/Switch";
 import { LongText } from "./LongText";
+import { point } from './point';
 import styles from './styles.module.css';
 
 export const DevIssuesTableColumns = [
@@ -161,7 +162,7 @@ export const DevIssuesTableColumns = [
                         >
                             {row.developer_name}
                         </a>
-                        ({row.raised_against_p}%)
+                        ({point(row.raised_against_p)})
                     </Switch.Case>
                 </Switch>
             );
@@ -235,7 +236,7 @@ const Verdict = ({row}) => {
         }else{
             return (
                 <div className={styles.task_title}>
-                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
+                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({point(row?.raised_by_percent)}) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({point(row?.raised_against_percent)})
                 </div>
             )
         }

@@ -362,6 +362,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
     Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
+    Route::post('delete-staging-site', [PendingActionController::class, 'DeleteStagingSite'])->name('delete-staging');
+    Route::get('assign-task-ignore/{id}', [PendingActionController::class, 'AssignTaskIgnore'])->name('ignore-assign-task');
 
     /** DEVELOPER CHECK IN CHECK OUT START*/
     Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
@@ -856,10 +858,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('working-environment/task/{task_id}', [TaskController::class, 'taskWorkingEnvironment']);
 
      /******* Independent TASK Start ******** */
+    Route::get('independent/{any?}', [IndependentTaskController::class, 'index'])
+    ->where('any', '^(?!api\/)[\/\w\.-]*')
+    ->where('any', '^(?:(?!\d+).)*');
     Route::resource('independent-task',IndependentTaskController::class);
     Route::get('get-independent-task',[IndependentTaskController::class,'independentTaskGet'])->name('independent-task-get');
     Route::get('independent-task-show',[IndependentTaskController::class,'independentTaskShow'])->name('independent-task-show');
     Route::get('get-all-independent-task',[IndependentTaskController::class,'independentTaskAll'])->name('get-all-independent-task');
+    Route::get('independent-task/{task_id}/subtask',[IndependentTaskController::class,'independentSubTask'])->name('get-independent-subtask');
+    Route::get('independent-subtasks',[IndependentTaskController::class,'independentAllSubTask'])->name('get-independent-all-sub-task');
      /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
@@ -1669,4 +1676,5 @@ Route::get('/task-guideline-approved-authorization/{id}', [TaskController::class
 Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 'taskGuidelineDenyAuthorization']);
 Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
+Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 

@@ -3,8 +3,24 @@ import style from "../../../../../styles/required-action-card.module.css";
 import dayjs from "dayjs";
 import ShowTimer from "./team-lead-components/ShowTimer";
 import ActionsButton from "./team-lead-components/ActionsButton";
+import useTimer from "../../../../../hooks/useTimer";
+import { useCallback } from "react";
 
 export default function RequiredActionsCard_TeamLead_Live({data}) {
+    const {time} = useTimer(dayjs(data.created_at).add(Number(data?.timeframe), "hours"),{
+        stopOnExpire: true,
+    })
+
+
+    const handleMessageShow = useCallback((type)=>{
+      if (type === "PDA" || type === "DTDA") {
+        return `${data.message} ${time.h || 0} hour ${time.m || 0} minutes`;
+      } else {
+        return data.message;
+      }
+    },[time,data])
+
+
     return (
         <div className={style.card_container}>
             {/* card details */}
@@ -17,7 +33,7 @@ export default function RequiredActionsCard_TeamLead_Live({data}) {
                     {/* card subtitle */}
                     <p className={style.subtitle}>
                         <span
-                            dangerouslySetInnerHTML={{ __html: data.message }}
+                            dangerouslySetInnerHTML={{ __html: handleMessageShow(data?.code) }}
                         />{" "}
                         {/* from */}
                     </p>
