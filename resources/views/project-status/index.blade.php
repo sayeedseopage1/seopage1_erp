@@ -17,9 +17,9 @@
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.month')</p>
             <div class="select-month">
                 <select class="form-control select-picker" name="month" id="month" data-live-search="true" data-size="8">
-                    @foreach ($months as $month)
+                    {{-- @foreach ($months as $month)
                         <option @if ($currentMonth == $loop->iteration) selected @endif value="{{ $loop->iteration }}">{{ ucfirst($month) }}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>
             </div>
         </div>
@@ -30,10 +30,10 @@
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.year')</p>
             <div class="select-year">
                 <select class="form-control select-picker" name="year" id="year" data-live-search="true" data-size="8">
-                    @foreach ($years as $year)
+                    {{-- @foreach ($years as $year)
                         <option @if ($year == $currentYear) selected @endif
                             value="{{ $year }}">{{ $year }}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>
             </div>
         </div>
@@ -74,8 +74,6 @@ $addPermission = user()->permission('add_holiday');
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex action-bar justify-content-between ">
-
-
             <x-datatable.actions>
                 <div class="select-status mr-3 pl-3">
                     <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
@@ -89,7 +87,7 @@ $addPermission = user()->permission('add_holiday');
                 <a href="{{ route('project-status.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
 
-                <a href="{{ route('project-status.calendar') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
+                <a href="{{ route('project-status-calendar') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
                     data-original-title="@lang('app.menu.calendar')"><i class="side-icon bi bi-calendar"></i></a>
             </div>
         </div>
@@ -112,18 +110,18 @@ $addPermission = user()->permission('add_holiday');
     @include('sections.datatable_js')
 
     <script>
-        $('#holiday-table').on('preXhr.dt', function(e, settings, data) {
-            var month = $('#month').val();
-            var year = $('#year').val();
+        $('#project-status-table').on('preXhr.dt', function(e, settings, data) {
+            // var month = $('#month').val();
+            // var year = $('#year').val();
             var searchText = $('#search-text-field').val();
 
-            data['month'] = month;
-            data['year'] = year;
+            // data['month'] = month;
+            // data['year'] = year;
             data['searchText'] = searchText;
         });
 
         const showTable = () => {
-            window.LaravelDataTables["holiday-table"].draw();
+            window.LaravelDataTables["project-status-table"].draw();
         }
 
         $('#search-text-field, #month, #year').on('change keyup',
@@ -145,8 +143,6 @@ $addPermission = user()->permission('add_holiday');
 
         $('#reset-filters').click(function() {
             $('#filter-form')[0].reset();
-            $('#month').val('{{ $currentMonth }}');
-            $('#year').val('{{ $currentYear }}');
             $('.filter-box .select-picker').selectpicker("refresh");
             $('#reset-filters').addClass('d-none');
             showTable();
@@ -238,7 +234,7 @@ $addPermission = user()->permission('add_holiday');
         });
 
         const applyQuickAction = () => {
-            var rowdIds = $("#holiday-table input:checkbox:checked").map(function() {
+            var rowdIds = $("#project-status-table input:checkbox:checked").map(function() {
                 return $(this).val();
             }).get();
 

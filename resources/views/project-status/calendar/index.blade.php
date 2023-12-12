@@ -58,10 +58,10 @@ $addHolidayPermission = user()->permission('add_holiday');
             </div>
 
             <div class="btn-group" role="group" aria-label="Basic example">
-                <a href="{{ route('holidays.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
+                <a href="{{ route('project-status.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
 
-                <a href="{{ route('holidays.calendar') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
+                <a href="{{ route('project-status-calendar') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                     data-original-title="@lang('app.menu.calendar')"><i class="side-icon bi bi-calendar"></i></a>
             </div>
         </div>

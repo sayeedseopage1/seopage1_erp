@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\DataTables\HolidayDataTable;
 use App\Models\Holiday;
+use App\DataTables\ProjectStatusDataTable;
+use App\Models\ProjectPmGoal;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -22,25 +24,10 @@ class ProjectStatusController extends AccountBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(HolidayDataTable $dataTable)
+    public function index(ProjectStatusDataTable $datatable)
     {
-        $this->currentYear = now()->format('Y');
-        $this->currentMonth = now()->month;
-
-        /* year range from last 5 year to next year */
-        $years = [];
-        $latestFifthYear = (int)Carbon::now()->subYears(5)->format('Y');
-        $nextYear = (int)Carbon::now()->addYear()->format('Y');
-
-        for ($i = $latestFifthYear; $i <= $nextYear; $i++) {
-            $years[] = $i;
-        }
-
-        $this->years = $years;
-
-        /* months */
-        $this->months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
-        return $dataTable->render('project-status.index',$this->data);
+        $this->project_pm_goals = ProjectPmGoal::all();
+        return $datatable->render('project-status.index',$this->data);
     }
 
     /**
@@ -108,11 +95,12 @@ class ProjectStatusController extends AccountBaseController
     {
         //
     }
-    public function calendar(Request $request)
+    public function projectStatusCalendar(Request $request)
     {
-        $this->viewPermission = user()->permission('view_holiday');
+        // dd($request->all());
+        // $this->viewPermission = user()->permission('view_holiday');
 
-        abort_403(!($this->viewPermission == 'all' || $this->viewPermission == 'added'));
+        // abort_403(!($this->viewPermission == 'all' || $this->viewPermission == 'added'));
 
         $this->pageTitle = 'app.menu.calendar';
 

@@ -1062,7 +1062,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     /* PM PROJECT STATUS */
     Route::resource('project-status',ProjectStatusController::class);
-    Route::get('project-status/calendar', [ProjectStatusController::class, 'calendar'])->name('project-status.calendar');
+    Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
 
     //qualified sales Settings
 
