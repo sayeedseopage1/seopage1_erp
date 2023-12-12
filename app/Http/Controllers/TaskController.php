@@ -996,6 +996,7 @@ class TaskController extends AccountBaseController
              $action= PendingAction::where('id',$action->id)->first();
              $action->past_status= 1;
              $action->authorized_by= Auth::id();
+             $action->authorized_at= Carbon::now();
              $action->save();
              $project=Project::where('id',$action->project_id)->first();
              $current_date= Carbon::now();
