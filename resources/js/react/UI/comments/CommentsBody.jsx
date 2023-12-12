@@ -31,6 +31,8 @@ import dayjs from "dayjs";
 import isCurrentUser from "./utils/isCurrentUser";
 import CommentsPlaceholder from "./utils/CommentsPlaceholder";
 import getTextContent, { htmlToString } from "./utils/getTextContent";
+import { useDeleteCommentsMutation } from "../../services/api/commentsApiSlice";
+import { useParams } from "react-router-dom";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -48,13 +50,19 @@ export function useCommentContext() {
 const CommentsBody = ({
     fullScreenView,
     setFullScreenView,
+    isOpen,
     close,
     comments,
     loading,
     refetch,
     taskId,
+    height,
 }) => {
+    const param = useParams();
+    const [deleteComments, { isLoading: deleteLoading }] =
+        useDeleteCommentsMutation();
     const chatbottom_ref = useRef(null);
+    const comments_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchText, setSearchText] = useState("");
     const [allComments, setAllComments] = useState([]);
@@ -107,7 +115,9 @@ const CommentsBody = ({
                 <span className={`context_title`}>Copy</span>
             </ContextMenuItem>
             {isCurrentUser(contextHolder?.user_id) ? (
-                <ContextMenuItem onSelect={handleDeleteSingleComment}>
+                <ContextMenuItem
+                    onSelect={() => handleDeleteSingleComment(contextHolder)}
+                >
                     <IoMdCloseCircleOutline className={`context_icons`} />
                     <span className={`context_title`}>Remove</span>
                 </ContextMenuItem>
@@ -125,7 +135,7 @@ const CommentsBody = ({
                 const filteredComments = [...comments].filter((comment) => {
                     return (
                         !comment?.is_deleted &&
-                        getTextContent(comment?.comment)
+                        htmlToString(comment?.comment)
                             .toLowerCase()
                             .includes(searchText.toLowerCase())
                     );
@@ -151,12 +161,20 @@ const CommentsBody = ({
 
     // scroll to bottom feature
     useEffect(() => {
-        // chatbottom_ref.current?.scrollIntoView();
-        chatbottom_ref.current?.scrollIntoView({
-            // behavior: "smooth",
-            block: "end",
-        });
-    }, [scroll, loading]);
+        let timer = setTimeout(() => {
+            // chatbottom_ref.current?.scrollIntoView();
+            chatbottom_ref.current?.scrollIntoView({
+                // behavior: "smooth",
+                block: "end",
+            });
+        }, 0);
+
+        return () => clearTimeout(timer);
+    }, [scroll, isOpen, comments, loading]);
+
+    useEffect(() => {
+        setSearchText("");
+    }, [showSearchBar]);
 
     // useEffect(() => {
     //     console.log({ contextHolder });
@@ -235,18 +253,35 @@ const CommentsBody = ({
     };
 
     const handleDeleteComments = () => {
-        setIsLoading(true),
-            Swal.fire({
-                icon: "success",
-                title: "Comments deleted successfully",
-                timer: 2000,
-                showConfirmButton: true,
-                timerProgressBar: true,
+        const commentsId = Object.values({ ...selectedComments }).map(
+            (comment) => comment.id
+        );
+        // console.log({ commentsId,selectedComments });
+        // return;
+        // setIsLoading(true),
+        deleteComments({ commentsId })
+            .then(() => {
+                Swal.fire({
+                    icon: "success",
+                    title: "Comments deleted successfully",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+                setSecletedComments({});
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "An error occured to delete comments",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
             });
-        setSecletedComments({});
         // setScroll(prev=>!prev);
-        refetch();
-        setIsLoading(false);
+        // refetch();
+        // setIsLoading(false);
     };
 
     const handleCopySingleComment = (comment) => {
@@ -294,7 +329,39 @@ const CommentsBody = ({
             });
     };
 
-    const handleDeleteSingleComment = (comment) => {};
+    const handleDeleteSingleComment = (comment) => {
+        // console.log({ id: comment.id });
+        // return;
+        deleteComments({ commentsId: [comment.id] })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    Swal.fire({
+                        icon: "success",
+                        title: `${res.data.message}`,
+                        timer: 2000,
+                        showConfirmButton: true,
+                        timerProgressBar: true,
+                    });
+                } else if (res.data.status == 400) {
+                    Swal.fire({
+                        icon: "error",
+                        title: `${res.data.comment}`,
+                        timer: 2000,
+                        showConfirmButton: true,
+                        timerProgressBar: true,
+                    });
+                }
+            })
+            .catch(() => {
+                Swal.fire({
+                    icon: "error",
+                    title: "An error occured to delete the comment",
+                    timer: 2000,
+                    showConfirmButton: true,
+                    timerProgressBar: true,
+                });
+            });
+    };
 
     // console.log({allComments});
     return (
@@ -315,7 +382,7 @@ const CommentsBody = ({
                     backgroundImage: `url(${commentBg})`,
                     // backgroundImage:`url(https://seopage1storage.s3.ap-southeast-1.amazonaws.com/655f048a34e53.jpg)`,
                     width: fullScreenView ? "100vw" : "auto",
-                    height: fullScreenView ? "99vh" : "84vh",
+                    height: fullScreenView ? "99vh" : height,
                     maxHeight: fullScreenView ? "99vh" : "auto",
                 }}
             >
@@ -374,6 +441,41 @@ const CommentsBody = ({
                         </svg>
                     </span>
 
+                    {!param?.taskId ? (
+                        <span
+                            onClick={()=>window.open(`/account/tasks/${taskId}`,"_blank")}
+                            className={style.commentsBody_header_btn}
+                        >
+                            <svg
+                                id="maximize"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="28"
+                                height="28"
+                                viewBox="0 0 28 28"
+                            >
+                                <path
+                                    id="Path_14871"
+                                    data-name="Path 14871"
+                                    d="M25.375,0H2.625A2.628,2.628,0,0,0,0,2.625V13.431a.875.875,0,0,0,1.75,0V2.625a.876.876,0,0,1,.875-.875h22.75a.876.876,0,0,1,.875.875v22.75a.876.876,0,0,1-.875.875H14.569a.875.875,0,0,0,0,1.75H25.375A2.628,2.628,0,0,0,28,25.375V2.625A2.628,2.628,0,0,0,25.375,0Z"
+                                />
+                                <path
+                                    id="Path_14872"
+                                    data-name="Path 14872"
+                                    d="M9.625,18h-7A2.628,2.628,0,0,0,0,20.625v7A2.628,2.628,0,0,0,2.625,30.25h7a2.628,2.628,0,0,0,2.625-2.625v-7A2.628,2.628,0,0,0,9.625,18Zm.875,9.625a.876.876,0,0,1-.875.875h-7a.876.876,0,0,1-.875-.875v-7a.876.876,0,0,1,.875-.875h7a.876.876,0,0,1,.875.875Z"
+                                    transform="translate(0 -2.25)"
+                                />
+                                <path
+                                    id="Path_14873"
+                                    data-name="Path 14873"
+                                    d="M16.494,15.494,22,9.987v1.388a.875.875,0,0,0,1.75,0v-3.5A.889.889,0,0,0,22.875,7h-3.5a.875.875,0,1,0,0,1.75h1.388l-5.506,5.506a.875.875,0,0,0,0,1.237.886.886,0,0,0,1.237,0Z"
+                                    transform="translate(-1.875 -0.875)"
+                                />
+                            </svg>
+                        </span>
+                    ) : (
+                        <></>
+                    )}
+
                     {showSearchBar ? (
                         <div
                             className={`${
@@ -426,50 +528,62 @@ const CommentsBody = ({
                     )}
 
                     {/* search btn */}
-                    <span
-                        onClick={() => {
-                            if (showSearchBar) {
-                                setTimeout(() => {
-                                    setShowSearchBar(false);
-                                }, 500);
-                                setAnimation(false);
-                            } else {
-                                setShowSearchBar(true);
-                                setAnimation(true);
-                            }
-                        }}
-                        className={style.commentsBody_header_btn}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="29"
-                            height="29"
-                            viewBox="0 0 29 29"
+                    {param?.taskId ? (
+                        <span
+                            onClick={() => {
+                                if (showSearchBar) {
+                                    setTimeout(() => {
+                                        setShowSearchBar(false);
+                                    }, 500);
+                                    setAnimation(false);
+                                } else {
+                                    setShowSearchBar(true);
+                                    setAnimation(true);
+                                }
+                            }}
+                            className={style.commentsBody_header_btn}
                         >
-                            <path
-                                id="Search"
-                                d="M19.362,8.871a.674.674,0,1,1-.954.954,6.077,6.077,0,0,0-8.584,0,.674.674,0,0,1-.954-.954A7.427,7.427,0,0,1,19.362,8.871ZM33,30.3a2.7,2.7,0,0,1-4.6,1.907l-7.081-7.081a.674.674,0,0,1,0-.954l.954-.954-1.5-1.5a10.134,10.134,0,1,1,.954-.954l1.5,1.5.954-.954a.674.674,0,0,1,.954,0L32.21,28.4A2.678,2.678,0,0,1,33,30.3ZM22.884,14.116a8.767,8.767,0,1,0-8.767,8.767A8.777,8.777,0,0,0,22.884,14.116ZM31.651,30.3a1.34,1.34,0,0,0-.4-.954l-6.6-6.6-1.907,1.907,6.6,6.6a1.38,1.38,0,0,0,1.907,0,1.34,1.34,0,0,0,.4-.954Z"
-                                transform="translate(-4 -4)"
-                                fill="#727272"
-                            />
-                        </svg>
-                    </span>
-                    {!fullScreenView ? (
-                        <AiOutlineFullscreen
-                            onClick={() => setFullScreenView(true)}
-                            className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
-                        />
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="29"
+                                height="29"
+                                viewBox="0 0 29 29"
+                            >
+                                <path
+                                    id="Search"
+                                    d="M19.362,8.871a.674.674,0,1,1-.954.954,6.077,6.077,0,0,0-8.584,0,.674.674,0,0,1-.954-.954A7.427,7.427,0,0,1,19.362,8.871ZM33,30.3a2.7,2.7,0,0,1-4.6,1.907l-7.081-7.081a.674.674,0,0,1,0-.954l.954-.954-1.5-1.5a10.134,10.134,0,1,1,.954-.954l1.5,1.5.954-.954a.674.674,0,0,1,.954,0L32.21,28.4A2.678,2.678,0,0,1,33,30.3ZM22.884,14.116a8.767,8.767,0,1,0-8.767,8.767A8.777,8.777,0,0,0,22.884,14.116ZM31.651,30.3a1.34,1.34,0,0,0-.4-.954l-6.6-6.6-1.907,1.907,6.6,6.6a1.38,1.38,0,0,0,1.907,0,1.34,1.34,0,0,0,.4-.954Z"
+                                    transform="translate(-4 -4)"
+                                    fill="#727272"
+                                />
+                            </svg>
+                        </span>
                     ) : (
-                        <AiOutlineFullscreenExit
-                            onClick={() => setFullScreenView(false)}
-                            className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
-                        />
+                        <></>
+                    )}
+
+                    {/* full screen btn */}
+                    {param?.taskId ? (
+                        !fullScreenView ? (
+                            <AiOutlineFullscreen
+                                onClick={() => setFullScreenView(true)}
+                                className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
+                            />
+                        ) : (
+                            <AiOutlineFullscreenExit
+                                onClick={() => setFullScreenView(false)}
+                                className={`${style.commentsBody_header_btn} ${style.fullscreen_icons}`}
+                            />
+                        )
+                    ) : (
+                        <></>
                     )}
 
                     {/* cancel btn */}
                     <span
                         onClick={() => {
-                            setFullScreenView(false);
+                            if (setFullScreenView) {
+                                setFullScreenView(false);
+                            }
                             close();
                         }}
                         className={`${style.commentsBody_header_btn}`}
@@ -533,8 +647,11 @@ const CommentsBody = ({
                     </span>
                 </header>
 
-                <main className={`${style.commentsBody_commentArea}`}>
-                    {loading || isloading ? (
+                <main
+                    ref={comments_ref}
+                    className={`position-relative ${style.commentsBody_commentArea}`}
+                >
+                    {loading || isloading || deleteLoading ? (
                         <CommentsPlaceholder />
                     ) : (
                         <>
@@ -558,6 +675,9 @@ const CommentsBody = ({
                                         prevComment={
                                             i ? allComments[i - 1] : null
                                         }
+                                        handleDeleteSingleComment={
+                                            handleDeleteSingleComment
+                                        }
                                     />
                                 );
                             })}
@@ -568,7 +688,8 @@ const CommentsBody = ({
                         style={{
                             minHeight: "10px",
                             height: "10px",
-                            backgroundColor: "transparent",
+                            // backgroundColor: "transparent",
+                            position: "relative",
                             // backgroundColor: "black",
                         }}
                         ref={chatbottom_ref}
@@ -611,23 +732,37 @@ const CommentsBody = ({
                             <section
                                 className={`${style.comments_selected_action_controller_btn}`}
                             >
-                                <span
-                                    onClick={handleDeleteComments}
-                                    className={`${style.comments_selected_action_controller_btn_icon}`}
-                                >
-                                    {/* icon 2 */}
-                                    <IoMdCloseCircleOutline
-                                        style={{
-                                            height: "18.54px",
-                                            width: "18.54px",
-                                        }}
-                                    />
-                                </span>
-                                <span
-                                    className={`${style.comments_selected_action_controller_btn_text}`}
-                                >
-                                    Remove
-                                </span>
+                                {!deleteLoading ? (
+                                    <>
+                                        <span
+                                            onClick={() =>
+                                                handleDeleteComments()
+                                            }
+                                            className={`${style.comments_selected_action_controller_btn_icon}`}
+                                        >
+                                            {/* icon 2 */}
+                                            <IoMdCloseCircleOutline
+                                                style={{
+                                                    height: "18.54px",
+                                                    width: "18.54px",
+                                                }}
+                                            />
+                                        </span>
+                                        <span
+                                            onClick={() =>
+                                                handleDeleteComments()
+                                            }
+                                            className={`${style.comments_selected_action_controller_btn_text}`}
+                                        >
+                                            Remove
+                                        </span>
+                                    </>
+                                ) : (
+                                    <div
+                                        className="spinner-border"
+                                        role="status"
+                                    ></div>
+                                )}
                             </section>
                         ) : (
                             <></>

@@ -27,6 +27,7 @@ const currentUser = new User(window.Laravel.user);
 const ChatInput = ({ setScroll, taskId }) => {
     const [postComment, { isLoading }] = usePostCommentMutation();
     const [showEmoji, setShowEmoji] = useState(false);
+    const [buttonClick, setButtonClick] = useState();
     const [editorHtml, setEditorHtml] = useState("");
     const [show, setShow] = useState(false);
     const [files, setFiles] = useState([]);
@@ -67,12 +68,12 @@ const ChatInput = ({ setScroll, taskId }) => {
                 formdata.append(`file[]`, file);
             });
         }
-        const result = {};
-        for (const data of formdata.entries()) {
-            result[data[0]] = data[1];
-            // console.log(`${data[0]} : ${data[1]}`);
-        }
-        console.log(result);
+        // const result = {};
+        // for (const data of formdata.entries()) {
+        //     result[data[0]] = data[1];
+        //     // console.log(`${data[0]} : ${data[1]}`);
+        // }
+        // console.log(result);
 
         try {
             await postComment({ taskId, data: formdata });
@@ -103,6 +104,16 @@ const ChatInput = ({ setScroll, taskId }) => {
         setScroll((prev) => !prev);
     };
 
+    useEffect(() => {
+        // if (buttonClick?.shiftKey && buttonClick?.keyCode === 13) {
+        //     return ;
+        // }
+        // console.log(buttonClick);
+        if (buttonClick?.keyCode === 13 && !buttonClick?.shiftKey) {
+            handleSendComment();
+        }
+    }, [buttonClick]);
+
     return (
         <>
             <section className={`${style.chatInput}`}>
@@ -116,6 +127,9 @@ const ChatInput = ({ setScroll, taskId }) => {
                     setShow={setShow}
                     setShowEmoji={setShowEmoji}
                     showEmoji={showEmoji}
+                    buttonClick={buttonClick}
+                    setButtonClick={setButtonClick}
+                    isLoading={isLoading}
                 />
             </section>
             <section
@@ -204,7 +218,10 @@ function MentionedComment() {
                                     key={i}
                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                 >
-                                    <HandleFileIcon fileName={file?.name} URL={file?.url} />
+                                    <HandleFileIcon
+                                        fileName={file?.name}
+                                        URL={file?.url}
+                                    />
                                 </div>
                             );
                         })}
@@ -298,10 +315,34 @@ function CommentEditor({
     setEditorHtml,
     showEmoji,
     setShowEmoji,
+    buttonClick,
+    setButtonClick,
+    isLoading,
 }) {
     const quillRef = useRef(null);
     const { mentionedComment } = useCommentContext();
+    const [value, setValue] = useState("");
     // const [showEmoji, setShowEmoji] = useState(false);
+
+    useEffect(() => {
+        document.getElementById("quill").addEventListener("keydown", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                setValue((prev) => prev);
+            } else {
+                setValue(editorHtml);
+            }
+        });
+    }, [editorHtml]);
+
+    // useEffect(() => {
+    //     console.log(editorHtml);
+    // }, [editorHtml]);
+
+    // useEffect(() => {
+    //     if (!(!buttonClick?.shiftKey && buttonClick?.keyCode === 13)) {
+    //         setValue(editorHtml);
+    //     }
+    // }, [buttonClick]);
 
     useEffect(() => {
         // Focus the Quill editor when the component is rendered
@@ -366,8 +407,25 @@ function CommentEditor({
         return allPeople.filter((person) => person.value.includes(searchTerm));
     }
 
+    // console.log(ReactQuill)
+
     const modules = {
         toolbar: [["bold", "italic", "underline", "strike", "link"]],
+        // clipboard: {
+        //     matchVisual: false,
+        // },
+        // keyboard: {
+        //     bindings: {
+        //         // Intercept the Enter key event
+        //         enter: {
+        //             key: 13,
+        //             handler: function (range, context) {
+        //                 // Prevent the default behavior (inserting a new line)
+        //                 return true;
+        //             },
+        //         },
+        //     },
+        // },
         // mention: {
         //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
         //     mentionDenotationChars: ["@", "#"],
@@ -413,6 +471,22 @@ function CommentEditor({
         // "mention",
     ];
 
+    const checkPressedBtn = () => {
+        return new Promise((resolve, reject) => {
+            document
+                .getElementById("quill")
+                .addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        reject({ acceptToSubmit: true });
+                        return;
+                    } else {
+                        resolve({ acceptToSubmit: false });
+                        return;
+                    }
+                });
+        });
+    };
+
     return (
         <div
             className={`${style.chatInput_text_input}`}
@@ -435,21 +509,34 @@ function CommentEditor({
             }}
         >
             <ReactQuill
+                id="quill"
                 ref={quillRef}
                 theme="snow"
                 value={editorHtml}
+                // value={value}
+                onKeyDown={(e) => {
+                    // e.preventDefault();
+                    setButtonClick(e);
+                }}
+                // onKeyDown={(e) => {
+                //     e.preventDefault();
+                //     console.log("key down", e);
+                // }}
+                // onKeyPress={(e) => {
+                //     e.preventDefault();
+                //     console.log("key press", e);
+                // }}
+                // onKeyUp={(e) => {
+                //     e.preventDefault();
+                //     console.log("key up", e);
+                // }}
                 onChange={(value) => setEditorHtml(value)}
-                modules={{ ...modules }}
+                modules={{
+                    ...modules,
+                }}
                 formats={formats}
                 placeholder="Write your comment..."
-                // onKeyUp={(e) => {
-                //     console.log(e, quillRef?.current);
-                //     if (quillRef?.current?.editor) {
-                //       const delta = quillRef.current.editor.getContents();
-                //       const html = quillRef.current.editor.root.innerHTML;
-                //       console.log({ delta, html });
-                //     }
-                //   }}
+                readOnly={isLoading}
             />
             <span
                 // onClick={() => setShowEmoji((prev) => !prev)}

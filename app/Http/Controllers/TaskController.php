@@ -6608,6 +6608,29 @@ class TaskController extends AccountBaseController
         return response()->json(["message" => 'Comment Deleted Successfully'], 200);
     }
 
+    public function multipleCommentDelete(Request $request){
+        $task_comments = TaskComment::whereIn('id',$request->comments_id)->get();
+        if($task_comments !=null){
+            foreach($task_comments as $item){
+                $delete_cmnt = TaskComment::where('id',$item->id)->first();
+                $delete_cmnt->status = 'deleted';
+                $delete_cmnt->is_deleted = 1;
+                $delete_cmnt->deleted_by = Auth::user()->id;
+                $delete_cmnt->deleted_at = Carbon::now();
+                $delete_cmnt->save();
+            }
+            return response()->json([
+                "message" => 'Comment Deleted Successfully',
+                "status" => 200,
+            ], 200);
+        }else{
+            return response()->json([
+                "message" => 'Comment Not Found!',
+                "status" => 400
+            ], 400);
+        }
+    }
+
     /*************** END TASK COMMENT ************/
     /*********************************************/
 }

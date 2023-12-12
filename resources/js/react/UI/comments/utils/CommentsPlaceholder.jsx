@@ -1,10 +1,11 @@
 import React from "react";
 import { Placeholder } from "./Placeholder";
+import style from "../styles/comments.module.css";
 import _ from "lodash";
 
 export default function CommentsPlaceholder() {
     return (
-        <div>
+        <div className={`${style.commentsBody_loadingArea}`}>
             {_.fill(Array(10), "*").map((v, i) => {
                 return (
                     <React.Fragment key={i}>

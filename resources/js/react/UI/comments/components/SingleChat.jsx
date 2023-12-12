@@ -24,6 +24,7 @@ const SingleChat = ({
     onContextMenu,
     onKeyDown,
     idMatch,
+    handleDeleteSingleComment,
 }) => {
     const {
         setContextHolder,
@@ -95,9 +96,7 @@ const SingleChat = ({
                         className={`${style.singleChat_comment_card_text_time}`}
                     >
                         {/* 2:54 PM */}
-                        {`${dayjs(comment?.created_date).format(
-                            "hh:mm A"
-                        )}`}
+                        {`${dayjs(comment?.created_date).format("hh:mm A")}`}
                     </span>
                 );
             }
@@ -182,7 +181,7 @@ const SingleChat = ({
                 return (
                     <section
                         style={{
-                            height: "0px",
+                            height: "5px",
                             // backgroundColor: "black"
                         }}
                     />
@@ -260,8 +259,6 @@ const SingleChat = ({
             });
     };
 
-    const handleDeleteSingleComment = (comment) => {};
-
     return (
         <div
             id={id}
@@ -315,7 +312,10 @@ const SingleChat = ({
                 ) : (
                     <></>
                 )}
-                <section className={`${style.singleChat_comment_card}`}>
+                <section
+                    id="comment-card"
+                    className={`${style.singleChat_comment_card}`}
+                >
                     {/* {!isCurrentUser(comment?.user?.id) && (
                         <span
                             className={`${style.singleChat_comment_card_avator}`}
@@ -326,6 +326,7 @@ const SingleChat = ({
                         previousComment: prevComment,
                     })}
                     <article
+                        id="comment-card-text "
                         className={`${style.singleChat_comment_card_text}`}
                     >
                         {/* comment sender info */}
@@ -337,9 +338,9 @@ const SingleChat = ({
                         {/* comment message box */}
                         {comment?.is_deleted ? (
                             <div
-                                title={`${dayjs(
-                                    comment?.created_date
-                                ).format("MMM DD, YYYY, hh:mm A")}`}
+                                title={`${dayjs(comment?.created_date).format(
+                                    "MMM DD, YYYY, hh:mm A"
+                                )}`}
                                 className={`${style.single_comment_deleted_container}`}
                             >
                                 <section
@@ -347,6 +348,16 @@ const SingleChat = ({
                                         borderBottom: showDeletedComment
                                             ? "0.15px solid #f8d0d39a"
                                             : "0",
+                                        gap:
+                                            currentUser.roleId === 1 ||
+                                            currentUser.roleId === 8
+                                                ? "0 20px"
+                                                : "0",
+                                        justifyContent:
+                                            currentUser.roleId === 1 ||
+                                            currentUser.roleId === 8
+                                                ? "space-between"
+                                                : "center",
                                     }}
                                     className={`${style.single_comment_deleted_title}`}
                                 >
@@ -423,8 +434,8 @@ const SingleChat = ({
                                                     ) : (
                                                         <></>
                                                     )}
-                                                    {comment?.mention?.files_data
-                                                        ?.length ? (
+                                                    {comment?.mention
+                                                        ?.files_data?.length ? (
                                                         <span
                                                             className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
                                                         >
@@ -440,7 +451,14 @@ const SingleChat = ({
                                                                                 color: "#F17B7C",
                                                                             }}
                                                                         >
-                                                                            <HandleFileIcon fileName={file?.name} URL={file?.url} />
+                                                                            <HandleFileIcon
+                                                                                fileName={
+                                                                                    file?.name
+                                                                                }
+                                                                                URL={
+                                                                                    file?.url
+                                                                                }
+                                                                            />
                                                                         </div>
                                                                     );
                                                                 }
@@ -532,9 +550,9 @@ const SingleChat = ({
                             </div>
                         ) : (
                             <div
-                                title={`${dayjs(
-                                    comment?.created_date
-                                ).format("MMM DD, YYYY, hh:mm A")}`}
+                                title={`${dayjs(comment?.created_date).format(
+                                    "MMM DD, YYYY, hh:mm A"
+                                )}`}
                                 style={{
                                     alignSelf: isCurrentUser(comment?.user?.id)
                                         ? "flex-end"
@@ -585,7 +603,8 @@ const SingleChat = ({
                                             ) : (
                                                 <></>
                                             )}
-                                            {comment?.mention?.files_data?.length ? (
+                                            {comment?.mention?.files_data
+                                                ?.length ? (
                                                 <span
                                                     className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
                                                 >
@@ -596,7 +615,14 @@ const SingleChat = ({
                                                                     key={i}
                                                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                                                 >
-                                                                    <HandleFileIcon fileName={file?.name} URL={file?.url} />
+                                                                    <HandleFileIcon
+                                                                        fileName={
+                                                                            file?.name
+                                                                        }
+                                                                        URL={
+                                                                            file?.url
+                                                                        }
+                                                                    />
                                                                 </div>
                                                             );
                                                         }
@@ -613,7 +639,8 @@ const SingleChat = ({
                                                 {`${
                                                     comment?.mention?.user?.name
                                                 }, ${dayjs(
-                                                    comment?.mention?.mention_created_at
+                                                    comment?.mention
+                                                        ?.mention_created_at
                                                 ).format(
                                                     "MMM DD, YYYY, hh:mm A"
                                                 )}`}
@@ -835,7 +862,10 @@ const FileView = ({
                             key={i}
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
-                            <HandleFileIcon fileName={file?.name} URL={file?.url} />
+                            <HandleFileIcon
+                                fileName={file?.name}
+                                URL={file?.url}
+                            />
                         </div>
                     );
                 })

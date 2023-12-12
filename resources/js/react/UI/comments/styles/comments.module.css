@@ -28,12 +28,12 @@
 }
 
 .commentsBody{
-  height: 84vh;
+  /* height: 84vh; */
   padding: 29px 16px 19px;
   display: flex;
   flex-flow: column nowrap;
   /* gap: 10px; */
-  font-family: 'Poppins', sans-serif !important;
+  /* font-family: 'Poppins', sans-serif !important; */
   /* border: solid; */
   background-repeat: no-repeat;
   background-position: center;
@@ -151,13 +151,18 @@
   margin-bottom: 10px;
   /* padding-top: 20px; */
   /* scroll-padding-bottom: 5px; */
-  
+  /* position: relative; */
+}
+.commentsBody_loadingArea{
+  border: none;
 }
 .singleChat{
   /* width: 100%; */
   max-width: 75%;
   /* border: solid; */
   scroll-snap-align: center;
+  display: flex;
+  flex-flow: column nowrap;
 }
 .singleChat_match{
   outline: 4px solid skyblue;
@@ -198,8 +203,8 @@
 }
 .singleChat_comment_card_text_time{
   font-size: 10px;
-  line-height: 15px;
-  /* margin-bottom: 5px; */
+  line-height: 10px;
+  margin-bottom: 5px;
   /* margin-top: 5px; */
   color: #033C7E;
 }
@@ -214,9 +219,10 @@
 }
 .single_comment_deleted_title{
   display: flex;
-  justify-content: space-between;
+  min-width: 205px;
+  /* justify-content: space-between; */
   align-items: center;
-  gap: 0 20px;
+  /* gap: 0 20px; */
   padding: 7px 11px;
 }
 .single_comment_deleted_comment_body{
@@ -261,7 +267,7 @@
   z-index: 99;
   display: flex;
   flex-flow: column nowrap;
-  font-family: 'Poppins', sans-serif !important;
+  /* font-family: 'Poppins', sans-serif !important; */
   background-color: #FFFFFF;
   border-radius: 2px;
   padding: 8px 0 6px !important;
@@ -285,7 +291,7 @@
 .context_title{
   font-size: 8px;
   color: #626365;
-  font-family: 'Poppins', sans-serif !important;
+  /* font-family: 'Poppins', sans-serif !important; */
   line-height: 0;
 }
 .singleChat_comment_card_mentioned_comment{
