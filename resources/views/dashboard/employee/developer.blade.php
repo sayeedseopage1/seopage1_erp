@@ -148,8 +148,8 @@
             @endif
         @endif
     </div>
-    <div class="accordion" id="accordionExample">
-        <div class="card">
+    
+        {{-- <div class="card">
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -1442,8 +1442,244 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+            <div class="row">
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received</h5>
+                        <div class="d-flex flex-wrap">
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    0
+                                </a>
+                                {{-- <span class="f-12 font-weight-normal text-lightest">
+                                    @lang('Received tasks this cycle')
+                                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
+                                 
+                                </span> --}}
+                            </p>
+                        
+
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of submitted tasks</h5>
+                        <div class="d-flex flex-wrap">
+
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                 
+
+                                0
+                                  
+                                </a>
+                                {{-- <span class="f-12 font-weight-normal text-lightest">
+                                    @lang('Primary pages')
+                                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#"></i>
+                                 
+                                </span> --}}
+                            </p>
+                           
+
+                           
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt</h5>
+                        <div class="d-flex flex-wrap">
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    0
+                                </a>
+                              
+                            </p>
+                        
+
+                          
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="card">
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average number of attempts needed for approval</h5>
+                        <div class="d-flex flex-wrap">
+
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                 
+
+                                0
+                                  
+                                </a>
+                               
+                            </p>
+
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Percentage of tasks with revisions</h5>
+                        <div class="d-flex flex-wrap">
+
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                 
+
+                                0%
+                                  
+                                </a>
+                               
+                            </p>
+
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
+                            Total number of revisions
+                            </h5>
+                        <div class="d-flex flex-wrap">
+
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                 
+
+                                0
+                                  
+                                </a>
+                               
+                            </p>
+
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average number of attempts needed for approval</h5>
+                        <div class="d-flex flex-wrap">
+
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                 
+
+                                0
+                                  
+                                </a>
+                               
+                            </p>
+
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Percentage of tasks with revisions</h5>
+                        <div class="d-flex flex-wrap">
+
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                 
+
+                                0%
+                                  
+                                </a>
+                               
+                            </p>
+
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                    <div class="d-block text-capitalize">
+                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">
+                            Total number of revisions
+                            </h5>
+                        <div class="d-flex flex-wrap">
+
+                            <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                 
+
+                                0
+                                  
+                                </a>
+                               
+                            </p>
+
+                          
+                        </div>
+                    </div>
+                    <div class="d-block">
+                        <i class="fa fa-list text-lightest f-27"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+           
+        
+     
+        <div class="card mt-3">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-7">
@@ -1702,7 +1938,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 </div>
 @endsection
 @push('scripts')
