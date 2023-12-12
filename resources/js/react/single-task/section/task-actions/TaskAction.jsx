@@ -34,7 +34,7 @@ const TaskAction = ({ task, status }) => {
     const [timerStart, setTimerStart] = React.useState(false);
 
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
-  
+
     const {
         data: checkMarkAsCompleteEnableStatus,
         isLoading: isLoadingCompleteCheck,
@@ -133,8 +133,8 @@ const TaskAction = ({ task, status }) => {
             <ClientApproval task={task} status={status} auth={loggedUser} />
 
             {/* daily submission control */}
-            
-            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && (
+
+            {_.includes([5, 9, 10], loggedUser?.getRoleId()) && isEnable && (
                 <DailySubmissionControl />
             )}
 

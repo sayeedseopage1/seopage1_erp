@@ -3082,8 +3082,8 @@ var useDailySubmission = function useDailySubmission() {
             response = _context.sent;
             date = response.data.data; // Get the current day abbreviation (e.g., 'Sat', 'Sun', 'Mon', etc.)
             dayAbbreviation = d.dayjs(date).format('ddd'); // Define the cutoff times
-            saturdayCutoffTime = d.dayjs(date).set('hour', 12).set('minute', 45); // const otherDaysCutoffTime = d.dayjs(date).set('hour', 16).set('minute', 45);
-            otherDaysCutoffTime = d.dayjs(date).set('hour', 10).set('minute', 59); // Get the current time
+            saturdayCutoffTime = d.dayjs(date).set('hour', 12).set('minute', 45);
+            otherDaysCutoffTime = d.dayjs(date).set('hour', 16).set('minute', 45); // Get the current time
             currentTime = d.dayjs(date); // Check if it's Saturday or not
             if (dayAbbreviation === 'Sat') {
               // Check if the current time is greater than 12:30 PM on Saturday
