@@ -434,7 +434,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',8)->get();
+            $authorizers= User::where('role_id',1)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'DFA';
@@ -475,7 +475,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',1)->get();
+            $authorizers= User::where('role_id',8)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'TDA';
@@ -1701,7 +1701,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->message = 'Deadline for your task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next';
                 if($difference_in_hours > 0)
                 {
-                 $action->timeframe= $difference_in_hours+24;
+                 $action->timeframe= $difference_in_hours;
  
                 }else 
                 {

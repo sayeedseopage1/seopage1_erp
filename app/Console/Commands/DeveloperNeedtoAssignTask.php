@@ -81,15 +81,31 @@ class DeveloperNeedtoAssignTask extends Command
           {
 
          
-            if ($logged_minutes/$estimate_total_minutes*100 >= 80) {
+            if ($logged_minutes/$estimate_total_minutes*100 >= 90) {
                 $pending_action= PendingAction::where('developer_id',$developer->id)->where('past_status',0)->count();
-                if($pending_action == 0)
+                $pending_action_past= PendingAction::where('developer_id',$developer->id)->orderBy('id','desc')->first();
+                if($pending_action_past != null)
+                {
+                    $last_time= Carbon::parse($pending_action_past->created_at)->addHours(1);
+                if($pending_action == 0 && Carbon::now() > $last_time)
                 {
                     $helper = new HelperPendingActionController();
                     $helper->NeedtoTaskAssign($developer);
 
                 }
              
+
+                }else 
+                {
+                    if($pending_action == 0)
+                    {
+                        $helper = new HelperPendingActionController();
+                        $helper->NeedtoTaskAssign($developer);
+    
+                    }
+
+                }
+                
                 
             }
         }
@@ -129,14 +145,19 @@ class DeveloperNeedtoAssignTask extends Command
             
          }
          }
+        
          $deadline_tasks = Task::whereIn('board_column_id', [2, 3])
     ->whereNotNull('due_date')
     ->get();
 
       foreach ($deadline_tasks as $project) {
         $pro = Project::where('id', $project->project_id)->first();
+        if($pro != null)
+        {
+
+       
         $current_date = Carbon::now();
-        $deadline = $project->due_date;
+        $deadline = Carbon::parse($project->due_date)->addDay(1);
         $difference_in_hours = $current_date->diffInHours($deadline);
         
         if ($current_date > $deadline) {
@@ -160,6 +181,9 @@ class DeveloperNeedtoAssignTask extends Command
 
 
         }
+    }
+
+
       }
     
        
