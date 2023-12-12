@@ -74,17 +74,6 @@ $addPermission = user()->permission('add_holiday');
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex action-bar justify-content-between ">
-            <div id="table-actions" class="flex-grow-1 align-items-center">
-                @if ($addPermission == 'all' || $addPermission == 'added')
-                    <x-forms.link-primary :link="route('holidays.create')" class="mr-3 openRightModal float-left mb-2 mb-lg-0 mb-md-0"
-                        icon="plus">
-                        @lang('modules.holiday.addNewHoliday')
-                    </x-forms.link-primary>
-                    <x-forms.button-secondary icon="check" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" id="mark-holiday">
-                        @lang('modules.holiday.markSunday')
-                    </x-forms.button-secondary>
-                @endif
-            </div>
 
 
             <x-datatable.actions>
@@ -96,11 +85,11 @@ $addPermission = user()->permission('add_holiday');
                 </div>
             </x-datatable.actions>
 
-            <div class="btn-group ml-3" role="group" aria-label="Basic example">
-                <a href="{{ route('holidays.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
+            <div class="btn-group ml-auto" role="group" aria-label="Basic example">
+                <a href="{{ route('project-status.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
 
-                <a href="{{ route('holidays.calendar') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
+                <a href="{{ route('project-status.calendar') }}" class="btn btn-secondary f-14" data-toggle="tooltip"
                     data-original-title="@lang('app.menu.calendar')"><i class="side-icon bi bi-calendar"></i></a>
             </div>
         </div>

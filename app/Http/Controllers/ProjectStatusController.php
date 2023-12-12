@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\DataTables\HolidayDataTable;
+use App\Models\Holiday;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -106,5 +107,40 @@ class ProjectStatusController extends AccountBaseController
     public function destroy($id)
     {
         //
+    }
+    public function calendar(Request $request)
+    {
+        $this->viewPermission = user()->permission('view_holiday');
+
+        abort_403(!($this->viewPermission == 'all' || $this->viewPermission == 'added'));
+
+        $this->pageTitle = 'app.menu.calendar';
+
+        if (request('start') && request('end')) {
+            $holidayArray = array();
+
+            $holidays = Holiday::orderBy('date', 'ASC');
+
+            if (request()->searchText != '') {
+                $holidays->where('holidays.occassion', 'like', '%' . request()->searchText . '%');
+            }
+
+            $holidays = $holidays->get();
+
+            foreach ($holidays as $key => $holiday) {
+
+                $holidayArray[] = [
+                    'id' => $holiday->id,
+                    'title' => $holiday->occassion,
+                    'start' => $holiday->date->format('Y-m-d'),
+                    'end' => $holiday->date->format('Y-m-d'),
+                ];
+            }
+
+            return $holidayArray;
+        }
+
+        return view('project-status.calendar.index', $this->data);
+
     }
 }
