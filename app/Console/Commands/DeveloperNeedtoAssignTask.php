@@ -15,6 +15,9 @@ use App\Models\TaskRevision;
 use App\Models\ProjectMilestone;
 use App\Http\Controllers\HelperPendingActionController;
 use App\Models\ProjectSubmission;
+use App\Models\TaskUser;
+use App\Models\PendingActionPast;
+use App\Models\Role;
 
 class DeveloperNeedtoAssignTask extends Command
 {
@@ -185,8 +188,59 @@ class DeveloperNeedtoAssignTask extends Command
 
 
       }
+      $actions= PendingAction::where('code','DTDA')->where('past_status',0)->get();
+      foreach($actions as $action)
+      {
+        $task_status = Task::where('id',$action->task_id)->first();
+        if($task_status->board_column_id != 1 || $task_status->board_column_id != 2)
+        {
+            $actionId= PendingAction::where('id',$action->id)->first();
+            $actionId->past_status= 1;
+            $actionId->save();
+            $project=Project::where('id',$action->project_id)->first();
+            $current_date= Carbon::now();
     
-       
+            $client= User::where('id',$project->client_id)->first();
+           // $lead_developer= User::where('id',Auth::id())->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $task_user= TaskUser::where('task_id',$task_status->id)->first();
+            $developer= User::where('id',$task_user->user_id)->first();
+            $user_role= Role::where('id',$developer->role_id)->first();
+           
+            $past_action= new PendingActionPast();
+            $past_action->item_name = $action->item_name;
+            $past_action->code = $action->code;
+            $past_action->serial = $action->serial;
+            $past_action->action_id = $action->id;
+            $past_action->heading = $action->heading;
+            if($current_date > $task_status->due_date)
+            {
+                $past_action->message = 'Task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> & client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by '.$user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> after the deadline was over!';
+    
+            }else
+            {
+                $past_action->message = 'Task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> & client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by '.$user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> before the deadline was over';
+            }
+    
+         //   $past_action->button = $action->button;
+            $past_action->timeframe = $action->timeframe;
+            $past_action->authorization_for = $action->authorization_for;
+            $past_action->authorized_by = $action->authorized_by;
+            $past_action->authorized_at = $action->authorized_at;
+            $past_action->expired_status = $action->expired_status;
+            $past_action->past_status = $action->past_status;
+            $past_action->project_id = $action->project_id;
+            $past_action->task_id = $action->task_id;
+            $past_action->client_id = $action->client_id;
+            $past_action->developer_id = $action->developer_id;
+            $past_action->save();
+
+        }
+        
+
+
+      }
+     
 
 
         
