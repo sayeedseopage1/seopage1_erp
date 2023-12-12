@@ -196,6 +196,7 @@ class DeveloperNeedtoAssignTask extends Command
         {
             $actionId= PendingAction::where('id',$action->id)->first();
             $actionId->past_status= 1;
+            $actionId->authorized_by= $action->authorization_for;
             $actionId->save();
             $project=Project::where('id',$action->project_id)->first();
             $current_date= Carbon::now();
@@ -208,11 +209,11 @@ class DeveloperNeedtoAssignTask extends Command
             $user_role= Role::where('id',$developer->role_id)->first();
            
             $past_action= new PendingActionPast();
-            $past_action->item_name = $action->item_name;
-            $past_action->code = $action->code;
-            $past_action->serial = $action->serial;
-            $past_action->action_id = $action->id;
-            $past_action->heading = $action->heading;
+            $past_action->item_name = $actionId->item_name;
+            $past_action->code = $actionId->code;
+            $past_action->serial = $actionId->serial;
+            $past_action->action_id = $actionId->id;
+            $past_action->heading = $actionId->heading;
             if($current_date > $task_status->due_date)
             {
                 $past_action->message = 'Task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> & client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by '.$user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> after the deadline was over!';
@@ -223,16 +224,16 @@ class DeveloperNeedtoAssignTask extends Command
             }
     
          //   $past_action->button = $action->button;
-            $past_action->timeframe = $action->timeframe;
-            $past_action->authorization_for = $action->authorization_for;
-            $past_action->authorized_by = $action->authorized_by;
-            $past_action->authorized_at = $action->authorized_at;
-            $past_action->expired_status = $action->expired_status;
-            $past_action->past_status = $action->past_status;
-            $past_action->project_id = $action->project_id;
-            $past_action->task_id = $action->task_id;
-            $past_action->client_id = $action->client_id;
-            $past_action->developer_id = $action->developer_id;
+            $past_action->timeframe = $actionId->timeframe;
+            $past_action->authorization_for = $actionId->authorization_for;
+            $past_action->authorized_by = $actionId->authorized_by;
+            $past_action->authorized_at = $actionId->authorized_at;
+            $past_action->expired_status = $actionId->expired_status;
+            $past_action->past_status = $actionId->past_status;
+            $past_action->project_id = $actionId->project_id;
+            $past_action->task_id = $actionId->task_id;
+            $past_action->client_id = $actionId->client_id;
+            $past_action->developer_id = $actionId->developer_id;
             $past_action->save();
 
         }
