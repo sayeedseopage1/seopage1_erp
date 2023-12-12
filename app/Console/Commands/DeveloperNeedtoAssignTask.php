@@ -15,6 +15,9 @@ use App\Models\TaskRevision;
 use App\Models\ProjectMilestone;
 use App\Http\Controllers\HelperPendingActionController;
 use App\Models\ProjectSubmission;
+use App\Models\TaskUser;
+use App\Models\PendingActionPast;
+use App\Models\Role;
 
 class DeveloperNeedtoAssignTask extends Command
 {
@@ -186,7 +189,6 @@ class DeveloperNeedtoAssignTask extends Command
 
       }
     
-       
 
 
         

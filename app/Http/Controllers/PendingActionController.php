@@ -653,8 +653,8 @@ class PendingActionController extends AccountBaseController
         ->leftJoin('users as client','client.id','pending_action_pasts.client_id')
         ->leftJoin('users as pm','pm.id','projects.pm_id')
         ->leftJoin('users as authorize_by','authorize_by.id','pending_action_pasts.authorized_by')
-        ->where('pending_action_pasts.authorization_for',$user)
-        ->where('pending_action_pasts.past_status',1);
+        ->where('pending_action_pasts.authorization_for',$user);
+      //  ->where('pending_action_pasts.past_status',1);
         if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
 
 
