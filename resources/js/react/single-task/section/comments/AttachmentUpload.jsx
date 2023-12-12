@@ -1,13 +1,15 @@
 import _ from "lodash";
 import React from "react";
+import { toast } from "react-toastify";
 import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
 import Button from "../../../global/Button";
 import Switch from "../../../global/Switch";
 import { useReplyTaskCommentMutation } from "../../../services/api/TaskCommentApiSlice";
-import { toast } from "react-toastify";
+import { ErrorText } from '../../components/form/ErrorText';
 
 const AttachmentUpload = ({ comment, onReply, close }) => {
     const [files, setFiles] = React.useState([]);
+    const [error, setError] = React.useState(null);
 
     const [replyTaskComment, { isLoading }] = useReplyTaskCommentMutation();
 
@@ -21,6 +23,14 @@ const AttachmentUpload = ({ comment, onReply, close }) => {
 
     // handle update
     const onUpdate = async (e) => {
+
+        // if not select any file show error message
+        if(_.size(files) === 0){
+            setError(p => ({...p, fileError: "Please select at least one file."}));
+            return;
+        }
+
+
         const formData = new FormData();
         formData.append("reply_text", "");
         formData.append("task_id", comment.task_id);
@@ -36,13 +46,17 @@ const AttachmentUpload = ({ comment, onReply, close }) => {
             formData.append("file[]", file);
         });
 
-        await replyTaskComment({ formData, commentId: comment.id }).then(
-            (res) => {
+        // submit form
+        try {
+            const response = await replyTaskComment({ formData, commentId: comment.id });
+            if(response){
                 toast.success("Your files has been successfully uploaded.");
                 onReply();
                 close();
             }
-        );
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     return (
@@ -57,6 +71,7 @@ const AttachmentUpload = ({ comment, onReply, close }) => {
                             uploadInputClass="comment-file-upload"
                             fileWrapperClass="comment-uploaded-file"
                         />
+                        {error && error.fileError ? <ErrorText> {error.fileError} </ErrorText> :''}
                     </div>
                 </React.Fragment>
 
