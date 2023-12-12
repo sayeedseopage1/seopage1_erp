@@ -192,7 +192,7 @@ class DeveloperNeedtoAssignTask extends Command
       foreach($actions as $action)
       {
         $task_status = Task::where('id',$action->task_id)->first();
-        if($task_status->board_column_id != 1 || $task_status->board_column_id != 2)
+        if($task_status->board_column_id != 2 || $task_status->board_column_id != 3 || $task_status->board_column_id != 1)
         {
             $actionId= PendingAction::where('id',$action->id)->first();
             $actionId->past_status= 1;
