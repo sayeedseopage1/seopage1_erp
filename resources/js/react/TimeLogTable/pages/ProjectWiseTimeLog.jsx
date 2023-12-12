@@ -10,6 +10,8 @@ import { ProjectTableCtx } from "../context/ProjectWiseTableContext";
 import { convertTime } from "../../utils/converTime";
 import Loader from "../../global/Loader";
 import { RefreshButton } from "../components/RefreshButton";
+import ExportProjectWiseTableDataToExcel from "../export/excel/ExportProjectWiseTableDataToExcel";
+import { ExportToExcel } from "../components/ExportToExcel";
 
 const ProjectWiseTimeLog = () => {
     const [data, setData] = useState([]);
@@ -78,11 +80,26 @@ const ProjectWiseTimeLog = () => {
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
                     <Tabbar/>
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
-                        {isLoading ?
-                            <Loader title="Refreshing..."  borderRightColor="white" />
-                        : 'Refresh'}
-                    </RefreshButton>
+
+                    <div className="d-flex align-items-center" style={{gap: '10px'}}>
+                        <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
+                            {isLoading ?
+                                <Loader title="Refreshing..."  borderRightColor="white" />
+                            : 'Refresh'}
+                        </RefreshButton>
+
+                        <ExportProjectWiseTableDataToExcel
+                             data = {data}
+                             filter={filter}
+                             button = {
+                                 <ExportToExcel>
+                                     <i className="fa-solid fa-download" />
+                                     Export to Excel
+                                 </ExportToExcel>
+                             }
+                             filename={`project_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
+                        />
+                    </div>
                 </div>
                 
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
