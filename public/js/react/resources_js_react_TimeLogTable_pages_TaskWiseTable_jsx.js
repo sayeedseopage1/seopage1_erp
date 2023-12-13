@@ -911,6 +911,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
@@ -933,34 +935,47 @@ var ExportTaskWiseTableDataToExcel = function ExportTaskWiseTableDataToExcel(_re
       horizontal: 'top'
     }
   };
+  console.log({
+    filter: filter,
+    data: data
+  });
 
   // get data
   var getData = function getData(data) {
     var rows = [];
     lodash__WEBPACK_IMPORTED_MODULE_3___default().forEach(data, function (d) {
+      var _d$task_name, _d$project_name, _d$pm_name, _d$client_name, _d$employee_name, _d$start_time, _d$end_time, _d$hours;
       var row = [{
-        value: d['task_name'],
+        value: (_d$task_name = d['task_name']) !== null && _d$task_name !== void 0 ? _d$task_name : '--',
         style: fieldStyle
       }, {
-        value: d['project_name'],
+        value: (_d$project_name = d['project_name']) !== null && _d$project_name !== void 0 ? _d$project_name : '--',
         style: fieldStyle
       }, {
-        value: d['pm_name'],
+        value: (_d$pm_name = d['pm_name']) !== null && _d$pm_name !== void 0 ? _d$pm_name : '--',
         style: fieldStyle
       }, {
-        value: d['client_name'],
+        value: (_d$client_name = d['client_name']) !== null && _d$client_name !== void 0 ? _d$client_name : '--',
         style: fieldStyle
       }, {
-        value: d['employee_name'],
+        value: (_d$employee_name = d['employee_name']) !== null && _d$employee_name !== void 0 ? _d$employee_name : '--',
         style: fieldStyle
       }, {
-        value: d["start_time"],
+        value: (_d$start_time = d["start_time"]) !== null && _d$start_time !== void 0 ? _d$start_time : '--',
         style: fieldStyle
       }, {
-        value: d["end_time"],
-        style: fieldStyle
+        value: (_d$end_time = d["end_time"]) !== null && _d$end_time !== void 0 ? _d$end_time : "active",
+        style: _objectSpread(_objectSpread({}, fieldStyle), {}, {
+          font: {
+            color: d["end_time"] ? {
+              rgb: "00000000"
+            } : {
+              rgb: "FF00AA00"
+            }
+          }
+        })
       }, {
-        value: d["hours"],
+        value: (_d$hours = d["hours"]) !== null && _d$hours !== void 0 ? _d$hours : '--',
         style: fieldStyle
       }];
       rows.push(row);
