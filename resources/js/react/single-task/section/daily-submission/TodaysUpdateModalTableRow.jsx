@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import FileUploader from "../../../file-upload/FileUploader";
-import CKEditorComponent from "../../../ckeditor";
-import SubmitButton from "../../components/SubmitButton";
-import { convertTime } from "../../../utils/converTime";
-import { Placeholder } from "../../../global/Placeholder";
-import Checkbox from "../../../UI/form/Cheeckbox";
-import { useSubmitDailySubmissionMutation } from "../../../services/api/dailySubmissionApiSlice";
-import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import Checkbox from "../../../UI/form/Cheeckbox";
+import CKEditorComponent from "../../../ckeditor";
+import FileUploader from "../../../file-upload/FileUploader";
+import { Placeholder } from "../../../global/Placeholder";
+import { useSubmitDailySubmissionMutation } from "../../../services/api/dailySubmissionApiSlice";
+import { convertTime } from "../../../utils/converTime";
+import SubmitButton from "../../components/SubmitButton";
 
 const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }) => {
     const [showSubmissionForm, setShowSubmissionForm] = useState(true);
@@ -21,7 +21,6 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
     const [updatedValue,] = useState(null);
     const [completedSection, setCompletedSection] = useState('');
     const [submitDailySubmission, { isLoading: isSubmitting }] = useSubmitDailySubmissionMutation();
-
 
     // error state
     const [attachmentLinkError, setAttachmentLinkError] = useState('');

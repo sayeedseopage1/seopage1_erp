@@ -1,9 +1,8 @@
 import { useRef } from "react";
-import { useClickAway, useWindowSize } from "react-use";
+import { useWindowSize } from "react-use";
 import Button from "../../components/Button";
 import CustomModal from "../../components/CustomModal";
 import Modal from "../../components/Modal";
-import { get_data_dailySubmission } from "./fake-data/data_dailySubmission";
 import DailySubmissionItem from "./DailySubmissionItem";
 
 const DailysubmissionDrawerTable = ({ isOpen, close, toggle, data, modalData, setModalData }) => {
@@ -32,7 +31,12 @@ const DailysubmissionDrawerTable = ({ isOpen, close, toggle, data, modalData, se
                         {/* {deviceWidth > 800 ? <Table data={data} />: <CardView data={data} />} */}
                         {
                             data?.map((singleData) => (
-                                <DailySubmissionItem key={singleData.id} item={singleData} setModalData={setModalData} modalData={modalData} />
+                                <DailySubmissionItem
+                                    key={singleData.id}
+                                    item={singleData}
+                                    setModalData={setModalData}
+                                    modalData={modalData}
+                                />
                             ))
                         }
                     </table>

@@ -20,7 +20,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading, 
     const [updatedValue,] = useState(null);
     const [completedSection, setCompletedSection] = useState('');
     const [submitDailySubmission, { isLoading: isSubmitting }] = useSubmitDailySubmissionMutation();
-
+    
 
     // error state
     const [attachmentLinkError, setAttachmentLinkError] = useState('');
@@ -113,7 +113,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading, 
                         'No Link attached'
                 }</td>
                 <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : convertTime(data.total_time_spent)}</td>
-                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : data.client_name}</td>
+                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : (data?.client_name ?? 'N/A')}</td>
                 <td className={`sp1_tlr_td`}>
                     {
                         loading ?

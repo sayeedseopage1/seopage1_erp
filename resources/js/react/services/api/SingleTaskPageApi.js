@@ -85,7 +85,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["TASK_COMMENTS"]
+            invalidatesTags: ["TASK_COMMENTS", "TASK_COMMENTS_WIDGET"]
         }),
 
         // edit comment

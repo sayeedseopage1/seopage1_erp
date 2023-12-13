@@ -2168,15 +2168,22 @@ class ProjectController extends AccountBaseController
            //     $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
 
-                $helper = new HelperPendingActionController();
-
-
-                $helper->ProjectDeliverableCreation($past_action->project_id);
+               
 
 
         }
     }
+    $pending_actions = PendingAction::where('code','DCA')->where('project_id',$project->id)->where('authorization_for',$project->pm_id)->count();
+    if($pending_actions == 0)
+    {
+        $helper = new HelperPendingActionController();
 
+
+        $helper->ProjectDeliverableCreation($project->id);
+    
+
+    }
+   
         if($project->status == 'not started'){
             if ($request->project_challenge != 'No Challenge') {
                 $project_update = Project::find($request->project_id);
@@ -2381,7 +2388,7 @@ class ProjectController extends AccountBaseController
 
         $this->messageSetting = MessageSetting::first();
         $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
-        $this->deliverables = ProjectDeliverable::where('project_id', $this->project->id)->orderBy('id','desc')->get();
+        $this->deliverables = ProjectDeliverable::where('project_id', $this->project->id)->get();
 
         $tab = request('tab');
 
@@ -3237,7 +3244,8 @@ class ProjectController extends AccountBaseController
             $deliverable->description = $request->description;
             $deliverable->save();
             $project= Project::where('id',$deliverable->project_id)->first();
-            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$deliverable->project_id)->where('authorization_for',Auth::id())->get();
+
             if($actions != null)
             {
             foreach ($actions as $key => $action) {

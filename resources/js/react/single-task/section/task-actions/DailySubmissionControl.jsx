@@ -1,15 +1,10 @@
 import { useState } from "react";
 // import { Button } from "react-bootstrap";
-import CKEditorComponent from "../../../ckeditor";
-import FileUploader from "../../../file-upload/FileUploader";
-import Modal from "../../components/Modal";
-import Button from "../../components/Button";
-import SubmitButton from "../../components/SubmitButton";
-import TodaysUpdateModalTable from "../daily-submission/TodaysUpdateModalTable";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import Swal from "sweetalert2";
-import dayjs from "dayjs";
+import Button from "../../components/Button";
+import Modal from "../../components/Modal";
+import TodaysUpdateModalTable from "../daily-submission/TodaysUpdateModalTable";
 
 const DailySubmissionControl = () => {
     const [todaysUpdateModalisOpen, setTodaysUpdateModalisOpen] =
@@ -20,9 +15,7 @@ const DailySubmissionControl = () => {
 
 
     const isOpen = url.get("modal") === "daily-submission";
-
-
-
+ 
 
     // console.log(location);
 
