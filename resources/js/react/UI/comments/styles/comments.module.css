@@ -279,6 +279,7 @@
   padding: 3.5px 8px !important;
   margin: 0 !important;
   color: black;
+  /* transform: scale(1.5); */
 }
 .singleChat_comment_card_text_more_options > section:hover{
   color: black;
