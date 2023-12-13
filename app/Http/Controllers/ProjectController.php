@@ -2379,7 +2379,7 @@ class ProjectController extends AccountBaseController
             || ($this->viewPermission == 'both' && (in_array(user()->id, $memberIds) || user()->id == $this->project->added_by) && in_array('employee', user_roles()))
         ));
 
-        $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 100, " ..."));
+        $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 50, " ..."));
 
 
         if (!empty($this->project->getCustomFieldGroupsWithFields())) {
@@ -3244,8 +3244,7 @@ class ProjectController extends AccountBaseController
             $deliverable->description = $request->description;
             $deliverable->save();
             $project= Project::where('id',$deliverable->project_id)->first();
-            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$deliverable->project_id)->where('authorization_for',Auth::id())->get();
-
+            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$request->project_id)->get();
             if($actions != null)
             {
             foreach ($actions as $key => $action) {
