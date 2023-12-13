@@ -410,7 +410,15 @@ function CommentEditor({
     // console.log(ReactQuill)
 
     const modules = {
-        toolbar: [["bold", "italic", "underline", "strike", "link"]],
+        toolbar: [
+            [
+                "bold", 
+                "italic", 
+                "underline", 
+                // "strike", 
+                // "link"
+            ]
+        ],
         // clipboard: {
         //     matchVisual: false,
         // },
@@ -466,8 +474,8 @@ function CommentEditor({
         "bold",
         "italic",
         "underline",
-        "strike",
-        "link",
+        // "strike",
+        // "link",
         // "mention",
     ];
 
