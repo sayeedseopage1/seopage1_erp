@@ -11,6 +11,8 @@ import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { ExportToExcel } from "../components/ExportToExcel";
 import ExportTaskWiseTableDataToExcel from "../export/excel/ExportTaskWiseTableDataToExcel";
+import { useAuth } from '../../hooks/useAuth';
+import Switch from '../../global/Switch'
 
 const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);
@@ -21,6 +23,9 @@ const TaskWiseLogReport = () => {
     const [trackedTime, setTrackedTime] = useState(0);
     const [filter, setFilter] = useState(null);
     const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
+
+    // current user
+    const auth = useAuth();
 
     // handle data
     const handleData = (data, currentPage, perPageData) => {
@@ -87,17 +92,21 @@ const TaskWiseLogReport = () => {
                             <i className="fa-solid fa-download" />
                             Export to Excel
                         </ExportToExcel> */}
-                        <ExportTaskWiseTableDataToExcel
-                            data = {data}
-                            filter={filter}
-                            button = {
-                                <ExportToExcel>
-                                    <i className="fa-solid fa-download" />
-                                    Export to Excel
-                                </ExportToExcel>
-                            }
-                            filename={`task_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
-                        />
+                        <Switch>
+                            <Switch.Case condition={auth.getRoleId() === 1}>
+                                <ExportTaskWiseTableDataToExcel
+                                    data = {data}
+                                    filter={filter}
+                                    button = {
+                                        <ExportToExcel>
+                                            <i className="fa-solid fa-download" />
+                                            Export to Excel
+                                        </ExportToExcel>
+                                    }
+                                    filename={`task_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
+                                />
+                            </Switch.Case>
+                        </Switch>
                     </div>
                 </div>
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>

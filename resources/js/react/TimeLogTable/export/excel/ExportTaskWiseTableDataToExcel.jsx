@@ -15,8 +15,7 @@ const ExportTaskWiseTableDataToExcel = ({data, button, filter, filename}) => {
       horizontal: 'top'
     }
   }
-
-  console.log({filter, data});
+ 
  
   // get data
   const getData = (data) => {
