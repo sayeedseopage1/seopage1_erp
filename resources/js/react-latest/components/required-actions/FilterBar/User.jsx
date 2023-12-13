@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { User as USER } from "../../../utils/user-details";
 import Person from "../utils/Person";
+import _ from "lodash";
 
 const currentUser = new USER(window.Laravel.user);
 
@@ -21,20 +22,22 @@ const User = ({ user: userState, setUser, change }) => {
     }, []);
 
     useEffect(() => {
-        const filteredUser = [...users].filter((user) => {
-            if (
-                user.role_id === 1 ||
-                user.role_id === 2 ||
-                user.role_id === 3 ||
-                // user.role_id === 8 ||
-                user.role_id === currentUser.roleId ||
-                !user.role_id
-            ) {
-                return false;
-            } else {
-                return true;
+        const filteredUser = _.orderBy(_.uniqBy([...users],"name"), ["name"], ["asc"]).filter(
+            (user) => {
+                if (
+                    // user.role_id === 1 ||
+                    user.role_id === 2 ||
+                    user.role_id === 3 ||
+                    // user.role_id === 8 ||
+                    user.id === currentUser.id ||
+                    !user.role_id
+                ) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
-        });
+        );
         // console.log(filteredUser);
         setAllUser([window.Laravel.user, ...filteredUser]);
     }, [users]);
@@ -119,6 +122,14 @@ const User = ({ user: userState, setUser, change }) => {
                                                 className={`${style.user_field_dropdown_container_current_user_indicator}`}
                                             >
                                                 It's you
+                                            </div>
+                                        ) : user?.role_id === 1 ||
+                                          user?.role_id === 8 ||
+                                          user?.role_id === 11 ? (
+                                            <div
+                                                className={`${style.user_field_dropdown_container_current_user_indicator}`}
+                                            >
+                                                Admin
                                             </div>
                                         ) : (
                                             <></>
