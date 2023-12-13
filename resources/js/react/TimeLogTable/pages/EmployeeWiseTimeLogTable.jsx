@@ -12,7 +12,8 @@ import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { EmployeeTableCtx } from "../context/EmployeeTableContext";
 import { ExportToExcel } from "../components/ExportToExcel";
 import ExportEmployeeWiseTableDataToExcel from "../export/excel/ExportEmployeeWiseTableDataToExcel";
-
+import { useAuth } from '../../hooks/useAuth';
+import Switch from '../../global/Switch'
 
 
 const EmployeeWiseTimeLogTable = () => {
@@ -26,6 +27,9 @@ const EmployeeWiseTimeLogTable = () => {
     const [trackedTime, setTractedTime] = useState(0);
 
     const [getEmployeeWiseData, {isLoading}] = useGetEmployeeWiseDataMutation();
+
+    // current user
+    const auth = useAuth();
 
     // handle data
     const handleData = (data, currentPage, perPageData) => {
@@ -88,17 +92,21 @@ const EmployeeWiseTimeLogTable = () => {
                             : 'Refresh'}
                         </RefreshButton>
 
-                        <ExportEmployeeWiseTableDataToExcel
-                             data = {data}
-                             filter={filter}
-                             button = {
-                                 <ExportToExcel>
-                                     <i className="fa-solid fa-download" />
-                                     Export to Excel
-                                 </ExportToExcel>
-                             }
-                             filename={`employee_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
-                        />
+                        <Switch>
+                            <Switch.Case condition={auth.getRoleId() === 1}>
+                                <ExportEmployeeWiseTableDataToExcel
+                                    data = {data}
+                                    filter={filter}
+                                    button = {
+                                        <ExportToExcel>
+                                            <i className="fa-solid fa-download" />
+                                            Export to Excel
+                                        </ExportToExcel>
+                                    }
+                                    filename={`employee_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
+                                />
+                            </Switch.Case>
+                        </Switch>
                     </div>
                 </div>
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>

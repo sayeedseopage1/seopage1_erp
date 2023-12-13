@@ -16,41 +16,47 @@ const ExportTaskWiseTableDataToExcel = ({data, button, filter, filename}) => {
     }
   }
  
+ 
   // get data
   const getData = (data) => {
     let rows = [];
     _.forEach(data, d  => {
       let row = [ 
         {
-          value: d['task_name'], 
+          value: d['task_name'] ?? '--', 
           style: fieldStyle
         },
         {
-          value: d['project_name'],
+          value: d['project_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['pm_name'],
+          value: d['pm_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['client_name'],
+          value: d['client_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['employee_name'],
+          value: d['employee_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d["start_time"],
+          value: d["start_time"] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d["end_time"],
-          style: fieldStyle,
+          value: d["end_time"] ?? "active",
+          style: {
+            ...fieldStyle,
+            font:{
+              color: d["end_time"] ?{ rgb: "00000000" }  :{ rgb: "FF00AA00" }
+            }
+          },
         },
         {
-          value: d["hours"],
+          value: d["hours"] ?? '--',
           style: fieldStyle,
         } 
       ]

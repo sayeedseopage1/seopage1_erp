@@ -22,27 +22,27 @@ const ExportProjectWiseTableDataToExcel = ({data, button, filter, filename}) => 
     _.forEach(data, d  => {
       let row = [ 
         {
-          value: d['project_name'],
+          value: d['project_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['client_name'],
+          value: d['client_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['pm_name'],
+          value: d['pm_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['employee_name'],
+          value: d['employee_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d["number_of_session"],
+          value: d["number_of_session"] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d["hours"],
+          value: d["hours"] ?? '--',
           style: fieldStyle,
         } 
       ]
