@@ -1339,14 +1339,10 @@ var ChatInput = function ChatInput(_ref) {
     _useState8 = _slicedToArray(_useState7, 2),
     show = _useState8[0],
     setShow = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState10 = _slicedToArray(_useState9, 2),
-    isEditorHeightIncrease = _useState10[0],
-    setIsEditorHeightIncrease = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
-    _useState12 = _slicedToArray(_useState11, 2),
-    files = _useState12[0],
-    setFiles = _useState12[1];
+    files = _useState10[0],
+    setFiles = _useState10[1];
   var _useCommentContext = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext.mentionedComment,
     setMentionedComment = _useCommentContext.setMentionedComment,
@@ -1466,9 +1462,7 @@ var ChatInput = function ChatInput(_ref) {
         showEmoji: showEmoji,
         buttonClick: buttonClick,
         setButtonClick: setButtonClick,
-        isLoading: isLoading,
-        isEditorHeightIncrease: isEditorHeightIncrease,
-        setIsEditorHeightIncrease: setIsEditorHeightIncrease
+        isLoading: isLoading
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("section", {
       style: {
@@ -1617,16 +1611,14 @@ function CommentEditor(_ref5) {
     setShowEmoji = _ref5.setShowEmoji,
     buttonClick = _ref5.buttonClick,
     setButtonClick = _ref5.setButtonClick,
-    isLoading = _ref5.isLoading,
-    isEditorHeightIncrease = _ref5.isEditorHeightIncrease,
-    setIsEditorHeightIncrease = _ref5.setIsEditorHeightIncrease;
+    isLoading = _ref5.isLoading;
   var quillRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var _useCommentContext4 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext4.mentionedComment;
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
-    _useState14 = _slicedToArray(_useState13, 2),
-    value = _useState14[0],
-    setValue = _useState14[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState12 = _slicedToArray(_useState11, 2),
+    value = _useState12[0],
+    setValue = _useState12[1];
 
   // const [showEmoji, setShowEmoji] = useState(false);
 
@@ -1649,48 +1641,6 @@ function CommentEditor(_ref5) {
   //         setValue(editorHtml);
   //     }
   // }, [buttonClick]);
-
-  // useEffect(()=>{
-  //     const editorContainer = document.getElementById("editor_container");
-  //     if (editorContainer) {
-  //         const footer = editorContainer.parentElement.parentElement;
-  //         const container = editorContainer;
-  //         const editor = editorContainer.firstElementChild.lastElementChild.firstElementChild;
-  //         console.log(footer,container,editor);
-  //         // if (Number(footer.clientWidth)-Number(container.clientWidth)<106) {
-  //         //     if (editor.clientHeight>48) {
-  //         //         container.style.height = "100px";
-  //         //     }else{
-  //         //         container.style.height = "50px";
-  //         //     }
-  //         //     container.style.height = "100px";
-  //         //     setIsEditorHeightIncrease(true);
-  //         // } else {
-  //         //     container.style.height = "50px";
-  //         //     setIsEditorHeightIncrease(false);
-  //         // }
-  //         editor.style.maxWidth = `${footer.clientWidth - 140}px`;
-  //         if (container.clientHeight>=100) {
-  //             setIsEditorHeightIncrease(true);
-  //         }else{
-  //             setIsEditorHeightIncrease(false);
-  //         }
-  //     }
-  // },[editorHtml])
-
-  // useEffect(()=>{
-  //     const editorContainer = document.getElementById("editor_container");
-  //     if (editorContainer) {
-  //         const footer = editorContainer.parentElement.parentElement;
-  //         const container = editorContainer;
-  //         const editor = editorContainer.firstElementChild.lastElementChild.firstElementChild;
-  //         if (footer.clientWidth - container.clientWidth > 58 && !isEditorHeightIncrease) {
-  //             editor.style.maxWidth = `${footer.clientWidth - 140}px`;
-  //         }else{
-  //             editor.style.maxWidth = `${footer.clientWidth - 82}px`;
-  //         }  
-  //     }
-  // },[isEditorHeightIncrease])
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     // Focus the Quill editor when the component is rendered

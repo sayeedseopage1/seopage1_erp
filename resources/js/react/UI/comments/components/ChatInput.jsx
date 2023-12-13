@@ -30,7 +30,6 @@ const ChatInput = ({ setScroll, taskId }) => {
     const [buttonClick, setButtonClick] = useState();
     const [editorHtml, setEditorHtml] = useState("");
     const [show, setShow] = useState(false);
-    const [isEditorHeightIncrease, setIsEditorHeightIncrease] = useState(false);
     const [files, setFiles] = useState([]);
     const {
         mentionedComment,
@@ -147,8 +146,6 @@ const ChatInput = ({ setScroll, taskId }) => {
                     buttonClick={buttonClick}
                     setButtonClick={setButtonClick}
                     isLoading={isLoading}
-                    isEditorHeightIncrease={isEditorHeightIncrease}
-                    setIsEditorHeightIncrease={setIsEditorHeightIncrease}
                 />
             </section>
             <section
@@ -340,8 +337,6 @@ function CommentEditor({
     buttonClick,
     setButtonClick,
     isLoading,
-    isEditorHeightIncrease,
-    setIsEditorHeightIncrease
 }) {
     const quillRef = useRef(null);
     const { mentionedComment } = useCommentContext();
@@ -370,47 +365,6 @@ function CommentEditor({
     // }, [buttonClick]);
 
 
-    // useEffect(()=>{
-    //     const editorContainer = document.getElementById("editor_container");
-    //     if (editorContainer) {
-    //         const footer = editorContainer.parentElement.parentElement;
-    //         const container = editorContainer;
-    //         const editor = editorContainer.firstElementChild.lastElementChild.firstElementChild;
-    //         console.log(footer,container,editor);
-    //         // if (Number(footer.clientWidth)-Number(container.clientWidth)<106) {
-    //         //     if (editor.clientHeight>48) {
-    //         //         container.style.height = "100px";
-    //         //     }else{
-    //         //         container.style.height = "50px";
-    //         //     }
-    //         //     container.style.height = "100px";
-    //         //     setIsEditorHeightIncrease(true);
-    //         // } else {
-    //         //     container.style.height = "50px";
-    //         //     setIsEditorHeightIncrease(false);
-    //         // }
-    //         editor.style.maxWidth = `${footer.clientWidth - 140}px`;
-    //         if (container.clientHeight>=100) {
-    //             setIsEditorHeightIncrease(true);
-    //         }else{
-    //             setIsEditorHeightIncrease(false);
-    //         }
-    //     }
-    // },[editorHtml])
-
-    // useEffect(()=>{
-    //     const editorContainer = document.getElementById("editor_container");
-    //     if (editorContainer) {
-    //         const footer = editorContainer.parentElement.parentElement;
-    //         const container = editorContainer;
-    //         const editor = editorContainer.firstElementChild.lastElementChild.firstElementChild;
-    //         if (footer.clientWidth - container.clientWidth > 58 && !isEditorHeightIncrease) {
-    //             editor.style.maxWidth = `${footer.clientWidth - 140}px`;
-    //         }else{
-    //             editor.style.maxWidth = `${footer.clientWidth - 82}px`;
-    //         }  
-    //     }
-    // },[isEditorHeightIncrease])
 
     useEffect(() => {
         // Focus the Quill editor when the component is rendered
