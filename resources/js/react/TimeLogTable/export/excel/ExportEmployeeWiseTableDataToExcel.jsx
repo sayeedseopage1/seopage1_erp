@@ -26,23 +26,23 @@ const ExportEmployeeWiseTableDataToExcel = ({data, button, filter, filename}) =>
 
       let row = [ 
         {
-          value: d['employee_name'],
+          value: d['employee_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['project_name'],
+          value: d['project_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['client_name'],
+          value: d['client_name'] ?? '--',
           style: fieldStyle,
         },
         {
-          value: d['pm_name'],
+          value: d['pm_name'] ?? '--',
           style: fieldStyle,
         }, 
         {
-          value: d["number_of_session"],
+          value: d["number_of_session"] ?? '--',
           style: fieldStyle,
         },
         {

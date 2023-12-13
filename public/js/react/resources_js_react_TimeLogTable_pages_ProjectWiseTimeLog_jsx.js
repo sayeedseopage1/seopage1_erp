@@ -1326,23 +1326,24 @@ var ExportProjectWiseTableDataToExcel = function ExportProjectWiseTableDataToExc
   var getData = function getData(data) {
     var rows = [];
     lodash__WEBPACK_IMPORTED_MODULE_3___default().forEach(data, function (d) {
+      var _d$project_name, _d$client_name, _d$pm_name, _d$employee_name, _d$number_of_session, _d$hours;
       var row = [{
-        value: d['project_name'],
+        value: (_d$project_name = d['project_name']) !== null && _d$project_name !== void 0 ? _d$project_name : '--',
         style: fieldStyle
       }, {
-        value: d['client_name'],
+        value: (_d$client_name = d['client_name']) !== null && _d$client_name !== void 0 ? _d$client_name : '--',
         style: fieldStyle
       }, {
-        value: d['pm_name'],
+        value: (_d$pm_name = d['pm_name']) !== null && _d$pm_name !== void 0 ? _d$pm_name : '--',
         style: fieldStyle
       }, {
-        value: d['employee_name'],
+        value: (_d$employee_name = d['employee_name']) !== null && _d$employee_name !== void 0 ? _d$employee_name : '--',
         style: fieldStyle
       }, {
-        value: d["number_of_session"],
+        value: (_d$number_of_session = d["number_of_session"]) !== null && _d$number_of_session !== void 0 ? _d$number_of_session : '--',
         style: fieldStyle
       }, {
-        value: d["hours"],
+        value: (_d$hours = d["hours"]) !== null && _d$hours !== void 0 ? _d$hours : '--',
         style: fieldStyle
       }];
       rows.push(row);
