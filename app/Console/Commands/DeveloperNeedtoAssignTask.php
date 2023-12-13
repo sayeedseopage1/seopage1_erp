@@ -188,6 +188,19 @@ class DeveloperNeedtoAssignTask extends Command
 
 
       }
+
+      $deadline_actions= PendingAction::where('code','DTDA')->where('past_status',0)->get();
+      foreach($deadline_actions as $item)
+      {
+        $taskId= Task::where('id',$item->task_id)->first();
+        if($taskId->board_column_id == 6)
+        {
+            $update_item= PendingAction::find($item->id);
+            $update_item->past_status = 1;
+            $update_item->save();
+
+        }
+      }
     
 
 
