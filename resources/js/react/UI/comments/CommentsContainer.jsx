@@ -177,7 +177,7 @@ const CommentsContainer = ({
                     loading={isFetching || isLoading}
                     refetch={refetch}
                     taskId={taskId ? taskId : param?.taskId}
-                    height={"84vh"}
+                    height={"89vh"}
                 />
             {/* )} */}
         </CommentContainerDecider>

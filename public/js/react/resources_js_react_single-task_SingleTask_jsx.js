@@ -1026,7 +1026,7 @@ var CommentsContainer = function CommentsContainer(_ref) {
       loading: isFetching || isLoading,
       refetch: refetch,
       taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId,
-      height: "84vh"
+      height: "89vh"
     })
   });
 };
