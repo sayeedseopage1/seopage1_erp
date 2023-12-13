@@ -987,7 +987,7 @@ class TaskController extends AccountBaseController
         }
 
         $task_status->save();
-        $actions= PendingAction::where('code','DTDA')->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
+        $actions= PendingAction::where('code','DTDA')->where('past_status',0)->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
