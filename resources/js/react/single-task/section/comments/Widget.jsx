@@ -5,12 +5,13 @@ import dayjs from "dayjs";
 import { timeCalculate } from "../../../utils/timeCalculate";
 import Modal from "../../components/Modal";
 import CommentPreview from "./CommentPreview";
+import CommentsContainer from "../../../UI/comments/CommentsContainer";
 
 // widget item
 
 const WidgetItem = ({ comment }) => {
     const [isOpen, setIsOpen] = useState(false);
- 
+
     if (!comment) return null;
     return (
         <React.Fragment>
@@ -54,13 +55,14 @@ const WidgetItem = ({ comment }) => {
                 </div>
             </div>
 
-            <Modal isOpen={isOpen}>
+            {/* <Modal isOpen={isOpen}>
                 <CommentPreview
                     isOpen={isOpen}
                     close={() => setIsOpen(false)}
                     commentId={comment.id}
                 />
-            </Modal>
+            </Modal> */}
+            <CommentsContainer close={() => setIsOpen(false)} isOpen={isOpen} />
         </React.Fragment>
     );
 };

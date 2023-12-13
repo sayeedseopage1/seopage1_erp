@@ -30,6 +30,7 @@ const ChatInput = ({ setScroll, taskId }) => {
     const [buttonClick, setButtonClick] = useState();
     const [editorHtml, setEditorHtml] = useState("");
     const [show, setShow] = useState(false);
+    const [isEditorHeightIncrease, setIsEditorHeightIncrease] = useState(false);
     const [files, setFiles] = useState([]);
     const {
         mentionedComment,
@@ -38,7 +39,7 @@ const ChatInput = ({ setScroll, taskId }) => {
         setSecletedComments,
     } = useCommentContext();
 
-    const handleSendComment = async () => {
+    const handleSendComment = async ({ onEnter = false }) => {
         if (!htmlToString(editorHtml) && !files.length) {
             Swal.fire({
                 icon: "warning",
@@ -50,6 +51,8 @@ const ChatInput = ({ setScroll, taskId }) => {
             return;
         }
 
+        const slicedComment = editorHtml.split("<p><br></p>");
+
         const formdata = new FormData();
         formdata.append(
             "_token",
@@ -57,7 +60,22 @@ const ChatInput = ({ setScroll, taskId }) => {
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-        formdata.append("comment", htmlToString(editorHtml) ? editorHtml : "");
+        formdata.append(
+            "comment",
+            htmlToString(editorHtml)
+                ? onEnter
+                    ? slicedComment
+                          .slice(0, slicedComment.length - 1)
+                          .join("<p><br></p>")
+                    : editorHtml
+                : ""
+
+            // htmlToString(editorHtml)
+            //     ? slicedComment
+            //           .slice(0, slicedComment.length - 1)
+            //           .join("<p><br></p>")
+            //     : ""
+        );
         formdata.append("user_id", currentUser.id);
         formdata.append("task_id", taskId);
         formdata.append("added_by", currentUser.id);
@@ -77,20 +95,19 @@ const ChatInput = ({ setScroll, taskId }) => {
 
         try {
             await postComment({ taskId, data: formdata });
-            Swal.fire({
-                icon: "success",
-                title: "Comment Sent",
-                showConfirmButton: true,
-                timer: 2000,
-                timerProgressBar: true,
-            });
+            // Swal.fire({
+            //     icon: "success",
+            //     title: "Comment Sent",
+            //     showConfirmButton: true,
+            //     timer: 2000,
+            //     timerProgressBar: true,
+            // });
         } catch (err) {
             Swal.fire({
                 icon: "error",
                 title: "Comment not sent",
                 showConfirmButton: true,
-                timer: 2000,
-                timerProgressBar: true,
+                confirmButtonColor: "red",
             });
         }
 
@@ -110,7 +127,7 @@ const ChatInput = ({ setScroll, taskId }) => {
         // }
         // console.log(buttonClick);
         if (buttonClick?.keyCode === 13 && !buttonClick?.shiftKey) {
-            handleSendComment();
+            handleSendComment({ onEnter: true });
         }
     }, [buttonClick]);
 
@@ -130,12 +147,17 @@ const ChatInput = ({ setScroll, taskId }) => {
                     buttonClick={buttonClick}
                     setButtonClick={setButtonClick}
                     isLoading={isLoading}
+                    isEditorHeightIncrease={isEditorHeightIncrease}
+                    setIsEditorHeightIncrease={setIsEditorHeightIncrease}
                 />
             </section>
             <section
                 style={{
                     flexDirection:
-                        show || files.length || mentionedComment
+                        show ||
+                        files.length ||
+                        mentionedComment
+                        // || isEditorHeightIncrease
                             ? "column"
                             : "row",
                 }}
@@ -318,21 +340,24 @@ function CommentEditor({
     buttonClick,
     setButtonClick,
     isLoading,
+    isEditorHeightIncrease,
+    setIsEditorHeightIncrease
 }) {
     const quillRef = useRef(null);
     const { mentionedComment } = useCommentContext();
     const [value, setValue] = useState("");
+
     // const [showEmoji, setShowEmoji] = useState(false);
 
-    useEffect(() => {
-        document.getElementById("quill").addEventListener("keydown", (e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-                setValue((prev) => prev);
-            } else {
-                setValue(editorHtml);
-            }
-        });
-    }, [editorHtml]);
+    // useEffect(() => {
+    //     document.getElementById("quill").addEventListener("keydown", (e) => {
+    //         if (e.key === "Enter" && !e.shiftKey) {
+    //             setValue((prev) => prev);
+    //         } else {
+    //             setValue(editorHtml);
+    //         }
+    //     });
+    // }, [editorHtml]);
 
     // useEffect(() => {
     //     console.log(editorHtml);
@@ -343,6 +368,49 @@ function CommentEditor({
     //         setValue(editorHtml);
     //     }
     // }, [buttonClick]);
+
+
+    // useEffect(()=>{
+    //     const editorContainer = document.getElementById("editor_container");
+    //     if (editorContainer) {
+    //         const footer = editorContainer.parentElement.parentElement;
+    //         const container = editorContainer;
+    //         const editor = editorContainer.firstElementChild.lastElementChild.firstElementChild;
+    //         console.log(footer,container,editor);
+    //         // if (Number(footer.clientWidth)-Number(container.clientWidth)<106) {
+    //         //     if (editor.clientHeight>48) {
+    //         //         container.style.height = "100px";
+    //         //     }else{
+    //         //         container.style.height = "50px";
+    //         //     }
+    //         //     container.style.height = "100px";
+    //         //     setIsEditorHeightIncrease(true);
+    //         // } else {
+    //         //     container.style.height = "50px";
+    //         //     setIsEditorHeightIncrease(false);
+    //         // }
+    //         editor.style.maxWidth = `${footer.clientWidth - 140}px`;
+    //         if (container.clientHeight>=100) {
+    //             setIsEditorHeightIncrease(true);
+    //         }else{
+    //             setIsEditorHeightIncrease(false);
+    //         }
+    //     }
+    // },[editorHtml])
+
+    // useEffect(()=>{
+    //     const editorContainer = document.getElementById("editor_container");
+    //     if (editorContainer) {
+    //         const footer = editorContainer.parentElement.parentElement;
+    //         const container = editorContainer;
+    //         const editor = editorContainer.firstElementChild.lastElementChild.firstElementChild;
+    //         if (footer.clientWidth - container.clientWidth > 58 && !isEditorHeightIncrease) {
+    //             editor.style.maxWidth = `${footer.clientWidth - 140}px`;
+    //         }else{
+    //             editor.style.maxWidth = `${footer.clientWidth - 82}px`;
+    //         }  
+    //     }
+    // },[isEditorHeightIncrease])
 
     useEffect(() => {
         // Focus the Quill editor when the component is rendered
@@ -412,12 +480,12 @@ function CommentEditor({
     const modules = {
         toolbar: [
             [
-                "bold", 
-                "italic", 
-                "underline", 
-                // "strike", 
+                "bold",
+                "italic",
+                "underline",
+                // "strike",
                 // "link"
-            ]
+            ],
         ],
         // clipboard: {
         //     matchVisual: false,
@@ -497,6 +565,7 @@ function CommentEditor({
 
     return (
         <div
+            id="editor_container"
             className={`${style.chatInput_text_input}`}
             style={{
                 borderRadius: `${(() => {

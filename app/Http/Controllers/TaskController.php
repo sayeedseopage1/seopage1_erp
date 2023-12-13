@@ -4641,8 +4641,10 @@ class TaskController extends AccountBaseController
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                  //  dd($file);
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                 
+                 //   $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                    $filename = $file->getClientOriginalName();
+                 //   dd($file,$filename);
                     array_push($file_name, $filename);
 
                     // Store the file in AWS S3 using the 's3' disk

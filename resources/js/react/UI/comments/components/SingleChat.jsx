@@ -731,13 +731,13 @@ const SingleChat = ({
                                             left: isCurrentUser(
                                                 comment?.user?.id
                                             )
-                                                ? "-98px"
+                                                ? "-131.133px"
                                                 : "auto",
                                             right: isCurrentUser(
                                                 comment?.user?.id
                                             )
                                                 ? "auto"
-                                                : "-98px",
+                                                : "-131.133px",
                                         }}
                                         className={
                                             style.singleChat_comment_card_text_more_options
