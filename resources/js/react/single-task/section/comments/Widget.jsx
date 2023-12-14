@@ -28,7 +28,7 @@ const WidgetItem = ({ comment }) => {
                         >
                             {comment.user.name}
                         </a>{" "}
-                        {comment.mention? "replied " : "added "} a
+                        {comment.mention? "replied to " : "added "} a
                         comment
                     </p>
                     <p

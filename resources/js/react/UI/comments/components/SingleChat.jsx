@@ -361,7 +361,9 @@ const SingleChat = ({
                                     }}
                                     className={`${style.single_comment_deleted_title}`}
                                 >
-                                    <span>This Comment has been deleted</span>
+                                    <span>This Comment has been deleted {showDeletedComment?`(Deleted at : ${dayjs(comment?.deleted_at).format(
+                                    "MMM DD, YYYY, hh:mm A"
+                                )})`:''}</span>
                                     {currentUser.roleId === 1 ||
                                     currentUser.roleId === 8 ? (
                                         showDeletedComment ? (
@@ -699,7 +701,7 @@ const SingleChat = ({
                                 )}
 
                                 {/* comment more btn */}
-                                <span
+                                {/* <span
                                     onClick={() => {
                                         // setScroll((prev) => !prev);
                                         setShowCommentMenu((prev) => !prev);
@@ -721,10 +723,10 @@ const SingleChat = ({
                                             width: "100%",
                                         }}
                                     />
-                                </span>
+                                </span> */}
 
                                 {/* comment more options */}
-                                {showCommentMenu ? (
+                                {/* {showCommentMenu ? (
                                     <div
                                         ref={menuRef}
                                         style={{
@@ -817,7 +819,39 @@ const SingleChat = ({
                                     </div>
                                 ) : (
                                     <></>
-                                )}
+                                )} */}
+                                {/* <MoreOption
+                                    setShowCommentMenu={setShowCommentMenu}
+                                    showCommentMenu={showCommentMenu}
+                                    isCurrentUser={isCurrentUser}
+                                    comment={comment}
+                                    menuBtnRef={menuBtnRef}
+                                    menuRef={menuRef}
+                                    setMentionedComment={setMentionedComment}
+                                    handleSelect={handleSelect}
+                                    handleCopySingleComment={
+                                        handleCopySingleComment
+                                    }
+                                    handleDeleteSingleComment={
+                                        handleDeleteSingleComment
+                                    }
+                                /> */}
+                                <CustomMoreOption
+                                    comment={comment}
+                                    isCurrentUser={isCurrentUser}
+                                    handleCopySingleComment={
+                                        handleCopySingleComment
+                                    }
+                                    handleDeleteSingleComment={
+                                        handleDeleteSingleComment
+                                    }
+                                    handleSelect={handleSelect}
+                                    setMentionedComment={setMentionedComment}
+                                    setShowCommentMenu={setShowCommentMenu}
+                                    menuBtnRef={menuBtnRef}
+                                    menuRef={menuRef}
+                                    showCommentMenu={showCommentMenu}
+                                />
                             </div>
                         )}
                     </article>
@@ -963,5 +997,203 @@ const UnSelect = () => {
                 </g>
             </g>
         </svg>
+    );
+};
+
+const MoreOption = ({
+    setShowCommentMenu,
+    showCommentMenu,
+    isCurrentUser,
+    comment,
+    menuBtnRef,
+    menuRef,
+    setMentionedComment,
+    handleSelect,
+    handleCopySingleComment,
+    handleDeleteSingleComment,
+}) => {
+    return (
+        <>
+            {/* comment more btn */}
+            <span
+                onClick={() => {
+                    // setScroll((prev) => !prev);
+                    setShowCommentMenu((prev) => !prev);
+                }}
+                style={{
+                    left: isCurrentUser(comment?.user?.id) ? "-14px" : "auto",
+                    right: isCurrentUser(comment?.user?.id) ? "auto" : "-14px",
+                }}
+                className={`${style.singleChat_comment_card_text_more_btn}`}
+                ref={menuBtnRef}
+            ></span>
+
+            {/* comment more options */}
+            {showCommentMenu ? (
+                <div
+                    ref={menuRef}
+                    style={{
+                        left: isCurrentUser(comment?.user?.id)
+                            ? "-131.133px"
+                            : "auto",
+                        right: isCurrentUser(comment?.user?.id)
+                            ? "auto"
+                            : "-131.133px",
+                    }}
+                    className={style.singleChat_comment_card_text_more_options}
+                >
+                    <section
+                        onClick={() => {
+                            setShowCommentMenu(false);
+                            setMentionedComment(comment);
+                        }}
+                    >
+                        <HiReply className={`${style.context_icons}`} />
+                        <span className={`${style.context_title}`}>Reply</span>
+                    </section>
+
+                    <section
+                        onClick={() => {
+                            setShowCommentMenu(false);
+                            handleSelect();
+                        }}
+                    >
+                        <TbMessage2Check className={`${style.context_icons}`} />
+                        <span className={`${style.context_title}`}>
+                            Select Message
+                        </span>
+                    </section>
+
+                    <section
+                        onClick={() => {
+                            setShowCommentMenu(false);
+                            handleCopySingleComment(comment);
+                        }}
+                    >
+                        <MdOutlineContentCopy
+                            className={`${style.context_icons}`}
+                        />
+                        <span className={`${style.context_title}`}>Copy</span>
+                    </section>
+
+                    {isCurrentUser(comment?.user?.id) ? (
+                        <section
+                            onClick={() => {
+                                setShowCommentMenu(false);
+                                handleDeleteSingleComment(comment);
+                            }}
+                        >
+                            <IoMdCloseCircleOutline
+                                className={`${style.context_icons}`}
+                            />
+                            <span className={`${style.context_title}`}>
+                                Remove
+                            </span>
+                        </section>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+            ) : (
+                <></>
+            )}
+        </>
+    );
+};
+
+const CustomMoreOption = ({
+    comment,
+    isCurrentUser,
+    setMentionedComment,
+    handleSelect,
+    handleCopySingleComment,
+    handleDeleteSingleComment,
+    menuBtnRef,
+    menuRef,
+    showCommentMenu,
+    setShowCommentMenu,
+}) => {
+    const [clicked, setClicked] = useState(false);
+    // console.log(showCommentMenu);
+
+    return (
+        <div
+            style={{
+                left: isCurrentUser(comment?.user?.id) ? "-15px" : "auto",
+                right: isCurrentUser(comment?.user?.id) ? "auto" : "-15px",
+            }}
+            className={`${
+                isCurrentUser(comment?.user?.id) ? "dropleft" : "dropright"
+            } ${style.singleChat_comment_card_text_custom_more_btn_container}`}
+        >
+            <button
+                ref={menuBtnRef}
+                type="button"
+                className={`${style.singleChat_comment_card_text_custom_more_btn}`}
+                data-toggle="dropdown"
+                aria-expanded="false"
+            >
+                <FiMoreVertical
+                    style={{
+                        height: "15px",
+                        width: "15px",
+                    }}
+                />
+            </button>
+            <div
+                ref={menuRef}
+                className={`dropdown-menu ${style.singleChat_comment_card_text_custom_more_options}`}
+            >
+                <section
+                    onClick={() => {
+                        // setShowCommentMenu(false);
+                        setMentionedComment(comment);
+                    }}
+                >
+                    <HiReply className={`${style.context_icons}`} />
+                    <span className={`${style.context_title}`}>Reply</span>
+                </section>
+
+                <section
+                    onClick={() => {
+                        // setShowCommentMenu(false);
+                        handleSelect();
+                    }}
+                >
+                    <TbMessage2Check className={`${style.context_icons}`} />
+                    <span className={`${style.context_title}`}>
+                        Select Message
+                    </span>
+                </section>
+
+                <section
+                    onClick={() => {
+                        // setShowCommentMenu(false);
+                        handleCopySingleComment(comment);
+                    }}
+                >
+                    <MdOutlineContentCopy
+                        className={`${style.context_icons}`}
+                    />
+                    <span className={`${style.context_title}`}>Copy</span>
+                </section>
+
+                {isCurrentUser(comment?.user?.id) ? (
+                    <section
+                        onClick={() => {
+                            // setShowCommentMenu(false);
+                            handleDeleteSingleComment(comment);
+                        }}
+                    >
+                        <IoMdCloseCircleOutline
+                            className={`${style.context_icons}`}
+                        />
+                        <span className={`${style.context_title}`}>Remove</span>
+                    </section>
+                ) : (
+                    <></>
+                )}
+            </div>
+        </div>
     );
 };
