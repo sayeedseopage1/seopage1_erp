@@ -6,6 +6,7 @@ import { timeCalculate } from "../../../utils/timeCalculate";
 import Modal from "../../components/Modal";
 import CommentPreview from "./CommentPreview";
 import CommentsContainer from "../../../UI/comments/CommentsContainer";
+import { useGetCommentsQuery } from "../../../services/api/commentsApiSlice";
 
 // widget item
 
@@ -22,19 +23,19 @@ const WidgetItem = ({ comment }) => {
                 >
                     <p className="mb-0 pb-0">
                         <a
-                            href={`/account/employees/${comment.user_id}`}
+                            href={`/account/employees/${comment.user.id}`}
                             className="hover-underline text-primary"
                         >
-                            {comment.user_name}
+                            {comment.user.name}
                         </a>{" "}
-                        {comment.type_is_reply === 1 ? "replied " : "added "} a
+                        {comment.mention? "replied " : "added "} a
                         comment
                     </p>
                     <p
                         className="text-ellipsis d-flex align-items-center mb-0 pb-0"
                         style={{ color: "#AEAFB9" }}
                     >
-                        {timeCalculate(comment.created_at)}
+                        {timeCalculate(comment.created_date)}
                     </p>
                 </div>
 
@@ -62,20 +63,24 @@ const WidgetItem = ({ comment }) => {
                     commentId={comment.id}
                 />
             </Modal> */}
-            <CommentsContainer close={() => setIsOpen(false)} isOpen={isOpen} />
+            <CommentsContainer singleCommentId={comment.id} close={() => setIsOpen(false)} isOpen={isOpen} />
         </React.Fragment>
     );
 };
 
 const Widget = ({ task }) => {
-    const { data, isLoading } = useGetTaskCommentWidgetDataQuery(task.id, {
+    // console.log(task);
+    // const { data, isLoading } = useGetTaskCommentWidgetDataQuery(task.id, {
+    //     skip: !task.id,
+    // });
+    const { data: comments, isLoading } = useGetCommentsQuery(task.id, {
         skip: !task.id,
     });
 
     // console.log({ widget: data });
     return (
         <React.Fragment>
-            {_.map(_.orderBy(data, "id", "desc"), (comment) => (
+            {_.map(_.orderBy(comments, "id", "desc"), (comment) => (
                 <WidgetItem key={comment.id} comment={comment} />
             ))}
         </React.Fragment>
