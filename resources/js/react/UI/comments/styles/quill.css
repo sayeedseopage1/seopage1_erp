@@ -87,7 +87,7 @@
 }
 .ql-editor.ql-blank::before{
   left: 33.66px;
-  top: 35%;
+  top: 30%;
 }
 /* .ql-editor::placeholder{
   vertical-align: middle;
