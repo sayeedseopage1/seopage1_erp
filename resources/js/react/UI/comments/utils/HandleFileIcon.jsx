@@ -2,7 +2,7 @@ import React from "react";
 import { FileIcon, defaultStyles } from "react-file-icon";
 import style from "../styles/comments.module.css";
 
-const handleFileUrl = (url,fileName, file) => {
+const handleFileUrl = (url, fileName, file) => {
     if (fileName) {
         const file_name = fileName.split(".");
         const [name, ext] = [
@@ -20,9 +20,9 @@ const handleFileUrl = (url,fileName, file) => {
     }
 };
 
-const HandleFileIcon = ({ URL= "", fileName = "", file = null }) => {
+const HandleFileIcon = ({ URL = "", fileName = "", file = null }) => {
     const selectFileComponent = ({ fileName = "", file = null }) => {
-        const [url, name, ext] = handleFileUrl(URL,fileName, file);
+        const [url, name, ext] = handleFileUrl(URL, fileName, file);
         if (
             // false
             ext === "img" ||
@@ -38,8 +38,10 @@ const HandleFileIcon = ({ URL= "", fileName = "", file = null }) => {
                     style={{
                         objectFit: "cover",
                         width: "69px",
-                        height: "51px",
+                        height: "69px",
                         display: "flex",
+                        overflow: "hidden",
+                        borderRadius: "4px",
                     }}
                 >
                     <img
@@ -48,7 +50,8 @@ const HandleFileIcon = ({ URL= "", fileName = "", file = null }) => {
                         style={{
                             objectFit: "cover",
                             width: "69px",
-                            height: "51px",
+                            // height: "51px",
+                            height: "69px",
                         }}
                         src={url}
                         alt=""

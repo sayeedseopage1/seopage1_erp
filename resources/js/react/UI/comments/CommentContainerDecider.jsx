@@ -29,17 +29,32 @@ const CommentContainerDecider = ({
                     </div>
                 </Modal>
             );
-        } else if (width > 1200) {
-            return (
-                <CustomModal toggleRef={toggleRef} isOpen={isOpen}>
-                    <div className="sp1_task_comment_modal">
-                        {/* modal body (start) */}
-                        {children}
-                        {/* modal body (end) */}
-                    </div>
-                </CustomModal>
-            );
-        } else if (width <= 1200) {
+        }
+        // else if (width > 1200) {
+        //     return (
+        //         <CustomModal toggleRef={toggleRef} isOpen={isOpen}>
+        //             <div className="sp1_task_comment_modal">
+        //                 {/* modal body (start) */}
+        //                 {children}
+        //                 {/* modal body (end) */}
+        //             </div>
+        //         </CustomModal>
+        //     );
+        // }
+        // else if (width <= 1200) {
+        //     return (
+        //         <Modal isOpen={isOpen}>
+        //             <div className="position-relative">
+        //                 <div className="sp1_task_comment_modal --small-device">
+        //                     {/* modal body (start) */}
+        //                     {children}
+        //                     {/* modal body (end) */}
+        //                 </div>
+        //             </div>
+        //         </Modal>
+        //     );
+        // }
+        else {
             return (
                 <Modal isOpen={isOpen}>
                     <div className="position-relative">

@@ -28,26 +28,24 @@ export default function Pagination() {
     const handleMiddleOrder = (TOTAL_PAGE, currentPage) => {
         const middleOrder = [];
 
-        if (TOTAL_PAGE > 2 && TOTAL_PAGE <= 1+4) {
+        if (TOTAL_PAGE > 2 && TOTAL_PAGE <= 1 + 4) {
             for (let i = 2; i < TOTAL_PAGE; i++) {
                 middleOrder.push(i);
             }
-        }
-        else if (TOTAL_PAGE > 1+4) {
-            if (currentPage<1+3) {
-                for (let i = 2; i <= 1+3; i++) {
+        } else if (TOTAL_PAGE > 1 + 4) {
+            if (currentPage < 1 + 3) {
+                for (let i = 2; i <= 1 + 3; i++) {
                     middleOrder.push(i);
                 }
-            }else if (currentPage>=1+3 && currentPage<=TOTAL_PAGE-3) {
-                for (let i = currentPage-1; i <= currentPage+1; i++) {
+            } else if (currentPage >= 1 + 3 && currentPage <= TOTAL_PAGE - 3) {
+                for (let i = currentPage - 1; i <= currentPage + 1; i++) {
                     middleOrder.push(i);
                 }
-            }else if (currentPage>TOTAL_PAGE-3) {
-                for (let i = TOTAL_PAGE-3; i <= TOTAL_PAGE-1; i++) {
+            } else if (currentPage > TOTAL_PAGE - 3) {
+                for (let i = TOTAL_PAGE - 3; i <= TOTAL_PAGE - 1; i++) {
                     middleOrder.push(i);
                 }
             }
-            
         }
 
         // console.log("middleOrder", middleOrder);
@@ -55,58 +53,120 @@ export default function Pagination() {
     };
 
     return (
-        <nav aria-label="Page navigation example">
-            <ul className="pagination">
-                {/* previous button */}
-                <li className="page-item">
-                    <button onClick={()=>setCurrentPage((prev)=>{
-                      return prev>1?prev-1:1;
-                    })} className="page-link">Previous</button>
-                </li>
-
-                {/* first page */}
-                <li className={`page-item ${currentPage===1 && 'active'}`}>
-                    <button onClick={()=>setCurrentPage(1)} className="page-link">1</button>
-                </li>
-
-                {/* gapping */}
-                {TOTAL_PAGE > 5 && currentPage > 3 && (
+        <section
+            style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "10px",
+            }}
+        >
+            <span
+                style={{
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                }}
+            >
+                Showing {perPageItem * currentPage - (perPageItem - 1)} to{" "}
+                {perPageItem * currentPage > totalItem
+                    ? totalItem
+                    : perPageItem * currentPage}{" "}
+                of {totalItem} entries
+            </span>
+            <nav aria-label="Page navigation example">
+                <ul className="pagination">
+                    {/* previous button */}
                     <li className="page-item">
-                        <button className="page-link">...</button>
+                        <button
+                            onClick={() =>
+                                setCurrentPage((prev) => {
+                                    return prev > 1 ? prev - 1 : 1;
+                                })
+                            }
+                            className="page-link"
+                        >
+                            Previous
+                        </button>
                     </li>
-                )}
 
-                {/* middle order */}
-                {handleMiddleOrder(TOTAL_PAGE, currentPage).map((page) => {
-                    return (
-                        <li key={page} className={`page-item ${currentPage===page && 'active'}`}>
-                            <button onClick={()=>setCurrentPage(page)} className="page-link">{page}</button>
+                    {/* first page */}
+                    <li
+                        className={`page-item ${currentPage === 1 && "active"}`}
+                    >
+                        <button
+                            onClick={() => setCurrentPage(1)}
+                            className="page-link"
+                        >
+                            1
+                        </button>
+                    </li>
+
+                    {/* gapping */}
+                    {TOTAL_PAGE > 5 && currentPage > 3 && (
+                        <li className="page-item">
+                            <button className="page-link">...</button>
                         </li>
-                    );
-                })}
+                    )}
 
-                {/* gapping */}
-                {TOTAL_PAGE > 5 && currentPage<= TOTAL_PAGE-3 && (
+                    {/* middle order */}
+                    {handleMiddleOrder(TOTAL_PAGE, currentPage).map((page) => {
+                        return (
+                            <li
+                                key={page}
+                                className={`page-item ${
+                                    currentPage === page && "active"
+                                }`}
+                            >
+                                <button
+                                    onClick={() => setCurrentPage(page)}
+                                    className="page-link"
+                                >
+                                    {page}
+                                </button>
+                            </li>
+                        );
+                    })}
+
+                    {/* gapping */}
+                    {TOTAL_PAGE > 5 && currentPage <= TOTAL_PAGE - 3 && (
+                        <li className="page-item">
+                            <button className="page-link">...</button>
+                        </li>
+                    )}
+
+                    {/* last page */}
+                    {TOTAL_PAGE > 1 && (
+                        <li
+                            className={`page-item ${
+                                currentPage === TOTAL_PAGE && "active"
+                            }`}
+                        >
+                            <button
+                                onClick={() => setCurrentPage(TOTAL_PAGE)}
+                                className="page-link"
+                            >
+                                {TOTAL_PAGE}
+                            </button>
+                        </li>
+                    )}
+
+                    {/* next button */}
                     <li className="page-item">
-                        <button className="page-link">...</button>
+                        <button
+                            onClick={() =>
+                                setCurrentPage((prev) => {
+                                    return prev < TOTAL_PAGE
+                                        ? prev + 1
+                                        : TOTAL_PAGE;
+                                })
+                            }
+                            className="page-link"
+                        >
+                            Next
+                        </button>
                     </li>
-                )}
-
-                {/* last page */}
-                {TOTAL_PAGE > 1 && (
-                    <li className={`page-item ${currentPage===TOTAL_PAGE && 'active'}`}>
-                        <button onClick={()=>setCurrentPage(TOTAL_PAGE)} className="page-link">{TOTAL_PAGE}</button>
-                    </li>
-                )}
-
-                {/* next button */}
-                <li className="page-item">
-                    <button onClick={()=>setCurrentPage((prev)=>{
-                      return prev<TOTAL_PAGE?prev+1:TOTAL_PAGE;
-                    })} className="page-link">Next</button>
-                </li>
-            </ul>
-        </nav>
+                </ul>
+            </nav>
+        </section>
     );
 }
 
