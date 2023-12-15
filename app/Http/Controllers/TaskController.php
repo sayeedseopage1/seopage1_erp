@@ -4683,13 +4683,13 @@ class TaskController extends AccountBaseController
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                    $original_file_name = $file->getClientOriginalName();
+                    $originalfilename = $file->getClientOriginalName();
                     $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
                 
                   //  $filename= 
               
                     array_push($file_name, $filename);
-                    array_push($original_file_name, $original_file_name);
+                    array_push($original_file_name, $originalfilename);
 
                     // Store the file in AWS S3 using the 's3' disk
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
