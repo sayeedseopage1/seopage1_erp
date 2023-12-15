@@ -14259,6 +14259,17 @@ var SubTaskForm = function SubTaskForm(_ref) {
       }
     }
   }, []);
+
+  // page type change clear related entries
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setPageTypeOthers("");
+    setPageName("");
+    setPageURL("");
+    setNumberOfPage(0);
+    setExistingDesignLink("");
+    setPageTypePriority("");
+    setPageTypeName("");
+  }, [pageType]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
       className: "sp1-subtask-form --form row",
@@ -14429,7 +14440,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
-              className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+              className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
                 children: pageType !== null && pageType !== void 0 ? pageType : "--"
@@ -17834,20 +17845,22 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
   // check validation
   var isValid = function isValid() {
     var valid = true;
-    if (!lodash__WEBPACK_IMPORTED_MODULE_0___default().size(links) || links[0] === '') {
-      setLinkErr('You must provide at least one link to your work');
-      react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn('You must provide at least one link to your work');
-      valid = false;
-    }
-    if (lodash__WEBPACK_IMPORTED_MODULE_0___default().size(links)) {
-      lodash__WEBPACK_IMPORTED_MODULE_0___default().forEach(links, function (link) {
-        if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_13__.checkIsURL)(link)) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn('Please provide a valid url');
-          setLinkErr('Please provide a valid url');
-          valid = false;
-        }
-      });
-    }
+    // if(!_.size(links) || links[0] === ''){
+    //     setLinkErr('You must provide at least one link to your work');
+    //     toast.warn('You must provide at least one link to your work');
+    //     valid = false;
+    // }
+
+    // if(_.size(links)){
+    //     _.forEach(links, link => {
+    //         if(!checkIsURL(link)){
+    //             toast.warn('Please provide a valid url');
+    //             setLinkErr('Please provide a valid url');
+    //             valid = false;
+    //         }
+    //     })
+    // }
+
     if (comment === '') {
       setCommentErr("Please describe what you've done !");
       react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please describe what you've done!");
@@ -17930,13 +17943,11 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
                 className: "form-group",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
                   htmlFor: "exampleFormControlInput1",
-                  children: ["Submit Links What You've Done", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("sup", {
-                    children: "*"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                  children: ["Submit links to the work you've done!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
                     className: "ml-2",
                     "data-toggle": "tooltip",
                     "data-placement": "top",
-                    title: "Submit Links What You've Done",
+                    title: "Submit links to the work you've done!",
                     "data-boundary": "window",
                     style: {
                       cursor: "pointer"

@@ -3636,12 +3636,15 @@ class TaskController extends AccountBaseController
 
     public function storeTaskGuideline(Request $request)
     {
+        // dd($request->all());
         $request->validate([
+            'task_category' => 'required',
             'theme_details' => 'required',
             'design_details' => 'required',
             'color_schema' => 'required',
             'plugin_research' => 'required',
         ], [
+            'task_category.required' => 'This field is required!',
             'theme_details.required' => 'This field is required!',
             'design_details.required' => 'This field is required!',
             'color_schema.required' => 'This field is required!',
@@ -3654,6 +3657,7 @@ class TaskController extends AccountBaseController
 
         $pm_task_guideline = new PmTaskGuideline();
         $pm_task_guideline->project_id = $data['project_id'];
+        $pm_task_guideline->task_category = $data['task_category'];
         $pm_task_guideline->theme_details = $data['theme_details'];
         $pm_task_guideline->theme_name = $data['theme_name'];
         $pm_task_guideline->theme_url = $data['theme_url'];
@@ -3728,72 +3732,109 @@ class TaskController extends AccountBaseController
         $pm_task_update->save();
         $pm_task_guideline_authorization = '';
 
+        if($request->task_category == 'development'){
+            if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+                $name1 = 'Theme Details';
+                $name2 = 'Design Details';
+                $name3 = 'Color Scheme';
+                $name4 = 'Plugin Research';
 
-        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
-            $name1 = 'Theme Details';
-            $name2 = 'Design Details';
-            $name3 = 'Color Scheme';
-            $name4 = 'Plugin Research';
+                if ($data['theme_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name1;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name1;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['design_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['color_schema'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['plugin_research'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name4;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name4;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+            }
+        }else{
+            if ($data['design_details'] == 0 || $data['color_schema'] == 0) {
+                $name2 = 'Design Details';
+                $name3 = 'Color Scheme';
 
-            if ($data['theme_details'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name1;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name1;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['design_details'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name2;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name2;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['color_schema'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name3;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name3;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['plugin_research'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name4;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name4;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
+                if ($data['design_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['color_schema'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
             }
         }
         $users = User::where('role_id', 1)->get();
