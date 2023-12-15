@@ -1975,6 +1975,152 @@
             </div>
 
         </div>
+        <div class="row mt-3">
+				
+            <div class="col-sm-6 col-lg-6">
+                <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+                    <x-table class="border-0 pb-3 admin-dash-table table-hover mt-3">
+                        <x-slot name="thead">
+                            <th class="pl-20">#</th>
+                            <th>Creation Date</th>
+                            <th>Task Name</th>
+                            <th>Client Name</th>
+                            <th>Submittion date</th>
+                            <th>Current Status</th>
+                            
+                        
+                        </x-slot>
+        
+                        @forelse($tasks as $task)
+                        
+                        <tr>
+                            <td class="pl-20">{{$loop->index+1}}</td>
+                            <td>
+                               {{$task->created_at}}
+                            </td>
+                            <td>
+                                <a href="{{route('tasks.show',$task->id)}}"> {{$task->heading}}</a>
+                            
+                            </td>
+                            <td>
+                                @if($task->ProjectId != null)
+
+                                <a href="{{route('clients.show',$task->client_id)}}">{{$task->clientName}}</a>
+                                @elseif($task->task_client_name != null)
+                                {{$task->task_client_name}}
+                                @else 
+                                {{$task->cl_name}}
+
+                                @endif
+                                
+                            </td>
+        
+                            <td>
+                                @if($task->board_column_id == 2 || $task->board_column_id == 1 || $task->board_column_id == 3)
+                                N\A 
+                                @else 
+                                {{$task->submission_date}}
+                              
+                                @endif
+                                
+                            </td>
+                            <td>
+                                @php 
+
+                                @endphp
+                                <span style="color: {{ $task->label_color }}" > {{ $task->column_name }}</span>
+
+                               
+                                
+                            
+                            </td>
+                            
+                            
+                            
+                          
+                        </tr>
+                        @empty
+                        
+                        <tr>
+                            <td colspan="10" class="shadow-none">
+                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                            </td>
+                        </tr>
+                        @endforelse
+                        
+                    </x-table>
+                    
+                </x-cards.data>
+            </div>
+    
+    
+        <div class="col-sm-6 col-lg-6">
+            <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
+                <x-table class="border-0 pb-3 admin-dash-table table-hover mt-3">
+                    <x-slot name="thead">
+                        <th class="pl-20">#</th>
+                        <th>Creation Date</th>
+                        <th>task Name</th>
+                        <th>Client Name</th>
+                        <th>Current Status</th>
+                        
+                
+                    </x-slot>
+    
+                    
+                    
+                    @forelse($past_tasks as $task)
+                        
+                    <tr>
+                        <td class="pl-20">{{$loop->index+1}}</td>
+                        <td>
+                           {{$task->created_at}}
+                        </td>
+                        <td>
+                            <a href="{{route('tasks.show',$task->id)}}"> {{$task->heading}}</a>
+                        
+                        </td>
+                        <td>
+                            @if($task->ProjectId != null)
+
+                            <a href="{{route('clients.show',$task->client_id)}}">{{$task->clientName}}</a>
+                            @elseif($task->task_client_name != null)
+                            {{$task->task_client_name}}
+                            @else 
+                            {{$task->cl_name}}
+
+                            @endif
+                            
+                        </td>
+    
+                      
+                        <td>
+                            <span style="color: {{ $task->label_color }}" > {{ $task->column_name }}</span>
+
+                           
+                            
+                        
+                        </td>
+                        
+                        
+                        
+                      
+                    </tr>
+                    @empty
+                    
+                    <tr>
+                        <td colspan="10" class="shadow-none">
+                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
+                        </td>
+                    </tr>
+                    @endforelse
+                    
+                </x-table>
+            </x-cards.data>
+        </div>
+            <!-- CARD BODY START -->
+        
+       </div>
 </div>
        
         
