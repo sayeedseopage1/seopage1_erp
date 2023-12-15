@@ -4689,7 +4689,7 @@ class TaskController extends AccountBaseController
                  //   dd($file,$filename);
                 
                  $fileCoun1= TaskComment::whereJsonContains('files', '["' . $filename2 . '"]')->count();
-                 $fileCoun2= TaskFile::whereJsonContains('files', '["' . $filename2 . '"]')->count();
+                 $fileCoun2= TaskFile::whereJsonContains('filename', '["' . $filename2 . '"]')->count();
                  $file_count= $fileCoun1+ $fileCoun2;
                  dd($file_count);
                  
