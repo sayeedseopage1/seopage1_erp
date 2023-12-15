@@ -4688,7 +4688,7 @@ class TaskController extends AccountBaseController
                     $filename2= $file->getClientOriginalName();
                  //   dd($file,$filename);
                  $file_count= TaskFile::where('filename',$file)->count();
-                 dd($file_count);
+                // dd($file_count);
                  if($file_count > 0)
                  {
                     $filename = $filename2 . ' ('.$file_count.')';
