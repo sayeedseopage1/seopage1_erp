@@ -61,7 +61,7 @@ const User = ({ user: userState, setUser, change }) => {
             <span className={style.user_label}>Employee:</span>
 
             {/* drop down */}
-            <div className={`dropdown `}>
+            <div className={`dropdown`} >
                 <div
                     className={`dropdown-toggle ${style.user_field} ${
                         change ? style.white_bg : style.custom_bg

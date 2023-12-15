@@ -175,7 +175,7 @@ const CommentsContainer = ({
                     isOpen={isOpen}
                     close={close}
                     // comments={param?.taskId ? data : comments}
-                    comments={param?.taskId? singleCommentId?[...data].filter((comment)=>comment.id===singleCommentId):data : comments}
+                    comments={param?.taskId? singleCommentId?data?.filter((comment)=>comment.id===singleCommentId):data : comments}
                     // comments={demoComments}
                     loading={isFetching || isLoading}
                     refetch={refetch}
