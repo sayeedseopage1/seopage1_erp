@@ -4676,6 +4676,7 @@ class TaskController extends AccountBaseController
                 $files = $request->file('file');
                 $destinationPath = storage_path('app/public/');
                 $file_name = [];
+                $original_file_name = [];
                 // foreach ($files as $file) {
                 //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 //     array_push($file_name, $filename);
