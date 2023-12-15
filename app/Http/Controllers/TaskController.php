@@ -4682,30 +4682,19 @@ class TaskController extends AccountBaseController
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                 
-                 //   $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                    $original_file_name = $file->getClientOriginalName();
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
                 
-                    $filename2= $file->getClientOriginalName();
-                 //   dd($file,$filename);
-                
-                 $fileCoun1= TaskComment::whereJsonContains('files', '["' . $file . '"]')->count();
-                 $fileCoun2= TaskFile::whereJsonContains('filename', $file)->count();
-                 $file_count= $fileCoun1+ $fileCoun1;
-                 dd($file,$filename2,$file_count,$fileCoun2);
-                 
-                 if($file_count > 0)
-                 {
-                    $filename = $filename2 . ' ('.$file_count.')';
-                 }else 
-                 {
-                    $filename = $filename2;
-                 }
+                  //  $filename= 
+              
                     array_push($file_name, $filename);
+                    array_push($original_file_name, $original_file_name);
 
                     // Store the file in AWS S3 using the 's3' disk
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 }
                 $data->files = $file_name;
+                $data->original_files = $original_file_name;
                 $data->save();
             }
 
