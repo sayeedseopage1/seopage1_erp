@@ -8,6 +8,7 @@ import commentDemoData from "./_Data/commentDemoData";
 import { useParams } from "react-router-dom";
 import { useGetCommentsQuery } from "../../services/api/commentsApiSlice";
 import CommentContainerDecider from "./CommentContainerDecider";
+import _ from "lodash";
 
 // const demoComments = commentDemoData(20);
 
@@ -19,6 +20,7 @@ const CommentsContainer = ({
     comments = null,
     onCommentPost,
     taskId,
+    singleCommentId,
 }) => {
     // ---------------------------------------------------------
     const param = useParams();
@@ -172,12 +174,13 @@ const CommentsContainer = ({
                     setFullScreenView={setFullScreenView}
                     isOpen={isOpen}
                     close={close}
-                    comments={param?.taskId ? data : comments}
+                    // comments={param?.taskId ? data : comments}
+                    comments={param?.taskId? singleCommentId?[...data].filter((comment)=>comment.id===singleCommentId):data : comments}
                     // comments={demoComments}
                     loading={isFetching || isLoading}
                     refetch={refetch}
                     taskId={taskId ? taskId : param?.taskId}
-                    height={"84vh"}
+                    height={"89vh"}
                 />
             {/* )} */}
         </CommentContainerDecider>

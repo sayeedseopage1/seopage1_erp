@@ -987,7 +987,7 @@ class TaskController extends AccountBaseController
         }
 
         $task_status->save();
-        $actions= PendingAction::where('code','DTDA')->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
+        $actions= PendingAction::where('code','DTDA')->where('past_status',0)->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
@@ -4682,8 +4682,10 @@ class TaskController extends AccountBaseController
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                  //  dd($file);
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                 
+                 //   $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                    $filename = $file->getClientOriginalName();
+                 //   dd($file,$filename);
                     array_push($file_name, $filename);
 
                     // Store the file in AWS S3 using the 's3' disk
@@ -6570,13 +6572,15 @@ class TaskController extends AccountBaseController
                 $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
                 if($actions != null)
                 {
-                foreach ($actions as $key => $action) {
+                foreach ($actions as $key => $p_action) {
                     $project= Project::where('id',$task->project_id)->first();
 
-                        $action->authorized_by= Auth::id();
-                        $action->authorized_at= Carbon::now();
-                        $action->past_status = 1;
-                        $action->save();
+                    $action= PendingAction::where('id',$p_action->id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+
 
 
                         $project_manager= User::where('id',$project->pm_id)->first();
@@ -6646,14 +6650,13 @@ class TaskController extends AccountBaseController
                 $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
                 if($actions != null)
                 {
-                foreach ($actions as $key => $action) {
+                foreach ($actions as $key => $p_action) {
                     $project= Project::where('id',$pendingParentTasks->project_id)->first();
-
-                        $action->authorized_by= Auth::id();
-                        $action->authorized_at= Carbon::now();
-                        $action->past_status = 1;
-                        $action->save();
-
+                    $action= PendingAction::where('id',$p_action->id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
 
                         $project_manager= User::where('id',$project->pm_id)->first();
                         $client= User::where('id',$project->client_id)->first();

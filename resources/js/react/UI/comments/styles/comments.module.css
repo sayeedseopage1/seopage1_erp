@@ -214,7 +214,8 @@
   /* border: 0.15px solid #F17B7C; */
   border: 0.15px solid #f8d0d3;
   border-radius: 5px;
-  font-size: 12px;
+  font-size: 14px;
+  line-height: 14px;
   overflow: hidden;
 }
 .single_comment_deleted_title{
@@ -223,14 +224,15 @@
   /* justify-content: space-between; */
   align-items: center;
   /* gap: 0 20px; */
-  padding: 7px 11px;
+  padding: 5px 5px;
 }
 .single_comment_deleted_comment_body{
-  padding: 7px 11px;
+  padding: 5px 5px;
   /* color: #f17b7d86; */
   color: #F17B7C;
   background-color: #FFF3F4;
-  font-size: 12px;
+  font-size: 14px;
+  line-height: 14px;
 }
 .singleChat_comment_card_text_container{
   position: relative;
@@ -262,7 +264,8 @@
   /* bottom: calc(50% - 50px); */
   top: calc(50% - 7px);
   /* height: 79px; */
-  width: 94px;
+  /* width: 94px; */
+  width: 127.133px;
   /* border: solid; */
   z-index: 99;
   display: flex;
@@ -279,23 +282,25 @@
   padding: 3.5px 8px !important;
   margin: 0 !important;
   color: black;
+  /* transform: scale(1.5); */
 }
 .singleChat_comment_card_text_more_options > section:hover{
   color: black;
   background-color: #EEF9FF;
 }
 .context_icons{
-  height: 10px;
-  width: 10px;
+  height: 12px;
+  width: 12px;
 }
 .context_title{
-  font-size: 8px;
+  /* font-size: 8px; */
+  font-size: 12px;
   color: #626365;
   /* font-family: 'Poppins', sans-serif !important; */
   line-height: 0;
 }
 .singleChat_comment_card_mentioned_comment{
-  padding: 7px 11px;
+  padding: 5px 5px;
   font-style: italic;
   font-size: 10px;
   color: #6F6F6F;
@@ -303,13 +308,16 @@
   border: 0.15px solid #aaaaaa;
   border-radius: 5px 5px 0 0;
   border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);
+  overflow-wrap: anywhere;
 }
 .singleChat_comment_card_text_message{
-  padding: 7px 11px;
+  padding: 5px 5px;
   border: 0.15px solid #aaaaaa;
   background-color: #EEF9FF;
   border-radius: 5px;
-  font-size: 12px;
+  font-size: 14px;
+  line-height: 14px;
+  overflow-wrap: anywhere;
   /* width: 100%; */
 }
 .singleChat_comment_card_files{
@@ -340,6 +348,7 @@
   padding: 13.33px 33.66px;
   position: relative;
   color: #616365;
+  overflow-wrap: anywhere;
 }
 .chatInput_mentioned_comment_icon{
   width: 11.1px;
@@ -356,9 +365,11 @@
 .chatInput_mentioned_comment_text_area{
   padding-left: 11px;
   /* margin-top: 6px; */
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 12px;
   display: flex;
   flex-flow: column nowrap;
+  overflow-wrap: anywhere;
   /* gap: 5px; */
 }
 .chatInput_mentioned_comment_text_area_mssg{
@@ -406,7 +417,8 @@
   overflow-x: auto;
 }
 .chatInput_filePreview__file{
-  height: 51px;
+  /* height: 51px; */
+  height: 69px;
   width: 69px;
   position: relative;
   /* border: solid 0.5px gray; */
@@ -424,12 +436,12 @@
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  gap: 1px;
+  gap: 3px;
   /* padding: 10px 8px; */
   padding: 5px;
 }
 .chatInput_filePreview__file__fileIcon{
-  width: 20px;
+  width: 40px;
   display: inline-flex;
   align-items: center;
   cursor: pointer;
@@ -444,6 +456,7 @@
   overflow: hidden;
   text-overflow: ellipsis; 
   font-size: 8px;
+  line-height: 8px;
   font-weight: bold;
 }
 .chatInput_filePreview__file:hover{
@@ -459,7 +472,8 @@
   color: rgb(177, 177, 177) !important;
 }
 .chatInput_filePreview__addFile{
-  height: 51px;
+  /* height: 51px; */
+  height: 69px;
   min-width: 69px !important;
   max-width: 69px !important;
   /* border: solid 0.5px gray; */
@@ -504,9 +518,11 @@
 .chatInput_actions_btn_container{
   /* border: solid; */
   padding-top: 5px;
+  flex: 0 0 40px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  align-self: flex-end;
   gap: 8px;
 }
 .chatInput_actions_btn_send{

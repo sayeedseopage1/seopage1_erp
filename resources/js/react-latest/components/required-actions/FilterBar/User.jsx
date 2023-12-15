@@ -6,6 +6,7 @@ import { useCallback } from "react";
 import { FaAngleDown } from "react-icons/fa";
 import { User as USER } from "../../../utils/user-details";
 import Person from "../utils/Person";
+import _ from "lodash";
 
 const currentUser = new USER(window.Laravel.user);
 
@@ -21,29 +22,33 @@ const User = ({ user: userState, setUser, change }) => {
     }, []);
 
     useEffect(() => {
-        const filteredUser = [...users].filter((user) => {
-            if (
-                user.role_id === 1 ||
-                user.role_id === 2 ||
-                user.role_id === 3 ||
-                // user.role_id === 8 ||
-                user.role_id === currentUser.roleId ||
-                !user.role_id
-            ) {
-                return false;
-            } else {
-                return true;
+        const filteredUser = _.orderBy(_.uniqBy([...users],"name"), ["name"], ["asc"]).filter(
+            (user) => {
+                if (
+                    // user.role_id === 1 ||
+                    user.role_id === 2 ||
+                    user.role_id === 3 ||
+                    // user.role_id === 8 ||
+                    user.id === currentUser.id ||
+                    !user.role_id
+                ) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
-        });
+        );
         // console.log(filteredUser);
-        setAllUser(filteredUser);
+        setAllUser([window.Laravel.user, ...filteredUser]);
     }, [users]);
 
     useEffect(() => {
         if (searchUser) {
             const filter = [...allUser].filter((user) => {
                 // console.log(user.name.toLowerCase(), searchUser.toLowerCase());
-                return user.name.toLowerCase().includes(searchUser.toLowerCase());
+                return user.name
+                    .toLowerCase()
+                    .includes(searchUser.toLowerCase());
             });
             setFilteredUser(filter);
         } else {
@@ -65,9 +70,10 @@ const User = ({ user: userState, setUser, change }) => {
                     data-toggle="dropdown"
                     aria-expanded="false"
                 >
-                    {userState?.id === window.Laravel.user.id
+                    {/* {userState?.id === window.Laravel.user.id
                         ? "Admin"
-                        : userState?.name}
+                        : userState?.name} */}
+                    {userState?.name}
                     <FaAngleDown className={`${style.user_field_down_arrow}`} />
                 </div>
                 <div
@@ -83,16 +89,15 @@ const User = ({ user: userState, setUser, change }) => {
                     <section
                         className={`${style.user_field_dropdown_container_btn_group}`}
                     >
-                        <button
+                        {/* <button
                             onClick={() => {
                                 setSearchUser("");
                                 setUser(window.Laravel.user);
                             }}
                             className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
                         >
-                            {/* Admin */}
-                            <Person name={"Admin"} avatar={'http://127.0.0.1:8000/user-uploads/avatar/avatar_blank.png'}/>
-                        </button>
+                            <Person name={"current user"} avatar={'http://127.0.0.1:8000/user-uploads/avatar/avatar_blank.png'}/>
+                        </button> */}
                         {!isFetching &&
                             [...filteredUser].map((user) => {
                                 return (
@@ -108,7 +113,27 @@ const User = ({ user: userState, setUser, change }) => {
                                         className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
                                     >
                                         {/* {user.name} */}
-                                        <Person name={user.name} avatar={user.image_url}/>
+                                        <Person
+                                            name={user.name}
+                                            avatar={user.image_url}
+                                        />
+                                        {user?.id === currentUser?.id ? (
+                                            <div
+                                                className={`${style.user_field_dropdown_container_current_user_indicator}`}
+                                            >
+                                                It's you
+                                            </div>
+                                        ) : user?.role_id === 1 ||
+                                          user?.role_id === 8 ||
+                                          user?.role_id === 11 ? (
+                                            <div
+                                                className={`${style.user_field_dropdown_container_current_user_indicator}`}
+                                            >
+                                                Admin
+                                            </div>
+                                        ) : (
+                                            <></>
+                                        )}
                                     </button>
                                 );
                             })}
