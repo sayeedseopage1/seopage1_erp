@@ -455,7 +455,7 @@ const SingleChat = ({
                                                                         >
                                                                             <HandleFileIcon
                                                                                 fileName={
-                                                                                    file?.name
+                                                                                    comment.original_files[i]
                                                                                 }
                                                                                 URL={
                                                                                     file?.url
