@@ -4684,8 +4684,17 @@ class TaskController extends AccountBaseController
                 foreach ($files as $file) {
                  
                  //   $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
-                    $filename = $file->getClientOriginalName();
+                
+                    $filename2= $file->getClientOriginalName();
                  //   dd($file,$filename);
+                 $file_count= TaskFile::where('filename',$filename2)->count();
+                 if($file_count > 0)
+                 {
+                    $filename = $filename2 . ' ('.$file_count.')';
+                 }else 
+                 {
+                    $filename = $filename2;
+                 }
                     array_push($file_name, $filename);
 
                     // Store the file in AWS S3 using the 's3' disk
