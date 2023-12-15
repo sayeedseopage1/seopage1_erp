@@ -69,6 +69,10 @@
         .line-height-30 {
             line-height: 30px;
         }
+        .history-color {
+    color: /* Your color value here */;
+}
+
     </style>
 @endpush
 @section('content')
@@ -2025,10 +2029,9 @@
                                 
                             </td>
                             <td>
-                                @php 
-
-                                @endphp
-                                <span style="color: {{ $task->label_color }}" > {{ $task->column_name }}</span>
+                                <span class="task-status" data-task-id="{{ $task->id }}" style="color: {{ $task->label_color }}; cursor:pointer">
+                                    {{ $task->column_name }}
+                                </span>
 
                                
                                 
@@ -2095,7 +2098,9 @@
     
                       
                         <td>
-                            <span style="color: {{ $task->label_color }}" > {{ $task->column_name }}</span>
+                            <span class="task-status" data-task-id="{{ $task->id }}" style="color: {{ $task->label_color }}; cursor:pointer">
+                                {{ $task->column_name }}
+                            </span>
 
                            
                             
@@ -2700,7 +2705,50 @@
                 });
             }
         });
+        $(document).ready(function () {
+        // Enable Bootstrap popovers
+        $('[data-toggle="popover"]').popover();
 
+        // Handle click on task status element
+        $('.task-status').on('click', function () {
+            var taskId = $(this).data('task-id');
+            var url = '{{ route('task_history_dashboard', ':taskId') }}'.replace(':taskId', taskId);
+
+            // Reference 'this' to use inside the AJAX success function
+            var self = $(this);
+
+            // Make an AJAX request to fetch task history data
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                console.log(data);
+                    // Format the task history data for display in the popover
+                    var popoverContent = '<ul >';
+                    $.each(data, function (index, history) {
+                        
+                        // popoverContent += '<li class="history_color">' + history.column_name + ' (' + history?.created_on + ')</li>';
+                        popoverContent += `<li> ${history.column_name} (${history.created_on}) </li>`;
+                     
+
+                    });
+                    popoverContent += '</ul>';
+
+                    // Open a Bootstrap popover and display the task history data
+                    self.popover({
+                        content: popoverContent,
+                        html: true,
+                        title: 'Task History',
+                        placement: 'auto',
+                        trigger: 'manual' // Set trigger to 'manual' to control popover manually
+                    }).popover('show');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching task history:', error);
+                }
+            });
+        });
+    });
     </script>
 @endif
 @endpush

@@ -44,6 +44,7 @@ use App\Models\DeveloperStopTimer;
 use Auth;
 use App\Models\Attendance;
 use App\Models\DailySubmission;
+use App\Models\TaskHistory;
 
 use function PHPUnit\Framework\isNull;
 
@@ -777,5 +778,21 @@ class DashboardController extends AccountBaseController
         $stop_time->save();
 
         return response()->json(['status'=>200]);
+    }
+    public function task_history($id)
+    {
+        $status_history= TaskHistory::select('task_history.id','task_history.created_at as created_on',
+        'taskboard_columns.column_name','taskboard_columns.label_color'
+        )
+        ->leftJoin('taskboard_columns','taskboard_columns.id','task_history.board_column_id')
+        ->where('task_history.task_id',$id)
+       
+        ->where('task_history.board_column_id','!=',null)
+        ->groupBy('task_history.id','task_history.created_at')
+      
+        ->orderBy('task_history.created_at','desc')
+        ->get();
+      //  dd($status_history);
+        return response()->json($status_history);
     }
   }
