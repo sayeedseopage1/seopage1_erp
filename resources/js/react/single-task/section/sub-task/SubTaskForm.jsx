@@ -312,6 +312,7 @@ const SubTaskForm = ({ close }) => {
             }
         }
 
+            
 
 
             // check violation words
@@ -391,7 +392,19 @@ const SubTaskForm = ({ close }) => {
         }
     }, [])
 
+ 
+    // page type change clear related entries
+    useEffect(() => { 
+        setPageTypeOthers("");
+        setPageName("")
+        setPageURL("")
+        setNumberOfPage(0);
+        setExistingDesignLink("");
+        setPageTypePriority("");
+        setPageTypeName("");
+    }, [pageType]);
 
+     
     return (
         <React.Fragment>
             <div className="sp1-subtask-form --form row">
@@ -582,7 +595,8 @@ const SubTaskForm = ({ close }) => {
                     <Listbox value={pageType} onChange={setPageType}>
                         <div className="form-group position-relative my-3">
                             <label htmlFor=""> Task Type <sup>*</sup> </label>
-                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                            <Listbox.Button 
+                                className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                 <span className="singleline-ellipsis pr-3">
                                     {pageType ?? "--"}
                                 </span>

@@ -141,9 +141,29 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             const d = data?.pm_task_guideline_authorization[index];
             let status = d?.status;
             if(Number(status) === 2){
-                return <span className="badge badge-warning"> Rejected </span>
+                return(
+                    <>
+                        <span className="badge badge-warning"> Rejected </span>
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, theme_details: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button> 
+                    </>
+                )
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span>
+                return(
+                    <>
+                        <span className="badge badge-warning"> Pending </span>
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, theme_details: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button> 
+                    </>
+                )
             }else if(Number(status) === 1) {
                 return <span className="badge badge-success"> Approved </span>
             }
@@ -159,9 +179,29 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             const d = data?.pm_task_guideline_authorization[index];
             let status = d?.status;
             if(Number(status) === 2){
-                return <span className="badge badge-warning"> Rejected </span>
+                return (
+                    <>
+                        <span className="badge badge-warning"> Rejected </span>
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, design_details: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button>
+                    </>
+                )
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span>
+                return (
+                    <>
+                        <span className="badge badge-warning"> Pending </span>
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, design_details: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button>
+                    </>
+                )
             }else if(Number(status) === 1) {
                 return <span className="badge badge-success"> Approved </span>
             }
@@ -178,9 +218,30 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             const d = data?.pm_task_guideline_authorization[index];
             let status = d?.status;
             if(Number(status) === 2){
-                return <span className="badge badge-warning"> Rejected </span>
+                return(
+                    <>
+                        <span className="badge badge-warning"> Rejected </span> 
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, color_schema: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button> 
+                    </>
+                ) 
+
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span>
+                return (
+                    <>
+                        <span className="badge badge-warning"> Pending </span>
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, color_schema: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button>  
+                    </>
+                )
             }else if(Number(status) === 1) {
                 return <span className="badge badge-success"> Approved </span>
             }
@@ -196,9 +257,30 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             const d = data?.pm_task_guideline_authorization[index];
             let status = d?.status;
             if(Number(status) === 2){
-                return <span className="badge badge-warning"> Rejected </span>
+                return(
+                    <>
+                        <span className="badge badge-warning"> Rejected </span>
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, plugin_research: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button>
+                    </>
+                ) 
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span>
+                return(
+                    <>
+                        <span className="badge badge-warning"> Pending </span>
+                        <button
+                            onClick={() => setEdit(prev => ({...prev, plugin_research: true}))}
+                            className="badge badge-secondary ml-1"
+                        >
+                            Edit
+                        </button>
+                    </>
+                ) 
+                 
             }else if(Number(status) === 1) {
                 return <span className="badge badge-success"> Approved </span>
             }
@@ -412,8 +494,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         if(isValide()){
             await updateProjectGuideline(formData)
             .unwrap()
-            .then(res => {
-                console.log(res)
+            .then(res => { 
                 toast.success('Task Guideline Update Successfully');
                 close();
             })
@@ -465,12 +546,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
                                                     {themeDetailsAuthorizedStatus()}
-                                                    <button
-                                                        onClick={() => setEdit(prev => ({...prev, theme_details: true}))}
-                                                        className="badge badge-secondary ml-1"
-                                                    >
-                                                        Edit
-                                                    </button>
+                                                   
                                                 </>
                                             }
                                         </label>
@@ -567,12 +643,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
                                                    {designDetailsAuthorizedStatus()}
-                                                    <button
-                                                        onClick={() => setEdit(prev => ({...prev, design_details: true}))}
-                                                        className="badge badge-secondary ml-1"
-                                                    >
-                                                        Edit
-                                                    </button>
+                                                    
                                                 </>
                                             }
                                         </label>
@@ -748,12 +819,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
                                                     {colorSchemaAuthorizedStatus()}
-                                                    <button
-                                                        onClick={() => setEdit(prev => ({...prev, color_schema: true}))}
-                                                        className="badge badge-secondary ml-1"
-                                                    >
-                                                        Edit
-                                                    </button>
+                                                    
                                                 </>
                                             }
                                         </label>
@@ -929,13 +995,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                             {pluginResearchAuthorized() ?
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
-                                                    {pluginResearchAuthorizedStatus()}
-                                                    <button
-                                                        onClick={() => setEdit(prev => ({...prev, plugin_research: true}))}
-                                                        className="badge badge-secondary ml-1"
-                                                    >
-                                                        Edit
-                                                    </button>
+                                                    {pluginResearchAuthorizedStatus()} 
                                                 </>
                                             }
                                         </label>
