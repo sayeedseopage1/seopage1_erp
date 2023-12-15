@@ -795,6 +795,7 @@
                                     {{-- @endif --}}
 
                                 </div>
+                                
                                 @include('contracts.modals.client_dealaddstagemodal')
                                 @include('contracts.modals.dealaddstagemodal')
                                 @include('contracts.modals.deallostmodal')

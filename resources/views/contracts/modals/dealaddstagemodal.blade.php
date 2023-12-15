@@ -237,14 +237,13 @@
 
 
                         </select>
-                    </div>
-
+                    </div> 
                     <div class="mt-3" id="timerss">
 
                         <h2><strong>Project Award Time <span style="color:red;">*<span></strong>
                             <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Project Award Time" data-html="true" data-trigger="hover"></i>
                         </h2>
-
+                         
                         <input type="text" id="date-format" name="award_time" value="{{old('award_time')}}" class="form-control height-35 f-14 floating-label" placeholder="Select Exact Award Time" >
                         <label id="awardTimeError" class="text-danger" for=""></label>
                     </div>
@@ -280,7 +279,8 @@
             }
         });
     }
-</script>
+</script> 
+ 
 <script type="text/javascript">
     $(document).ready(function()
     {
@@ -301,6 +301,8 @@
         ({
             format: 'DD-MM-YYYY HH:mm:ss'
         });
+
+       
         $('#date-fr').bootstrapMaterialDatePicker
         ({
             format: 'DD/MM/YYYY HH:mm',
@@ -326,10 +328,10 @@
         $('#min-date').bootstrapMaterialDatePicker({ format : 'DD/MM/YYYY HH:mm', minDate : new Date() });
 
         $.material.init()
-    });
-
-
+    }); 
+  
 </script>
+ 
 <script>
     $('#createWonDealBtn').click(function(e){
         // alert("success");

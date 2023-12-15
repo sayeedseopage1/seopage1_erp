@@ -14212,6 +14212,17 @@ var SubTaskForm = function SubTaskForm(_ref) {
       }
     }
   }, []);
+
+  // page type change clear related entries
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setPageTypeOthers("");
+    setPageName("");
+    setPageURL("");
+    setNumberOfPage(0);
+    setExistingDesignLink("");
+    setPageTypePriority("");
+    setPageTypeName("");
+  }, [pageType]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
       className: "sp1-subtask-form --form row",
@@ -14382,7 +14393,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
-              className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+              className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
                 children: pageType !== null && pageType !== void 0 ? pageType : "--"
