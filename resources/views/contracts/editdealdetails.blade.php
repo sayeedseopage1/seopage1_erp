@@ -850,7 +850,9 @@
                     'client_email': document.getElementById("client_email").value,
                     'profile_link': document.getElementById("profile_link").value,
                     'deal_category': document.getElementById("deal_category").value,
+                    @if ($deal->cms_id && $deal->cms_name)
                     'cms_id': document.getElementById("cms_id").value,
+                    @endif
                     'message_link': message_links_values,
                     'description2': description2,
                     'description3': description3,
@@ -1033,7 +1035,9 @@
                     'profile_link': document.getElementById("profile_link").value,
                     'long_project': document.getElementById("long_project").value,
                     'deal_category': document.getElementById("deal_category").value,
+                    @if ($deal->cms_id && $deal->cms_name)
                     'cms_id': document.getElementById("cms_id").value,
+                    @endif
                     'hubstaff_tracking': hubstaff_tracking,
                     'message_link': message_links_values,
                     'description2': description2,
