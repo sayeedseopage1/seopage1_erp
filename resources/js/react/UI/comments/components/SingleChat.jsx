@@ -290,6 +290,7 @@ const SingleChat = ({
                         : "row",
                 }}
             >
+                {/* comment selection checkmark */}
                 {[...Object.keys(selectedComments)].length > 0 ? (
                     <span
                         style={{
@@ -311,6 +312,8 @@ const SingleChat = ({
                 ) : (
                     <></>
                 )}
+
+                {/* comment card */}
                 <section
                     id="comment-card"
                     className={`${style.singleChat_comment_card}`}
@@ -442,7 +445,7 @@ const SingleChat = ({
                                                         >
                                                             {comment?.mention?.files_data?.map(
                                                                 (file, i) => {
-                                                                    console.log(comment?.mention?.original_files);
+                                                                    // console.log(comment?.mention?.original_files);
                                                                     return (
                                                                         <div
                                                                             key={
@@ -610,7 +613,7 @@ const SingleChat = ({
                                                 >
                                                     {comment?.mention?.files_data?.map(
                                                         (file, i) => {
-                                                            console.log(comment.original_files);
+                                                            // console.log(comment.original_files);
                                                             return (
                                                                 <div
                                                                     key={i}
@@ -891,14 +894,14 @@ const FileView = ({
         >
             {[...files]?.length ? (
                 [...files]?.map((file, i) => {
-                    console.log(comment);
+                    // console.log(comment);
                     return (
                         <div
                             key={i}
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
                             <HandleFileIcon
-                                fileName={comment.original_files}
+                                fileName={comment.original_files[i]}
                                 URL={file?.url}
                             />
                         </div>
