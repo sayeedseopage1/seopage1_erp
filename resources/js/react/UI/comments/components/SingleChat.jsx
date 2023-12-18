@@ -445,7 +445,7 @@ const SingleChat = ({
                                                         >
                                                             {comment?.mention?.files_data?.map(
                                                                 (file, i) => {
-                                                                    console.log(comment?.mention?.original_files);
+                                                                    // console.log(comment?.mention?.original_files);
                                                                     return (
                                                                         <div
                                                                             key={
@@ -613,7 +613,7 @@ const SingleChat = ({
                                                 >
                                                     {comment?.mention?.files_data?.map(
                                                         (file, i) => {
-                                                            console.log(comment.original_files);
+                                                            // console.log(comment.original_files);
                                                             return (
                                                                 <div
                                                                     key={i}
@@ -894,7 +894,7 @@ const FileView = ({
         >
             {[...files]?.length ? (
                 [...files]?.map((file, i) => {
-                    console.log(comment);
+                    // console.log(comment);
                     return (
                         <div
                             key={i}

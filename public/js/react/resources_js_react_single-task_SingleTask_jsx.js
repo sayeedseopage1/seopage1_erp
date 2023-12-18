@@ -2164,7 +2164,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var currentUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_7__.User(window.Laravel.user);
 var SingleChat = function SingleChat(_ref) {
-  var _comment$user8, _comment$user9, _comment$mention, _comment$mention2, _comment$mention3, _comment$mention4, _comment$mention7, _comment$mention8, _comment$files_data, _comment$user10, _comment$user11, _comment$mention9, _comment$mention10, _comment$mention11, _comment$mention13, _comment$mention14, _comment$files_data2, _comment$user12;
+  var _comment$user8, _comment$user9, _comment$mention, _comment$mention2, _comment$mention3, _comment$mention4, _comment$mention6, _comment$mention7, _comment$files_data, _comment$user10, _comment$user11, _comment$mention8, _comment$mention9, _comment$mention10, _comment$mention12, _comment$mention13, _comment$files_data2, _comment$user12;
   var id = _ref.id,
     comment = _ref.comment,
     prevComment = _ref.prevComment,
@@ -2478,15 +2478,15 @@ var SingleChat = function SingleChat(_ref) {
                   }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention3 = comment.mention) !== null && _comment$mention3 !== void 0 && (_comment$mention3 = _comment$mention3.files_data) !== null && _comment$mention3 !== void 0 && _comment$mention3.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
                     children: comment === null || comment === void 0 || (_comment$mention4 = comment.mention) === null || _comment$mention4 === void 0 || (_comment$mention4 = _comment$mention4.files_data) === null || _comment$mention4 === void 0 ? void 0 : _comment$mention4.map(function (file, i) {
-                      var _comment$mention5, _comment$mention6;
-                      console.log(comment === null || comment === void 0 || (_comment$mention5 = comment.mention) === null || _comment$mention5 === void 0 ? void 0 : _comment$mention5.original_files);
+                      var _comment$mention5;
+                      // console.log(comment?.mention?.original_files);
                       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
                         style: {
                           color: "#F17B7C"
                         },
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                          fileName: comment === null || comment === void 0 || (_comment$mention6 = comment.mention) === null || _comment$mention6 === void 0 ? void 0 : _comment$mention6.original_files[i],
+                          fileName: comment === null || comment === void 0 || (_comment$mention5 = comment.mention) === null || _comment$mention5 === void 0 ? void 0 : _comment$mention5.original_files[i],
                           URL: file === null || file === void 0 ? void 0 : file.url
                         })
                       }, i);
@@ -2496,7 +2496,7 @@ var SingleChat = function SingleChat(_ref) {
                       fontStyle: "italic"
                     },
                     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_sender_time),
-                    children: "".concat(comment === null || comment === void 0 || (_comment$mention7 = comment.mention) === null || _comment$mention7 === void 0 || (_comment$mention7 = _comment$mention7.user) === null || _comment$mention7 === void 0 ? void 0 : _comment$mention7.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention8 = comment.mention) === null || _comment$mention8 === void 0 ? void 0 : _comment$mention8.created_date).format("MMM DD, YYYY, hh:mm A"))
+                    children: "".concat(comment === null || comment === void 0 || (_comment$mention6 = comment.mention) === null || _comment$mention6 === void 0 || (_comment$mention6 = _comment$mention6.user) === null || _comment$mention6 === void 0 ? void 0 : _comment$mention6.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention7 = comment.mention) === null || _comment$mention7 === void 0 ? void 0 : _comment$mention7.created_date).format("MMM DD, YYYY, hh:mm A"))
                   })]
                 })]
               }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
@@ -2561,22 +2561,22 @@ var SingleChat = function SingleChat(_ref) {
                 className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_icon)
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("article", {
                 className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area),
-                children: [comment !== null && comment !== void 0 && (_comment$mention9 = comment.mention) !== null && _comment$mention9 !== void 0 && _comment$mention9.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                children: [comment !== null && comment !== void 0 && (_comment$mention8 = comment.mention) !== null && _comment$mention8 !== void 0 && _comment$mention8.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_mssg),
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                     dangerouslySetInnerHTML: {
                       __html: comment === null || comment === void 0 ? void 0 : comment.mention.comment
                     }
                   })
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention10 = comment.mention) !== null && _comment$mention10 !== void 0 && (_comment$mention10 = _comment$mention10.files_data) !== null && _comment$mention10 !== void 0 && _comment$mention10.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention9 = comment.mention) !== null && _comment$mention9 !== void 0 && (_comment$mention9 = _comment$mention9.files_data) !== null && _comment$mention9 !== void 0 && _comment$mention9.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
-                  children: comment === null || comment === void 0 || (_comment$mention11 = comment.mention) === null || _comment$mention11 === void 0 || (_comment$mention11 = _comment$mention11.files_data) === null || _comment$mention11 === void 0 ? void 0 : _comment$mention11.map(function (file, i) {
-                    var _comment$mention12;
-                    console.log(comment.original_files);
+                  children: comment === null || comment === void 0 || (_comment$mention10 = comment.mention) === null || _comment$mention10 === void 0 || (_comment$mention10 = _comment$mention10.files_data) === null || _comment$mention10 === void 0 ? void 0 : _comment$mention10.map(function (file, i) {
+                    var _comment$mention11;
+                    // console.log(comment.original_files);
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                        fileName: comment === null || comment === void 0 || (_comment$mention12 = comment.mention) === null || _comment$mention12 === void 0 ? void 0 : _comment$mention12.original_files[i],
+                        fileName: comment === null || comment === void 0 || (_comment$mention11 = comment.mention) === null || _comment$mention11 === void 0 ? void 0 : _comment$mention11.original_files[i],
                         URL: file === null || file === void 0 ? void 0 : file.url
                       })
                     }, i);
@@ -2586,7 +2586,7 @@ var SingleChat = function SingleChat(_ref) {
                     fontStyle: "italic"
                   },
                   className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_sender_time),
-                  children: "".concat(comment === null || comment === void 0 || (_comment$mention13 = comment.mention) === null || _comment$mention13 === void 0 || (_comment$mention13 = _comment$mention13.user) === null || _comment$mention13 === void 0 ? void 0 : _comment$mention13.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention14 = comment.mention) === null || _comment$mention14 === void 0 ? void 0 : _comment$mention14.mention_created_at).format("MMM DD, YYYY, hh:mm A"))
+                  children: "".concat(comment === null || comment === void 0 || (_comment$mention12 = comment.mention) === null || _comment$mention12 === void 0 || (_comment$mention12 = _comment$mention12.user) === null || _comment$mention12 === void 0 ? void 0 : _comment$mention12.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention13 = comment.mention) === null || _comment$mention13 === void 0 ? void 0 : _comment$mention13.mention_created_at).format("MMM DD, YYYY, hh:mm A"))
                 })]
               })]
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
@@ -2655,7 +2655,7 @@ var FileView = function FileView(_ref5) {
     },
     className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_files),
     children: (_ref6 = _toConsumableArray(files)) !== null && _ref6 !== void 0 && _ref6.length ? (_ref7 = _toConsumableArray(files)) === null || _ref7 === void 0 ? void 0 : _ref7.map(function (file, i) {
-      console.log(comment);
+      // console.log(comment);
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
