@@ -357,6 +357,7 @@
                                         <span id="deal_category_error" class="text-danger"></span>
                                     </div>
                                 </div>
+                                @if($deal->cms_id && $deal->cms_name)
                                 <div class="col-md-6">
                                     <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_cms">Project CMS
                                         <sup class="f-14 mr-1">*</sup>
@@ -373,6 +374,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                           <br>
                           <div class="row">
