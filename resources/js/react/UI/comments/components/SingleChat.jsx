@@ -25,6 +25,8 @@ const SingleChat = ({
     onKeyDown,
     idMatch,
     handleDeleteSingleComment,
+    selectMentionIndex,
+    setSelectMentionIndex,
 }) => {
     const {
         setContextHolder,
@@ -217,10 +219,11 @@ const SingleChat = ({
     const handleCopySingleComment = (comment) => {
         const SelectedCommentsString = [comment].reduce(
             (total, comment, i, arr) => {
-                total += `${htmlToString(comment?.comment)}\n\n${comment?.user?.name
-                    }, ${dayjs(comment?.created_date).format(
-                        "MMM DD, YYYY, hh:mm A"
-                    )}`;
+                total += `${htmlToString(comment?.comment)}\n\n${
+                    comment?.user?.name
+                }, ${dayjs(comment?.created_date).format(
+                    "MMM DD, YYYY, hh:mm A"
+                )}`;
 
                 if (i < arr.length - 1) {
                     total += "\n\n\n";
@@ -352,22 +355,29 @@ const SingleChat = ({
                                             : "0",
                                         gap:
                                             currentUser.roleId === 1 ||
-                                                currentUser.roleId === 8
+                                            currentUser.roleId === 8
                                                 ? "0 20px"
                                                 : "0",
                                         justifyContent:
                                             currentUser.roleId === 1 ||
-                                                currentUser.roleId === 8
+                                            currentUser.roleId === 8
                                                 ? "space-between"
                                                 : "center",
                                     }}
                                     className={`${style.single_comment_deleted_title}`}
                                 >
-                                    <span>This Comment has been deleted {showDeletedComment ? `(Deleted at : ${dayjs(comment?.deleted_at).format(
-                                        "MMM DD, YYYY, hh:mm A"
-                                    )})` : ''}</span>
+                                    <span>
+                                        This Comment has been deleted{" "}
+                                        {showDeletedComment
+                                            ? `(Deleted at : ${dayjs(
+                                                  comment?.deleted_at
+                                              ).format(
+                                                  "MMM DD, YYYY, hh:mm A"
+                                              )})`
+                                            : ""}
+                                    </span>
                                     {currentUser.roleId === 1 ||
-                                        currentUser.roleId === 8 ? (
+                                    currentUser.roleId === 8 ? (
                                         showDeletedComment ? (
                                             <FaEyeSlash
                                                 onClick={() =>
@@ -394,6 +404,11 @@ const SingleChat = ({
                                         {/* mentioned comment */}
                                         {comment?.mention ? (
                                             <div
+                                                onClick={() =>
+                                                    setSelectMentionIndex(
+                                                        comment?.mention?.id
+                                                    )
+                                                }
                                                 // onContextMenu={(e) => {
                                                 //     onContextMenu(e);
                                                 //     setContextHolder(comment);
@@ -458,7 +473,15 @@ const SingleChat = ({
                                                                         >
                                                                             <HandleFileIcon
                                                                                 fileName={
-                                                                                    comment?.mention?.original_files[i]
+                                                                                    comment
+                                                                                        ?.mention
+                                                                                        ?.original_files
+                                                                                        ? comment
+                                                                                              ?.mention
+                                                                                              ?.original_files[
+                                                                                              i
+                                                                                          ]
+                                                                                        : file.name
                                                                                 }
                                                                                 URL={
                                                                                     file?.url
@@ -479,14 +502,15 @@ const SingleChat = ({
                                                         className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
                                                     >
                                                         {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                                                        {`${comment?.mention
-                                                            ?.user?.name
-                                                            }, ${dayjs(
-                                                                comment?.mention
-                                                                    ?.created_date
-                                                            ).format(
-                                                                "MMM DD, YYYY, hh:mm A"
-                                                            )}`}
+                                                        {`${
+                                                            comment?.mention
+                                                                ?.user?.name
+                                                        }, ${dayjs(
+                                                            comment?.mention
+                                                                ?.created_date
+                                                        ).format(
+                                                            "MMM DD, YYYY, hh:mm A"
+                                                        )}`}
                                                     </span>
                                                 </article>
                                             </div>
@@ -563,13 +587,20 @@ const SingleChat = ({
                                         ? "flex-end"
                                         : "flex-start",
                                 }}
-                                className={`${style.singleChat_comment_card_text_container
-                                    } ${idMatch ? `${style.singleChat_match}` : ""
-                                    }`}
+                                className={`${
+                                    style.singleChat_comment_card_text_container
+                                } ${
+                                    idMatch ? `${style.singleChat_match}` : ""
+                                } ${selectMentionIndex===comment?.id? `${style.singleChat_match}`:""}`}
                             >
                                 {/* mentioned comment */}
                                 {comment?.mention ? (
                                     <div
+                                        onClick={() =>
+                                            setSelectMentionIndex(
+                                                comment?.mention?.id
+                                            )
+                                        }
                                         onContextMenu={(e) => {
                                             onContextMenu(e);
                                             setContextHolder(comment);
@@ -621,7 +652,15 @@ const SingleChat = ({
                                                                 >
                                                                     <HandleFileIcon
                                                                         fileName={
-                                                                            comment?.mention?.original_files[i]
+                                                                            comment
+                                                                                ?.mention
+                                                                                ?.original_files
+                                                                                ? comment
+                                                                                      ?.mention
+                                                                                      ?.original_files[
+                                                                                      i
+                                                                                  ]
+                                                                                : file.name
                                                                         }
                                                                         URL={
                                                                             file?.url
@@ -640,13 +679,14 @@ const SingleChat = ({
                                                 className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
                                             >
                                                 {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                                                {`${comment?.mention?.user?.name
-                                                    }, ${dayjs(
-                                                        comment?.mention
-                                                            ?.mention_created_at
-                                                    ).format(
-                                                        "MMM DD, YYYY, hh:mm A"
-                                                    )}`}
+                                                {`${
+                                                    comment?.mention?.user?.name
+                                                }, ${dayjs(
+                                                    comment?.mention
+                                                        ?.mention_created_at
+                                                ).format(
+                                                    "MMM DD, YYYY, hh:mm A"
+                                                )}`}
                                             </span>
                                         </article>
                                     </div>
@@ -702,142 +742,7 @@ const SingleChat = ({
                                     <></>
                                 )}
 
-                                {/* comment more btn */}
-                                {/* <span
-                                    onClick={() => {
-                                        // setScroll((prev) => !prev);
-                                        setShowCommentMenu((prev) => !prev);
-                                    }}
-                                    style={{
-                                        left: isCurrentUser(comment?.user?.id)
-                                            ? "-14px"
-                                            : "auto",
-                                        right: isCurrentUser(comment?.user?.id)
-                                            ? "auto"
-                                            : "-14px",
-                                    }}
-                                    className={`${style.singleChat_comment_card_text_more_btn}`}
-                                    ref={menuBtnRef}
-                                >
-                                    <FiMoreVertical
-                                        style={{
-                                            height: "100%",
-                                            width: "100%",
-                                        }}
-                                    />
-                                </span> */}
-
-                                {/* comment more options */}
-                                {/* {showCommentMenu ? (
-                                    <div
-                                        ref={menuRef}
-                                        style={{
-                                            left: isCurrentUser(
-                                                comment?.user?.id
-                                            )
-                                                ? "-131.133px"
-                                                : "auto",
-                                            right: isCurrentUser(
-                                                comment?.user?.id
-                                            )
-                                                ? "auto"
-                                                : "-131.133px",
-                                        }}
-                                        className={
-                                            style.singleChat_comment_card_text_more_options
-                                        }
-                                    >
-                                        <section
-                                            onClick={() => {
-                                                setShowCommentMenu(false);
-                                                setMentionedComment(comment);
-                                            }}
-                                        >
-                                            <HiReply
-                                                className={`${style.context_icons}`}
-                                            />
-                                            <span
-                                                className={`${style.context_title}`}
-                                            >
-                                                Reply
-                                            </span>
-                                        </section>
-
-                                        <section
-                                            onClick={() => {
-                                                setShowCommentMenu(false);
-                                                handleSelect();
-                                            }}
-                                        >
-                                            <TbMessage2Check
-                                                className={`${style.context_icons}`}
-                                            />
-                                            <span
-                                                className={`${style.context_title}`}
-                                            >
-                                                Select Message
-                                            </span>
-                                        </section>
-
-                                        <section
-                                            onClick={() => {
-                                                setShowCommentMenu(false);
-                                                handleCopySingleComment(
-                                                    comment
-                                                );
-                                            }}
-                                        >
-                                            <MdOutlineContentCopy
-                                                className={`${style.context_icons}`}
-                                            />
-                                            <span
-                                                className={`${style.context_title}`}
-                                            >
-                                                Copy
-                                            </span>
-                                        </section>
-
-                                        {isCurrentUser(comment?.user?.id) ? (
-                                            <section
-                                                onClick={() => {
-                                                    setShowCommentMenu(false);
-                                                    handleDeleteSingleComment(
-                                                        comment
-                                                    );
-                                                }}
-                                            >
-                                                <IoMdCloseCircleOutline
-                                                    className={`${style.context_icons}`}
-                                                />
-                                                <span
-                                                    className={`${style.context_title}`}
-                                                >
-                                                    Remove
-                                                </span>
-                                            </section>
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <></>
-                                )} */}
-                                {/* <MoreOption
-                                    setShowCommentMenu={setShowCommentMenu}
-                                    showCommentMenu={showCommentMenu}
-                                    isCurrentUser={isCurrentUser}
-                                    comment={comment}
-                                    menuBtnRef={menuBtnRef}
-                                    menuRef={menuRef}
-                                    setMentionedComment={setMentionedComment}
-                                    handleSelect={handleSelect}
-                                    handleCopySingleComment={
-                                        handleCopySingleComment
-                                    }
-                                    handleDeleteSingleComment={
-                                        handleDeleteSingleComment
-                                    }
-                                /> */}
+                                {/* custom more option */}
                                 <CustomMoreOption
                                     comment={comment}
                                     isCurrentUser={isCurrentUser}
@@ -877,7 +782,7 @@ const FileView = ({
     onContextMenu,
     onKeyDown,
     topMargin,
-    comment
+    comment,
 }) => {
     // console.log({ isCurrentUser });
 
@@ -901,7 +806,11 @@ const FileView = ({
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
                             <HandleFileIcon
-                                fileName={comment.original_files[i]}
+                                fileName={
+                                    comment.original_files
+                                        ? comment.original_files[i]
+                                        : file.name
+                                }
                                 URL={file?.url}
                             />
                         </div>
@@ -1126,8 +1035,9 @@ const CustomMoreOption = ({
                 left: isCurrentUser(comment?.user?.id) ? "-15px" : "auto",
                 right: isCurrentUser(comment?.user?.id) ? "auto" : "-15px",
             }}
-            className={`${isCurrentUser(comment?.user?.id) ? "dropleft" : "dropright"
-                } ${style.singleChat_comment_card_text_custom_more_btn_container}`}
+            className={`${
+                isCurrentUser(comment?.user?.id) ? "dropleft" : "dropright"
+            } ${style.singleChat_comment_card_text_custom_more_btn_container}`}
         >
             <button
                 ref={menuBtnRef}

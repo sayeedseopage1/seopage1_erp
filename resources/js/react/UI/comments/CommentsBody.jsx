@@ -202,15 +202,19 @@ const CommentsBody = ({
         // console.log(searchIndexes.length - commentIndex,searchIndexes[searchIndexes.length - commentIndex]);
     }, [commentIndex]);
 
+    // scroll to the mention comment according to selection
     useEffect(() => {
+        let time_ref;
         if (selectMentionIndex) {
             document.getElementById(selectMentionIndex).scrollIntoView({
                 behavior: "smooth",
                 // block: "",
             });
-        } else {
-            setScroll((prev) => !prev);
+            time_ref = setTimeout(() => {
+                setSelectMentionIndex(0);
+            }, 2000);
         }
+        return () => clearTimeout(time_ref);
     }, [selectMentionIndex]);
 
     const handleCopyComments = () => {
@@ -694,6 +698,10 @@ const CommentsBody = ({
                                         }
                                         handleDeleteSingleComment={
                                             handleDeleteSingleComment
+                                        }
+                                        selectMentionIndex={selectMentionIndex}
+                                        setSelectMentionIndex={
+                                            setSelectMentionIndex
                                         }
                                     />
                                 );
