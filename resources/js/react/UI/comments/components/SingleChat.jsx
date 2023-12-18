@@ -290,6 +290,7 @@ const SingleChat = ({
                         : "row",
                 }}
             >
+                {/* comment selection checkmark */}
                 {[...Object.keys(selectedComments)].length > 0 ? (
                     <span
                         style={{
@@ -311,6 +312,8 @@ const SingleChat = ({
                 ) : (
                     <></>
                 )}
+
+                {/* comment card */}
                 <section
                     id="comment-card"
                     className={`${style.singleChat_comment_card}`}
@@ -898,7 +901,7 @@ const FileView = ({
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
                             <HandleFileIcon
-                                fileName={comment.original_files}
+                                fileName={comment.original_files[i]}
                                 URL={file?.url}
                             />
                         </div>

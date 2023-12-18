@@ -2659,7 +2659,7 @@ var FileView = function FileView(_ref5) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
-          fileName: comment.original_files,
+          fileName: comment.original_files[i],
           URL: file === null || file === void 0 ? void 0 : file.url
         })
       }, i);
