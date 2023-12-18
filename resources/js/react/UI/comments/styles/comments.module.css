@@ -367,6 +367,7 @@
   border-radius: 5px 5px 0 0;
   border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);
   overflow-wrap: anywhere;
+  cursor: pointer;
 }
 .singleChat_comment_card_text_message{
   padding: 5px 5px;
@@ -377,6 +378,9 @@
   line-height: 14px;
   overflow-wrap: anywhere;
   /* width: 100%; */
+}
+.singleChat_comment_card_text_message p{
+  margin: 10px 0;
 }
 .singleChat_comment_card_files{
   /* flex: 0 0 75%; */
@@ -432,6 +436,9 @@
 }
 .chatInput_mentioned_comment_text_area_mssg{
   font-style: italic !important;
+}
+.chatInput_mentioned_comment_text_area_mssg p{
+  margin: 10px 0;
 }
 .chatInput_mentioned_comment_text_area_attachments{
   display: flex;
