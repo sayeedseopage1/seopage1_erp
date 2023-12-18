@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Auth;
 
 class ProjectStatusDataTable extends BaseDataTable
 {
@@ -41,6 +42,39 @@ class ProjectStatusDataTable extends BaseDataTable
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
+            ->editColumn('action', function ($row) {
+
+                if(Auth::user()->role_id == 4){
+
+                $actions = '<div class="task_view">
+
+                    <div class="dropdown">
+                        <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link" id="dropdownMenuLink-41" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-options-vertical icons"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-41" tabindex="0" x-placement="bottom-end" style="position: absolute; transform: translate3d(-137px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">';
+
+                        $actions .= '<a href="javascript:;" class="dropdown-item extendRequest" data-id="'.$row->projectId.'"><i class="fa fa-eye mr-2"></i>'.__('Extend Request').'</a>';
+                $actions .= '</div> </div> </div>';
+                return $actions;
+                }
+                if(Auth::user()->role_id == 1 || Auth::use()->role_id == 8){
+                    if($row->extended_request_status == 1){
+
+                        $actions = '<div class="task_view">
+        
+                            <div class="dropdown">
+                                <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link" id="dropdownMenuLink-41" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="icon-options-vertical icons"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-41" tabindex="0" x-placement="bottom-end" style="position: absolute; transform: translate3d(-137px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">';
+        
+                                $actions .= '<a href="javascript:;" class="dropdown-item reviewExtendRequest" data-id="'.$row->projectId.'"><i class="fa fa-eye mr-2"></i>'.__('Review Extend Request').'</a>';
+                        $actions .= '</div> </div> </div>';
+                        return $actions;
+                    }
+                }
+            })
             ->editColumn('clientName', function ($row) {
                 return '<div class="media align-items-center">
                         <a href="' . route('clients.show', [$row->clientId]) . '">
@@ -51,7 +85,7 @@ class ProjectStatusDataTable extends BaseDataTable
                     </div>';
             })
             ->editColumn('project_name', function ($row) {
-                return '<a href="' . route('projects.show', $row->projectId) . '">' . $row->project_name . '</a>';
+                return '<a class="project-status-inner-view" data-id="'.$row->projectId.'" href="javascript:;">' . $row->project_name . '</a>';
             })
             ->editColumn('pmName', function ($row) {
                 return '<div class="media align-items-center">
@@ -63,8 +97,6 @@ class ProjectStatusDataTable extends BaseDataTable
                     </div>';
             })
             ->editColumn('project_budget', function ($row) {
-                // return $row->project_budget;
-
                 $project = Project::where('id', $row->projectId)->first();
                 $deal = Deal::where('id', $project->deal_id)->first();
                 $currency = Currency::where('id', $deal->original_currency_id)->first();
@@ -86,7 +118,7 @@ class ProjectStatusDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['check', 'project_name','clientName','pmName','project_budget','project_category','start_date']);
+            ->rawColumns(['check','action' ,'clientName','project_name','pmName','project_budget','project_category','start_date']);
     }
 
     /**
@@ -155,18 +187,17 @@ class ProjectStatusDataTable extends BaseDataTable
                 'searchable' => false
             ],
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
-            __('project_name') => ['data' => 'project_name', 'name' => 'project_name', 'title' => __('Project Name')],
             __('clientName') => ['data' => 'clientName', 'name' => 'clientName', 'title' => __('Client')],
-            __('pmName') => ['data' => 'pmName', 'name' => 'pmName', 'title' => __('Project Manager')],
+            __('project_name') => ['data' => 'project_name', 'name' => 'project_name', 'title' => __('Project Name')],
             __('project_budget') => ['data' => 'project_budget', 'name' => 'project_budget', 'title' => __('Project Budget')],
             __('project_category') => ['data' => 'project_category', 'name' => 'project_category', 'title' => __('Project Category')],
             __('start_date') => ['data' => 'start_date', 'name' => 'start_date', 'title' => __('Start Date')],
-            // Column::computed('action', __('app.action'))
-            //     ->exportable(false)
-            //     ->printable(false)
-            //     ->orderable(false)
-            //     ->searchable(false)
-            //     ->addClass('text-right pr-20')
+            Column::computed('action', __('app.action'))
+            ->exportable(false)
+            ->printable(false)
+            ->orderable(false)
+            ->searchable(false)
+            ->addClass('text-right pr-20')
         ];
     }
 

@@ -40,6 +40,10 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->longText('admin_comment')->nullable();
             $table->longText('reason')->nullable();
+            $table->integer('reason_status')->default(0);
+            $table->integer('extended_day')->nullable();
+            $table->dateTime('extended_goal_end_day')->nullable();
+            $table->integer('extended_request_status')->default(0);
             $table->timestamps();
         });
     }

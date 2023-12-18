@@ -943,6 +943,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
 
+
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
     Route::resource('digital-marketing-lead',DMLeadController::class);
@@ -1063,6 +1064,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     /* PM PROJECT STATUS */
     Route::resource('project-status',ProjectStatusController::class);
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
+    Route::post('project-status-reason-submit', [ProjectStatusController::class, 'projectStatusReason'])->name('project-status-reason-submit');
+    Route::post('project-status-resolve-submit', [ProjectStatusController::class, 'projectStatusResolve'])->name('project-status-resolve-submit');
+    Route::get('project-status-extend-request/{id}', [ProjectStatusController::class, 'projectStatusExtendRequest'])->name('project-status.extendRequest');
+    Route::post('pm-extend-request-store', [ProjectStatusController::class, 'storePMExtendRequest'])->name('store_pm_extend_request');
+    Route::get('project-status-review-extend-request/{id}', [ProjectStatusController::class, 'reviewExtendRequest'])->name('project-status.reviewExtendRequest');
+    Route::post('project-status-accept-extend-request', [ProjectStatusController::class, 'acceptOrDenyExtendRequest'])->name('project-status-extend-request-accept');
 
     //qualified sales Settings
 

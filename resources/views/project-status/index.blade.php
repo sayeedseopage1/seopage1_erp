@@ -96,12 +96,33 @@ $addPermission = user()->permission('add_holiday');
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
-
         </div>
         <!-- leave table End -->
 
     </div>
     <!-- CONTENT WRAPPER END -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="extendRequest-$row->projectId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            ...
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    
 
 @endsection
 
@@ -110,6 +131,7 @@ $addPermission = user()->permission('add_holiday');
     @include('sections.datatable_js')
 
     <script>
+        
         $('#project-status-table').on('preXhr.dt', function(e, settings, data) {
             // var month = $('#month').val();
             // var year = $('#year').val();
@@ -147,131 +169,41 @@ $addPermission = user()->permission('add_holiday');
             $('#reset-filters').addClass('d-none');
             showTable();
         });
+       
+        $('body').on('click', '.project-status-inner-view', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
 
-        $('#quick-action-type').change(function() {
-            const actionValue = $(this).val();
-
-            if (actionValue != '') {
-                $('#quick-action-apply').removeAttr('disabled');
-            } else {
-                $('#quick-action-apply').attr('disabled', true);
-                $('.quick-action-field').addClass('d-none');
-            }
-        });
-
-        $('#quick-action-apply').click(function() {
-            const actionValue = $('#quick-action-type').val();
-            if (actionValue == 'delete') {
-                Swal.fire({
-                    title: "@lang('messages.sweetAlertTitle')",
-                    text: "@lang('messages.recoverRecord')",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    focusConfirm: false,
-                    confirmButtonText: "@lang('messages.confirmDelete')",
-                    cancelButtonText: "@lang('app.cancel')",
-                    customClass: {
-                        confirmButton: 'btn btn-primary mr-3',
-                        cancelButton: 'btn btn-secondary'
-                    },
-                    showClass: {
-                        popup: 'swal2-noanimation',
-                        backdrop: 'swal2-noanimation'
-                    },
-                    buttonsStyling: false
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        applyQuickAction();
-                    }
-                });
-
-            } else {
-                applyQuickAction();
-            }
-        });
-
-        $('body').on('click', '.delete-table-row', function() {
-            var id = $(this).data('holiday-id');
-            Swal.fire({
-                title: "@lang('messages.sweetAlertTitle')",
-                text: "@lang('messages.recoverRecord')",
-                icon: 'warning',
-                showCancelButton: true,
-                focusConfirm: false,
-                confirmButtonText: "@lang('messages.confirmDelete')",
-                cancelButtonText: "@lang('app.cancel')",
-                customClass: {
-                    confirmButton: 'btn btn-primary mr-3',
-                    cancelButton: 'btn btn-secondary'
-                },
-                showClass: {
-                    popup: 'swal2-noanimation',
-                    backdrop: 'swal2-noanimation'
-                },
-                buttonsStyling: false
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = "{{ route('holidays.destroy', ':id') }}";
-                    url = url.replace(':id', id);
-
-                    var token = "{{ csrf_token() }}";
-
-                    $.easyAjax({
-                        type: 'POST',
-                        url: url,
-                        data: {
-                            '_token': token,
-                            '_method': 'DELETE'
-                        },
-                        success: function(response) {
-                            if (response.status == "success") {
-                                showTable();
-                            }
-                        }
-                    });
-                }
-            });
-        });
-
-        const applyQuickAction = () => {
-            var rowdIds = $("#project-status-table input:checkbox:checked").map(function() {
-                return $(this).val();
-            }).get();
-
-            var url = "{{ route('holidays.apply_quick_action') }}?row_ids=" + rowdIds;
-
-            $.easyAjax({
-                url: url,
-                container: '#quick-action-form',
-                type: "POST",
-                disableButton: true,
-                buttonSelector: "#quick-action-apply",
-                data: $('#quick-action-form').serialize(),
-                success: function(response) {
-                    if (response.status == 'success') {
-                        showTable();
-                        resetActionButtons();
-                        deSelectAll();
-                    }
-                }
-            })
-        };
-
-        $('body').on('click', '.show-holiday', function() {
-            var holidayId = $(this).data('holiday-id');
-
-            var url = '{{ route('holidays.show', ':id') }}';
-            url = url.replace(':id', holidayId);
+            var url = "{{ route('project-status.show', ':id') }}";
+            url = url.replace(':id', id);
 
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
+
         });
 
-        $('body').on('click', '#mark-holiday', function() {
-            var url = "{{ route('holidays.mark_holiday') }}?year" + $('#year').val();
+        $('body').on('click', '.extendRequest', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            var url = "{{ route('project-status.extendRequest', ':id') }}";
+            url = url.replace(':id', id);
 
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
+
+        });
+
+        $('body').on('click', '.reviewExtendRequest', function(e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+
+            var url = "{{ route('project-status.reviewExtendRequest', ':id') }}";
+            url = url.replace(':id', id);
+
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+
         });
     </script>
 @endpush
