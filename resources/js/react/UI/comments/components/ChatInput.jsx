@@ -438,7 +438,7 @@ function CommentEditor({
                 "italic",
                 "underline",
                 "strike",
-                "link"
+                // "link"
             ],
         ],
         // clipboard: {
@@ -497,7 +497,7 @@ function CommentEditor({
         "italic",
         "underline",
         "strike",
-        "link",
+        // "link",
         // "mention",
     ];
 

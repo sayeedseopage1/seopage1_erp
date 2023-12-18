@@ -1753,7 +1753,9 @@ function CommentEditor(_ref5) {
     return _suggestPeople.apply(this, arguments);
   }
   var modules = {
-    toolbar: [["bold", "italic", "underline", "strike", "link"]]
+    toolbar: [["bold", "italic", "underline", "strike"
+    // "link"
+    ]]
     // clipboard: {
     //     matchVisual: false,
     // },
@@ -1805,7 +1807,8 @@ function CommentEditor(_ref5) {
     //   },
   };
 
-  var formats = ["bold", "italic", "underline", "strike", "link"
+  var formats = ["bold", "italic", "underline", "strike"
+  // "link",
   // "mention",
   ];
 
