@@ -1652,12 +1652,47 @@ if ($request->project_type !='hourly'){
         ->leftJoin('users', 'users.id', 'leads.added_by')
         ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
         ->where('leads.status','!=','DM')
+        ->orderBy('leads.id', 'desc')
         ->paginate($limit);
 
+        foreach($leads as $lead){
+            $won_lost = '';
+            if($lead->deal_status == 0){
+                $won_lost = 0;
+            } else {
+                $deal_stages = DealStage::all();
+                foreach($deal_stages as $leadId){
+                    $leadId = DealStage::where('lead_id', $lead->id)->first();
+                    if ($leadId == null) {
+                        $won_lost = 0;
+                    } else {
+                        if($lead->id == $leadId->lead_id){
+                            if($leadId->deal_status == 'pending' && $leadId->won_lost == 'Yes'){
+                                $won_lost = 1;
+                            } elseif($leadId->deal_status == 'Lost'){
+                                $won_lost = 2;
+                            } elseif(($leadId->deal_status == 'pending' && $leadId->won_lost == 'No') || ($leadId->deal_status == 'pending' && $leadId->won_lost == null)) {
+                                $won_lost = 3;
+                            }
+                        }
+                    }
+                }
+            }
+            $lead->won_lost = $won_lost;
+        }
+
         return response()->json([
-            'status'=>200,
-            'data'=> $leads
+            'data' => $leads,
+            'status' => 200
         ]);
     }
 
 }
+
+
+/** 
+ * $won_lost = 0 =>Not Applicable
+ * $won_lost = 1 =>Won
+ * $won_lost = 2 =>Lost
+ * $won_lost = 3 =>No Activity Yet
+ */
