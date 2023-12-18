@@ -4,10 +4,9 @@
     @include('sections.datatable_css')
 @endpush
 
-@section('filter-section')
-
-    @include('leads.filters')
-
+@section('filter-section') 
+    {{-- @include('leads.filters')  --}}
+    <div id="leadTableFilterContainer"></div>
 @endsection
 
 @php
@@ -78,8 +77,8 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
               </div>
               @endif
-
-            {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+              <div id="leadTableContainer"></div>
+            {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
             @include('contracts.modals.dealstmodal')
         </div>
         <!-- Task Box End -->

@@ -941,7 +941,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
-
+    Route::get('get-all-leads', [LeadController::class,'getLead']);
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
     Route::resource('digital-marketing-lead',DMLeadController::class);

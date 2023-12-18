@@ -1620,4 +1620,44 @@ if ($request->project_type !='hourly'){
         return $dataTable->render('leads.show', $this->data);
     }
 
+    public function getLead(Request $request){
+        $limit = $request->limit ??  10 ;
+        $leads = Lead::with(['leadAgent', 'leadAgent.user', 'category','user'])
+        ->select(
+            'leads.id',
+            'leads.added_by',
+            'leads.client_id',
+            'leads.category_id',
+            'client_name',
+            'actual_value',
+            'bidding_minutes',
+            'bidding_seconds',
+            'bid_value',
+            'bid_value2',
+            'project_link',
+            'project_id',
+            'company_name',
+            'lead_status.type as statusName',
+            'lead_status.label_color as lead_status_label_color',
+            'status_id',
+            'deal_status',
+            'currency_id',
+            'original_currency_id',
+            'leads.created_at as lead_created_at',
+            'users.name as agent_name',
+            'users.image',
+            'currencies.currency_symbol as currency_symbol',
+        )
+        ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+        ->leftJoin('users', 'users.id', 'leads.added_by')
+        ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+        ->where('leads.status','!=','DM')
+        ->paginate($limit);
+
+        return response()->json([
+            'status'=>200,
+            'data'=> $leads
+        ]);
+    }
+
 }
