@@ -10,6 +10,8 @@ import {
     ProjectID,
     Status,
 } from "./ui";
+import { Menu } from "@headlessui/react";
+import ActionDropdown from "./ActionDropdown";
 
 export const LeadTableColumns = [
     {
@@ -124,8 +126,7 @@ export const LeadTableColumns = [
     {
         id: "action",
         header: "Action",
-        cell: ({ row }) => {
-            return <Action>---</Action>;
-        },
+        cell: (props) => <ActionDropdown {...props} />
     },
 ];
+

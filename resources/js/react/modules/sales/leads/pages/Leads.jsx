@@ -36,8 +36,7 @@ const Leads = () => {
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
-
-    console.log(filter);
+ 
 
     return (
         <Container>

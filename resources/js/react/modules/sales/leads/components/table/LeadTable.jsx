@@ -28,15 +28,25 @@ import _ from "lodash";
 import { Placeholder } from "../../../../../global/Placeholder";
 import EmptyTable from "../../../../../global/EmptyTable";
 import { useSearchParams } from "react-router-dom";
+import { useLocalStorage } from 'react-use'
 
-const LeadTable = ({ data, columns = [], isLoading, onPageChange, sorting, setSorting }) => {
+const LeadTable = ({
+    data,
+    columns = [],
+    isLoading,
+    onPageChange,
+    sorting,
+    tableName = "leadTable",
+    setSorting,
+}) => {
     const [tableData, setTableData] = React.useState([]);
     const [tableColumns, setTableColumns] = React.useState(columns);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
-    }); 
- 
+    });
+
+    const [value, setValue] = useLocalStorage(tableName);
 
     // on pagination
     const handlePageChange = ({ selected }) => {
@@ -45,7 +55,7 @@ const LeadTable = ({ data, columns = [], isLoading, onPageChange, sorting, setSo
             pageSize,
         };
 
-        setPagination({ ...paginate, pageIndex: 0 }); 
+        setPagination({ ...paginate, pageIndex: 0 });
         onPageChange(paginate);
     };
 
@@ -64,11 +74,19 @@ const LeadTable = ({ data, columns = [], isLoading, onPageChange, sorting, setSo
     // columns order
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
+    // if has table columns record on local store
+    // organize column orders
+    React.useEffect(() => {
+        if (value && value.columnOrder) {
+            setColumnOrder(value.columnOrder);
+        }
+    }, []);
+
     // formate data
 
     // use effect
     React.useEffect(() => {
-        data ? setTableData(_.orderBy(data?.data, 'desc')) : setTableData([]);
+        data ? setTableData(_.orderBy(data?.data, "desc")) : setTableData([]);
     }, [data]);
 
     // pagination
@@ -84,6 +102,7 @@ const LeadTable = ({ data, columns = [], isLoading, onPageChange, sorting, setSo
         state: {
             sorting,
             pagination,
+            tableName,
             columnOrder,
         },
         // onPaginationChange: setPagination,
@@ -102,40 +121,42 @@ const LeadTable = ({ data, columns = [], isLoading, onPageChange, sorting, setSo
                     <Table>
                         <LeadTableHeader table={table} columns={tableColumns} />
                         <TableBody>
-                            {!isLoading && table.getRowModel().rows.map((row) => (
-                                <TableRow key={row.id}>
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableItem key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableItem>
-                                    ))}
-                                </TableRow>
-                            ))}
+                            {!isLoading &&
+                                table.getRowModel().rows.map((row) => (
+                                    <TableRow key={row.id}>
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableItem key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </TableItem>
+                                        ))}
+                                    </TableRow>
+                                ))}
 
                             {/* On loading  */}
-                            { isLoading && 
-                                _.times(pageSize, item => (
+                            {isLoading &&
+                                _.times(pageSize, (item) => (
                                     <TableRow key={item}>
-                                        {_.times(tableColumns.length, col => (
-                                            <TableItem key={col} className="py-3">
+                                        {_.times(tableColumns.length, (col) => (
+                                            <TableItem
+                                                key={col}
+                                                className="py-3"
+                                            >
                                                 <Placeholder />
                                             </TableItem>
                                         ))}
                                     </TableRow>
-                                ))
-                            }
+                                ))}
 
-                            {
-                                !isLoading && _.size(tableData) === 0 && 
+                            {!isLoading && _.size(tableData) === 0 && (
                                 <TableRow>
                                     <TableItem colSpan={_.size(tableColumns)}>
                                         <EmptyTable />
                                     </TableItem>
                                 </TableRow>
-                            }
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
