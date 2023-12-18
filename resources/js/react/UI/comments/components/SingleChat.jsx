@@ -217,11 +217,10 @@ const SingleChat = ({
     const handleCopySingleComment = (comment) => {
         const SelectedCommentsString = [comment].reduce(
             (total, comment, i, arr) => {
-                total += `${htmlToString(comment?.comment)}\n\n${
-                    comment?.user?.name
-                }, ${dayjs(comment?.created_date).format(
-                    "MMM DD, YYYY, hh:mm A"
-                )}`;
+                total += `${htmlToString(comment?.comment)}\n\n${comment?.user?.name
+                    }, ${dayjs(comment?.created_date).format(
+                        "MMM DD, YYYY, hh:mm A"
+                    )}`;
 
                 if (i < arr.length - 1) {
                     total += "\n\n\n";
@@ -350,22 +349,22 @@ const SingleChat = ({
                                             : "0",
                                         gap:
                                             currentUser.roleId === 1 ||
-                                            currentUser.roleId === 8
+                                                currentUser.roleId === 8
                                                 ? "0 20px"
                                                 : "0",
                                         justifyContent:
                                             currentUser.roleId === 1 ||
-                                            currentUser.roleId === 8
+                                                currentUser.roleId === 8
                                                 ? "space-between"
                                                 : "center",
                                     }}
                                     className={`${style.single_comment_deleted_title}`}
                                 >
-                                    <span>This Comment has been deleted {showDeletedComment?`(Deleted at : ${dayjs(comment?.deleted_at).format(
-                                    "MMM DD, YYYY, hh:mm A"
-                                )})`:''}</span>
+                                    <span>This Comment has been deleted {showDeletedComment ? `(Deleted at : ${dayjs(comment?.deleted_at).format(
+                                        "MMM DD, YYYY, hh:mm A"
+                                    )})` : ''}</span>
                                     {currentUser.roleId === 1 ||
-                                    currentUser.roleId === 8 ? (
+                                        currentUser.roleId === 8 ? (
                                         showDeletedComment ? (
                                             <FaEyeSlash
                                                 onClick={() =>
@@ -443,6 +442,7 @@ const SingleChat = ({
                                                         >
                                                             {comment?.mention?.files_data?.map(
                                                                 (file, i) => {
+                                                                    console.log(comment?.mention?.original_files);
                                                                     return (
                                                                         <div
                                                                             key={
@@ -455,7 +455,7 @@ const SingleChat = ({
                                                                         >
                                                                             <HandleFileIcon
                                                                                 fileName={
-                                                                                    comment.original_files[i]
+                                                                                    comment?.mention?.original_files[i]
                                                                                 }
                                                                                 URL={
                                                                                     file?.url
@@ -476,15 +476,14 @@ const SingleChat = ({
                                                         className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
                                                     >
                                                         {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                                                        {`${
-                                                            comment?.mention
-                                                                ?.user?.name
-                                                        }, ${dayjs(
-                                                            comment?.mention
-                                                                ?.created_date
-                                                        ).format(
-                                                            "MMM DD, YYYY, hh:mm A"
-                                                        )}`}
+                                                        {`${comment?.mention
+                                                            ?.user?.name
+                                                            }, ${dayjs(
+                                                                comment?.mention
+                                                                    ?.created_date
+                                                            ).format(
+                                                                "MMM DD, YYYY, hh:mm A"
+                                                            )}`}
                                                     </span>
                                                 </article>
                                             </div>
@@ -531,6 +530,7 @@ const SingleChat = ({
                                         {/* file will be shown here */}
                                         {comment?.files_data?.length ? (
                                             <FileView
+                                                comment={comment}
                                                 // onContextMenu={(e) => {
                                                 //     onContextMenu(e);
                                                 //     setContextHolder(comment);
@@ -560,11 +560,9 @@ const SingleChat = ({
                                         ? "flex-end"
                                         : "flex-start",
                                 }}
-                                className={`${
-                                    style.singleChat_comment_card_text_container
-                                } ${
-                                    idMatch ? `${style.singleChat_match}` : ""
-                                }`}
+                                className={`${style.singleChat_comment_card_text_container
+                                    } ${idMatch ? `${style.singleChat_match}` : ""
+                                    }`}
                             >
                                 {/* mentioned comment */}
                                 {comment?.mention ? (
@@ -612,6 +610,7 @@ const SingleChat = ({
                                                 >
                                                     {comment?.mention?.files_data?.map(
                                                         (file, i) => {
+                                                            console.log(comment.original_files);
                                                             return (
                                                                 <div
                                                                     key={i}
@@ -619,7 +618,7 @@ const SingleChat = ({
                                                                 >
                                                                     <HandleFileIcon
                                                                         fileName={
-                                                                            file?.name
+                                                                            comment?.mention?.original_files[i]
                                                                         }
                                                                         URL={
                                                                             file?.url
@@ -638,14 +637,13 @@ const SingleChat = ({
                                                 className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
                                             >
                                                 {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                                                {`${
-                                                    comment?.mention?.user?.name
-                                                }, ${dayjs(
-                                                    comment?.mention
-                                                        ?.mention_created_at
-                                                ).format(
-                                                    "MMM DD, YYYY, hh:mm A"
-                                                )}`}
+                                                {`${comment?.mention?.user?.name
+                                                    }, ${dayjs(
+                                                        comment?.mention
+                                                            ?.mention_created_at
+                                                    ).format(
+                                                        "MMM DD, YYYY, hh:mm A"
+                                                    )}`}
                                             </span>
                                         </article>
                                     </div>
@@ -685,6 +683,7 @@ const SingleChat = ({
                                 {/* file will be shown here */}
                                 {comment?.files_data?.length ? (
                                     <FileView
+                                        comment={comment}
                                         onContextMenu={(e) => {
                                             onContextMenu(e);
                                             setContextHolder(comment);
@@ -875,6 +874,7 @@ const FileView = ({
     onContextMenu,
     onKeyDown,
     topMargin,
+    comment
 }) => {
     // console.log({ isCurrentUser });
 
@@ -891,13 +891,14 @@ const FileView = ({
         >
             {[...files]?.length ? (
                 [...files]?.map((file, i) => {
+                    console.log(comment);
                     return (
                         <div
                             key={i}
                             className={`${style.chatInput_filePreview__file} shadow-sm`}
                         >
                             <HandleFileIcon
-                                fileName={file?.name}
+                                fileName={comment.original_files}
                                 URL={file?.url}
                             />
                         </div>
@@ -1122,9 +1123,8 @@ const CustomMoreOption = ({
                 left: isCurrentUser(comment?.user?.id) ? "-15px" : "auto",
                 right: isCurrentUser(comment?.user?.id) ? "auto" : "-15px",
             }}
-            className={`${
-                isCurrentUser(comment?.user?.id) ? "dropleft" : "dropright"
-            } ${style.singleChat_comment_card_text_custom_more_btn_container}`}
+            className={`${isCurrentUser(comment?.user?.id) ? "dropleft" : "dropright"
+                } ${style.singleChat_comment_card_text_custom_more_btn_container}`}
         >
             <button
                 ref={menuBtnRef}

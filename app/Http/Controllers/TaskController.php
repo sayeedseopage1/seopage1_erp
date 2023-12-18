@@ -4642,7 +4642,7 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-            //    DB::beginTransaction();
+             //  DB::beginTransaction();
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
@@ -4684,19 +4684,23 @@ class TaskController extends AccountBaseController
                 // }
                 foreach ($files as $file) {
                     $originalfilename = $file->getClientOriginalName();
+                   // dd($originalfilename);
                     $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
                 
                   //  $filename= 
               
                     array_push($file_name, $filename);
                     array_push($original_file_name, $originalfilename);
+                 //$original_file_name = $originalfilename;
 
                     // Store the file in AWS S3 using the 's3' disk
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 }
                 $data->files = $file_name;
                 $data->original_files = $original_file_name;
+            //  /   dd($original_file_name);
                 $data->save();
+            //   /  dd($data);
             }
 
             $data = TaskComment::find($data->id);
@@ -6792,11 +6796,15 @@ class TaskController extends AccountBaseController
     public function getTaskComments($task_id)
     {
         $data = TaskComment::select('task_comments.*','task_comments.created_at as created_date')->where('task_comments.task_id', $task_id)->where('task_comments.root', null)->get();
+        // foreach($data as $item)
+        // {
+        //     $item->
+        // }
 
         foreach ($data as $value) {
 
            $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
-        //   $value->files_data = $value->files;
+           $value->original_files= json_decode($value->original_files);
         }
         
         // return response()->json([
