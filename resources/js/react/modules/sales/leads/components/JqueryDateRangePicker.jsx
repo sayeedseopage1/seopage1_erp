@@ -6,8 +6,7 @@ const JqueryDateRangePicker = ({
     startDate,
     endDate,
     setStartDate,
-    setEndDate,
-    onApply = () => {},
+    setEndDate, 
 }) => {
     const handleTimePicker = () => {
         if (window.$) {
@@ -16,7 +15,7 @@ const JqueryDateRangePicker = ({
             // let today = moment().format('D');
 
             $(function () {
-                let start = moment().subtract(1, "years");
+                let start = moment().subtract(3, "day");
                 let end = moment();
 
                 // if(today > 20){
@@ -25,26 +24,18 @@ const JqueryDateRangePicker = ({
                 //     end = moment().date(20);
                 // }
 
-                //    setStartDate(start.format());
-                //    setEndDate(end.format());
+                setStartDate(start.format());
+                setEndDate(end.format());
 
                 function cb(start, end) {
-                    // setStartDate(start.format('YYYY-MM-DD'));
-                    // setEndDate(end.format('YYYY-MM-DD'));
-                    onApply &&
-                        onApply(
-                            start.format("YYYY-MM-DD"),
-                            end.format("YYYY-MM-DD"),
-                            () => {
-                                $(
-                                    "#jqueryDatePicker div.sp1__jquery_date_text"
-                                ).html(
-                                    start.format("MMM D, YYYY") +
-                                        " to " +
-                                        end.format("MMM D, YYYY")
-                                );
-                            }
-                        );
+                    setStartDate(start.format("YYYY-MM-DD"));
+                    setEndDate(end.format("YYYY-MM-DD"));
+
+                    $("#jqueryDatePicker div.sp1__jquery_date_text").html(
+                        start.format("MMM D, YYYY") +
+                            " to " +
+                            end.format("MMM D, YYYY")
+                    );
                 }
 
                 $("#jqueryDatePicker").daterangepicker(
@@ -54,7 +45,7 @@ const JqueryDateRangePicker = ({
                             customRangeLabel: "Custom Range",
                             separator: " To ",
                             applyLabel: "Apply",
-                            autoApply: false,
+                            autoApply: true,
                             cancelLabel: "Cancel",
                             daysOfWeek: [
                                 "Su",

@@ -5,6 +5,7 @@ import { faker } from "@faker-js/faker";
 import { useLeadsQuery } from "../../../../services/api/leadApiSlice";
 import { LeadTableColumns } from "../components/table/LeadTableColumns";
 import LeadTableFilterBar from "../components/LeadTableFilterBar";
+import LeadTableExportButton from "../components/LeadTableExportButton";
  
 
 const Leads = () => {
@@ -29,7 +30,7 @@ const Leads = () => {
       sort_by: sorting[0]?.id,
       sort_type: sorting[0]?.desc ? 'desc' : 'asc',
       ...filter
-    }),{ refetchOnMountOrArgChange: true});
+    }),{ refetchOnMountOrArgChange: true, skip: !filter?.start_date});
 
 
     const leads = data?.data;
@@ -44,6 +45,9 @@ const Leads = () => {
             <LeadTableFilterBar
               setFilter={setFilter}
             /> 
+            <LeadTableExportButton 
+                filter={filter} 
+            />
             <LeadTable
                 data={leads}
                 columns={[...LeadTableColumns]}

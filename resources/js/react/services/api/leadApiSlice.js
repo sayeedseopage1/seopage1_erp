@@ -32,6 +32,11 @@ const leadApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["LEADS"]
         }),
+
+        // export lead
+        allLeads: build.query({
+            query: (query) => `/account/export-lead-data${query}`,
+        })
     }),
 });
 
@@ -39,4 +44,6 @@ export const {
     useLeadsQuery,
     useDealConversionMutation,
     useDeleteLeadMutation,
+    useAllLeadsQuery,
+    useLazyAllLeadsQuery
 } = leadApiSlice;

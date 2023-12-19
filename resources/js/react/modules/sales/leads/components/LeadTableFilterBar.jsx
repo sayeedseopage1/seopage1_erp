@@ -11,15 +11,17 @@ const LeadTableFilterBar = ({ setFilter }) => {
 
     const searchText = React.useDeferredValue(search);
 
-    // on date picker apply
-    const handleDatePicker = (start, end, cb) => {
+    const _startData = React.useMemo(() => startDate, [startDate])
+    const _endData = React.useMemo(() => endDate, [endDate])
+
+    React.useEffect(() => {
         setFilter((prev) => ({
             ...prev,
-            start_date: start,
-            end_date: end,
+            start_date: _startData,
+            end_date: _endData,
         }));
-        cb();
-    };
+    }, [_startData, _endData])
+
 
     // search data
     React.useEffect(() => {
@@ -36,7 +38,7 @@ const LeadTableFilterBar = ({ setFilter }) => {
                         setStartDate={setStartDate}
                         endDate={endDate}
                         setEndDate={setEndDate}
-                        onApply={handleDatePicker}
+                       
                     />
 
                     <div
