@@ -20,11 +20,11 @@ import HandleFileIcon from "../utils/HandleFileIcon";
 import Swal from "sweetalert2";
 import { usePostCommentMutation } from "../../../services/api/commentsApiSlice";
 import { User } from "../utils/user-details";
-import getTextContent, { htmlToString } from "../utils/getTextContent";
+import getTextContent, { getTrimmedHtml, htmlToString } from "../utils/getTextContent";
 
 const currentUser = new User(window.Laravel.user);
 
-const ChatInput = ({ setScroll, taskId }) => {
+const ChatInput = ({ setScroll, taskId, setIsLoading }) => {
     const [postComment, { isLoading }] = usePostCommentMutation();
     const [showEmoji, setShowEmoji] = useState(false);
     const [buttonClick, setButtonClick] = useState();
@@ -38,6 +38,10 @@ const ChatInput = ({ setScroll, taskId }) => {
         setSecletedComments,
     } = useCommentContext();
 
+    useEffect(() => {
+        setIsLoading(isLoading);
+    }, [isLoading]);
+
     const handleSendComment = async ({ onEnter = false }) => {
         if (!htmlToString(editorHtml) && !files.length) {
             Swal.fire({
@@ -50,8 +54,6 @@ const ChatInput = ({ setScroll, taskId }) => {
             return;
         }
 
-        const slicedComment = editorHtml.split("<p><br></p>");
-
         const formdata = new FormData();
         formdata.append(
             "_token",
@@ -63,17 +65,9 @@ const ChatInput = ({ setScroll, taskId }) => {
             "comment",
             htmlToString(editorHtml)
                 ? onEnter
-                    ? slicedComment
-                          .slice(0, slicedComment.length - 1)
-                          .join("<p><br></p>")
+                    ? getTrimmedHtml(editorHtml)
                     : editorHtml
                 : ""
-
-            // htmlToString(editorHtml)
-            //     ? slicedComment
-            //           .slice(0, slicedComment.length - 1)
-            //           .join("<p><br></p>")
-            //     : ""
         );
         formdata.append("user_id", currentUser.id);
         formdata.append("task_id", taskId);
@@ -85,6 +79,7 @@ const ChatInput = ({ setScroll, taskId }) => {
                 formdata.append(`file[]`, file);
             });
         }
+
         // const result = {};
         // for (const data of formdata.entries()) {
         //     result[data[0]] = data[1];
@@ -151,38 +146,18 @@ const ChatInput = ({ setScroll, taskId }) => {
             <section
                 style={{
                     flexDirection:
-                        show ||
-                        files.length ||
-                        mentionedComment
-                        // || isEditorHeightIncrease
-                            ? "column"
+                        show || files.length || mentionedComment
+                            ? // || isEditorHeightIncrease
+                              "column"
                             : "row",
                 }}
                 className={`${style.chatInput_actions_btn_container}`}
             >
                 <FileUpload files={files} setFiles={setFiles} />
-                {isLoading ? (
-                    <div
-                        style={{
-                            flex: "0 0 40px",
-                            height: "40px",
-                            width: "40px",
-                            borderRadius: "40px",
-                            padding: "8px",
-                            cursor: "progress",
-                            backgroundColor: "#49b9fa",
-                        }}
-                        className={`spinner-border text-light`}
-                        role="status"
-                    >
-                        <span className="sr-only">Loading...</span>
-                    </div>
-                ) : (
-                    <IoMdSend
-                        onClick={handleSendComment}
-                        className={`${style.chatInput_actions_btn_send}`}
-                    />
-                )}
+                <IoMdSend
+                    onClick={handleSendComment}
+                    className={`${style.chatInput_actions_btn_send}`}
+                />
             </section>
         </>
     );
@@ -192,8 +167,6 @@ export default ChatInput;
 
 function MentionedComment() {
     const { mentionedComment, setMentionedComment } = useCommentContext();
-
-    // console.log({mentionedComment});
 
     return (
         <div
@@ -238,7 +211,12 @@ function MentionedComment() {
                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                 >
                                     <HandleFileIcon
-                                        fileName={file?.name}
+                                        fileName={
+                                            mentionedComment?.original_files
+                                                ? mentionedComment
+                                                      ?.original_files[i]
+                                                : file.name
+                                        }
                                         URL={file?.url}
                                     />
                                 </div>
@@ -363,8 +341,6 @@ function CommentEditor({
     //         setValue(editorHtml);
     //     }
     // }, [buttonClick]);
-
-
 
     useEffect(() => {
         // Focus the Quill editor when the component is rendered

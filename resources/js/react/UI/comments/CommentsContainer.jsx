@@ -177,7 +177,8 @@ const CommentsContainer = ({
                     // comments={param?.taskId ? data : comments}
                     comments={param?.taskId? singleCommentId?data?.filter((comment)=>comment.id===singleCommentId):data : comments}
                     // comments={demoComments}
-                    loading={isFetching || isLoading}
+                    loading={isLoading}
+                    fetching={isFetching}
                     refetch={refetch}
                     taskId={taskId ? taskId : param?.taskId}
                     height={"89vh"}
