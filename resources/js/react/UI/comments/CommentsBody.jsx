@@ -70,6 +70,7 @@ const CommentsBody = ({
     const [searchIndexes, setSearchIndexes] = useState([]);
     const [animation, setAnimation] = useState(false);
     const [isloading, setIsLoading] = useState(false);
+    const [selectMentionIndex, setSelectMentionIndex] = useState(0);
 
     // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
@@ -200,6 +201,21 @@ const CommentsBody = ({
         }
         // console.log(searchIndexes.length - commentIndex,searchIndexes[searchIndexes.length - commentIndex]);
     }, [commentIndex]);
+
+    // scroll to the mention comment according to selection
+    useEffect(() => {
+        let time_ref;
+        if (selectMentionIndex) {
+            document.getElementById(selectMentionIndex).scrollIntoView({
+                behavior: "smooth",
+                // block: "",
+            });
+            time_ref = setTimeout(() => {
+                setSelectMentionIndex(0);
+            }, 2000);
+        }
+        return () => clearTimeout(time_ref);
+    }, [selectMentionIndex]);
 
     const handleCopyComments = () => {
         // setIsLoading(true);
@@ -443,7 +459,12 @@ const CommentsBody = ({
 
                     {!param?.taskId ? (
                         <span
-                            onClick={()=>window.open(`/account/tasks/${taskId}`,"_blank")}
+                            onClick={() =>
+                                window.open(
+                                    `/account/tasks/${taskId}`,
+                                    "_blank"
+                                )
+                            }
                             className={style.commentsBody_header_btn}
                         >
                             <svg
@@ -677,6 +698,10 @@ const CommentsBody = ({
                                         }
                                         handleDeleteSingleComment={
                                             handleDeleteSingleComment
+                                        }
+                                        selectMentionIndex={selectMentionIndex}
+                                        setSelectMentionIndex={
+                                            setSelectMentionIndex
                                         }
                                     />
                                 );

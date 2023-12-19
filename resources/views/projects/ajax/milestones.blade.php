@@ -226,7 +226,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                                         @if($item->qc_status == 0)
-                                                 <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
+                                            @if ($project->dispute_status !=1)
+                                            <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
+                                            @else
+                                            <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                                            @endif
 
                                         @elseif($item->qc_status == 2)
                                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
@@ -263,8 +267,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                             @if($last_milestone != null && $incomplete_milestone == 0 && $item->id == $last_milestone->id )
 
                                     @if($item->qc_status == 0)
+                                            @if ($project->dispute_status !=1)
                                              <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
-
+                                             @else
+                                             <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                                            @endif
                                     @elseif($item->qc_status == 2)
                                                         <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                                 Awaiting Approval
@@ -380,8 +387,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                 @if($item->qc_status == 0)
+                @if ($project->dispute_status !=1)
                          <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
-
+                @else
+                <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                @endif
                 @elseif($item->qc_status == 2)
                         <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                 Awaiting Approval
@@ -417,8 +427,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     @if($last_milestone != null && $incomplete_milestone == 0 && $item->id == $last_milestone->id )
 
             @if($item->qc_status == 0)
+                    @if ($project->dispute_status !=1)
                      <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
-
+                     @else
+                     <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                    @endif
             @elseif($item->qc_status == 2)
                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                         Awaiting Approval

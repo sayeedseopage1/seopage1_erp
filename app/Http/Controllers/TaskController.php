@@ -4642,7 +4642,7 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-            //    DB::beginTransaction();
+             //  DB::beginTransaction();
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
@@ -4655,10 +4655,10 @@ class TaskController extends AccountBaseController
 
             $data->save();
             //need pedning action
-            // $helper = new HelperPendingActionController();
+            $helper = new HelperPendingActionController();
 
 
-            // $helper->NewCommentAdded($data->task_id,$data->user_id);
+            $helper->NewCommentAdded($data->task_id,$data->user_id);
 
             //need pending action
             $taskID = Task::where('id', $request->task_id)->first();
@@ -4676,23 +4676,31 @@ class TaskController extends AccountBaseController
                 $files = $request->file('file');
                 $destinationPath = storage_path('app/public/');
                 $file_name = [];
+                $original_file_name = [];
                 // foreach ($files as $file) {
                 //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 //     array_push($file_name, $filename);
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                 
-                 //   $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
-                    $filename = $file->getClientOriginalName();
-                 //   dd($file,$filename);
+                    $originalfilename = $file->getClientOriginalName();
+                   // dd($originalfilename);
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                
+                  //  $filename= 
+              
                     array_push($file_name, $filename);
+                    array_push($original_file_name, $originalfilename);
+                 //$original_file_name = $originalfilename;
 
                     // Store the file in AWS S3 using the 's3' disk
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 }
                 $data->files = $file_name;
+                $data->original_files = $original_file_name;
+            //  /   dd($original_file_name);
                 $data->save();
+            //   /  dd($data);
             }
 
             $data = TaskComment::find($data->id);
@@ -6788,11 +6796,15 @@ class TaskController extends AccountBaseController
     public function getTaskComments($task_id)
     {
         $data = TaskComment::select('task_comments.*','task_comments.created_at as created_date')->where('task_comments.task_id', $task_id)->where('task_comments.root', null)->get();
+        // foreach($data as $item)
+        // {
+        //     $item->
+        // }
 
         foreach ($data as $value) {
 
-           $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
-        //   $value->files_data = $value->files;
+           $mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
+           $value->original_files= json_decode($value->original_files);
         }
         
         // return response()->json([

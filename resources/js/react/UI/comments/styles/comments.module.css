@@ -33,7 +33,7 @@
   display: flex;
   flex-flow: column nowrap;
   /* gap: 10px; */
-  /* font-family: 'Poppins', sans-serif !important; */
+  font-family: 'Poppins', sans-serif !important;
   /* border: solid; */
   background-repeat: no-repeat;
   background-position: center;
@@ -270,7 +270,7 @@
   z-index: 99;
   display: flex;
   flex-flow: column nowrap;
-  /* font-family: 'Poppins', sans-serif !important; */
+  font-family: 'Poppins', sans-serif !important;
   background-color: #FFFFFF;
   border-radius: 2px;
   padding: 8px 0 6px !important;
@@ -296,9 +296,67 @@
   /* font-size: 8px; */
   font-size: 12px;
   color: #626365;
-  /* font-family: 'Poppins', sans-serif !important; */
+  font-family: 'Poppins', sans-serif !important;
   line-height: 0;
 }
+/* ------------------------------------------------------- */
+/* ------------------------------------------------------- */
+/* ------------------------------------------------------- */
+/* ------------------------------------------------------- */
+.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_custom_more_btn{
+  display: block;
+}
+.singleChat_comment_card_text_custom_more_btn_container{
+  display: flex;
+  position: absolute;
+  /* border: solid; */
+  top: 0;
+  bottom: 0;
+  width: 15px;
+  /* left: -20px; */
+  align-items: center;
+  justify-content: center;
+}
+.singleChat_comment_card_text_custom_more_btn{
+  background-color: transparent;
+  display: none;
+  /* border: solid; */
+  /* transform: translateX(-20px); */
+}
+.singleChat_comment_card_text_custom_more_btn::after{
+  content: none;
+}
+.singleChat_comment_card_text_custom_more_btn:hover{
+  background-color: none;
+}
+.singleChat_comment_card_text_custom_more_options{  
+  /* width: 127.133px; */
+  /* z-index: 99; */
+  /* display: flex; */
+  /* flex-flow: column nowrap; */
+  /* font-family: 'Poppins', sans-serif !important; */
+  /* background-color: #FFFFFF; */
+  /* border-radius: 2px; */
+  /* padding: 8px 0 6px !important; */
+  border: none;
+}
+.singleChat_comment_card_text_custom_more_options > section{
+  display: flex;
+  align-items: center;
+  gap: 5.45px;
+  padding: 3.5px 8px !important;
+  margin: 0 !important;
+  color: black;
+  /* transform: scale(1.5); */
+}
+.singleChat_comment_card_text_custom_more_options > section:hover{
+  color: black;
+  background-color: #EEF9FF;
+}
+/* ------------------------------------------------------- */
+/* ------------------------------------------------------- */
+/* ------------------------------------------------------- */
+/* ------------------------------------------------------- */
 .singleChat_comment_card_mentioned_comment{
   padding: 5px 5px;
   font-style: italic;
@@ -309,6 +367,7 @@
   border-radius: 5px 5px 0 0;
   border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);
   overflow-wrap: anywhere;
+  cursor: pointer;
 }
 .singleChat_comment_card_text_message{
   padding: 5px 5px;
@@ -319,6 +378,9 @@
   line-height: 14px;
   overflow-wrap: anywhere;
   /* width: 100%; */
+}
+.singleChat_comment_card_text_message p{
+  margin: 10px 0;
 }
 .singleChat_comment_card_files{
   /* flex: 0 0 75%; */
@@ -374,6 +436,9 @@
 }
 .chatInput_mentioned_comment_text_area_mssg{
   font-style: italic !important;
+}
+.chatInput_mentioned_comment_text_area_mssg p{
+  margin: 10px 0;
 }
 .chatInput_mentioned_comment_text_area_attachments{
   display: flex;

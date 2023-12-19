@@ -437,7 +437,7 @@ function CommentEditor({
                 "bold",
                 "italic",
                 "underline",
-                // "strike",
+                "strike",
                 // "link"
             ],
         ],
@@ -496,7 +496,7 @@ function CommentEditor({
         "bold",
         "italic",
         "underline",
-        // "strike",
+        "strike",
         // "link",
         // "mention",
     ];
