@@ -10,6 +10,7 @@ const handleFileUrl = (url, fileName, file) => {
             file_name[file_name.length - 1],
         ];
         return [url, name, ext];
+        console.log(fileName);
     } else if (file) {
         const file_name = file.name.split(".");
         const [name, ext] = [
