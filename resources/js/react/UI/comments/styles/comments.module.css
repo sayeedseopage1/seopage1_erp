@@ -380,7 +380,13 @@
   /* width: 100%; */
 }
 .singleChat_comment_card_text_message p{
-  margin: 10px 0;
+  margin: 5px 0 5px;
+}
+.singleChat_comment_card_text_message p:first-child{
+  margin: 0 0 5px;
+}
+.singleChat_comment_card_text_message p:last-child{
+  margin: 5px 0 0;
 }
 .singleChat_comment_card_files{
   /* flex: 0 0 75%; */
