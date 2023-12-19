@@ -1620,91 +1620,6 @@ if ($request->project_type !='hourly'){
         return $dataTable->render('leads.show', $this->data);
     }
 
-    // public function getLead(Request $request){
-    //     $startDate = null;
-    //     $endDate = null;
-
-    //     if ($request->start_date !== null && $request->start_date != 'null' && $request->start_date != '') {
-    //         $startDate = Carbon::createFromFormat($this->global->date_format, $request->start_date)->toDateString();
-    //     }
-
-    //     if ($request->end_date !== null && $request->end_date != 'null' && $request->end_date != '') {
-    //         $endDate = Carbon::createFromFormat($this->global->date_format, $request->end_date)->toDateString();
-    //     }
-    //     $currentDate = now()->format('Y-m-d');
-
-    //     $limit = $request->limit ??  10 ;
-    //     $leads = Lead::select(
-    //         'leads.id',
-    //         'leads.added_by',
-    //         'leads.client_id',
-    //         'leads.category_id',
-    //         'client_name',
-    //         'actual_value',
-    //         'bidding_minutes',
-    //         'bidding_seconds',
-    //         'bid_value',
-    //         'bid_value2',
-    //         'project_link',
-    //         'project_id',
-    //         'company_name',
-    //         'lead_status.type as statusName',
-    //         'lead_status.label_color as lead_status_label_color',
-    //         'status_id',
-    //         'deal_status',
-    //         'currency_id',
-    //         'original_currency_id',
-    //         'leads.created_at as lead_created_at',
-    //         'users.name as agent_name',
-    //         'users.image',
-    //         'currencies.currency_symbol as currency_symbol',
-    //     )
-    //     ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
-    //     ->leftJoin('users', 'users.id', 'leads.added_by')
-    //     ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
-    //     ->where('leads.status','!=','DM')
-    //     ->orderBy('leads.id', 'desc')
-    //     ->paginate($limit);
-
-    //     /** new code */
-
-    //     $dealStages = DealStage::whereIn('lead_id', $leads->pluck('id'))->get();
-
-    //     foreach ($leads as $lead) {
-    //         $wonLost = 0;
-
-    //         $leadDealStages = $dealStages->where('lead_id', $lead->id);
-
-    //         if ($leadDealStages->isNotEmpty()) {
-    //             $latestDealStage = $leadDealStages->sortByDesc('created_at')->first();
-
-    //             if ($latestDealStage->deal_status == 'pending' && $latestDealStage->won_lost == 'Yes') {
-    //                 $wonLost = 1;
-    //             } elseif ($latestDealStage->deal_status == 'Lost') {
-    //                 $wonLost = 2;
-    //             } elseif ($latestDealStage->deal_status == 'pending' && ($latestDealStage->won_lost == 'No' || $latestDealStage->won_lost == null)) {
-    //                 $wonLost = 3;
-    //             }
-    //         }
-
-    //         $lead->won_lost = $wonLost;
-    //     }
-
-    //     if ($startDate !== null && $endDate !== null) {
-    //         $lead->where(function ($query) use ($startDate, $endDate) {
-    //             $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
-
-    //             $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
-    //         });
-    //     }
-
-
-    //     return response()->json([
-    //         'data' => $leads,
-    //         'status' => 200
-    //     ]);
-    // }
-
     public function getLead(Request $request)
     {
         $startDate = $request->start_date ?? null;
@@ -1793,8 +1708,12 @@ if ($request->project_type !='hourly'){
     }
 
 
-    public function exportLead(){
-        $leads = Lead::select(
+    public function exportLead(Request $request)
+    {
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+
+        $leadsQuery = Lead::select(
             'leads.id',
             'leads.added_by',
             'leads.client_id',
@@ -1819,12 +1738,21 @@ if ($request->project_type !='hourly'){
             'users.image',
             'currencies.currency_symbol as currency_symbol',
         )
-        ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
-        ->leftJoin('users', 'users.id', 'leads.added_by')
-        ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
-        ->where('leads.status','!=','DM')
-        ->orderBy('leads.id', 'desc')
-        ->get();
+            ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+            ->leftJoin('users', 'users.id', 'leads.added_by')
+            ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+            ->where('leads.status', '!=', 'DM');
+
+            if ($startDate !== null && $endDate !== null) {
+                $leadsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+
+            $leads = $leadsQuery
+                ->orderBy('leads.id', 'desc')
+                ->get();
 
         return response()->json([
             'data' => $leads,
