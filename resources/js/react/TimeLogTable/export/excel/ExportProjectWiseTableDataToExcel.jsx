@@ -111,7 +111,6 @@ const ExportProjectWiseTableDataToExcel = ({data, button, filter, filename}) => 
       <ExcelSheet
         dataSet={multiDataSet}
         name={filename} 
-        name="Organization"
       />
     </ExcelFile>
   )

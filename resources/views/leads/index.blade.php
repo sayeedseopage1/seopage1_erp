@@ -4,10 +4,9 @@
     @include('sections.datatable_css')
 @endpush
 
-@section('filter-section')
-
-    @include('leads.filters')
-
+@section('filter-section') 
+    {{-- @include('leads.filters')  --}}
+    <div id="leadTableFilterContainer"></div>
 @endsection
 
 @php
@@ -28,6 +27,8 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                         @lang('app.lead')
                     </x-forms.link-primary>
                 @endif
+
+                <div id="leadTableExportButton"></div>
 
           {{--      @if ($addLeadCustomFormPermission == 'all')
                     <x-forms.button-secondary icon="pencil-alt" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" id="add-lead">
@@ -59,14 +60,16 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                 </div>
             </x-datatable.actions>
 
+            <div id="leadTableRefreshButton"></div>
 
-            <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">
+
+            {{-- <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">
                 <a href="{{ route('leads.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
-                    data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
+                    data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a> --}}
                   {{--
                 <a href="{{ route('leadboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
                 --}}
-            </div>
+            {{-- </div> --}}
         </div>
 
         <!-- Add Task Export Buttons End -->
@@ -78,8 +81,8 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
               </div>
               @endif
-
-            {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+              <div id="leadTableContainer"></div>
+            {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
             @include('contracts.modals.dealstmodal')
         </div>
         <!-- Task Box End -->
