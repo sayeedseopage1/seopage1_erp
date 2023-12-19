@@ -1748,6 +1748,17 @@ if ($request->project_type !='hourly'){
                     $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
                 });
             }
+            if ($request->search != '') {
+                $leadsQuery->where(function ($query) {
+                    $query->where('leads.client_name', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.company_name', 'like', '%' . request('search') . '%')
+    
+                    ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.project_id', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.actual_value', 'like', '%' . request('search') . '%')
+                    ->orWhere('users.name', 'like', '%' . request('search') . '%');
+                });
+            }
 
             $leads = $leadsQuery
                 ->orderBy('leads.id', 'desc')
