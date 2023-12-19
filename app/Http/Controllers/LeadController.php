@@ -1621,6 +1621,18 @@ if ($request->project_type !='hourly'){
     }
 
     public function getLead(Request $request){
+        $startDate = null;
+        $endDate = null;
+
+        if ($request->start_date !== null && $request->start_date != 'null' && $request->start_date != '') {
+            $startDate = Carbon::createFromFormat($this->global->date_format, $request->start_date)->toDateString();
+        }
+
+        if ($request->end_date !== null && $request->end_date != 'null' && $request->end_date != '') {
+            $endDate = Carbon::createFromFormat($this->global->date_format, $request->end_date)->toDateString();
+        }
+        $currentDate = now()->format('Y-m-d');
+
         $limit = $request->limit ??  10 ;
         $leads = Lead::select(
             'leads.id',
@@ -1677,33 +1689,14 @@ if ($request->project_type !='hourly'){
 
             $lead->won_lost = $wonLost;
         }
-        
-        /** old code */
-        // foreach($leads as $lead){
-        //     $won_lost = '';
-        //     if($lead->deal_status == 0){
-        //         $won_lost = 0;
-        //     } else {
-        //         $deal_stages = DealStage::all();
-        //         foreach($deal_stages as $leadId){
-        //             $leadId = DealStage::where('lead_id', $lead->id)->first();
-        //             if ($leadId == null) {
-        //                 $won_lost = 0;
-        //             } else {
-        //                 if($lead->id == $leadId->lead_id){
-        //                     if($leadId->deal_status == 'pending' && $leadId->won_lost == 'Yes'){
-        //                         $won_lost = 1;
-        //                     } elseif($leadId->deal_status == 'Lost'){
-        //                         $won_lost = 2;
-        //                     } elseif(($leadId->deal_status == 'pending' && $leadId->won_lost == 'No') || ($leadId->deal_status == 'pending' && $leadId->won_lost == null)) {
-        //                         $won_lost = 3;
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     $lead->won_lost = $won_lost;
-        // }
+
+        if ($startDate !== null && $endDate !== null) {
+            $lead->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
+
+                $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
+            });
+        }
 
 
         return response()->json([
