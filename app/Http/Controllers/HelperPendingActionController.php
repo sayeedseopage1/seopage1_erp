@@ -1139,46 +1139,35 @@ class HelperPendingActionController extends AccountBaseController
              'button_color' => 'primary',
              'button_type' => 'modal',
              'button_url' => '',
-             'modal_form'=> true,
-             'form'=> [
-                 [
-                     'type'=> 'textarea',
-                     'label'=>'Write a reply',
-                     'name'=>'reply',
-                     'required'=> true,
-                 ], 
-                 [
-                     'type'=> 'hidden',
-                      'value'=> $task->id,
-                      'readonly'=> true,
+             'modal_form'=> false,
+            //  'form'=> [
+            //      [
+            //          'type'=> 'textarea',
+            //          'label'=>'Write a reply',
+            //          'name'=>'reply',
+            //          'required'=> true,
+            //      ], 
+            //      [
+            //          'type'=> 'hidden',
+            //           'value'=> $task->id,
+            //           'readonly'=> true,
                     
-                     'name'=>'project_id',
-                     'required'=> true,
-                 ], 
-                  [
-                     'type'=> 'hidden',
-                     'value'=> $action->id,
-                     'readonly'=> true,
+            //          'name'=>'project_id',
+            //          'required'=> true,
+            //      ], 
+            //       [
+            //          'type'=> 'hidden',
+            //          'value'=> $action->id,
+            //          'readonly'=> true,
                      
-                     'name'=>'authorization_id',
+            //          'name'=>'authorization_id',
                     
-                     'required'=> true,
+            //          'required'=> true,
                      
-                 ], 
+            //      ], 
                  
-             ], 
-             'form_action'=> [
-                 [
-                     'type'=> 'button',
-                     'method'=>'POST',
-                     'label'=> 'Reply',
-                     'color'=> 'success',
-                     'url'=> '',
-
-                 ], 
-                
-                 
-             ]
+            //  ], 
+            
          ],
          [
             'button_name' => 'Not relevant to me',
