@@ -28,7 +28,7 @@ import _ from "lodash";
 import { Placeholder } from "../../../../../global/Placeholder";
 import EmptyTable from "../../../../../global/EmptyTable";
 import { useSearchParams } from "react-router-dom";
-import { useLocalStorage } from 'react-use'
+import { useLocalStorage } from "react-use";
 
 const LeadTable = ({
     data,
@@ -177,21 +177,25 @@ const LeadTable = ({
                         Entries
                     </Flex>
 
-                    <ReactPaginate
-                        breakLabel="..."
-                        onPageChange={handlePageChange}
-                        previousLabel="Previous"
-                        nextLabel="Next"
-                        pageRangeDisplayed={3}
-                        marginPagesDisplayed={1}
-                        pageCount={data?.last_page ?? 1}
-                        renderOnZeroPageCount={null}
-                        containerClassName={styles.containerClassName}
-                        pageLinkClassName={styles.pageLinkClassName}
-                        activeLinkClassName={styles.activeLinkClassName}
-                        previousLinkClassName={styles.pageLinkClassName}
-                        nextLinkClassName={styles.pageLinkClassName}
-                    />
+                    <Flex>
+                        <span>Showing {data?.from} to {data?.to} of {data?.total} entries</span>
+
+                        <ReactPaginate
+                            breakLabel="..."
+                            onPageChange={handlePageChange}
+                            previousLabel="Previous"
+                            nextLabel="Next"
+                            pageRangeDisplayed={3}
+                            marginPagesDisplayed={1}
+                            pageCount={data?.last_page ?? 1}
+                            renderOnZeroPageCount={null}
+                            containerClassName={styles.containerClassName}
+                            pageLinkClassName={styles.pageLinkClassName}
+                            activeLinkClassName={styles.activeLinkClassName}
+                            previousLinkClassName={styles.pageLinkClassName}
+                            nextLinkClassName={styles.pageLinkClassName}
+                        />
+                    </Flex>
                 </TableFooter>
             </React.Fragment>
         </React.Fragment>

@@ -54,7 +54,7 @@ const LeadTableExportButton = ({ filter }) => {
                 },
             ];
 
-            const s = d?.won_lost ? status[d?.won_lost] : "--";
+            const s = d?.won_lost ? status[d?.won_lost] : null;
 
             let row = [
                 {
@@ -106,7 +106,7 @@ const LeadTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: s,
+                    value: s?.label ?? '--',
                     style: {
                         ...fieldStyle,
                         font: {
@@ -142,8 +142,7 @@ const LeadTableExportButton = ({ filter }) => {
         {
             columns: [
                 { title: "Filter" },
-                { title: "Date" },
-                { title: "Status" },
+                { title: "Date" }, 
             ],
             data: [
                 [
@@ -176,10 +175,6 @@ const LeadTableExportButton = ({ filter }) => {
         setIsRender(false);
         await allLeads(`?${query}`).unwrap();
         setIsRender(true);
-
-        setTimeout(() => {
-            setIsRender(false);
-        }, 500)
     };
 
     return ReactDOM.createPortal(

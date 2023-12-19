@@ -60,14 +60,16 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                 </div>
             </x-datatable.actions>
 
+            <div id="leadTableRefreshButton"></div>
 
-            <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">
+
+            {{-- <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">
                 <a href="{{ route('leads.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
-                    data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a>
+                    data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a> --}}
                   {{--
                 <a href="{{ route('leadboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
                 --}}
-            </div>
+            {{-- </div> --}}
         </div>
 
         <!-- Add Task Export Buttons End -->

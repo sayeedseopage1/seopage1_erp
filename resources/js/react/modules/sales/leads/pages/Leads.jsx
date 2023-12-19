@@ -6,6 +6,7 @@ import { useLeadsQuery } from "../../../../services/api/leadApiSlice";
 import { LeadTableColumns } from "../components/table/LeadTableColumns";
 import LeadTableFilterBar from "../components/LeadTableFilterBar";
 import LeadTableExportButton from "../components/LeadTableExportButton";
+import RefreshButton from "../components/RefreshButton";
  
 
 const Leads = () => {
@@ -48,6 +49,9 @@ const Leads = () => {
             <LeadTableExportButton 
                 filter={filter} 
             />
+
+            {/* refresh */}
+            <RefreshButton onClick={refetch} isLoading={isFetching} />
             <LeadTable
                 data={leads}
                 columns={[...LeadTableColumns]}
