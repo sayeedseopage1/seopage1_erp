@@ -65,7 +65,7 @@ class TimelogReportController extends AccountBaseController
 
     public function getTimeLog(Request $request, $type)
     {
-       // dd($request);
+       
        // dd($type);
         $page = $request->input('page', 1);
         $perPage = $request->input('per_page_row', 10);
@@ -113,8 +113,8 @@ class TimelogReportController extends AccountBaseController
 
                 'project_time_logs.start_time as time_log_start_time',
                 'project_time_logs.end_time as time_log_end_time',
-               DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
-               DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
+               DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
+               DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
             ])
                 ->leftJoin('projects', 'project_time_logs.project_id', '=', 'projects.id')
 
@@ -157,7 +157,9 @@ class TimelogReportController extends AccountBaseController
                         $data = $data->whereDate('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                     }
                 }
-            } else {
+            } 
+            
+            else {
                 if (!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate) {
 
                     $data = $data->whereDate('projects.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
@@ -181,9 +183,9 @@ class TimelogReportController extends AccountBaseController
                 $data = $data->where('projects.client_id', $clientId);
             }
 
-            if (!is_null($status)) {
-                $data = $data->where('projects.status', $status);
-            }
+            // if (!is_null($status)) {
+            //     $data = $data->where('projects.status', $status);
+            // }
             /*$total_rows = $data->get()->count();
 
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
@@ -209,9 +211,15 @@ class TimelogReportController extends AccountBaseController
       //dd($data);
 
       foreach ($data as $item) {
-        $timer= ProjectTimeLog::where('project_id',$item->project_id)->where('user_id',$item->employee_id)
+        $timer= ProjectTimeLog::where('user_id',$item->employee_id)
         ->where('start_time','!=', null)->where('end_time',null)
         ->orderBy('id','desc')->first();
+        if($item->project_id == null)
+        {
+            $item->project_name = "Independent Task";
+            $item->client_name = '--';
+            $item->pm_name = '--';
+        }
 
 
          if($timer != null )
@@ -269,11 +277,11 @@ class TimelogReportController extends AccountBaseController
 
             ->leftJoin('projects', 'project_time_logs.project_id', 'projects.id')
 
-            ->join('users as pm', 'projects.pm_id', 'pm.id')
-            ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
+            ->leftJoin('users as pm', 'projects.pm_id', 'pm.id')
+            ->leftJoin('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
 
             ->leftJoin('users as employee', 'project_time_logs.user_id', 'employee.id')
-            ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
+            ->leftJoin('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
 
             ->leftJoin('users as client', 'projects.client_id', 'client.id')
             ->leftJoin('deals', 'client.id', '=', 'deals.client_id')
@@ -582,7 +590,7 @@ class TimelogReportController extends AccountBaseController
             DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
         ])
         ->leftJoin('users as employee', 'project_time_logs.user_id', 'employee.id')
-        ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
+        ->leftjoin('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
         ->leftJoin('developer_stop_timers','developer_stop_timers.user_id','employee.id')
 
         //->where('total_minutes', '>', 0);
@@ -774,6 +782,7 @@ class TimelogReportController extends AccountBaseController
 
     public function show(Request $request, $project_id ,$employee_id)
     {
+      //  dd($request);
         $data = ProjectTimeLog::select([
             'tasks.id as task_id',
             'tasks.heading as task_name',
@@ -783,7 +792,7 @@ class TimelogReportController extends AccountBaseController
             'project_time_logs.start_time',
             'project_time_logs.end_time',
             'project_time_logs.total_minutes',
-             DB::raw('(select sum(total_minutes) from project_time_logs where project_id = '.$project_id.') as project_total_time_log')
+             DB::raw('(select sum(total_minutes) from project_time_logs where user_id = '.$employee_id.') as project_total_time_log')
         ])
 
         ->leftJoin('projects','project_time_logs.project_id','projects.id')
@@ -792,7 +801,7 @@ class TimelogReportController extends AccountBaseController
         ->join('taskboard_columns', 'tasks.board_column_id', 'taskboard_columns.id')
         ->where([
             'project_time_logs.user_id' => $employee_id,
-            'project_time_logs.project_id' => $project_id
+          //  'project_time_logs.project_id' => $project_id
 
         ]);
 
@@ -811,7 +820,7 @@ class TimelogReportController extends AccountBaseController
 
         $data = $data->get();
         foreach ($data as $item) {
-            $timer= ProjectTimeLog::where('project_id',$project_id)->where('user_id',$employee_id)
+            $timer= ProjectTimeLog::where('user_id',$employee_id)
             ->where('start_time','!=', null)->where('end_time',null)
             ->orderBy('id','desc')->first();
 
