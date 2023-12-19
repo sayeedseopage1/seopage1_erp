@@ -1498,9 +1498,9 @@ var ChatInput = function ChatInput(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("section", {
       style: {
-        flexDirection: show || files.length || mentionedComment
+        flexDirection: show || files.length || mentionedComment ?
         // || isEditorHeightIncrease
-        ? "column" : "row"
+        "column" : "row"
       },
       className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_actions_btn_container),
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(FileUpload, {
@@ -1535,9 +1535,6 @@ function MentionedComment() {
   var _useCommentContext2 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
     mentionedComment = _useCommentContext2.mentionedComment,
     setMentionedComment = _useCommentContext2.setMentionedComment;
-
-  // console.log({mentionedComment});
-
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
     style: {
       borderBottom: "solid 0.5px white"
@@ -1565,7 +1562,7 @@ function MentionedComment() {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
             className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file, " shadow-sm"),
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
-              fileName: file === null || file === void 0 ? void 0 : file.name,
+              fileName: mentionedComment !== null && mentionedComment !== void 0 && mentionedComment.original_files ? mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.original_files[i] : file.name,
               URL: file === null || file === void 0 ? void 0 : file.url
             })
           }, i);

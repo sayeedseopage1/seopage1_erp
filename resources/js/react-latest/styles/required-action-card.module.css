@@ -294,3 +294,26 @@ p{
   /* border: solid; */
   gap: 0 10px;
 }
+
+
+
+/* ============================== comments modal (start) ============================== */
+
+
+
+
+
+/* --------- comment cancellation modal (start) --------- */
+.comment_cancellation_modal_container{
+  height: 259px;
+  height: 816px;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 4px;
+}
+/* --------- comment cancellation modal (end) --------- */
+
+
+/* ============================== comments modal (end) ============================== */

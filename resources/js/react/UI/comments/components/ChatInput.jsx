@@ -151,11 +151,9 @@ const ChatInput = ({ setScroll, taskId }) => {
             <section
                 style={{
                     flexDirection:
-                        show ||
-                        files.length ||
-                        mentionedComment
-                        // || isEditorHeightIncrease
-                            ? "column"
+                        show || files.length || mentionedComment
+                            ? // || isEditorHeightIncrease
+                              "column"
                             : "row",
                 }}
                 className={`${style.chatInput_actions_btn_container}`}
@@ -193,7 +191,6 @@ export default ChatInput;
 function MentionedComment() {
     const { mentionedComment, setMentionedComment } = useCommentContext();
 
-    // console.log({mentionedComment});
 
     return (
         <div
@@ -238,7 +235,12 @@ function MentionedComment() {
                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                 >
                                     <HandleFileIcon
-                                        fileName={file?.name}
+                                        fileName={
+                                            mentionedComment?.original_files
+                                                ? mentionedComment
+                                                      ?.original_files[i]
+                                                : file.name
+                                        }
                                         URL={file?.url}
                                     />
                                 </div>
@@ -363,8 +365,6 @@ function CommentEditor({
     //         setValue(editorHtml);
     //     }
     // }, [buttonClick]);
-
-
 
     useEffect(() => {
         // Focus the Quill editor when the component is rendered
