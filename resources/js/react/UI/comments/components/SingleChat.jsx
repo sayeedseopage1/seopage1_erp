@@ -13,7 +13,10 @@ import HandleFileIcon from "../utils/HandleFileIcon";
 import isCurrentUser from "../utils/isCurrentUser";
 import { User } from "../utils/user-details";
 import Swal from "sweetalert2";
-import getTextContent, { htmlToString } from "../utils/getTextContent";
+import getTextContent, {
+    htmlToPreservedText,
+    htmlToString,
+} from "../utils/getTextContent";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -217,21 +220,12 @@ const SingleChat = ({
     };
 
     const handleCopySingleComment = (comment) => {
-        const SelectedCommentsString = [comment].reduce(
-            (total, comment, i, arr) => {
-                total += `${htmlToString(comment?.comment)}\n\n${
-                    comment?.user?.name
-                }, ${dayjs(comment?.created_date).format(
-                    "MMM DD, YYYY, hh:mm A"
-                )}`;
+        const SelectedCommentsString = `${htmlToPreservedText(
+            comment.comment
+        )}\n${comment?.user?.name}, ${dayjs(comment?.created_date).format(
+            "MMM DD, YYYY, hh:mm A"
+        )} `;
 
-                if (i < arr.length - 1) {
-                    total += "\n\n\n";
-                }
-                return total;
-            },
-            ``
-        );
         // console.log({ allSelectedCommentsString });
         window.navigator.clipboard
             .writeText(SelectedCommentsString)
@@ -591,7 +585,11 @@ const SingleChat = ({
                                     style.singleChat_comment_card_text_container
                                 } ${
                                     idMatch ? `${style.singleChat_match}` : ""
-                                } ${selectMentionIndex===comment?.id? `${style.singleChat_match}`:""}`}
+                                } ${
+                                    selectMentionIndex === comment?.id
+                                        ? `${style.singleChat_match}`
+                                        : ""
+                                }`}
                             >
                                 {/* mentioned comment */}
                                 {comment?.mention ? (
@@ -746,18 +744,14 @@ const SingleChat = ({
                                 <CustomMoreOption
                                     comment={comment}
                                     isCurrentUser={isCurrentUser}
+                                    setMentionedComment={setMentionedComment}
+                                    handleSelect={handleSelect}
                                     handleCopySingleComment={
                                         handleCopySingleComment
                                     }
                                     handleDeleteSingleComment={
                                         handleDeleteSingleComment
                                     }
-                                    handleSelect={handleSelect}
-                                    setMentionedComment={setMentionedComment}
-                                    setShowCommentMenu={setShowCommentMenu}
-                                    menuBtnRef={menuBtnRef}
-                                    menuRef={menuRef}
-                                    showCommentMenu={showCommentMenu}
                                 />
                             </div>
                         )}
@@ -1021,13 +1015,12 @@ const CustomMoreOption = ({
     handleSelect,
     handleCopySingleComment,
     handleDeleteSingleComment,
-    menuBtnRef,
-    menuRef,
-    showCommentMenu,
-    setShowCommentMenu,
 }) => {
-    const [clicked, setClicked] = useState(false);
-    // console.log(showCommentMenu);
+    useEffect(() => {
+        document.addEventListener("contextmenu", (e) => {
+            $('.dropdown_btn').dropdown("hide");
+        });
+    }, []);
 
     return (
         <div
@@ -1040,9 +1033,9 @@ const CustomMoreOption = ({
             } ${style.singleChat_comment_card_text_custom_more_btn_container}`}
         >
             <button
-                ref={menuBtnRef}
+                id="dropdown_btn"
                 type="button"
-                className={`${style.singleChat_comment_card_text_custom_more_btn}`}
+                className={`dropdown_btn ${style.singleChat_comment_card_text_custom_more_btn}`}
                 data-toggle="dropdown"
                 aria-expanded="false"
             >
@@ -1054,7 +1047,6 @@ const CustomMoreOption = ({
                 />
             </button>
             <div
-                ref={menuRef}
                 className={`dropdown-menu ${style.singleChat_comment_card_text_custom_more_options}`}
             >
                 <section
@@ -1079,17 +1071,21 @@ const CustomMoreOption = ({
                     </span>
                 </section>
 
-                <section
-                    onClick={() => {
-                        // setShowCommentMenu(false);
-                        handleCopySingleComment(comment);
-                    }}
-                >
-                    <MdOutlineContentCopy
-                        className={`${style.context_icons}`}
-                    />
-                    <span className={`${style.context_title}`}>Copy</span>
-                </section>
+                {comment?.comment ? (
+                    <section
+                        onClick={() => {
+                            // setShowCommentMenu(false);
+                            handleCopySingleComment(comment);
+                        }}
+                    >
+                        <MdOutlineContentCopy
+                            className={`${style.context_icons}`}
+                        />
+                        <span className={`${style.context_title}`}>Copy</span>
+                    </section>
+                ) : (
+                    <></>
+                )}
 
                 {isCurrentUser(comment?.user?.id) ? (
                     <section
