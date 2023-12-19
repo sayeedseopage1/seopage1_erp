@@ -296,7 +296,21 @@
                         </div>
                         <div class="col-md-2">
                             <label for="">Education Level</label>
-                            <input type="text" name="education_level" id="education_level" class="form-control placeholderText height-35 f-14" placeholder="Education Level">
+                            <select name="education_level" id="education_level" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                <option value="">--</option>
+                                <option value="No formal education">No formal education</option>
+                                <option value="Primary school/elementary school">Primary school/elementary school</option>
+                                <option value="Secondary school/high school">Secondary school/high school</option>
+                                <option value="Vocational/technical schoo">Vocational/technical schoo</option>
+                                <option value="Vocational/technical schoo">Vocational/technical schoo</option>
+                                <option value="GED">GED</option>
+                                <option value="Associate's degree">Associate's degree</option>
+                                <option value="Bachelor's degree">Bachelor's degree</option>
+                                <option value="Master's degree">Master's degree</option>
+                                <option value="Doctoral degree">Doctoral degree</option>
+                                <option value="Professional degree (e.g., MD, JD, MBA)">Professional degree (e.g., MD, JD, MBA)</option>
+                                <option value="Others">Others</option>
+                            </select>
                             <span id="education_level_error" class="text-danger"></span>
                         </div>
                     </div>
