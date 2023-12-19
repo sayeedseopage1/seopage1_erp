@@ -12,6 +12,7 @@ import {
 } from "./ui";
 import { Menu } from "@headlessui/react";
 import ActionDropdown from "./ActionDropdown";
+import Avatar from "../../../../../global/Avatar";
 
 export const LeadTableColumns = [
     {
@@ -23,6 +24,22 @@ export const LeadTableColumns = [
         },
     },
     {
+        id: "project_name",
+        header: "Project Name",
+        accessorKey: "client_name",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <a
+                    href={`/account/leads/${data?.id}`}
+                    className="multiline-ellipsis text-hover-underline"
+                >
+                    {data?.client_name}
+                </a>
+            );
+        },
+    },
+    {
         id: "project_link",
         header: "Project Link",
         accessorKey: "project_link",
@@ -31,7 +48,7 @@ export const LeadTableColumns = [
             return (
                 <a
                     href={data?.project_link}
-                    className="multiline-ellipsis text-hover-underline"
+                    className="multiline-ellipsis text-hover-underline pr-2"
                 >
                     {data?.project_link}
                 </a>
@@ -91,7 +108,17 @@ export const LeadTableColumns = [
         accessorKey: "agent_name",
         cell: ({ row }) => {
             const data = row.original;
-            return <CreatedBy>{data?.agent_name}</CreatedBy>;
+            return (
+                <CreatedBy>
+                    <Avatar
+                        type="circle"
+                        name={data?.agent_name}
+                        src={data?.user?.image_url ?? null}
+                    />
+
+                    <span>{data?.agent_name}</span>
+                </CreatedBy>
+            );
         },
     },
     {
@@ -112,7 +139,22 @@ export const LeadTableColumns = [
         header: "Status",
         cell: ({ row }) => {
             const data = row.original;
-            return <Status>Pending</Status>;
+
+            return (
+                <Status>
+                    {data.deal_status === 0 ? (
+                        <span className="badge badge-danger">
+                            {" "}
+                            Not Converted to Deal{" "}
+                        </span>
+                    ) : (
+                        <span className="badge badge-success">
+                            {" "}
+                            Converted to Deal{" "}
+                        </span>
+                    )}
+                </Status>
+            );
         },
     },
     {
@@ -120,13 +162,41 @@ export const LeadTableColumns = [
         header: "Deal Status",
         cell: ({ row }) => {
             const data = row.original;
-            return <DealStatus>{data.statusName}</DealStatus>;
+            const status = [
+                {
+                    label: "Not Applicable",
+                    bgColor: "transparent",
+                    color: "#777",
+                },
+                {
+                    label: "Won",
+                    bgColor: "#0AAA29",
+                    color: "#fff",
+                },
+                {
+                    label: "Lost",
+                    bgColor: "#EC3003",
+                    color: "#fff",
+                },
+                {
+                    label: "Not Activity Yet",
+                    bgColor: "#FAA700",
+                    color: "#fff",
+                },
+            ];
+
+            const s = status[data?.won_lost];
+
+            return (
+                <DealStatus backgroundColor={s.bgColor} color={s.color}>
+                    {s.label}
+                </DealStatus>
+            );
         },
     },
     {
         id: "action",
         header: "Action",
-        cell: (props) => <ActionDropdown {...props} />
+        cell: (props) => <ActionDropdown {...props} />,
     },
 ];
-

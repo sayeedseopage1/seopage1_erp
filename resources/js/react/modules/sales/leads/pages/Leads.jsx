@@ -5,6 +5,7 @@ import { faker } from "@faker-js/faker";
 import { useLeadsQuery } from "../../../../services/api/leadApiSlice";
 import { LeadTableColumns } from "../components/table/LeadTableColumns";
 import LeadTableFilterBar from "../components/LeadTableFilterBar";
+ 
 
 const Leads = () => {
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
@@ -13,7 +14,7 @@ const Leads = () => {
     });
     const [filter, setFilter] = React.useState({});
 
-    const [sorting, setSorting] = React.useState([{id: 'id', desc: true}]);
+    const [sorting, setSorting] = React.useState([]);
 
     // make query string
     const queryString = (object) => {
@@ -42,8 +43,7 @@ const Leads = () => {
         <Container>
             <LeadTableFilterBar
               setFilter={setFilter}
-            />
-
+            /> 
             <LeadTable
                 data={leads}
                 columns={[...LeadTableColumns]}
@@ -52,6 +52,7 @@ const Leads = () => {
                 sorting={sorting} 
                 setSorting={setSorting}
             />
+
         </Container>
     );
 };

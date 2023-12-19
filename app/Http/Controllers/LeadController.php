@@ -1655,31 +1655,57 @@ if ($request->project_type !='hourly'){
         ->orderBy('leads.id', 'desc')
         ->paginate($limit);
 
-        foreach($leads as $lead){
-            $won_lost = '';
-            if($lead->deal_status == 0){
-                $won_lost = 0;
-            } else {
-                $deal_stages = DealStage::all();
-                foreach($deal_stages as $leadId){
-                    $leadId = DealStage::where('lead_id', $lead->id)->first();
-                    if ($leadId == null) {
-                        $won_lost = 0;
-                    } else {
-                        if($lead->id == $leadId->lead_id){
-                            if($leadId->deal_status == 'pending' && $leadId->won_lost == 'Yes'){
-                                $won_lost = 1;
-                            } elseif($leadId->deal_status == 'Lost'){
-                                $won_lost = 2;
-                            } elseif(($leadId->deal_status == 'pending' && $leadId->won_lost == 'No') || ($leadId->deal_status == 'pending' && $leadId->won_lost == null)) {
-                                $won_lost = 3;
-                            }
-                        }
-                    }
+        /** new code */
+
+        $dealStages = DealStage::whereIn('lead_id', $leads->pluck('id'))->get();
+
+        foreach ($leads as $lead) {
+            $wonLost = 0;
+
+            $leadDealStages = $dealStages->where('lead_id', $lead->id);
+
+            if ($leadDealStages->isNotEmpty()) {
+                $latestDealStage = $leadDealStages->sortByDesc('created_at')->first();
+
+                if ($latestDealStage->deal_status == 'pending' && $latestDealStage->won_lost == 'Yes') {
+                    $wonLost = 1;
+                } elseif ($latestDealStage->deal_status == 'Lost') {
+                    $wonLost = 2;
+                } elseif ($latestDealStage->deal_status == 'pending' && ($latestDealStage->won_lost == 'No' || $latestDealStage->won_lost == null)) {
+                    $wonLost = 3;
                 }
             }
-            $lead->won_lost = $won_lost;
+
+            $lead->won_lost = $wonLost;
         }
+        
+        /** old code */
+        // foreach($leads as $lead){
+        //     $won_lost = '';
+        //     if($lead->deal_status == 0){
+        //         $won_lost = 0;
+        //     } else {
+        //         $deal_stages = DealStage::all();
+        //         foreach($deal_stages as $leadId){
+        //             $leadId = DealStage::where('lead_id', $lead->id)->first();
+        //             if ($leadId == null) {
+        //                 $won_lost = 0;
+        //             } else {
+        //                 if($lead->id == $leadId->lead_id){
+        //                     if($leadId->deal_status == 'pending' && $leadId->won_lost == 'Yes'){
+        //                         $won_lost = 1;
+        //                     } elseif($leadId->deal_status == 'Lost'){
+        //                         $won_lost = 2;
+        //                     } elseif(($leadId->deal_status == 'pending' && $leadId->won_lost == 'No') || ($leadId->deal_status == 'pending' && $leadId->won_lost == null)) {
+        //                         $won_lost = 3;
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     $lead->won_lost = $won_lost;
+        // }
+
 
         return response()->json([
             'data' => $leads,
