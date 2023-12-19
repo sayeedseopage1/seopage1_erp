@@ -4,10 +4,9 @@
     @include('sections.datatable_css')
 @endpush
 
-@section('filter-section')
-
-    @include('leads.filters')
-
+@section('filter-section') 
+    {{-- @include('leads.filters')  --}}
+    <div id="leadTableFilterContainer"></div>
 @endsection
 
 @php
@@ -28,6 +27,8 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                         @lang('app.lead')
                     </x-forms.link-primary>
                 @endif
+
+                <div id="leadTableExportButton"></div>
 
           {{--      @if ($addLeadCustomFormPermission == 'all')
                     <x-forms.button-secondary icon="pencil-alt" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" id="add-lead">
@@ -78,8 +79,8 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
               </div>
               @endif
-
-            {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
+              <div id="leadTableContainer"></div>
+            {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
             @include('contracts.modals.dealstmodal')
         </div>
         <!-- Task Box End -->
