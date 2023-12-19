@@ -518,6 +518,7 @@ class DMLeadController extends AccountBaseController
     }
     public function dmDealStageChange(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'client_username' => 'required|max:255',
             'profile_link' => 'required',
