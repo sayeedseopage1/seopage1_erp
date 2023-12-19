@@ -12,19 +12,17 @@ import styled from "styled-components";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
-const LeadTableExportButton = ({filter}) => {
-    const [isRender, setIsRender] = React.useState(false); 
+const LeadTableExportButton = ({ filter }) => {
+    const [isRender, setIsRender] = React.useState(false);
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
-    const [allLeads, { data, isFetching, isSuccess }] =
-        useLazyAllLeadsQuery();
-
+    const [allLeads, { data, isFetching, isSuccess }] = useLazyAllLeadsQuery();
 
     const leads = data?.data;
 
     const fieldStyle = {
         alignment: {
-            wrapText: true,
+            // wrapText: true,
             vertical: "center",
             horizontal: "top",
         },
@@ -40,23 +38,23 @@ const LeadTableExportButton = ({filter}) => {
             const status = [
                 {
                     label: "Not Applicable",
-                    bgColor: "FFFFFFFF", 
+                    bgColor: "FFFFFFFF",
                 },
                 {
                     label: "Won",
-                    bgColor: "FF0AAA29", 
+                    bgColor: "FF0AAA29",
                 },
                 {
                     label: "Lost",
-                    bgColor: "FFEC3003", 
+                    bgColor: "FFEC3003",
                 },
                 {
                     label: "Not Activity Yet",
-                    bgColor: "FFFAA700", 
+                    bgColor: "FFFAA700",
                 },
             ];
 
-            const s = d?.won_lost ? status[d?.won_lost] : '--';
+            const s = d?.won_lost ? status[d?.won_lost] : "--";
 
             let row = [
                 {
@@ -110,11 +108,10 @@ const LeadTableExportButton = ({filter}) => {
                 {
                     value: s,
                     style: {
-                      ...fieldStyle,
-                      font: {
-                        color: { rgb: "FFFFFFFF" }
-
-                      }
+                        ...fieldStyle,
+                        font: {
+                            color: { rgb: "FFFFFFFF" },
+                        },
                     },
                 },
             ];
@@ -127,12 +124,12 @@ const LeadTableExportButton = ({filter}) => {
 
     // columns
     const columns = [
-        { title: "#"},
+        { title: "#" },
         { title: "Project Name" },
-        { title: "Project Link" },
-        { title: "Project ID"},
+        { title: "Project Link", width: { wpx: 200 } },
+        { title: "Project ID" },
         { title: "Project Budget" },
-        { title: "Bid Value"},
+        { title: "Bid Value" },
         { title: "Created At" },
         { title: "Created By" },
         { title: "Bidding Delay Time" },
@@ -143,14 +140,46 @@ const LeadTableExportButton = ({filter}) => {
     // multi data set
     const multiDataSet = [
         {
+            columns: [
+                { title: "Filter" },
+                { title: "Date" },
+                { title: "Status" },
+            ],
+            data: [
+                [
+                    {
+                        value: `--`,
+                    },
+                    {
+                        value: `${dayjs(filter?.start_date).format(
+                            "MMM-DD-YYYY"
+                        )} to ${dayjs(filter?.end_date).format("MMM-DD-YYYY")}`,
+                        style: {
+                            font: {
+                                bold: true,
+                            },
+                        },
+                    },
+                    
+                ],
+            ],
+        },
+        {
+            xSteps: 0,
+            ySteps: 2,
             columns: columns,
             data: getData(leads),
         },
     ];
 
     const handleRender = async () => {
+        setIsRender(false);
         await allLeads(`?${query}`).unwrap();
-        setIsRender(true); 
+        setIsRender(true);
+
+        setTimeout(() => {
+            setIsRender(false);
+        }, 500)
     };
 
     return ReactDOM.createPortal(
