@@ -6803,12 +6803,7 @@ class TaskController extends AccountBaseController
 
         foreach ($data as $value) {
 
-           $mentions = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->get();
-           foreach($mentions as $mention)
-           {
-            $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$mention->mention_id)->first();
-            $value->original_files =  json_decode($mention->original_files);
-           }
+           $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
            $value->original_files= json_decode($value->original_files);
         }
         
