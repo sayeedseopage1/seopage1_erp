@@ -3103,6 +3103,7 @@ var handleFileUrl = function handleFileUrl(url, fileName, file) {
       name = _ref[0],
       ext = _ref[1];
     return [url, name, ext];
+    console.log(fileName);
   } else if (file) {
     var _file_name = file.name.split(".");
     var _ref2 = [_file_name.slice(0, _file_name.length - 1).join("."), _file_name[_file_name.length - 1]],
