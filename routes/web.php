@@ -941,10 +941,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
-
+    Route::get('get-all-leads', [LeadController::class,'getLead']);
+    Route::get('export-lead-data', [LeadController::class,'exportLead']);
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
     Route::resource('digital-marketing-lead',DMLeadController::class);
+    Route::post('/dm-lead-source-store', [DMLeadController::class, 'storeDmLeadSource'])->name('store-dm-lead-source');
     Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
     Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
 

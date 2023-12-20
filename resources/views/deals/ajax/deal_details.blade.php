@@ -766,7 +766,7 @@
                                     @if (Auth::user()->role_id==4)
                                         <div class="sp1_deal-stage-wrapper">
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#clientDealaddStageModal"
-                                        data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
+                                        data-bs-whatever="@mdo" class="btn btn-success wons w-40" onclick="event.preventDefault()">Won The Deal</a>
                                             <div class="sp1_deal-stage-content text-left">
                                                 <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
                                             </div>
@@ -775,7 +775,7 @@
                                          {{-- WHEN DEGITAL MERKITING IS TRUE  --}}
                                             @if ($dealStage->convert_ld_status == 'DM')
                                                 <div class="sp1_deal-stage-wrapper">
-                                                    <a href="#" data-toggle="dealModal" data-target="#dm-dealaddstagemodal" class="btn btn-success wons deal-modal-toggle w-40">Won The Deal</a>
+                                                    <a href="#" data-toggle="dealModal" data-target="#dm-dealaddstagemodal" class="btn btn-success wons deal-modal-toggle w-40" onclick="event.preventDefault()">Won The Deal</a>
                                                     <div class="sp1_deal-stage-content text-left">
                                                         <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
                                                     </div>
@@ -783,7 +783,7 @@
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#dm-lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
                                             @else
                                                 <div class="sp1_deal-stage-wrapper">
-                                                    <a href="#" data-toggle="dealModal" data-target="#dealaddstagemodal" class="btn btn-success wons deal-modal-toggle w-40">Won The Deal</a>
+                                                    <a href="#" data-toggle="dealModal" data-target="#dealaddstagemodal" class="btn btn-success wons deal-modal-toggle w-40" onclick="event.preventDefault()">Won The Deal</a>
                                                     <div class="sp1_deal-stage-content text-left">
                                                         <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
                                                     </div>
