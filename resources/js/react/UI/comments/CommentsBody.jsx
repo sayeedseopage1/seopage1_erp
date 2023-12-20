@@ -30,7 +30,10 @@ import Swal from "sweetalert2";
 import dayjs from "dayjs";
 import isCurrentUser from "./utils/isCurrentUser";
 import CommentsPlaceholder from "./utils/CommentsPlaceholder";
-import getTextContent, { htmlToString } from "./utils/getTextContent";
+import getTextContent, {
+    htmlToPreservedText,
+    htmlToString,
+} from "./utils/getTextContent";
 import { useDeleteCommentsMutation } from "../../services/api/commentsApiSlice";
 import { useParams } from "react-router-dom";
 
@@ -54,6 +57,7 @@ const CommentsBody = ({
     close,
     comments,
     loading,
+    fetching,
     refetch,
     taskId,
     height,
@@ -109,12 +113,16 @@ const CommentsBody = ({
                 <TbMessage2Check className={`context_icons`} />
                 <span className={`context_title`}>Select Message</span>
             </ContextMenuItem>
-            <ContextMenuItem
-                onSelect={() => handleCopySingleComment(contextHolder)}
-            >
-                <MdOutlineContentCopy className={`context_icons`} />
-                <span className={`context_title`}>Copy</span>
-            </ContextMenuItem>
+            {contextHolder?.comment ? (
+                <ContextMenuItem
+                    onSelect={() => handleCopySingleComment(contextHolder)}
+                >
+                    <MdOutlineContentCopy className={`context_icons`} />
+                    <span className={`context_title`}>Copy</span>
+                </ContextMenuItem>
+            ) : (
+                <></>
+            )}
             {isCurrentUser(contextHolder?.user_id) ? (
                 <ContextMenuItem
                     onSelect={() => handleDeleteSingleComment(contextHolder)}
@@ -171,7 +179,7 @@ const CommentsBody = ({
         }, 0);
 
         return () => clearTimeout(timer);
-    }, [scroll, isOpen, comments, loading]);
+    }, [scroll, isOpen, comments, loading, fetching, isloading]);
 
     useEffect(() => {
         setSearchText("");
@@ -227,9 +235,9 @@ const CommentsBody = ({
         // console.log({ allSelectedComments });
         const allSelectedCommentsString = allSelectedComments.reduce(
             (total, comment, i, arr) => {
-                total += `${htmlToString(comment?.comment)}\n\n${
+                total += `${htmlToPreservedText(comment?.comment)}\n${
                     comment?.user?.name
-                }, ${dayjs(comment?.last_updated_date).format(
+                }, ${dayjs(comment?.created_date).format(
                     "MMM DD, YYYY, hh:mm A"
                 )}`;
 
@@ -301,21 +309,16 @@ const CommentsBody = ({
     };
 
     const handleCopySingleComment = (comment) => {
-        const SelectedCommentsString = [comment].reduce(
-            (total, comment, i, arr) => {
-                total += `${htmlToString(comment?.comment)}\n\n${
-                    comment?.user?.name
-                }, ${dayjs(comment?.last_updated_date).format(
-                    "MMM DD, YYYY, hh:mm A"
-                )}`;
-
-                if (i < arr.length - 1) {
-                    total += "\n\n\n";
-                }
-                return total;
-            },
-            ``
-        );
+        let SelectedCommentsString;
+        if (window.getSelection().toString()) {
+            SelectedCommentsString = window.getSelection().toString();
+        } else {
+            SelectedCommentsString = `${htmlToPreservedText(
+                comment.comment
+            )}\n${comment?.user?.name}, ${dayjs(comment?.created_date).format(
+                "MMM DD, YYYY, hh:mm A"
+            )} `;
+        }
         // console.log({ allSelectedCommentsString });
         window.navigator.clipboard
             .writeText(SelectedCommentsString)
@@ -672,7 +675,8 @@ const CommentsBody = ({
                     ref={comments_ref}
                     className={`position-relative ${style.commentsBody_commentArea}`}
                 >
-                    {loading || isloading || deleteLoading ? (
+                    {/* {loading || isloading || deleteLoading ? ( */}
+                    {loading ? (
                         <CommentsPlaceholder />
                     ) : (
                         <>
@@ -706,6 +710,16 @@ const CommentsBody = ({
                                     />
                                 );
                             })}
+                            {(fetching || isloading || deleteLoading) ? (
+                                <div className="d-flex justify-content-center mt-2">
+                                    <div
+                                        className="spinner-border"
+                                        role="status"
+                                    ></div>
+                                </div>
+                            ) : (
+                                <></>
+                            )}
                             {contextMenu}
                         </>
                     )}
@@ -720,37 +734,42 @@ const CommentsBody = ({
                         ref={chatbottom_ref}
                     />
                 </main>
-
                 <footer className={`${style.commentsBody_inputField}`}>
-                    <ChatInput taskId={taskId} setScroll={setScroll} />
+                    <ChatInput taskId={taskId} setScroll={setScroll} setIsLoading={setIsLoading} />
                 </footer>
 
                 {Object.keys(selectedComments).length > 0 ? (
                     <div
                         className={`${style.comments_selected_action_controller} ${style.open_action_controller}`}
                     >
-                        <section
-                            className={`${style.comments_selected_action_controller_btn}`}
-                        >
-                            <span
-                                onClick={handleCopyComments}
-                                className={`${style.comments_selected_action_controller_btn_icon}`}
+                        {Object.values(selectedComments).every((comment) => {
+                            return !!comment?.comment;
+                        }) ? (
+                            <section
+                                className={`${style.comments_selected_action_controller_btn}`}
                             >
-                                {/* icon 1 */}
-                                <MdContentCopy
-                                    style={{
-                                        height: "19.02px",
-                                        width: "16.01px",
-                                    }}
-                                />
-                            </span>
-                            <span
-                                onClick={handleCopyComments}
-                                className={`${style.comments_selected_action_controller_btn_text}`}
-                            >
-                                Copy
-                            </span>
-                        </section>
+                                <span
+                                    onClick={handleCopyComments}
+                                    className={`${style.comments_selected_action_controller_btn_icon}`}
+                                >
+                                    {/* icon 1 */}
+                                    <MdContentCopy
+                                        style={{
+                                            height: "19.02px",
+                                            width: "16.01px",
+                                        }}
+                                    />
+                                </span>
+                                <span
+                                    onClick={handleCopyComments}
+                                    className={`${style.comments_selected_action_controller_btn_text}`}
+                                >
+                                    Copy
+                                </span>
+                            </section>
+                        ) : (
+                            <></>
+                        )}
                         {Object.values(selectedComments).every((comment) => {
                             return isCurrentUser(comment?.user?.id);
                         }) ? (

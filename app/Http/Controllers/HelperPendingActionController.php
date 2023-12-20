@@ -16,6 +16,7 @@ use App\Models\TaskRevision;
 use App\Models\TaskRevisionDispute;
 use App\Models\Task;
 use App\Models\Taskuser;
+use App\Models\ProjectMember;
 
 class HelperPendingActionController extends AccountBaseController
 {
@@ -1109,15 +1110,11 @@ class HelperPendingActionController extends AccountBaseController
     $client= User::where('id',$project->client_id)->first();
    
     $commentor= User::where('id',$commentor)->first();
-    if($commentor->role_id == 4)
-    {
-        $authorizers= TaskUser::where('task_id',$task->id)->get();
+   
+        $authorizers= ProjectMember::where('project_id',$task->project_id)->where('user_id','!=',Auth::id())->groupBy('user_id')->get();
+       // dd($authorizers);
 
-    }else 
-    {
-        $authorizers= User::where('id',$project->pm_id)->get();
-
-    }
+   
    // dd($authorizers);
    
     
@@ -1132,7 +1129,7 @@ class HelperPendingActionController extends AccountBaseController
      $action->project_id = $project->id;
      $action->client_id = $client->id;
      $action->task_id = $task->id;
-     $action->authorization_for= $authorizer->id;
+     $action->authorization_for= $authorizer->user_id;
      $button = [
          [
              'button_name' => 'View and Reply',
