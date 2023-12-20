@@ -370,8 +370,9 @@ const SingleChat = ({
                                               )})`
                                             : ""}
                                     </span>
-                                    {currentUser.roleId === 1 ||
-                                    currentUser.roleId === 8 ? (
+                                    {currentUser.roleId === 1
+                                    // || currentUser.roleId === 8 
+                                    ? (
                                         showDeletedComment ? (
                                             <FaEyeSlash
                                                 onClick={() =>
@@ -398,11 +399,11 @@ const SingleChat = ({
                                         {/* mentioned comment */}
                                         {comment?.mention ? (
                                             <div
-                                                onClick={() =>
+                                                onClick={() => {
                                                     setSelectMentionIndex(
                                                         comment?.mention?.id
-                                                    )
-                                                }
+                                                    );
+                                                }}
                                                 // onContextMenu={(e) => {
                                                 //     onContextMenu(e);
                                                 //     setContextHolder(comment);
@@ -465,6 +466,18 @@ const SingleChat = ({
                                                                                 color: "#F17B7C",
                                                                             }}
                                                                         >
+                                                                            <div
+                                                                                style={{
+                                                                                    backgroundColor:
+                                                                                        "transparent",
+                                                                                    position:
+                                                                                        "absolute",
+                                                                                    top: "0",
+                                                                                    right: "0",
+                                                                                    bottom: "0",
+                                                                                    left: "0",
+                                                                                }}
+                                                                            />
                                                                             <HandleFileIcon
                                                                                 fileName={
                                                                                     comment
@@ -648,6 +661,18 @@ const SingleChat = ({
                                                                     key={i}
                                                                     className={`${style.chatInput_filePreview__file} shadow-sm`}
                                                                 >
+                                                                    <div
+                                                                        style={{
+                                                                            backgroundColor:
+                                                                                "transparent",
+                                                                            position:
+                                                                                "absolute",
+                                                                            top: "0",
+                                                                            right: "0",
+                                                                            bottom: "0",
+                                                                            left: "0",
+                                                                        }}
+                                                                    />
                                                                     <HandleFileIcon
                                                                         fileName={
                                                                             comment
@@ -708,6 +733,9 @@ const SingleChat = ({
                                             borderTop: comment?.mention
                                                 ? "none"
                                                 : "0.15px solid #aaaaaa",
+                                            alignSelf:comment?.mention?'stretch':isCurrentUser(
+                                                comment?.user?.id
+                                            )?'flex-end':'flex-start'
                                         }}
                                         className={`${style.singleChat_comment_card_text_message}`}
                                     >
@@ -1018,7 +1046,7 @@ const CustomMoreOption = ({
 }) => {
     useEffect(() => {
         document.addEventListener("contextmenu", (e) => {
-            $('.dropdown_btn').dropdown("hide");
+            $(".dropdown_btn").dropdown("hide");
         });
     }, []);
 
