@@ -56,7 +56,6 @@
             dataType: "json",
             success: function (response) {
                 $(location).prop('href', '{{url('/account/digital-marketing-lead/create')}}');
-                toastr.success('Lead Source Added Successfully');
                 $('#leadSourceBtn').attr("disabled", false);
                 $('#leadSourceBtn').html("Submit");
             },

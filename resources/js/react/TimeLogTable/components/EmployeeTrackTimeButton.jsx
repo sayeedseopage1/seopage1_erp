@@ -50,7 +50,7 @@ const EmployeeTrackTimeButton = ({ row, children }) => {
         handleData(data, currentPage, number);
     };
 
-    const handleClick = (e) => {
+    const handleClick = async(e) => {
         e.preventDefault();
         toggle();
 
@@ -59,7 +59,7 @@ const EmployeeTrackTimeButton = ({ row, children }) => {
         setEmployeeId(row?.employee_id);
         setEmployeeName(row?.employee_name);
 
-        getSessionDetails({
+        await getSessionDetails({
             projectID: row?.project_id,
             employeeID: row?.employee_id,
             startDate: filter?.start_date,
