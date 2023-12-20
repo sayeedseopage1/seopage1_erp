@@ -4,6 +4,7 @@ import { flexRender } from "@tanstack/react-table";
 import { useDrop, useDrag } from "react-dnd";
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useLocalStorage } from "react-use";
+import _ from "lodash";
 
 // reorder column
 const reorderColumn = (draggedColumnId, targetColumnId, columnOrder) => {
@@ -63,7 +64,8 @@ const TableHeaderItem = ({ header, table }) => {
 
     return (
         <TableHeadItem ref={dropRef}>
-            <button
+            {/* {!_.includes(['id'], column.id) &&
+                <button
                 {...{
                     onClick: header.column.getToggleSortingHandler(),
                     className: "sp1-data-table-sort-btn",
@@ -78,6 +80,7 @@ const TableHeaderItem = ({ header, table }) => {
                     <span className="table_asc_dec"></span>
                 )}
             </button>
+            } */}
 
             {header.isPlaceholder
                 ? null

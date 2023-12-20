@@ -209,7 +209,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                     </Flex>
                                 ))}
 
-                                <button onClick={addNewLink} className="px-2 ">
+                                <button onClick={addNewLink} className="px-2 btn btn-primary">
                                     + Add Another
                                 </button>
                             </InputGroup>

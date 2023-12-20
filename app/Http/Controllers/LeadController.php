@@ -1674,6 +1674,9 @@ if ($request->project_type !='hourly'){
                     ->orWhere('users.name', 'like', '%' . request('search') . '%');
                 });
             }
+            if ($request->sales_executive_id != '') {
+                $leadsQuery->where('leads.added_by',$request->sales_executive_id);
+            }
 
             $leads = $leadsQuery
                 ->orderBy('leads.id', 'desc')
@@ -1748,6 +1751,9 @@ if ($request->project_type !='hourly'){
                     $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
                     $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
                 });
+            }
+            if ($request->sales_executive_id != '') {
+                $leadsQuery->where('leads.added_by',$request->sales_executive_id);
             }
 
             $leads = $leadsQuery

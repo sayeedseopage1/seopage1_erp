@@ -74,10 +74,11 @@ export const BidValue = styled.div`
 export const CreatedAt = styled.div`
     width: 90px;
 `;
-export const CreatedBy = styled.div`
+export const CreatedBy = styled.a`
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 180px;
 `;
 export const BiddingDelayTime = styled.div``;
 export const Status = styled.div``;
@@ -88,7 +89,7 @@ export const DealStatus = styled.div`
     font-size: 10px;
     font-weight: 600;
     border-radius: 10px;
-    width: fit-content;
+    width: 100px;
 `;
 
 export const Action = styled.div``;

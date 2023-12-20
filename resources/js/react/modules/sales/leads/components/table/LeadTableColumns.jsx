@@ -18,10 +18,7 @@ export const LeadTableColumns = [
     {
         id: "id",
         header: "#",
-        cell: ({ row }) => {
-            const data = row.original;
-            return <span> {data.id} </span>;
-        },
+        cell: ({row}) => row.index + 1
     },
     {
         id: "project_name",
@@ -109,7 +106,9 @@ export const LeadTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <CreatedBy>
+                <CreatedBy
+                    href={`/account/employees/${data.added_by}`}
+                >
                     <Avatar
                         type="circle"
                         name={data?.agent_name}
