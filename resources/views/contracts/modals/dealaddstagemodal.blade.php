@@ -317,7 +317,8 @@
             locale: {
                 format: 'DD-MM-YYYY hh:mm A'
             }
-        })
+        });
+        $('#date-format').val(moment().format('DD-MM-YYYY hh:mm A'));
     });
 </script>
 
