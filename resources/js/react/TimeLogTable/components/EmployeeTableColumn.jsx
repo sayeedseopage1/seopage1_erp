@@ -32,8 +32,8 @@ export const EmployeeTableColumn = [
         sorted: false,
         cell: ({row, className}) =>{
             return (
-                <td className={className}>
-                    <a href={`/account/projects/${row?.project_id}`} >
+                <td className={className}> 
+                    <a href={`/account/${row?.is_independent ? 'tasks' : 'projects'}/${row?.project_id}`} >
                         {row?.project_name}
                     </a>
                 </td>
@@ -53,7 +53,7 @@ export const EmployeeTableColumn = [
                         name={row?.client_name}
                         profileUrl={`/account/clients/${row?.client_id}`}
                         image={row?.client_image}
-                        role="Freelancer.com"
+                        role={row?.is_independent ? '' : 'Freelancer.com'}
                         roleLink={row?.client_from}
                         id={row?.client_id}
                     />
