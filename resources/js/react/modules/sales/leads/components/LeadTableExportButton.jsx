@@ -8,6 +8,7 @@ import {
     useLazyAllLeadsQuery,
 } from "../../../../services/api/leadApiSlice";
 import styled from "styled-components";
+import Loader from '../../../../global/Loader'
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -38,7 +39,7 @@ const LeadTableExportButton = ({ filter }) => {
             const status = [
                 {
                     label: "Not Applicable",
-                    bgColor: "FFFFFFFF",
+                    bgColor: "FFB5BABD",
                 },
                 {
                     label: "Won",
@@ -54,8 +55,8 @@ const LeadTableExportButton = ({ filter }) => {
                 },
             ];
 
-            const s = d?.won_lost ? status[d?.won_lost] : null;
-
+            const s =  status[d?.won_lost] ?? null;
+   
             let row = [
                 {
                     value: d["id"] ?? "--",
@@ -77,11 +78,21 @@ const LeadTableExportButton = ({ filter }) => {
                     value:
                         `${d?.currency_symbol}${d?.bid_value} - ${d?.currency_symbol}${d?.bid_value2}` ??
                         "--",
-                    style: fieldStyle,
+                    style: {
+                        ...fieldStyle,
+                        font:{
+                            bold: true
+                        }
+                    },
                 },
                 {
                     value: `${d?.currency_symbol}${d?.actual_value}` ?? "--",
-                    style: fieldStyle,
+                    style: {
+                        ...fieldStyle,
+                        font:{
+                            bold: true
+                        }
+                    },
                 },
                 {
                     value: date,
@@ -103,15 +114,24 @@ const LeadTableExportButton = ({ filter }) => {
                             ? "Not Converted to Deal"
                             : "Converted to Deal"
                     }`,
-                    style: fieldStyle,
+                    style: {
+                        ...fieldStyle,
+                        font: {
+                            bold: true,
+                            color: {rgb: d.deal_status === 0 ? "FFB5BABD" : "FF0AAA29"}
+                        }
+                    },
                 },
                 {
                     value: s?.label ?? '--',
                     style: {
                         ...fieldStyle,
-                        font: {
-                            color: { rgb: "FFFFFFFF" },
-                        },
+                        font:{
+                            bold: true,
+                            color: {
+                                rgb: s?.bgColor ?? 'FFFAA700'
+                            }
+                        }
                     },
                 },
             ];
@@ -121,7 +141,7 @@ const LeadTableExportButton = ({ filter }) => {
 
         return rows;
     };
-
+ 
     // columns
     const columns = [
         { title: "#" },
@@ -181,7 +201,10 @@ const LeadTableExportButton = ({ filter }) => {
         <React.Fragment>
             <ExportButton onClick={handleRender}>
                 {isFetching ? (
-                    "Processing.."
+                    <>
+                        <Loader title="Processing..." />
+                        
+                    </>
                 ) : (
                     <>
                         <i className="fa-solid fa-download" /> Export To Excel

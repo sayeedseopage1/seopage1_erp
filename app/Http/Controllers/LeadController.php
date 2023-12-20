@@ -1754,6 +1754,27 @@ if ($request->project_type !='hourly'){
                 ->orderBy('leads.id', 'desc')
                 ->get();
 
+                $dealStages = DealStage::whereIn('lead_id', $leads->pluck('id'))->get();
+
+            foreach ($leads as $lead) {
+                $wonLost = 0;
+                $leadDealStages = $dealStages->where('lead_id', $lead->id);
+
+                if ($leadDealStages->isNotEmpty()) {
+                    $latestDealStage = $leadDealStages->sortByDesc('created_at')->first();
+
+                    if ($latestDealStage->deal_status == 'pending' && $latestDealStage->won_lost == 'Yes') {
+                        $wonLost = 1;
+                    } elseif ($latestDealStage->deal_status == 'Lost') {
+                        $wonLost = 2;
+                    } elseif ($latestDealStage->deal_status == 'pending' && ($latestDealStage->won_lost == 'No' || $latestDealStage->won_lost == null)) {
+                        $wonLost = 3;
+                    }
+                }
+
+                $lead->won_lost = $wonLost;
+            }
+
         return response()->json([
             'data' => $leads,
             'status' => 200
