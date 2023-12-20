@@ -8,7 +8,7 @@ const dmLeadApiSlice = apiSlice.injectEndpoints({
         }),
         dmDealConversion: build.mutation({
             query: (data) => ({
-                url: `/deal/stage`,
+                url: `/account/digital-marketing-deal/stage`,
                 method: "POST",
                 body: {
                     ...data,

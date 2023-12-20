@@ -101,12 +101,6 @@ const LeadTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: `${d?.bidding_minutes ?? 0} min ${
-                        d?.bidding_seconds ?? 0
-                    } sec`,
-                    style: fieldStyle,
-                },
-                {
                     value: `${
                         d.deal_status === 0
                             ? "Not Converted to Deal"
@@ -155,7 +149,6 @@ const LeadTableExportButton = ({ filter }) => {
         { title: "Bid Value" },
         { title: "Created At" },
         { title: "Created By" },
-        { title: "Bidding Delay Time" },
         { title: "Status" },
         { title: "Deal Status" },
     ];

@@ -121,19 +121,6 @@ export const LeadTableColumns = [
         },
     },
     {
-        id: "bidding_delay_time",
-        header: "Bidding Delay Time",
-        accessorFn: (row) => row?.bidding_minutes * 60 + row?.bidding_seconds,
-        cell: ({ row }) => {
-            const data = row.original;
-            return (
-                <BiddingDelayTime>
-                    {`${data?.bidding_minutes} min ${data?.bidding_seconds} sec`}
-                </BiddingDelayTime>
-            );
-        },
-    },
-    {
         id: "status",
         header: "Status",
         cell: ({ row }) => {
