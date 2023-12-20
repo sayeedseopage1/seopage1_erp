@@ -163,6 +163,7 @@ const LeadTableExportButton = ({ filter }) => {
             columns: [
                 { title: "Filter" },
                 { title: "Date" }, 
+                { title: "Sale"}
             ],
             data: [
                 [
@@ -179,7 +180,7 @@ const LeadTableExportButton = ({ filter }) => {
                             },
                         },
                     },
-                    
+                    {value: filter?.sale_name ?? '--'}
                 ],
             ],
         },
