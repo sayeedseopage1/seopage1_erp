@@ -1,12 +1,27 @@
 @extends('layouts.app')
+@section('filter-section')
+    <div id="dmLeadTableFilterContainer"></div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="com-md-12">
-            <div class="card mt-3 p-3" style="border: none">
-                <h2>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quae eius iusto aliquam eveniet vel quaerat porro excepturi! Voluptatibus nisi sit veritatis iusto numquam quam deleniti ipsum doloribus! Ducimus, eaque ratione.</h2>
+    <div class="content-wrapper">
+        <!-- Add Task Export Buttons Start -->
+        <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
+            <div id="table-actions" class="flex-grow-1 align-items-center">
+                {{-- @if ($addLeadPermission == 'all' || $addLeadPermission == 'added')
+                <x-forms.link-primary :link="url('/account/leads/create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
+                    @lang('app.add')
+                    @lang('app.lead')
+                </x-forms.link-primary>
+            @endif --}}
+
+                <div id="dmLeadTableExportButton"></div>
             </div>
+            <div id="dmLeadTableRefreshButton"></div>
         </div>
+
+        <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+            <div id="dmLeadTableContainer"></div>
+        </div>
+
     </div>
-</div>
 @endsection

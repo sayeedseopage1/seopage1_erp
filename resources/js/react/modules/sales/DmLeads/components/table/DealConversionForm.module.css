@@ -1,0 +1,51 @@
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 999;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 999;
+    display: grid;
+    place-items: center;
+    background-color: rgb(0 0 00 / 8%);
+    overflow-y: auto;
+}
+
+.panel {
+    padding: 1rem 1.5rem;
+    background-color: #fff;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 0 10px rgb(0 0 00 / 10%);
+    border-radius: 10px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(0 0 00 / 5%);
+}
+
+.dialogTitle {
+    font-size: 1rem;
+}
+
+.xCloseBtn {
+    font-size: 1rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+}
