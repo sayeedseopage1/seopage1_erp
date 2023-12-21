@@ -45,6 +45,7 @@ use Auth;
 use App\Models\Attendance;
 use App\Models\DailySubmission;
 use App\Models\TaskHistory;
+use App\Models\TaskRevision;
 
 use function PHPUnit\Framework\isNull;
 
@@ -793,6 +794,22 @@ class DashboardController extends AccountBaseController
         ->orderBy('task_history.created_at','desc')
         ->get();
       //  dd($status_history);
-        return response()->json($status_history);
+        
+      
+
+
+
+
+      
+    }
+    public function task_revision($id)
+    {
+        $task_revision= TaskRevision::select('task_revisions.created_at','task_revisions.final_responsible_person',
+        'raised_by_percent','raised_against_percent'
+        )->where('task_revisions.task_id',$id)
+        ->where('task_revisions.final_responsible_person','!=',null)
+        ->groupBy('task_revisions.id')
+        ->orderBy('task_revisions.id','desc')->get();
+      //  dd($task_revision);
     }
   }

@@ -159,7 +159,7 @@
 							   <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of tasks received</h5>
 							   <div class="d-flex flex-wrap">
 								   <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-									   <a href="#" data-toggle="modal" data-target="#">
+									   <a href="#" data-toggle="modal" data-target="#number_of_task_received{{$number_of_tasks_received_lead}}">
 										   {{$number_of_tasks_received_lead}}
 									   </a>
 									   {{-- <span class="f-12 font-weight-normal text-lightest">
@@ -168,7 +168,7 @@
 										
 									   </span> --}}
 								   </p>
-							   
+								   @include('dashboard.ajax.leaddeveloper.modals.number_of_task_received')
 	   
 								 
 							   </div>
@@ -185,7 +185,7 @@
 							   <div class="d-flex flex-wrap">
 	   
 								   <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-									   <a href="#" data-toggle="modal" data-target="#">
+									   <a href="#" data-toggle="modal" data-target="#submit_number_of_tasks_in_this_month_lead{{$submit_number_of_tasks_in_this_month_lead}}">
 										
 	   
 									   {{$submit_number_of_tasks_in_this_month_lead}}
@@ -197,6 +197,7 @@
 										
 									   </span> --}}
 								   </p>
+								   @include('dashboard.ajax.leaddeveloper.modals.number_of_task_submitted')
 								  
 	   
 								  
