@@ -420,7 +420,7 @@ class TimelogReportController extends AccountBaseController
                 $item->pm_image = $ppPm->image;
                 $item->pm_roles = $ppPmRole->display_name;
                 $item->project_id = '--';
-                $item->project_name = '--';
+                $item->project_name = 'Independent Project';
             }
              if($timer->end_time == null)
              {
