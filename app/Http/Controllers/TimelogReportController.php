@@ -401,6 +401,27 @@ class TimelogReportController extends AccountBaseController
         foreach ($data as $item) {
             $timer= ProjectTimeLog::where('project_id',$item->project_id)->where('user_id',$item->employee_id)->orderBy('id','desc')->first();
            // dd($timer);
+           if($item->project_id == null)
+            {
+                $ppTask = Task::where('id',$item->task_id)->first();
+                $ppClient = User::where('id',$ppTask->client_id)->first();
+                $ppPm = User::where('id',$ppTask->added_by)->first();
+                $ppPmRole = Role::where('id',$ppPm->role_id)->first();
+                if($ppClient != null){
+                    $item->client_id = $ppClient->id;
+                    $item->client_name = $ppClient->name;
+                    $item->client_image = $ppClient->image;
+                }else{
+                    $item->client_name = $ppTask->client_name;
+                } 
+                $item->is_independent = $ppTask->independent_task_status;
+                $item->pm_id = $ppPm->id;
+                $item->pm_name = $ppPm->name;
+                $item->pm_image = $ppPm->image;
+                $item->pm_roles = $ppPmRole->display_name;
+                $item->project_id = '--';
+                $item->project_name = '--';
+            }
              if($timer->end_time == null)
              {
                //  dd($data);

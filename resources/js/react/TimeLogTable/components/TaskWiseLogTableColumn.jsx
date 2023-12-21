@@ -72,7 +72,7 @@ export const TaskWiseTableColumn = [
                     name={row?.client_name}
                     profileUrl={`/account/clients/${row?.client_id}`}
                     image={row?.client_image}
-                    role="Freelancer.com"
+                    role={row?.is_independent ? "" : "Freelancer.com"}
                     roleLink={row?.client_from}
                     id={row?.client_id}
                 />

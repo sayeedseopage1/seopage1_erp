@@ -302,7 +302,7 @@ var TaskWiseTableColumn = [{
         name: row === null || row === void 0 ? void 0 : row.client_name,
         profileUrl: "/account/clients/".concat(row === null || row === void 0 ? void 0 : row.client_id),
         image: row === null || row === void 0 ? void 0 : row.client_image,
-        role: "Freelancer.com",
+        role: row !== null && row !== void 0 && row.is_independent ? "" : "Freelancer.com",
         roleLink: row === null || row === void 0 ? void 0 : row.client_from,
         id: row === null || row === void 0 ? void 0 : row.client_id
       })
