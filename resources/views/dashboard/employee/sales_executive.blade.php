@@ -123,7 +123,7 @@
     </div>
 	<div class="row d-flex justify-content-between mb-3">
 		<div class="col-md-6">
-				<h4 class="bg-white p-20 rounded b-shadow-4 mb-4 mb-md-0 mb-lg-0 d-inline-block">Core Metrics For Bidders :</h4>
+			<h4 class="bg-white rounded b-shadow-4 mb-4 mb-md-0 mb-lg-0 d-inline-block" style="padding: 7px;">Core Metrics For Bidders :-</h4>
 		</div>
 		<div class="col-md-6">
 			<div class="d-flex border-right-grey border-right-grey-sm-0 mb-3 ml-auto justify-content-end">
@@ -258,7 +258,7 @@
 	</div>
 	<div class="row d-flex justify-content-between mb-3">
 		<div class="col-md-6">
-				<h4 class="bg-white p-20 rounded b-shadow-4 mb-4 mb-md-0 mb-lg-0 d-inline-block">Core Metrics For Closers :</h4>
+			<h4 class="bg-white rounded b-shadow-4 mb-4 mb-md-0 mb-lg-0 d-inline-block" style="padding: 7px;">Core Metrics For Closers :-</h4>
 		</div>
 	</div>
 	<div class="row">
