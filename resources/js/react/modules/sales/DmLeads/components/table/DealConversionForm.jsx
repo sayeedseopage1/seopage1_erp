@@ -161,7 +161,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                 </Label>
                                 <Input
                                     type="text"
-                                    placeholder="Enter Client Username"
+                                    placeholder="Enter Client Profile Link"
                                     value={formData.profile_link}
                                     name="profile_link"
                                     onChange={handleOnChange}
