@@ -20,11 +20,15 @@ import HandleFileIcon from "../utils/HandleFileIcon";
 import Swal from "sweetalert2";
 import { usePostCommentMutation } from "../../../services/api/commentsApiSlice";
 import { User } from "../utils/user-details";
-import getTextContent, { getTrimmedHtml, htmlToString } from "../utils/getTextContent";
+import getTextContent, {
+    getTrimmedHtml,
+    htmlToString,
+} from "../utils/getTextContent";
+import getFormattedTime from "../utils/getFormattedTime";
 
 const currentUser = new User(window.Laravel.user);
 
-const ChatInput = ({ setScroll, taskId, setIsLoading }) => {
+const ChatInput = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const [postComment, { isLoading }] = usePostCommentMutation();
     const [showEmoji, setShowEmoji] = useState(false);
     const [buttonClick, setButtonClick] = useState();
@@ -89,6 +93,7 @@ const ChatInput = ({ setScroll, taskId, setIsLoading }) => {
 
         try {
             await postComment({ taskId, data: formdata });
+            await onSubmit(formdata);
             // Swal.fire({
             //     icon: "success",
             //     title: "Comment Sent",
@@ -230,9 +235,9 @@ function MentionedComment() {
                     className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
                 >
                     {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                    {`${mentionedComment?.user?.name}, ${dayjs(
+                    {`${mentionedComment?.user?.name}, ${getFormattedTime(
                         mentionedComment?.mention_created_at
-                    ).format("MMM DD, YYYY, hh:mm A")}`}
+                    )}`}
                 </span>
             </article>
         </div>
@@ -606,7 +611,10 @@ function FileUpload({ files, setFiles }) {
                 type="file"
                 id="file-input"
                 multiple
-                onChange={(e) => setFiles([...Object.values(e.target.files)])}
+                onChange={(e) => {
+                    setFiles([...Object.values(e.target.files)]);
+                    e.target.value = "";
+                }}
                 style={{ display: "none" }}
             />
             {/* ) : (
