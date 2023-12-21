@@ -18,6 +18,7 @@ export default function TimeLogHistoryTableFilterBar ({onFilter}){
 
     // employee
     const [selectedEmployeeId, setSelectedEmployeeId] = React.useState(null);
+    const [selectedEmployeeName, setSelectedEmployeeName] = React.useState(null);
    
 
     const logged_user = window?.Laravel?.user;
@@ -66,6 +67,7 @@ export default function TimeLogHistoryTableFilterBar ({onFilter}){
                 start_date: dayjs(_startDate).format('YYYY-MM-DD'),
                 end_date: dayjs(_endDate).format('YYYY-MM-DD'),
                 employee_id: _selectedEmployeeId,
+                employee_name: selectedEmployeeName,
             })
         }
     }, [_selectedEmployeeId, _startDate, _endDate]);
@@ -77,9 +79,11 @@ export default function TimeLogHistoryTableFilterBar ({onFilter}){
     const handleEmployeeFilter = (e, data) => { 
         e.preventDefault();
         if(data){
+            setSelectedEmployeeName(data.name);
             setSelectedEmployeeId(data.id);
         }else{
             setSelectedEmployeeId(null);
+            setSelectedEmployeeName(null);
         }
         
     }

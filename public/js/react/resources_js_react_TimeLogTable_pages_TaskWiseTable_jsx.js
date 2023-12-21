@@ -1,24 +1,6 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_react_TimeLogTable_pages_TaskWiseTable_jsx"],{
 
-/***/ "./resources/js/react/TimeLogTable/components/ExportToExcel.jsx":
-/*!**********************************************************************!*\
-  !*** ./resources/js/react/TimeLogTable/components/ExportToExcel.jsx ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ExportToExcel: () => (/* binding */ ExportToExcel)
-/* harmony export */ });
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-var _templateObject;
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-var ExportToExcel = styled_components__WEBPACK_IMPORTED_MODULE_0__["default"].button(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    background: #f9fafc;\n    padding: 0.4rem 1rem;\n    color: #252424;\n    border-radius: 6px;\n    border: 1px solid #ddd;\n    cursor: pointer;\n    transition: all 0.3s ease;\n    font-size: 1rem;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 5px; \n    align-self: flex-start;\n\n    &:hover {\n        background: #1D82F5;\n        color: #fff;\n    } \n  \n"])));
-
-/***/ }),
-
 /***/ "./resources/js/react/TimeLogTable/components/TaskWiseLogTable.jsx":
 /*!*************************************************************************!*\
   !*** ./resources/js/react/TimeLogTable/components/TaskWiseLogTable.jsx ***!

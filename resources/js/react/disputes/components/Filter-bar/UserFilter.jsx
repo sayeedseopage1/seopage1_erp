@@ -14,7 +14,7 @@ const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 
     if(roleIds === null){
         _users = _.filter(users, user => user.role_id === null)
     }else if(!_.isEmpty(roleIds)){
-        _users = _.filter(users, user => _.includes(roleIds, Number(user.role_id)))
+        _users = _.filter(users, user => _.includes(roleIds, Number(user.role_id)) ||  (_.includes(roleIds,3) && user.role_id === null ? true: false))
     }else _users = users;
 
 
