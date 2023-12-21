@@ -404,7 +404,7 @@
                                 <tr><td> <h4>HR Department</h4></td></tr>
                                 <tr><td style="height: 14px"> </td></tr>
                                 <tr><td style="height: 5px"> .....................................</td></tr>
-                                <tr><td> Hasan Hafizul Islam </td></tr>
+                                <tr><td> A. Khalid </td></tr>
                                 <tr><td> Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}} </td></tr>
 
                                 
