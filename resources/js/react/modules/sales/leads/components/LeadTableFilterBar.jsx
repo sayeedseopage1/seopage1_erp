@@ -60,7 +60,7 @@ const LeadTableFilterBar = ({ setFilter }) => {
                         value={sale}
                         onChange={setSale}
                         data={_.filter(users, (user) =>
-                            _.includes([7, 8], Number(user.role_id))
+                            _.includes([1, 7, 8], Number(user.role_id))
                         )}
                     />
                 </Flex>
