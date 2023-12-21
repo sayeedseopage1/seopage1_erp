@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Task;
 
 class TaskSubmission extends Model
 {
@@ -14,4 +15,8 @@ class TaskSubmission extends Model
       {
           return $this->belongsTo(User::class, 'user_id');
       }
+      public function task()
+    {
+        return $this->belongsTo(Task::class);
+    }
 }
