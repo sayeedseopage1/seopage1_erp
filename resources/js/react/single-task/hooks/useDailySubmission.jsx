@@ -18,8 +18,7 @@ export const useDailySubmission = () => {
 
                 // Define the cutoff times
                 const saturdayCutoffTime = d.dayjs(date).set('hour', 12).set('minute', 45);
-                // const otherDaysCutoffTime = d.dayjs(date).set('hour', 16).set('minute', 45);
-                const otherDaysCutoffTime = d.dayjs(date).set('hour', 10).set('minute', 59);
+                const otherDaysCutoffTime = d.dayjs(date).set('hour', 16).set('minute', 45);
 
                 // Get the current time
                 const currentTime = d.dayjs(date);

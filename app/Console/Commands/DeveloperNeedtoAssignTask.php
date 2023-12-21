@@ -15,6 +15,9 @@ use App\Models\TaskRevision;
 use App\Models\ProjectMilestone;
 use App\Http\Controllers\HelperPendingActionController;
 use App\Models\ProjectSubmission;
+use App\Models\TaskUser;
+use App\Models\PendingActionPast;
+use App\Models\Role;
 
 class DeveloperNeedtoAssignTask extends Command
 {
@@ -83,11 +86,8 @@ class DeveloperNeedtoAssignTask extends Command
          
             if ($logged_minutes/$estimate_total_minutes*100 >= 90) {
                 $pending_action= PendingAction::where('developer_id',$developer->id)->where('past_status',0)->count();
-                $pending_action_past= PendingAction::where('developer_id',$developer->id)->orderBy('id','desc')->first();
-                if($pending_action_past != null)
-                {
-                    $last_time= Carbon::parse($pending_action_past->created_at)->addHours(1);
-                if($pending_action == 0 && Carbon::now() > $last_time)
+             
+                if($pending_action == 0)
                 {
                     $helper = new HelperPendingActionController();
                     $helper->NeedtoTaskAssign($developer);
@@ -95,16 +95,7 @@ class DeveloperNeedtoAssignTask extends Command
                 }
              
 
-                }else 
-                {
-                    if($pending_action == 0)
-                    {
-                        $helper = new HelperPendingActionController();
-                        $helper->NeedtoTaskAssign($developer);
-    
-                    }
-
-                }
+               
                 
                 
             }
@@ -112,21 +103,39 @@ class DeveloperNeedtoAssignTask extends Command
         }
         $actions= PendingAction::where('code','TSA')->where('past_status',0)->get();
         foreach ($actions as $action) {
-           $creation_date = Carbon::parse($action->created_at)->addHours(21);
-          //  dd($developer,$logged_minutes,$estimate_total_minutes);
-          $current_date = Carbon::now();
-          if($current_date >= $creation_date )
-          {
-            $update_action= PendingAction::find($action->id);
-            $update_action->heading = 'New Submission Expiry Warning!';
-            $update_action->created_at = Carbon::now();
-            $update_action->updated_at = Carbon::now();
-           // $update_action->timeframe = 48;
-            $update_action->save();
+            $task= Task::where('id',$action->task_id)->first();
+            if($task->board_column_id == 6)
+            {
+              $pending_action_count = PendingAction::where('code','TSA')->where('task_id',$task->id)->count();
+              if($pending_action_count == 0)
+              {
+                $creation_date = Carbon::parse($action->created_at)->addHours(21);
+                //  dd($developer,$logged_minutes,$estimate_total_minutes);
+                $current_date = Carbon::now();
+                if($current_date >= $creation_date )
+                {
+                  $update_action= PendingAction::find($action->id);
+                  $update_action->heading = 'New Submission Expiry Warning!';
+                  $update_action->created_at = Carbon::now();
+                  $update_action->updated_at = Carbon::now();
+                 // $update_action->timeframe = 48;
+                  $update_action->save();
 
-         
-           
-        }
+              }
+               
+      
+               
+                 
+              }
+
+            }else {
+                $update_action= PendingAction::find($action->id);
+              
+                $update_action->past_status = 1;
+                $update_action->save();
+
+            }
+          
         }
         $actions= PendingAction::where('code','TDQ')->where('past_status',0)->get();
         foreach ($actions as $action) {
@@ -185,8 +194,20 @@ class DeveloperNeedtoAssignTask extends Command
 
 
       }
+
+      $deadline_actions= PendingAction::where('code','DTDA')->where('past_status',0)->get();
+      foreach($deadline_actions as $item)
+      {
+        $taskId= Task::where('id',$item->task_id)->first();
+        if($taskId->board_column_id == 6)
+        {
+            $update_item= PendingAction::find($item->id);
+            $update_item->past_status = 1;
+            $update_item->save();
+
+        }
+      }
     
-       
 
 
         

@@ -5,7 +5,7 @@ export const RefreshButton = styled.button`
     padding: 0.4rem 1rem;
     color: #fff;
     border-radius: 6px;
-    border: none;
+    border: 1px solid #1D82F5;
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1rem;

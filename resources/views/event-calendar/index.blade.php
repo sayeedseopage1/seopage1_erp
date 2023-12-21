@@ -155,7 +155,7 @@ $addEventsPermission = user()->permission('add_events');
                     var searchText = $('#search-text-field').val();
                     var clientId = $('#client').val();
                     var employeeId = $('#employee').val();
-
+ 
                     return {
                         searchText: searchText,
                         clientId: clientId,
@@ -193,7 +193,7 @@ $addEventsPermission = user()->permission('add_events');
                 blockUI: true,
                 container: RIGHT_MODAL,
                 historyPush: true,
-                success: function(response) {
+                success: function(response) { 
                     if (response.status == "success") {
                         $(RIGHT_MODAL_CONTENT).html(response.html);
                         $(RIGHT_MODAL_TITLE).html(response.title);

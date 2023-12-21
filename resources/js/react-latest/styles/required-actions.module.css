@@ -304,6 +304,7 @@
 .user_field_dropdown_container_btn{
   color: #28313c;
   background-color: white;
+  display: flex;
 }
 .user_field_dropdown_container_btn:active{
   color: #28313c;
@@ -312,6 +313,16 @@
 .user_field_dropdown_container_btn_active{
   color: #28313c;
   background-color: #E9ECEF;
+}
+.user_field_dropdown_container_current_user_indicator{
+  align-self: center;
+  background-color: var(--primary);
+  padding: 2px 3px;
+  border-radius: 3px;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 10px;
 }
 /* ---------- user bar (end) ---------- */
 

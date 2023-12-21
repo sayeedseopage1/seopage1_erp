@@ -605,8 +605,8 @@ class LeadsDataTable extends BaseDataTable
             __('app.biding_time') => ['data' => 'bidding_time', 'name' => 'bidding_time', 'title' => __('Bidding Delay Time')],
 
 
-              __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => false, 'title' => __('Staus')],
-                  __('app.won_lost') => ['data' => 'won_lost', 'name' => 'won_lost', 'exportable' => false, 'title' => __('Deal Status')],
+              __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => true, 'title' => __('Staus')],
+                  __('app.won_lost') => ['data' => 'won_lost', 'name' => 'won_lost', 'exportable' => true, 'title' => __('Deal Status')],
             __('app.leadStatus') => ['data' => 'leadStatus', 'name' => 'leadStatus', 'visible' => false, 'orderable' => false, 'searchable' => false, 'title' => __('app.status')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)

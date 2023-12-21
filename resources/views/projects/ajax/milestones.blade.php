@@ -158,6 +158,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         @if($task > 0)
 
                     @if($item->cancelation_status == null)
+                            @if ($project->dispute_status !=1)
 
                                 <button type="submit" disabled class="btn-danger btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
 
@@ -166,6 +167,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
 
                                 <button type="button" class="btn-danger rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}">Cancel Milestone</button>
+                            @else
+                            <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                            @endif
                     @else
                             @if(Auth::user()->role_id == 1)
                                    @if($item->cancelation_status == 'submitted')
@@ -226,7 +230,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                 @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                                         @if($item->qc_status == 0)
-                                                 <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
+                                            @if ($project->dispute_status !=1)
+                                            <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
+                                            @else
+                                            <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                                            @endif
 
                                         @elseif($item->qc_status == 2)
                                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
@@ -263,8 +271,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                             @if($last_milestone != null && $incomplete_milestone == 0 && $item->id == $last_milestone->id )
 
                                     @if($item->qc_status == 0)
+                                            @if ($project->dispute_status !=1)
                                              <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
-
+                                             @else
+                                             <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                                            @endif
                                     @elseif($item->qc_status == 2)
                                                         <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                                                 Awaiting Approval
@@ -380,8 +391,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
         @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                 @if($item->qc_status == 0)
+                @if ($project->dispute_status !=1)
                          <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
-
+                @else
+                <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                @endif
                 @elseif($item->qc_status == 2)
                         <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                 Awaiting Approval
@@ -417,8 +431,11 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
     @if($last_milestone != null && $incomplete_milestone == 0 && $item->id == $last_milestone->id )
 
             @if($item->qc_status == 0)
+                    @if ($project->dispute_status !=1)
                      <a href="/projects/q&c/{{$project->id}}/{{$item->id}}"  class="btn-success btn-sm rounded f-14 p-2 flex-right">Complete Q&C</a>
-
+                     @else
+                     <i class="fa fa-circle mr-1 text-red f-10"></i>Canceled
+                    @endif
             @elseif($item->qc_status == 2)
                                 <i class="fa fa-circle mr-1 text-yellow f-10"></i>
                                         Awaiting Approval

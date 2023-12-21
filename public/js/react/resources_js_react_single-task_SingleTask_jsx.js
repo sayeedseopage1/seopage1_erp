@@ -1,6 +1,3463 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_react_single-task_SingleTask_jsx"],{
 
+/***/ "./resources/js/react/UI/comments/CommentContainerDecider.jsx":
+/*!********************************************************************!*\
+  !*** ./resources/js/react/UI/comments/CommentContainerDecider.jsx ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Modal */ "./resources/js/react/UI/comments/components/Modal.jsx");
+/* harmony import */ var _components_CustomModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/CustomModal */ "./resources/js/react/UI/comments/components/CustomModal.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+var CommentContainerDecider = function CommentContainerDecider(_ref) {
+  var fullScreenView = _ref.fullScreenView,
+    toggleRef = _ref.toggleRef,
+    width = _ref.width,
+    isOpen = _ref.isOpen,
+    children = _ref.children;
+  var handleContainer = function handleContainer(children) {
+    if (fullScreenView) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        isOpen: isOpen,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "position-relative",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "sp1_task_comment_modal",
+            style: {
+              width: "100vw",
+              height: "100vh",
+              maxHeight: "100vh"
+            },
+            children: children
+          })
+        })
+      });
+    }
+    // else if (width > 1200) {
+    //     return (
+    //         <CustomModal toggleRef={toggleRef} isOpen={isOpen}>
+    //             <div className="sp1_task_comment_modal">
+    //                 {/* modal body (start) */}
+    //                 {children}
+    //                 {/* modal body (end) */}
+    //             </div>
+    //         </CustomModal>
+    //     );
+    // }
+    // else if (width <= 1200) {
+    //     return (
+    //         <Modal isOpen={isOpen}>
+    //             <div className="position-relative">
+    //                 <div className="sp1_task_comment_modal --small-device">
+    //                     {/* modal body (start) */}
+    //                     {children}
+    //                     {/* modal body (end) */}
+    //                 </div>
+    //             </div>
+    //         </Modal>
+    //     );
+    // }
+    else {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        isOpen: isOpen,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "position-relative",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "sp1_task_comment_modal --small-device",
+            children: children
+          })
+        })
+      });
+    }
+  };
+  return handleContainer(children);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CommentContainerDecider);
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/CommentsBody.jsx":
+/*!*********************************************************!*\
+  !*** ./resources/js/react/UI/comments/CommentsBody.jsx ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   useCommentContext: () => (/* binding */ useCommentContext)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
+/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var _media_comment_refresh_svg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./media/comment_refresh.svg */ "./resources/js/react/UI/comments/media/comment_refresh.svg");
+/* harmony import */ var _media_comment_search_svg__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./media/comment_search.svg */ "./resources/js/react/UI/comments/media/comment_search.svg");
+/* harmony import */ var _media_comments_body_bg_svg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./media/comments_body_bg.svg */ "./resources/js/react/UI/comments/media/comments_body_bg.svg");
+/* harmony import */ var _media_comments_body_bg_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./media/comments_body_bg.png */ "./resources/js/react/UI/comments/media/comments_body_bg.png");
+/* harmony import */ var _components_SingleChat__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/SingleChat */ "./resources/js/react/UI/comments/components/SingleChat.jsx");
+/* harmony import */ var _components_ChatInput__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/ChatInput */ "./resources/js/react/UI/comments/components/ChatInput.jsx");
+/* harmony import */ var use_context_menu__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! use-context-menu */ "./node_modules/use-context-menu/dist/use-context-menu.esm.js");
+/* harmony import */ var use_context_menu_styles_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! use-context-menu/styles.css */ "./node_modules/use-context-menu/styles.css");
+/* harmony import */ var _styles_customContextMenu_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./styles/customContextMenu.css */ "./resources/js/react/UI/comments/styles/customContextMenu.css");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./utils/isCurrentUser */ "./resources/js/react/UI/comments/utils/isCurrentUser.js");
+/* harmony import */ var _utils_CommentsPlaceholder__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./utils/CommentsPlaceholder */ "./resources/js/react/UI/comments/utils/CommentsPlaceholder.jsx");
+/* harmony import */ var _utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./utils/getTextContent */ "./resources/js/react/UI/comments/utils/getTextContent.jsx");
+/* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+// import commentClose from './media/comment_close.svg';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var CommentContext = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createContext)({
+  setScroll: function setScroll() {},
+  selectedComments: [],
+  setSecletedComments: function setSecletedComments() {},
+  mentionedComment: {},
+  setMentionedComment: function setMentionedComment() {},
+  contextHolder: {},
+  setContextHolder: function setContextHolder() {}
+});
+function useCommentContext() {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(CommentContext);
+}
+var CommentsBody = function CommentsBody(_ref) {
+  var fullScreenView = _ref.fullScreenView,
+    setFullScreenView = _ref.setFullScreenView,
+    isOpen = _ref.isOpen,
+    close = _ref.close,
+    comments = _ref.comments,
+    loading = _ref.loading,
+    fetching = _ref.fetching,
+    refetch = _ref.refetch,
+    taskId = _ref.taskId,
+    height = _ref.height;
+  var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_19__.useParams)();
+  var _useDeleteCommentsMut = (0,_services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_17__.useDeleteCommentsMutation)(),
+    _useDeleteCommentsMut2 = _slicedToArray(_useDeleteCommentsMut, 2),
+    deleteComments = _useDeleteCommentsMut2[0],
+    deleteLoading = _useDeleteCommentsMut2[1].isLoading;
+  var chatbottom_ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var comments_ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    showSearchBar = _useState2[0],
+    setShowSearchBar = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState4 = _slicedToArray(_useState3, 2),
+    searchText = _useState4[0],
+    setSearchText = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState6 = _slicedToArray(_useState5, 2),
+    allComments = _useState6[0],
+    setAllComments = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState8 = _slicedToArray(_useState7, 2),
+    commentIndex = _useState8[0],
+    setCommentIndex = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState10 = _slicedToArray(_useState9, 2),
+    searchIndexes = _useState10[0],
+    setSearchIndexes = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    animation = _useState12[0],
+    setAnimation = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    isloading = _useState14[0],
+    setIsLoading = _useState14[1];
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState16 = _slicedToArray(_useState15, 2),
+    selectMentionIndex = _useState16[0],
+    setSelectMentionIndex = _useState16[1];
+
+  // ============== ( CommentContext.Provider states ) ==============
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState18 = _slicedToArray(_useState17, 2),
+    scroll = _useState18[0],
+    setScroll = _useState18[1];
+  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
+    _useState20 = _slicedToArray(_useState19, 2),
+    selectedComments = _useState20[0],
+    setSecletedComments = _useState20[1];
+  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState22 = _slicedToArray(_useState21, 2),
+    mentionedComment = _useState22[0],
+    setMentionedComment = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState24 = _slicedToArray(_useState23, 2),
+    contextHolder = _useState24[0],
+    setContextHolder = _useState24[1];
+  // =================================================================
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setAllComments(comments);
+  }, [comments]);
+  var hnadleSelectComment = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
+    setSecletedComments(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, contextHolder.id, contextHolder));
+    });
+  }, [contextHolder]);
+  var _useContextMenu = (0,use_context_menu__WEBPACK_IMPORTED_MODULE_8__.useContextMenu)( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+        onSelect: function onSelect() {
+          setMentionedComment(contextHolder);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_20__.HiReply, {
+          className: "context_icons"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          className: "context_title",
+          children: "Reply"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+        onSelect: function onSelect() {
+          // console.log('clicked select');
+          hnadleSelectComment();
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_21__.TbMessage2Check, {
+          className: "context_icons"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          className: "context_title",
+          children: "Select Message"
+        })]
+      }), contextHolder !== null && contextHolder !== void 0 && contextHolder.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+        onSelect: function onSelect() {
+          return handleCopySingleComment(contextHolder);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_22__.MdOutlineContentCopy, {
+          className: "context_icons"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          className: "context_title",
+          children: "Copy"
+        })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {}), (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_14__["default"])(contextHolder === null || contextHolder === void 0 ? void 0 : contextHolder.user_id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(use_context_menu__WEBPACK_IMPORTED_MODULE_8__.ContextMenuItem, {
+        onSelect: function onSelect() {
+          return handleDeleteSingleComment(contextHolder);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_23__.IoMdCloseCircleOutline, {
+          className: "context_icons"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          className: "context_title",
+          children: "Remove"
+        })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {})]
+    })),
+    contextMenu = _useContextMenu.contextMenu,
+    onContextMenu = _useContextMenu.onContextMenu,
+    onKeyDown = _useContextMenu.onKeyDown;
+
+  // search result filtering
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // console.log("searchText :", searchText);
+    if (searchText) {
+      setAllComments(function () {
+        var filteredComments = _toConsumableArray(comments).filter(function (comment) {
+          return !(comment !== null && comment !== void 0 && comment.is_deleted) && (0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__.htmlToString)(comment === null || comment === void 0 ? void 0 : comment.comment).toLowerCase().includes(searchText.toLowerCase());
+          // const textContent = getTextContent(comment.comment).toLowerCase();
+          // console.log(textContent);
+          // return true;
+        });
+
+        setSearchIndexes(filteredComments.map(function (comment) {
+          return comment === null || comment === void 0 ? void 0 : comment.id;
+        }));
+        setCommentIndex(0);
+        return filteredComments;
+      });
+    } else {
+      // setScroll((prev) => !prev);
+      setSearchIndexes([]);
+      setCommentIndex(0);
+      setAllComments(comments);
+    }
+  }, [searchText]);
+
+  // scroll to bottom feature
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var timer = setTimeout(function () {
+      var _chatbottom_ref$curre;
+      // chatbottom_ref.current?.scrollIntoView();
+      (_chatbottom_ref$curre = chatbottom_ref.current) === null || _chatbottom_ref$curre === void 0 || _chatbottom_ref$curre.scrollIntoView({
+        // behavior: "smooth",
+        block: "end"
+      });
+    }, 0);
+    return function () {
+      return clearTimeout(timer);
+    };
+  }, [scroll, isOpen, comments, loading, fetching, isloading]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setSearchText("");
+  }, [showSearchBar]);
+
+  // useEffect(() => {
+  //     console.log({ contextHolder });
+  // }, [contextHolder]);
+
+  // useEffect(() => {
+  //     console.log({ mentionedComment });
+  // }, [mentionedComment]);
+
+  // scrolling to linked comment of search result
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (commentIndex) {
+      document.getElementById(searchIndexes[searchIndexes.length - commentIndex]).scrollIntoView({
+        behavior: "smooth"
+        // block: "",
+      });
+    } else {
+      setScroll(function (prev) {
+        return !prev;
+      });
+    }
+    // console.log(searchIndexes.length - commentIndex,searchIndexes[searchIndexes.length - commentIndex]);
+  }, [commentIndex]);
+
+  // scroll to the mention comment according to selection
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var time_ref;
+    if (selectMentionIndex) {
+      document.getElementById(selectMentionIndex).scrollIntoView({
+        behavior: "smooth"
+        // block: "",
+      });
+
+      time_ref = setTimeout(function () {
+        setSelectMentionIndex(0);
+      }, 2000);
+    }
+    return function () {
+      return clearTimeout(time_ref);
+    };
+  }, [selectMentionIndex]);
+  var handleCopyComments = function handleCopyComments() {
+    // setIsLoading(true);
+    var allSelectedComments = lodash__WEBPACK_IMPORTED_MODULE_11___default().orderBy(Object.values(selectedComments), ["id"], ["asc"]);
+    // console.log({ allSelectedComments });
+    var allSelectedCommentsString = allSelectedComments.reduce(function (total, comment, i, arr) {
+      var _comment$user;
+      total += "".concat((0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__.htmlToPreservedText)(comment === null || comment === void 0 ? void 0 : comment.comment), "\n").concat(comment === null || comment === void 0 || (_comment$user = comment.user) === null || _comment$user === void 0 ? void 0 : _comment$user.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_13___default()(comment === null || comment === void 0 ? void 0 : comment.created_date).format("MMM DD, YYYY, hh:mm A"));
+      if (i < arr.length - 1) {
+        total += "\n\n\n";
+      }
+      return total;
+    }, "");
+    // console.log({ allSelectedCommentsString });
+    window.navigator.clipboard.writeText(allSelectedCommentsString).then(function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "success",
+        title: "Comments copied successfully",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+      setSecletedComments({});
+      setScroll(function (prev) {
+        return !prev;
+      });
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "error",
+        title: "Comments didn't copied",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    })["finally"](function () {
+      //   setIsLoading(false);
+    });
+  };
+  var handleDeleteComments = function handleDeleteComments() {
+    var commentsId = Object.values(_objectSpread({}, selectedComments)).map(function (comment) {
+      return comment.id;
+    });
+    // console.log({ commentsId,selectedComments });
+    // return;
+    // setIsLoading(true),
+    deleteComments({
+      commentsId: commentsId
+    }).then(function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "success",
+        title: "Comments deleted successfully",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+      setSecletedComments({});
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "error",
+        title: "An error occured to delete comments",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    });
+    // setScroll(prev=>!prev);
+    // refetch();
+    // setIsLoading(false);
+  };
+
+  var handleCopySingleComment = function handleCopySingleComment(comment) {
+    var SelectedCommentsString;
+    if (window.getSelection().toString()) {
+      SelectedCommentsString = window.getSelection().toString();
+    } else {
+      var _comment$user2;
+      SelectedCommentsString = "".concat((0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_16__.htmlToPreservedText)(comment.comment), "\n").concat(comment === null || comment === void 0 || (_comment$user2 = comment.user) === null || _comment$user2 === void 0 ? void 0 : _comment$user2.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_13___default()(comment === null || comment === void 0 ? void 0 : comment.created_date).format("MMM DD, YYYY, hh:mm A"), " ");
+    }
+    // console.log({ allSelectedCommentsString });
+    window.navigator.clipboard.writeText(SelectedCommentsString).then(function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "success",
+        title: "Comments copied successfully",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+      // setSecletedComments({});
+      // setScroll(prev=>!prev);
+      setContextHolder(null);
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "error",
+        title: "Comments didn't copied",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    })["finally"](function () {
+      //   setIsLoading(false);
+    });
+  };
+  var handleDeleteSingleComment = function handleDeleteSingleComment(comment) {
+    // console.log({ id: comment.id });
+    // return;
+    deleteComments({
+      commentsId: [comment.id]
+    }).then(function (res) {
+      if (res.data.status == 200) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+          icon: "success",
+          title: "".concat(res.data.message),
+          timer: 2000,
+          showConfirmButton: true,
+          timerProgressBar: true
+        });
+      } else if (res.data.status == 400) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+          icon: "error",
+          title: "".concat(res.data.comment),
+          timer: 2000,
+          showConfirmButton: true,
+          timerProgressBar: true
+        });
+      }
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_12___default().fire({
+        icon: "error",
+        title: "An error occured to delete the comment",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    });
+  };
+
+  // console.log({allComments});
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(CommentContext.Provider, {
+    value: {
+      setScroll: setScroll,
+      selectedComments: selectedComments,
+      setSecletedComments: setSecletedComments,
+      mentionedComment: mentionedComment,
+      setMentionedComment: setMentionedComment,
+      contextHolder: contextHolder,
+      setContextHolder: setContextHolder
+    },
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+      className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody,
+      style: {
+        backgroundImage: "url(".concat(_media_comments_body_bg_svg__WEBPACK_IMPORTED_MODULE_4__["default"], ")"),
+        // backgroundImage:`url(https://seopage1storage.s3.ap-southeast-1.amazonaws.com/655f048a34e53.jpg)`,
+        width: fullScreenView ? "100vw" : "auto",
+        height: fullScreenView ? "99vh" : height,
+        maxHeight: fullScreenView ? "99vh" : "auto"
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("header", {
+        className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          onClick: refetch,
+          className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("svg", {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "28",
+            height: "28",
+            viewBox: "0 0 28 28",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("g", {
+              id: "Group_3837",
+              "data-name": "Group 3837",
+              transform: "translate(-837 -108)",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("circle", {
+                id: "Ellipse_1045",
+                "data-name": "Ellipse 1045",
+                cx: "14",
+                cy: "14",
+                r: "14",
+                transform: "translate(837 108)",
+                fill: "#1d82f5"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("g", {
+                id: "reload",
+                transform: "translate(822.039 113.273)",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("g", {
+                  id: "Group_3836",
+                  "data-name": "Group 3836",
+                  transform: "translate(20.982 0)",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("path", {
+                    id: "Path_1534",
+                    "data-name": "Path 1534",
+                    d: "M24.232,3.461a6.958,6.958,0,0,1,9.045-.239L31.206,3.3a.481.481,0,0,0,.018.962h.018l3.179-.118a.48.48,0,0,0,.463-.481V3.607h0L34.767.464A.481.481,0,1,0,33.8.5l.075,1.971a7.913,7.913,0,0,0-10.293.278,7.916,7.916,0,0,0-2.381,7.737.479.479,0,0,0,.467.367.417.417,0,0,0,.114-.014.482.482,0,0,0,.353-.581A6.954,6.954,0,0,1,24.232,3.461Z",
+                    transform: "translate(-20.982 0)",
+                    fill: "#fff"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("path", {
+                    id: "Path_1535",
+                    "data-name": "Path 1535",
+                    d: "M91.023,185.581a.481.481,0,0,0-.934.228A6.952,6.952,0,0,1,78.895,192.8l2.1-.189a.481.481,0,1,0-.089-.959l-3.168.285a.481.481,0,0,0-.435.524l.285,3.168a.48.48,0,0,0,.478.438.175.175,0,0,0,.043,0,.481.481,0,0,0,.435-.524l-.171-1.928a7.86,7.86,0,0,0,4.573,1.743c.135.007.271.011.4.011a7.915,7.915,0,0,0,7.68-9.783Z",
+                    transform: "translate(-75.289 -178.613)",
+                    fill: "#fff"
+                  })]
+                })
+              })]
+            })
+          })
+        }), !(param !== null && param !== void 0 && param.taskId) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          onClick: function onClick() {
+            return window.open("/account/tasks/".concat(taskId), "_blank");
+          },
+          className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("svg", {
+            id: "maximize",
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "28",
+            height: "28",
+            viewBox: "0 0 28 28",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("path", {
+              id: "Path_14871",
+              "data-name": "Path 14871",
+              d: "M25.375,0H2.625A2.628,2.628,0,0,0,0,2.625V13.431a.875.875,0,0,0,1.75,0V2.625a.876.876,0,0,1,.875-.875h22.75a.876.876,0,0,1,.875.875v22.75a.876.876,0,0,1-.875.875H14.569a.875.875,0,0,0,0,1.75H25.375A2.628,2.628,0,0,0,28,25.375V2.625A2.628,2.628,0,0,0,25.375,0Z"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("path", {
+              id: "Path_14872",
+              "data-name": "Path 14872",
+              d: "M9.625,18h-7A2.628,2.628,0,0,0,0,20.625v7A2.628,2.628,0,0,0,2.625,30.25h7a2.628,2.628,0,0,0,2.625-2.625v-7A2.628,2.628,0,0,0,9.625,18Zm.875,9.625a.876.876,0,0,1-.875.875h-7a.876.876,0,0,1-.875-.875v-7a.876.876,0,0,1,.875-.875h7a.876.876,0,0,1,.875.875Z",
+              transform: "translate(0 -2.25)"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("path", {
+              id: "Path_14873",
+              "data-name": "Path 14873",
+              d: "M16.494,15.494,22,9.987v1.388a.875.875,0,0,0,1.75,0v-3.5A.889.889,0,0,0,22.875,7h-3.5a.875.875,0,1,0,0,1.75h1.388l-5.506,5.506a.875.875,0,0,0,0,1.237.886.886,0,0,0,1.237,0Z",
+              transform: "translate(-1.875 -0.875)"
+            })]
+          })
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {}), showSearchBar ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_container, " ").concat(animation ? _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].open : _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].close),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("input", {
+            value: searchText,
+            onChange: function onChange(e) {
+              return setSearchText(e.target.value);
+            },
+            placeholder: "Search...",
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar),
+            type: "text"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("section", {
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions),
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_23__.IoIosArrowDown, {
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_btn),
+              onClick: function onClick() {
+                setCommentIndex(function (prev) {
+                  if (prev > 0) {
+                    return prev - 1;
+                  } else {
+                    return prev;
+                  }
+                });
+              }
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_text),
+              children: "".concat(commentIndex, " of ").concat(searchIndexes.length)
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_23__.IoIosArrowUp, {
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_searchBar_actions_btn),
+              onClick: function onClick() {
+                setCommentIndex(function (prev) {
+                  if (prev < searchIndexes.length) {
+                    return prev + 1;
+                  } else {
+                    return prev;
+                  }
+                });
+              }
+            })]
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {}), param !== null && param !== void 0 && param.taskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          onClick: function onClick() {
+            if (showSearchBar) {
+              setTimeout(function () {
+                setShowSearchBar(false);
+              }, 500);
+              setAnimation(false);
+            } else {
+              setShowSearchBar(true);
+              setAnimation(true);
+            }
+          },
+          className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("svg", {
+            xmlns: "http://www.w3.org/2000/svg",
+            width: "29",
+            height: "29",
+            viewBox: "0 0 29 29",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("path", {
+              id: "Search",
+              d: "M19.362,8.871a.674.674,0,1,1-.954.954,6.077,6.077,0,0,0-8.584,0,.674.674,0,0,1-.954-.954A7.427,7.427,0,0,1,19.362,8.871ZM33,30.3a2.7,2.7,0,0,1-4.6,1.907l-7.081-7.081a.674.674,0,0,1,0-.954l.954-.954-1.5-1.5a10.134,10.134,0,1,1,.954-.954l1.5,1.5.954-.954a.674.674,0,0,1,.954,0L32.21,28.4A2.678,2.678,0,0,1,33,30.3ZM22.884,14.116a8.767,8.767,0,1,0-8.767,8.767A8.777,8.777,0,0,0,22.884,14.116ZM31.651,30.3a1.34,1.34,0,0,0-.4-.954l-6.6-6.6-1.907,1.907,6.6,6.6a1.38,1.38,0,0,0,1.907,0,1.34,1.34,0,0,0,.4-.954Z",
+              transform: "translate(-4 -4)",
+              fill: "#727272"
+            })
+          })
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {}), param !== null && param !== void 0 && param.taskId ? !fullScreenView ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_24__.AiOutlineFullscreen, {
+          onClick: function onClick() {
+            return setFullScreenView(true);
+          },
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].fullscreen_icons)
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_24__.AiOutlineFullscreenExit, {
+          onClick: function onClick() {
+            return setFullScreenView(false);
+          },
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].fullscreen_icons)
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+          onClick: function onClick() {
+            if (setFullScreenView) {
+              setFullScreenView(false);
+            }
+            close();
+          },
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_header_btn),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("svg", {
+            xmlns: "http://www.w3.org/2000/svg",
+            xlink: "http://www.w3.org/1999/xlink",
+            viewBox: "15 7 28 28",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("defs", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("filter", {
+                id: "Ellipse_58",
+                x: "0",
+                y: "0",
+                width: "58",
+                height: "58",
+                filterUnits: "userSpaceOnUse",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("feOffset", {
+                  dy: "8",
+                  input: "SourceAlpha"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("feGaussianBlur", {
+                  stdDeviation: "5",
+                  result: "blur"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("feFlood", {
+                  floodColor: "#757575",
+                  floodOpacity: "0.161"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("feComposite", {
+                  operator: "in",
+                  in2: "blur"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("feComposite", {
+                  "in": "SourceGraphic"
+                })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("g", {
+              id: "Group_3644",
+              "data-name": "Group 3644",
+              transform: "translate(-976 -145)",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("g", {
+                transform: "matrix(1, 0, 0, 1, 976, 145)",
+                filter: "url(#Ellipse_58)",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("circle", {
+                  id: "Ellipse_58-2",
+                  "data-name": "Ellipse 58",
+                  cx: "14",
+                  cy: "14",
+                  r: "14",
+                  transform: "translate(15 7)",
+                  fill: "#df0b0b"
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("path", {
+                id: "remove_1_",
+                "data-name": "remove (1)",
+                d: "M5.059,13A7.941,7.941,0,1,1,13,20.941,7.941,7.941,0,0,1,5.059,13ZM13,4a9,9,0,0,0,0,18,9.139,9.139,0,0,0,6.911-3.235A8.762,8.762,0,0,0,22,13,9,9,0,0,0,13,4ZM9.256,15.995,12.251,13,9.256,10.005,10,9.257,13,12.251l3-3,.748.748-3,3,3,3-.748.748-3-2.995L10,16.743Z",
+                transform: "translate(992 153)",
+                fill: "#fff",
+                fillRule: "evenodd"
+              })]
+            })]
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("main", {
+        ref: comments_ref,
+        className: "position-relative ".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_commentArea),
+        children: [loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_utils_CommentsPlaceholder__WEBPACK_IMPORTED_MODULE_15__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {
+          children: [allComments === null || allComments === void 0 ? void 0 : allComments.map(function (comment, i) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_SingleChat__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              idMatch: (comment === null || comment === void 0 ? void 0 : comment.id) === searchIndexes[searchIndexes.length - commentIndex],
+              id: comment === null || comment === void 0 ? void 0 : comment.id
+              // comment_text_id={`${comment.id}_comment`}
+              ,
+              setScroll: setScroll,
+              onContextMenu: onContextMenu,
+              onKeyDown: onKeyDown,
+              comment: comment,
+              prevComment: i ? allComments[i - 1] : null,
+              handleDeleteSingleComment: handleDeleteSingleComment,
+              selectMentionIndex: selectMentionIndex,
+              setSelectMentionIndex: setSelectMentionIndex
+            }, i);
+          }), fetching || isloading || deleteLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+            className: "d-flex justify-content-center mt-2",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+              className: "spinner-border",
+              role: "status"
+            })
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {}), contextMenu]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+          style: {
+            minHeight: "10px",
+            height: "10px",
+            // backgroundColor: "transparent",
+            position: "relative"
+            // backgroundColor: "black",
+          },
+
+          ref: chatbottom_ref
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("footer", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].commentsBody_inputField),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ChatInput__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          taskId: taskId,
+          setScroll: setScroll,
+          setIsLoading: setIsLoading
+        })
+      }), Object.keys(selectedComments).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller, " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].open_action_controller),
+        children: [Object.values(selectedComments).every(function (comment) {
+          return !!(comment !== null && comment !== void 0 && comment.comment);
+        }) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("section", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+            onClick: handleCopyComments,
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_icon),
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_22__.MdContentCopy, {
+              style: {
+                height: "19.02px",
+                width: "16.01px"
+              }
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+            onClick: handleCopyComments,
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_text),
+            children: "Copy"
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {}), Object.values(selectedComments).every(function (comment) {
+          var _comment$user3;
+          return (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_14__["default"])(comment === null || comment === void 0 || (_comment$user3 = comment.user) === null || _comment$user3 === void 0 ? void 0 : _comment$user3.id);
+        }) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("section", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn),
+          children: !deleteLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+              onClick: function onClick() {
+                return handleDeleteComments();
+              },
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_icon),
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_23__.IoMdCloseCircleOutline, {
+                style: {
+                  height: "18.54px",
+                  width: "18.54px"
+                }
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+              onClick: function onClick() {
+                return handleDeleteComments();
+              },
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].comments_selected_action_controller_btn_text),
+              children: "Remove"
+            })]
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+            className: "spinner-border",
+            role: "status"
+          })
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {})]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {})]
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CommentsBody);
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/CommentsContainer.jsx":
+/*!**************************************************************!*\
+  !*** ./resources/js/react/UI/comments/CommentsContainer.jsx ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useWindowSize.js");
+/* harmony import */ var _components_CustomModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/CustomModal */ "./resources/js/react/UI/comments/components/CustomModal.jsx");
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Modal */ "./resources/js/react/UI/comments/components/Modal.jsx");
+/* harmony import */ var _CommentsBody__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
+/* harmony import */ var _Data_commentDemoData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./_Data/commentDemoData */ "./resources/js/react/UI/comments/_Data/commentDemoData.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
+/* harmony import */ var _CommentContainerDecider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./CommentContainerDecider */ "./resources/js/react/UI/comments/CommentContainerDecider.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+
+
+
+
+// const demoComments = commentDemoData(20);
+
+var CommentsContainer = function CommentsContainer(_ref) {
+  var _ref$toggleRef = _ref.toggleRef,
+    toggleRef = _ref$toggleRef === void 0 ? null : _ref$toggleRef,
+    isOpen = _ref.isOpen,
+    close = _ref.close,
+    task = _ref.task,
+    _ref$comments = _ref.comments,
+    comments = _ref$comments === void 0 ? null : _ref$comments,
+    onCommentPost = _ref.onCommentPost,
+    taskId = _ref.taskId,
+    singleCommentId = _ref.singleCommentId;
+  // ---------------------------------------------------------
+  var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useParams)();
+
+  // ---------------------------------------------------------
+
+  var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_10__["default"])(),
+    width = _useWindowSize.width;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    fullScreenView = _useState2[0],
+    setFullScreenView = _useState2[1];
+  var _useGetCommentsQuery = (0,_services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_5__.useGetCommentsQuery)(param === null || param === void 0 ? void 0 : param.taskId),
+    data = _useGetCommentsQuery.data,
+    isFetching = _useGetCommentsQuery.isFetching,
+    isLoading = _useGetCommentsQuery.isLoading,
+    refetch = _useGetCommentsQuery.refetch;
+
+  // console.log({ param,data });
+  // if (fullScreenView) {
+  //     return (
+  //         <Modal isOpen={isOpen}>
+  //             <div className="position-relative">
+  //                 <div
+  //                     className="sp1_task_comment_modal"
+  //                     style={{
+  //                         width: "100vw",
+  //                         height: "100vh",
+  //                         maxHeight: "100vh",
+  //                     }}
+  //                 >
+  //                     {/* modal body (start) */}
+  //                     {isOpen && (
+  //                         <CommentsBody
+  //                             fullScreenView={fullScreenView}
+  //                             setFullScreenView={setFullScreenView}
+  //                             close={close}
+  //                             comments={param?.taskId?data:comments}
+  //                             // comments={demoComments}
+  //                             loading={isFetching || isLoading}
+  //                             refetch={refetch}
+  //                             taskId={taskId?taskId:param?.taskId}
+  //                         />
+  //                     )}
+  //                     {/* modal body (end) */}
+  //                 </div>
+  //             </div>
+  //         </Modal>
+  //     );
+  // }
+
+  // return (
+  //     <React.Fragment>
+  //         {width > 1200 ? (
+  //             <CustomModal toggleRef={toggleRef} isOpen={isOpen}>
+  //                 <div className="sp1_task_comment_modal">
+  //                     {/* modal body (start) */}
+  //                     {/* <div className='border-bottom pb-2 d-flex align-items-center'>
+  //                 <Button
+  //                     aria-label="close-modal"
+  //                     className='_close-modal ml-auto'
+  //                     onClick={close}
+  //                 >
+  //                     <i className="fa-solid fa-xmark" />
+  //                 </Button>
+  //             </div>
+  //             <div className='d-flex flex-column pt-3'>
+  //                 <CommentSendBox  onCommentPost ={onCommentPost} task={task}/>
+  //                 <div className='sp1_task_comment_list mt-4'>
+  //                     <div className='font-weight-bold pb-3'>Comments: </div>
+  //                     <div className='sp1_task_comment_list_items'>
+  //                         {comments?.length > 0 && comments?.map(comment => (
+  //                             <React.Fragment key={comment.id} >
+  //                                 <React.Suspense fallback={<InnerCommentLoader />}>
+  //                                     <InnerComment comment={comment} />
+  //                                 </React.Suspense>
+  //                             </React.Fragment>
+  //                         )) }
+  //                     </div>
+  //                 </div>
+  //             </div>  */}
+  //                     {isOpen && (
+  //                         <CommentsBody
+  //                             fullScreenView={fullScreenView}
+  //                             setFullScreenView={setFullScreenView}
+  //                             close={close}
+  //                             comments={param?.taskId?data:comments}
+  //                             // comments={demoComments}
+  //                             loading={isFetching || isLoading}
+  //                             refetch={refetch}
+  //                             taskId={taskId?taskId:param?.taskId}
+  //                         />
+  //                     )}
+  //                     {/* modal body (end) */}
+  //                 </div>
+  //             </CustomModal>
+  //         ) : (
+  //             <React.Fragment>
+  //                 <Modal isOpen={isOpen}>
+  //                     <div className="position-relative">
+  //                         <div className="sp1_task_comment_modal --small-device">
+  //                             {/* modal body (start) */}
+  //                             {/* <div className='border-bottom pb-2 d-flex align-items-center'>
+  //                     <Button
+  //                         aria-label="close-modal"
+  //                         className='_close-modal ml-auto'
+  //                         onClick={close}
+  //                     >
+  //                         <i className="fa-solid fa-xmark" />
+  //                     </Button>
+  //                 </div>
+  //                 <div className='d-flex flex-column pt-3'>
+  //                     <CommentSendBox  onCommentPost ={onCommentPost} task={task}/>
+  //                     <div className='sp1_task_comment_list mt-4'>
+  //                         <div className='font-weight-bold pb-3'>Comments: </div>
+  //                         <div className='sp1_task_comment_list_items'>
+  //                             {comments?.length > 0 && comments?.map(comment => (
+  //                                 <React.Fragment key={comment.id} >
+  //                                     <React.Suspense fallback={<InnerCommentLoader />}>
+  //                                         <InnerComment comment={comment} />
+  //                                     </React.Suspense>
+  //                                 </React.Fragment>
+  //                             ))}
+  //                         </div>
+  //                     </div>
+  //                 </div>  */}
+  //                             {isOpen && (
+  //                                 <CommentsBody
+  //                                     fullScreenView={fullScreenView}
+  //                                     setFullScreenView={setFullScreenView}
+  //                                     close={close}
+  //                                     comments={param?.taskId?data:comments}
+  //                                     // comments={demoComments}
+  //                                     loading={isFetching || isLoading}
+  //                                     refetch={refetch}
+  //                                     taskId={taskId?taskId:param?.taskId}
+  //                                 />
+  //                             )}
+  //                             {/* modal body (end) */}
+  //                         </div>
+  //                     </div>
+  //                 </Modal>
+  //             </React.Fragment>
+  //         )}
+  //     </React.Fragment>
+  // );
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_CommentContainerDecider__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    fullScreenView: fullScreenView,
+    isOpen: isOpen,
+    toggleRef: toggleRef,
+    width: width,
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_CommentsBody__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      fullScreenView: fullScreenView,
+      setFullScreenView: setFullScreenView,
+      isOpen: isOpen,
+      close: close
+      // comments={param?.taskId ? data : comments}
+      ,
+      comments: param !== null && param !== void 0 && param.taskId ? singleCommentId ? data === null || data === void 0 ? void 0 : data.filter(function (comment) {
+        return comment.id === singleCommentId;
+      }) : data : comments
+      // comments={demoComments}
+      ,
+      loading: isLoading,
+      fetching: isFetching,
+      refetch: refetch,
+      taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId,
+      height: "89vh"
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CommentsContainer);
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/_Data/commentDemoData.js":
+/*!*****************************************************************!*\
+  !*** ./resources/js/react/UI/comments/_Data/commentDemoData.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ commentDemoData)
+/* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @faker-js/faker */ "./node_modules/@faker-js/faker/dist/esm/index.mjs");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+
+
+
+
+
+function commentDemoData() {
+  var count = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+  var commentData = [];
+  var getFileUrls = function getFileUrls() {
+    var files = [];
+    for (var i = 0; i < _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"]({
+      min: 1,
+      max: 10
+    }); i++) {
+      files.push("".concat(_faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.image.url(), ".").concat(_faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.system.commonFileExt()));
+    }
+    return files;
+  };
+  var getData = function getData(i) {
+    var comment = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("p", {
+      children: [_faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.lorem.lines(1), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("b", {
+        children: [_faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.lorem.words(5), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+          children: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.lorem.words(3)
+        }), " ", _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.lorem.words(2)]
+      }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+        children: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.lorem.words(4)
+      })]
+    });
+    // const comment = <p><h2>Some Format - Text element demo</h2>
+    // <h3>heading</h3>
+    //   <h1>This is heading 1 - The most importance</h1>
+    //   <h2>This is heading 2</h2>
+    //   <h3>This is heading 3</h3>
+    //   <h4>This is heading 4</h4>
+    //   <h5>This is heading 5</h5>
+    //   <h6>This is heading 6 - The least importance</h6>
+    // <hr />
+    // <h3>paragraph</h3>
+    // <p>
+    //   This paragraph
+    //   contains a lot of lines
+    //   in the source code,
+    //   but the browser 
+    //   ignores it.
+    // </p>
+
+    // <p>
+    //   This paragraph
+    //   contains      a lot of spaces
+    //   in the source     code,
+    //   but the    browser 
+    //   ignores it.
+    // </p>
+
+    // <p>
+    //   The number of lines in a paragraph depends on the size of the browser window. If you resize the browser window, the number of lines in this paragraph will change.
+    // </p>
+    // <hr />
+    // <h3>em vs i, strong vs b</h3>
+    // <p>
+    //   The visual result is, by default, the same. <br />
+    //   Both tags <em>emphasis</em> and <i>italic</i> render its content in italics. <br />
+    //   Both tags <strong>strong emphasis</strong> and <b>bold</b> render its content in bold.
+    // </p>
+    // <p>
+    //   But the semantic meaning is different <br />
+    //   The &lt;em&gt; tag represents stress emphasis of its contents, while the &lt;i&gt; tag represents text that is set off from the normal prose. <br />
+    //   And similar to &lt;strong&gt; and &lt;b&gt;
+    // </p>
+    // <hr />
+    // <h3>quotes</h3>
+    //  <blockquote>
+    //    This a long quotations
+    //    For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally. 
+    //    <br />
+    //    <q>can nested some short quote</q>
+    // </blockquote> 
+    // <q>This is a short quotations</q>
+    // <hr />
+    // <h3>preformatted</h3>
+    //  <p>
+    // Text in a p element
+    // is displayed in a fixed-width
+    // font, and it preserves
+    // both      spaces and
+    // line breaks
+    // </p> 
+    // <hr />
+    // <h3>abbreviations</h3>
+    // <p>
+    //   The HTML &lt;abbr&gt; element represents an abbreviation and optionally provides a full description for it. <br />
+    //   Demo below <br />
+    //   The <abbr title="World Health Organization">WHO</abbr> was founded in 1948. </p>
+    // <hr />
+    // <h3>address</h3>
+    // <p>Demo using &lt;address&gt; tag to display address
+    //   <address>
+    //     Written by <a href="mailto:webmaster@example.com">Jon Doe</a>.<br />
+    //     Visit us at:<br />
+    //     Example.com<br />
+    //     Box 564, Disneyland<br />
+    //     USA
+    //   </address> 
+    // <hr />
+    // <h3>citation</h3>
+    //  <p><cite>The Scream</cite> by Edward Munch. Painted in 1893.</p> 
+    // <hr /></p></p>;
+    // const comment = faker.number.int({ max: 1, min: 0 }) ? faker.lorem.lines({
+    //   min: 2,
+    //   max: 4,
+    // }) : '';
+
+    var files = _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"]({
+      max: 1,
+      min: 0
+    }) || !comment ? getFileUrls() : null;
+
+    // console.log({comment,files});
+
+    return {
+      id: 100 + i,
+      comment: comment,
+      files: files,
+      user_id: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"]({
+        min: 1,
+        max: 3
+      }),
+      task_id: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"](),
+      added_by_id: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"](),
+      added_by_name: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.person.firstName(),
+      last_updated_by: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"](),
+      root: null,
+      status: null,
+      is_deleted: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"]({
+        min: 0,
+        max: 1
+      }),
+      deleted_by: null,
+      deleted_at: null,
+      created_at: dayjs__WEBPACK_IMPORTED_MODULE_2___default()().format('YYYY-MM-DD HH:mm:ss'),
+      updated_at: dayjs__WEBPACK_IMPORTED_MODULE_2___default()().add(2, 'day').format('YYYY-MM-DD HH:mm:ss')
+    };
+  };
+  for (var i = 0; i < count; i++) {
+    commentData.push(_objectSpread(_objectSpread({}, getData(i + 1)), {}, {
+      mention_comment: _faker_js_faker__WEBPACK_IMPORTED_MODULE_1__.faker.number["int"]({
+        max: 1,
+        min: 0
+      }) ? getData(i) : null
+    }));
+  }
+  return commentData;
+
+  // return _.fill(Array(count),{
+  //   ...data,
+  //   mention_comment:faker.number.int({max:3,min:1})===2?data:null,
+  // })
+}
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/components/ChatInput.jsx":
+/*!*****************************************************************!*\
+  !*** ./resources/js/react/UI/comments/components/ChatInput.jsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_quill__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-quill */ "./node_modules/react-quill/lib/index.js");
+/* harmony import */ var react_quill__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_quill__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var quill_mention__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! quill-mention */ "./node_modules/quill-mention/dist/quill.mention.esm.js");
+/* harmony import */ var react_quill_dist_quill_snow_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-quill/dist/quill.snow.css */ "./node_modules/react-quill/dist/quill.snow.css");
+/* harmony import */ var _styles_quill_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../styles/quill.css */ "./resources/js/react/UI/comments/styles/quill.css");
+/* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
+/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
+/* harmony import */ var react_icons_lu__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-icons/lu */ "./node_modules/react-icons/lu/index.esm.js");
+/* harmony import */ var react_icons_io5__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-icons/io5 */ "./node_modules/react-icons/io5/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
+/* harmony import */ var react_icons_bs__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/bs */ "./node_modules/react-icons/bs/index.esm.js");
+/* harmony import */ var emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! emoji-picker-react */ "./node_modules/emoji-picker-react/dist/emoji-picker-react.esm.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var _CommentsBody__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/HandleFileIcon */ "./resources/js/react/UI/comments/utils/HandleFileIcon.jsx");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../utils/user-details */ "./resources/js/react/UI/comments/utils/user-details.js");
+/* harmony import */ var _utils_getTextContent__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../utils/getTextContent */ "./resources/js/react/UI/comments/utils/getTextContent.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var currentUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(window.Laravel.user);
+var ChatInput = function ChatInput(_ref) {
+  var setScroll = _ref.setScroll,
+    taskId = _ref.taskId,
+    setIsLoading = _ref.setIsLoading;
+  var _usePostCommentMutati = (0,_services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_11__.usePostCommentMutation)(),
+    _usePostCommentMutati2 = _slicedToArray(_usePostCommentMutati, 2),
+    postComment = _usePostCommentMutati2[0],
+    isLoading = _usePostCommentMutati2[1].isLoading;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    showEmoji = _useState2[0],
+    setShowEmoji = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+    _useState4 = _slicedToArray(_useState3, 2),
+    buttonClick = _useState4[0],
+    setButtonClick = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState6 = _slicedToArray(_useState5, 2),
+    editorHtml = _useState6[0],
+    setEditorHtml = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState8 = _slicedToArray(_useState7, 2),
+    show = _useState8[0],
+    setShow = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
+    _useState10 = _slicedToArray(_useState9, 2),
+    files = _useState10[0],
+    setFiles = _useState10[1];
+  var _useCommentContext = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
+    mentionedComment = _useCommentContext.mentionedComment,
+    setMentionedComment = _useCommentContext.setMentionedComment,
+    setContextHolder = _useCommentContext.setContextHolder,
+    setSecletedComments = _useCommentContext.setSecletedComments;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setIsLoading(isLoading);
+  }, [isLoading]);
+  var handleSendComment = /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_ref2) {
+      var _ref2$onEnter, onEnter, formdata;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _ref2$onEnter = _ref2.onEnter, onEnter = _ref2$onEnter === void 0 ? false : _ref2$onEnter;
+            if (!(!(0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_13__.htmlToString)(editorHtml) && !files.length)) {
+              _context.next = 4;
+              break;
+            }
+            sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().fire({
+              icon: "warning",
+              title: "Enter your comment or attachment",
+              showConfirmButton: true,
+              timer: 2000,
+              timerProgressBar: true
+            });
+            return _context.abrupt("return");
+          case 4:
+            formdata = new FormData();
+            formdata.append("_token", document.querySelector("meta[name='csrf-token']").getAttribute("content"));
+            formdata.append("comment", (0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_13__.htmlToString)(editorHtml) ? onEnter ? (0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_13__.getTrimmedHtml)(editorHtml) : editorHtml : "");
+            formdata.append("user_id", currentUser.id);
+            formdata.append("task_id", taskId);
+            formdata.append("added_by", currentUser.id);
+            formdata.append("last_updated_by", currentUser.id);
+            formdata.append("mention_id", (mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.id) || null);
+            if (files.length) {
+              Array.from(files).forEach(function (file) {
+                formdata.append("file[]", file);
+              });
+            }
+
+            // const result = {};
+            // for (const data of formdata.entries()) {
+            //     result[data[0]] = data[1];
+            //     // console.log(`${data[0]} : ${data[1]}`);
+            // }
+            // console.log(result);
+            _context.prev = 13;
+            _context.next = 16;
+            return postComment({
+              taskId: taskId,
+              data: formdata
+            });
+          case 16:
+            _context.next = 21;
+            break;
+          case 18:
+            _context.prev = 18;
+            _context.t0 = _context["catch"](13);
+            sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().fire({
+              icon: "error",
+              title: "Comment not sent",
+              showConfirmButton: true,
+              confirmButtonColor: "red"
+            });
+          case 21:
+            setSecletedComments({});
+            setMentionedComment(null);
+            setContextHolder(null);
+            setEditorHtml("");
+            setShow(false);
+            setShowEmoji(false);
+            setFiles([]);
+            setScroll(function (prev) {
+              return !prev;
+            });
+          case 29:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee, null, [[13, 18]]);
+    }));
+    return function handleSendComment(_x) {
+      return _ref3.apply(this, arguments);
+    };
+  }();
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // if (buttonClick?.shiftKey && buttonClick?.keyCode === 13) {
+    //     return ;
+    // }
+    // console.log(buttonClick);
+    if ((buttonClick === null || buttonClick === void 0 ? void 0 : buttonClick.keyCode) === 13 && !(buttonClick !== null && buttonClick !== void 0 && buttonClick.shiftKey)) {
+      handleSendComment({
+        onEnter: true
+      });
+    }
+  }, [buttonClick]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("section", {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput),
+      children: [mentionedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(MentionedComment, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(FilePreviewer, {
+        files: files,
+        setFiles: setFiles
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(CommentEditor, {
+        editorHtml: editorHtml,
+        setEditorHtml: setEditorHtml,
+        files: files,
+        show: show,
+        setShow: setShow,
+        setShowEmoji: setShowEmoji,
+        showEmoji: showEmoji,
+        buttonClick: buttonClick,
+        setButtonClick: setButtonClick,
+        isLoading: isLoading
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("section", {
+      style: {
+        flexDirection: show || files.length || mentionedComment ?
+        // || isEditorHeightIncrease
+        "column" : "row"
+      },
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_actions_btn_container),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(FileUpload, {
+        files: files,
+        setFiles: setFiles
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_15__.IoMdSend, {
+        onClick: handleSendComment,
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_actions_btn_send)
+      })]
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ChatInput);
+function MentionedComment() {
+  var _mentionedComment$fil, _mentionedComment$fil2, _mentionedComment$use;
+  var _useCommentContext2 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
+    mentionedComment = _useCommentContext2.mentionedComment,
+    setMentionedComment = _useCommentContext2.setMentionedComment;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+    style: {
+      borderBottom: "solid 0.5px white"
+    },
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment),
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_16__.HiReply, {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_icon)
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_17__.MdClose, {
+      onClick: function onClick() {
+        setMentionedComment(null);
+      },
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_close_icon)
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("article", {
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area),
+      children: [mentionedComment !== null && mentionedComment !== void 0 && mentionedComment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area_mssg),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+          dangerouslySetInnerHTML: {
+            __html: mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.comment
+          }
+        })
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {}), mentionedComment !== null && mentionedComment !== void 0 && (_mentionedComment$fil = mentionedComment.files_data) !== null && _mentionedComment$fil !== void 0 && _mentionedComment$fil.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area_attachments),
+        children: mentionedComment === null || mentionedComment === void 0 || (_mentionedComment$fil2 = mentionedComment.files_data) === null || _mentionedComment$fil2 === void 0 ? void 0 : _mentionedComment$fil2.map(function (file, i) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file, " shadow-sm"),
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
+              fileName: mentionedComment !== null && mentionedComment !== void 0 && mentionedComment.original_files ? mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.original_files[i] : file.name,
+              URL: file === null || file === void 0 ? void 0 : file.url
+            })
+          }, i);
+        })
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_mentioned_comment_text_area_sender_time),
+        children: "".concat(mentionedComment === null || mentionedComment === void 0 || (_mentionedComment$use = mentionedComment.user) === null || _mentionedComment$use === void 0 ? void 0 : _mentionedComment$use.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_8___default()(mentionedComment === null || mentionedComment === void 0 ? void 0 : mentionedComment.mention_created_at).format("MMM DD, YYYY, hh:mm A"))
+      })]
+    })]
+  });
+}
+function FilePreviewer(_ref4) {
+  var files = _ref4.files,
+    setFiles = _ref4.setFiles;
+  var _useCommentContext3 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
+    mentionedComment = _useCommentContext3.mentionedComment;
+  return files.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+    style: {
+      borderRadius: mentionedComment ? "0" : "10px 10px 0 0",
+      borderBottom: "solid 0.5px white"
+    },
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview),
+    children: [files.map(function (file, i) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__file, " shadow-sm"),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          file: file
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_15__.IoMdCloseCircle, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__removeFile),
+          onClick: function onClick() {
+            var newFiles = _toConsumableArray(files);
+            newFiles.splice(i, 1);
+            setFiles(newFiles);
+          },
+          style: {
+            cursor: "pointer",
+            position: "absolute",
+            top: "5px",
+            right: "5px"
+          }
+        })]
+      }, i);
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
+      htmlFor: "add-file",
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_filePreview__addFile),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_18__.AiOutlinePlusSquare, {
+        style: {
+          height: "19.42px",
+          width: "19.42px",
+          color: "gray"
+        }
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
+        style: {
+          display: "none"
+        },
+        type: "file",
+        multiple: true,
+        id: "add-file",
+        onChange: function onChange(e) {
+          return setFiles(function (prev) {
+            return [].concat(_toConsumableArray(prev), _toConsumableArray(Object.values(e.target.files)));
+          });
+        }
+      })]
+    })]
+  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {});
+}
+function CommentEditor(_ref5) {
+  var show = _ref5.show,
+    setShow = _ref5.setShow,
+    files = _ref5.files,
+    editorHtml = _ref5.editorHtml,
+    setEditorHtml = _ref5.setEditorHtml,
+    showEmoji = _ref5.showEmoji,
+    setShowEmoji = _ref5.setShowEmoji,
+    buttonClick = _ref5.buttonClick,
+    setButtonClick = _ref5.setButtonClick,
+    isLoading = _ref5.isLoading;
+  var quillRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var _useCommentContext4 = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_7__.useCommentContext)(),
+    mentionedComment = _useCommentContext4.mentionedComment;
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState12 = _slicedToArray(_useState11, 2),
+    value = _useState12[0],
+    setValue = _useState12[1];
+
+  // const [showEmoji, setShowEmoji] = useState(false);
+
+  // useEffect(() => {
+  //     document.getElementById("quill").addEventListener("keydown", (e) => {
+  //         if (e.key === "Enter" && !e.shiftKey) {
+  //             setValue((prev) => prev);
+  //         } else {
+  //             setValue(editorHtml);
+  //         }
+  //     });
+  // }, [editorHtml]);
+
+  // useEffect(() => {
+  //     console.log(editorHtml);
+  // }, [editorHtml]);
+
+  // useEffect(() => {
+  //     if (!(!buttonClick?.shiftKey && buttonClick?.keyCode === 13)) {
+  //         setValue(editorHtml);
+  //     }
+  // }, [buttonClick]);
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    // Focus the Quill editor when the component is rendered
+    if (quillRef.current && showEmoji) {
+      var _quillRef$current, _quillRef$current2;
+      quillRef.current.getEditor().focus();
+      (_quillRef$current = quillRef.current) === null || _quillRef$current === void 0 || (_quillRef$current = _quillRef$current.getEditor()) === null || _quillRef$current === void 0 || _quillRef$current.setSelection((_quillRef$current2 = quillRef.current) === null || _quillRef$current2 === void 0 ? void 0 : _quillRef$current2.getEditor().getLength());
+    }
+  }, [showEmoji]);
+  var handleEmojiSelection = function handleEmojiSelection(emoji, e) {
+    var _quillRef$current3, _quill$getSelection;
+    // console.log(emoji);
+    // console.log(quillRef?.current);
+
+    var quill = (_quillRef$current3 = quillRef.current) === null || _quillRef$current3 === void 0 ? void 0 : _quillRef$current3.getEditor();
+    var cursorPosition = quill === null || quill === void 0 || (_quill$getSelection = quill.getSelection()) === null || _quill$getSelection === void 0 ? void 0 : _quill$getSelection.index;
+    if (cursorPosition !== undefined && emoji.imageUrl) {
+      // Insert the mention at the cursor position
+      quill === null || quill === void 0 || quill.insertText(cursorPosition, "".concat(emoji.emoji));
+      // quill?.insertEmbed(cursorPosition, 'image', emoji.imageUrl);
+      // <img src="" alt="" />
+    }
+  };
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var quill = quillRef.current.getEditor();
+
+    // Access the Quill toolbar container
+    var toolbar = quill.container.previousSibling;
+
+    // Hide the toolbar
+    toolbar.style.display = show ? "block" : "none";
+
+    // Clean up when component unmounts
+    return function () {
+      quill.off("text-change"); // Optional: Unsubscribe from any event listeners
+    };
+  }, [show]);
+  var atValues = [{
+    id: 1,
+    value: "Fredrik Sundqvist"
+  }, {
+    id: 2,
+    value: "Patrik Sjölin"
+  }];
+  var hashValues = [{
+    id: 3,
+    value: "Fredrik Sundqvist 2"
+  }, {
+    id: 4,
+    value: "Patrik Sjölin 2"
+  }];
+  function suggestPeople(_x2) {
+    return _suggestPeople.apply(this, arguments);
+  } // console.log(ReactQuill)
+  function _suggestPeople() {
+    _suggestPeople = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(searchTerm) {
+      var allPeople;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            allPeople = [{
+              id: 1,
+              value: "Fredrik Sundqvist"
+            }, {
+              id: 2,
+              value: "Patrik Sjölin"
+            }];
+            return _context2.abrupt("return", allPeople.filter(function (person) {
+              return person.value.includes(searchTerm);
+            }));
+          case 2:
+          case "end":
+            return _context2.stop();
+        }
+      }, _callee2);
+    }));
+    return _suggestPeople.apply(this, arguments);
+  }
+  var modules = {
+    toolbar: [["bold", "italic", "underline", "strike"
+    // "link"
+    ]]
+    // clipboard: {
+    //     matchVisual: false,
+    // },
+    // keyboard: {
+    //     bindings: {
+    //         // Intercept the Enter key event
+    //         enter: {
+    //             key: 13,
+    //             handler: function (range, context) {
+    //                 // Prevent the default behavior (inserting a new line)
+    //                 return true;
+    //             },
+    //         },
+    //     },
+    // },
+    // mention: {
+    //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+    //     mentionDenotationChars: ["@", "#"],
+    //     source: async function (searchTerm, renderList) {
+    //         console.log({searchTerm, renderList});
+    //         const matchedPeople = await suggestPeople(searchTerm);
+    //         renderList(matchedPeople);
+    //     },
+    // },
+    // mention: {
+    //     allowedChars: /^[A-Za-z\sÅÄÖåäö]*$/,
+    //     mentionDenotationChars: ['@', '#'],
+    //     source: function (searchTerm, renderList, mentionChar) {
+    //       let values;
+
+    //       if (mentionChar === '@') {
+    //         values = atValues;
+    //       } else {
+    //         values = hashValues;
+    //       }
+
+    //       if (searchTerm.length === 0) {
+    //         renderList(values, searchTerm);
+    //       } else {
+    //         const matches = [];
+    //         for (let i = 0; i < values.length; i++)
+    //           if (
+    //             ~values[i].value.toLowerCase().indexOf(searchTerm.toLowerCase())
+    //           )
+    //             matches.push(values[i]);
+    //         renderList(matches, searchTerm);
+    //       }
+    //     },
+    //   },
+  };
+
+  var formats = ["bold", "italic", "underline", "strike"
+  // "link",
+  // "mention",
+  ];
+
+  var checkPressedBtn = function checkPressedBtn() {
+    return new Promise(function (resolve, reject) {
+      document.getElementById("quill").addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          reject({
+            acceptToSubmit: true
+          });
+          return;
+        } else {
+          resolve({
+            acceptToSubmit: false
+          });
+          return;
+        }
+      });
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+    id: "editor_container",
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_input),
+    style: {
+      borderRadius: "".concat(function () {
+        if (mentionedComment || files.length) {
+          return "0 0 10px 10px";
+          // !(show || files.length || mentionedComment)
+          // ? "40px"
+          // : "10px"
+        } else {
+          if (show) {
+            return "10px";
+          } else {
+            return "40px";
+          }
+        }
+      }())
+      // overflow: "hidden",
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)((react_quill__WEBPACK_IMPORTED_MODULE_1___default()), {
+      id: "quill",
+      ref: quillRef,
+      theme: "snow",
+      value: editorHtml
+      // value={value}
+      ,
+      onKeyDown: function onKeyDown(e) {
+        // e.preventDefault();
+        setButtonClick(e);
+      }
+      // onKeyDown={(e) => {
+      //     e.preventDefault();
+      //     console.log("key down", e);
+      // }}
+      // onKeyPress={(e) => {
+      //     e.preventDefault();
+      //     console.log("key press", e);
+      // }}
+      // onKeyUp={(e) => {
+      //     e.preventDefault();
+      //     console.log("key up", e);
+      // }}
+      ,
+      onChange: function onChange(value) {
+        return setEditorHtml(value);
+      },
+      modules: _objectSpread({}, modules),
+      formats: formats,
+      placeholder: "Write your comment...",
+      readOnly: isLoading
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+      // onClick={() => setShowEmoji((prev) => !prev)}
+      style: {
+        bottom: show ? "14.16px" : "calc(50% - 7.66px)"
+      },
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emoji_icon),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_bs__WEBPACK_IMPORTED_MODULE_19__.BsEmojiSmile, {
+        onClick: function onClick() {
+          return setShowEmoji(function (prev) {
+            return !prev;
+          });
+        },
+        style: {
+          height: "15.32px",
+          width: "15.32px"
+        }
+      }), showEmoji && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_emojis),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          width: "100%",
+          height: "100%",
+          skinTonesDisabled: true,
+          emojiStyle: "facebook",
+          onEmojiClick: handleEmojiSelection
+        })
+      })]
+    }), !show ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_lu__WEBPACK_IMPORTED_MODULE_20__.LuPencilLine, {
+      onClick: function onClick() {
+        return setShow(true);
+      },
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_style_icon)
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_io5__WEBPACK_IMPORTED_MODULE_21__.IoChevronDownOutline, {
+      onClick: function onClick() {
+        return setShow(false);
+      },
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_text_style_icon),
+      style: {
+        bottom: "14.16px"
+      }
+    })]
+  });
+}
+function FileUpload(_ref6) {
+  var files = _ref6.files,
+    setFiles = _ref6.setFiles;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_5__["default"].chatInput_file_add_btn),
+    htmlFor: "file-input",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_22__.FaFileCirclePlus, {
+      style: {
+        height: "100%",
+        width: "100%"
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
+      type: "file",
+      id: "file-input",
+      multiple: true,
+      onChange: function onChange(e) {
+        return setFiles(_toConsumableArray(Object.values(e.target.files)));
+      },
+      style: {
+        display: "none"
+      }
+    })]
+  });
+}
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/components/CustomModal.jsx":
+/*!*******************************************************************!*\
+  !*** ./resources/js/react/UI/comments/components/CustomModal.jsx ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_popper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-popper */ "./node_modules/react-popper/lib/esm/usePopper.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/components/AnimatePresence/index.mjs");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+var CustomModal = function CustomModal(_ref) {
+  var _ref$toggleRef = _ref.toggleRef,
+    toggleRef = _ref$toggleRef === void 0 ? null : _ref$toggleRef,
+    isOpen = _ref.isOpen,
+    close = _ref.close,
+    children = _ref.children;
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(null),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    modalRef = _React$useState2[0],
+    setModalRef = _React$useState2[1];
+  var _usePopper = (0,react_popper__WEBPACK_IMPORTED_MODULE_3__.usePopper)(toggleRef, modalRef, {
+      placement: 'left-start',
+      modifiers: [{
+        name: 'offset',
+        options: {
+          offset: [0, 0]
+        }
+      }]
+    }),
+    styles = _usePopper.styles,
+    attributes = _usePopper.attributes;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", _objectSpread(_objectSpread({
+    ref: setModalRef,
+    style: _objectSpread(_objectSpread({}, styles.popper), {}, {
+      pointerEvents: isOpen ? 'all' : 'none',
+      zIndex: 99
+    })
+  }, attributes.popper), {}, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(framer_motion__WEBPACK_IMPORTED_MODULE_4__.AnimatePresence, {
+      children: isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(framer_motion__WEBPACK_IMPORTED_MODULE_5__.motion.div, {
+        initial: {
+          opacity: 0
+        },
+        animate: {
+          opacity: 1
+        },
+        exit: {
+          opacity: 0
+        },
+        className: "",
+        children: [children, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Shadow, {})]
+      })
+    })
+  }));
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CustomModal);
+var Shadow = function Shadow() {
+  return /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    style: {
+      width: '100vw',
+      height: '100vh',
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      zIndex: 90,
+      background: 'rgba(0,0,0,.1)'
+    }
+  }), document.querySelector('#sp1SingleTaskPageModal'));
+};
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/components/Modal.jsx":
+/*!*************************************************************!*\
+  !*** ./resources/js/react/UI/comments/components/Modal.jsx ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+var Modal = function Modal(_ref) {
+  var children = _ref.children,
+    isOpen = _ref.isOpen,
+    className = _ref.className;
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    isBrowser = _React$useState2[0],
+    setIsBrowser = _React$useState2[1];
+  // generate random id for dropdown menu
+  var id = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
+    return Math.random().toString(36).substr(2, 9);
+  }, []);
+  var DOM = document.getElementById(id);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    setIsBrowser(true);
+    var el = document.createElement('div');
+    el.id = id;
+    document.body.appendChild(el);
+    return function () {
+      document.body.removeChild(el);
+    };
+  }, []);
+
+  // React.useEffect(() => {
+  //     if(isOpen){
+  //         document.body.classList.add('cnx_body-overflow-hidden')
+  //     }else{
+  //         document.body.classList.remove('cnx_body-overflow-hidden')
+  //     }
+  // }, [isOpen]) 
+
+  if (!DOM) return;
+  var modalContent = isOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: "cnx_modal ".concat(className),
+    children: children
+  }) : null;
+  if (isBrowser) {
+    return /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal(modalContent, DOM);
+  } else {
+    return null;
+  }
+};
+Modal.propTypes = {
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().node).isRequired,
+  isOpen: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().bool).isRequired,
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().string)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Modal);
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/components/SingleChat.jsx":
+/*!******************************************************************!*\
+  !*** ./resources/js/react/UI/comments/components/SingleChat.jsx ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
+/* harmony import */ var react_icons_fi__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-icons/fi */ "./node_modules/react-icons/fi/index.esm.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_tb__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-icons/tb */ "./node_modules/react-icons/tb/index.esm.js");
+/* harmony import */ var react_icons_md__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-icons/md */ "./node_modules/react-icons/md/index.esm.js");
+/* harmony import */ var react_icons_io__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/io */ "./node_modules/react-icons/io/index.esm.js");
+/* harmony import */ var react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-icons/fa6 */ "./node_modules/react-icons/fa6/index.esm.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _CommentsBody__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../utils/HandleFileIcon */ "./resources/js/react/UI/comments/utils/HandleFileIcon.jsx");
+/* harmony import */ var _utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../utils/isCurrentUser */ "./resources/js/react/UI/comments/utils/isCurrentUser.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/user-details */ "./resources/js/react/UI/comments/utils/user-details.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _utils_getTextContent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/getTextContent */ "./resources/js/react/UI/comments/utils/getTextContent.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var currentUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_7__.User(window.Laravel.user);
+var SingleChat = function SingleChat(_ref) {
+  var _comment$user8, _comment$user9, _comment$mention2, _comment$mention3, _comment$mention4, _comment$mention5, _comment$mention8, _comment$mention9, _comment$files_data, _comment$user10, _comment$user11, _comment$mention11, _comment$mention12, _comment$mention13, _comment$mention16, _comment$mention17, _comment$files_data2, _comment$user12;
+  var id = _ref.id,
+    comment = _ref.comment,
+    prevComment = _ref.prevComment,
+    _onContextMenu = _ref.onContextMenu,
+    onKeyDown = _ref.onKeyDown,
+    idMatch = _ref.idMatch,
+    handleDeleteSingleComment = _ref.handleDeleteSingleComment,
+    selectMentionIndex = _ref.selectMentionIndex,
+    setSelectMentionIndex = _ref.setSelectMentionIndex;
+  var _useCommentContext = (0,_CommentsBody__WEBPACK_IMPORTED_MODULE_3__.useCommentContext)(),
+    setContextHolder = _useCommentContext.setContextHolder,
+    setMentionedComment = _useCommentContext.setMentionedComment,
+    selectedComments = _useCommentContext.selectedComments,
+    setSecletedComments = _useCommentContext.setSecletedComments;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    showCommentMenu = _useState2[0],
+    setShowCommentMenu = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState4 = _slicedToArray(_useState3, 2),
+    showDeletedComment = _useState4[0],
+    setShowDeletedComment = _useState4[1];
+  var menuRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var menuBtnRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  var closeContext = function closeContext() {
+    setShowCommentMenu(false);
+  };
+
+  // comment more btn clicked menu
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var handleClickOutside = function handleClickOutside(event) {
+      // console.log(event.target);
+      if (menuRef.current && !menuRef.current.contains(event.target) && menuBtnRef.current && !menuBtnRef.current.contains(event.target)) {
+        setShowCommentMenu(function (prev) {
+          if (prev) {
+            return false;
+          } else {
+            return prev;
+          }
+        });
+        // console.log("outside clicked");
+        // setShowCommentMenu(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    document.addEventListener("contextmenu", closeContext);
+    return function () {
+      document.removeEventListener("contextmenu", closeContext);
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  // comment sender info showing handler
+  var handleSenderInfo = function handleSenderInfo(_ref2) {
+    var _currentComment$user, _previousComment$user;
+    var currentComment = _ref2.currentComment,
+      previousComment = _ref2.previousComment;
+    if (Number(currentComment === null || currentComment === void 0 || (_currentComment$user = currentComment.user) === null || _currentComment$user === void 0 ? void 0 : _currentComment$user.id) === Number(previousComment === null || previousComment === void 0 || (_previousComment$user = previousComment.user) === null || _previousComment$user === void 0 ? void 0 : _previousComment$user.id)) {
+      if (dayjs__WEBPACK_IMPORTED_MODULE_4___default()(currentComment === null || currentComment === void 0 ? void 0 : currentComment.created_date).diff(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(previousComment === null || previousComment === void 0 ? void 0 : previousComment.created_date), "minutes") <= 10) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {});
+      } else {
+        var _comment$user;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          style: {
+            alignSelf: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user = comment.user) === null || _comment$user === void 0 ? void 0 : _comment$user.id) ? "flex-end" : "flex-start"
+          },
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_time),
+          children: "".concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_date).format("hh:mm A"))
+        });
+      }
+    } else {
+      var _comment$user2, _comment$user3;
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+        style: {
+          alignSelf: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user2 = comment.user) === null || _comment$user2 === void 0 ? void 0 : _comment$user2.id) ? "flex-end" : "flex-start"
+        },
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_time),
+        children: "".concat(comment === null || comment === void 0 || (_comment$user3 = comment.user) === null || _comment$user3 === void 0 ? void 0 : _comment$user3.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_date).format("MMM DD, YYYY, hh:mm A"))
+      });
+    }
+  };
+
+  // comment sender avator showing handler
+  var handleSenderAvator = function handleSenderAvator(_ref3) {
+    var _currentComment$user2, _previousComment$user2;
+    var currentComment = _ref3.currentComment,
+      previousComment = _ref3.previousComment;
+    if (Number(currentComment === null || currentComment === void 0 || (_currentComment$user2 = currentComment.user) === null || _currentComment$user2 === void 0 ? void 0 : _currentComment$user2.id) === Number(previousComment === null || previousComment === void 0 || (_previousComment$user2 = previousComment.user) === null || _previousComment$user2 === void 0 ? void 0 : _previousComment$user2.id)) {
+      var _comment$user4;
+      if ((0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user4 = comment.user) === null || _comment$user4 === void 0 ? void 0 : _comment$user4.id)) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {});
+      } else {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          style: {
+            visibility: "hidden"
+          },
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_avator)
+        });
+      }
+    } else {
+      var _comment$user5;
+      if ((0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user5 = comment.user) === null || _comment$user5 === void 0 ? void 0 : _comment$user5.id)) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {});
+      } else {
+        var _comment$user6;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_avator),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("img", {
+            style: {
+              height: "100%",
+              width: "100%"
+            },
+            src: "/user-uploads/avatar/".concat(comment === null || comment === void 0 || (_comment$user6 = comment.user) === null || _comment$user6 === void 0 ? void 0 : _comment$user6.image),
+            alt: ""
+          })
+        });
+      }
+    }
+  };
+
+  // comment field top space handler
+  var handleTopSpace = function handleTopSpace(_ref4) {
+    var _currentComment$user3, _previousComment$user3;
+    var currentComment = _ref4.currentComment,
+      previousComment = _ref4.previousComment;
+    if (Number(currentComment === null || currentComment === void 0 || (_currentComment$user3 = currentComment.user) === null || _currentComment$user3 === void 0 ? void 0 : _currentComment$user3.id) === Number(previousComment === null || previousComment === void 0 || (_previousComment$user3 = previousComment.user) === null || _previousComment$user3 === void 0 ? void 0 : _previousComment$user3.id)) {
+      if (dayjs__WEBPACK_IMPORTED_MODULE_4___default()(currentComment === null || currentComment === void 0 ? void 0 : currentComment.created_date).diff(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(previousComment === null || previousComment === void 0 ? void 0 : previousComment.created_date), "minutes") <= 10) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("section", {
+          style: {
+            height: "5px"
+            // backgroundColor: "black"
+          }
+        });
+      } else {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("section", {
+          style: {
+            height: "5px"
+            // backgroundColor: "black"
+          }
+        });
+      }
+    } else {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("section", {
+        style: {
+          height: "10px"
+          // backgroundColor: "black"
+        }
+      });
+    }
+  };
+
+  var handleSelect = function handleSelect() {
+    setSecletedComments(function (prev) {
+      return _objectSpread(_objectSpread({}, prev), {}, _defineProperty({}, id, comment));
+    });
+  };
+  var handleUnSelect = function handleUnSelect() {
+    setSecletedComments(function (prev) {
+      var selected = _objectSpread({}, prev);
+      delete selected[id];
+      return selected;
+    });
+  };
+  var handleCopySingleComment = function handleCopySingleComment(comment) {
+    var _comment$user7;
+    var SelectedCommentsString = "".concat((0,_utils_getTextContent__WEBPACK_IMPORTED_MODULE_9__.htmlToPreservedText)(comment.comment), "\n").concat(comment === null || comment === void 0 || (_comment$user7 = comment.user) === null || _comment$user7 === void 0 ? void 0 : _comment$user7.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_date).format("MMM DD, YYYY, hh:mm A"), " ");
+
+    // console.log({ allSelectedCommentsString });
+    window.navigator.clipboard.writeText(SelectedCommentsString).then(function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_8___default().fire({
+        icon: "success",
+        title: "Comments copied successfully",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+      // setSecletedComments({});
+      // setScroll(prev=>!prev);
+      setContextHolder(null);
+    })["catch"](function () {
+      sweetalert2__WEBPACK_IMPORTED_MODULE_8___default().fire({
+        icon: "error",
+        title: "Comments didn't copied",
+        timer: 2000,
+        showConfirmButton: true,
+        timerProgressBar: true
+      });
+    })["finally"](function () {
+      //   setIsLoading(false);
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+    id: id,
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat),
+    style: {
+      alignSelf: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user8 = comment.user) === null || _comment$user8 === void 0 ? void 0 : _comment$user8.id) ? "flex-end" : "flex-start"
+    },
+    children: [
+    // <section
+    //     style={{
+    //         height: "10px",
+    //         // backgroundColor: "black"
+    //     }}
+    // />
+    handleTopSpace({
+      currentComment: comment,
+      previousComment: prevComment
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+      style: {
+        display: "inline-flex",
+        // border:"solid",
+        gap: "0 6px",
+        flexDirection: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user9 = comment.user) === null || _comment$user9 === void 0 ? void 0 : _comment$user9.id) ? "row-reverse" : "row"
+      },
+      children: [_toConsumableArray(Object.keys(selectedComments)).length > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+        style: {
+          // border: "solid",
+          height: "28px",
+          // flex: "0 0 28px",
+          borderRadius: "28px"
+        },
+        onClick: function onClick() {
+          if (selectedComments[id]) {
+            handleUnSelect();
+          } else {
+            handleSelect();
+          }
+        },
+        children: selectedComments[id] ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(Select, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(UnSelect, {})
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        id: "comment-card",
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card),
+        children: [handleSenderAvator({
+          currentComment: comment,
+          previousComment: prevComment
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("article", {
+          id: "comment-card-text ",
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text),
+          children: [handleSenderInfo({
+            currentComment: comment,
+            previousComment: prevComment
+          }), comment !== null && comment !== void 0 && comment.is_deleted ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            title: "".concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_date).format("MMM DD, YYYY, hh:mm A")),
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].single_comment_deleted_container),
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+              style: {
+                borderBottom: showDeletedComment ? "0.15px solid #f8d0d39a" : "0",
+                gap: currentUser.roleId === 1 || currentUser.roleId === 8 ? "0 20px" : "0",
+                justifyContent: currentUser.roleId === 1 || currentUser.roleId === 8 ? "space-between" : "center"
+              },
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].single_comment_deleted_title),
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+                children: ["This Comment has been deleted", " ", showDeletedComment ? "(Deleted at : ".concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.deleted_at).format("MMM DD, YYYY, hh:mm A"), ")") : ""]
+              }), currentUser.roleId === 1 || currentUser.roleId === 8 ? showDeletedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__.FaEyeSlash, {
+                onClick: function onClick() {
+                  return setShowDeletedComment(false);
+                },
+                style: {
+                  cursor: "pointer"
+                }
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_fa6__WEBPACK_IMPORTED_MODULE_11__.FaEye, {
+                onClick: function onClick() {
+                  return setShowDeletedComment(true);
+                },
+                style: {
+                  cursor: "pointer"
+                }
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+            }), showDeletedComment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].single_comment_deleted_comment_body),
+              children: [comment !== null && comment !== void 0 && comment.mention ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+                onClick: function onClick() {
+                  var _comment$mention;
+                  return setSelectMentionIndex(comment === null || comment === void 0 || (_comment$mention = comment.mention) === null || _comment$mention === void 0 ? void 0 : _comment$mention.id);
+                }
+                // onContextMenu={(e) => {
+                //     onContextMenu(e);
+                //     setContextHolder(comment);
+                // }}
+                // onKeyDown={onKeyDown}
+                ,
+                style: {
+                  // borderRadius:
+                  //     comment?.comment
+                  //         ? "5px 5px 0 0"
+                  //         : "5px",
+                  backgroundColor: "#FFF3F4",
+                  color: "#F17B7C",
+                  // border: "0.15px solid #f17b7dbb",
+                  border: "none"
+                  // borderBottom:
+                  //     comment?.comment
+                  //         ? "solid 1px #f17b7dbb"
+                  //         : "solid 0.15px #f17b7dbb",
+                },
+
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_mentioned_comment),
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
+                  style: {
+                    color: "#F17B7C"
+                  },
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_icon)
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("article", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area),
+                  children: [comment !== null && comment !== void 0 && (_comment$mention2 = comment.mention) !== null && _comment$mention2 !== void 0 && _comment$mention2.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_mssg),
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                      dangerouslySetInnerHTML: {
+                        __html: comment === null || comment === void 0 || (_comment$mention3 = comment.mention) === null || _comment$mention3 === void 0 ? void 0 : _comment$mention3.comment
+                      }
+                    })
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention4 = comment.mention) !== null && _comment$mention4 !== void 0 && (_comment$mention4 = _comment$mention4.files_data) !== null && _comment$mention4 !== void 0 && _comment$mention4.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
+                    children: comment === null || comment === void 0 || (_comment$mention5 = comment.mention) === null || _comment$mention5 === void 0 || (_comment$mention5 = _comment$mention5.files_data) === null || _comment$mention5 === void 0 ? void 0 : _comment$mention5.map(function (file, i) {
+                      var _comment$mention6, _comment$mention7;
+                      // console.log(comment?.mention?.original_files);
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+                        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
+                        style: {
+                          color: "#F17B7C"
+                        },
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                          fileName: comment !== null && comment !== void 0 && (_comment$mention6 = comment.mention) !== null && _comment$mention6 !== void 0 && _comment$mention6.original_files ? comment === null || comment === void 0 || (_comment$mention7 = comment.mention) === null || _comment$mention7 === void 0 ? void 0 : _comment$mention7.original_files[i] : file.name,
+                          URL: file === null || file === void 0 ? void 0 : file.url
+                        })
+                      }, i);
+                    })
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                    style: {
+                      fontStyle: "italic"
+                    },
+                    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_sender_time),
+                    children: "".concat(comment === null || comment === void 0 || (_comment$mention8 = comment.mention) === null || _comment$mention8 === void 0 || (_comment$mention8 = _comment$mention8.user) === null || _comment$mention8 === void 0 ? void 0 : _comment$mention8.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention9 = comment.mention) === null || _comment$mention9 === void 0 ? void 0 : _comment$mention9.created_date).format("MMM DD, YYYY, hh:mm A"))
+                  })]
+                })]
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+                // onContextMenu={(e) => {
+                //     onContextMenu(e);
+                //     setContextHolder(comment);
+                // }}
+                // onKeyDown={onKeyDown}
+                style: {
+                  backgroundColor: "#FFF3F4",
+                  color: "#F17B7C",
+                  position: "relative",
+                  // borderRadius:
+                  //     comment?.mention
+                  //         ? "0 0 5px 5px"
+                  //         : "5px",
+                  // border: "0.15px solid #f17b7dbb",
+                  // borderTop:
+                  // comment?.mention
+                  // ? "none"
+                  // : "0.15px solid #f17b7dbb",
+                  padding: "0",
+                  border: "none"
+                },
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_message),
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+                  dangerouslySetInnerHTML: {
+                    __html: comment === null || comment === void 0 ? void 0 : comment.comment
+                  }
+                })
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$files_data = comment.files_data) !== null && _comment$files_data !== void 0 && _comment$files_data.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(FileView, {
+                comment: comment
+                // onContextMenu={(e) => {
+                //     onContextMenu(e);
+                //     setContextHolder(comment);
+                // }}
+                // onKeyDown={onKeyDown}
+                ,
+                isCurrentUser: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user10 = comment.user) === null || _comment$user10 === void 0 ? void 0 : _comment$user10.id),
+                files: comment === null || comment === void 0 ? void 0 : comment.files_data,
+                topMargin: !!(comment !== null && comment !== void 0 && comment.comment)
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            title: "".concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 ? void 0 : comment.created_date).format("MMM DD, YYYY, hh:mm A")),
+            style: {
+              alignSelf: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user11 = comment.user) === null || _comment$user11 === void 0 ? void 0 : _comment$user11.id) ? "flex-end" : "flex-start"
+            },
+            className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_container, " ").concat(idMatch ? "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_match) : "", " ").concat(selectMentionIndex === (comment === null || comment === void 0 ? void 0 : comment.id) ? "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_match) : ""),
+            children: [comment !== null && comment !== void 0 && comment.mention ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+              onClick: function onClick() {
+                var _comment$mention10;
+                return setSelectMentionIndex(comment === null || comment === void 0 || (_comment$mention10 = comment.mention) === null || _comment$mention10 === void 0 ? void 0 : _comment$mention10.id);
+              },
+              onContextMenu: function onContextMenu(e) {
+                _onContextMenu(e);
+                setContextHolder(comment);
+              },
+              onKeyDown: onKeyDown,
+              style: {
+                borderRadius: comment !== null && comment !== void 0 && comment.comment ? "5px 5px 0 0" : "5px",
+                borderBottom: comment !== null && comment !== void 0 && comment.comment ? "solid 1px hsla(0, 0%, 44%, 0.13)" : "0.15px solid #aaaaaa"
+              },
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_mentioned_comment),
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_icon)
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("article", {
+                className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area),
+                children: [comment !== null && comment !== void 0 && (_comment$mention11 = comment.mention) !== null && _comment$mention11 !== void 0 && _comment$mention11.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_mssg),
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+                    dangerouslySetInnerHTML: {
+                      __html: comment === null || comment === void 0 ? void 0 : comment.mention.comment
+                    }
+                  })
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$mention12 = comment.mention) !== null && _comment$mention12 !== void 0 && (_comment$mention12 = _comment$mention12.files_data) !== null && _comment$mention12 !== void 0 && _comment$mention12.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_attachments),
+                  children: comment === null || comment === void 0 || (_comment$mention13 = comment.mention) === null || _comment$mention13 === void 0 || (_comment$mention13 = _comment$mention13.files_data) === null || _comment$mention13 === void 0 ? void 0 : _comment$mention13.map(function (file, i) {
+                    var _comment$mention14, _comment$mention15;
+                    // console.log(comment.original_files);
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+                      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                        fileName: comment !== null && comment !== void 0 && (_comment$mention14 = comment.mention) !== null && _comment$mention14 !== void 0 && _comment$mention14.original_files ? comment === null || comment === void 0 || (_comment$mention15 = comment.mention) === null || _comment$mention15 === void 0 ? void 0 : _comment$mention15.original_files[i] : file.name,
+                        URL: file === null || file === void 0 ? void 0 : file.url
+                      })
+                    }, i);
+                  })
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+                  style: {
+                    fontStyle: "italic"
+                  },
+                  className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_mentioned_comment_text_area_sender_time),
+                  children: "".concat(comment === null || comment === void 0 || (_comment$mention16 = comment.mention) === null || _comment$mention16 === void 0 || (_comment$mention16 = _comment$mention16.user) === null || _comment$mention16 === void 0 ? void 0 : _comment$mention16.name, ", ").concat(dayjs__WEBPACK_IMPORTED_MODULE_4___default()(comment === null || comment === void 0 || (_comment$mention17 = comment.mention) === null || _comment$mention17 === void 0 ? void 0 : _comment$mention17.mention_created_at).format("MMM DD, YYYY, hh:mm A"))
+                })]
+              })]
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+              onContextMenu: function onContextMenu(e) {
+                _onContextMenu(e);
+                setContextHolder(comment);
+              },
+              onKeyDown: onKeyDown,
+              style: {
+                position: "relative",
+                borderRadius: comment !== null && comment !== void 0 && comment.mention ? "0 0 5px 5px" : "5px",
+                borderTop: comment !== null && comment !== void 0 && comment.mention ? "none" : "0.15px solid #aaaaaa"
+              },
+              className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_message),
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+                dangerouslySetInnerHTML: {
+                  __html: comment === null || comment === void 0 ? void 0 : comment.comment
+                }
+              })
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), comment !== null && comment !== void 0 && (_comment$files_data2 = comment.files_data) !== null && _comment$files_data2 !== void 0 && _comment$files_data2.length ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(FileView, {
+              comment: comment,
+              onContextMenu: function onContextMenu(e) {
+                _onContextMenu(e);
+                setContextHolder(comment);
+              },
+              onKeyDown: onKeyDown,
+              isCurrentUser: (0,_utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"])(comment === null || comment === void 0 || (_comment$user12 = comment.user) === null || _comment$user12 === void 0 ? void 0 : _comment$user12.id),
+              files: comment === null || comment === void 0 ? void 0 : comment.files_data,
+              topMargin: !!(comment !== null && comment !== void 0 && comment.comment)
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(CustomMoreOption, {
+              comment: comment,
+              isCurrentUser: _utils_isCurrentUser__WEBPACK_IMPORTED_MODULE_6__["default"],
+              setMentionedComment: setMentionedComment,
+              handleSelect: handleSelect,
+              handleCopySingleComment: handleCopySingleComment,
+              handleDeleteSingleComment: handleDeleteSingleComment
+            })]
+          })]
+        })]
+      })]
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SingleChat);
+var FileView = function FileView(_ref5) {
+  var _ref6, _ref7;
+  var files = _ref5.files,
+    isCurrentUser = _ref5.isCurrentUser,
+    onContextMenu = _ref5.onContextMenu,
+    onKeyDown = _ref5.onKeyDown,
+    topMargin = _ref5.topMargin,
+    comment = _ref5.comment;
+  // console.log({ isCurrentUser });
+
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+    onContextMenu: onContextMenu,
+    onKeyDown: onKeyDown,
+    style: {
+      // alignSelf: isCurrentUser ? "flex-end" : "flex-start",
+      justifyContent: isCurrentUser ? "right" : "left",
+      marginTop: topMargin ? "5px" : "0"
+    },
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_files),
+    children: (_ref6 = _toConsumableArray(files)) !== null && _ref6 !== void 0 && _ref6.length ? (_ref7 = _toConsumableArray(files)) === null || _ref7 === void 0 ? void 0 : _ref7.map(function (file, i) {
+      // console.log(comment);
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].chatInput_filePreview__file, " shadow-sm"),
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_utils_HandleFileIcon__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          fileName: comment.original_files ? comment.original_files[i] : file.name,
+          URL: file === null || file === void 0 ? void 0 : file.url
+        })
+      }, i);
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})
+  });
+};
+var Select = function Select() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("svg", {
+    style: {
+      cursor: "pointer"
+    }
+    // onClick={onclick}
+    ,
+    id: "Group_3960",
+    "data-name": "Group 3960",
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "28",
+    height: "28",
+    viewBox: "0 0 28 28",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
+      id: "Ellipse_54",
+      "data-name": "Ellipse 54",
+      cx: "14",
+      cy: "14",
+      r: "14",
+      fill: "#009cec"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("g", {
+      id: "Group_3829",
+      "data-name": "Group 3829",
+      transform: "translate(4.278 5.251)",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("path", {
+        id: "Path_1532",
+        "data-name": "Path 1532",
+        d: "M6.361,6.861,5,8.222l4.861,4.861,9.722-9.722L18.222,2,9.861,10.361Z",
+        transform: "translate(-0.139 -1.028)",
+        fill: "#fff"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("path", {
+        id: "Path_1533",
+        "data-name": "Path 1533",
+        d: "M8.75,16.556a6.806,6.806,0,1,1,0-13.611,7.094,7.094,0,0,1,3.4.875l.972-1.653A8.758,8.758,0,0,0,0,9.75a8.75,8.75,0,0,0,17.5,0H15.556A6.764,6.764,0,0,1,8.75,16.556Z",
+        transform: "translate(0 -1)",
+        fill: "#fff"
+      })]
+    })]
+  });
+};
+var UnSelect = function UnSelect() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("svg", {
+    style: {
+      cursor: "pointer"
+    }
+    // onClick={onClick}
+    ,
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "28",
+    height: "28",
+    viewBox: "0 0 28 28",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("g", {
+      id: "Group_3961",
+      "data-name": "Group 3961",
+      transform: "translate(0 -0.068)",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
+        id: "Ellipse_1044",
+        "data-name": "Ellipse 1044",
+        cx: "14",
+        cy: "14",
+        r: "14",
+        transform: "translate(0 0.068)",
+        fill: "#009cec"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("g", {
+        id: "Ellipse_1043",
+        "data-name": "Ellipse 1043",
+        transform: "translate(7 7.068)",
+        fill: "none",
+        stroke: "#fff",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        strokeWidth: "1.5",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
+          cx: "7",
+          cy: "7",
+          r: "7",
+          stroke: "none"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("circle", {
+          cx: "7",
+          cy: "7",
+          r: "7.75",
+          fill: "none"
+        })]
+      })]
+    })
+  });
+};
+var MoreOption = function MoreOption(_ref8) {
+  var _comment$user13, _comment$user14, _comment$user15, _comment$user16, _comment$user17;
+  var setShowCommentMenu = _ref8.setShowCommentMenu,
+    showCommentMenu = _ref8.showCommentMenu,
+    isCurrentUser = _ref8.isCurrentUser,
+    comment = _ref8.comment,
+    menuBtnRef = _ref8.menuBtnRef,
+    menuRef = _ref8.menuRef,
+    setMentionedComment = _ref8.setMentionedComment,
+    handleSelect = _ref8.handleSelect,
+    handleCopySingleComment = _ref8.handleCopySingleComment,
+    handleDeleteSingleComment = _ref8.handleDeleteSingleComment;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+      onClick: function onClick() {
+        // setScroll((prev) => !prev);
+        setShowCommentMenu(function (prev) {
+          return !prev;
+        });
+      },
+      style: {
+        left: isCurrentUser(comment === null || comment === void 0 || (_comment$user13 = comment.user) === null || _comment$user13 === void 0 ? void 0 : _comment$user13.id) ? "-14px" : "auto",
+        right: isCurrentUser(comment === null || comment === void 0 || (_comment$user14 = comment.user) === null || _comment$user14 === void 0 ? void 0 : _comment$user14.id) ? "auto" : "-14px"
+      },
+      className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_btn),
+      ref: menuBtnRef
+    }), showCommentMenu ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+      ref: menuRef,
+      style: {
+        left: isCurrentUser(comment === null || comment === void 0 || (_comment$user15 = comment.user) === null || _comment$user15 === void 0 ? void 0 : _comment$user15.id) ? "-131.133px" : "auto",
+        right: isCurrentUser(comment === null || comment === void 0 || (_comment$user16 = comment.user) === null || _comment$user16 === void 0 ? void 0 : _comment$user16.id) ? "auto" : "-131.133px"
+      },
+      className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_more_options,
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          setShowCommentMenu(false);
+          setMentionedComment(comment);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Reply"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          setShowCommentMenu(false);
+          handleSelect();
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_13__.TbMessage2Check, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Select Message"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          setShowCommentMenu(false);
+          handleCopySingleComment(comment);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_14__.MdOutlineContentCopy, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Copy"
+        })]
+      }), isCurrentUser(comment === null || comment === void 0 || (_comment$user17 = comment.user) === null || _comment$user17 === void 0 ? void 0 : _comment$user17.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          setShowCommentMenu(false);
+          handleDeleteSingleComment(comment);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_15__.IoMdCloseCircleOutline, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Remove"
+        })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+  });
+};
+var CustomMoreOption = function CustomMoreOption(_ref9) {
+  var _comment$user18, _comment$user19, _comment$user20, _comment$user21;
+  var comment = _ref9.comment,
+    isCurrentUser = _ref9.isCurrentUser,
+    setMentionedComment = _ref9.setMentionedComment,
+    handleSelect = _ref9.handleSelect,
+    handleCopySingleComment = _ref9.handleCopySingleComment,
+    handleDeleteSingleComment = _ref9.handleDeleteSingleComment;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    document.addEventListener("contextmenu", function (e) {
+      $('.dropdown_btn').dropdown("hide");
+    });
+  }, []);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+    style: {
+      left: isCurrentUser(comment === null || comment === void 0 || (_comment$user18 = comment.user) === null || _comment$user18 === void 0 ? void 0 : _comment$user18.id) ? "-15px" : "auto",
+      right: isCurrentUser(comment === null || comment === void 0 || (_comment$user19 = comment.user) === null || _comment$user19 === void 0 ? void 0 : _comment$user19.id) ? "auto" : "-15px"
+    },
+    className: "".concat(isCurrentUser(comment === null || comment === void 0 || (_comment$user20 = comment.user) === null || _comment$user20 === void 0 ? void 0 : _comment$user20.id) ? "dropleft" : "dropright", " ").concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_custom_more_btn_container),
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("button", {
+      id: "dropdown_btn",
+      type: "button",
+      className: "dropdown_btn ".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_custom_more_btn),
+      "data-toggle": "dropdown",
+      "aria-expanded": "false",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_fi__WEBPACK_IMPORTED_MODULE_16__.FiMoreVertical, {
+        style: {
+          height: "15px",
+          width: "15px"
+        }
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+      className: "dropdown-menu ".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].singleChat_comment_card_text_custom_more_options),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          // setShowCommentMenu(false);
+          setMentionedComment(comment);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_12__.HiReply, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Reply"
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          // setShowCommentMenu(false);
+          handleSelect();
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_tb__WEBPACK_IMPORTED_MODULE_13__.TbMessage2Check, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Select Message"
+        })]
+      }), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          // setShowCommentMenu(false);
+          handleCopySingleComment(comment);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_md__WEBPACK_IMPORTED_MODULE_14__.MdOutlineContentCopy, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Copy"
+        })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {}), isCurrentUser(comment === null || comment === void 0 || (_comment$user21 = comment.user) === null || _comment$user21 === void 0 ? void 0 : _comment$user21.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("section", {
+        onClick: function onClick() {
+          // setShowCommentMenu(false);
+          handleDeleteSingleComment(comment);
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_icons_io__WEBPACK_IMPORTED_MODULE_15__.IoMdCloseCircleOutline, {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_icons)
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].context_title),
+          children: "Remove"
+        })]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {})]
+    })]
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/utils/CommentsPlaceholder.jsx":
+/*!**********************************************************************!*\
+  !*** ./resources/js/react/UI/comments/utils/CommentsPlaceholder.jsx ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ CommentsPlaceholder)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Placeholder__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Placeholder */ "./resources/js/react/UI/comments/utils/Placeholder.jsx");
+/* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+
+
+function CommentsPlaceholder() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_2__["default"].commentsBody_loadingArea),
+    children: lodash__WEBPACK_IMPORTED_MODULE_3___default().fill(Array(10), "*").map(function (v, i) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(LeftSideComment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(RightSideComment, {})]
+      }, i);
+    })
+  });
+}
+var LeftSideComment = function LeftSideComment() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    className: "d-flex",
+    style: {
+      gap: "0 6px",
+      marginTop: "10px"
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Placeholder__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+      height: "30px",
+      width: "30px",
+      type: "circle"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("section", {
+      style: {
+        flex: "1 1 75%",
+        display: "flex",
+        gap: "6px",
+        flexFlow: "column nowrap"
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Placeholder__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+        height: "20px",
+        width: "200px"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+        style: {
+          width: "75%",
+          height: "100px",
+          overflow: "hidden"
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Placeholder__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+          width: "75%",
+          height: "100px",
+          style: {
+            transform: "scale(3.5)"
+          }
+        })
+      })]
+    })]
+  });
+};
+var RightSideComment = function RightSideComment() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("section", {
+    style: {
+      display: "flex",
+      gap: "6px",
+      flexFlow: "column nowrap",
+      alignItems: "end",
+      marginTop: "10px"
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Placeholder__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+      height: "20px",
+      width: "200px"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+      style: {
+        width: "75%",
+        height: "100px",
+        overflow: "hidden"
+      },
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Placeholder__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+        width: "75%",
+        height: "100px",
+        style: {
+          transform: "scale(3.5)"
+        }
+      })
+    })]
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/utils/HandleFileIcon.jsx":
+/*!*****************************************************************!*\
+  !*** ./resources/js/react/UI/comments/utils/HandleFileIcon.jsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_file_icon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-file-icon */ "./node_modules/react-file-icon/dist/react-file-icon.esm.js");
+/* harmony import */ var _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles/comments.module.css */ "./resources/js/react/UI/comments/styles/comments.module.css");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+var handleFileUrl = function handleFileUrl(url, fileName, file) {
+  if (fileName) {
+    var file_name = fileName.split(".");
+    var _ref = [file_name.slice(0, file_name.length - 1).join("."), file_name[file_name.length - 1]],
+      name = _ref[0],
+      ext = _ref[1];
+    return [url, name, ext];
+    console.log(fileName);
+  } else if (file) {
+    var _file_name = file.name.split(".");
+    var _ref2 = [_file_name.slice(0, _file_name.length - 1).join("."), _file_name[_file_name.length - 1]],
+      _name = _ref2[0],
+      _ext = _ref2[1];
+    return [URL.createObjectURL(file), _name, _ext];
+  }
+};
+var HandleFileIcon = function HandleFileIcon(_ref3) {
+  var _ref3$URL = _ref3.URL,
+    URL = _ref3$URL === void 0 ? "" : _ref3$URL,
+    _ref3$fileName = _ref3.fileName,
+    fileName = _ref3$fileName === void 0 ? "" : _ref3$fileName,
+    _ref3$file = _ref3.file,
+    file = _ref3$file === void 0 ? null : _ref3$file;
+  var selectFileComponent = function selectFileComponent(_ref4) {
+    var _ref4$fileName = _ref4.fileName,
+      fileName = _ref4$fileName === void 0 ? "" : _ref4$fileName,
+      _ref4$file = _ref4.file,
+      file = _ref4$file === void 0 ? null : _ref4$file;
+    var _handleFileUrl = handleFileUrl(URL, fileName, file),
+      _handleFileUrl2 = _slicedToArray(_handleFileUrl, 3),
+      url = _handleFileUrl2[0],
+      name = _handleFileUrl2[1],
+      ext = _handleFileUrl2[2];
+    if (
+    // false
+    ext === "img" || ext === "png" || ext === "jpg" || ext === "jpeg" || ext === "svg" || ext === "gif" || ext === "webp") {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        style: {
+          objectFit: "cover",
+          width: "69px",
+          height: "69px",
+          display: "flex",
+          overflow: "hidden",
+          borderRadius: "4px"
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+          title: "".concat(name, ".").concat(ext),
+          onClick: function onClick() {
+            return window.open(url, "_blank");
+          },
+          style: {
+            objectFit: "cover",
+            width: "69px",
+            // height: "51px",
+            height: "69px"
+          },
+          src: url,
+          alt: ""
+        })
+      });
+    } else {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+        title: "".concat(name, ".").concat(ext),
+        className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_2__["default"].filePreview__notImg),
+        onClick: function onClick() {
+          return window.open(url, "_blank");
+        },
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+          className: "".concat(_styles_comments_module_css__WEBPACK_IMPORTED_MODULE_2__["default"].chatInput_filePreview__file__fileIcon),
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_file_icon__WEBPACK_IMPORTED_MODULE_1__.FileIcon, _objectSpread({
+            extension: ext
+          }, react_file_icon__WEBPACK_IMPORTED_MODULE_1__.defaultStyles[ext]))
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("p", {
+          className: _styles_comments_module_css__WEBPACK_IMPORTED_MODULE_2__["default"].chatInput_filePreview__file__fileName,
+          children: [name, ".", ext]
+        })]
+      });
+    }
+  };
+  return selectFileComponent({
+    fileName: fileName,
+    file: file
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HandleFileIcon);
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/utils/Placeholder.jsx":
+/*!**************************************************************!*\
+  !*** ./resources/js/react/UI/comments/utils/Placeholder.jsx ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Placeholder: () => (/* binding */ Placeholder)
+/* harmony export */ });
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var Placeholder = function Placeholder(_ref) {
+  var _ref$width = _ref.width,
+    width = _ref$width === void 0 ? "100%" : _ref$width,
+    _ref$height = _ref.height,
+    height = _ref$height === void 0 ? 16 : _ref$height,
+    _ref$className = _ref.className,
+    className = _ref$className === void 0 ? "" : _ref$className,
+    _ref$type = _ref.type,
+    type = _ref$type === void 0 ? "square" : _ref$type,
+    style = _ref.style;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
+    className: "skeleton-loading ".concat(className),
+    style: _objectSpread({
+      width: width,
+      height: height,
+      borderRadius: type === "circle" ? "50%" : "4px"
+    }, style)
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/utils/getTextContent.jsx":
+/*!*****************************************************************!*\
+  !*** ./resources/js/react/UI/comments/utils/getTextContent.jsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ getTextContent),
+/* harmony export */   getTrimmedHtml: () => (/* binding */ getTrimmedHtml),
+/* harmony export */   htmlToPreservedText: () => (/* binding */ htmlToPreservedText),
+/* harmony export */   htmlToString: () => (/* binding */ htmlToString)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function getTextContent(element) {
+  // console.log('element type',typeof element);
+  // console.log('check isArray',Array.isArray(element));
+  // console.log('check isValidElement',React.isValidElement(element));
+
+  if (typeof element === "string") {
+    return element;
+  }
+  if (Array.isArray(element)) {
+    return element.map(getTextContent).join("");
+  }
+  if ( /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().isValidElement(element)) {
+    var children = react__WEBPACK_IMPORTED_MODULE_0___default().Children.toArray(element.props.children);
+    return getTextContent(children);
+  }
+  return "";
+}
+function htmlToString(html) {
+  var tag = document.createElement("div");
+  tag.innerHTML = html;
+  var text = tag.textContent;
+  return text || "";
+}
+function htmlToPreservedText(comment) {
+  // Function to recursively extract text content from HTML nodes
+  var extractTextContent = function extractTextContent(node) {
+    var text = "";
+    node.childNodes.forEach(function (child) {
+      if (child.nodeType === 3) {
+        // Text node
+        text += child.textContent.trim();
+      } else if (child.nodeType === 1) {
+        // Element node
+        text += extractTextContent(child);
+      }
+    });
+    return text;
+  };
+
+  // const tags = html.split("<br>");
+  var tag = document.createElement("div");
+  tag.innerHTML = comment;
+  var resultString = Array.from(tag.childNodes).map(function (node) {
+    return extractTextContent(node) + "\n";
+  }).join("");
+
+  // console.log(resultString);
+
+  return resultString;
+}
+function getTrimmedHtml(html) {
+  var arr = html.split('<p><br></p>');
+  var newHtml;
+  if (!arr[arr.length - 1]) {
+    newHtml = arr.slice(0, arr.length - 1).join('<p><br></p>');
+  } else {
+    newHtml = arr.join('<p><br></p>');
+  }
+  return newHtml;
+}
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/utils/isCurrentUser.js":
+/*!***************************************************************!*\
+  !*** ./resources/js/react/UI/comments/utils/isCurrentUser.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ isCurrentUser)
+/* harmony export */ });
+/* harmony import */ var _user_details__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./user-details */ "./resources/js/react/UI/comments/utils/user-details.js");
+
+var currentUser = new _user_details__WEBPACK_IMPORTED_MODULE_0__.User(window.Laravel.user);
+function isCurrentUser(user_id) {
+  return currentUser.id === Number(user_id);
+  // return Number(2) === Number(user_id);
+}
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/utils/user-details.js":
+/*!**************************************************************!*\
+  !*** ./resources/js/react/UI/comments/utils/user-details.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   User: () => (/* binding */ User)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var User = /*#__PURE__*/function () {
+  function User(data) {
+    _classCallCheck(this, User);
+    this.id = data === null || data === void 0 ? void 0 : data.id;
+    this.name = data === null || data === void 0 ? void 0 : data.name;
+    this.userName = (data === null || data === void 0 ? void 0 : data.user_name) || null;
+    this.email = data === null || data === void 0 ? void 0 : data.email;
+    this.adminApproval = data === null || data === void 0 ? void 0 : data.admin_approval;
+    this.clientDetails = data === null || data === void 0 ? void 0 : data.client_details;
+    this.countryId = data === null || data === void 0 ? void 0 : data.country_id;
+    this.darkTheme = data === null || data === void 0 ? void 0 : data.dark_theme;
+    this.emailNotifications = data === null || data === void 0 ? void 0 : data.email_notifications;
+    this.employeeDetail = new Employee(data === null || data === void 0 ? void 0 : data.employee_detail);
+    this.aboutMe = data === null || data === void 0 ? void 0 : data.about_me;
+    this.addedBy = data === null || data === void 0 ? void 0 : data.added_by;
+    this.address = data === null || data === void 0 ? void 0 : data.address;
+    this.attendanceReminder = data === null || data === void 0 ? void 0 : data.attendance_reminder;
+    this.calendarView = data === null || data === void 0 ? void 0 : data.calendar_view;
+    this.dateOfBirth = new Date(data === null || data === void 0 ? void 0 : data.date_of_birth);
+    this.departmentId = data === null || data === void 0 ? void 0 : data.department_id;
+    this.employeeId = data === null || data === void 0 ? void 0 : data.employee_id;
+    this.hourlyRate = data === null || data === void 0 ? void 0 : data.hourly_rate;
+    this.joiningDate = new Date(data === null || data === void 0 ? void 0 : data.joining_date);
+    this.lastDate = data === null || data === void 0 ? void 0 : data.last_date;
+    this.reportingTo = data === null || data === void 0 ? void 0 : data.reporting_to;
+    this.slackUsername = data === null || data === void 0 ? void 0 : data.slack_username;
+    this.upcomingBirthday = new Date(data === null || data === void 0 ? void 0 : data.upcoming_birthday);
+    this.userId = data === null || data === void 0 ? void 0 : data.id;
+    this.gender = data === null || data === void 0 ? void 0 : data.gender;
+    this.googleCalendarStatus = data === null || data === void 0 ? void 0 : data.google_calendar_status;
+    this.image = data === null || data === void 0 ? void 0 : data.image;
+    this.imageUrl = data === null || data === void 0 ? void 0 : data.image_url;
+    this.lastLogin = new Date(data === null || data === void 0 ? void 0 : data.last_login);
+    this.locale = data === null || data === void 0 ? void 0 : data.locale;
+    this.login = data === null || data === void 0 ? void 0 : data.login;
+    this.mobile = data === null || data === void 0 ? void 0 : data.mobile;
+    this.modules = data === null || data === void 0 ? void 0 : data.modules;
+    this.role = data === null || data === void 0 ? void 0 : data.role.map(function (roleData) {
+      return new UserRole(roleData);
+    });
+    this.rtl = data === null || data === void 0 ? void 0 : data.rtl;
+    this.roleId = Number(data === null || data === void 0 ? void 0 : data.role_id);
+    this.salutation = data === null || data === void 0 ? void 0 : data.salutation;
+    this.session = data === null || data === void 0 ? void 0 : data.session;
+    this.status = data === null || data === void 0 ? void 0 : data.status;
+    this.twoFaVerifyVia = data === null || data === void 0 ? void 0 : data.two_fa_verify_via;
+    this.twoFactorCode = data === null || data === void 0 ? void 0 : data.two_factor_code;
+    this.twoFactorConfirmed = data === null || data === void 0 ? void 0 : data.two_factor_confirmed;
+    this.twoFactorEmailConfirmed = data === null || data === void 0 ? void 0 : data.two_factor_email_confirmed;
+    this.twoFactorExpiresAt = data === null || data === void 0 ? void 0 : data.two_factor_expires_at;
+    this.twoFactorRecoveryCodes = data === null || data === void 0 ? void 0 : data.two_factor_recovery_codes;
+    this.twoFactorSecret = data === null || data === void 0 ? void 0 : data.two_factor_secret;
+    this.userOtherRole = data === null || data === void 0 ? void 0 : data.user_other_role;
+  }
+
+  // name
+  _createClass(User, [{
+    key: "getName",
+    value: function getName() {
+      return this.name;
+    }
+  }, {
+    key: "getId",
+    value:
+    // user id
+    function getId() {
+      return Number(this.userId);
+    }
+  }, {
+    key: "getUserLink",
+    value:
+    // user link
+    function getUserLink() {
+      return "/account/employees/".concat(this.userId);
+    }
+
+    // image URL
+  }, {
+    key: "getAvatar",
+    value: function getAvatar() {
+      return this.imageUrl;
+    }
+
+    // get role id
+  }, {
+    key: "getRoleId",
+    value: function getRoleId() {
+      return this.roleId;
+    }
+
+    // designation name
+  }, {
+    key: "getDesignationName",
+    value: function getDesignationName() {
+      return this.employeeDetail.getEmployeeDesignationName();
+    }
+  }]);
+  return User;
+}();
+var Employee = /*#__PURE__*/function () {
+  function Employee(data) {
+    _classCallCheck(this, Employee);
+    this.id = data === null || data === void 0 ? void 0 : data.id;
+    this.userId = data === null || data === void 0 ? void 0 : data.user_id;
+    this.employeeId = data === null || data === void 0 ? void 0 : data.employee_id;
+    this.address = data === null || data === void 0 ? void 0 : data.address;
+    this.hourlyRate = data === null || data === void 0 ? void 0 : data.hourly_rate;
+    this.lastUpdatedBy = data === null || data === void 0 ? void 0 : data.last_updated_by;
+    this.designation = new Designation(data === null || data === void 0 ? void 0 : data.designation);
+  }
+
+  //employe degenation name 
+  _createClass(Employee, [{
+    key: "getEmployeeDesignationName",
+    value: function getEmployeeDesignationName() {
+      return this.designation.getDesignationName();
+    }
+  }]);
+  return Employee;
+}();
+var Designation = /*#__PURE__*/function () {
+  function Designation(data) {
+    _classCallCheck(this, Designation);
+    this.id = data === null || data === void 0 ? void 0 : data.id;
+    this.name = data === null || data === void 0 ? void 0 : data.name;
+    this.parentId = data === null || data === void 0 ? void 0 : data.parent_id;
+    this.addedBy = data === null || data === void 0 ? void 0 : data.added_by;
+    this.lastUpdatedBy = data === null || data === void 0 ? void 0 : data.last_updated_by;
+  }
+
+  // gesination name
+  _createClass(Designation, [{
+    key: "getDesignationName",
+    value: function getDesignationName() {
+      return this.name;
+    }
+  }]);
+  return Designation;
+}();
+var UserRole = /*#__PURE__*/_createClass(function UserRole(data) {
+  _classCallCheck(this, UserRole);
+  this.userId = data === null || data === void 0 ? void 0 : data.user_id;
+  this.roleId = data === null || data === void 0 ? void 0 : data.role_id;
+});
+
+/***/ }),
+
 /***/ "./resources/js/react/UI/form/Cheeckbox.jsx":
 /*!**************************************************!*\
   !*** ./resources/js/react/UI/form/Cheeckbox.jsx ***!
@@ -573,6 +4030,79 @@ var useGetTaskCommentsQuery = taskCommentApiSlice.useGetTaskCommentsQuery,
 
 /***/ }),
 
+/***/ "./resources/js/react/services/api/commentsApiSlice.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/react/services/api/commentsApiSlice.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useDeleteCommentsMutation: () => (/* binding */ useDeleteCommentsMutation),
+/* harmony export */   useGetCommentsQuery: () => (/* binding */ useGetCommentsQuery),
+/* harmony export */   useLazyGetCommentsQuery: () => (/* binding */ useLazyGetCommentsQuery),
+/* harmony export */   usePostCommentMutation: () => (/* binding */ usePostCommentMutation)
+/* harmony export */ });
+/* harmony import */ var _apiSlice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiSlice */ "./resources/js/react/services/api/apiSlice.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+
+var commentsApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEndpoints({
+  endpoints: function endpoints(build) {
+    return {
+      // get all comments
+      getComments: build.query({
+        query: function query(taskId) {
+          return "/account/tasks/".concat(taskId, "/comments");
+        },
+        providesTags: ["COMMENTS"]
+      }),
+      // post a comment
+      postComment: build.mutation({
+        query: function query(_ref) {
+          var taskId = _ref.taskId,
+            data = _ref.data;
+          return {
+            url: "/account/task/".concat(taskId, "/json?mode=comment_store"),
+            method: "POST",
+            body: data,
+            formData: true
+          };
+        },
+        invalidatesTags: ["COMMENTS"]
+      }),
+      // update a comment
+
+      // delete a comment
+      deleteComments: build.mutation({
+        query: function query(_ref2) {
+          var commentsId = _ref2.commentsId;
+          return {
+            url: "/account/tasks-comment-delete",
+            body: {
+              comments_id: _toConsumableArray(commentsId),
+              _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            },
+            method: 'POST'
+          };
+        },
+        invalidatesTags: ["COMMENTS"]
+      })
+    };
+  }
+});
+var useGetCommentsQuery = commentsApiSlice.useGetCommentsQuery,
+  useLazyGetCommentsQuery = commentsApiSlice.useLazyGetCommentsQuery,
+  usePostCommentMutation = commentsApiSlice.usePostCommentMutation,
+  useDeleteCommentsMutation = commentsApiSlice.useDeleteCommentsMutation;
+
+
+/***/ }),
+
 /***/ "./resources/js/react/single-task/SingleTask.jsx":
 /*!*******************************************************!*\
   !*** ./resources/js/react/single-task/SingleTask.jsx ***!
@@ -655,7 +4185,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 
 
 var SingleTaskPage = function SingleTaskPage() {
-  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$pageType, _task$pageName, _task$taskTypeDetails, _task$taskTypeDetails2, _task$taskTypeDetails3, _task$taskTypeDetails4, _task$taskTypeDetails5, _task$taskTypeDetails6, _task$taskTypeDetails7, _task$taskTypeDetails8, _task$taskTypeDetails9, _task$taskTypeDetails10, _task$taskTypeDetails11, _task$taskTypeDetails12, _task$taskTypeDetails13, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _$last;
+  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$pageType, _task$pageName, _task$taskTypeDetails, _task$taskTypeDetails2, _task$taskTypeDetails3, _task$taskTypeDetails4, _task$taskTypeDetails5, _task$taskTypeDetails6, _task$taskTypeDetails7, _task$taskTypeDetails8, _task$taskTypeDetails9, _task$taskTypeDetails10, _task$taskTypeDetails11, _task$taskTypeDetails12, _task$taskTypeDetails13, _task$taskTypeDetails14, _task$taskTypeDetails15, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _$last;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -1074,7 +4604,7 @@ var SingleTaskPage = function SingleTaskPage() {
                           children: "Other Task Type:"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
                           className: "sp1_st-list-item-value",
-                          children: "--"
+                          children: (_task$taskTypeDetails9 = task === null || task === void 0 || (_task$taskTypeDetails10 = task.taskTypeDetails) === null || _task$taskTypeDetails10 === void 0 ? void 0 : _task$taskTypeDetails10.taskTypeOther) !== null && _task$taskTypeDetails9 !== void 0 ? _task$taskTypeDetails9 : '--'
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsxs)("div", {
                         className: "sp1_st-list-item",
@@ -1083,7 +4613,7 @@ var SingleTaskPage = function SingleTaskPage() {
                           children: "Page Name:"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
                           className: "sp1_st-list-item-value",
-                          children: (_task$taskTypeDetails9 = task === null || task === void 0 || (_task$taskTypeDetails10 = task.taskTypeDetails) === null || _task$taskTypeDetails10 === void 0 ? void 0 : _task$taskTypeDetails10.pageName) !== null && _task$taskTypeDetails9 !== void 0 ? _task$taskTypeDetails9 : '--'
+                          children: (_task$taskTypeDetails11 = task === null || task === void 0 || (_task$taskTypeDetails12 = task.taskTypeDetails) === null || _task$taskTypeDetails12 === void 0 ? void 0 : _task$taskTypeDetails12.pageName) !== null && _task$taskTypeDetails11 !== void 0 ? _task$taskTypeDetails11 : '--'
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsxs)("div", {
                         className: "sp1_st-list-item",
@@ -1092,9 +4622,9 @@ var SingleTaskPage = function SingleTaskPage() {
                           children: "Page URL:"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
                           className: "sp1_st-list-item-value",
-                          children: task !== null && task !== void 0 && (_task$taskTypeDetails11 = task.taskTypeDetails) !== null && _task$taskTypeDetails11 !== void 0 && _task$taskTypeDetails11.pageUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("a", {
-                            href: task === null || task === void 0 || (_task$taskTypeDetails12 = task.taskTypeDetails) === null || _task$taskTypeDetails12 === void 0 ? void 0 : _task$taskTypeDetails12.pageUrl,
-                            children: task === null || task === void 0 || (_task$taskTypeDetails13 = task.taskTypeDetails) === null || _task$taskTypeDetails13 === void 0 ? void 0 : _task$taskTypeDetails13.pageUrl
+                          children: task !== null && task !== void 0 && (_task$taskTypeDetails13 = task.taskTypeDetails) !== null && _task$taskTypeDetails13 !== void 0 && _task$taskTypeDetails13.pageUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("a", {
+                            href: task === null || task === void 0 || (_task$taskTypeDetails14 = task.taskTypeDetails) === null || _task$taskTypeDetails14 === void 0 ? void 0 : _task$taskTypeDetails14.pageUrl,
+                            children: task === null || task === void 0 || (_task$taskTypeDetails15 = task.taskTypeDetails) === null || _task$taskTypeDetails15 === void 0 ? void 0 : _task$taskTypeDetails15.pageUrl
                           }) : "--"
                         })]
                       })]
@@ -3082,8 +6612,8 @@ var useDailySubmission = function useDailySubmission() {
             response = _context.sent;
             date = response.data.data; // Get the current day abbreviation (e.g., 'Sat', 'Sun', 'Mon', etc.)
             dayAbbreviation = d.dayjs(date).format('ddd'); // Define the cutoff times
-            saturdayCutoffTime = d.dayjs(date).set('hour', 12).set('minute', 45); // const otherDaysCutoffTime = d.dayjs(date).set('hour', 16).set('minute', 45);
-            otherDaysCutoffTime = d.dayjs(date).set('hour', 10).set('minute', 59); // Get the current time
+            saturdayCutoffTime = d.dayjs(date).set('hour', 12).set('minute', 45);
+            otherDaysCutoffTime = d.dayjs(date).set('hour', 16).set('minute', 45); // Get the current time
             currentTime = d.dayjs(date); // Check if it's Saturday or not
             if (dayAbbreviation === 'Sat') {
               // Check if the current time is greater than 12:30 PM on Saturday
@@ -4241,7 +7771,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _Widget__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Widget */ "./resources/js/react/single-task/section/comments/Widget.jsx");
 /* harmony import */ var _services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../services/api/TaskCommentApiSlice */ "./resources/js/react/services/api/TaskCommentApiSlice.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _UI_comments_CommentsContainer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../UI/comments/CommentsContainer */ "./resources/js/react/UI/comments/CommentsContainer.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -4252,6 +7783,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -4296,7 +7828,7 @@ var CommentSection = function CommentSection(_ref) {
     }),
     data = _useGetTaskCommentsQu.data,
     isFetching = _useGetTaskCommentsQu.isLoading;
-  var comments = lodash__WEBPACK_IMPORTED_MODULE_6___default().orderBy(data, 'id', 'desc');
+  var comments = lodash__WEBPACK_IMPORTED_MODULE_6___default().orderBy(data, "id", "desc");
 
   // console.log({comments})
   // // if task notes fetch completed store data into redux store
@@ -4329,43 +7861,41 @@ var CommentSection = function CommentSection(_ref) {
     // setComments(_comments);
   };
 
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_task_right_card mb-3",
       ref: setModalToggleRef,
       style: {
         zIndex: modalIsOpen ? "99" : ""
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_CommentModal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_UI_comments_CommentsContainer__WEBPACK_IMPORTED_MODULE_9__["default"], {
         isOpen: modalIsOpen,
         toggleRef: modalToggleRef,
         comments: comments,
         task: task,
-        isLoading: isFetching,
         close: function close() {
           return setModalIsOpen(false);
         },
-        onCommentPost: onCommentPost,
-        updateComments: updateComments
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
+        onCommentPost: onCommentPost
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("button", {
         "aria-label": "openCommentModalButton",
         className: "sp1_task_right_dl_toggle",
         onClick: toggleModalButton,
         style: {
           zIndex: modalIsOpen ? "110" : ""
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("i", {
           className: "fa-solid fa-circle-chevron-".concat(modalIsOpen ? "right" : "left"),
           style: {
             color: "#276fec"
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h6", {
           className: "f-16 mb-0",
           children: "Comment"
-        }), (isLoading || isFetching) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        }), (isLoading || isFetching) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "spinner-border text-dark ml-2 mr-auto",
           role: "status",
           style: {
@@ -4374,24 +7904,24 @@ var CommentSection = function CommentSection(_ref) {
             border: "0.14em solid rgba(0, 0, 0, .25)",
             borderRightColor: "transparent"
           }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
           variant: "tertiary",
           className: "sp1_tark_add_item",
           "aria-label": "addButton",
           onClick: toggleModalButton,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("i", {
             className: "fa-solid fa-plus",
             style: {
               fontSize: "12px"
             }
           }), "Comment"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_CommentWritingModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_CommentWritingModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
           isOpen: openAddCommentModal,
           close: closeAddCommentModal
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "sp1_task_right_card--body",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Widget__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Widget__WEBPACK_IMPORTED_MODULE_7__["default"], {
           task: task
         })
       })]
@@ -5481,13 +9011,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_timeCalculate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../utils/timeCalculate */ "./resources/js/react/utils/timeCalculate.js");
 /* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
 /* harmony import */ var _CommentPreview__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./CommentPreview */ "./resources/js/react/single-task/section/comments/CommentPreview.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _UI_comments_CommentsContainer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/comments/CommentsContainer */ "./resources/js/react/UI/comments/CommentsContainer.jsx");
+/* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -5506,66 +9040,67 @@ var WidgetItem = function WidgetItem(_ref) {
     isOpen = _useState2[0],
     setIsOpen = _useState2[1];
   if (!comment) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "d-flex justify-content-between sp1_tark_right_item align-items-start pt-1 pb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "w-100 sp1_st_comment-view",
         style: {
           overflow: "hidden"
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("p", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("p", {
           className: "mb-0 pb-0",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
-            href: "/account/employees/".concat(comment.user_id),
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+            href: "/account/employees/".concat(comment.user.id),
             className: "hover-underline text-primary",
-            children: comment.user_name
-          }), " ", comment.type_is_reply === 1 ? "replied " : "added ", " a comment"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
+            children: comment.user.name
+          }), " ", comment.mention ? "replied to " : "added ", " a comment"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
           className: "text-ellipsis d-flex align-items-center mb-0 pb-0",
           style: {
             color: "#AEAFB9"
           },
-          children: (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_4__.timeCalculate)(comment.created_at)
+          children: (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_4__.timeCalculate)(comment.created_date)
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "d-flex align-items-center",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
           href: "#",
           className: "mr-2 py-2 sp1_task_righ_action_btn ".concat(isOpen ? "text-primary" : ""),
           onClick: function onClick(e) {
             e.preventDefault();
             setIsOpen(true);
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
             className: "fa-regular fa-eye"
           })
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      isOpen: isOpen,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_CommentPreview__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        isOpen: isOpen,
-        close: function close() {
-          return setIsOpen(false);
-        },
-        commentId: comment.id
-      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_UI_comments_CommentsContainer__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      singleCommentId: comment.id,
+      close: function close() {
+        return setIsOpen(false);
+      },
+      isOpen: isOpen
     })]
   });
 };
 var Widget = function Widget(_ref2) {
   var task = _ref2.task;
-  var _useGetTaskCommentWid = (0,_services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_2__.useGetTaskCommentWidgetDataQuery)(task.id, {
+  // console.log(task);
+  // const { data, isLoading } = useGetTaskCommentWidgetDataQuery(task.id, {
+  //     skip: !task.id,
+  // });
+  var _useGetCommentsQuery = (0,_services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_8__.useGetCommentsQuery)(task.id, {
       skip: !task.id
     }),
-    data = _useGetTaskCommentWid.data,
-    isLoading = _useGetTaskCommentWid.isLoading;
+    comments = _useGetCommentsQuery.data,
+    isLoading = _useGetCommentsQuery.isLoading;
 
   // console.log({ widget: data });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: lodash__WEBPACK_IMPORTED_MODULE_1___default().map(lodash__WEBPACK_IMPORTED_MODULE_1___default().orderBy(data, "id", "desc"), function (comment) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(WidgetItem, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: lodash__WEBPACK_IMPORTED_MODULE_1___default().map(lodash__WEBPACK_IMPORTED_MODULE_1___default().orderBy(comments, "id", "desc"), function (comment) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(WidgetItem, {
         comment: comment
       }, comment.id);
     })
@@ -10880,6 +14415,17 @@ var SubTaskForm = function SubTaskForm(_ref) {
       }
     }
   }, []);
+
+  // page type change clear related entries
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    setPageTypeOthers("");
+    setPageName("");
+    setPageURL("");
+    setNumberOfPage(0);
+    setExistingDesignLink("");
+    setPageTypePriority("");
+    setPageTypeName("");
+  }, [pageType]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
       className: "sp1-subtask-form --form row",
@@ -11050,7 +14596,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
-              className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+              className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
                 children: pageType !== null && pageType !== void 0 ? pageType : "--"
@@ -14455,20 +18001,22 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
   // check validation
   var isValid = function isValid() {
     var valid = true;
-    if (!lodash__WEBPACK_IMPORTED_MODULE_0___default().size(links) || links[0] === '') {
-      setLinkErr('You must provide at least one link to your work');
-      react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn('You must provide at least one link to your work');
-      valid = false;
-    }
-    if (lodash__WEBPACK_IMPORTED_MODULE_0___default().size(links)) {
-      lodash__WEBPACK_IMPORTED_MODULE_0___default().forEach(links, function (link) {
-        if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_13__.checkIsURL)(link)) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn('Please provide a valid url');
-          setLinkErr('Please provide a valid url');
-          valid = false;
-        }
-      });
-    }
+    // if(!_.size(links) || links[0] === ''){
+    //     setLinkErr('You must provide at least one link to your work');
+    //     toast.warn('You must provide at least one link to your work');
+    //     valid = false;
+    // }
+
+    // if(_.size(links)){
+    //     _.forEach(links, link => {
+    //         if(!checkIsURL(link)){
+    //             toast.warn('Please provide a valid url');
+    //             setLinkErr('Please provide a valid url');
+    //             valid = false;
+    //         }
+    //     })
+    // }
+
     if (comment === '') {
       setCommentErr("Please describe what you've done !");
       react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please describe what you've done!");
@@ -14551,13 +18099,11 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
                 className: "form-group",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
                   htmlFor: "exampleFormControlInput1",
-                  children: ["Submit Links What You've Done", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("sup", {
-                    children: "*"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                  children: ["Submit links to the work you've done!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
                     className: "ml-2",
                     "data-toggle": "tooltip",
                     "data-placement": "top",
-                    title: "Submit Links What You've Done",
+                    title: "Submit links to the work you've done!",
                     "data-boundary": "window",
                     style: {
                       cursor: "pointer"
@@ -19484,6 +23030,156 @@ var timeCalculate = function timeCalculate(date) {
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/comments.module.css":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/comments.module.css ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Poppins&display=swap);"]);
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "/* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.xKTA64JpPBJ8Ut9ZDbn9rg\\=\\={\r\n  /* height: 84vh; */\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  background-size: cover;\r\n  position: relative;\r\n  overflow: hidden;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.lNdp1uhUVwyTMS8gXh\\+ukw\\=\\={\r\n  /* height: 57px; */\r\n  padding: 0 20px 10px;\r\n  border-bottom: solid 1px #aaaaaa4a;\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\={\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.mDfG9kMeymQ7VrZRvw8oDw\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n.W3912K8vxyr9Jqu9BSeJmg\\=\\={\r\n  border:solid 1px #727272;\r\n}\r\n.dtoYKAVX1AaeSxRjjoMSxA\\=\\={\r\n  /* flex: 1 0 auto; */\r\n  flex-grow: 1;\r\n  display: flex;\r\n  /* align-items: center; */\r\n  gap: 5px;\r\n  overflow: hidden;\r\n  /* width: 100%; */\r\n  /* max-width: 100px; */\r\n  /* border: solid; */\r\n}\r\n.fKU16kBo1Qmtce7l43-HuA\\=\\={\r\n  animation: ZQdC4FMRqeETrYmgX5dlXw\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes ZQdC4FMRqeETrYmgX5dlXw\\=\\= {\r\n  from{\r\n    /* display: none; */\r\n    max-width: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n}\r\n.RSRvd4EzQhSo8tEk1xfqTg\\=\\={\r\n  animation: G9e1R4rYy7AuLehHuTkQIw\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes G9e1R4rYy7AuLehHuTkQIw\\=\\= {\r\n  from{\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-width: 0%;\r\n  }\r\n}\r\n.xphoAuNibDod8P95ANKOxw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding: 2px 3px;\r\n  border-radius: 5px;\r\n  outline: none;\r\n  border: solid 0.5px #aaaaaa;\r\n}\r\n._0Ka7DovjQ7lrVCOSf2hYdQ\\=\\={\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 3px;\r\n}\r\n.i\\+2bPq8rIRUzxD7JxDasGQ\\=\\={\r\n  height: 18px;\r\n  width: 18px;\r\n  cursor: pointer;\r\n  /* align-self: baseline; */\r\n}\r\n.i\\+2bPq8rIRUzxD7JxDasGQ\\=\\=:active{\r\n  transform: scale(0.9);\r\n}\r\n.uIC61\\+vXTTqzJrGb6ey53w\\=\\={\r\n  /* align-self: center; */\r\n  color: gray;\r\n  font-weight: bold;\r\n  font-size: 15px;\r\n  user-select: none;\r\n  -webkit-user-select: none;\r\n  -moz-user-select: none;\r\n  /* border: solid; */\r\n  width: 70px;\r\n  text-align: center;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.hwrDAUbLAFvk3tT5O8yUWw\\=\\={\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 10px; */\r\n  margin-bottom: 10px;\r\n  /* padding-top: 20px; */\r\n  /* scroll-padding-bottom: 5px; */\r\n  /* position: relative; */\r\n}\r\n.PNojGp79QSWwRy6Ou6N3bQ\\=\\={\r\n  border: none;\r\n}\r\n.AHrh7nNelyFOlX8D-8vVOg\\=\\={\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n  /* border: solid; */\r\n  scroll-snap-align: center;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n}\r\n.Ei8\\+fdUr5qspbMUd8v2a1A\\=\\={\r\n  outline: 4px solid skyblue;\r\n  outline-offset: 5px;\r\n  position: relative;\r\n  z-index: 999;\r\n  scroll-margin-top: 10px;\r\n  /* transform: scale(1.2); */\r\n}\r\n/* .singleChat_match::after{\r\n  content: '';\r\n  position: absolute;\r\n  outline: 4px solid skyblue;\r\n  top: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  z-index: 999;\r\n} */\r\n.WXR6qxKTISGZx4u40qK\\+Aw\\=\\={\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.lzG-A5LIYcFnh0Ffq18x3A\\=\\={\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n  overflow: hidden;\r\n}\r\n.M6c3Wn9AMARvfa1tdaWY-w\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  justify-content: flex-start;\r\n  /* gap: 5px; */\r\n}\r\n._3Ww24uW4\\+XDNVrun81m4eQ\\=\\={\r\n  font-size: 12px;\r\n  line-height: 10px;\r\n  margin-bottom: 5px;\r\n  margin-top: 10px;\r\n  color: #033C7E;\r\n}\r\n.QSOgeDrSYtIXhpHqH0JtxQ\\=\\={\r\n  color: #F17B7C;\r\n  background-color: #FFF3F4;\r\n  /* border: 0.15px solid #F17B7C; */\r\n  border: 0.15px solid #f8d0d3;\r\n  border-radius: 5px;\r\n  font-size: 14px;\r\n  line-height: 14px;\r\n  overflow: hidden;\r\n}\r\n.jVnvN2KV0zkBNqAyIbo3UQ\\=\\={\r\n  display: flex;\r\n  min-width: 205px;\r\n  /* justify-content: space-between; */\r\n  align-items: center;\r\n  /* gap: 0 20px; */\r\n  padding: 5px 5px;\r\n}\r\n.oNU9PkVWGObofTUa2a8niA\\=\\={\r\n  padding: 5px 5px;\r\n  /* color: #f17b7d86; */\r\n  color: #F17B7C;\r\n  background-color: #FFF3F4;\r\n  font-size: 14px;\r\n  line-height: 14px;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\={\r\n  position: relative;\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  border-radius: 5px;\r\n}\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\=:hover .b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.b88vZXkQEZupqpqCOpBq\\+w\\=\\={\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\={\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  /* width: 94px; */\r\n  width: 127.133px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n  /* transform: scale(1.5); */\r\n}\r\n.AnXvk2Phi1b1oIgEvs7HGQ\\=\\= > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.S59xMzZAdnSxfMKxhWYluQ\\=\\={\r\n  height: 12px;\r\n  width: 12px;\r\n}\r\n._9eTdcW7EtRqzqd-9Sx0beA\\=\\={\r\n  /* font-size: 8px; */\r\n  font-size: 12px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n.iXxQt2ilXdp3hz4sSqwgLA\\=\\=:hover ._4XWvMsypp9X4wrmnm6SmHA\\=\\={\r\n  display: block;\r\n}\r\n.JgrXh6cQOhttEIcdLxYpew\\=\\={\r\n  display: flex;\r\n  position: absolute;\r\n  /* border: solid; */\r\n  top: 0;\r\n  bottom: 0;\r\n  width: 15px;\r\n  /* left: -20px; */\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n._4XWvMsypp9X4wrmnm6SmHA\\=\\={\r\n  background-color: transparent;\r\n  display: none;\r\n  /* border: solid; */\r\n  /* transform: translateX(-20px); */\r\n}\r\n._4XWvMsypp9X4wrmnm6SmHA\\=\\=::after{\r\n  content: none;\r\n}\r\n._4XWvMsypp9X4wrmnm6SmHA\\=\\=:hover{\r\n  background-color: none;\r\n}\r\n.YHF8YVKSFtN1z1EI\\+qL81w\\=\\={  \r\n  /* width: 127.133px; */\r\n  /* z-index: 99; */\r\n  /* display: flex; */\r\n  /* flex-flow: column nowrap; */\r\n  /* font-family: 'Poppins', sans-serif !important; */\r\n  /* background-color: #FFFFFF; */\r\n  /* border-radius: 2px; */\r\n  /* padding: 8px 0 6px !important; */\r\n  border: none;\r\n}\r\n.YHF8YVKSFtN1z1EI\\+qL81w\\=\\= > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n  /* transform: scale(1.5); */\r\n}\r\n.YHF8YVKSFtN1z1EI\\+qL81w\\=\\= > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n.i7e-ZRoTPtdM-Xd6fRXRPQ\\=\\={\r\n  padding: 5px 5px;\r\n  font-style: italic;\r\n  font-size: 10px;\r\n  color: #6F6F6F;\r\n  background-color: #EEF9FF;\r\n  border: 0.15px solid #aaaaaa;\r\n  border-radius: 5px 5px 0 0;\r\n  border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);\r\n  overflow-wrap: anywhere;\r\n  cursor: pointer;\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\={\r\n  padding: 5px 5px;\r\n  border: 0.15px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 14px;\r\n  line-height: 14px;\r\n  overflow-wrap: anywhere;\r\n  /* width: 100%; */\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\= p{\r\n  margin: 5px 0 5px;\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\= p:first-child{\r\n  margin: 0 0 5px;\r\n}\r\n.ozoqbxWJE0LRx7y9ID5w7w\\=\\= p:last-child{\r\n  margin: 5px 0 0;\r\n}\r\n._74ptsqCavibfvgxpYkl\\+MA\\=\\={\r\n  /* flex: 0 0 75%; */\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.zrdgoGyh2d-jYHAdcQ6zRw\\=\\={\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.RwrF3vIc7qZnuBaQOCCGtw\\=\\={\r\n  /* flex: 0 1 calc(100% - 58px); */\r\n  width: calc(100% - 58px)\r\n  /* overflow-y: auto; */\r\n}\r\n.oyVP27hk-yx7bf6gIZI97A\\=\\={\r\n  max-height: 200px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  overflow-y: auto;\r\n  overflow-x: hidden;\r\n  padding: 13.33px 33.66px;\r\n  position: relative;\r\n  color: #616365;\r\n  overflow-wrap: anywhere;\r\n}\r\n.WvqpvluPc6n2SnoZNViB3w\\=\\={\r\n  width: 11.1px;\r\n  height: 9.67px;\r\n}\r\n.dAEoOn-7aqYBjsPL0u9jow\\=\\={\r\n  position: absolute;\r\n  width: 11.1px;\r\n  height: 11.1px;\r\n  top: 17px;\r\n  right: 33.66px;\r\n  cursor: pointer;\r\n}\r\n.rqeZltLL9VBzpngK5CuBNg\\=\\={\r\n  padding-left: 11px;\r\n  /* margin-top: 6px; */\r\n  font-size: 12px;\r\n  line-height: 12px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  overflow-wrap: anywhere;\r\n  /* gap: 5px; */\r\n}\r\n.pc\\+r0LCRA\\+u6\\+EC1IkM\\+Iw\\=\\={\r\n  font-style: italic !important;\r\n}\r\n.pc\\+r0LCRA\\+u6\\+EC1IkM\\+Iw\\=\\= p{\r\n  margin: 10px 0;\r\n}\r\n.-v023bgpIZZRqFfN2HiI8w\\=\\={\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n.kJDLHiEb5luetCsd5qbQGA\\=\\={\r\n  margin-top: 9px;\r\n}\r\n.QNBcto9P7B0fe75qKKERxg\\=\\={\r\n  position: absolute;\r\n  /* top: -300px; */\r\n  /* bottom: 20px; */\r\n  /* bottom: calc(50% + 20px); */\r\n  bottom: 25px;\r\n  left: -12.5px;\r\n  height: 300px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.QNBcto9P7B0fe75qKKERxg\\=\\=::after{\r\n  content: \"\";\r\n  position: absolute;\r\n  bottom: -5px;\r\n  left: 10px;\r\n  rotate: 45deg;\r\n  height: 20px;\r\n  width: 20px;\r\n  background-color: white;\r\n  border-radius: 3px;\r\n}\r\n.MU\\+2fsRtd-fYkwtfChCZ5Q\\=\\={\r\n  /* height: 68px; */\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  max-width: 100%;\r\n  display: flex;\r\n  padding: 10px 8px 0px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\={\r\n  /* height: 51px; */\r\n  height: 69px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  /* padding: 10px 8px; */\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n  /* box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */\r\n}\r\n._2S3q8-zwnDBqDgBvnedlxA\\=\\={\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  justify-content: center;\r\n  gap: 3px;\r\n  /* padding: 10px 8px; */\r\n  padding: 5px;\r\n}\r\n.BA94bXFVSLRqwsaHI-WPbg\\=\\={\r\n  width: 40px;\r\n  display: inline-flex;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.chSZm1wAt\\+DMl7WTi7D0hA\\=\\={\r\n    font-size: 10px !important;\r\n    font-weight: bold;\r\n    line-height: 0;\r\n}\r\n.DZoHasb9fTH95vYwijQvYg\\=\\={\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 9px;\r\n  line-height: 11px;\r\n  font-weight: bold;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover{\r\n  cursor: pointer !important;\r\n}\r\n.f83hmzg55NGhPxy3Uxioqw\\=\\=:hover .XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.XUBNxpW9I1MVSnQsoZ1gLg\\=\\={\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.Uy9qarsT3oxliXUpdMTp7g\\=\\={\r\n  /* height: 51px; */\r\n  height: 69px;\r\n  min-width: 69px !important;\r\n  max-width: 69px !important;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.EHoh9kHBfS25-lsSApkjcA\\=\\={\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border: solid; */\r\n  /* border-radius: 10px; */\r\n  /* overflow: visible; */\r\n}\r\n._0Vi3CbFJTVsOYtWqqf4OSw\\=\\={\r\n  width: 12px;\r\n  height: 12px;\r\n}\r\n._9xtGbNPYWLNVvodQc9Zexw\\=\\={\r\n  /* border: solid; */\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  /* height: 15.32px; */\r\n  /* width: 15.32px; */\r\n  cursor: pointer;\r\n  overflow: visible;\r\n  display: inline-flex;\r\n  align-items: center;\r\n}\r\n.Z4idHPZ\\+Jg5FhKPogy5vLA\\=\\={\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.cDxECmJkcQKexCVYE\\+xUdg\\=\\={\r\n  /* border: solid; */\r\n  padding-top: 5px;\r\n  flex: 0 0 40px;\r\n  display: flex;\r\n  flex-direction: row;\r\n  justify-content: flex-end;\r\n  align-self: flex-end;\r\n  gap: 8px;\r\n}\r\n._4PrZ4kZ2lmKWJOsI6-hTtg\\=\\={\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #49b9fa;\r\n  color: white;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.d9ImWwRcKSCeTIhL5iIcSQ\\=\\={\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n._4PrZ4kZ2lmKWJOsI6-hTtg\\=\\=:active , .d9ImWwRcKSCeTIhL5iIcSQ\\=\\=:active{\r\n  transform: scale(0.95);\r\n}\r\n/* ---------------------------------------------------------- */\r\n.cMgFfi2lmDxSJqCcm1xYWw\\=\\={\r\n  position: fixed;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 77px;\r\n  background: #DAEDF8;\r\n  display: flex;\r\n  gap: 30px;\r\n  justify-content: right;\r\n  align-items: center;\r\n  border-radius: 0px 0px 10px 10px;\r\n  padding: 0 70px;\r\n}\r\n.j7gCYq5fh7PDw2dOm4hJMA\\=\\={\r\n  animation: R4\\+x5WnjsKReKncdPl3k1A\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes R4\\+x5WnjsKReKncdPl3k1A\\=\\= {\r\n  from{\r\n    /* display: none; */\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n}\r\n.GvsV57ZpZ1k8hbpOsdb0Pg\\=\\={\r\n  animation: XOsLvWaX4SMD9-71EWvvsA\\=\\= 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes XOsLvWaX4SMD9-71EWvvsA\\=\\= {\r\n  from{\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-height: 0%;\r\n  }\r\n}\r\n._46gxeP54f8ksCaSAI8sMRw\\=\\={\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 4.5px;\r\n  align-items: center;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.ZiORtGFOdrPYo3IiYwLcNw\\=\\={\r\n  height: 20px;\r\n  width: 20px;\r\n  /* background-color: #033C7E; */\r\n}\r\n.hx-uqiFHB-iVqkLXXbD7fw\\=\\={\r\n  font-size: 12px;\r\n  color: #000000;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/comments.module.css"],"names":[],"mappings":"AAEC,UAAU;AACX;;;GAGG;;AAEH,UAAU;AACV;;GAEG;;AAEH,WAAW;AACX;;GAEG;;AAEH,oBAAoB;AACpB;;IAEI;;AAEJ;EACE,SAAS;EACT,UAAU;EACV,sBAAsB;AACxB;;AAEA;EACE,kBAAkB;EAClB,uBAAuB;EACvB,aAAa;EACb,wBAAwB;EACxB,eAAe;EACf,6CAA6C;EAC7C,mBAAmB;EACnB,4BAA4B;EAC5B,2BAA2B;EAI3B,sBAAsB;EACtB,kBAAkB;EAClB,gBAAgB;EAChB,iCAAiC;AACnC;;AAEA,+DAA+D;AAC/D;EACE,kBAAkB;EAClB,oBAAoB;EACpB,kCAAkC;EAClC,aAAa;EACb,sBAAsB;EACtB,qBAAqB;EACrB,WAAW;AACb;AACA;EACE,YAAY;EACZ,WAAW;EACX,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,sBAAsB;AACxB;AACA;EACE,wBAAwB;AAC1B;AACA;EACE,oBAAoB;EACpB,YAAY;EACZ,aAAa;EACb,yBAAyB;EACzB,QAAQ;EACR,gBAAgB;EAChB,iBAAiB;EACjB,sBAAsB;EACtB,mBAAmB;AACrB;AACA;EACE,iEAA8C;AAChD;AACA;EACE;IACE,mBAAmB;IACnB,YAAY;EACd;EACA;IACE,mBAAmB;IACnB,eAAe;EACjB;AACF;AACA;EACE,iEAA8C;AAChD;AACA;EACE;IACE,mBAAmB;IACnB,eAAe;EACjB;EACA;IACE,mBAAmB;IACnB,aAAa;EACf;AACF;AACA;EACE,cAAc;EACd,gBAAgB;EAChB,kBAAkB;EAClB,aAAa;EACb,2BAA2B;AAC7B;AACA;EACE,oBAAoB;EACpB,mBAAmB;EACnB,QAAQ;AACV;AACA;EACE,YAAY;EACZ,WAAW;EACX,eAAe;EACf,0BAA0B;AAC5B;AACA;EACE,qBAAqB;AACvB;AACA;EACE,wBAAwB;EACxB,WAAW;EACX,iBAAiB;EACjB,eAAe;EACf,iBAAiB;EACjB,yBAAyB;EACzB,sBAAsB;EACtB,mBAAmB;EACnB,WAAW;EACX,kBAAkB;AACpB;AACA,+DAA+D;AAC/D;EACE,cAAc;EACd,mBAAmB;EACnB,aAAa;EACb,wBAAwB;EACxB,eAAe;EACf,mBAAmB;EACnB,gBAAgB;EAChB,0BAA0B;EAC1B,mBAAmB;EACnB,uBAAuB;EACvB,gCAAgC;EAChC,wBAAwB;AAC1B;AACA;EACE,YAAY;AACd;AACA;EACE,iBAAiB;EACjB,cAAc;EACd,mBAAmB;EACnB,yBAAyB;EACzB,aAAa;EACb,wBAAwB;AAC1B;AACA;EACE,0BAA0B;EAC1B,mBAAmB;EACnB,kBAAkB;EAClB,YAAY;EACZ,uBAAuB;EACvB,2BAA2B;AAC7B;AACA;;;;;;;;;GASG;AACH;EACE,aAAa;EACb,QAAQ;AACV;AACA;EACE,cAAc;EACd,mBAAmB;EACnB,YAAY;EACZ,WAAW;EACX,4BAA4B;EAC5B,gBAAgB;AAClB;AACA;EACE,mBAAmB;EACnB,aAAa;EACb,wBAAwB;EACxB,2BAA2B;EAC3B,cAAc;AAChB;AACA;EACE,eAAe;EACf,iBAAiB;EACjB,kBAAkB;EAClB,gBAAgB;EAChB,cAAc;AAChB;AACA;EACE,cAAc;EACd,yBAAyB;EACzB,kCAAkC;EAClC,4BAA4B;EAC5B,kBAAkB;EAClB,eAAe;EACf,iBAAiB;EACjB,gBAAgB;AAClB;AACA;EACE,aAAa;EACb,gBAAgB;EAChB,oCAAoC;EACpC,mBAAmB;EACnB,iBAAiB;EACjB,gBAAgB;AAClB;AACA;EACE,gBAAgB;EAChB,sBAAsB;EACtB,cAAc;EACd,yBAAyB;EACzB,eAAe;EACf,iBAAiB;AACnB;AACA;EACE,kBAAkB;EAClB,mBAAmB;EACnB,aAAa;EACb,wBAAwB;EACxB,kBAAkB;AACpB;AACA;EACE,cAAc;EACd,YAAY;EACZ,WAAW;EACX,oBAAoB;EACpB,kBAAkB;EAClB,sBAAsB;EACtB,eAAe;AACjB;AACA;EACE,aAAa;EACb,kBAAkB;EAClB,iBAAiB;EACjB,oBAAoB;EACpB,wBAAwB;EACxB,4BAA4B;EAC5B,qBAAqB;AACvB;AACA;EACE,kBAAkB;EAClB,8BAA8B;EAC9B,oBAAoB;EACpB,kBAAkB;EAClB,iBAAiB;EACjB,gBAAgB;EAChB,mBAAmB;EACnB,WAAW;EACX,aAAa;EACb,wBAAwB;EACxB,6CAA6C;EAC7C,yBAAyB;EACzB,kBAAkB;EAClB,6BAA6B;AAC/B;AACA;EACE,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,6BAA6B;EAC7B,oBAAoB;EACpB,YAAY;EACZ,2BAA2B;AAC7B;AACA;EACE,YAAY;EACZ,yBAAyB;AAC3B;AACA;EACE,YAAY;EACZ,WAAW;AACb;AACA;EACE,oBAAoB;EACpB,eAAe;EACf,cAAc;EACd,6CAA6C;EAC7C,cAAc;AAChB;AACA,4DAA4D;AAC5D,4DAA4D;AAC5D,4DAA4D;AAC5D,4DAA4D;AAC5D;EACE,cAAc;AAChB;AACA;EACE,aAAa;EACb,kBAAkB;EAClB,mBAAmB;EACnB,MAAM;EACN,SAAS;EACT,WAAW;EACX,iBAAiB;EACjB,mBAAmB;EACnB,uBAAuB;AACzB;AACA;EACE,6BAA6B;EAC7B,aAAa;EACb,mBAAmB;EACnB,kCAAkC;AACpC;AACA;EACE,aAAa;AACf;AACA;EACE,sBAAsB;AACxB;AACA;EACE,sBAAsB;EACtB,iBAAiB;EACjB,mBAAmB;EACnB,8BAA8B;EAC9B,mDAAmD;EACnD,+BAA+B;EAC/B,wBAAwB;EACxB,mCAAmC;EACnC,YAAY;AACd;AACA;EACE,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,6BAA6B;EAC7B,oBAAoB;EACpB,YAAY;EACZ,2BAA2B;AAC7B;AACA;EACE,YAAY;EACZ,yBAAyB;AAC3B;AACA,4DAA4D;AAC5D,4DAA4D;AAC5D,4DAA4D;AAC5D,4DAA4D;AAC5D;EACE,gBAAgB;EAChB,kBAAkB;EAClB,eAAe;EACf,cAAc;EACd,yBAAyB;EACzB,4BAA4B;EAC5B,0BAA0B;EAC1B,+CAA+C;EAC/C,uBAAuB;EACvB,eAAe;AACjB;AACA;EACE,gBAAgB;EAChB,4BAA4B;EAC5B,yBAAyB;EACzB,kBAAkB;EAClB,eAAe;EACf,iBAAiB;EACjB,uBAAuB;EACvB,iBAAiB;AACnB;AACA;EACE,iBAAiB;AACnB;AACA;EACE,eAAe;AACjB;AACA;EACE,eAAe;AACjB;AACA;EACE,mBAAmB;EACnB,mBAAmB;EACnB,aAAa;EACb,mBAAmB;EACnB,QAAQ;AACV;AACA,+DAA+D;AAC/D;EACE,mBAAmB;EACnB,aAAa;EACb,SAAS;EACT,kBAAkB;AACpB;AACA;EACE,iCAAiC;EACjC,uBAAuB;EACvB,sBAAsB;AACxB;AACA;EACE,iBAAiB;EACjB,yBAAyB;EACzB,4BAA4B;EAC5B,gBAAgB;EAChB,kBAAkB;EAClB,wBAAwB;EACxB,kBAAkB;EAClB,cAAc;EACd,uBAAuB;AACzB;AACA;EACE,aAAa;EACb,cAAc;AAChB;AACA;EACE,kBAAkB;EAClB,aAAa;EACb,cAAc;EACd,SAAS;EACT,cAAc;EACd,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,qBAAqB;EACrB,eAAe;EACf,iBAAiB;EACjB,aAAa;EACb,wBAAwB;EACxB,uBAAuB;EACvB,cAAc;AAChB;AACA;EACE,6BAA6B;AAC/B;AACA;EACE,cAAc;AAChB;AACA;EACE,aAAa;EACb,mBAAmB;EACnB,QAAQ;AACV;AACA;EACE,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,iBAAiB;EACjB,kBAAkB;EAClB,8BAA8B;EAC9B,YAAY;EACZ,aAAa;EACb,aAAa;EACb,gBAAgB;EAChB,WAAW;AACb;AACA;EACE,WAAW;EACX,kBAAkB;EAClB,YAAY;EACZ,UAAU;EACV,aAAa;EACb,YAAY;EACZ,WAAW;EACX,uBAAuB;EACvB,kBAAkB;AACpB;AACA;EACE,kBAAkB;EAClB,yBAAyB;EACzB,4BAA4B;EAC5B,eAAe;EACf,aAAa;EACb,qBAAqB;EACrB,SAAS;EACT,kBAAkB;EAClB,gBAAgB;AAClB;AACA;EACE,kBAAkB;EAClB,YAAY;EACZ,WAAW;EACX,kBAAkB;EAClB,8BAA8B;EAC9B,iBAAiB;EACjB,kBAAkB;EAClB,uBAAuB;EACvB;;aAEW;EACX;;uDAEqD;AACvD;AACA;EACE,aAAa;EACb,wBAAwB;EACxB,uBAAuB;EACvB,QAAQ;EACR,uBAAuB;EACvB,YAAY;AACd;AACA;EACE,WAAW;EACX,oBAAoB;EACpB,mBAAmB;EACnB,eAAe;AACjB;AACA;IACI,0BAA0B;IAC1B,iBAAiB;IACjB,cAAc;AAClB;AACA;EACE,mBAAmB;EACnB,gBAAgB;EAChB,uBAAuB;EACvB,cAAc;EACd,iBAAiB;EACjB,iBAAiB;AACnB;AACA;EACE,0BAA0B;AAC5B;AACA;EACE,8BAA8B;EAC9B,4BAA4B;EAC5B,kBAAkB;EAClB,qBAAqB;AACvB;AACA;EACE,oCAAoC;AACtC;AACA;EACE,kBAAkB;EAClB,YAAY;EACZ,0BAA0B;EAC1B,0BAA0B;EAC1B,8BAA8B;EAC9B,iBAAiB;EACjB,kBAAkB;EAClB,aAAa;EACb,uBAAuB;EACvB,mBAAmB;EACnB,eAAe;AACjB;AACA;EACE,kBAAkB;EAClB,yBAAyB;EACzB,mBAAmB;EACnB,yBAAyB;EACzB,uBAAuB;AACzB;AACA;EACE,WAAW;EACX,YAAY;AACd;AACA;EACE,mBAAmB;EACnB,kBAAkB;EAClB,YAAY;EACZ,0BAA0B;EAC1B,qBAAqB;EACrB,oBAAoB;EACpB,eAAe;EACf,iBAAiB;EACjB,oBAAoB;EACpB,mBAAmB;AACrB;AACA;EACE,kBAAkB;EAClB,cAAc;EACd,yBAAyB;EACzB,cAAc;EACd,aAAa;EACb,eAAe;AACjB;AACA;EACE,mBAAmB;EACnB,gBAAgB;EAChB,cAAc;EACd,aAAa;EACb,mBAAmB;EACnB,yBAAyB;EACzB,oBAAoB;EACpB,QAAQ;AACV;AACA;EACE,cAAc;EACd,YAAY;EACZ,WAAW;EACX,mBAAmB;EACnB,yBAAyB;EACzB,YAAY;EACZ,YAAY;EACZ,eAAe;AACjB;AACA;EACE,cAAc;EACd,YAAY;EACZ,WAAW;EACX,mBAAmB;EACnB,yBAAyB;EACzB,YAAY;EACZ,eAAe;AACjB;AACA;EACE,sBAAsB;AACxB;AACA,+DAA+D;AAC/D;EACE,eAAe;EACf,SAAS;EACT,OAAO;EACP,QAAQ;EACR,YAAY;EACZ,mBAAmB;EACnB,aAAa;EACb,SAAS;EACT,sBAAsB;EACtB,mBAAmB;EACnB,gCAAgC;EAChC,eAAe;AACjB;AACA;EACE,kEAAgE;AAClE;AACA;EACE;IACE,mBAAmB;IACnB,aAAa;EACf;EACA;IACE,mBAAmB;IACnB,gBAAgB;EAClB;AACF;AACA;EACE,iEAAgE;AAClE;AACA;EACE;IACE,mBAAmB;IACnB,gBAAgB;EAClB;EACA;IACE,mBAAmB;IACnB,cAAc;EAChB;AACF;AACA;EACE,aAAa;EACb,wBAAwB;EACxB,UAAU;EACV,mBAAmB;EACnB,eAAe;EACf,mBAAmB;AACrB;AACA;EACE,YAAY;EACZ,WAAW;EACX,+BAA+B;AACjC;AACA;EACE,eAAe;EACf,cAAc;AAChB;AACA,+DAA+D;AAC/D,+DAA+D","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n /* width */\r\n/* .commentsBody::-webkit-scrollbar {\r\n  width: 5px;\r\n  border-radius: 5px;\r\n} */\r\n\r\n/* Track */\r\n/* .commentsBody::-webkit-scrollbar-track {\r\n  background: #f1f1f1;\r\n} */\r\n\r\n/* Handle */\r\n/* .commentsBody::-webkit-scrollbar-thumb {\r\n  background: #888;\r\n} */\r\n\r\n/* Handle on hover */\r\n/* .commentsBody::-webkit-scrollbar-thumb:hover {\r\n  background: #555;\r\n}  */\r\n\r\n*{\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n}\r\n\r\n.commentsBody{\r\n  /* height: 84vh; */\r\n  padding: 29px 16px 19px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  font-family: 'Poppins', sans-serif !important;\r\n  /* border: solid; */\r\n  background-repeat: no-repeat;\r\n  background-position: center;\r\n  -webkit-background-size: cover;\r\n  -moz-background-size: cover;\r\n  -o-background-size: cover;\r\n  background-size: cover;\r\n  position: relative;\r\n  overflow: hidden;\r\n  /* background-clip: border-box; */\r\n}\r\n\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_header{\r\n  /* height: 57px; */\r\n  padding: 0 20px 10px;\r\n  border-bottom: solid 1px #aaaaaa4a;\r\n  display: flex;\r\n  justify-content: right;\r\n  align-items: flex-end;\r\n  gap: 0 16px;\r\n}\r\n.commentsBody_header_btn{\r\n  height: 28px;\r\n  width: 28px;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.commentsBody_header_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n.fullscreen_icons{\r\n  border:solid 1px #727272;\r\n}\r\n.commentsBody_header_searchBar_container{\r\n  /* flex: 1 0 auto; */\r\n  flex-grow: 1;\r\n  display: flex;\r\n  /* align-items: center; */\r\n  gap: 5px;\r\n  overflow: hidden;\r\n  /* width: 100%; */\r\n  /* max-width: 100px; */\r\n  /* border: solid; */\r\n}\r\n.open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    /* display: none; */\r\n    max-width: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n}\r\n.close{\r\n  animation: closing 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes closing {\r\n  from{\r\n    /* display: flex; */\r\n    max-width: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-width: 0%;\r\n  }\r\n}\r\n.commentsBody_header_searchBar{\r\n  flex: 1 1 auto;\r\n  padding: 2px 3px;\r\n  border-radius: 5px;\r\n  outline: none;\r\n  border: solid 0.5px #aaaaaa;\r\n}\r\n.commentsBody_header_searchBar_actions{\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 3px;\r\n}\r\n.commentsBody_header_searchBar_actions_btn{\r\n  height: 18px;\r\n  width: 18px;\r\n  cursor: pointer;\r\n  /* align-self: baseline; */\r\n}\r\n.commentsBody_header_searchBar_actions_btn:active{\r\n  transform: scale(0.9);\r\n}\r\n.commentsBody_header_searchBar_actions_text{\r\n  /* align-self: center; */\r\n  color: gray;\r\n  font-weight: bold;\r\n  font-size: 15px;\r\n  user-select: none;\r\n  -webkit-user-select: none;\r\n  -moz-user-select: none;\r\n  /* border: solid; */\r\n  width: 70px;\r\n  text-align: center;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_commentArea{\r\n  flex: 1 1 auto;\r\n  padding-right: 17px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  /* gap: 10px; */\r\n  /* border: solid; */\r\n  overflow-y: auto;\r\n  /* padding-bottom: 10px; */\r\n  margin-bottom: 10px;\r\n  /* padding-top: 20px; */\r\n  /* scroll-padding-bottom: 5px; */\r\n  /* position: relative; */\r\n}\r\n.commentsBody_loadingArea{\r\n  border: none;\r\n}\r\n.singleChat{\r\n  /* width: 100%; */\r\n  max-width: 75%;\r\n  /* border: solid; */\r\n  scroll-snap-align: center;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n}\r\n.singleChat_match{\r\n  outline: 4px solid skyblue;\r\n  outline-offset: 5px;\r\n  position: relative;\r\n  z-index: 999;\r\n  scroll-margin-top: 10px;\r\n  /* transform: scale(1.2); */\r\n}\r\n/* .singleChat_match::after{\r\n  content: '';\r\n  position: absolute;\r\n  outline: 4px solid skyblue;\r\n  top: 0;\r\n  right: 0;\r\n  bottom: 0;\r\n  left: 0;\r\n  z-index: 999;\r\n} */\r\n.singleChat_comment_card{\r\n  display: flex;\r\n  gap: 6px;\r\n}\r\n.singleChat_comment_card_avator{\r\n  flex: 0 0 30px;\r\n  border-radius: 30px;\r\n  height: 30px;\r\n  width: 30px;\r\n  background-color: aquamarine;\r\n  overflow: hidden;\r\n}\r\n.singleChat_comment_card_text{\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  justify-content: flex-start;\r\n  /* gap: 5px; */\r\n}\r\n.singleChat_comment_card_text_time{\r\n  font-size: 12px;\r\n  line-height: 10px;\r\n  margin-bottom: 5px;\r\n  margin-top: 10px;\r\n  color: #033C7E;\r\n}\r\n.single_comment_deleted_container{\r\n  color: #F17B7C;\r\n  background-color: #FFF3F4;\r\n  /* border: 0.15px solid #F17B7C; */\r\n  border: 0.15px solid #f8d0d3;\r\n  border-radius: 5px;\r\n  font-size: 14px;\r\n  line-height: 14px;\r\n  overflow: hidden;\r\n}\r\n.single_comment_deleted_title{\r\n  display: flex;\r\n  min-width: 205px;\r\n  /* justify-content: space-between; */\r\n  align-items: center;\r\n  /* gap: 0 20px; */\r\n  padding: 5px 5px;\r\n}\r\n.single_comment_deleted_comment_body{\r\n  padding: 5px 5px;\r\n  /* color: #f17b7d86; */\r\n  color: #F17B7C;\r\n  background-color: #FFF3F4;\r\n  font-size: 14px;\r\n  line-height: 14px;\r\n}\r\n.singleChat_comment_card_text_container{\r\n  position: relative;\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  border-radius: 5px;\r\n}\r\n.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_more_btn{\r\n  display: block;\r\n  height: 15px;\r\n  width: 15px;\r\n  /* display: block; */\r\n  position: absolute;\r\n  top: calc(50% - 7.5px);\r\n  cursor: pointer;\r\n}\r\n.singleChat_comment_card_text_more_btn{\r\n  display: none;\r\n  /* height: 15px; */\r\n  /* width: 15px; */\r\n  /* display: block; */\r\n  /* position: absolute; */\r\n  /* top: calc(50% - 7.5px); */\r\n  /* cursor: pointer; */\r\n}\r\n.singleChat_comment_card_text_more_options{\r\n  position: absolute;\r\n  /* bottom: calc(50% - 50px); */\r\n  top: calc(50% - 7px);\r\n  /* height: 79px; */\r\n  /* width: 94px; */\r\n  width: 127.133px;\r\n  /* border: solid; */\r\n  z-index: 99;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  padding: 8px 0 6px !important;\r\n}\r\n.singleChat_comment_card_text_more_options > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n  /* transform: scale(1.5); */\r\n}\r\n.singleChat_comment_card_text_more_options > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n.context_icons{\r\n  height: 12px;\r\n  width: 12px;\r\n}\r\n.context_title{\r\n  /* font-size: 8px; */\r\n  font-size: 12px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n.singleChat_comment_card_text_container:hover .singleChat_comment_card_text_custom_more_btn{\r\n  display: block;\r\n}\r\n.singleChat_comment_card_text_custom_more_btn_container{\r\n  display: flex;\r\n  position: absolute;\r\n  /* border: solid; */\r\n  top: 0;\r\n  bottom: 0;\r\n  width: 15px;\r\n  /* left: -20px; */\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n.singleChat_comment_card_text_custom_more_btn{\r\n  background-color: transparent;\r\n  display: none;\r\n  /* border: solid; */\r\n  /* transform: translateX(-20px); */\r\n}\r\n.singleChat_comment_card_text_custom_more_btn::after{\r\n  content: none;\r\n}\r\n.singleChat_comment_card_text_custom_more_btn:hover{\r\n  background-color: none;\r\n}\r\n.singleChat_comment_card_text_custom_more_options{  \r\n  /* width: 127.133px; */\r\n  /* z-index: 99; */\r\n  /* display: flex; */\r\n  /* flex-flow: column nowrap; */\r\n  /* font-family: 'Poppins', sans-serif !important; */\r\n  /* background-color: #FFFFFF; */\r\n  /* border-radius: 2px; */\r\n  /* padding: 8px 0 6px !important; */\r\n  border: none;\r\n}\r\n.singleChat_comment_card_text_custom_more_options > section{\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n  /* transform: scale(1.5); */\r\n}\r\n.singleChat_comment_card_text_custom_more_options > section:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n/* ------------------------------------------------------- */\r\n.singleChat_comment_card_mentioned_comment{\r\n  padding: 5px 5px;\r\n  font-style: italic;\r\n  font-size: 10px;\r\n  color: #6F6F6F;\r\n  background-color: #EEF9FF;\r\n  border: 0.15px solid #aaaaaa;\r\n  border-radius: 5px 5px 0 0;\r\n  border-bottom: solid 1px hsla(0, 0%, 44%, 0.13);\r\n  overflow-wrap: anywhere;\r\n  cursor: pointer;\r\n}\r\n.singleChat_comment_card_text_message{\r\n  padding: 5px 5px;\r\n  border: 0.15px solid #aaaaaa;\r\n  background-color: #EEF9FF;\r\n  border-radius: 5px;\r\n  font-size: 14px;\r\n  line-height: 14px;\r\n  overflow-wrap: anywhere;\r\n  /* width: 100%; */\r\n}\r\n.singleChat_comment_card_text_message p{\r\n  margin: 5px 0 5px;\r\n}\r\n.singleChat_comment_card_text_message p:first-child{\r\n  margin: 0 0 5px;\r\n}\r\n.singleChat_comment_card_text_message p:last-child{\r\n  margin: 5px 0 0;\r\n}\r\n.singleChat_comment_card_files{\r\n  /* flex: 0 0 75%; */\r\n  /* border: solid; */\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n/* ---------------------------------------------------------- */\r\n.commentsBody_inputField{\r\n  /* border: solid; */\r\n  display: flex;\r\n  gap: 18px;\r\n  position: relative;\r\n}\r\n.chatInput{\r\n  /* flex: 0 1 calc(100% - 58px); */\r\n  width: calc(100% - 58px)\r\n  /* overflow-y: auto; */\r\n}\r\n.chatInput_mentioned_comment{\r\n  max-height: 200px;\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  overflow-y: auto;\r\n  overflow-x: hidden;\r\n  padding: 13.33px 33.66px;\r\n  position: relative;\r\n  color: #616365;\r\n  overflow-wrap: anywhere;\r\n}\r\n.chatInput_mentioned_comment_icon{\r\n  width: 11.1px;\r\n  height: 9.67px;\r\n}\r\n.chatInput_mentioned_comment_close_icon{\r\n  position: absolute;\r\n  width: 11.1px;\r\n  height: 11.1px;\r\n  top: 17px;\r\n  right: 33.66px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_mentioned_comment_text_area{\r\n  padding-left: 11px;\r\n  /* margin-top: 6px; */\r\n  font-size: 12px;\r\n  line-height: 12px;\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  overflow-wrap: anywhere;\r\n  /* gap: 5px; */\r\n}\r\n.chatInput_mentioned_comment_text_area_mssg{\r\n  font-style: italic !important;\r\n}\r\n.chatInput_mentioned_comment_text_area_mssg p{\r\n  margin: 10px 0;\r\n}\r\n.chatInput_mentioned_comment_text_area_attachments{\r\n  display: flex;\r\n  flex-flow: row wrap;\r\n  gap: 5px;\r\n}\r\n.chatInput_mentioned_comment_text_area_sender_time{\r\n  margin-top: 9px;\r\n}\r\n.chatInput_text_emojis{\r\n  position: absolute;\r\n  /* top: -300px; */\r\n  /* bottom: 20px; */\r\n  /* bottom: calc(50% + 20px); */\r\n  bottom: 25px;\r\n  left: -12.5px;\r\n  height: 300px;\r\n  max-width: 300px;\r\n  z-index: 99;\r\n}\r\n.chatInput_text_emojis::after{\r\n  content: \"\";\r\n  position: absolute;\r\n  bottom: -5px;\r\n  left: 10px;\r\n  rotate: 45deg;\r\n  height: 20px;\r\n  width: 20px;\r\n  background-color: white;\r\n  border-radius: 3px;\r\n}\r\n.chatInput_filePreview{\r\n  /* height: 68px; */\r\n  background-color: #DAEDF8;\r\n  border-radius: 10px 10px 0 0;\r\n  max-width: 100%;\r\n  display: flex;\r\n  padding: 10px 8px 0px;\r\n  gap: 14px;\r\n  overflow-y: hidden;\r\n  overflow-x: auto;\r\n}\r\n.chatInput_filePreview__file{\r\n  /* height: 51px; */\r\n  height: 69px;\r\n  width: 69px;\r\n  position: relative;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  /* padding: 10px 8px; */\r\n  /* display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 5px; */\r\n  /* box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-webkit-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1);\r\n-moz-box-shadow: 1px 1px 7px 1px rgba(199,199,199,1); */\r\n}\r\n.filePreview__notImg{\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  justify-content: center;\r\n  gap: 3px;\r\n  /* padding: 10px 8px; */\r\n  padding: 5px;\r\n}\r\n.chatInput_filePreview__file__fileIcon{\r\n  width: 40px;\r\n  display: inline-flex;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.chatInput_filePreview__file__fileExt{\r\n    font-size: 10px !important;\r\n    font-weight: bold;\r\n    line-height: 0;\r\n}\r\n.chatInput_filePreview__file__fileName{\r\n  white-space: nowrap; \r\n  overflow: hidden;\r\n  text-overflow: ellipsis; \r\n  font-size: 9px;\r\n  line-height: 11px;\r\n  font-weight: bold;\r\n}\r\n.chatInput_filePreview__file:hover{\r\n  cursor: pointer !important;\r\n}\r\n.chatInput_filePreview__file:hover .chatInput_filePreview__removeFile{\r\n  color: rgb(0, 0, 0) !important;\r\n  background: white !important;\r\n  border-radius: 50%;\r\n  transform: scale(1.1);\r\n}\r\n.chatInput_filePreview__removeFile{\r\n  color: rgb(177, 177, 177) !important;\r\n}\r\n.chatInput_filePreview__addFile{\r\n  /* height: 51px; */\r\n  height: 69px;\r\n  min-width: 69px !important;\r\n  max-width: 69px !important;\r\n  /* border: solid 0.5px gray; */\r\n  background: white;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  justify-content: center;\r\n  align-items: center;\r\n  cursor: pointer;\r\n}\r\n.chatInput_text_input{\r\n  position: relative;\r\n  background-color: #DAEDF8;\r\n  /* border: solid; */\r\n  /* border-radius: 10px; */\r\n  /* overflow: visible; */\r\n}\r\n.chatInput_text_input_emoji{\r\n  width: 12px;\r\n  height: 12px;\r\n}\r\n.chatInput_text_emoji_icon{\r\n  /* border: solid; */\r\n  position: absolute;\r\n  left: 8.34px;\r\n  bottom: calc(50% - 7.66px);\r\n  /* height: 15.32px; */\r\n  /* width: 15.32px; */\r\n  cursor: pointer;\r\n  overflow: visible;\r\n  display: inline-flex;\r\n  align-items: center;\r\n}\r\n.chatInput_text_style_icon{\r\n  position: absolute;\r\n  right: 16.18px;\r\n  bottom: calc(50% - 6.4px);\r\n  height: 12.8px;\r\n  width: 12.8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_actions_btn_container{\r\n  /* border: solid; */\r\n  padding-top: 5px;\r\n  flex: 0 0 40px;\r\n  display: flex;\r\n  flex-direction: row;\r\n  justify-content: flex-end;\r\n  align-self: flex-end;\r\n  gap: 8px;\r\n}\r\n.chatInput_actions_btn_send{\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #49b9fa;\r\n  color: white;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_file_add_btn{\r\n  flex: 0 0 40px;\r\n  height: 40px;\r\n  width: 40px;\r\n  border-radius: 40px;\r\n  background-color: #DAEDF8;\r\n  padding: 8px;\r\n  cursor: pointer;\r\n}\r\n.chatInput_actions_btn_send:active , .chatInput_file_add_btn:active{\r\n  transform: scale(0.95);\r\n}\r\n/* ---------------------------------------------------------- */\r\n.comments_selected_action_controller{\r\n  position: fixed;\r\n  bottom: 0;\r\n  left: 0;\r\n  right: 0;\r\n  height: 77px;\r\n  background: #DAEDF8;\r\n  display: flex;\r\n  gap: 30px;\r\n  justify-content: right;\r\n  align-items: center;\r\n  border-radius: 0px 0px 10px 10px;\r\n  padding: 0 70px;\r\n}\r\n.open_action_controller{\r\n  animation: opening_action_controller 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening_action_controller {\r\n  from{\r\n    /* display: none; */\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n}\r\n.close_action_controller{\r\n  animation: closing_action_controller 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes closing_action_controller {\r\n  from{\r\n    /* display: flex; */\r\n    max-height: 100%;\r\n  }\r\n  to {\r\n    /* display: none; */\r\n    max-height: 0%;\r\n  }\r\n}\r\n.comments_selected_action_controller_btn{\r\n  display: flex;\r\n  flex-flow: column nowrap;\r\n  gap: 4.5px;\r\n  align-items: center;\r\n  cursor: pointer;\r\n  /* border: solid; */\r\n}\r\n.comments_selected_action_controller_btn_icon{\r\n  height: 20px;\r\n  width: 20px;\r\n  /* background-color: #033C7E; */\r\n}\r\n.comments_selected_action_controller_btn_text{\r\n  font-size: 12px;\r\n  color: #000000;\r\n}\r\n/* ---------------------------------------------------------- */\r\n/* ---------------------------------------------------------- */\r\n"],"sourceRoot":""}]);
+// Exports
+___CSS_LOADER_EXPORT___.locals = {
+	"commentsBody": "xKTA64JpPBJ8Ut9ZDbn9rg==",
+	"commentsBody_header": "lNdp1uhUVwyTMS8gXh+ukw==",
+	"commentsBody_header_btn": "mDfG9kMeymQ7VrZRvw8oDw==",
+	"fullscreen_icons": "W3912K8vxyr9Jqu9BSeJmg==",
+	"commentsBody_header_searchBar_container": "dtoYKAVX1AaeSxRjjoMSxA==",
+	"open": "fKU16kBo1Qmtce7l43-HuA==",
+	"opening": "ZQdC4FMRqeETrYmgX5dlXw==",
+	"close": "RSRvd4EzQhSo8tEk1xfqTg==",
+	"closing": "G9e1R4rYy7AuLehHuTkQIw==",
+	"commentsBody_header_searchBar": "xphoAuNibDod8P95ANKOxw==",
+	"commentsBody_header_searchBar_actions": "_0Ka7DovjQ7lrVCOSf2hYdQ==",
+	"commentsBody_header_searchBar_actions_btn": "i+2bPq8rIRUzxD7JxDasGQ==",
+	"commentsBody_header_searchBar_actions_text": "uIC61+vXTTqzJrGb6ey53w==",
+	"commentsBody_commentArea": "hwrDAUbLAFvk3tT5O8yUWw==",
+	"commentsBody_loadingArea": "PNojGp79QSWwRy6Ou6N3bQ==",
+	"singleChat": "AHrh7nNelyFOlX8D-8vVOg==",
+	"singleChat_match": "Ei8+fdUr5qspbMUd8v2a1A==",
+	"singleChat_comment_card": "WXR6qxKTISGZx4u40qK+Aw==",
+	"singleChat_comment_card_avator": "lzG-A5LIYcFnh0Ffq18x3A==",
+	"singleChat_comment_card_text": "M6c3Wn9AMARvfa1tdaWY-w==",
+	"singleChat_comment_card_text_time": "_3Ww24uW4+XDNVrun81m4eQ==",
+	"single_comment_deleted_container": "QSOgeDrSYtIXhpHqH0JtxQ==",
+	"single_comment_deleted_title": "jVnvN2KV0zkBNqAyIbo3UQ==",
+	"single_comment_deleted_comment_body": "oNU9PkVWGObofTUa2a8niA==",
+	"singleChat_comment_card_text_container": "iXxQt2ilXdp3hz4sSqwgLA==",
+	"singleChat_comment_card_text_more_btn": "b88vZXkQEZupqpqCOpBq+w==",
+	"singleChat_comment_card_text_more_options": "AnXvk2Phi1b1oIgEvs7HGQ==",
+	"context_icons": "S59xMzZAdnSxfMKxhWYluQ==",
+	"context_title": "_9eTdcW7EtRqzqd-9Sx0beA==",
+	"singleChat_comment_card_text_custom_more_btn": "_4XWvMsypp9X4wrmnm6SmHA==",
+	"singleChat_comment_card_text_custom_more_btn_container": "JgrXh6cQOhttEIcdLxYpew==",
+	"singleChat_comment_card_text_custom_more_options": "YHF8YVKSFtN1z1EI+qL81w==",
+	"singleChat_comment_card_mentioned_comment": "i7e-ZRoTPtdM-Xd6fRXRPQ==",
+	"singleChat_comment_card_text_message": "ozoqbxWJE0LRx7y9ID5w7w==",
+	"singleChat_comment_card_files": "_74ptsqCavibfvgxpYkl+MA==",
+	"commentsBody_inputField": "zrdgoGyh2d-jYHAdcQ6zRw==",
+	"chatInput": "RwrF3vIc7qZnuBaQOCCGtw==",
+	"chatInput_mentioned_comment": "oyVP27hk-yx7bf6gIZI97A==",
+	"chatInput_mentioned_comment_icon": "WvqpvluPc6n2SnoZNViB3w==",
+	"chatInput_mentioned_comment_close_icon": "dAEoOn-7aqYBjsPL0u9jow==",
+	"chatInput_mentioned_comment_text_area": "rqeZltLL9VBzpngK5CuBNg==",
+	"chatInput_mentioned_comment_text_area_mssg": "pc+r0LCRA+u6+EC1IkM+Iw==",
+	"chatInput_mentioned_comment_text_area_attachments": "-v023bgpIZZRqFfN2HiI8w==",
+	"chatInput_mentioned_comment_text_area_sender_time": "kJDLHiEb5luetCsd5qbQGA==",
+	"chatInput_text_emojis": "QNBcto9P7B0fe75qKKERxg==",
+	"chatInput_filePreview": "MU+2fsRtd-fYkwtfChCZ5Q==",
+	"chatInput_filePreview__file": "f83hmzg55NGhPxy3Uxioqw==",
+	"filePreview__notImg": "_2S3q8-zwnDBqDgBvnedlxA==",
+	"chatInput_filePreview__file__fileIcon": "BA94bXFVSLRqwsaHI-WPbg==",
+	"chatInput_filePreview__file__fileExt": "chSZm1wAt+DMl7WTi7D0hA==",
+	"chatInput_filePreview__file__fileName": "DZoHasb9fTH95vYwijQvYg==",
+	"chatInput_filePreview__removeFile": "XUBNxpW9I1MVSnQsoZ1gLg==",
+	"chatInput_filePreview__addFile": "Uy9qarsT3oxliXUpdMTp7g==",
+	"chatInput_text_input": "EHoh9kHBfS25-lsSApkjcA==",
+	"chatInput_text_input_emoji": "_0Vi3CbFJTVsOYtWqqf4OSw==",
+	"chatInput_text_emoji_icon": "_9xtGbNPYWLNVvodQc9Zexw==",
+	"chatInput_text_style_icon": "Z4idHPZ+Jg5FhKPogy5vLA==",
+	"chatInput_actions_btn_container": "cDxECmJkcQKexCVYE+xUdg==",
+	"chatInput_actions_btn_send": "_4PrZ4kZ2lmKWJOsI6-hTtg==",
+	"chatInput_file_add_btn": "d9ImWwRcKSCeTIhL5iIcSQ==",
+	"comments_selected_action_controller": "cMgFfi2lmDxSJqCcm1xYWw==",
+	"open_action_controller": "j7gCYq5fh7PDw2dOm4hJMA==",
+	"opening_action_controller": "R4+x5WnjsKReKncdPl3k1A==",
+	"close_action_controller": "GvsV57ZpZ1k8hbpOsdb0Pg==",
+	"closing_action_controller": "XOsLvWaX4SMD9-71EWvvsA==",
+	"comments_selected_action_controller_btn": "_46gxeP54f8ksCaSAI8sMRw==",
+	"comments_selected_action_controller_btn_icon": "ZiORtGFOdrPYo3IiYwLcNw==",
+	"comments_selected_action_controller_btn_text": "hx-uqiFHB-iVqkLXXbD7fw=="
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/customContextMenu.css":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/customContextMenu.css ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Poppins&display=swap);"]);
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".useContextMenu_Backdrop {\r\n  z-index: 99999;\r\n}\r\n\r\n.useContextMenu_ContextMenu{\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  display: flex;\r\n  flex-flow: column;\r\n  /* gap: 7px; */\r\n  padding: 8px 0 6px !important;\r\n  /* padding:0 !important; */\r\n  /* transform: scale(1.5); */\r\n}\r\n\r\n.useContextMenu_ContextMenuItem {\r\n  /* background-color: #FFFFFF; */\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.useContextMenu_ContextMenuItem:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_icons{\r\n  height: 12px;\r\n  width: 12px;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_title{\r\n  /* font-size: 8px; */\r\n  font-size: 12px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/customContextMenu.css"],"names":[],"mappings":"AAEA;EACE,cAAc;AAChB;;AAEA;EACE,6CAA6C;EAC7C,yBAAyB;EACzB,kBAAkB;EAClB,aAAa;EACb,iBAAiB;EACjB,cAAc;EACd,6BAA6B;EAC7B,0BAA0B;EAC1B,2BAA2B;AAC7B;;AAEA;EACE,+BAA+B;EAC/B,aAAa;EACb,mBAAmB;EACnB,WAAW;EACX,6BAA6B;EAC7B,oBAAoB;EACpB,YAAY;AACd;AACA;EACE,YAAY;EACZ,yBAAyB;AAC3B;;AAEA;EACE,YAAY;EACZ,WAAW;AACb;;AAEA;EACE,oBAAoB;EACpB,eAAe;EACf,cAAc;EACd,6CAA6C;EAC7C,cAAc;AAChB","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');\r\n\r\n.useContextMenu_Backdrop {\r\n  z-index: 99999;\r\n}\r\n\r\n.useContextMenu_ContextMenu{\r\n  font-family: 'Poppins', sans-serif !important;\r\n  background-color: #FFFFFF;\r\n  border-radius: 2px;\r\n  display: flex;\r\n  flex-flow: column;\r\n  /* gap: 7px; */\r\n  padding: 8px 0 6px !important;\r\n  /* padding:0 !important; */\r\n  /* transform: scale(1.5); */\r\n}\r\n\r\n.useContextMenu_ContextMenuItem {\r\n  /* background-color: #FFFFFF; */\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 5.45px;\r\n  padding: 3.5px 8px !important;\r\n  margin: 0 !important;\r\n  color: black;\r\n}\r\n.useContextMenu_ContextMenuItem:hover{\r\n  color: black;\r\n  background-color: #EEF9FF;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_icons{\r\n  height: 12px;\r\n  width: 12px;\r\n}\r\n\r\n.useContextMenu_ContextMenuItem .context_title{\r\n  /* font-size: 8px; */\r\n  font-size: 12px;\r\n  color: #626365;\r\n  font-family: 'Poppins', sans-serif !important;\r\n  line-height: 0;\r\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/quill.css":
+/*!*******************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/quill.css ***!
+  \*******************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  /* padding-right: 33.66px; */\r\n  padding-left: 33.66px;\r\n  font-size: 14px;\r\n  color: black;\r\n  max-height: 100px; \r\n  overflow-y: auto;\r\n  margin-right: 33.66px;\r\n  max-width: 100%;\r\n  overflow-wrap: anywhere;\r\n  /* margin-top: 5px;\r\n  margin-bottom: 5px; */\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 30%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n/* .open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    max-height: 100%;\r\n  }\r\n} */\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n\r\n\r\n/* style for emoji */\r\n.EmojiPickerReact .epr-preview{\r\n  display: none !important;\r\n}\r\n\r\naside.EmojiPickerReact.epr-main{\r\n  /* position: absolute;\r\n  top: -0px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px; */\r\n  z-index: 99;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/UI/comments/styles/quill.css"],"names":[],"mappings":"AAAA;EACE,uBAAuB;EACvB,yBAAyB;EACzB,wBAAwB;EACxB,wBAAwB;EACxB,qBAAqB;AACvB;;AAEA,yCAAyC;AACzC;kDACkD;AAClD,MAAM;;AAEN;sDACsD;EACpD,+DAA+D;AACjE,MAAM;;AAEN;sDACsD;AACtD,MAAM;;AAEN,gBAAgB;AAChB;qEACqE;EACnE,kEAAkE;AACpE,MAAM;;AAEN,mCAAmC;AACnC;;GAEG;;AAEH;;iEAEiE;AACjE,MAAM;;AAEN;;GAEG;;AAEH,mCAAmC;AACnC;;GAEG;;AAEH;;;GAGG;;AAEH;;GAEG;AACH,oDAAoD;;AAEpD;EACE,uBAAuB;EACvB,kCAAkC;EAClC,+BAA+B;EAC/B,wCAAwC;EACxC,kCAAkC;EAClC,mBAAmB;EACnB,4BAA4B;EAC5B,gBAAgB;EAChB,iBAAiB;EACjB,gBAAgB;AAClB;AACA;EACE,6BAA6B;EAC7B,uBAAuB;EACvB,8CAA8C;EAC9C,4BAA4B;EAC5B,qBAAqB;EACrB,eAAe;EACf,YAAY;EACZ,iBAAiB;EACjB,gBAAgB;EAChB,qBAAqB;EACrB,eAAe;EACf,uBAAuB;EACvB;uBACqB;EACrB;qBACmB;AACrB;AACA;EACE,aAAa;EACb,QAAQ;AACV;AACA;;;GAGG;;AAEH;EACE,6BAA6B;EAC7B,4BAA4B;EAC5B,8BAA8B;EAC9B,8CAA8C;EAC9C,uCAAuC;EACvC,aAAa;EACb,mBAAmB;EACnB,cAAc;EACd,uBAAuB;EACvB,8BAA8B;EAC9B,YAAY;AACd;AACA;;;;;;;;;;GAUG;;AAEH;EACE,YAAY;EACZ,uBAAuB;EACvB,sBAAsB;EACtB,qBAAqB;EACrB,0BAA0B;AAC5B;;;AAGA,oBAAoB;AACpB;EACE,wBAAwB;AAC1B;;AAEA;EACE;;;;qBAImB;EACnB,WAAW;AACb","sourcesContent":[":root {\r\n  --width: 1px !important;\r\n  --radius: 10px !important;\r\n  --bg: skyblue !important;\r\n  --color: blue !important;\r\n  --firefox-width: thin;\r\n}\r\n\r\n/* For Webkit browsers (Chrome, Safari) */\r\n/* ::-webkit-scrollbar {\r\n  width: var(--width); /* Width of the scrollbar */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-thumb {\r\n  background-color: var(--bg); /* Color of the thumb */\r\n  /* border-radius: var(--radius); Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* ::-webkit-scrollbar-track {\r\n  background-color: var(--bg); /* Color of the track */\r\n/* } */ \r\n\r\n/* For Firefox */\r\n/* * {\r\n  scrollbar-color: var(--color) var(--bg); /* thumb and track color */\r\n  /* scrollbar-width: var(--firefox-width); width of the scrollbar */\r\n/* } */ \r\n\r\n/* For Firefox with border-radius */\r\n/* *::-moz-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-moz-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius); /* Rounded corners of the thumb */\r\n/* } */\r\n\r\n/* *::-moz-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n\r\n/* For Internet Explorer and Edge */\r\n/* *::-ms-scrollbar {\r\n  width: var(--width);\r\n} */\r\n\r\n/* *::-ms-scrollbar-thumb {\r\n  background-color: var(--bg);\r\n  border-radius: var(--radius);\r\n} */\r\n\r\n/* *::-ms-scrollbar-track {\r\n  background-color: var(--bg);\r\n} */\r\n/* ----------------------------------------------- */\r\n\r\n.ql-container {\r\n  border: none !important;\r\n  /* border: solid 1px !important; */\r\n  /* background-color: #DAEDF8; */\r\n  background-color: transparent !important;\r\n  /* border-radius: 0 0 10px 10px; */\r\n  border-radius: 10px;\r\n  /* padding-right: 35.05px; */\r\n  min-height: 50px;\r\n  max-height: 100px;\r\n  overflow-y: auto;\r\n}\r\n.ql-editor {\r\n  /* background-color: black; */\r\n  border: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  /* padding-right: 33.66px; */\r\n  padding-left: 33.66px;\r\n  font-size: 14px;\r\n  color: black;\r\n  max-height: 100px; \r\n  overflow-y: auto;\r\n  margin-right: 33.66px;\r\n  max-width: 100%;\r\n  overflow-wrap: anywhere;\r\n  /* margin-top: 5px;\r\n  margin-bottom: 5px; */\r\n  /* border-radius: 0 0 10px 10px;\r\n  overflow: hidden; */\r\n}\r\n.ql-editor.ql-blank::before{\r\n  left: 33.66px;\r\n  top: 30%;\r\n}\r\n/* .ql-editor::placeholder{\r\n  vertical-align: middle;\r\n  padding-left: 33.66px;\r\n} */\r\n\r\n.ql-toolbar {\r\n  /* background-color: black; */\r\n  border: 0.25px solid #707070;\r\n  border-bottom: none !important;\r\n  /* border-top: solid 0.5px white !important; */\r\n  border-radius: 10px 10px 0 0 !important;\r\n  display: flex;\r\n  align-items: center;\r\n  /* gap: 7px; */\r\n  background-color: white;\r\n  padding-top: 14px 0 !important;\r\n  height: 52px;\r\n}\r\n/* .open{\r\n  animation: opening 0.5s steps(100) 0s forwards;\r\n}\r\n@keyframes opening {\r\n  from{\r\n    max-height: 0;\r\n  }\r\n  to {\r\n    max-height: 100%;\r\n  }\r\n} */\r\n\r\n.ql-toolbar button {\r\n  border: none;\r\n  height: 15px !important;\r\n  width: 15px !important;\r\n  padding: 0 !important;\r\n  margin: 0 3.5px !important;\r\n}\r\n\r\n\r\n/* style for emoji */\r\n.EmojiPickerReact .epr-preview{\r\n  display: none !important;\r\n}\r\n\r\naside.EmojiPickerReact.epr-main{\r\n  /* position: absolute;\r\n  top: -0px;\r\n  left: 0;\r\n  height: 400px;\r\n  max-width: 300px; */\r\n  z-index: 99;\r\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/form/checkbox.css":
 /*!***********************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/form/checkbox.css ***!
@@ -19596,6 +23292,149 @@ ___CSS_LOADER_EXPORT___.locals = {
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/media/comment_refresh.svg":
+/*!******************************************************************!*\
+  !*** ./resources/js/react/UI/comments/media/comment_refresh.svg ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/comment_refresh.svg?7328ad3899086fd7b726335938395adb");
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/media/comment_search.svg":
+/*!*****************************************************************!*\
+  !*** ./resources/js/react/UI/comments/media/comment_search.svg ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/comment_search.svg?20ddfc7d47f72f9d3229f6341b0eecc7");
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/media/comments_body_bg.png":
+/*!*******************************************************************!*\
+  !*** ./resources/js/react/UI/comments/media/comments_body_bg.png ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/comments_body_bg.png?95ab68e77e02282db558e30ca6f9da64");
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/media/comments_body_bg.svg":
+/*!*******************************************************************!*\
+  !*** ./resources/js/react/UI/comments/media/comments_body_bg.svg ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ("/images/comments_body_bg.svg?6e3beb7d0c73bb7ce8b6011c7e9572d1");
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/styles/comments.module.css":
+/*!*******************************************************************!*\
+  !*** ./resources/js/react/UI/comments/styles/comments.module.css ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_comments_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./comments.module.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/comments.module.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_comments_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/styles/customContextMenu.css":
+/*!*********************************************************************!*\
+  !*** ./resources/js/react/UI/comments/styles/customContextMenu.css ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_customContextMenu_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./customContextMenu.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/customContextMenu.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_customContextMenu_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_customContextMenu_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/js/react/UI/comments/styles/quill.css":
+/*!*********************************************************!*\
+  !*** ./resources/js/react/UI/comments/styles/quill.css ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_quill_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./quill.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/comments/styles/quill.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_quill_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_quill_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 

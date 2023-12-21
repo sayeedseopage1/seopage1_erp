@@ -504,7 +504,7 @@ const SingleTaskPage = () => {
                                                                Other Task Type:
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                --
+                                                            {task?.taskTypeDetails?.taskTypeOther ?? '--'}
                                                             </div>
                                                         </div>
 

@@ -295,11 +295,13 @@
 
         <!-- REACT COMPONENT MASTER ACCESS -->
         <div id="react-root-container" ></div>
+        <div id="react-timezone-modal"></div>
         <div id="react-features-container" ></div>
         <!-- REACT COMPONENT MASTER ACCESS -->
+
         <!-- MAIN CONTAINER START -->
         <section class="main-container bg-additional-grey" id="fullscreen">
-
+ 
             <div class="preloader-container d-flex justify-content-center align-items-center">
                 <div class="spinner-border" role="status" aria-hidden="true"></div>
             </div>

@@ -987,13 +987,17 @@ class TaskController extends AccountBaseController
         }
 
         $task_status->save();
-        $actions= PendingAction::where('code','DTDA')->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
+        $actions= PendingAction::where('code','DTDA')->where('past_status',0)->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
 
              //need pending action past
              $action= PendingAction::where('id',$action->id)->first();
+             $action->past_status= 1;
+             $action->authorized_by= Auth::id();
+             $action->authorized_at= Carbon::now();
+             $action->save();
              $project=Project::where('id',$action->project_id)->first();
              $current_date= Carbon::now();
 
@@ -3159,7 +3163,7 @@ class TaskController extends AccountBaseController
 
         // dd($clientRevisionCount);
 
-        if ($clientRevisionCount >= 5) {
+        if ($request->acknowledgement_id == 'CPRx06' && $clientRevisionCount >= 5) {
             $task_revision->dispute_created = true;
             $task_revision->final_responsible_person = ''; // create dispute
         }else if ($request->acknowledgement_id == 'CPRx06') {
@@ -3192,7 +3196,6 @@ class TaskController extends AccountBaseController
         // }
 
         $task_revision->save();
-
 
 
         // CREATE DISPUTE
@@ -3632,12 +3635,15 @@ class TaskController extends AccountBaseController
 
     public function storeTaskGuideline(Request $request)
     {
+        // dd($request->all());
         $request->validate([
+            'task_category' => 'required',
             'theme_details' => 'required',
             'design_details' => 'required',
             'color_schema' => 'required',
             'plugin_research' => 'required',
         ], [
+            'task_category.required' => 'This field is required!',
             'theme_details.required' => 'This field is required!',
             'design_details.required' => 'This field is required!',
             'color_schema.required' => 'This field is required!',
@@ -3650,6 +3656,7 @@ class TaskController extends AccountBaseController
 
         $pm_task_guideline = new PmTaskGuideline();
         $pm_task_guideline->project_id = $data['project_id'];
+        $pm_task_guideline->task_category = $data['task_category'];
         $pm_task_guideline->theme_details = $data['theme_details'];
         $pm_task_guideline->theme_name = $data['theme_name'];
         $pm_task_guideline->theme_url = $data['theme_url'];
@@ -3724,72 +3731,109 @@ class TaskController extends AccountBaseController
         $pm_task_update->save();
         $pm_task_guideline_authorization = '';
 
+        if($request->task_category == 'development'){
+            if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+                $name1 = 'Theme Details';
+                $name2 = 'Design Details';
+                $name3 = 'Color Scheme';
+                $name4 = 'Plugin Research';
 
-        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
-            $name1 = 'Theme Details';
-            $name2 = 'Design Details';
-            $name3 = 'Color Scheme';
-            $name4 = 'Plugin Research';
+                if ($data['theme_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name1;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name1;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['design_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['color_schema'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['plugin_research'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name4;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name4;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+            }
+        }else{
+            if ($data['design_details'] == 0 || $data['color_schema'] == 0) {
+                $name2 = 'Design Details';
+                $name3 = 'Color Scheme';
 
-            if ($data['theme_details'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name1;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name1;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['design_details'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name2;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name2;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['color_schema'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name3;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name3;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['plugin_research'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name4;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name4;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
+                if ($data['design_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['color_schema'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
             }
         }
         $users = User::where('role_id', 1)->get();
@@ -4597,22 +4641,23 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-            //    DB::beginTransaction();
-           // dd($request);
+             //  DB::beginTransaction();
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
             $data->task_id = $request->task_id;
             $data->added_by = $this->user->id;
             $data->last_updated_by = $this->user->id;
-           // $data->mention_id = $request->mention_id;
+
+            $data->mention_id = $request->mention_id;
+
 
             $data->save();
             //need pedning action
-            // $helper = new HelperPendingActionController();
+            $helper = new HelperPendingActionController();
 
 
-            // $helper->NewCommentAdded($data->task_id,$data->user_id);
+            $helper->NewCommentAdded($data->task_id,$data->user_id);
 
             //need pending action
             $taskID = Task::where('id', $request->task_id)->first();
@@ -4630,20 +4675,31 @@ class TaskController extends AccountBaseController
                 $files = $request->file('file');
                 $destinationPath = storage_path('app/public/');
                 $file_name = [];
+                $original_file_name = [];
                 // foreach ($files as $file) {
                 //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 //     array_push($file_name, $filename);
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $originalfilename = $file->getClientOriginalName();
+                   // dd($originalfilename);
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                
+                  //  $filename= 
+              
                     array_push($file_name, $filename);
+                    array_push($original_file_name, $originalfilename);
+                 //$original_file_name = $originalfilename;
 
                     // Store the file in AWS S3 using the 's3' disk
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 }
                 $data->files = $file_name;
+                $data->original_files = $original_file_name;
+            //  /   dd($original_file_name);
                 $data->save();
+            //   /  dd($data);
             }
 
             $data = TaskComment::find($data->id);
@@ -4660,9 +4716,11 @@ class TaskController extends AccountBaseController
             }
 
 
-            return response()->json($data);
+            return response()->json([
+                'status'=>200,
+                'success'=>true
+            ]);
         } elseif ($request->mode == 'comment_reply_store') {
-
             $data = new TaskReply();
             $data->comment_id = $request->comment_id;
             $data->reply = $request->comment;
@@ -6521,13 +6579,15 @@ class TaskController extends AccountBaseController
                 $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
                 if($actions != null)
                 {
-                foreach ($actions as $key => $action) {
+                foreach ($actions as $key => $p_action) {
                     $project= Project::where('id',$task->project_id)->first();
 
-                        $action->authorized_by= Auth::id();
-                        $action->authorized_at= Carbon::now();
-                        $action->past_status = 1;
-                        $action->save();
+                    $action= PendingAction::where('id',$p_action->id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+
 
 
                         $project_manager= User::where('id',$project->pm_id)->first();
@@ -6597,14 +6657,13 @@ class TaskController extends AccountBaseController
                 $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
                 if($actions != null)
                 {
-                foreach ($actions as $key => $action) {
+                foreach ($actions as $key => $p_action) {
                     $project= Project::where('id',$pendingParentTasks->project_id)->first();
-
-                        $action->authorized_by= Auth::id();
-                        $action->authorized_at= Carbon::now();
-                        $action->past_status = 1;
-                        $action->save();
-
+                    $action= PendingAction::where('id',$p_action->id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
 
                         $project_manager= User::where('id',$project->pm_id)->first();
                         $client= User::where('id',$project->client_id)->first();
@@ -6735,26 +6794,34 @@ class TaskController extends AccountBaseController
 
     public function getTaskComments($task_id)
     {
-        $data = TaskComment::where('task_id', $task_id)->where('root', null)->get();
+        $data = TaskComment::select('task_comments.*','task_comments.created_at as created_date')->where('task_comments.task_id', $task_id)->where('task_comments.root', null)->get();
+        // foreach($data as $item)
+        // {
+        //     $item->
+        // }
 
         foreach ($data as $value) {
-
-            $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
-            $value->total_replies = $replies->count();
-            $value->last_updated_at = strtotime($value->created_at);
-            $value->replies_users = User::whereIn('id', $replies->unique())->get()->map(function ($row) {
-                return [
-                    'id' => $row->id,
-                    'image_url' => $row->image_url,
-                    'name' => $row->name
-                ];
-            });
-            $value->last_updated_date = $value->created_at;
-            $value->replies = [];
+           
+           $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
+           if($value->mention != null && $value->mention->original_files != null){
+            $value->mention->original_files = json_decode($value->mention->original_files);
+           }
+          
+           
+         
+           $value->original_files= json_decode($value->original_files);
         }
+        
+        // return response()->json([
+           
+        //     'data' => $data,
+        //   //  'mention'=> $data->mention,
+        //     'status' => 200
+        // ]);
 
         // dd($data);
-        return response()->json($data, 200);
+        $data = json_decode(json_encode($data));
+        return response()->json($data,200);
     }
 
     // Get task comment replied
@@ -7018,6 +7085,29 @@ class TaskController extends AccountBaseController
 
 
         return response()->json(["message" => 'Comment Deleted Successfully'], 200);
+    }
+
+    public function multipleCommentDelete(Request $request){
+        $task_comments = TaskComment::whereIn('id',$request->comments_id)->get();
+        if($task_comments !=null){
+            foreach($task_comments as $item){
+                $delete_cmnt = TaskComment::where('id',$item->id)->first();
+                $delete_cmnt->status = 'deleted';
+                $delete_cmnt->is_deleted = 1;
+                $delete_cmnt->deleted_by = Auth::user()->id;
+                $delete_cmnt->deleted_at = Carbon::now();
+                $delete_cmnt->save();
+            }
+            return response()->json([
+                "message" => 'Comment Deleted Successfully',
+                "status" => 200,
+            ], 200);
+        }else{
+            return response()->json([
+                "message" => 'Comment Not Found!',
+                "status" => 400
+            ], 400);
+        }
     }
 
     /*************** END TASK COMMENT ************/

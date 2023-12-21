@@ -783,6 +783,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/comments/{comment_id}/preview', [TaskController::class, 'previewTaskComment']);
     Route::delete('tasks/{task_id}/comments/{comment_id}/delete-attach-file', [TaskController::class, 'deleteOldFile']);
     Route::delete('tasks/comments/{comment_id}/delete', [TaskController::class, 'deleteComment']);
+    Route::post('tasks-comment-delete', [TaskController::class, 'multipleCommentDelete']);
 
     // SUBMIT TASK FOR CLIENT APPROVAL
     Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');
@@ -942,12 +943,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
-
+    Route::get('get-all-leads', [LeadController::class,'getLead']);
+    Route::get('export-lead-data', [LeadController::class,'exportLead']);
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
     Route::resource('digital-marketing-lead',DMLeadController::class);
+    Route::post('/dm-lead-source-store', [DMLeadController::class, 'storeDmLeadSource'])->name('store-dm-lead-source');
     Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
     Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
+    Route::get('get-all-dm-leads', [DMLeadController::class,'getDmLead']);
+    Route::get('export-dm-lead-data', [DMLeadController::class,'exportDmLead']);
 
 
     /*=========================> DIGITAL MERKTING LEAD END <===========================*/

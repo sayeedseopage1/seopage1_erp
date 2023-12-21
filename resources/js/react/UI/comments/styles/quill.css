@@ -1,0 +1,143 @@
+:root {
+  --width: 1px !important;
+  --radius: 10px !important;
+  --bg: skyblue !important;
+  --color: blue !important;
+  --firefox-width: thin;
+}
+
+/* For Webkit browsers (Chrome, Safari) */
+/* ::-webkit-scrollbar {
+  width: var(--width); /* Width of the scrollbar */
+/* } */
+
+/* ::-webkit-scrollbar-thumb {
+  background-color: var(--bg); /* Color of the thumb */
+  /* border-radius: var(--radius); Rounded corners of the thumb */
+/* } */
+
+/* ::-webkit-scrollbar-track {
+  background-color: var(--bg); /* Color of the track */
+/* } */ 
+
+/* For Firefox */
+/* * {
+  scrollbar-color: var(--color) var(--bg); /* thumb and track color */
+  /* scrollbar-width: var(--firefox-width); width of the scrollbar */
+/* } */ 
+
+/* For Firefox with border-radius */
+/* *::-moz-scrollbar {
+  width: var(--width);
+} */
+
+/* *::-moz-scrollbar-thumb {
+  background-color: var(--bg);
+  border-radius: var(--radius); /* Rounded corners of the thumb */
+/* } */
+
+/* *::-moz-scrollbar-track {
+  background-color: var(--bg);
+} */
+
+/* For Internet Explorer and Edge */
+/* *::-ms-scrollbar {
+  width: var(--width);
+} */
+
+/* *::-ms-scrollbar-thumb {
+  background-color: var(--bg);
+  border-radius: var(--radius);
+} */
+
+/* *::-ms-scrollbar-track {
+  background-color: var(--bg);
+} */
+/* ----------------------------------------------- */
+
+.ql-container {
+  border: none !important;
+  /* border: solid 1px !important; */
+  /* background-color: #DAEDF8; */
+  background-color: transparent !important;
+  /* border-radius: 0 0 10px 10px; */
+  border-radius: 10px;
+  /* padding-right: 35.05px; */
+  min-height: 50px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+.ql-editor {
+  /* background-color: black; */
+  border: none !important;
+  /* border-top: solid 0.5px white !important; */
+  /* padding-right: 33.66px; */
+  padding-left: 33.66px;
+  font-size: 14px;
+  color: black;
+  max-height: 100px; 
+  overflow-y: auto;
+  margin-right: 33.66px;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  /* margin-top: 5px;
+  margin-bottom: 5px; */
+  /* border-radius: 0 0 10px 10px;
+  overflow: hidden; */
+}
+.ql-editor.ql-blank::before{
+  left: 33.66px;
+  top: 30%;
+}
+/* .ql-editor::placeholder{
+  vertical-align: middle;
+  padding-left: 33.66px;
+} */
+
+.ql-toolbar {
+  /* background-color: black; */
+  border: 0.25px solid #707070;
+  border-bottom: none !important;
+  /* border-top: solid 0.5px white !important; */
+  border-radius: 10px 10px 0 0 !important;
+  display: flex;
+  align-items: center;
+  /* gap: 7px; */
+  background-color: white;
+  padding-top: 14px 0 !important;
+  height: 52px;
+}
+/* .open{
+  animation: opening 0.5s steps(100) 0s forwards;
+}
+@keyframes opening {
+  from{
+    max-height: 0;
+  }
+  to {
+    max-height: 100%;
+  }
+} */
+
+.ql-toolbar button {
+  border: none;
+  height: 15px !important;
+  width: 15px !important;
+  padding: 0 !important;
+  margin: 0 3.5px !important;
+}
+
+
+/* style for emoji */
+.EmojiPickerReact .epr-preview{
+  display: none !important;
+}
+
+aside.EmojiPickerReact.epr-main{
+  /* position: absolute;
+  top: -0px;
+  left: 0;
+  height: 400px;
+  max-width: 300px; */
+  z-index: 99;
+}

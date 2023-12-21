@@ -154,7 +154,6 @@
                         $('#lead-convert').trigger("reset");
                         $('#dealstmodal').hide();
                         window.location.reload();
-                        // $('.table').DataTable().ajax.reload();
                         window.location.href = "/account/deals/" + response.deal_id;
                     }
                 },

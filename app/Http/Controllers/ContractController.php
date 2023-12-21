@@ -1157,8 +1157,8 @@ class ContractController extends AccountBaseController
                 }
             }
 
-            $deal->cms_id = $item[0];
-            $deal->cms_name = $item[1];
+            $deal->cms_id = $item[0] ?? null;
+            $deal->cms_name = $item[1] ?? null;
             $deal->deal_category = $request->deal_category;
             $deal->deadline = $request->deadline;
             $deal->estimated_hour_task = $request->estimated_hour_task;
@@ -1711,8 +1711,8 @@ class ContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
-            $deal->cms_id = $item[0];
-            $deal->cms_name = $item[1];
+            $deal->cms_id = $item[0] ?? null;
+            $deal->cms_name = $item[1] ?? null;
             $deal->updated_by = Auth::id();
             //                dd($deal);
             $deal->save();
