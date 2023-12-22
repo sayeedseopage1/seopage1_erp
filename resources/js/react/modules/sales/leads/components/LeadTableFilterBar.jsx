@@ -6,6 +6,7 @@ import SearchBox from "../../../../global/Searchbox";
 import { useUsers } from "../../../../hooks/useUsers";
 import _ from "lodash";
 import SalesFilter from "./SalesFilter";
+import ConvertStatus from "./ConvertStatus";
 
 const LeadTableFilterBar = ({ setFilter }) => {
     const { users } = useUsers();
@@ -13,6 +14,7 @@ const LeadTableFilterBar = ({ setFilter }) => {
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
     const [sale, setSale] = React.useState(null);
+    const [convertStatus, setConvertStatus] = React.useState(null);
 
     const searchText = React.useDeferredValue(search);
 
@@ -21,7 +23,7 @@ const LeadTableFilterBar = ({ setFilter }) => {
     const _startData = React.useMemo(() => startDate, [startDate]);
     const _endData = React.useMemo(() => endDate, [endDate]);
     const _saleId = React.useMemo(() => sale?.id, [saleId]);
-
+    const _convertStatus = React.useMemo(() => convertStatus, [convertStatus]);
 
     React.useEffect(() => {
         setFilter((prev) => ({
@@ -29,9 +31,10 @@ const LeadTableFilterBar = ({ setFilter }) => {
             start_date: _startData,
             end_date: _endData,
             sales_executive_id: _saleId,
-            sale_name: sale?.name
+            sale_name: sale?.name,
+            convert_status: convertStatus?.id ? (convertStatus?.status ? "1" : "0") : 0
         }));
-    }, [_startData, _endData, _saleId]);
+    }, [_startData, _endData, _saleId, _convertStatus]);
 
     // search data
     React.useEffect(() => {
@@ -62,6 +65,22 @@ const LeadTableFilterBar = ({ setFilter }) => {
                         data={_.filter(users, (user) =>
                             _.includes([1, 7, 8], Number(user.role_id))
                         )}
+                    />
+                     <ConvertStatus
+                     value={convertStatus}
+                     onChange={setConvertStatus}
+                     data={[
+                         {
+                            id: 1,
+                            name: 'Converted to Deal ',
+                            status: true
+                         },
+                         {
+                            id: 2,
+                            name: 'Not Converted to Deal ',
+                            status: false
+                         }
+                     ]}
                     />
                 </Flex>
             </div>

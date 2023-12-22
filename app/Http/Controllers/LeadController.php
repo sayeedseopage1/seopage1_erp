@@ -1624,7 +1624,7 @@ if ($request->project_type !='hourly'){
     {
         $startDate = $request->start_date ?? null;
         $endDate = $request->end_date ?? null;
-
+        $convert_status = $request->convert_status;
         $limit = $request->limit ??  10;
 
         $leadsQuery = Lead::select(
@@ -1677,6 +1677,9 @@ if ($request->project_type !='hourly'){
             if ($request->sales_executive_id != '') {
                 $leadsQuery->where('leads.added_by',$request->sales_executive_id);
             }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
+            }
 
             $leads = $leadsQuery
                 ->orderBy('leads.id', 'desc')
@@ -1715,6 +1718,7 @@ if ($request->project_type !='hourly'){
     {
         $startDate = $request->start_date ?? null;
         $endDate = $request->end_date ?? null;
+        $convert_status = $request->convert_status;
 
         $leadsQuery = Lead::select(
             'leads.id',
@@ -1754,6 +1758,9 @@ if ($request->project_type !='hourly'){
             }
             if ($request->sales_executive_id != '') {
                 $leadsQuery->where('leads.added_by',$request->sales_executive_id);
+            }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
             }
 
             $leads = $leadsQuery

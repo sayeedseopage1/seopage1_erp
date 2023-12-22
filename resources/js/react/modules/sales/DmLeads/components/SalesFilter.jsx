@@ -33,6 +33,16 @@ export default function SalesFilter({ value, onChange, data }) {
                         />
                     </div>
                     <div className={styles.options}>
+                        <Listbox.Option
+                            className={({ active, selected }) =>
+                                `${styles.dropdownItem} ${
+                                    active && styles.dropdownItemActive
+                                } ${selected && styles.dropdownItemSelected}`
+                            } 
+                            value={null}
+                        >
+                            Select All
+                        </Listbox.Option>
                         {filteredData?.map((person) => (
                             <Listbox.Option
                                 className={({ active, selected }) =>

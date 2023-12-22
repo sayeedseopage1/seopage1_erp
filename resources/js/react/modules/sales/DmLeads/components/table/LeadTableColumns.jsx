@@ -53,6 +53,15 @@ export const LeadTableColumns = [
         },
     },
     {
+        id: "lead_source",
+        header: "Lead Source",
+        accessorKey: "lead_source",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <ProjectID>{data?.lead_source ?? "--"}</ProjectID>;
+        },
+    },
+    {
         id: "project_id",
         header: "Project ID",
         accessorKey: "project_id",
