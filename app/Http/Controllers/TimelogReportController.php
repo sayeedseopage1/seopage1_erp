@@ -407,6 +407,7 @@ class TimelogReportController extends AccountBaseController
            // dd($timer);
            if($item->project_id == null)
             {
+                $status= null;
                 $ppTask = Task::where('id',$item->task_id)->first();
                 $ppClient = User::where('id',$ppTask->client_id)->first();
                 $ppPm = User::where('id',$ppTask->added_by)->first();
