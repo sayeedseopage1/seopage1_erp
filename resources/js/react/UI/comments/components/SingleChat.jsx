@@ -17,6 +17,9 @@ import getTextContent, {
     htmlToPreservedText,
     htmlToString,
 } from "../utils/getTextContent";
+import getFormattedTime from "../utils/getFormattedTime";
+import { FcCancel } from "react-icons/fc";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -115,10 +118,17 @@ const SingleChat = ({
                     }}
                     className={`${style.singleChat_comment_card_text_time}`}
                 >
+                    {/* Nafis, Today, 2:54 PM */}
+                    {/* Nafis, Yesterday, 2:54 PM */}
+                    {/* Nafis, Monday, 2:54 PM */}
+                    {/* Nafis, Tuesday, 2:54 PM */}
+                    {/* Nafis, Wednessday, 2:54 PM */}
+                    {/* Nafis, Thursday, 2:54 PM */}
+                    {/* Nafis, Friday, 2:54 PM */}
                     {/* Nafis, Nov 16,2023, 2:54 PM */}
-                    {`${comment?.user?.name}, ${dayjs(
+                    {`${comment?.user?.name}, ${getFormattedTime(
                         comment?.created_date
-                    ).format("MMM DD, YYYY, hh:mm A")}`}
+                    )}`}
                 </span>
             );
         }
@@ -340,51 +350,80 @@ const SingleChat = ({
                                 title={`${dayjs(comment?.created_date).format(
                                     "MMM DD, YYYY, hh:mm A"
                                 )}`}
-                                className={`${style.single_comment_deleted_container}`}
+                                className={`${
+                                    style.single_comment_deleted_container
+                                } ${
+                                    selectMentionIndex === comment?.id
+                                        ? `${style.singleChat_match}`
+                                        : ""
+                                }`}
                             >
                                 <section
                                     style={{
-                                        borderBottom: showDeletedComment
-                                            ? "0.15px solid #f8d0d39a"
-                                            : "0",
+                                        alignSelf: isCurrentUser(comment?.user?.id)?"flex-end":"flex-start",
                                         gap:
-                                            currentUser.roleId === 1 ||
-                                            currentUser.roleId === 8
-                                                ? "0 20px"
+                                            currentUser.roleId === 1
+                                                ? // || currentUser.roleId === 8
+                                                  "0 15px"
                                                 : "0",
                                         justifyContent:
-                                            currentUser.roleId === 1 ||
-                                            currentUser.roleId === 8
-                                                ? "space-between"
+                                            currentUser.roleId === 1
+                                                ? // || currentUser.roleId === 8
+                                                  "space-between"
                                                 : "center",
+                                        flexFlow: isCurrentUser(
+                                            comment?.user?.id
+                                        )
+                                            ? "row-reverse"
+                                            : "row",
                                     }}
                                     className={`${style.single_comment_deleted_title}`}
                                 >
-                                    <span>
-                                        This Comment has been deleted{" "}
-                                        {showDeletedComment
+                                    <span
+                                        style={{
+                                            color: "red",
+                                        }}
+                                    >
+                                        <FcCancel
+                                            style={{
+                                                transform: "rotateZ(90deg)",
+                                                height: "100%",
+                                                width: "auto",
+                                                margin: isCurrentUser(comment?.user?.id)?"0 2px 2px 0":"0 2px 2px 2px",
+                                            }}
+                                        />
+                                        {isCurrentUser(comment?.user?.id)
+                                            ? "You have deleted this comment"
+                                            : "This comment was deleted"}{" "}
+                                        {/* {showDeletedComment
                                             ? `(Deleted at : ${dayjs(
                                                   comment?.deleted_at
                                               ).format(
                                                   "MMM DD, YYYY, hh:mm A"
                                               )})`
-                                            : ""}
+                                            : ""} */}
                                     </span>
-                                    {currentUser.roleId === 1 ||
-                                    currentUser.roleId === 8 ? (
+                                    {currentUser.roleId === 1 ? (
+                                        // || currentUser.roleId === 8
                                         showDeletedComment ? (
-                                            <FaEyeSlash
+                                            <IoEyeOffOutline
                                                 onClick={() =>
                                                     setShowDeletedComment(false)
                                                 }
-                                                style={{ cursor: "pointer" }}
+                                                style={{
+                                                    cursor: "pointer",
+                                                    height: "15px",
+                                                }}
                                             />
                                         ) : (
-                                            <FaEye
+                                            <IoEyeOutline
                                                 onClick={() =>
                                                     setShowDeletedComment(true)
                                                 }
-                                                style={{ cursor: "pointer" }}
+                                                style={{
+                                                    cursor: "pointer",
+                                                    height: "15px",
+                                                }}
                                             />
                                         )
                                     ) : (
@@ -394,15 +433,18 @@ const SingleChat = ({
                                 {showDeletedComment ? (
                                     <section
                                         className={`${style.single_comment_deleted_comment_body}`}
+                                        style={{
+                                            margin: isCurrentUser(comment?.user?.id)?"0 11px 0 0":"0 0 0 11px",
+                                        }}
                                     >
                                         {/* mentioned comment */}
                                         {comment?.mention ? (
                                             <div
-                                                onClick={() =>
+                                                onClick={() => {
                                                     setSelectMentionIndex(
                                                         comment?.mention?.id
-                                                    )
-                                                }
+                                                    );
+                                                }}
                                                 // onContextMenu={(e) => {
                                                 //     onContextMenu(e);
                                                 //     setContextHolder(comment);
@@ -413,8 +455,8 @@ const SingleChat = ({
                                                     //     comment?.comment
                                                     //         ? "5px 5px 0 0"
                                                     //         : "5px",
-                                                    backgroundColor: "#FFF3F4",
-                                                    color: "#F17B7C",
+                                                    // backgroundColor: "#FFF3F4",
+                                                    // color: "#F17B7C",
                                                     // border: "0.15px solid #f17b7dbb",
                                                     border: "none",
                                                     // borderBottom:
@@ -425,7 +467,6 @@ const SingleChat = ({
                                                 className={`${style.singleChat_comment_card_mentioned_comment}`}
                                             >
                                                 <HiReply
-                                                    style={{ color: "#F17B7C" }}
                                                     className={`${style.chatInput_mentioned_comment_icon}`}
                                                 />
                                                 <article
@@ -461,10 +502,19 @@ const SingleChat = ({
                                                                                 i
                                                                             }
                                                                             className={`${style.chatInput_filePreview__file} shadow-sm`}
-                                                                            style={{
-                                                                                color: "#F17B7C",
-                                                                            }}
                                                                         >
+                                                                            <div
+                                                                                style={{
+                                                                                    backgroundColor:
+                                                                                        "transparent",
+                                                                                    position:
+                                                                                        "absolute",
+                                                                                    top: "0",
+                                                                                    right: "0",
+                                                                                    bottom: "0",
+                                                                                    left: "0",
+                                                                                }}
+                                                                            />
                                                                             <HandleFileIcon
                                                                                 fileName={
                                                                                     comment
@@ -499,11 +549,9 @@ const SingleChat = ({
                                                         {`${
                                                             comment?.mention
                                                                 ?.user?.name
-                                                        }, ${dayjs(
+                                                        }, ${getFormattedTime(
                                                             comment?.mention
-                                                                ?.created_date
-                                                        ).format(
-                                                            "MMM DD, YYYY, hh:mm A"
+                                                                ?.mention_created_at
                                                         )}`}
                                                     </span>
                                                 </article>
@@ -521,8 +569,6 @@ const SingleChat = ({
                                                 // }}
                                                 // onKeyDown={onKeyDown}
                                                 style={{
-                                                    backgroundColor: "#FFF3F4",
-                                                    color: "#F17B7C",
                                                     position: "relative",
                                                     // borderRadius:
                                                     //     comment?.mention
@@ -593,101 +639,164 @@ const SingleChat = ({
                             >
                                 {/* mentioned comment */}
                                 {comment?.mention ? (
-                                    <div
-                                        onClick={() =>
-                                            setSelectMentionIndex(
-                                                comment?.mention?.id
-                                            )
-                                        }
-                                        onContextMenu={(e) => {
-                                            onContextMenu(e);
-                                            setContextHolder(comment);
-                                        }}
-                                        onKeyDown={onKeyDown}
-                                        style={{
-                                            borderRadius: comment?.comment
-                                                ? "5px 5px 0 0"
-                                                : "5px",
-                                            borderBottom: comment?.comment
-                                                ? "solid 1px hsla(0, 0%, 44%, 0.13)"
-                                                : "0.15px solid #aaaaaa",
-                                        }}
-                                        className={`${style.singleChat_comment_card_mentioned_comment}`}
-                                    >
-                                        <HiReply
-                                            className={`${style.chatInput_mentioned_comment_icon}`}
-                                        />
-                                        <article
-                                            className={`${style.chatInput_mentioned_comment_text_area}`}
+                                    comment?.mention?.is_deleted ? (
+                                        <div
+                                            onClick={() =>
+                                                setSelectMentionIndex(
+                                                    comment?.mention?.id
+                                                )
+                                            }
+                                            style={{
+                                                borderRadius: comment?.comment
+                                                    ? "5px 5px 0 0"
+                                                    : "5px",
+                                                borderBottom: comment?.comment
+                                                    ? "solid 1px hsla(0, 0%, 44%, 0.13)"
+                                                    : "0.15px solid #aaaaaa",
+                                            }}
+                                            className={`${style.singleChat_comment_card_mentioned_comment}`}
                                         >
-                                            {comment?.mention?.comment ? (
+                                            <article
+                                                className={`${style.single_comment_deleted_comment_body}`}
+                                                style={{
+                                                    backgroundColor:
+                                                        "transparent",
+                                                    border: "none",
+                                                }}
+                                            >
                                                 <span
+                                                    style={{
+                                                        color: "red",
+                                                    }}
                                                     className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                 >
-                                                    <div
-                                                        dangerouslySetInnerHTML={{
-                                                            __html: comment
-                                                                ?.mention
-                                                                .comment,
+                                                    <FcCancel
+                                                        style={{
+                                                            transform:
+                                                                "rotateZ(90deg)",
+                                                            height: "100%",
+                                                            width: "auto",
+                                                            margin: "0 2px 2px",
                                                         }}
                                                     />
+                                                    {isCurrentUser(
+                                                        comment?.user?.id
+                                                    )
+                                                        ? "You have deleted this comment"
+                                                        : "This comment was deleted"}{" "}
                                                 </span>
-                                            ) : (
-                                                <></>
-                                            )}
-                                            {comment?.mention?.files_data
-                                                ?.length ? (
-                                                <span
-                                                    className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
-                                                >
-                                                    {comment?.mention?.files_data?.map(
-                                                        (file, i) => {
-                                                            // console.log(comment.original_files);
-                                                            return (
-                                                                <div
-                                                                    key={i}
-                                                                    className={`${style.chatInput_filePreview__file} shadow-sm`}
-                                                                >
-                                                                    <HandleFileIcon
-                                                                        fileName={
-                                                                            comment
-                                                                                ?.mention
-                                                                                ?.original_files
-                                                                                ? comment
-                                                                                      ?.mention
-                                                                                      ?.original_files[
-                                                                                      i
-                                                                                  ]
-                                                                                : file.name
-                                                                        }
-                                                                        URL={
-                                                                            file?.url
-                                                                        }
-                                                                    />
-                                                                </div>
-                                                            );
-                                                        }
-                                                    )}
-                                                </span>
-                                            ) : (
-                                                <></>
-                                            )}
-                                            <span
-                                                style={{ fontStyle: "italic" }}
-                                                className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
+                                            </article>
+                                        </div>
+                                    ) : (
+                                        <div
+                                            onClick={() =>
+                                                setSelectMentionIndex(
+                                                    comment?.mention?.id
+                                                )
+                                            }
+                                            onContextMenu={(e) => {
+                                                onContextMenu(e);
+                                                setContextHolder(comment);
+                                            }}
+                                            onKeyDown={onKeyDown}
+                                            style={{
+                                                borderRadius: comment?.comment
+                                                    ? "5px 5px 0 0"
+                                                    : "5px",
+                                                borderBottom: comment?.comment
+                                                    ? "solid 1px hsla(0, 0%, 44%, 0.13)"
+                                                    : "0.15px solid #aaaaaa",
+                                            }}
+                                            className={`${style.singleChat_comment_card_mentioned_comment}`}
+                                        >
+                                            <HiReply
+                                                className={`${style.chatInput_mentioned_comment_icon}`}
+                                            />
+                                            <article
+                                                className={`${style.chatInput_mentioned_comment_text_area}`}
                                             >
-                                                {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
-                                                {`${
-                                                    comment?.mention?.user?.name
-                                                }, ${dayjs(
-                                                    comment?.mention
-                                                        ?.mention_created_at
-                                                ).format(
-                                                    "MMM DD, YYYY, hh:mm A"
-                                                )}`}
-                                            </span>
-                                        </article>
-                                    </div>
+                                                {comment?.mention?.comment ? (
+                                                    <span
+                                                        className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
+                                                    >
+                                                        <div
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: comment
+                                                                    ?.mention
+                                                                    .comment,
+                                                            }}
+                                                        />
+                                                    </span>
+                                                ) : (
+                                                    <></>
+                                                )}
+                                                {comment?.mention?.files_data
+                                                    ?.length ? (
+                                                    <span
+                                                        className={`${style.chatInput_mentioned_comment_text_area_attachments}`}
+                                                    >
+                                                        {comment?.mention?.files_data?.map(
+                                                            (file, i) => {
+                                                                // console.log(comment.original_files);
+                                                                return (
+                                                                    <div
+                                                                        key={i}
+                                                                        className={`${style.chatInput_filePreview__file} shadow-sm`}
+                                                                    >
+                                                                        <div
+                                                                            style={{
+                                                                                backgroundColor:
+                                                                                    "transparent",
+                                                                                position:
+                                                                                    "absolute",
+                                                                                top: "0",
+                                                                                right: "0",
+                                                                                bottom: "0",
+                                                                                left: "0",
+                                                                            }}
+                                                                        />
+                                                                        <HandleFileIcon
+                                                                            fileName={
+                                                                                comment
+                                                                                    ?.mention
+                                                                                    ?.original_files
+                                                                                    ? comment
+                                                                                          ?.mention
+                                                                                          ?.original_files[
+                                                                                          i
+                                                                                      ]
+                                                                                    : file.name
+                                                                            }
+                                                                            URL={
+                                                                                file?.url
+                                                                            }
+                                                                        />
+                                                                    </div>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </span>
+                                                ) : (
+                                                    <></>
+                                                )}
+                                                <span
+                                                    style={{
+                                                        fontStyle: "italic",
+                                                    }}
+                                                    className={`${style.chatInput_mentioned_comment_text_area_sender_time}`}
+                                                >
+                                                    {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
+                                                    {`${
+                                                        comment?.mention?.user
+                                                            ?.name
+                                                    }, ${getFormattedTime(
+                                                        comment?.mention
+                                                            ?.mention_created_at
+                                                    )}`}
+                                                </span>
+                                            </article>
+                                        </div>
+                                    )
                                 ) : (
                                     <></>
                                 )}
@@ -708,6 +817,13 @@ const SingleChat = ({
                                             borderTop: comment?.mention
                                                 ? "none"
                                                 : "0.15px solid #aaaaaa",
+                                            alignSelf: comment?.mention
+                                                ? "stretch"
+                                                : isCurrentUser(
+                                                      comment?.user?.id
+                                                  )
+                                                ? "flex-end"
+                                                : "flex-start",
                                         }}
                                         className={`${style.singleChat_comment_card_text_message}`}
                                     >
@@ -1018,7 +1134,7 @@ const CustomMoreOption = ({
 }) => {
     useEffect(() => {
         document.addEventListener("contextmenu", (e) => {
-            $('.dropdown_btn').dropdown("hide");
+            $(".dropdown_btn").dropdown("hide");
         });
     }, []);
 
