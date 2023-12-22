@@ -58,7 +58,7 @@ const ActionDropdown = ({ ...rest }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu placement="bottom-end">
-                    {_.includes([1, 7], auth.getRoleId()) && (
+                    {_.includes([1, 7, 11, 12], auth.getRoleId()) && (
                         <Dropdown.Item
                             onClick={() =>
                                 (window.location.href = `/account/leads/${rest.row.original?.id}/edit`)
@@ -71,7 +71,7 @@ const ActionDropdown = ({ ...rest }) => {
                     )}
 
                     {/* delete lead */}
-                    {auth.getRoleId() === 1 && (
+                    {_.includes([1, 11], auth.getRoleId()) && (
                         <Dropdown.Item
                             onClick={handleDelete}
                             className={styles.dropdownItem}
