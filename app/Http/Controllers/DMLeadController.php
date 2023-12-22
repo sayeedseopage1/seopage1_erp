@@ -823,6 +823,7 @@ class DMLeadController extends AccountBaseController
             'leads.added_by',
             'leads.client_id',
             'leads.category_id',
+            'leads.lead_source',
             'client_name',
             'actual_value',
             'bidding_minutes',
