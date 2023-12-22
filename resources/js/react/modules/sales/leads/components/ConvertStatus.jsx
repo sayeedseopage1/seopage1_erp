@@ -20,7 +20,7 @@ export default function ConvertStatus({ value, onChange, data }) {
                 className={styles.dropdown}
             >
                 <Listbox.Button className={styles.dropdownToggle}>
-                    {value?.name ?? "--"}
+                    {value?.name ?? "All"}
                 </Listbox.Button>
                 <Listbox.Options className={styles.dropdownMenu}>
                     <div className={styles.searchBox}>
