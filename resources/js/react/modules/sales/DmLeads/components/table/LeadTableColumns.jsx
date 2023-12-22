@@ -18,7 +18,7 @@ export const LeadTableColumns = [
     {
         id: "id",
         header: "#",
-        cell: ({row}) => row.index + 1
+        cell: ({row}) => row.original.id
     },
     {
         id: "project_name",
