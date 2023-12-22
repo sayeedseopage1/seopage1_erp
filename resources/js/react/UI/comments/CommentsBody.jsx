@@ -61,6 +61,7 @@ const CommentsBody = ({
     refetch,
     taskId,
     height,
+    onSubmit = async () => null,
 }) => {
     const param = useParams();
     const [deleteComments, { isLoading: deleteLoading }] =
@@ -200,7 +201,7 @@ const CommentsBody = ({
                 .getElementById(
                     searchIndexes[searchIndexes.length - commentIndex]
                 )
-                .scrollIntoView({
+                ?.scrollIntoView({
                     behavior: "smooth",
                     // block: "",
                 });
@@ -213,8 +214,8 @@ const CommentsBody = ({
     // scroll to the mention comment according to selection
     useEffect(() => {
         let time_ref;
-        if (selectMentionIndex) {
-            document.getElementById(selectMentionIndex).scrollIntoView({
+        if (selectMentionIndex && param?.taskId) {
+            document.getElementById(selectMentionIndex)?.scrollIntoView({
                 behavior: "smooth",
                 // block: "",
             });
@@ -222,7 +223,11 @@ const CommentsBody = ({
                 setSelectMentionIndex(0);
             }, 2000);
         }
-        return () => clearTimeout(time_ref);
+        return () => {
+            if (time_ref) {
+                clearTimeout(time_ref);
+            }
+        };
     }, [selectMentionIndex]);
 
     const handleCopyComments = () => {
@@ -400,9 +405,11 @@ const CommentsBody = ({
                 style={{
                     backgroundImage: `url(${commentBg})`,
                     // backgroundImage:`url(https://seopage1storage.s3.ap-southeast-1.amazonaws.com/655f048a34e53.jpg)`,
-                    width: fullScreenView ? "100vw" : "auto",
-                    height: fullScreenView ? "99vh" : height,
-                    maxHeight: fullScreenView ? "99vh" : "auto",
+                    // width: fullScreenView ? "100vw" : "auto",
+                    width: fullScreenView ? "100%" : "auto",
+                    // height: fullScreenView ? "99vh" : height,
+                    height: fullScreenView ? "100%" : height,
+                    // maxHeight: fullScreenView ? "99vh" : "auto",
                 }}
             >
                 <header className={style.commentsBody_header}>
@@ -710,7 +717,7 @@ const CommentsBody = ({
                                     />
                                 );
                             })}
-                            {(fetching || isloading || deleteLoading) ? (
+                            {fetching || isloading || deleteLoading ? (
                                 <div className="d-flex justify-content-center mt-2">
                                     <div
                                         className="spinner-border"
@@ -735,7 +742,12 @@ const CommentsBody = ({
                     />
                 </main>
                 <footer className={`${style.commentsBody_inputField}`}>
-                    <ChatInput taskId={taskId} setScroll={setScroll} setIsLoading={setIsLoading} />
+                    <ChatInput
+                        onSubmit={onSubmit}
+                        taskId={taskId}
+                        setScroll={setScroll}
+                        setIsLoading={setIsLoading}
+                    />
                 </footer>
 
                 {Object.keys(selectedComments).length > 0 ? (
