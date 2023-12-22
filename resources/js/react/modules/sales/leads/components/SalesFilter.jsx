@@ -9,7 +9,6 @@ export default function SalesFilter({ value, onChange, data }) {
 
     
     const filteredData = data ? query ? filter(data, person => includes(lowerCase(person.name), lowerCase(query))) : data : [];
-
     return (
         <div className={styles.toggleWrapper}>
             <span><strong>Sales:</strong> </span>
@@ -26,9 +25,24 @@ export default function SalesFilter({ value, onChange, data }) {
                 <Listbox.Options className={styles.dropdownMenu}>
                     <div className={styles.searchBox}>
                         <i className="fa-solid fa-search" />
-                        <input type="text" placeholder="Search..." value={query} onChange={e=> setQuery(e.target.value)}/>
+                        <input 
+                            type="text" 
+                            placeholder="Search..." 
+                            value={query} 
+                            onChange={e=> setQuery(e.target.value)}
+                        />
                     </div>
                     <div className={styles.options}>
+                        <Listbox.Option
+                            className={({ active, selected }) =>
+                                `${styles.dropdownItem} ${
+                                    active && styles.dropdownItemActive
+                                } ${selected && styles.dropdownItemSelected}`
+                            } 
+                            value={null}
+                        >
+                            Select All
+                        </Listbox.Option>
                         {filteredData?.map((person) => (
                             <Listbox.Option
                                 className={({ active, selected }) =>

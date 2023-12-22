@@ -6,6 +6,8 @@ import SearchBox from "../../../../global/Searchbox";
 import { useUsers } from "../../../../hooks/useUsers";
 import _ from "lodash";
 import SalesFilter from "./SalesFilter";
+import LeadSource from "./LeadSource";
+import ConvertStatus from "./ConvertStatus";
 
 const LeadTableFilterBar = ({ setFilter }) => {
     const { users } = useUsers();
@@ -13,6 +15,9 @@ const LeadTableFilterBar = ({ setFilter }) => {
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
     const [sale, setSale] = React.useState(null);
+    const [leadSource, setLeadSource] = React.useState('');
+    const [convertStatus, setConvertStatus] = React.useState(null);
+    
 
     const searchText = React.useDeferredValue(search);
 
@@ -21,6 +26,7 @@ const LeadTableFilterBar = ({ setFilter }) => {
     const _startData = React.useMemo(() => startDate, [startDate]);
     const _endData = React.useMemo(() => endDate, [endDate]);
     const _saleId = React.useMemo(() => sale?.id, [saleId]);
+    const _convertStatus = React.useMemo(() => convertStatus, [convertStatus]);
 
 
     React.useEffect(() => {
@@ -29,13 +35,15 @@ const LeadTableFilterBar = ({ setFilter }) => {
             start_date: _startData,
             end_date: _endData,
             sales_executive_id: _saleId,
-            sale_name: sale?.name
+            sale_name: sale?.name,
+            lead_source: leadSource,
+            convert_status: convertStatus?.id ? (convertStatus?.status ? "1" : "0") : 0
         }));
-    }, [_startData, _endData, _saleId]);
+    }, [_startData, _endData, _saleId, leadSource, _convertStatus]);
 
     // search data
     React.useEffect(() => {
-        setFilter((prev) => ({ ...prev, search: searchText }));
+        setFilter((prev) => ({ ...prev, search: searchText}));
     }, [searchText]);
 
     return ReactDOM.createPortal(
@@ -62,6 +70,33 @@ const LeadTableFilterBar = ({ setFilter }) => {
                         data={_.filter(users, (user) =>
                             _.includes([1, 11, 12], Number(user.role_id))
                         )}
+                    />
+
+
+                    <LeadSource
+                        value={leadSource}
+                        onChange={setLeadSource}
+                        data={[
+                            "Freelancer.com",
+                            "Upwork.com"
+                        ]}
+                    />
+
+                    <ConvertStatus
+                     value={convertStatus}
+                     onChange={setConvertStatus}
+                     data={[
+                         {
+                            id: 1,
+                            name: 'Converted to Deal ',
+                            status: true
+                         },
+                         {
+                            id: 2,
+                            name: 'Not Converted to Deal ',
+                            status: false
+                         }
+                     ]}
                     />
                 </Flex>
             </div>
