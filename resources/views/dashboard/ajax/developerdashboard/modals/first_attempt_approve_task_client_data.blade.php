@@ -27,7 +27,9 @@
                   </tr>
                 </thead>
                 <tbody>
+              
                     @foreach($first_attempt_approve_task_in_this_month_client_data as $row)
+                   {{-- {{ dd($row)}} --}}
                  
                     <tr>
                         <td>{{$loop->index+1}}</td>
