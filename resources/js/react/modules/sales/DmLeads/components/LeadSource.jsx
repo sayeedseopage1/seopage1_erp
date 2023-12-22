@@ -20,7 +20,7 @@ export default function LeadSource({ value, onChange, data }) {
                 className={styles.dropdown}
             >
                 <Listbox.Button className={styles.dropdownToggle}>
-                    {value ?? "--"}
+                    {value || "All"}
                 </Listbox.Button>
                 <Listbox.Options className={styles.dropdownMenu}>
                     <div className={styles.searchBox}>
