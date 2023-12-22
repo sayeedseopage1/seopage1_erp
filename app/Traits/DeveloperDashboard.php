@@ -598,7 +598,7 @@ foreach ($number_of_tasks_approved as $task) {
         } else {
             $this->average_submission_aproval_in_this_month_client = 0;
         }
-        dd($this->average_submission_aproval_in_this_month_client);
+        // dd($this->average_submission_aproval_in_this_month_client);
 
 
         //---------------------------------Percentage of Revision----------------------------------------------------//
@@ -1739,7 +1739,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
             } else {
                 $this->average_submission_aproval_in_this_month_client = 0;
             }
-            dd($this->average_submission_aproval_in_this_month_client);
+            // dd($this->average_submission_aproval_in_this_month_client);
 
 
 
