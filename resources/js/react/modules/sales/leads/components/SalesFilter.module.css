@@ -45,3 +45,27 @@
 .dropdownItemSelected{
   background-color: rgba(98, 98, 209, 0.089);
 }
+
+
+.searchBox{
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  margin: 6px 10px;
+  padding-inline: 10px;
+  border-radius: 4px;
+}
+
+.searchBox > i {
+  color: #777;
+}
+
+.searchBox > input{
+  padding: 8px 10px;
+  border: none; 
+}
+.options{
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 350px;
+} 
