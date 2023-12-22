@@ -48,13 +48,13 @@ class DeveloperNeedtoAssignTask extends Command
 
         foreach ($projects_tasks as $project) {
             $project_submission = ProjectSubmission::where('project_id', $project->id)->first();
-        
+
             if ($project_submission != null) {
                 $creation_date = $project_submission->created_at;
                 $project_submission_date = Carbon::parse($project_submission->created_at)->addDay(14);
-        
+
                 $current_date = Carbon::now();
-        
+
                 if ($current_date >= $project_submission_date && $project_submission->dummy_link != null) {
                     $pending_action = PendingAction::where('code','STR')->where('project_id',$project->id)->where('past_status',0)->count();
                     if($pending_action == 0)
@@ -63,7 +63,7 @@ class DeveloperNeedtoAssignTask extends Command
                         $helper->RemovalofStagingSite($project, $project_submission);
 
                     }
-                   
+
                 }
             }
         }
@@ -83,24 +83,25 @@ class DeveloperNeedtoAssignTask extends Command
           if($estimate_total_minutes != 0)
           {
 
-         
+
             if ($logged_minutes/$estimate_total_minutes*100 >= 90) {
                 $pending_action= PendingAction::where('developer_id',$developer->id)->where('past_status',0)->count();
-             
+
                 if($pending_action == 0)
                 {
                     $helper = new HelperPendingActionController();
                     $helper->NeedtoTaskAssign($developer);
 
                 }
-             
 
-               
-                
-                
+
+
+
+
             }
         }
         }
+       // dd("jdnsdjas");
         $actions= PendingAction::where('code','TSA')->where('past_status',0)->get();
         foreach ($actions as $action) {
             $task= Task::where('id',$action->task_id)->first();
@@ -122,20 +123,20 @@ class DeveloperNeedtoAssignTask extends Command
                   $update_action->save();
 
               }
-               
-      
-               
-                 
+
+
+
+
               }
 
             }else {
                 $update_action= PendingAction::find($action->id);
-              
+
                 $update_action->past_status = 1;
                 $update_action->save();
 
             }
-          
+
         }
         $actions= PendingAction::where('code','TDQ')->where('past_status',0)->get();
         foreach ($actions as $action) {
@@ -149,12 +150,12 @@ class DeveloperNeedtoAssignTask extends Command
              $update_action->updated_at = Carbon::now();
              //$update_action->timeframe = 2;
              $update_action->save();
- 
-          
-            
+
+
+
          }
          }
-        
+
          $deadline_tasks = Task::whereIn('board_column_id', [2, 3])
     ->whereNotNull('due_date')
     ->get();
@@ -164,11 +165,11 @@ class DeveloperNeedtoAssignTask extends Command
         if($pro != null)
         {
 
-       
+
         $current_date = Carbon::now();
         $deadline = Carbon::parse($project->due_date)->addDay(1);
         $difference_in_hours = $current_date->diffInHours($deadline);
-        
+
         if ($current_date > $deadline) {
             // Deadline is in the past
             $difference_in_hours = -$difference_in_hours;
@@ -181,12 +182,12 @@ class DeveloperNeedtoAssignTask extends Command
             if($pending_action == 0 && $pro->status == 'in progress')
             {
                 $helper = new HelperPendingActionController();
- 
- 
+
+
                 $helper->TaskDeadline($project, $difference_in_hours);
 
             }
-           
+
 
 
         }
@@ -207,11 +208,11 @@ class DeveloperNeedtoAssignTask extends Command
 
         }
       }
-    
 
 
-        
+
+
         $this->info('Pending action created');
-        
+
     }
 }
