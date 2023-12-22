@@ -81,7 +81,7 @@ const ActionDropdown = ({ ...rest }) => {
                         </Dropdown.Item>
                     )}
 
-                    {_.includes([1, 7, 8], auth.getRoleId()) && rest.row.original?.deal_status === 0 && (
+                    {_.includes([1, 7, 8, 11, 12], auth.getRoleId()) && rest.row.original?.deal_status === 0 && (
                         <Dropdown.Item
                             onClick={() => setIsOpenDealConversionForm(true)}
                             className={styles.dropdownItem}
