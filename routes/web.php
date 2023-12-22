@@ -949,6 +949,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/dm-lead-source-store', [DMLeadController::class, 'storeDmLeadSource'])->name('store-dm-lead-source');
     Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
     Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
+    Route::get('get-all-dm-leads', [DMLeadController::class,'getDmLead']);
+    Route::get('export-dm-lead-data', [DMLeadController::class,'exportDmLead']);
 
 
     /*=========================> DIGITAL MERKTING LEAD END <===========================*/

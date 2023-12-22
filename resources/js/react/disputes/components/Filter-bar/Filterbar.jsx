@@ -85,7 +85,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         title="Dispute Raised Against"
                         state={disputeRaisedAgainst}
                         setState={setDisputeRaisedAgainst}
-                        roleIds={[4,5,6, 7, 9, 10]}
+                        roleIds={[3,4,5,6, 7, 9, 10]}
                     />
                      
                     <HDivider />

@@ -21,8 +21,11 @@ export default function DailySubmissionTableFilter ({onFilter}){
 
     // employee
     const [selectedEmployeeId, setSelectedEmployeeId] = React.useState(null);
+    const [selectedEmployeeName, setSelectedEmployeeName] = React.useState(null);
     const [selectedPMId, setSelectedPMId] = React.useState(null);
+    const [selectedPMName, setSelectedPMName] = React.useState(null);
     const [selectedClientId, setSelectedClientId] = React.useState(null);
+    const [selectedClientName, setSelectedClientName] = React.useState(null);
     const [selectedProject, setSelectedProject] = React.useState(null);
 
     const logged_user = window?.Laravel?.user;
@@ -77,10 +80,15 @@ export default function DailySubmissionTableFilter ({onFilter}){
                 start_date: dayjs(_startDate).format('YYYY-MM-DD'),
                 end_date: dayjs(_endDate).format('YYYY-MM-DD'),
                 employee_id: _selectedEmployeeId,
+                employee_name: selectedEmployeeName,
                 pm_id: _selectedPMId,
+                pm_name: selectedPMName,
                 client_id: _selectedClientId,   
+                client_name: selectedClientName,
                 // status: _status,
-                project_id: _selectedProject ? _selectedProject.id : null
+                project_id: _selectedProject ? _selectedProject.id : null,
+                project_name:_selectedProject ? _selectedProject.project_name : null
+ 
             })
         }
     }, [_selectedClientId, _selectedEmployeeId, _selectedPMId, _status, _selectedProject, _startDate, _endDate]);
@@ -108,8 +116,10 @@ export default function DailySubmissionTableFilter ({onFilter}){
         e.preventDefault();
         if(data){
             setSelectedEmployeeId(data.id);
+            setSelectedEmployeeName(data.name);
         }else{
             setSelectedEmployeeId(null);
+            setSelectedEmployeeName(null);
         }
         
     }
@@ -118,8 +128,10 @@ export default function DailySubmissionTableFilter ({onFilter}){
         e.preventDefault();
         if(data){
             setSelectedPMId(data.id);
+            setSelectedPMName(data.name);
         }else{
             setSelectedPMId(null);
+            setSelectedPMName(null);
         }
     }
 
@@ -128,8 +140,10 @@ export default function DailySubmissionTableFilter ({onFilter}){
         e.preventDefault();
        if(data){
             setSelectedClientId(data.id);
+            setSelectedClientName(data.name);
        } else{
             setSelectedClientId(null);
+            setSelectedClientName(null);
        }
     }
 

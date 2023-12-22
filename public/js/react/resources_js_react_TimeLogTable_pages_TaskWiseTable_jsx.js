@@ -1,24 +1,6 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_react_TimeLogTable_pages_TaskWiseTable_jsx"],{
 
-/***/ "./resources/js/react/TimeLogTable/components/ExportToExcel.jsx":
-/*!**********************************************************************!*\
-  !*** ./resources/js/react/TimeLogTable/components/ExportToExcel.jsx ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   ExportToExcel: () => (/* binding */ ExportToExcel)
-/* harmony export */ });
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-var _templateObject;
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-var ExportToExcel = styled_components__WEBPACK_IMPORTED_MODULE_0__["default"].button(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    background: #f9fafc;\n    padding: 0.4rem 1rem;\n    color: #252424;\n    border-radius: 6px;\n    border: 1px solid #ddd;\n    cursor: pointer;\n    transition: all 0.3s ease;\n    font-size: 1rem;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 5px; \n    align-self: flex-start;\n\n    &:hover {\n        background: #1D82F5;\n        color: #fff;\n    } \n  \n"])));
-
-/***/ }),
-
 /***/ "./resources/js/react/TimeLogTable/components/TaskWiseLogTable.jsx":
 /*!*************************************************************************!*\
   !*** ./resources/js/react/TimeLogTable/components/TaskWiseLogTable.jsx ***!
@@ -253,7 +235,9 @@ var TaskWiseTableColumn = [{
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td sp1_tlr_td_border sp1_drag_col_".concat(col === null || col === void 0 ? void 0 : col.id, " sp1_tlr_td_marged ").concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
+      children: row !== null && row !== void 0 && row.is_independent ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        children: row === null || row === void 0 ? void 0 : row.project_name
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
         href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.task_id),
         children: row === null || row === void 0 ? void 0 : row.project_name
       })
@@ -302,7 +286,7 @@ var TaskWiseTableColumn = [{
         name: row === null || row === void 0 ? void 0 : row.client_name,
         profileUrl: "/account/clients/".concat(row === null || row === void 0 ? void 0 : row.client_id),
         image: row === null || row === void 0 ? void 0 : row.client_image,
-        role: "Freelancer.com",
+        role: row !== null && row !== void 0 && row.is_independent ? "" : "Freelancer.com",
         roleLink: row === null || row === void 0 ? void 0 : row.client_from,
         id: row === null || row === void 0 ? void 0 : row.client_id
       })

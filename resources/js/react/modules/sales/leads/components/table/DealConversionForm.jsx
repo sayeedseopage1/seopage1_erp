@@ -161,7 +161,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                 </Label>
                                 <Input
                                     type="text"
-                                    placeholder="Enter Client Username"
+                                    placeholder="Enter Client Profile Link"
                                     value={formData.profile_link}
                                     name="profile_link"
                                     onChange={handleOnChange}
@@ -169,8 +169,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
 
                                 {error?.profile_link ? (
                                     <ErrorText>
-                                        {" "}
-                                        {error?.profile_link[0]}{" "}
+                                        {error?.profile_link[0]}
                                     </ErrorText>
                                 ) : null}
                             </InputGroup>
@@ -209,7 +208,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                     </Flex>
                                 ))}
 
-                                <button onClick={addNewLink} className="px-2 ">
+                                <button onClick={addNewLink} className="px-2 btn btn-primary">
                                     + Add Another
                                 </button>
                             </InputGroup>

@@ -14,6 +14,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\DeveloperStopTimer;
+use App\Models\Role;
+
 class TimelogReportController extends AccountBaseController
 {
 
@@ -78,7 +80,6 @@ class TimelogReportController extends AccountBaseController
         $status = $request->input('status', null);
         $project_id = $request->input('project_id', null);
 
-
         $users = DB::table('users')->select(['id'])->whereIn('role_id', [5, 9, 10])->get()->toArray();
         $filtered_array = array_filter($users, function($item) {
             return isset($item->id);
@@ -92,6 +93,7 @@ class TimelogReportController extends AccountBaseController
             $data = DB::table('project_time_logs')->select([
                 DB::raw('(SELECT UUID()) as uuid'),
                 'project_time_logs.id as log_id',
+                'project_time_logs.task_id as taskId',
                 'employee.id as employee_id',
                 'employee.name as employee_name',
                 'employee.image as employee_image',
@@ -113,8 +115,8 @@ class TimelogReportController extends AccountBaseController
 
                 'project_time_logs.start_time as time_log_start_time',
                 'project_time_logs.end_time as time_log_end_time',
-               DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
-               DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
+                DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
+                DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
             ])
                 ->leftJoin('projects', 'project_time_logs.project_id', '=', 'projects.id')
 
@@ -136,6 +138,7 @@ class TimelogReportController extends AccountBaseController
                 ->whereIn('project_time_logs.user_id', $id_array)
              //   ->where('total_minutes', '>', 0)
                 ->groupBy('project_time_logs.user_id', 'employee.id');
+
 
             if (is_null($project_id)) {
                 $data = $data->groupBy('project_time_logs.project_id');
@@ -216,9 +219,25 @@ class TimelogReportController extends AccountBaseController
         ->orderBy('id','desc')->first();
         if($item->project_id == null)
         {
-            $item->project_name = "Independent Task";
-            $item->client_name = '--';
-            $item->pm_name = '--';
+            $ppTask = Task::where('id',$item->taskId)->first();
+            $ppClient = User::where('id',$ppTask->client_id)->first();
+            $ppPm = User::where('id',$ppTask->added_by)->first();
+            $ppPmRole = Role::where('id',$ppPm->role_id)->first();
+            // dd($ppTask); 
+            if($ppClient != null){
+                $item->client_id = $ppClient->id;
+                $item->client_name = $ppClient->name;
+                $item->client_image = $ppClient->image;
+            }else{
+                $item->client_name = $ppTask->client_name;
+            } 
+            $item->is_independent = $ppTask->independent_task_status;
+            $item->pm_id = $ppPm->id;
+            $item->pm_name = $ppPm->name;
+            $item->pm_image = $ppPm->image;
+            $item->pm_roles = $ppPmRole->display_name;
+            $item->project_id = $ppTask->id;
+            $item->project_name = $ppTask->heading;
         }
 
 
@@ -382,6 +401,27 @@ class TimelogReportController extends AccountBaseController
         foreach ($data as $item) {
             $timer= ProjectTimeLog::where('project_id',$item->project_id)->where('user_id',$item->employee_id)->orderBy('id','desc')->first();
            // dd($timer);
+           if($item->project_id == null)
+            {
+                $ppTask = Task::where('id',$item->task_id)->first();
+                $ppClient = User::where('id',$ppTask->client_id)->first();
+                $ppPm = User::where('id',$ppTask->added_by)->first();
+                $ppPmRole = Role::where('id',$ppPm->role_id)->first();
+                if($ppClient != null){
+                    $item->client_id = $ppClient->id;
+                    $item->client_name = $ppClient->name;
+                    $item->client_image = $ppClient->image;
+                }else{
+                    $item->client_name = $ppTask->client_name;
+                } 
+                $item->is_independent = $ppTask->independent_task_status;
+                $item->pm_id = $ppPm->id;
+                $item->pm_name = $ppPm->name;
+                $item->pm_image = $ppPm->image;
+                $item->pm_roles = $ppPmRole->display_name;
+                $item->project_id = '--';
+                $item->project_name = 'Independent Project';
+            }
              if($timer->end_time == null)
              {
                //  dd($data);
@@ -397,7 +437,7 @@ class TimelogReportController extends AccountBaseController
              }
 
          }
-    //    / dd($data);
+        // dd($data);
 
         }
         else if($type == 'projects') {

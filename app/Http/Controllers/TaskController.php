@@ -3163,7 +3163,7 @@ class TaskController extends AccountBaseController
 
         // dd($clientRevisionCount);
 
-        if ($clientRevisionCount >= 5) {
+        if ($request->acknowledgement_id == 'CPRx06' && $clientRevisionCount >= 5) {
             $task_revision->dispute_created = true;
             $task_revision->final_responsible_person = ''; // create dispute
         }else if ($request->acknowledgement_id == 'CPRx06') {
@@ -3196,7 +3196,6 @@ class TaskController extends AccountBaseController
         // }
 
         $task_revision->save();
-
 
 
         // CREATE DISPUTE

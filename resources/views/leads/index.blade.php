@@ -4,18 +4,17 @@
     @include('sections.datatable_css')
 @endpush
 
-@section('filter-section') 
+@section('filter-section')
     {{-- @include('leads.filters')  --}}
     <div id="leadTableFilterContainer"></div>
 @endsection
 
 @php
-$addLeadPermission = user()->permission('add_lead');
-$addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
+    $addLeadPermission = user()->permission('add_lead');
+    $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 @endphp
 
 @section('content')
-
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
@@ -30,7 +29,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
                 <div id="leadTableExportButton"></div>
 
-          {{--      @if ($addLeadCustomFormPermission == 'all')
+                {{--      @if ($addLeadCustomFormPermission == 'all')
                     <x-forms.button-secondary icon="pencil-alt" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" id="add-lead">
                         @lang('modules.lead.leadForm')
                     </x-forms.button-secondary>
@@ -66,7 +65,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
             {{-- <div class="btn-group mt-2 mt-lg-0 mt-md-0 ml-0 ml-lg-3 ml-md-3" role="group">
                 <a href="{{ route('leads.index') }}" class="btn btn-secondary f-14 btn-active" data-toggle="tooltip"
                     data-original-title="@lang('modules.leaves.tableView')"><i class="side-icon bi bi-list-ul"></i></a> --}}
-                  {{--
+            {{--
                 <a href="{{ route('leadboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
                 --}}
             {{-- </div> --}}
@@ -75,24 +74,23 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
         <!-- Add Task Export Buttons End -->
         <!-- Task Box Start -->
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
-          @if(Session::has('status_updated'))
-              <div class="alert alert-success show mb-2" role="alert">{{Session::get('status_updated')}}</div>
-              <div>
+            @if (Session::has('status_updated'))
+                <div class="alert alert-success show mb-2" role="alert">{{ Session::get('status_updated') }}</div>
+                <div>
 
-              </div>
-              @endif
-              <div id="leadTableContainer"></div>
+                </div>
+            @endif
+            <div id="leadTableContainer"></div>
             {{-- {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!} --}}
             @include('contracts.modals.dealstmodal')
         </div>
         <!-- Task Box End -->
     </div>
     <!-- CONTENT WRAPPER END -->
-
 @endsection
 
 @push('scripts')
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
     @include('sections.datatable_js')
 
 
@@ -101,7 +99,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
             var startDate = $('#datatableRange').val();
-        //    / console.log(moment().format('DD-MM-YYYY'), moment().subtract(30, 'days').format('DD-MM-YYYY'));
+            //    / console.log(moment().format('DD-MM-YYYY'), moment().subtract(30, 'days').format('DD-MM-YYYY'));
             if (startDate == '') {
                 startDate = moment().subtract(30, 'days').format('DD-MM-YYYY');
                 endDate = moment().format('DD-MM-YYYY');
@@ -197,7 +195,7 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
                 },
                 buttonsStyling: false
             }).then((result) => {
-              //console.log('id');
+                //console.log('id');
                 if (result.isConfirmed) {
                     var url = "{{ route('leads.destroy', ':id') }}";
                     url = url.replace(':id', id);
@@ -310,102 +308,93 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
             window.location.href = "{{ route('lead-form.index') }}";
         });
 
-        $( document ).ready(function() {
+        $(document).ready(function() {
             @if (!is_null(request('start')) && !is_null(request('end')))
-            $('#datatableRange').val('{{ request('start') }}' +
-            ' @lang("app.to") ' + '{{ request('end') }}');
-            $('#datatableRange').data('daterangepicker').setStartDate("{{ request('start') }}");
-            $('#datatableRange').data('daterangepicker').setEndDate("{{ request('end') }}");
+                $('#datatableRange').val('{{ request('start') }}' +
+                    ' @lang('app.to') ' + '{{ request('end') }}');
+                $('#datatableRange').data('daterangepicker').setStartDate("{{ request('start') }}");
+                $('#datatableRange').data('daterangepicker').setEndDate("{{ request('end') }}");
                 showTable();
             @endif
         });
-
     </script>
 
     <script>
-  function dataTableRowCheck2(id)
-  {
-     var id = id;
-     //console.log(id);
+        function dataTableRowCheck2(id) {
+            var id = id;
+            //console.log(id);
 
-  document.getElementById('mydata').value= id;
-  }
-  </script>
+            document.getElementById('mydata').value = id;
+        }
+    </script>
 
-  <script>
-
-
-
-
-          $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             quillImageLoad('#comments');
 
 
 
-              $("#lead-convert").validate({
+            $("#lead-convert").validate({
 
 
-                  rules: {
-                      client_username: {
-                          required: true,
-
-                      },
-
-                      profile_link: {
-                        url:true,
+                rules: {
+                    client_username: {
                         required: true,
 
-                      },
-                      message_link: {
-                        url:true,
+                    },
+
+                    profile_link: {
+                        url: true,
                         required: true,
 
-                      },
+                    },
+                    message_link: {
+                        url: true,
+                        required: true,
 
-                      comments: {
-                          required: true,
-                          minlength: 10
-                      },
+                    },
 
-
-                  },
-                  messages: {
-                      client_username: {
-                          required: "Client username is required"
-
-                      },
-
-                      profile_link: {
-                          required: "Profile link is required",
-                          url: "Link must be a valid url"
-
-                      },
-                      message_link: {
-                          required: "Message thread link is required",
-                          url: "Link must be a valid url"
-
-                      },
                     comments: {
-                          required: "Comment field is required",
-                         minlength: "Comments must be minimum 10 characters"
-                      },
+                        required: true,
+                        minlength: 10
+                    },
 
 
-                  }
-              });
+                },
+                messages: {
+                    client_username: {
+                        required: "Client username is required"
 
-          });
+                    },
+
+                    profile_link: {
+                        required: "Profile link is required",
+                        url: "Link must be a valid url"
+
+                    },
+                    message_link: {
+                        required: "Message thread link is required",
+                        url: "Link must be a valid url"
+
+                    },
+                    comments: {
+                        required: "Comment field is required",
+                        minlength: "Comments must be minimum 10 characters"
+                    },
 
 
-          $('#lead-convert-button').click(function() {
+                }
+            });
+
+        });
+
+
+        $('#lead-convert-button').click(function() {
             var commentsElement = document.getElementById('comments');
             if (commentsElement && commentsElement.children.length > 0) {
                 var note3 = commentsElement.children[0].innerHTML;
                 document.getElementById('comments-text').value = note3;
             }
-            });
-
-
-      </script>
-
+        });
+    </script>
 @endpush
