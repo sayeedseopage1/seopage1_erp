@@ -4041,6 +4041,15 @@ class TaskController extends AccountBaseController
 
     public function task_json(Request $request, $id)
     {
+        $projectTask= Task::where('id',$id)->first();
+        if($projectTask->independent_task_status != 0 )
+        {
+            $projecttaskId= Project::where('id',$projectTask->project_id)->first();
+            if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
+            {
+                abort(403);
+            }
+        }
         if ($request->mode == 'basic') {
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
