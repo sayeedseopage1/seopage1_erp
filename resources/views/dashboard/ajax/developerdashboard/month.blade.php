@@ -134,14 +134,11 @@
             <div class="d-flex flex-wrap">
 
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
-                     
-
+                    <a href="#" data-toggle="modal" data-target="#avg_task_approval_client{{count($average_number_of_tasks_approved_client_data)}}">
                         {{round($average_submission_aproval_in_this_month_client,2)}}
-                      
-                    </a>
-                   
+                    </a>   
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_client')
 
               
             </div>
@@ -163,14 +160,11 @@
             <div class="d-flex flex-wrap">
 
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
-                     
-
+                    <a href="#" data-toggle="modal" data-target="#percentage_task_with_revision{{count($revision_task_data)}}">
                         {{round($percentage_of_tasks_with_revision,2)}}%
-                      
                     </a>
-                   
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.percentage_task_with_revision')
 
               
             </div>
@@ -187,16 +181,12 @@
                 Total number of revisions
                 </h5>
             <div class="d-flex flex-wrap">
-
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
-                     
-
-                        {{round($number_of_total_revision_for_this_month,2)}}
-                      
+                    <a href="#" data-toggle="modal" data-target="#total_no_of_revision{{count($revision_task_data)}}">
+                        {{round($number_of_total_revision_for_this_month,2)}}%
                     </a>
-                   
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.total_num_of_revision')
 
               
             </div>
@@ -291,18 +281,12 @@
                 Percentage of tasks where deadline was missed 
                 </h5>
             <div class="d-flex flex-wrap">
-
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
-                     
-
+                    <a href="#" data-toggle="modal" data-target="#deadline_was_missed{{count($deadline_missed_task_data)}}">
                         {{round($percentage_of_tasks_deadline,2)}}%
-                      
                     </a>
-                   
                 </p>
-
-              
+                {{-- @include('dashboard.ajax.developerdashboard.modals.percentage_task_deadline_missed')               --}}
             </div>
         </div>
         <div class="d-block">
@@ -315,15 +299,12 @@
         <div class="d-block text-capitalize">
             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Percentage of tasks where given estimated time was missed</h5>
             <div class="d-flex flex-wrap">
-
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
-                     
+                    <a href="#" data-toggle="modal" data-target="#estimated_time_was_missed{{count($estimate_missed_task_data)}}">
                         {{round($percentage_number_task_cross_estimate_time,2)}}%
-                      
                     </a>
-                   
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.estimated_time_was_missed')
 
               
             </div>
@@ -423,28 +404,22 @@
             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of disputes filed</h5>
             <div class="d-flex flex-wrap">
 
-                <h6 class="mb-0 f-18 font-weight-bold mr-5">
+                <p class="mb-0 f-18 font-weight-bold mr-5">
                     No. of disputes filed:
-                    <a href="#" data-toggle="modal" data-target="#">
-                     
-
-                      {{$number_of_dispute_filed_own}} 
-                      
-                      
+                    
+                    <a href="#" data-toggle="modal" data-target="#dispute_file_own{{count($number_of_dispute_filed_own_data) }}">
+                        {{$number_of_dispute_filed_own}} 
                     </a>
+                    @include('dashboard.ajax.developerdashboard.modals.dispute_file_own')
                    
-                </h6>
-                <h6 class="mb-0 f-18 font-weight-bold mr-5">
+                </p>
+                <p class="mb-0 f-18 font-weight-bold mr-5">
                     No. of disputes (Overall):
-                    <a href="#" data-toggle="modal" data-target="#">
-                     
-
+                    <a href="#" data-toggle="modal" data-target="#disput_file_all_data{{count($number_of_dispute_filed_all_data)}}">
                         {{$number_of_dispute_filed_all}}
-                      
-                      
                     </a>
-                   
-                </h6>
+                    @include('dashboard.ajax.developerdashboard.modals.dispute_file_all_data')
+                </p>
               
 
               
