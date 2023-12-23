@@ -26,7 +26,7 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
     width = _ref.width,
     isOpen = _ref.isOpen,
     children = _ref.children;
-  console.log(width);
+  // console.log(width);
   var handleContainer = function handleContainer(children) {
     if (fullScreenView && width <= 991) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -323,6 +323,7 @@ var CommentsContainer = function CommentsContainer(_ref) {
       fetching: isFetching,
       refetch: refetch,
       taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId,
+      task: task,
       height: "89vh"
     })
   });

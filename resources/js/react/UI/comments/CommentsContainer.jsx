@@ -181,6 +181,7 @@ const CommentsContainer = ({
                     fetching={isFetching}
                     refetch={refetch}
                     taskId={taskId ? taskId : param?.taskId}
+                    task={task}
                     height={"89vh"}
                 />
             {/* )} */}
