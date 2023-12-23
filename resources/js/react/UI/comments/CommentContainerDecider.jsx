@@ -9,7 +9,7 @@ const CommentContainerDecider = ({
     isOpen,
     children,
 }) => {
-    console.log(width);
+    // console.log(width);
     const handleContainer = (children) => {
         if (fullScreenView && width <= 991) {
             return (

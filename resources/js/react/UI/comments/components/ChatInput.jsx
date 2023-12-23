@@ -25,7 +25,7 @@ import getTextContent, {
     htmlToString,
 } from "../utils/getTextContent";
 import getFormattedTime from "../utils/getFormattedTime";
-
+import AutoLinker from 'autolinker';
 const currentUser = new User(window.Laravel.user);
 
 const ChatInput = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
@@ -65,12 +65,15 @@ const ChatInput = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
+
+        const comment = AutoLinker.link(editorHtml); // convert link text to link
+
         formdata.append(
             "comment",
-            htmlToString(editorHtml)
+            htmlToString(comment)
                 ? onEnter
-                    ? getTrimmedHtml(editorHtml)
-                    : editorHtml
+                    ? getTrimmedHtml(comment)
+                    : comment
                 : ""
         );
         formdata.append("user_id", currentUser.id);
@@ -83,6 +86,8 @@ const ChatInput = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                 formdata.append(`file[]`, file);
             });
         }
+
+    
 
         // const result = {};
         // for (const data of formdata.entries()) {

@@ -36,6 +36,8 @@ import getTextContent, {
 } from "./utils/getTextContent";
 import { useDeleteCommentsMutation } from "../../services/api/commentsApiSlice";
 import { useParams } from "react-router-dom";
+import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
+
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -60,6 +62,7 @@ const CommentsBody = ({
     fetching,
     refetch,
     taskId,
+    task,
     height,
     onSubmit = async () => null,
 }) => {
@@ -83,6 +86,7 @@ const CommentsBody = ({
     const [mentionedComment, setMentionedComment] = useState(null);
     const [contextHolder, setContextHolder] = useState(null);
     // =================================================================
+ 
 
     useEffect(() => {
         setAllComments(comments);
@@ -288,29 +292,49 @@ const CommentsBody = ({
         // console.log({ commentsId,selectedComments });
         // return;
         // setIsLoading(true),
-        deleteComments({ commentsId })
-            .then(() => {
-                Swal.fire({
-                    icon: "success",
-                    title: "Comments deleted successfully",
-                    timer: 2000,
-                    showConfirmButton: true,
-                    timerProgressBar: true,
+        const deleteComments = async ({commentsId}) => {
+            await deleteComments({ commentsId })
+                .then(() => {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Comments deleted successfully",
+                        timer: 2000,
+                        showConfirmButton: true,
+                        timerProgressBar: true,
+                    });
+                    setSecletedComments({});
+                })
+                .catch(() => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "An error occured to delete comments",
+                        timer: 2000,
+                        showConfirmButton: true,
+                        timerProgressBar: true,
+                    });
                 });
-                setSecletedComments({});
-            })
-            .catch(() => {
-                Swal.fire({
-                    icon: "error",
-                    title: "An error occured to delete comments",
-                    timer: 2000,
-                    showConfirmButton: true,
-                    timerProgressBar: true,
-                });
-            });
+        }
         // setScroll(prev=>!prev);
         // refetch();
         // setIsLoading(false);
+
+
+        Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: 'If you click on Yes, the comment will be deleted. If you click on no, the comment will not be deleted.',
+            showConfirmButton: true,
+            confirmButtonText: 'Yes',
+            showDenyButton: true,
+            denyButtonText: 'No',
+            customClass: {
+                confirmButton: 'btn btn-primary',
+            }
+        }).then(res => {
+            if(res.isConfirmed){
+                deleteComments({commentsId})
+            }
+        })
     };
 
     const handleCopySingleComment = (comment) => {
@@ -356,7 +380,8 @@ const CommentsBody = ({
     const handleDeleteSingleComment = (comment) => {
         // console.log({ id: comment.id });
         // return;
-        deleteComments({ commentsId: [comment.id] })
+        const deleteComment = async(commentId) => {
+            await deleteComments({ commentsId: [commentId] })
             .then((res) => {
                 if (res.data.status == 200) {
                     Swal.fire({
@@ -385,6 +410,25 @@ const CommentsBody = ({
                     timerProgressBar: true,
                 });
             });
+        }
+       
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Are you sure?',
+                text: 'If you click on Yes, the comment will be deleted. If you click on no, the comment will not be deleted.',
+                showConfirmButton: true,
+                confirmButtonText: 'Yes',
+                showDenyButton: true,
+                denyButtonText: 'No',
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                }
+            }).then(res => {
+                if(res.isConfirmed){
+                    deleteComment(comment.id);
+                }
+            })
     };
 
     // console.log({allComments});
@@ -741,14 +785,19 @@ const CommentsBody = ({
                         ref={chatbottom_ref}
                     />
                 </main>
-                <footer className={`${style.commentsBody_inputField}`}>
-                    <ChatInput
-                        onSubmit={onSubmit}
-                        taskId={taskId}
-                        setScroll={setScroll}
-                        setIsLoading={setIsLoading}
-                    />
-                </footer>
+                 {isHasPermissionForWriteComment({
+                     assignTo: task?.assigneeTo?.id, 
+                     assignBy: task?.assigneeBy?.id
+                }) ?  
+                    <footer className={`${style.commentsBody_inputField}`}>
+                        <ChatInput
+                            onSubmit={onSubmit}
+                            taskId={taskId}
+                            setScroll={setScroll}
+                            setIsLoading={setIsLoading}
+                        />
+                    </footer>
+                 : null} 
 
                 {Object.keys(selectedComments).length > 0 ? (
                     <div
