@@ -54,12 +54,21 @@ const FilterSidebar = ({
                 roleIds={[4]}
             />
 
-            <UserFilter
-                title="Assigned By"
-                state={leadDeveloper}
-                setState={setLeadDeveloper}
-                roleIds={_.includes([9, 10], auth.getRoleId()) ? [1,4] : [1, 6]}
-            />
+            {page === "subtasks" ? 
+                <UserFilter
+                    title="Assigned By"
+                    state={leadDeveloper}
+                    setState={setLeadDeveloper}
+                    roleIds={[1, 6]}
+                /> :
+                <UserFilter
+                    title="Assigned By"
+                    state={leadDeveloper}
+                    setState={setLeadDeveloper}
+                    roleIds={[1, 4]}
+                />
+            }
+            
 
             {page === "subtasks" ? (
                 !isDev &&  <UserFilter
