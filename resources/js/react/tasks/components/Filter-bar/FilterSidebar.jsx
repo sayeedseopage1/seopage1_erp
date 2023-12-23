@@ -7,6 +7,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import _ from 'lodash';
 
 const FilterSidebar = ({
+    page,
     developer,
     setDeveloper,
     client,
@@ -53,19 +54,37 @@ const FilterSidebar = ({
                 roleIds={[4]}
             />
 
-            <UserFilter
-                title="Assigned By"
-                state={leadDeveloper}
-                setState={setLeadDeveloper}
-                roleIds={_.includes([9, 10], auth.getRoleId()) ? [1,4] : [1, 6]}
-            />
+            {page === "subtasks" ? 
+                <UserFilter
+                    title="Assigned By"
+                    state={leadDeveloper}
+                    setState={setLeadDeveloper}
+                    roleIds={[1, 6]}
+                /> :
+                <UserFilter
+                    title="Assigned By"
+                    state={leadDeveloper}
+                    setState={setLeadDeveloper}
+                    roleIds={[1, 4]}
+                />
+            }
+            
 
-            {!isDev &&  <UserFilter
-                title="Assigned To"
-                state={developer}
-                setState={setDeveloper}
-                roleIds={[5, 9, 10]}
-            /> }
+            {page === "subtasks" ? (
+                !isDev &&  <UserFilter
+                    title="Assigned To"
+                    state={developer}
+                    setState={setDeveloper}
+                    roleIds={[5, 9, 10]}
+                />
+            ): (
+                <UserFilter
+                    title="Assigned To"
+                    state={developer}
+                    setState={setDeveloper}
+                    roleIds={[4, 6, 9, 10]}
+                />
+            )}
 
             <StatusFilter state={status} setState={setStatus} />
         </div>
