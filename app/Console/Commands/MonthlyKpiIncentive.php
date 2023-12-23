@@ -47,13 +47,13 @@ class MonthlyKpiIncentive extends Command
     //DB::beginTransaction();
     
     // /dd($shift_users);
-    DB::beginTransaction();
+   // DB::beginTransaction();
         $check_kpi = kpiSetting::where([
             'kpi_status' => '2',
             'cron_status' => '0',
             'start_month' => Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d')
         ])->first();
-        dd($check_kpi);
+    //    / dd($check_kpi);
         $left_days = (int) Carbon::now()->endOfMonth()->format('d') - (int) Carbon::now()->format('d');
 
         if ($left_days <= 8 && is_null($check_kpi)) {
