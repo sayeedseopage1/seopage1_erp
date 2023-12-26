@@ -306,7 +306,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         }
 
         const primaryPageConfirmation = () => {
-            if(pageTypePriority === "Primary Page Development"){
+            if(!isDesignerTask && pageTypePriority === "Primary Page Development"){
                 Swal.fire({
                     icon: 'info',
                     html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
@@ -580,6 +580,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     <AssginedToSelection
                         selected={assignedTo}
                         onSelect={setAssignedTo}
+                        taskCategory={taskCategory}
                     />
 
                     {err?.assignedTo && (

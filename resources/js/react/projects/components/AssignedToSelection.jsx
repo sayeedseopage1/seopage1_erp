@@ -27,7 +27,7 @@ const AssginedToSelection = ({selected, onSelect, taskCategory}) => {
     }else if(taskCategory && taskCategory.id === 7){
         employees = _.filter(users, user => filterUser(user, 13) || filterUser(user, 10))
     }else{
-        employees = _.filter(users, user => filterUser(user,[6, 9, 10]) || Number(user?.id) === auth.getId() )
+        employees = _.filter(users, user => filterUser(user, 6) || Number(user?.id) === auth.getId() )
     }
 
     const filteredData =

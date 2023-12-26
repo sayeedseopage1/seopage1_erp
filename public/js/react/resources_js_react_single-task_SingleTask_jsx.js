@@ -9106,18 +9106,33 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var AssginedToSelection = function AssginedToSelection(_ref) {
+  var _employees;
   var selected = _ref.selected,
-    onSelect = _ref.onSelect;
+    onSelect = _ref.onSelect,
+    taskCategory = _ref.taskCategory;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(""),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     query = _React$useState2[0],
     setQuery = _React$useState2[1];
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_6__.useParams)();
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useGetTaskDetailsQuery)("/".concat(params === null || params === void 0 ? void 0 : params.taskId, "/json?mode=employees")),
-    employees = _useGetTaskDetailsQue.data,
+    data = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
-  console.log(employees);
-  var filteredData = query === "" ? employees : employees === null || employees === void 0 ? void 0 : employees.filter(function (employee) {
+  var employees = [];
+  if (taskCategory && taskCategory.id === 5) {
+    employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
+      return Number(d.role_id) === 9;
+    });
+  } else if (taskCategory && taskCategory.id === 7) {
+    employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
+      return Number(d.role_id) === 10;
+    });
+  } else {
+    employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
+      return Number(d.role_id) === 5;
+    });
+  }
+  var filteredData = query === "" ? employees : (_employees = employees) === null || _employees === void 0 ? void 0 : _employees.filter(function (employee) {
     return employee === null || employee === void 0 ? void 0 : employee.name.toLowerCase().includes(query.toLowerCase());
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Combobox, {
@@ -9150,7 +9165,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
         children: [isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "sp1-select-option-nodata",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Loader__WEBPACK_IMPORTED_MODULE_3__["default"], {})
-        }), (filteredData === null || filteredData === void 0 ? void 0 : filteredData.length) === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        }), !isFetching && (filteredData === null || filteredData === void 0 ? void 0 : filteredData.length) === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "sp1-select-option-nodata",
           children: "Nothing found."
         }) : filteredData === null || filteredData === void 0 ? void 0 : filteredData.map(function (employee) {
@@ -10367,13 +10382,17 @@ var SubtTaskEditForm = function SubtTaskEditForm(_ref) {
             className: "col-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_3__["default"], {
               selected: taskCategory,
-              onSelect: setTaskCategory
+              onSelect: function onSelect(value) {
+                setTaskCategory(value);
+                setAssignedTo(null);
+              }
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
             className: "col-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_4__["default"], {
               selected: assignedTo,
-              onSelect: setAssignedTo
+              onSelect: setAssignedTo,
+              taskCategory: taskCategory
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
             className: "col-6",
@@ -11492,7 +11511,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               };
             }();
             primaryPageConfirmation = function primaryPageConfirmation() {
-              if (pageTypePriority === "Primary Page Development") {
+              if (!isDesignerTask && pageTypePriority === "Primary Page Development") {
                 Swal.fire({
                   icon: 'info',
                   html: "<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>",
@@ -11742,7 +11761,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
         className: "col-12 col-md-6",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_6__["default"], {
           selected: assignedTo,
-          onSelect: setAssignedTo
+          onSelect: setAssignedTo,
+          taskCategory: taskCategory
         }), (err === null || err === void 0 ? void 0 : err.assignedTo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
           style: {
             color: "red"
@@ -13147,13 +13167,17 @@ var TaskEditForm = function TaskEditForm(_ref2) {
           className: "col-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_12__["default"], {
             selected: taskCategory,
-            onSelect: setTaskCategory
+            onSelect: function onSelect(value) {
+              setTaskCategory(value);
+              setAssignedTo(null);
+            }
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "col-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_10__["default"], {
             selected: assignedTo,
-            onSelect: setAssignedTo
+            onSelect: setAssignedTo,
+            taskCategory: taskCategory
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "col-6",

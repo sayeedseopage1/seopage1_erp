@@ -4340,6 +4340,7 @@ class TaskController extends AccountBaseController
                     'image_url' => $row->image_url,
                     'gender' => $row->gender,
                     'developer_status' => $developer_status,
+                    'role_id' => $row->role_id,
                     'roles' => DB::table('role_user')->where('role_user.user_id', $row->id)->get(),
                 ];
             });
