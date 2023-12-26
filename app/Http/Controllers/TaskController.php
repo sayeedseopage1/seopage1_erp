@@ -4317,17 +4317,18 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'employees') {
             // dd("snknaslkndas");
-            $data = User::where('role_id', 5)->get()->map(function ($row) {
-
+            $data = User::where('role_id', 5)
+            ->orWhere('role_id',9)
+            ->orWhere('role_id',10) 
+            ->get()
+            ->map(function ($row) {
                 $task_assign = Task::select('tasks.*')
                     ->join('task_users', 'task_users.task_id', 'tasks.id')
                     ->join('projects', 'projects.id', 'tasks.project_id')
                     ->where('projects.status', 'in progress')
                     ->where('task_users.user_id', $row->id)
-
                     ->where('tasks.board_column_id', 3)
                     ->count();
-                //dd($task_assign);
                 if ($task_assign > 0) {
                     $developer_status = 1;
                 } else {
@@ -4339,6 +4340,7 @@ class TaskController extends AccountBaseController
                     'image_url' => $row->image_url,
                     'gender' => $row->gender,
                     'developer_status' => $developer_status,
+                    'roles' => DB::table('role_user')->where('role_user.user_id', $row->id)->get(),
                 ];
             });
             return response()->json($data);
