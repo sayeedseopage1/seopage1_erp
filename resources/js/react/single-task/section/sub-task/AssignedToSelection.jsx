@@ -17,6 +17,8 @@ const AssginedToSelection = ({ selected, onSelect }) => {
         `/${params?.taskId}/json?mode=employees`
     );
 
+    console.log(employees)
+
     const filteredData =
         query === ""
             ? employees

@@ -9116,6 +9116,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useGetTaskDetailsQuery)("/".concat(params === null || params === void 0 ? void 0 : params.taskId, "/json?mode=employees")),
     employees = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
+  console.log(employees);
   var filteredData = query === "" ? employees : employees === null || employees === void 0 ? void 0 : employees.filter(function (employee) {
     return employee === null || employee === void 0 ? void 0 : employee.name.toLowerCase().includes(query.toLowerCase());
   });
@@ -11141,7 +11142,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var SubTaskForm = function SubTaskForm(_ref) {
   var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _ref10, _ref13, _required_error$page_, _required_error$page_2, _required_error$descr, _required_error$descr2;
-  var close = _ref.close;
+  var close = _ref.close,
+    isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -11298,6 +11300,16 @@ var SubTaskForm = function SubTaskForm(_ref) {
     var value = e.target.value;
     setState(value);
   };
+
+  // if task for designer select category default
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    var _task$category, _task$category2, _task$category3;
+    isDesignerTask && setTaskCategory({
+      id: task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id,
+      category_name: task === null || task === void 0 || (_task$category2 = task.category) === null || _task$category2 === void 0 ? void 0 : _task$category2.name,
+      added_by: task === null || task === void 0 || (_task$category3 = task.category) === null || _task$category3 === void 0 ? void 0 : _task$category3.addedBy
+    });
+  }, [isDesignerTask]);
   var isValid = function isValid() {
     var count = 0;
     var error = new Object();
@@ -11718,7 +11730,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
         className: "col-12 col-md-6",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_8__["default"], {
           selected: taskCategory,
-          onSelect: setTaskCategory
+          onSelect: setTaskCategory,
+          isDesignerTask: isDesignerTask
         }), (err === null || err === void 0 ? void 0 : err.taskCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
           style: {
             color: "red"
@@ -12147,13 +12160,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SubTaskForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SubTaskForm */ "./resources/js/react/single-task/section/sub-task/SubTaskForm.jsx");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
 /* harmony import */ var _LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./LeadConfirmationModal */ "./resources/js/react/single-task/section/sub-task/LeadConfirmationModal.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -12174,27 +12190,28 @@ var WithContainer = function WithContainer(_ref2) {
   var children = _ref2.children,
     close = _ref2.close,
     visibleEnvironmentForm = _ref2.visibleEnvironmentForm;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
     className: "sp1-subtask-form --modal-panel",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel-header",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
         children: visibleEnvironmentForm ? "Working Environment" : "Create Sub Task"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_6__["default"], {
         "aria-label": "close-modal",
         className: "_close-modal",
         onClick: close,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
           className: "fa-solid fa-xmark"
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       className: "sp1-subtask-form --modal-panel-body sp1_subtask_form",
       children: children
     })]
   });
 };
 function SubTaskFormController(_ref3) {
+  var _task$category;
   var close = _ref3.close,
     _ref3$isFirstSubtask = _ref3.isFirstSubtask,
     isFirstSubtask = _ref3$isFirstSubtask === void 0 ? true : _ref3$isFirstSubtask;
@@ -12218,23 +12235,24 @@ function SubTaskFormController(_ref3) {
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)(); // dispatch
   var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_4__.useAuth)(); // logged user
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_3__.SingleTask(taskDetails); // task instance;
+  var isDesignerTask = lodash__WEBPACK_IMPORTED_MODULE_8___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
 
   // environment status
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    var showEnv = (task === null || task === void 0 ? void 0 : task.workingEnvironment) === 0 ? _.size(task === null || task === void 0 ? void 0 : task.subtask) === 0 ? true : false : false;
+    var showEnv = (task === null || task === void 0 ? void 0 : task.workingEnvironment) === 0 ? lodash__WEBPACK_IMPORTED_MODULE_8___default().size(task === null || task === void 0 ? void 0 : task.subtask) === 0 ? true : false : false;
     if (auth.getRoleId() === 6 && showEnv) {
       setVisibleEnvironmentForm(true);
     }
   }, []);
 
   // render
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(VisibleItem, {
-      isVisible: visibleEnvironmentForm,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(WithContainer, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(VisibleItem, {
+      isVisible: !isDesignerTask && visibleEnvironmentForm,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(WithContainer, {
         close: close,
         visibleEnvironmentForm: visibleEnvironmentForm,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
           task: task,
           onSubmit: function onSubmit() {
             setVisibleEnvironmentForm(false);
@@ -12243,22 +12261,23 @@ function SubTaskFormController(_ref3) {
           close: close
         })
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(VisibleItem, {
-      isVisible: !visibleEnvironmentForm && visibleInformationModal,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(VisibleItem, {
+      isVisible: !isDesignerTask && !visibleEnvironmentForm && visibleInformationModal,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_7__["default"], {
         isOpen: true,
         onConfirm: function onConfirm() {
           return setVisibleInformationModal(false);
         },
         close: close
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(VisibleItem, {
-      isVisible: !visibleEnvironmentForm && !visibleInformationModal,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(WithContainer, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(VisibleItem, {
+      isVisible: isDesignerTask || !visibleEnvironmentForm && !visibleInformationModal,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(WithContainer, {
         close: close,
         visibleEnvironmentForm: visibleEnvironmentForm,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_SubTaskForm__WEBPACK_IMPORTED_MODULE_5__["default"], {
-          close: close
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_SubTaskForm__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          close: close,
+          isDesignerTask: isDesignerTask
         })
       })
     })]

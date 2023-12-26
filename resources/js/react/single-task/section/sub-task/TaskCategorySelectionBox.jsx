@@ -8,15 +8,20 @@ import { useGetTaskDetailsQuery } from '../../../../react-latest/services/api/Si
 
 
 
-const TaskCategorySelectionBox = ({selected, onSelect, taskId}) => {
+const TaskCategorySelectionBox = ({selected, onSelect, taskId, isDesignerTask}) => {
     const [query, setQuery] = React.useState('');
 
     const params = useParams();
     const {
-        data:categories,
+        data,
         isFetching
     } = useGetTaskDetailsQuery(`/${params?.taskId || taskId}/json?mode=category`);
 
+    const categories = data?.map(d => ({
+        id: d?.id,
+        category_name: d?.category_name,
+        added_by: d?.added_by,
+    }))
 
     const filteredData =
     query === ''
@@ -26,7 +31,7 @@ const TaskCategorySelectionBox = ({selected, onSelect, taskId}) => {
         })
 
   return (
-    <Combobox value={selected} onChange={onSelect}>
+    <Combobox value={selected} disabled={isDesignerTask} onChange={onSelect}>
         <div className="form-group position-relative my-3">
             <label htmlFor="">Task category<sup>*</sup></label>
             <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">

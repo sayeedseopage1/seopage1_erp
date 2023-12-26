@@ -27,7 +27,7 @@ import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
 import { calenderOpen } from "./helper/calender_open";
 
-const SubTaskForm = ({ close }) => {
+const SubTaskForm = ({ close, isDesignerTask }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
@@ -99,6 +99,16 @@ const SubTaskForm = ({ close }) => {
         let value = e.target.value;
         setState(value);
     };
+
+    // if task for designer select category default
+    React.useEffect(() => {
+        isDesignerTask && setTaskCategory({
+            id: task?.category?.id,
+            category_name: task?.category?.name,
+            added_by: task?.category?.addedBy,
+        })
+    }, [isDesignerTask])
+
 
 
     const isValid = () => {
@@ -556,6 +566,7 @@ const SubTaskForm = ({ close }) => {
                     <TaskCategorySelectionBox
                         selected={taskCategory}
                         onSelect={setTaskCategory}
+                        isDesignerTask={isDesignerTask}
                     />
 
                     {err?.taskCategory && (

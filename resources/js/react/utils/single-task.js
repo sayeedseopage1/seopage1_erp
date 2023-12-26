@@ -22,9 +22,9 @@ export class BoardColumn {
 // category
 export class Category {
     constructor(cat) {
-        (this.name = _.startCase(cat?.category_name)),
-            (this.addedBy = cat?.added_by),
-            (this.id = cat?.id);
+        (this.name = cat?.category_name),
+        (this.addedBy = cat?.added_by),
+        (this.id = cat?.id);
     }
 }
 
