@@ -13,6 +13,7 @@ import { useApproveSubmittedTaskMutation, useGetSubmittedTaskQuery } from '../..
 import Button from '../../../components/Button';
 import Modal from '../../../components/Modal';
 import SubmitButton from '../../../components/SubmitButton';
+import _ from 'lodash';
 
 const ApproveTask = ({task, status, auth}) => {
   const dispatch = useDispatch();
@@ -190,7 +191,7 @@ const ApproveTask = ({task, status, auth}) => {
 
                                 <div className="form-group">
                                     <label htmlFor="" className='font-weight-bold'>
-                                        Any Recommendations For Developer?<sup className='f-16'>*</sup>
+                                        Any Recommendations For {_.includes([5, 7], task?.category?.id) ? "Designer" : "Developer"}?<sup className='f-16'>*</sup>
                                     </label>
                                     <div className='ck-editor-holder'>
                                         <CKEditorComponent onChange={onWriteOnEditor} />

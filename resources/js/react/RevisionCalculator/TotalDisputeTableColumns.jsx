@@ -109,7 +109,7 @@ export const TotalDisputeTableColumn = [
 
     {
         id: "developer_name",
-        heading: "Developers name",
+        heading: "Developers/Designers name",
         moveable: false,
         sort: row => row?.developer_name,
         rowSpan: 2,

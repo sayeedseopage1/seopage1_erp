@@ -62,7 +62,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         return () => clearInterval(interval); // clear interval
     }, [timerStart]);
 
-    // time formating
+    // time formatting
     const timer = () => {
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
@@ -75,7 +75,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         return `${hr}:${min}:${sec}`;
     };
 
-    // tostar
+    // toaster
     const Toast = Swal.mixin({
         toast: true,
         position: "top-end",
@@ -160,6 +160,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     };
 
+    const isDesignerTask = _.includes([5, 7], task?.category?.id); 
+
     // start timer function
     const startTimer = (e) => {
         e.preventDefault();
@@ -169,7 +171,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         )
             .unwrap()
             .then((res) => {
-                if (res.is_first_task) {
+                if (res.is_first_task && !isDesignerTask) {
                     setIsOpenConfirmationModal(true);
                 } else startTimerControl();
             })
