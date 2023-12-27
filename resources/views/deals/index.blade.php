@@ -9,7 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
 
-    <x-filters.filter-box>
+    {{-- <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
@@ -107,7 +107,7 @@
             </x-forms.button-secondary>
         </div>
         <!-- RESET END -->
-    </x-filters.filter-box>
+    </x-filters.filter-box> --}}
 
 
 
@@ -172,11 +172,11 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
         <!-- Add Task Export Buttons End -->
 
         <!-- Task Box Start -->
-        <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+        {{-- <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
 
-        </div>
+        </div> --}}
         <!-- Task Box End -->
     </div>
     <!-- CONTENT WRAPPER END -->
@@ -184,7 +184,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 @endsection
 
 
-@push('scripts')
+{{-- @push('scripts')
     @include('sections.datatable_js')
     <script>
 
@@ -388,4 +388,4 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
     });
     </script>
 
-@endpush
+@endpush --}}

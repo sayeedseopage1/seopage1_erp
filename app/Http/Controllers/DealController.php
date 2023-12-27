@@ -72,7 +72,7 @@ class DealController extends AccountBaseController
     }
 
 
-    public function index(DealsDataTable $dataTable)
+    public function index()
     {
       //  abort_403(user()->permission('view_deal') == 'none');
 
@@ -85,7 +85,7 @@ class DealController extends AccountBaseController
 
         }
 
-        return $dataTable->render('deals.index', $this->data);
+        return view('deals.index', $this->data);
     }
 
     public function applyQuickAction(Request $request)
