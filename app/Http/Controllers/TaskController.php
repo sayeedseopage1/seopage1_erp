@@ -1174,8 +1174,34 @@ class TaskController extends AccountBaseController
         }
     }
 
+    /**
+     * PROJECT MANAGER TO LEAD DEVELOPER/DESIGNER REVISION
+     */
     public function TaskRevision(Request $request)
     {
+
+        $revision_type = $request->revision_type; 
+
+        if($revision_type == 'GENERAL_REVISION'){
+            
+            $startDate = now()->startOfMonth();  //* Start of the current month
+            $endDate = now()->endOfMonth();      //* End of the current month
+
+            $generalRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
+                ->where('projects.pm_id', Auth::id())
+                ->where('revision_type', 'GENERAL_REVISION')
+                // ->where('task_id', $task_revision->id);
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->count();
+ 
+
+            if($generalRevisionCount > 1){
+                return response()->json([
+                    'error' => true,
+                    'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum time'
+                ]);
+            }
+         }
 
         $task_status = Task::find($request->task_id);
         $task_status->status = "incomplete";
@@ -1218,15 +1244,17 @@ class TaskController extends AccountBaseController
             $task_revision->final_responsible_person = "PM";
         }
 
+        if($revision_type){
+            $task_revision->revision_type = $revision_type;
+        } 
+
         // if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
         //     $task_revision->raised_by_percent = 50;
         //     $task_revision->raised_against_percent = 50;
         //     $task_revision->final_responsible_person = '';
         // }
         $task_revision->save();
-
-
-
+ 
         //need pending action
 
         $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$task_revision->task_id)->get();
@@ -3091,7 +3119,36 @@ class TaskController extends AccountBaseController
     /************* CLIENT HAS REVISION *************** */
     public function clientHasRevision(Request $request)
     {
-        // DB::beginTransaction();
+        $revision_type = $request->revision_type; 
+ 
+        /**
+         *  if project manager select 2 time general revision 
+         *  then he/she not able to select this option any more 
+         */
+
+         if($revision_type == 'GENERAL_REVISION'){
+            
+            $startDate = now()->startOfMonth();  //* Start of the current month
+            $endDate = now()->endOfMonth();      //* End of the current month
+
+            $generalRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
+                ->where('projects.pm_id', Auth::id())
+                ->where('revision_type', 'GENERAL_REVISION')
+                // ->where('task_id', $task_revision->id);
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->count();
+ 
+
+            if($generalRevisionCount > 2){
+                return response()->json([
+                    'error' => true,
+                    'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum times.'
+                ]);
+            }
+         }
+
+
+
 
         $dispute_between = explode('x', $request->acknowledgement_id)[0];
 
@@ -3204,8 +3261,12 @@ class TaskController extends AccountBaseController
         //     $updateTask->save();
         // }
 
-        $task_revision->save();
+        if($revision_type){
+            $task_revision->revision_type = $revision_type;
+        }
 
+        $task_revision->save();
+         
 
         // CREATE DISPUTE
         if ($task_revision->dispute_created) {

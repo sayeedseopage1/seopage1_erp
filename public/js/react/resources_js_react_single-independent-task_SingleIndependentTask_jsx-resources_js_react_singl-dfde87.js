@@ -848,7 +848,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useRevision: () => (/* binding */ useRevision)
 /* harmony export */ });
-var useRevision = function useRevision() {
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+var useRevision = function useRevision(task) {
+  var _task$category;
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
+
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
     var isAlreadyAccepted = false;
@@ -865,12 +871,17 @@ var useRevision = function useRevision() {
       isDeniable: false
     }, {
       id: 'PLRx3',
-      revision: "The Lead Developer/project coordinator’s delivered work doesn’t match my shared requirement",
+      revision: "The Lead ".concat(taskType === 'design' ? 'designer' : 'developer', "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
       isDeniable: true
     }, {
       id: 'PLRx04',
-      revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
+      revision: "The instruction was followed, but the lead ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out some default/basic things or best practices which are not essential to write in instruction"),
       isDeniable: true
+    }, {
+      id: 'PLRx05',
+      revision: "I have some general revisions",
+      isDeniable: false,
+      type: 'GENERAL_REVISION'
     }];
   };
 
@@ -883,7 +894,7 @@ var useRevision = function useRevision() {
     } else {
       return [{
         id: 'LDRx1',
-        revision: "The concerned developer’s delivered work doesn’t match my shared requirement",
+        revision: "The concerned ".concat(taskType === 'design' ? 'designer’s' : 'developer’s', "  delivered work doesn\u2019t match my shared requirement"),
         isDeniable: true
       }, {
         id: 'LDRx2',
@@ -895,7 +906,7 @@ var useRevision = function useRevision() {
         isDeniable: false
       }, {
         id: 'LDRx4',
-        revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
+        revision: "The instruction was followed but the ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
         isDeniable: true
       }];
     }

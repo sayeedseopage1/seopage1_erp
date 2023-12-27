@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import CKEditorComponent from "../../../../ckeditor";
-import { useRevision } from '../../../../hooks/useRevision';
+import { useRevision } from "../../../../hooks/useRevision";
 import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPageApi";
 import Button from "../../../components/Button";
 import SubmitButton from "../../../components/SubmitButton";
 import Swal from "sweetalert2";
-
-
 
 const RevisionCreationModal = ({ close, task, auth }) => {
     const [reason, setReason] = useState(null);
@@ -18,14 +16,17 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     const dispatch = useDispatch();
     const {
         getLeadDeveloperAcknowladgementOptions,
-        getProjectManagerAcknowladgementOptions
-    } = useRevision();
+        getProjectManagerAcknowladgementOptions,
+    } = useRevision(task);
 
     const role = auth.getRoleId();
 
-    const revisionOptions = role === 4 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
+    const revisionOptions =
+        role === 4
+            ? getProjectManagerAcknowladgementOptions()
+            : getLeadDeveloperAcknowladgementOptions();
 
-    const [createRevision, {isLoading}] =  useCreateRevisionMutation();
+    const [createRevision, { isLoading }] = useCreateRevisionMutation();
 
     // radio button change
     const handleChange = (value) => {
@@ -33,78 +34,90 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     };
 
     // editor change text
-    const handleEditorTextChange= (e, editor) => {
+    const handleEditorTextChange = (e, editor) => {
         const data = editor.getData();
         setComment(data);
-    }
+    };
 
     // validation
     const validate = () => {
-       let errorCount = 0;
+        let errorCount = 0;
 
-       if(comment === ""){
+        if (comment === "") {
             errorCount++;
-            setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')
-       }
+            setCommentError(
+                "You have to explain the revision in details, so that lead developer/developer can understand where they need to work."
+            );
+        }
 
-       if(!reason){
+        if (!reason) {
             errorCount++;
-            setReasonError('You have to select a reason from above options')
-       }
+            setReasonError("You have to select a reason from above options");
+        }
 
-       return errorCount === 0;
-    }
-
+        return errorCount === 0;
+    };
+    console.log({task})
 
     // handle submission
-    const handleSubmission=(e)=>{
+    const handleSubmission = async (e) => {
         e.preventDefault();
+
 
         const data = {
             task_id: task?.id,
             user_id: auth?.id,
-            revision_acknowledgement: reason?.revision ?? '',
-            acknowledgement_id: reason?.id ,
+            against_to: task?.assigneeTo?.id,
+            revision_acknowledgement: reason?.revision ?? "",
+            acknowledgement_id: reason?.id,
             comment,
-            is_deniable: reason?.isDeniable ?? false
-        }
+            revision_type: reason?.type ?? null,
+            is_deniable: reason?.isDeniable ?? false,
+        };
 
-        if(validate()){
-            createRevision(data)
-            .unwrap()
-            .then(res => {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
+        if (validate()) {
+            await createRevision(data)
+                .unwrap()
+                .then((res) => { 
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                    });
+
+                    if(res?.error){
+                        Toast.fire({
+                            icon: "error",
+                            html: res?.message,
+                        });
+                        return;
+                    }
+
+                    Toast.fire({
+                        icon: "success",
+                        text: "Task submitted for Revision successfully",
+                    });
+                    close();
                 })
-
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Task submitted for Revision successfully'
-                })
-
-                close();
-            })
-            .catch(err => console.log(err));
-        }else{
+                .catch((err) => console.log(err));
+        } else {
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'top-end',
+                position: "top-end",
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
-            })
+            });
 
             Toast.fire({
-                icon: 'success',
-                title: 'You forgot to fill up some required fields'
-            })
+                icon: "success",
+                title: "You forgot to fill up some required fields",
+            });
             // console.log('Your forgot to fill up some required fields')
         }
-    }
+    };
 
     return (
         <React.Fragment>
@@ -125,17 +138,21 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                 <form className="px-3">
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold">
-                            Select Reason for Revision<sup className="f-16">*</sup> :
+                            Select Reason for Revision
+                            <sup className="f-16">*</sup> :
                         </label>
                         <div className="px-3">
-                            {revisionOptions.map(option => (
-                                <div key={option.id} className="form-check d-flex align-items-start mb-2">
+                            {revisionOptions.map((option) => (
+                                <div
+                                    key={option.id}
+                                    className="form-check d-flex align-items-start mb-2"
+                                >
                                     <input
                                         className="form-check-input mr-2"
                                         type="radio"
                                         name="exampleRadios"
                                         id={option.id}
-                                        required= {true}
+                                        required={true}
                                         onChange={() => handleChange(option)}
                                         value={option.revision}
                                         style={{
@@ -143,7 +160,6 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                                             height: "16px",
                                             marginTop: "3px",
                                         }}
-
                                     />
                                     <label
                                         className="form-check-label"
@@ -155,7 +171,14 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                                 </div>
                             ))}
                         </div>
-                        {reasonError && <small id="emailHelp" className="form-text text-danger">{reasonError}</small>}
+                        {reasonError && (
+                            <small
+                                id="emailHelp"
+                                className="form-text text-danger"
+                            >
+                                {reasonError}
+                            </small>
+                        )}
                     </div>
 
                     <div className="form-group">
@@ -163,17 +186,34 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                             Explain or Comment<sup className="f-16">*</sup> :
                         </label>
                         <div className="ck-editor-holder">
-                            <CKEditorComponent onChange={handleEditorTextChange}/>
+                            <CKEditorComponent
+                                onChange={handleEditorTextChange}
+                            />
                         </div>
-                        {commentError && <small id="emailHelp" className="form-text text-danger">{commentError}</small>}
+                        {commentError && (
+                            <small
+                                id="emailHelp"
+                                className="form-text text-danger"
+                            >
+                                {commentError}
+                            </small>
+                        )}
                     </div>
 
                     <div>
                         <div className="mt-3 d-flex align-items-center">
-                            <Button onClick={close} variant="tertiary" className="ml-auto mr-2">
+                            <Button
+                                onClick={close}
+                                variant="tertiary"
+                                className="ml-auto mr-2"
+                            >
                                 Close
                             </Button>
-                            <SubmitButton title="Submit" onClick={handleSubmission} isLoading={isLoading} />
+                            <SubmitButton
+                                title="Submit"
+                                onClick={handleSubmission}
+                                isLoading={isLoading}
+                            />
                         </div>
                     </div>
                 </form>

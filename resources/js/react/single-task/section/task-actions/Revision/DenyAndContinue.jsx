@@ -3,24 +3,8 @@ import Button from '../../../components/Button';
 import CKEditorComponent from '../../../../ckeditor';
 import SubmitButton from '../../../components/SubmitButton';
 import { User } from '../../../../utils/user-details';
+import _ from 'lodash';
 
-
-
-const denyOptions = (type) => {
-    switch(type){
-        case 'lead_dev': 
-            return ([
-                {id: 'deny1', title: 'The project manager added new things in the instruction which was not part of the original instruction'},
-                {id: 'deny2', title: 'The way the project manager is interpreting his original instruction now was not possible to understand from what his writing'}
-            ])
-        case 'dev':
-            return([
-                {id: 'deny1', title: 'The lead developer added new things in the instruction which was not part of the original instruction'},
-                {id: 'deny2', title: 'The way the lead developer is interpreting his original instruction now was not possible to understand from what his writing'}
-            ])
-        default: []
-    }
-}
 
 
 
@@ -32,6 +16,10 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
     const [commentError, setCommentError] = useState("");
     const [err, setErr] = useState(null);
 
+    console.log({denyandcontinue: task})
+
+    const taskType = _.includes([5, 7], task?.category?.id) ? 'design' : 'development';
+
     const handleEditorDataChange = (e, editor) => {
         const data = editor.getData();
         setComment(data);
@@ -41,6 +29,25 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
     const handleChange = (e) => {
         setReason(e.target.value);
     };
+
+            
+    const denyOptions = (type) => {
+        switch(type){
+            case 'lead_dev': 
+                return ([
+                    {id: 'deny1', title: 'The project manager added new things in the instruction which was not part of the original instruction'},
+                    {id: 'deny2', title: 'The way the project manager is interpreting his original instruction now was not possible to understand from what his writing'}
+                ])
+            case 'dev':
+                return([
+                    {id: 'deny1', title: `The lead ${taskType === 'design' ? 'designer' : 'developer'} added new things in the instruction which was not part of the original instruction`},
+                    {id: 'deny2', title: 'The way the lead developer is interpreting his original instruction now was not possible to understand from what his writing'}
+                ])
+            default: []
+        }
+    }
+
+
 
      // validation
      const validate = () => {
