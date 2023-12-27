@@ -93,3 +93,8 @@ export const DealStatus = styled.div`
 `;
 
 export const Action = styled.div``;
+
+
+export const EmptySpace = styled.span`
+    color: #ccc;
+`;

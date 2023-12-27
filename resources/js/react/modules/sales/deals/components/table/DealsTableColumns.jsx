@@ -14,112 +14,120 @@
 // import ActionDropdown from "./ActionDropdown";
 // import Avatar from "../../../../../global/Avatar";
 
+import { EmptySpace } from "./ui";
+
 export const DealsTableColumns = [
     {
         id: "id",
         header: "#",
-        cell: ({row}) => 'id',
+        cell: ({row}) => row.original?.id,
     },
-    // {
-    //     id: "project_name",
-    //     header: "Project Name",
-    //     accessorKey: "client_name",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         return (
-    //             <a
-    //                 href={`/account/leads/${data?.id}`}
-    //                 className="multiline-ellipsis text-hover-underline"
-    //             >
-    //                 {data?.client_name}
-    //             </a>
-    //         );
-    //     },
-    // },
-    // {
-    //     id: "project_link",
-    //     header: "Project Link",
-    //     accessorKey: "project_link",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         return (
-    //             <a
-    //                 href={data?.project_link}
-    //                 className="multiline-ellipsis text-hover-underline pr-2"
-    //             >
-    //                 {data?.project_link}
-    //             </a>
-    //         );
-    //     },
-    // },
-    // {
-    //     id: "project_id",
-    //     header: "Project ID",
-    //     accessorKey: "project_id",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         return <ProjectID>{data?.project_id ?? "--"}</ProjectID>;
-    //     },
-    // },
-    // {
-    //     id: "project_budget",
-    //     header: "Project Budget",
-    //     accessorKey: "bid_value2",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         return (
-    //             <ProjectBudget>
-    //                 {`${data?.currency_symbol}${data?.bid_value} - ${data?.currency_symbol}${data?.bid_value2}`}
-    //             </ProjectBudget>
-    //         );
-    //     },
-    // },
-    // {
-    //     id: "bid_value",
-    //     header: "Bid Value",
-    //     accessorKey: "actual_value",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         return (
-    //             <BidValue>
-    //                 {`${data?.currency_symbol}${data?.actual_value}`}
-    //             </BidValue>
-    //         );
-    //     },
-    // },
-    // {
-    //     id: "created_at",
-    //     header: "Created",
-    //     accessorKey: "lead_created_at",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         const date = data?.lead_created_at
-    //             ? dayjs(data?.lead_created_at).format(`DD-MM-YYYY hh:mm:ss A`)
-    //             : "--";
-    //         return <CreatedAt>{date}</CreatedAt>;
-    //     },
-    // },
-    // {
-    //     id: "created_by",
-    //     header: "Created By",
-    //     accessorKey: "agent_name",
-    //     cell: ({ row }) => {
-    //         const data = row.original;
-    //         return (
-    //             <CreatedBy
-    //                 href={`/account/employees/${data.added_by}`}
-    //             >
-    //                 <Avatar
-    //                     type="circle"
-    //                     name={data?.agent_name}
-    //                     src={data?.user?.image_url ?? null}
-    //                 />
+    {
+        id: "deal_name",
+        header: "Deal Name",
+        accessorKey: "",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <a
+                    href={`/account/deals/${data?.id}`}
+                    className="multiline-ellipsis text-hover-underline"
+                >
+                    {data?.project_name}
+                </a>
+            );
+        },
+    },
+    {
+        id: "client",
+        header: "Client",
+        accessorKey: "client_name",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span className="multiline-ellipsis text-hover-underline pr-2">
+                    {data?.client_name || data?.client_username || <EmptySpace> -- </EmptySpace>}
+                </span>
+            );
+        },
+    },
+    {
+        id: "project_link",
+        header: "Project Link",
+        accessorKey: "project_link",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <a
+                    href={data?.project_link}
+                    className="multiline-ellipsis text-hover-underline pr-2"
+                >
+                    {data?.project_link ?? <EmptySpace> -- </EmptySpace>}
+                </a>
+            );
+        },
+    },
+    {
+        id: "project_budget",
+        header: "Project Budget (USD)",
+        accessorKey: "bid_value2",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <ProjectBudget>
+                    {/* {`${data?.currency_symbol}${data?.bid_value} - ${data?.currency_symbol}${data?.bid_value2}`} */}
+                </ProjectBudget>
+            );
+        },
+    },
+    {
+        id: "project_budget_original_currency",
+        header: "Project Budget (Original Currency)",
+        accessorKey: "bid_value2",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <ProjectBudget>
+                    {/* {`${data?.currency_symbol}${data?.bid_value} - ${data?.currency_symbol}${data?.bid_value2}`} */}
+                </ProjectBudget>
+            );
+        },
+    },
+    {
+        id: "created_at",
+        header: "Created Date",
+        accessorKey: "created_at",
+        cell: ({ row }) => {
+            const data = row.original;
+            const date = data?.created_at
+                ? dayjs(data?.created_at).format(`DD-MM-YYYY hh:mm:ss A`)
+                : <EmptySpace> -- </EmptySpace>;
+            return <CreatedAt>{date}</CreatedAt>;
+        },
+    },
+ 
+   
+    {
+        id: "added_by",
+        header: "Added By",
+        accessorKey: "add",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <CreatedBy
+                    href={`/account/employees/${data.added_by}`}
+                >
+                    <Avatar
+                        type="circle"
+                        name={data?.agent_name}
+                        src={data?.user?.image_url ?? null}
+                    />
 
-    //                 <span>{data?.agent_name}</span>
-    //             </CreatedBy>
-    //         );
-    //     },
-    // },
+                    <span>{data?.agent_name}</span>
+                </CreatedBy>
+            );
+        },
+    },
     // {
     //     id: "bidding_delay_time",
     //     header: "Bidding Delay Time",

@@ -30,7 +30,7 @@ const Deals = () => {
       sort_by: sorting[0]?.id,
       sort_type: sorting[0]?.desc ? 'desc' : 'asc',
       ...filter
-    }),{ refetchOnMountOrArgChange: true, skip: !filter?.start_date});
+    }),{ refetchOnMountOrArgChange: true });
 
 
     const deals = data?.data;
@@ -39,6 +39,8 @@ const Deals = () => {
         setPagination(paginate);
     };
  
+
+    console.log(deals);
 
     return (
         <Container> 
