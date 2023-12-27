@@ -57,7 +57,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
 
         return errorCount === 0;
     };
-    console.log({task})
+   
 
     // handle submission
     const handleSubmission = async (e) => {

@@ -17384,9 +17384,6 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     }
     return errorCount === 0;
   };
-  console.log({
-    task: task
-  });
 
   // handle submission
   var handleSubmission = /*#__PURE__*/function () {
