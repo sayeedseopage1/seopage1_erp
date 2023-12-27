@@ -872,10 +872,22 @@ class DealController extends AccountBaseController
         // $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $dealQuery = DealStage::select('deal_stages.*', 'deal_stages.converted_by as deal_stages_converted_by', 'deal_stages.added_by as lead_added_by')
+        $dealQuery = DealStage::select(
+            'deal_stages.*',
+            'deal_stages.added_by as lead_added_by',
+            'lead_added_by.name as lead_added_by_name',
+            'lead_added_by.image as lead_added_by_image',
+            'deal_stages.converted_by as deal_stages_converted_by',
+            'deal_stages_converted_by.name as deal_stages_converted_by_name',
+            'deal_stages_converted_by.image as deal_stages_converted_by_image',
+            'amount.currency_symbol as ammount_currency_symbol',
+            'actual_amount.currency_symbol as actual_amount_currency_symbol'
+            )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
             ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
+            ->leftJoin('currencies as amount', 'amount.id', 'deal_stages.currency_id')
+            ->leftJoin('currencies as actual_amount', 'actual_amount.id', 'deal_stages.original_currency_id')
             ->where('deal_stages.convert_ld_status' ,'!=','DM');
 
             // if ($startDate !== null && $endDate !== null) {
