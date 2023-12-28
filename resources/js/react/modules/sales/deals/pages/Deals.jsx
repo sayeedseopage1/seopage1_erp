@@ -7,8 +7,12 @@ import { useDealsQuery } from "../../../../services/api/dealApiSlice";
 import { Flex } from "../components/table/ui";
 import Button from "../../../../global/Button";
 import FilterBar from "../components/FilterBar";
+import DealCreationForm from "../components/DealCreationForm";
 
 const Deals = () => {
+    const [isCreationFormVisible, setIsCreationFormVisible] =
+        React.useState(false);
+
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -42,30 +46,38 @@ const Deals = () => {
     };
 
     return (
-        <Container>
-            <FilterBar setFilter={setFilter} />
-            <Flex justifyContent="space-between" className="mb-3">
-                <Button className="font-weight-normal">
-                    <i className="fa-solid fa-plus" />
-                    Create Deal
-                </Button>
-                {/* refresh */}
-                <RefreshButton
-                    onClick={refetch}
+        <React.Fragment>
+            <Container>
+                <FilterBar setFilter={setFilter} />
+                <Flex justifyContent="space-between" className="mb-3">
+                    <Button onClick={() => setIsCreationFormVisible(true)} className="font-weight-normal">
+                        <i className="fa-solid fa-plus" />
+                        Create Deal
+                    </Button>
+                    {/* refresh */}
+                    <RefreshButton
+                        onClick={refetch}
+                        isLoading={isFetching}
+                        className="font-weight-normal"
+                    />
+                </Flex>
+                <DataTable
+                    data={deals}
+                    columns={[...DealsTableColumns]}
                     isLoading={isFetching}
-                    className="font-weight-normal"
+                    onPageChange={onPageChange}
+                    sorting={sorting}
+                    tableName="DealsTable"
+                    setSorting={setSorting}
                 />
-            </Flex>
-            <DataTable
-                data={deals}
-                columns={[...DealsTableColumns]}
-                isLoading={isFetching}
-                onPageChange={onPageChange}
-                sorting={sorting}
-                tableName="DealsTable"
-                setSorting={setSorting}
+            </Container>
+
+            {/* creation form */}
+            <DealCreationForm
+                isOpen={isCreationFormVisible}
+                close={() => setIsCreationFormVisible}
             />
-        </Container>
+        </React.Fragment>
     );
 };
 

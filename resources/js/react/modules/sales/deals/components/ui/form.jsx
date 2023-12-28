@@ -36,3 +36,13 @@ export const ErrorText = styled.div`
   color: red;
   font-size: 14px;
 `;
+
+export const RadioLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const RadioInput = styled.input`
+  
+`;
