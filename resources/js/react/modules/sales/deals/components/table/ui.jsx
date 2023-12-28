@@ -28,34 +28,34 @@ export const TableRow = styled.tr`
     }
 `;
 export const TableHeadItem = styled.th`
-    padding: 10px 16px; 
+    padding: 10px 16px;
     font-weight: 400;
     background-color: #fff;
     color: #99a5b5;
     white-space: nowrap;
-    box-shadow: 0 1px 0 0 #f1f1f3; 
+    box-shadow: 0 1px 0 0 #f1f1f3;
 
     cursor: -moz-grab;
     cursor: -webkit-grab;
     cursor: grab;
 
-    &.dragging{
+    &.dragging {
         cursor: -moz-grabbing;
         cursor: -webkit-grabbing;
         cursor: grabbing;
     }
-    &.dropArea{
+    &.dropArea {
         background-color: #f7f7f7;
     }
 
-    &.project_name{
+    &.project_name {
         width: 256px;
         min-width: 256px;
     }
 
-    &.actual_amount{
+    &.actual_amount {
         white-space: pre-wrap;
-        width: 150px;  
+        width: 150px;
         min-width: 150px;
     }
 `;
@@ -92,8 +92,8 @@ export const ProjectID = styled.div`
     width: 130px;
 `;
 
-export const ProjectBudget = styled.div` 
-    text-align: right; 
+export const ProjectBudget = styled.div`
+    text-align: right;
 `;
 export const BidValue = styled.div`
     width: 80px;
@@ -108,7 +108,22 @@ export const CreatedBy = styled.a`
     width: 180px;
 `;
 export const BiddingDelayTime = styled.div``;
-export const Status = styled.div``;
+
+export const Status = styled.div`
+    background-color: ${({ bgColor }) =>
+        bgColor.toUpperCase() === "#FFFF00" ? "#e6e600" : bgColor};
+    color: ${({ bgColor }) =>
+        bgColor.toUpperCase() === "#FFFF00" ? "#111" : "#fff"};
+    border-radius: 10px;
+    font-size: 11px;
+    padding: 0;
+    width: fit-content;
+    font-weight: bold;
+    padding: 0 8px;
+    line-height: 16px;
+    white-space: nowrap;
+`;
+
 export const DealStatus = styled.div`
     background-color: ${(props) => props.backgroundColor};
     color: ${(props) => props.color};
@@ -120,7 +135,6 @@ export const DealStatus = styled.div`
 `;
 
 export const Action = styled.div``;
-
 
 export const EmptySpace = styled.span`
     color: #ccc;

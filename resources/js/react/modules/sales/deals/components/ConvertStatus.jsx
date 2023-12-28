@@ -1,17 +1,23 @@
-import * as React from 'react';
+import * as React from "react";
 import { Listbox } from "@headlessui/react";
-import styles from "./SalesFilter.module.css";
+import styles from "./PersonFilter.module.css";
 import Avatar from "../../../../global/Avatar";
-import {filter, lowerCase, includes} from 'lodash'; 
+import { filter, lowerCase, includes } from "lodash";
+import { LuChevronsUpDown } from "react-icons/lu";
 
 export default function ConvertStatus({ value, onChange, data }) {
     const [query, setQuery] = React.useState("");
 
-    
-    const filteredData = data ? query ? filter(data, item => includes(lowerCase(item.name), lowerCase(query))) : data : [];
+    const filteredData = data
+        ? query
+            ? filter(data, (item) =>
+                  includes(lowerCase(item.name), lowerCase(query))
+              )
+            : data
+        : [];
     return (
         <div className={styles.toggleWrapper}>
-            <span><strong>Status:</strong> </span>
+            <span>Status: </span>
 
             <Listbox
                 as="div"
@@ -20,16 +26,21 @@ export default function ConvertStatus({ value, onChange, data }) {
                 className={styles.dropdown}
             >
                 <Listbox.Button className={styles.dropdownToggle}>
-                    {value?.name ?? "All"}
+                    <span
+                        className={`${styles.dropdownToggleButtonText} singleline-ellipsis`}
+                    >
+                        {value?.title ?? <span>All</span>}
+                    </span>
+                    <LuChevronsUpDown className={styles.dropdownIcon} />
                 </Listbox.Button>
                 <Listbox.Options className={styles.dropdownMenu}>
                     <div className={styles.searchBox}>
                         <i className="fa-solid fa-search" />
-                        <input 
-                            type="text" 
-                            placeholder="Search..." 
-                            value={query} 
-                            onChange={e=> setQuery(e.target.value)}
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
                         />
                     </div>
                     <div className={styles.options}>
@@ -38,7 +49,7 @@ export default function ConvertStatus({ value, onChange, data }) {
                                 `${styles.dropdownItem} ${
                                     active && styles.dropdownItemActive
                                 } ${selected && styles.dropdownItemSelected}`
-                            } 
+                            }
                             value={null}
                         >
                             Select All
@@ -48,12 +59,14 @@ export default function ConvertStatus({ value, onChange, data }) {
                                 className={({ active, selected }) =>
                                     `${styles.dropdownItem} ${
                                         active && styles.dropdownItemActive
-                                    } ${selected && styles.dropdownItemSelected}`
+                                    } ${
+                                        selected && styles.dropdownItemSelected
+                                    }`
                                 }
                                 key={item.id}
                                 value={item}
                             >
-                                {item.name}
+                                {item.title}
                             </Listbox.Option>
                         ))}
                     </div>

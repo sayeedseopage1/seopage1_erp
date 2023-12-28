@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+ 
 import Button from "../../../../global/Button";
 
 export default function RefreshButton({onClick, isLoading, ...rest}) {
@@ -9,6 +9,7 @@ export default function RefreshButton({onClick, isLoading, ...rest}) {
             loaderTitle="Refreshing..." 
             {...rest}
         >
+            <i className="fa-solid fa-rotate-right"/>
             Refresh
         </Button>
     );

@@ -11,8 +11,7 @@ import {
     ProjectID,
     Status,
 } from "./ui";
-// import { Menu } from "@headlessui/react ";
-// import ActionDropdown from "./ActionDropdown";
+import ActionDropdown from "./ActionDropdown";
 import Avatar from "../../../../../global/Avatar";
  
 
@@ -154,18 +153,8 @@ export const DealsTableColumns = [
             const data = row.original;
 
             return (
-                <Status>
-                    {data.deal_status === 0 ? (
-                        <span className="badge badge-danger">
-                            {" "}
-                            Not Converted to Deal{" "}
-                        </span>
-                    ) : (
-                        <span className="badge badge-success">
-                            {" "}
-                            Converted to Deal{" "}
-                        </span>
-                    )}
+                <Status bgColor={data?.won_lost_bg}>
+                   {data?.won_lost} 
                 </Status>
             );
         },
@@ -174,6 +163,6 @@ export const DealsTableColumns = [
     {
         id: "action",
         header: "Action",
-        cell: (props) => '',
+        cell: (props) => <ActionDropdown {...props} />,
     },
 ];
