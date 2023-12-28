@@ -970,5 +970,4 @@ class DealController extends AccountBaseController
             'data' => $deals_data
         ]);
     }
-
 }
