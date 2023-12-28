@@ -151,7 +151,7 @@ class DealController extends AccountBaseController
     }
 
 
-    public function store(Request $request)
+    public function storeDeal(Request $request)
     {
     //    dd($request->all());
         $request->validate([
