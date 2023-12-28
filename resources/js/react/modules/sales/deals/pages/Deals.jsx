@@ -8,8 +8,12 @@ import { Flex } from "../components/table/ui";
 import Button from "../../../../global/Button";
 import FilterBar from "../components/FilterBar";
 import DealCreationForm from "../components/DealCreationForm";
+import DealUpdateForm from "../components/DealUpdateForm";
+import { useDealContext } from "../components/context/DealContext";
 
 const Deals = () => {
+    const {isEditFormEnable} = useDealContext();
+
     const [isCreationFormVisible, setIsCreationFormVisible] =
         React.useState(false);
 
@@ -77,6 +81,12 @@ const Deals = () => {
                 isOpen={isCreationFormVisible}
                 close={() => setIsCreationFormVisible(false)}
             />
+
+            {/* edit form */}
+            {isEditFormEnable && 
+              <DealUpdateForm/>
+            }
+            
         </React.Fragment>
     );
 };

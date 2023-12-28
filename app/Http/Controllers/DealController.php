@@ -420,16 +420,16 @@ class DealController extends AccountBaseController
 
     public function update(Request $request)
     {
-//        dd($request->all());
-        $request->validate([
-            'client_name' => 'required',
-            'client_username' => 'required',
-            'project_name' => 'required',
-            'project_link' => 'required|url',
-            'amount' => 'required',
-            'description' => 'required',
+    //    dd($request->all()); 
+        // $request->validate([
+        //     'client_name' => 'required',
+        //     'client_username' => 'required',
+        //     'project_name' => 'required',
+        //     'project_link' => 'required|url',
+        //     'amount' => 'required',
+        //     'description' => 'required',
 
-        ]);
+        // ]);
 
         $deal = DealStage::findOrFail($request->id);
         $deal->client_name= $request->client_name;

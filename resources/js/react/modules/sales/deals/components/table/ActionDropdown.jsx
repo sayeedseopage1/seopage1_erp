@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Dropdown from "../../../../../global/Dropdown";
 import styles from "./ActionDropdown.module.css";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -8,10 +8,10 @@ import { useAuth } from "../../../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import _ from "lodash";
+import { useDealContext } from "../context/DealContext";
 
 const ActionDropdown = ({ ...rest }) => {
-    const [isOpenDealConversionForm, setIsOpenDealConversionForm] =
-        React.useState(false);
+    const {openEditForm} = useDealContext();
 
     // const [deleteLead, { isLoading }] = useDeleteLeadMutation();
     const auth = useAuth();
@@ -61,9 +61,7 @@ const ActionDropdown = ({ ...rest }) => {
 
                     {_.includes([1, 7], auth.getRoleId()) && (
                         <Dropdown.Item
-                            onClick={() =>
-                                (window.location.href = `/account/leads/${rest.row.original?.id}/edit`)
-                            }
+                            onClick={() => openEditForm(rest?.row?.original)}
                             className={styles.dropdownItem}
                         >
                             <i className="fa-regular fa-pen-to-square" />
@@ -82,7 +80,7 @@ const ActionDropdown = ({ ...rest }) => {
                         </Dropdown.Item>
                     )}
                 </Dropdown.Menu>
-            </Dropdown>
+            </Dropdown>  
         </React.Fragment>
     );
 };

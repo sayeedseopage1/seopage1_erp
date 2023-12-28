@@ -80,6 +80,13 @@ const DealCreationFormControl = ({close}) => {
       }))
     }
 
+     // control project type change
+     React.useEffect(() => {
+      setFormData(state => ({...state, amount: '', original_currency_id: ''}))
+        setCurrency(null) 
+    }, [formData.project_type])
+
+  
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -125,7 +132,9 @@ const DealCreationFormControl = ({close}) => {
 
       try {
         const res = await dealCreate(formData).unwrap();
-        console.log({res}); 
+        if(res.status === 200){
+          toast.success('Deal Created Successfully') 
+        }
       } catch (error) {
         console.log({error})
       }
@@ -340,7 +349,7 @@ const DealCreationFormControl = ({close}) => {
           <Button variant='tertiary' onClick={handleClose}>
             Close
           </Button>
-          <Button onClick={handleSubmit}>
+          <Button isLoading={isLoading} loaderTitle='Processing...' onClick={handleSubmit}>
             Submit
           </Button>
         </Card.Footer>

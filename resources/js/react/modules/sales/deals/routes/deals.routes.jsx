@@ -8,6 +8,7 @@ import { store } from "../../../../services/store";
 
 import Deals from "../pages/Deals";
 import Toaster from "../../../../global/Toaster";
+import DealContextProvider from "../components/context/DealContext";
 
 // custom drag layer
 const DragLayer = () => {
@@ -62,13 +63,15 @@ if (container) {
         <React.StrictMode>
             <Provider store={store}>
                 <DndProvider backend={HTML5Backend}>
-                    <BrowserRouter basename="/account/deals">
-                        <Routes>
-                            <Route path="/" element={<Content />}>
-                              <Route index element={<Deals />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                    <DealContextProvider>
+                        <BrowserRouter basename="/account/deals">
+                            <Routes>
+                                <Route path="/" element={<Content />}>
+                                <Route index element={<Deals />} />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
+                    </DealContextProvider> 
                 </DndProvider>
             </Provider>
         </React.StrictMode>

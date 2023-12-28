@@ -21,7 +21,22 @@ const DealApiSlice = apiSlice.injectEndpoints({
                 },
             }),
         }),
+
+        dealUpdate: build.mutation({
+            query: (data) => ({
+                url: "/account/accounts/deals/update",
+                method: "POST",
+                body: {
+                    ...data,
+                    _token,
+                },
+            }),
+        }),
     }),
 });
 
-export const { useDealsQuery, useDealCreateMutation } = DealApiSlice;
+export const { 
+    useDealsQuery, 
+    useDealCreateMutation,
+    useDealUpdateMutation,
+} = DealApiSlice;
