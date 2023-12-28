@@ -7,13 +7,13 @@ export const DialogPanelWrapper = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgb(0 0 0 / 20%);
-  z-index: 10;
+  z-index: 80;
   overflow-y: auto;
 
   & > .dialog-panel{
     width: 100%;
     max-width: 800px; 
-    margin: 2rem auto;
+    margin: 3rem auto 5rem auto;
   }
 `;
 

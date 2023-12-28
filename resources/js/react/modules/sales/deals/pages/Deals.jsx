@@ -75,7 +75,7 @@ const Deals = () => {
             {/* creation form */}
             <DealCreationForm
                 isOpen={isCreationFormVisible}
-                close={() => setIsCreationFormVisible}
+                close={() => setIsCreationFormVisible(false)}
             />
         </React.Fragment>
     );

@@ -80,8 +80,7 @@ const DealCreationFormControl = ({close}) => {
 
     // handle submission
     const handleSubmit = async (e) => {
-      e.preventDefault()
-      console.log({formData})
+      e.preventDefault() 
 
       try {
         const res = await dealCreate(formData).unwrap();
@@ -95,6 +94,7 @@ const DealCreationFormControl = ({close}) => {
     // handle close form
     const handleClose = () => {
       setFormData({initialData});
+      setCurrency(null);
       close();
     }
 
