@@ -42,6 +42,7 @@ export default function PersonFilter({ value, onChange, data, title, display = i
                             type="text"
                             placeholder="Search..."
                             value={query}
+                            onKeyDown={e => e.stopPropagation()}
                             onChange={(e) => setQuery(e.target.value)}
                         />
                     </div>

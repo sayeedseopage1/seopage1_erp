@@ -41,6 +41,7 @@ export default function ConvertStatus({ value, onChange, data }) {
                             type="text"
                             placeholder="Search..."
                             value={query}
+                            onKeyDown={e => e.stopPropagation()}
                             onChange={(e) => setQuery(e.target.value)}
                         />
                     </div>

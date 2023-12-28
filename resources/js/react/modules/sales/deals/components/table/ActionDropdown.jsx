@@ -9,21 +9,21 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import _ from "lodash";
 import { useDealContext } from "../context/DealContext";
+import { useDealDeleteMutation } from "../../../../../services/api/dealApiSlice";
 
 const ActionDropdown = ({ ...rest }) => {
     const {openEditForm} = useDealContext();
 
-    // const [deleteLead, { isLoading }] = useDeleteLeadMutation();
+    const [deleteLead, { isLoading }] = useDealDeleteMutation();
     const auth = useAuth();
 
     const handleDelete = () => {
         // submit form
         const submitForm = async () => {
-            // const res = await deleteLead(rest.row.original?.id);
-            // console.log(res);
-
-            if (res.success) {
-                toast.success("Lead deleted successfully.");
+            const res = await deleteLead(rest.row.original?.id).unwrap();
+             
+            if (res.status) {
+                toast.success("Deal deleted successfully.");
             }
         };
 

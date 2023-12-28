@@ -134,7 +134,7 @@ const DealUpdateFormControl = ({close, deal}) => {
       const isValid = () => {
         const _error = new Object();
 
-        // check falsey data
+        // check falsy data
         Object.keys(formData).map(key => {
           if(key === 'project_link'){
             if(!formData[key]) {
@@ -170,9 +170,10 @@ const DealUpdateFormControl = ({close, deal}) => {
       };
 
       try {
-        const res = await dealUpdate(formData).unwrap();
-        if(res.status === 200){
-          toast.success('Deal Updated Successfully') 
+        const res = await dealUpdate({...formData, id: deal?.id}).unwrap();
+        if(res.status === "success"){
+          toast.success('Deal Updated Successfully');
+          handleClose();
         }
       } catch (error) {
         console.log({error})

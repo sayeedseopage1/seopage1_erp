@@ -183,6 +183,7 @@ class DealController extends AccountBaseController
         //dd($currency);
         $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->description= $request->description;
+        $deal->comments= $request->comments;
         $deal->added_by= Auth::id();
         $deal->converted_by= Auth::id();
         if($existing_client != null)
@@ -446,6 +447,7 @@ class DealController extends AccountBaseController
         //dd($currency);
         $deal->amount = ($request->amount)/$currency->exchange_rate;
         $deal->description= $request->description;
+        $deal->comments= $request->comments;
         $deal->updated_by= Auth::id();
 
         $deal->save();

@@ -20,6 +20,7 @@ const DealApiSlice = apiSlice.injectEndpoints({
                     _token,
                 },
             }),
+            invalidatesTags: ["DEALS"]
         }),
 
         dealUpdate: build.mutation({
@@ -31,6 +32,19 @@ const DealApiSlice = apiSlice.injectEndpoints({
                     _token,
                 },
             }),
+
+            invalidatesTags: ["DEALS"]
+        }),
+
+        dealDelete: build.mutation({
+            query: (dealId) => ({
+                url: `/account/deals/${dealId}`,
+                method: "DELETE",
+                body: {
+                    _token,
+                },
+            }),
+            invalidatesTags: ["DEALS"]
         }),
     }),
 });
@@ -39,4 +53,5 @@ export const {
     useDealsQuery, 
     useDealCreateMutation,
     useDealUpdateMutation,
+    useDealDeleteMutation
 } = DealApiSlice;

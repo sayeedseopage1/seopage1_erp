@@ -95,7 +95,7 @@ const DealCreationFormControl = ({close}) => {
       const isValid = () => {
         const _error = new Object();
 
-        // check falsey data
+        // check falsy data
         Object.keys(formData).map(key => {
           if(key === 'project_link'){
             if(!formData[key]) {
@@ -132,8 +132,9 @@ const DealCreationFormControl = ({close}) => {
 
       try {
         const res = await dealCreate(formData).unwrap();
-        if(res.status === 200){
-          toast.success('Deal Created Successfully') 
+        if(res.status === "success"){
+          toast.success('Deal Created Successfully');
+          handleClose();
         }
       } catch (error) {
         console.log({error})
