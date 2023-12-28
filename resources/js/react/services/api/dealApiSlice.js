@@ -13,7 +13,7 @@ const DealApiSlice = apiSlice.injectEndpoints({
 
         dealCreate: build.mutation({
             query: (data) => ({
-                url: "/account/client-deal-store",
+                url: "/account/deals-store",
                 method: "POST",
                 body: {
                     ...data,
