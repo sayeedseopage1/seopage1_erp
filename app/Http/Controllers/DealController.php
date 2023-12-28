@@ -929,6 +929,42 @@ class DealController extends AccountBaseController
                 ->orderBy('id', 'desc')
                 ->paginate($limit);
 
+            foreach($deals_data as $item){
+                $won_lost = '';
+                $won_lost_bg = '';
+                if($item->won_lost != null){
+                    if($item->won_lost== 'Yes'){
+                        $won_lost = 'Won';
+                        $won_lost_bg = '#00aa00';
+                    }else{
+                        $won_lost = 'Lost';
+                        $won_lost_bg = '#FF0000';
+                    }
+                }else{
+                    if($item->deal_stage == 0){
+                        $won_lost = 'Contact Made';
+                        $won_lost_bg = '#FFFF00';
+                    }elseif ($item->deal_stage == 1) {
+                        $won_lost = 'Qualified';
+                        $won_lost_bg = '#10e0ef';
+                    }elseif ($item->deal_stage == 2) {
+                        $won_lost = 'Requirements Defined';
+                        $won_lost_bg = '#0000FF';
+                    }elseif ($item->deal_stage == 3) {
+                        $won_lost = 'Proposal Made';
+                        $won_lost_bg = '#FFA500';
+                    }elseif ($item->deal_stage == 4) {
+                        $won_lost = 'Negotiation Started';
+                        $won_lost_bg = '#A020F0';
+                    }else{
+                        $won_lost = 'Milestone Breakdown';
+                        $won_lost_bg = '#C525F2';
+                    }
+                }
+                $item->won_lost = $won_lost;
+                $item->won_lost_bg = $won_lost_bg;
+            }
+
         return response()->json([
             'status'=> 200,
             'data' => $deals_data
