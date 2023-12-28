@@ -81,6 +81,7 @@ class DealController extends AccountBaseController
                 $this->clients = User::client();
             } else {
                 $this->clients = User::allClients();
+                // dd($this->clients);
             }
 
         }
