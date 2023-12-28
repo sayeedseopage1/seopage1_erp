@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { useCurrencyListQuery } from '../../../../services/api/currencyApiSlice'
 import { Dialog } from '@headlessui/react';
+import { toast } from 'react-toastify'
 
 // styled component
 import {
   DialogPanelWrapper, SelectionMenuWrapper,
 } from './ui/dealStyledComponent';
-import { Input, InputGroup, Label, RadioInput, RadioLabel } from './ui/form';
+import { ErrorText, Input, InputGroup, Label, RadioInput, RadioLabel } from './ui/form';
 import { Flex } from './table/ui';
+import validator from 'validator'
 
 // custom component
 import Card from '../../../../global/Card';
@@ -20,7 +22,7 @@ import { useDealCreateMutation } from '../../../../services/api/dealApiSlice';
 const DealCreationForm = ({isOpen, close}) => {
   return(
     <React.Fragment>
-      <Dialog as="div" open={isOpen} onClose={close}>
+      <Dialog as="div" open={isOpen} onClose={() => null}>
         <DialogPanelWrapper>
           <Dialog.Panel className="dialog-panel">
             <DealCreationFormControl close={close} />
@@ -53,6 +55,7 @@ const initialData = {
 // form 
 const DealCreationFormControl = ({close}) => {
     const [formData, setFormData] = React.useState(initialData);
+    const [error, setError] = React.useState(initialData);
     const [currency, setCurrency] = React.useState(null);
 
     // api hooks
@@ -81,6 +84,44 @@ const DealCreationFormControl = ({close}) => {
     // handle submission
     const handleSubmit = async (e) => {
       e.preventDefault() 
+
+      const isValid = () => {
+        const _error = new Object();
+
+        // check falsey data
+        Object.keys(formData).map(key => {
+          if(key === 'project_link'){
+            if(!formData[key]) {
+              _error[key] = "This Field is required!"
+            }else if(!validator.isURL(formData[key])){
+              _error[key] = "Invalid URL";
+            }
+          }else if(!formData[key]){
+            _error[key] = "This Field is required!"
+          }
+        })
+
+        // if project type hourly no need amount
+        if(
+            _error.hasOwnProperty('amount') && 
+            formData.hasOwnProperty('project_type') && 
+            formData['project_type'] === 'hourly'
+        ){
+          delete _error['amount'];
+          delete _error['original_currency_id'];
+        }
+
+        
+
+        setError(_error);
+        return Object.keys(_error)?.length === 0;
+      }
+
+
+      if(!isValid()){
+        toast.error("Please provide all required data!")
+        return null;
+      };
 
       try {
         const res = await dealCreate(formData).unwrap();
@@ -129,6 +170,7 @@ const DealCreationFormControl = ({close}) => {
                     onChange={handleInputChange}
                     placeholder='Enter client username'
                   />
+                  {error?.client_username && <ErrorText> {error?.client_username} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -143,6 +185,7 @@ const DealCreationFormControl = ({close}) => {
                     onChange={handleInputChange}
                     placeholder='Enter client name'
                   />
+                    {error?.client_name && <ErrorText> {error?.client_name} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -157,6 +200,7 @@ const DealCreationFormControl = ({close}) => {
                     onChange={handleInputChange}
                     placeholder='Enter project name'
                   />
+                  {error?.project_name && <ErrorText> {error?.project_name} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -172,6 +216,7 @@ const DealCreationFormControl = ({close}) => {
                     onChange={handleInputChange}
                     placeholder='Enter project link'
                   />
+                  {error?.project_link && <ErrorText> {error?.project_link} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -203,6 +248,9 @@ const DealCreationFormControl = ({close}) => {
                       Hourly Project
                     </RadioLabel>
                   </Flex>
+
+                  
+                  {error?.project_type && <ErrorText> {error?.project_type} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -213,11 +261,13 @@ const DealCreationFormControl = ({close}) => {
                   <Label> Project Budget <sup>*</sup> :  </Label>
                   <Input
                     type='number'
-                    name='amount' 
+                    name='amount'
+                    disabled={formData.project_type === 'hourly'}
                     value={formData.amount}
                     onChange={handleInputChange}
                     placeholder='Enter project Budget'
                   />
+                  {error?.amount && <ErrorText> {error?.amount} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -249,6 +299,7 @@ const DealCreationFormControl = ({close}) => {
                         </Select.Options>
                     </Select>  
                   </SelectionMenuWrapper>
+                  {error?.original_currency_id && <ErrorText> {error?.original_currency_id} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -263,6 +314,7 @@ const DealCreationFormControl = ({close}) => {
                         onChange={(e, editor) => handleEditorDataChange(editor, 'description')}
                     /> 
                   </div>
+                  {error?.description && <ErrorText> {error?.description} </ErrorText>}
                 </InputGroup>
               </div>
 
@@ -276,6 +328,8 @@ const DealCreationFormControl = ({close}) => {
                         onChange={(e, editor) => handleEditorDataChange(editor, 'comments')}
                     /> 
                   </div>
+                  
+                  {error?.comments && <ErrorText> {error?.comments} </ErrorText>}
                 </InputGroup>
               </div> 
             </div>
