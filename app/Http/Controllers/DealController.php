@@ -868,8 +868,8 @@ class DealController extends AccountBaseController
     }
 /** DEAL TABLE GET API */
     public function getDealData(Request $request){
-        // $startDate = $request->start_date ?? null;
-        // $endDate = $request->end_date ?? null;
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
         $dealQuery = DealStage::select(
@@ -890,41 +890,41 @@ class DealController extends AccountBaseController
             ->leftJoin('currencies as actual_amount', 'actual_amount.id', 'deal_stages.original_currency_id')
             ->where('deal_stages.convert_ld_status' ,'!=','DM');
 
-            // if ($startDate !== null && $endDate !== null) {
-            //     $dealQuery->where(function ($q) use ($startDate, $endDate) {
-            //         $q->whereBetween(DB::raw('DATE(deal_stages.`created_at`)'), [$startDate, $endDate]);
-            //         $q->orWhereBetween(DB::raw('DATE(deal_stages.`updated_at`)'), [$startDate, $endDate]);
-            //     });
-            // }
-            // if ($request->searchText != '') {
-            //     $dealQuery->where(function ($query) {
-            //         $query->where('deal_stages.project_name', 'like', '%' . request('searchText') . '%')
-            //             ->orWhere('deal_stages.short_code', 'like', '%' . request('searchText') . '%')
-            //             ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
-            //             ->orWhere('deal_stages.client_username', 'like', '%' . request('searchText') . '%')
-            //             ->orWhere('deal_stages.client_name', 'like', '%' . request('searchText') . '%');
-            //     });
-            // }
-            // if ($request->client_name != null) {
-            //     $dealQuery->where('deal_stages.client_name', $request->client_name);
-            // }
-            // if ($request->has('closed_by') && $request->input('closed_by') !== 'all') {
-            //     $dealQuery->where('deal_stages.converted_by', $request->input('closed_by'));
-            // }
-            // if ($request->status != 'all') {
-            //     if ($request->status == 5) {
-            //         $dealQuery->where('deal_stage', $request->status)->where('won_lost', '=',null);
-            //     }
-            //     elseif ($request->status == 'won') {
-            //         $dealQuery->where('won_lost', '=','Yes');
-            //     }
-            //     elseif ($request->status == 'lost') {
-            //         $dealQuery->where('won_lost', '=','No');
-            //     }
-            //     else{
-            //         $dealQuery->where('deal_stage', $request->status);
-            //     }
-            // }
+            if ($startDate !== null && $endDate !== null) {
+                $dealQuery->where(function ($q) use ($startDate, $endDate) {
+                    $q->whereBetween(DB::raw('DATE(deal_stages.`created_at`)'), [$startDate, $endDate]);
+                    $q->orWhereBetween(DB::raw('DATE(deal_stages.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->search !='') {
+                $dealQuery->where(function ($query) {
+                    $query->where('deal_stages.project_name', 'like', '%' . request('search') . '%')
+                        ->orWhere('deal_stages.short_code', 'like', '%' . request('search') . '%')
+                        ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
+                        ->orWhere('deal_stages.client_username', 'like', '%' . request('search') . '%')
+                        ->orWhere('deal_stages.client_name', 'like', '%' . request('search') . '%');
+                });
+            }
+            if ($request->client_username != null) {
+                $dealQuery->where('deal_stages.client_username', $request->client_username);
+            }
+            if ($request->has('closed_by') && $request->input('closed_by') !== 'all') {
+                $dealQuery->where('deal_stages.converted_by', $request->input('closed_by'));
+            }
+            if ($request->status != null) {
+                if ($request->status == 5) {
+                    $dealQuery->where('deal_stages.deal_stage', $request->status)->where('won_lost', '=',null);
+                }
+                elseif ($request->status == 'won') {
+                    $dealQuery->where('deal_stages.won_lost', '=','Yes');
+                }
+                elseif ($request->status == 'lost') {
+                    $dealQuery->where('deal_stages.won_lost', '=','No');
+                }
+                else{
+                    $dealQuery->where('deal_stages.deal_stage', $request->status);
+                }
+            }
             $deals_data = $dealQuery
                 ->orderBy('id', 'desc')
                 ->paginate($limit);
