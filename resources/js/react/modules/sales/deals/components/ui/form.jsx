@@ -25,8 +25,9 @@ export const Input = styled.input`
   border-radius: 6px;
 
 
-  &:read-only{
-    background-color: rgb(0 0 0 / 8%);
+  &:read-only,
+  &:disabled {
+    background-color: rgb(0 0 0 / 5%);
   }
 `;
 

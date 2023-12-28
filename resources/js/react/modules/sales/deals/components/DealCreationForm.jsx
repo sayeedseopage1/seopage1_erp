@@ -1,9 +1,10 @@
 import * as React from 'react';
+import { useCurrencyListQuery } from '../../../../services/api/currencyApiSlice'
 import { Dialog } from '@headlessui/react';
 
 // styled component
 import {
-  DialogPanelWrapper,
+  DialogPanelWrapper, SelectionMenuWrapper,
 } from './ui/dealStyledComponent';
 import { Input, InputGroup, Label, RadioInput, RadioLabel } from './ui/form';
 import { Flex } from './table/ui';
@@ -11,7 +12,9 @@ import { Flex } from './table/ui';
 // custom component
 import Card from '../../../../global/Card';
 import Button from '../../../../global/Button';
+import Select from '../../../../global/Select';
 import CKEditor from '../../../../ckeditor/index'
+import { useDealCreateMutation } from '../../../../services/api/dealApiSlice';
  
 
 const DealCreationForm = ({isOpen, close}) => {
@@ -49,7 +52,13 @@ const initialData = {
 
 // form 
 const DealCreationFormControl = ({close}) => {
-    const [formData, setFormData] = React.useState(initialData)
+    const [formData, setFormData] = React.useState(initialData);
+    const [currency, setCurrency] = React.useState(null);
+
+    // api hooks
+    const {data: currencies} = useCurrencyListQuery();
+    const [dealCreate, { isLoading }] = useDealCreateMutation(); 
+
 
     // input field change
     const handleInputChange = (e) => {
@@ -70,9 +79,16 @@ const DealCreationFormControl = ({close}) => {
 
 
     // handle submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault()
       console.log({formData})
+
+      try {
+        const res = await dealCreate(formData).unwrap();
+        console.log({res}); 
+      } catch (error) {
+        console.log({error})
+      }
     }
 
 
@@ -82,6 +98,17 @@ const DealCreationFormControl = ({close}) => {
       close();
     }
 
+    // handle currencySelection 
+    const handleCurrencySelection = (value) => {
+      setCurrency(value)
+      setFormData(state => ({...state, original_currency_id: value.id}))
+    }
+
+    // filter
+    const getCurrencies = (data, query) => {
+      return data?.filter(d => d?.currency_code?.toLowerCase()?.includes(query?.toLowerCase()))
+    }
+ 
     return(
       <Card>
         <Card.Head onClose={handleClose}>
@@ -186,7 +213,7 @@ const DealCreationFormControl = ({close}) => {
                   <Label> Project Budget <sup>*</sup> :  </Label>
                   <Input
                     type='number'
-                    name='amount'
+                    name='amount' 
                     value={formData.amount}
                     onChange={handleInputChange}
                     placeholder='Enter project Budget'
@@ -198,13 +225,30 @@ const DealCreationFormControl = ({close}) => {
               <div className="col-md-4">
                 <InputGroup>
                   <Label> Currency <sup>*</sup> :  </Label>
-                  <Input
-                    type='number'
-                    name='original_currency_id'
-                    value={formData.original_currency_id}
-                    onChange={handleInputChange}
-                    placeholder='Enter currency'
-                  />
+                  <SelectionMenuWrapper>
+                    <Select 
+                      value={currency} 
+                      onChange={handleCurrencySelection} 
+                      display={(value) => value?.currency_code ?? '--'}
+                      className='selection'
+                    >
+                      <Select.Options>
+                          <Select.SearchControllerWrapper>
+                              {(query) => (
+                                getCurrencies(currencies?.data, query)?.map(currency => (
+                                  <Select.Option key={currency.id} value={currency}>
+                                    {({selected}) => (
+                                      <div>
+                                        {currency?.currency_code} ( {currency?.currency_symbol} )
+                                      </div>
+                                    )}
+                                  </Select.Option>
+                                ))
+                              )}
+                          </Select.SearchControllerWrapper>
+                        </Select.Options>
+                    </Select>  
+                  </SelectionMenuWrapper>
                 </InputGroup>
               </div>
 
