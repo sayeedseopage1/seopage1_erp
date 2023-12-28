@@ -970,4 +970,15 @@ class DealController extends AccountBaseController
             'data' => $deals_data
         ]);
     }
+
+
+    /**ALL Currencie API*/
+    public function getAllCurrencie(){
+        $currencies = Currency::all();
+
+        return response()->json([
+            'status'=>200,
+            'data'=>$currencies
+        ]);
+    }
 }

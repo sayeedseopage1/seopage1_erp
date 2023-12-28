@@ -1187,6 +1187,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
     Route::get('get-deal-data', [DealController::class,'getDealData']);
+    /**ALL Currencie API START*/
+    Route::get('get-all-currencies', [DealController::class,'getAllCurrencie']);
+    /**ALL Currencie API END*/
 
     /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
 
