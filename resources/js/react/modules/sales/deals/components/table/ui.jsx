@@ -28,9 +28,36 @@ export const TableRow = styled.tr`
     }
 `;
 export const TableHeadItem = styled.th`
-    padding: 10px 16px;
-    white-space: nowrap;
+    padding: 10px 16px; 
+    font-weight: 400;
     background-color: #fff;
+    color: #99a5b5;
+    white-space: nowrap;
+    box-shadow: 0 1px 0 0 #f1f1f3; 
+
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: grab;
+
+    &.dragging{
+        cursor: -moz-grabbing;
+        cursor: -webkit-grabbing;
+        cursor: grabbing;
+    }
+    &.dropArea{
+        background-color: #f7f7f7;
+    }
+
+    &.project_name{
+        width: 256px;
+        min-width: 256px;
+    }
+
+    &.actual_amount{
+        white-space: pre-wrap;
+        width: 150px;  
+        min-width: 150px;
+    }
 `;
 export const TableItem = styled.td`
     padding: 3px 16px;
@@ -65,8 +92,8 @@ export const ProjectID = styled.div`
     width: 130px;
 `;
 
-export const ProjectBudget = styled.div`
-    width: 100px;
+export const ProjectBudget = styled.div` 
+    text-align: right; 
 `;
 export const BidValue = styled.div`
     width: 80px;

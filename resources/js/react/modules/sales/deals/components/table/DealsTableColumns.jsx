@@ -23,7 +23,7 @@ export const DealsTableColumns = [
         cell: ({row}) => row.original?.id,
     },
     {
-        id: "deal_name",
+        id: "project_name",
         header: "Deal Name",
         accessorKey: "",
         cell: ({ row }) => {
@@ -39,13 +39,13 @@ export const DealsTableColumns = [
         },
     },
     {
-        id: "client",
+        id: "client_name",
         header: "Client",
         accessorKey: "client_name",
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <span className="multiline-ellipsis text-hover-underline pr-2">
+                <span className="multiline-ellipsis pr-2">
                     {data?.client_name || data?.client_username || <EmptySpace> -- </EmptySpace>}
                 </span>
             );
@@ -68,7 +68,7 @@ export const DealsTableColumns = [
         },
     },
     {
-        id: "project_budget",
+        id: "amount",
         header: "Project Budget (USD)",
         accessorKey: "amount",
         cell: ({ row }) => {
@@ -81,7 +81,7 @@ export const DealsTableColumns = [
         },
     },
     {
-        id: "project_budget_original_currency",
+        id: "actual_amount",
         header: "Project Budget (Original Currency)",
         accessorKey: "actual_amount",
         cell: ({ row }) => {
@@ -106,9 +106,9 @@ export const DealsTableColumns = [
         },
     }, 
     {
-        id: "added_by",
+        id: "lead_added_by_name",
         header: "Added By",
-        accessorKey: "lead_added_by",
+        accessorKey: "lead_added_by_name",
         cell: ({ row }) => {
             const data = row.original;
             return (
@@ -127,9 +127,9 @@ export const DealsTableColumns = [
         },
     },
     {
-        id: "closed_by",
+        id: "deal_stages_converted_by_name",
         header: "Closed By",
-        accessorKey: "lead_added_by",
+        accessorKey: "deal_stages_converted_by_name",
         cell: ({ row }) => {
             const data = row.original;
             return (

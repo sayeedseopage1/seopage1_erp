@@ -63,8 +63,8 @@ const TableHeaderItem = ({ header, table }) => {
     drag(drop(dropRef));
 
     return (
-        <TableHeadItem ref={dropRef}>
-            {/* {!_.includes(['id'], column.id) &&
+        <TableHeadItem ref={dropRef} className={`${column.id ?? ''} ${isDragging ? 'dragging' : ''} ${isOver ? 'dropArea': ''}`}>
+            {!_.includes(['id'], column.id) &&
                 <button
                 {...{
                     onClick: header.column.getToggleSortingHandler(),
@@ -80,7 +80,7 @@ const TableHeaderItem = ({ header, table }) => {
                     <span className="table_asc_dec"></span>
                 )}
             </button>
-            } */}
+            }
 
             {header.isPlaceholder
                 ? null

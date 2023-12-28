@@ -7,7 +7,7 @@ import TableHeaderItem from './TableHeaderItem';
 
 
 
-const LeadTableHeader = ({table, columns}) => {
+const TableHeader = ({table, columns}) => {
   return(
     <TableHead>
       {
@@ -29,4 +29,4 @@ const LeadTableHeader = ({table, columns}) => {
   )
 }
 
-export default LeadTableHeader;
+export default TableHeader;

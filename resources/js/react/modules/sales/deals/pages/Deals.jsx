@@ -16,6 +16,7 @@ const Deals = () => {
     const [filter, setFilter] = React.useState({});
 
     const [sorting, setSorting] = React.useState([]);
+    console.log({sorting})
 
     // make query string
     const queryString = (object) => {
@@ -40,11 +41,11 @@ const Deals = () => {
     };
  
 
-    console.log(deals);
+     
 
     return (
         <Container> 
-            <Flex justifyContent="space-between">
+            <Flex justifyContent="space-between" className="mb-3">
               <Button>
                 <i className="fa-solid fa-plus" />
                 Create Deal
