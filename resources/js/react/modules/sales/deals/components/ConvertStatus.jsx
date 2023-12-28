@@ -3,7 +3,8 @@ import { Listbox } from "@headlessui/react";
 import styles from "./PersonFilter.module.css";
 import Avatar from "../../../../global/Avatar";
 import { filter, lowerCase, includes } from "lodash";
-import { LuChevronsUpDown } from "react-icons/lu";
+
+import { GoTriangleDown } from "react-icons/go"; 
 
 export default function ConvertStatus({ value, onChange, data }) {
     const [query, setQuery] = React.useState("");
@@ -31,7 +32,7 @@ export default function ConvertStatus({ value, onChange, data }) {
                     >
                         {value?.title ?? <span>All</span>}
                     </span>
-                    <LuChevronsUpDown className={styles.dropdownIcon} />
+                    <GoTriangleDown className={styles.dropdownIcon} />
                 </Listbox.Button>
                 <Listbox.Options className={styles.dropdownMenu}>
                     <div className={styles.searchBox}>

@@ -108,6 +108,8 @@ const FilterBar = ({ setFilter }) => {
                             value={client}
                             onChange={setClient}
                             title="Client"
+                            display={value => value?.user_name}
+                            searchBy={value => value?.user_name}
                             data={_.filter(
                                 users,
                                 (user) => user.role_id === null

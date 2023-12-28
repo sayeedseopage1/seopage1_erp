@@ -38,14 +38,14 @@ export const DealsTableColumns = [
         },
     },
     {
-        id: "client_name",
+        id: "client_username",
         header: "Client",
-        accessorKey: "client_name",
+        accessorKey: "client_username",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <span className="multiline-ellipsis pr-2">
-                    {data?.client_name || data?.client_username || <EmptySpace> -- </EmptySpace>}
+                    { data?.client_username || <EmptySpace> -- </EmptySpace>}
                 </span>
             );
         },

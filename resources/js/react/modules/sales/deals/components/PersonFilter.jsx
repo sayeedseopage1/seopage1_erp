@@ -3,15 +3,17 @@ import { Listbox } from "@headlessui/react";
 import styles from "./PersonFilter.module.css";
 import Avatar from "../../../../global/Avatar";
 import { filter, lowerCase, includes } from "lodash";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { GoTriangleDown } from "react-icons/go"; 
 
-export default function PersonFilter({ value, onChange, data, title }) {
+const initialDisplay = (value) => value?.name;
+
+export default function PersonFilter({ value, onChange, data, title, display = initialDisplay, searchBy = initialDisplay }) {
     const [query, setQuery] = React.useState("");
 
     const filteredData = data
         ? query
             ? filter(data, (person) =>
-                  includes(lowerCase(person.name), lowerCase(query))
+                  includes(lowerCase(searchBy(person)), lowerCase(query))
               )
             : data
         : [];
@@ -29,9 +31,9 @@ export default function PersonFilter({ value, onChange, data, title }) {
                     <span
                         className={`${styles.dropdownToggleButtonText} singleline-ellipsis`}
                     >
-                        {value?.name ?? <span>All</span>}
+                        {display(value) ?? <span>All</span>}
                     </span>
-                    <LuChevronsUpDown className={styles.dropdownIcon} />
+                    <GoTriangleDown className={styles.dropdownIcon} />
                 </Listbox.Button>
                 <Listbox.Options className={styles.dropdownMenu}>
                     <div className={styles.searchBox}>
@@ -73,7 +75,7 @@ export default function PersonFilter({ value, onChange, data, title }) {
                                     height={28}
                                     type="circle"
                                 />
-                                {person.name}
+                                {display(person)}
                             </Listbox.Option>
                         ))}
                     </div>
