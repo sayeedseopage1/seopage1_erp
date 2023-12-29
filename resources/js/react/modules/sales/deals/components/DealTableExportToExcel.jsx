@@ -19,7 +19,7 @@ const DealTableExportButton = ({ filter }) => {
         useExportableDealsMutation();
 
     const deals = data?.data;
-    console.log({ deals });
+   
 
     const fieldStyle = {
         alignment: {
@@ -207,7 +207,7 @@ const DealTableExportButton = ({ filter }) => {
                 )}
             </ExportButton>
 
-            {isRender && !isLoading && (
+            {isRender && !isLoading && deals?.length > 0 && (
                 <ExcelFile filename="lead_table_data" hideElement={true}>
                     <ExcelSheet dataSet={multiDataSet} name="lead_table_data" />
                 </ExcelFile>
