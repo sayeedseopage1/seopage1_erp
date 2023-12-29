@@ -16,7 +16,7 @@ import Card from '../../../../global/Card';
 import Button from '../../../../global/Button';
 import Select from '../../../../global/Select';
 import CKEditor from '../../../../ckeditor/index'
-import { useDealCreateMutation, useDealUpdateMutation } from '../../../../services/api/dmDealApiSlice';
+import { useDmDealUpdateMutation } from '../../../../services/api/dmDealApiSlice';
 import { useDealContext } from './context/DealContext';
  
 
@@ -67,7 +67,7 @@ const DealUpdateFormControl = ({close, deal}) => {
 
     // api hooks
     const {data: currencies} = useCurrencyListQuery();
-    const [dealUpdate, { isLoading }] = useDealUpdateMutation(); 
+    const [dealUpdate, { isLoading }] = useDmDealUpdateMutation(); 
 
     // initial deal data
     React.useEffect(() => { 

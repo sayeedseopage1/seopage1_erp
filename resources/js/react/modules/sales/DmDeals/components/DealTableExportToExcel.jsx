@@ -5,7 +5,7 @@ import ReactExport from "react-data-export";
 import _, { fill } from "lodash";
 import styled from "styled-components";
 import Loader from "../../../../global/Loader";
-import { useExportableDealsMutation } from "../../../../services/api/dmDealApiSlice";
+import { useExportableDmDealsMutation } from "../../../../services/api/dmDealApiSlice";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -16,7 +16,7 @@ const DealTableExportButton = ({ filter }) => {
     const query = new URLSearchParams(queryObject).toString();
 
     const [exportableDeals, { data, isLoading, isSuccess, isUninitialized }] =
-        useExportableDealsMutation();
+        useExportableDmDealsMutation();
 
     const deals = data?.data;
    
@@ -42,18 +42,14 @@ const DealTableExportButton = ({ filter }) => {
               return {
                 fill: {
                   fgColor: {rgb:'22E6E600'},
-                },
-                font: {
-                  bold: 500,
-                },
+                }, 
               }
             }else{
               return {
                 fill: {
                   fgColor: {rgb: c.replace(/#/g, '22')},
                 },
-                font: {
-                  bold: 500,
+                font: { 
                   color: {rgb: 'FFFFFFFF' },
                 },
               }
@@ -81,11 +77,7 @@ const DealTableExportButton = ({ filter }) => {
                 {
                     value: d["project_link"] ?? "--",
                     style: fieldStyle,
-                },
-                {
-                    value: d["project_id"] ?? "--",
-                    style: fieldStyle,
-                },
+                }, 
                 {
                     value: `${d?.ammount_currency_symbol} ${d?.amount}` ?? "--",
                     style: {
@@ -97,7 +89,7 @@ const DealTableExportButton = ({ filter }) => {
                 },
                 {
                     value:
-                        `${d?.actual_amount_currency_symbol}${d?.actual_amount}` ??
+                        `${d?.actual_amount_currency_symbol} ${d?.actual_amount}` ??
                         "--",
                     style: {
                         ...fieldStyle,
@@ -145,7 +137,6 @@ const DealTableExportButton = ({ filter }) => {
         { title: "Added By" },
         { title: "Closed By" },
         { title: "Status" },
-        { title: "Action" },
     ];
 
     // multi data set
@@ -208,8 +199,8 @@ const DealTableExportButton = ({ filter }) => {
             </ExportButton>
 
             {isRender && !isLoading && deals?.length > 0 && (
-                <ExcelFile filename="lead_table_data" hideElement={true}>
-                    <ExcelSheet dataSet={multiDataSet} name="lead_table_data" />
+                <ExcelFile filename="dm_deal_table_data" hideElement={true}>
+                    <ExcelSheet dataSet={multiDataSet} name="dm_deal_table_data" />
                 </ExcelFile>
             )}
         </React.Fragment>

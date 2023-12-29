@@ -9,11 +9,11 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import _ from "lodash";
 import { useDealContext } from "../context/DealContext";
-import { useDealDeleteMutation } from "../../../../../services/api/dmDealApiSlice";
+import { useDmDealDeleteMutation } from "../../../../../services/api/dmDealApiSlice";
 
 const ActionDropdown = ({ ...rest }) => {
     const { openEditForm } = useDealContext();
-    const [deleteDeal, { isLoading }] = useDealDeleteMutation();
+    const [deleteDeal, { isLoading }] = useDmDealDeleteMutation();
     const auth = useAuth();
 
     const handleDelete = () => {

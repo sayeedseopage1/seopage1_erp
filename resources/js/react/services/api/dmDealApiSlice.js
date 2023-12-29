@@ -6,13 +6,13 @@ const _token = document
 
 const DmDealApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
-        deals: build.query({
+        dmDeals: build.query({
             query: (query) => `/account/get-dm-deal-data?${query}`,
             providesTags: ["DEALS"],
         }),
 
        
-        dealCreate: build.mutation({
+        dmDealCreate: build.mutation({
             query: (data) => ({
                 url: "/account/accounts/deals/store",
                 method: "POST",
@@ -24,7 +24,7 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["DEALS"]
         }),
 
-        dealUpdate: build.mutation({
+        dmDealUpdate: build.mutation({
             query: (data) => ({
                 url: "/account/accounts/deals/update",
                 method: "POST",
@@ -37,7 +37,7 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["DEALS"]
         }),
 
-        dealDelete: build.mutation({
+        dmDealDelete: build.mutation({
             query: (dealId) => ({
                 url: `/account/deals/${dealId}`,
                 method: "DELETE",
@@ -49,7 +49,7 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
         }),
          
         // deal export data
-        exportableDeals: build.mutation({
+        exportableDmDeals: build.mutation({
             query: (query) => ({
                 url: `/account/export-dm-deal-data?${query}`,
                 method: "GET",
@@ -61,9 +61,9 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
 });
 
 export const { 
-    useDealsQuery, 
-    useDealCreateMutation,
-    useDealUpdateMutation,
-    useDealDeleteMutation,
-    useExportableDealsMutation
+    useDmDealsQuery, 
+    useDmDealCreateMutation,
+    useDmDealUpdateMutation,
+    useDmDealDeleteMutation,
+    useExportableDmDealsMutation
 } = DmDealApiSlice;

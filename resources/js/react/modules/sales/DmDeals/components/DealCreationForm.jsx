@@ -16,7 +16,7 @@ import Card from '../../../../global/Card';
 import Button from '../../../../global/Button';
 import Select from '../../../../global/Select';
 import CKEditor from '../../../../ckeditor/index'
-import { useDealCreateMutation } from '../../../../services/api/dmDealApiSlice';
+import { useDmDealCreateMutation } from '../../../../services/api/dmDealApiSlice';
  
 
 const DealCreationForm = ({isOpen, close}) => {
@@ -60,7 +60,7 @@ const DealCreationFormControl = ({close}) => {
 
     // api hooks
     const {data: currencies} = useCurrencyListQuery();
-    const [dealCreate, { isLoading }] = useDealCreateMutation(); 
+    const [dealCreate, { isLoading }] = useDmDealCreateMutation(); 
 
 
     // input field change

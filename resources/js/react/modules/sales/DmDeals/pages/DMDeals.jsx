@@ -3,7 +3,7 @@ import styled from "styled-components";
 import RefreshButton from "../components/RefreshButton";
 import DataTable from "../components/table/DataTable";
 import { DealsTableColumns } from "../components/table/DealsTableColumns";
-import { useDealsQuery } from "../../../../services/api/dmDealApiSlice";
+import { useDmDealsQuery } from "../../../../services/api/dmDealApiSlice";
 import { Flex } from "../components/table/ui";
 import Button from "../../../../global/Button";
 import FilterBar from "../components/DMDealsFilterBar";
@@ -33,7 +33,7 @@ const DigitalMarketerDeals = () => {
     };
 
     // fetch data
-    const { data, isFetching, refetch } = useDealsQuery(
+    const { data, isFetching, refetch } = useDmDealsQuery(
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
