@@ -74,7 +74,7 @@ export const DealsTableColumns = [
             const data = row.original;
             return (
                 <ProjectBudget> 
-                    {`${data?.ammount_currency_symbol} ${data?.amount}`}
+                    {`${data?.ammount_currency_symbol} ${Number(data?.amount).toFixed(0)}`}
                 </ProjectBudget>
             );
         },
@@ -87,7 +87,7 @@ export const DealsTableColumns = [
             const data = row.original;
             return (
                 <ProjectBudget>
-                    {`${data?.actual_amount_currency_symbol} ${data?.actual_amount}`}
+                    {`${data?.actual_amount_currency_symbol} ${Number(data?.actual_amount).toFixed(2)}`}
                 </ProjectBudget>
             );
         },

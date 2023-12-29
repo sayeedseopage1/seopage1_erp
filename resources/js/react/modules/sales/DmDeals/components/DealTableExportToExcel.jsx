@@ -5,7 +5,7 @@ import ReactExport from "react-data-export";
 import _, { fill } from "lodash";
 import styled from "styled-components";
 import Loader from "../../../../global/Loader";
-import { useExportableDmDealsMutation } from "../../../../services/api/dmDealApiSlice";
+import { useExportableDealsMutation } from "../../../../services/api/dealApiSlice";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -16,7 +16,7 @@ const DealTableExportButton = ({ filter }) => {
     const query = new URLSearchParams(queryObject).toString();
 
     const [exportableDeals, { data, isLoading, isSuccess, isUninitialized }] =
-        useExportableDmDealsMutation();
+        useExportableDealsMutation();
 
     const deals = data?.data;
    
@@ -75,7 +75,7 @@ const DealTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d["project_link"] ?? "--",
+                    value: (d?.lead_id ? d?.lead_project_link : d?.project_link) ?? "--",
                     style: fieldStyle,
                 }, 
                 {
@@ -103,12 +103,12 @@ const DealTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d["lead_added_by_name"] ?? '--',
+                    value: (d?.lead_id ? d?.added_by_name : d?.lead_added_by_name) ?? '--',
                     style: fieldStyle,
                 },
 
                 {
-                    value: d["deal_stages_converted_by_name"] ?? '--',
+                    value: (d?.deal_stages_converted_by_name &&  d["deal_stages_converted_by_name"] ) ?? '--',
                     style: fieldStyle,
                 },
                 {
@@ -136,7 +136,7 @@ const DealTableExportButton = ({ filter }) => {
         { title: "Created Date" },
         { title: "Added By" },
         { title: "Closed By" },
-        { title: "Status" },
+        { title: "Status" }, 
     ];
 
     // multi data set
@@ -199,8 +199,8 @@ const DealTableExportButton = ({ filter }) => {
             </ExportButton>
 
             {isRender && !isLoading && deals?.length > 0 && (
-                <ExcelFile filename="dm_deal_table_data" hideElement={true}>
-                    <ExcelSheet dataSet={multiDataSet} name="dm_deal_table_data" />
+                <ExcelFile filename="dm-deal_table_data" hideElement={true}>
+                    <ExcelSheet dataSet={multiDataSet} name="dm-deal_table_data" />
                 </ExcelFile>
             )}
         </React.Fragment>
