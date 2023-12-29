@@ -42,10 +42,11 @@ const FilterBar = ({ setFilter }) => {
             end_date: _endData,
             client_id: _clientId,
             client_name: client?.name,
+            client_username: client?.user_name,
             status: _convertStatus?.id,
             status_title: convertStatus?.title,
             closed_by: _closedById,
-            closed_by_name: closedBy?.name
+            closed_by_name: closedBy?.name,
         }));
     }, [_startData,_closedById, _endData, _clientId, _convertStatus]);
 
