@@ -877,6 +877,12 @@ class DealController extends AccountBaseController
 
         $dealQuery = DealStage::select(
             'deal_stages.*',
+            'added_by.id as added_by_id',
+            'added_by.name as added_by_name',
+            'added_by.image as added_by_image',
+            'converted_by.id as converted_by_id',
+            'converted_by.name as converted_by_name',
+            'converted_by.image as converted_by_image',
             'deal_stages.added_by as lead_added_by',
             'lead_added_by.name as lead_added_by_name',
             'lead_added_by.image as lead_added_by_image',
@@ -885,9 +891,11 @@ class DealController extends AccountBaseController
             'deal_stages_converted_by.image as deal_stages_converted_by_image',
             'amount.currency_symbol as ammount_currency_symbol',
             'actual_amount.currency_symbol as actual_amount_currency_symbol',
-            'leads.project_link as project_link'
+            'leads.project_link as lead_project_link'
             )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->leftJoin('users as added_by', 'deal_stages.added_by', '=', 'added_by.id')
+            ->leftJoin('users as converted_by', 'deal_stages.converted_by', '=', 'converted_by.id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
             ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
             ->leftJoin('currencies as amount', 'amount.id', 'deal_stages.currency_id')
@@ -981,6 +989,12 @@ class DealController extends AccountBaseController
 
         $dealQuery = DealStage::select(
             'deal_stages.*',
+            'added_by.id as added_by_id',
+            'added_by.name as added_by_name',
+            'added_by.image as added_by_image',
+            'converted_by.id as converted_by_id',
+            'converted_by.name as converted_by_name',
+            'converted_by.image as converted_by_image',
             'deal_stages.added_by as lead_added_by',
             'lead_added_by.name as lead_added_by_name',
             'lead_added_by.image as lead_added_by_image',
@@ -988,9 +1002,12 @@ class DealController extends AccountBaseController
             'deal_stages_converted_by.name as deal_stages_converted_by_name',
             'deal_stages_converted_by.image as deal_stages_converted_by_image',
             'amount.currency_symbol as ammount_currency_symbol',
-            'actual_amount.currency_symbol as actual_amount_currency_symbol'
+            'actual_amount.currency_symbol as actual_amount_currency_symbol',
+            'leads.project_link as lead_project_link'
             )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->leftJoin('users as added_by', 'deal_stages.added_by', '=', 'added_by.id')
+            ->leftJoin('users as converted_by', 'deal_stages.converted_by', '=', 'converted_by.id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
             ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
             ->leftJoin('currencies as amount', 'amount.id', 'deal_stages.currency_id')
