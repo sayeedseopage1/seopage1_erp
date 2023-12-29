@@ -1207,7 +1207,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     /*=========================> DIGITAL MERKTING DEALS START <===========================*/
 
     Route::resource('digital-marketing-deals',DMDealController::class);
-    Route::post('dm-deal-store', [DMDealController::class, 'storeDm']);
     Route::post('/digital-marketing-leads/deals/store', [DMDealController::class, 'storeDMLeadDeal'])->name('digital-marketing-store-deals-stage');
     Route::post('/digital-marketing/deal/stage/lost', [DMDealController::class, 'dmDealStageUpdateLost'])->name('digital-marketing-deal-update-lost');
     Route::get('get-dm-deal-data', [DMDealController::class,'getDmDealData']);
