@@ -61,7 +61,7 @@ export const DealsTableColumns = [
                     href={data?.project_link}
                     className="multiline-ellipsis text-hover-underline pr-2"
                 >
-                    {data?.project_link ?? <EmptySpace> -- </EmptySpace>}
+                    { (data?.lead_id ? data?.lead_project_link : data?.project_link) ?? <EmptySpace> -- </EmptySpace>}
                 </a>
             );
         },
@@ -110,9 +110,26 @@ export const DealsTableColumns = [
         accessorKey: "lead_added_by_name",
         cell: ({ row }) => {
             const data = row.original;
-            if(!data?.lead_added_by_name){
+            
+
+            if(!data?.lead_id){ 
+                return (
+                    <CreatedBy
+                        href={`/account/employees/${data.added_by}`}
+                    >
+                        <Avatar
+                            type="circle"
+                            name={data?.added_by_name}
+                            src={data?.added_by_image ? `/user-uploads/avatar/${data?.added_by_image}` : null}
+                        />
+
+                        <span>{data?.added_by_name}</span>
+                    </CreatedBy>
+                )
+            }else if(!data?.lead_added_by_name){
                 return <EmptySpace> -- </EmptySpace>
             }
+
             return (
                 <CreatedBy
                     href={`/account/employees/${data.lead_added_by}`}
@@ -134,6 +151,11 @@ export const DealsTableColumns = [
         accessorKey: "deal_stages_converted_by_name",
         cell: ({ row }) => {
             const data = row.original;
+
+            if(!data?.deal_stages_converted_by_name) {
+                return <EmptySpace> -- </EmptySpace>
+            }
+
             return (
                 <CreatedBy
                     href={`/account/employees/${data.deal_stages_converted_by}`}
