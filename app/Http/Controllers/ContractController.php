@@ -2944,4 +2944,53 @@ public function storeClientDeal(Request $request){
         ]);
 }
 
+    public function getAllContracts(Request $request){
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $limit = $request->limit ??  10;
+
+        $dealsQuery = Deal::select('deals.*','deals.status as deal_status')
+        ->leftJoin('users', 'users.id', 'deals.added_by')
+        ->where('deals.dept_status','WD');
+
+        if ($startDate !== null && $endDate !== null) {
+            $dealsQuery->where(function ($q) use ($startDate, $endDate) {
+                $q->whereBetween(DB::raw('DATE(deals.`created_at`)'), [$startDate, $endDate]);
+                $q->WhereBetween(DB::raw('DATE(deals.`updated_at`)'), [$startDate, $endDate]);
+            });
+        }
+        if ($request->searchText != '') {
+            $dealsQuery->where(function ($query) {
+                $query->where('deals.project_name', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('deals.deal_id', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('users.name', 'like', '%' . request('searchText') . '%');
+            });
+        }
+        if ($request->pm_id != null) {
+            $dealsQuery->where('pm_id', $request->pm_id);
+        }
+        if ($request->client_id != null) {
+            $dealsQuery->where('client_id', $request->client_id);
+        }
+        if ($request->closed_by != null) {
+            $dealsQuery->where('added_by', $request->closed_by);
+        }
+        if ($request->status != null) {
+            $dealsQuery->where('deals.status', $request->status);
+        }
+        
+        if (Auth::user()->role_id == 4) {
+            $dealsQuery->where('pm_id',Auth::id());
+        }else {
+        $deals = $dealsQuery
+            ->orderBy('deals.id', 'desc')
+            ->paginate($limit);
+        }
+
+        return response()->json([
+            'data' => $deals,
+            'status'=> 200,
+        ]);
+    }
+
 }

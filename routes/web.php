@@ -1173,6 +1173,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('contracts/apply-quick-action', [ContractController::class, 'applyQuickAction'])->name('contracts.apply_quick_action');
     Route::get('contracts/download/{id}', [ContractController::class, 'download'])->name('contracts.download');
     Route::post('contracts/sign/{id}', [ContractController::class, 'sign'])->name('contracts.sign');
+    Route::get('get-contracts-data', [ContractController::class, 'getAllContracts']);
     Route::group(
         ['prefix' => 'contracts'],
         function () {
