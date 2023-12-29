@@ -219,8 +219,8 @@ const DealTableExportButton = ({ filter }) => {
 export default DealTableExportButton;
 
 const ExportButton = styled.button`
-    padding: 10px;
-    border-radius: 6px;
+    padding: 6px 10px;
+    border-radius: 3px;
     display: flex;
     align-items: center;
     gap: 8px;

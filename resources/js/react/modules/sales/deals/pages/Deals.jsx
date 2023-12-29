@@ -52,13 +52,18 @@ const Deals = () => {
 
     return (
         <React.Fragment>
-            <Container>
+            <div>
                 <FilterBar setFilter={setFilter} />
                 <Flex justifyContent="space-between" className="mb-3">
-                    <Button onClick={() => setIsCreationFormVisible(true)} className="font-weight-normal">
-                        <i className="fa-solid fa-plus" />
-                        Create Deal
-                    </Button>
+                    <Flex>
+                        <Button onClick={() => setIsCreationFormVisible(true)} className="font-weight-normal">
+                            <i className="fa-solid fa-plus" />
+                            Create Deal
+                        </Button> 
+
+                        <DealTableExportButton filter={filter} />
+                    </Flex>
+
                     <Flex>
                         {/* refresh */}
                         <RefreshButton
@@ -66,20 +71,20 @@ const Deals = () => {
                             isLoading={isFetching}
                             className="font-weight-normal"
                         />
-
-                        <DealTableExportButton filter={filter} />
                     </Flex>
                 </Flex>
-                <DataTable
-                    data={deals}
-                    columns={[...DealsTableColumns]}
-                    isLoading={isFetching}
-                    onPageChange={onPageChange}
-                    sorting={sorting}
-                    tableName="DealsTable"
-                    setSorting={setSorting}
-                />
-            </Container>
+                <Container>
+                    <DataTable
+                        data={deals}
+                        columns={[...DealsTableColumns]}
+                        isLoading={isFetching}
+                        onPageChange={onPageChange}
+                        sorting={sorting}
+                        tableName="DealsTable"
+                        setSorting={setSorting}
+                    />
+                </Container>
+            </div>
 
             {/* creation form */}
             <DealCreationForm
@@ -100,5 +105,7 @@ export default Deals;
 
 const Container = styled.div`
     background-color: #fff;
-    padding: 1.2rem;
+    padding: 2rem;
+    box-shadow: 0 0 6px rgb(0 0 0 / 20%);
+    border-radius: 10px;
 `;

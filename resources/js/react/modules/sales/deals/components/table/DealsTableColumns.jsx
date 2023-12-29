@@ -110,6 +110,9 @@ export const DealsTableColumns = [
         accessorKey: "lead_added_by_name",
         cell: ({ row }) => {
             const data = row.original;
+            if(!data?.lead_added_by_name){
+                return <EmptySpace> -- </EmptySpace>
+            }
             return (
                 <CreatedBy
                     href={`/account/employees/${data.lead_added_by}`}
