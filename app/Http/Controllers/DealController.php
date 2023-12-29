@@ -880,24 +880,16 @@ class DealController extends AccountBaseController
             'added_by.id as added_by_id',
             'added_by.name as added_by_name',
             'added_by.image as added_by_image',
-            'converted_by.id as converted_by_id',
-            'converted_by.name as converted_by_name',
-            'converted_by.image as converted_by_image',
             'deal_stages.added_by as lead_added_by',
             'lead_added_by.name as lead_added_by_name',
             'lead_added_by.image as lead_added_by_image',
-            'deal_stages.converted_by as deal_stages_converted_by',
-            'deal_stages_converted_by.name as deal_stages_converted_by_name',
-            'deal_stages_converted_by.image as deal_stages_converted_by_image',
             'amount.currency_symbol as ammount_currency_symbol',
             'actual_amount.currency_symbol as actual_amount_currency_symbol',
             'leads.project_link as lead_project_link'
             )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as added_by', 'deal_stages.added_by', '=', 'added_by.id')
-            ->leftJoin('users as converted_by', 'deal_stages.converted_by', '=', 'converted_by.id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
-            ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
             ->leftJoin('currencies as amount', 'amount.id', 'deal_stages.currency_id')
             ->leftJoin('currencies as actual_amount', 'actual_amount.id', 'deal_stages.original_currency_id')
             ->where('deal_stages.convert_ld_status' ,'!=','DM');
@@ -975,6 +967,19 @@ class DealController extends AccountBaseController
                 }
                 $item->won_lost = $won_lost;
                 $item->won_lost_bg = $won_lost_bg;
+
+
+                if($item->won_lost == 'Won'){
+                    $deal_id = Deal::where('deal_id',$item->short_code)->first();
+                    $user= User::where('id',$deal_id->added_by)->first();
+                    $item->deal_stages_converted_by = $user->id;
+                    $item->deal_stages_converted_by_name = $user->name;
+                    $item->deal_stages_converted_by_image = $user->image;
+                }else{
+                    $item->deal_stages_converted_by = null;
+                    $item->deal_stages_converted_by_name = null;
+                    $item->deal_stages_converted_by_image = null;
+                }
             }
 
         return response()->json([
@@ -991,25 +996,16 @@ class DealController extends AccountBaseController
             'deal_stages.*',
             'added_by.id as added_by_id',
             'added_by.name as added_by_name',
-            'added_by.image as added_by_image',
-            'converted_by.id as converted_by_id',
-            'converted_by.name as converted_by_name',
-            'converted_by.image as converted_by_image',
             'deal_stages.added_by as lead_added_by',
             'lead_added_by.name as lead_added_by_name',
             'lead_added_by.image as lead_added_by_image',
-            'deal_stages.converted_by as deal_stages_converted_by',
-            'deal_stages_converted_by.name as deal_stages_converted_by_name',
-            'deal_stages_converted_by.image as deal_stages_converted_by_image',
             'amount.currency_symbol as ammount_currency_symbol',
             'actual_amount.currency_symbol as actual_amount_currency_symbol',
             'leads.project_link as lead_project_link'
             )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as added_by', 'deal_stages.added_by', '=', 'added_by.id')
-            ->leftJoin('users as converted_by', 'deal_stages.converted_by', '=', 'converted_by.id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
-            ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
             ->leftJoin('currencies as amount', 'amount.id', 'deal_stages.currency_id')
             ->leftJoin('currencies as actual_amount', 'actual_amount.id', 'deal_stages.original_currency_id')
             ->where('deal_stages.convert_ld_status' ,'!=','DM');
@@ -1087,6 +1083,18 @@ class DealController extends AccountBaseController
                 }
                 $item->won_lost = $won_lost;
                 $item->won_lost_bg = $won_lost_bg;
+
+                if($item->won_lost == 'Won'){
+                    $deal_id = Deal::where('deal_id',$item->short_code)->first();
+                    $user= User::where('id',$deal_id->added_by)->first();
+                    $item->deal_stages_converted_by = $user->id;
+                    $item->deal_stages_converted_by_name = $user->name;
+                    $item->deal_stages_converted_by_image = $user->image;
+                }else{
+                    $item->deal_stages_converted_by = null;
+                    $item->deal_stages_converted_by_name = null;
+                    $item->deal_stages_converted_by_image = null;
+                }
             }
 
         return response()->json([
