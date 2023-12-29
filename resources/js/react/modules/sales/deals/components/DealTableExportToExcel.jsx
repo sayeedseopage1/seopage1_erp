@@ -75,7 +75,7 @@ const DealTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d["project_link"] ?? "--",
+                    value: (d?.lead_id ? d?.lead_project_link : d?.project_link) ?? "--",
                     style: fieldStyle,
                 }, 
                 {
@@ -103,7 +103,7 @@ const DealTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d["lead_added_by_name"] ?? '--',
+                    value: (d?.lead_id ? d?.added_by_name : d?.lead_added_by_name) ?? '--',
                     style: fieldStyle,
                 },
 
