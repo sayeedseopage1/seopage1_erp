@@ -7,7 +7,8 @@ import { Provider } from "react-redux";
 import { store } from "../../../../services/store";
 
 import Deals from "../pages/DMDeals";
-import Toaster from "../../../../global/Toaster";
+import DealContextProvider from "../components/context/DealContext";
+// import Toaster from "../../../../global/Toaster";
 
 // custom drag layer
 const DragLayer = () => {
@@ -47,25 +48,27 @@ const Content = () => {
     return (
         <React.Fragment>
             <DragLayer />
-                <Outlet />
-            <Toaster />
+            <Outlet />
+            {/* <Toaster /> */}
         </React.Fragment>
     );
 };
 
-const container = document.getElementById("");
+const container = document.getElementById("dmDealsContainer");
 if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>
             <Provider store={store}>
                 <DndProvider backend={HTML5Backend}>
-                    <BrowserRouter basename="/account/digital-marketing-deals">
-                        <Routes>
-                            <Route path="/" element={<Content />}>
-                              <Route index element={<Deals />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                    <DealContextProvider>
+                        <BrowserRouter basename="/account/digital-marketing-deals">
+                            <Routes>
+                                <Route path="/" element={<Content />}>
+                                    <Route index element={<Deals />} />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
+                    </DealContextProvider>
                 </DndProvider>
             </Provider>
         </React.StrictMode>
