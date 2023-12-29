@@ -884,7 +884,8 @@ class DealController extends AccountBaseController
             'deal_stages_converted_by.name as deal_stages_converted_by_name',
             'deal_stages_converted_by.image as deal_stages_converted_by_image',
             'amount.currency_symbol as ammount_currency_symbol',
-            'actual_amount.currency_symbol as actual_amount_currency_symbol'
+            'actual_amount.currency_symbol as actual_amount_currency_symbol',
+            'leads.project_link as project_link'
             )
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
