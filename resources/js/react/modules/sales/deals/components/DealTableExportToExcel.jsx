@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import dayjs from "dayjs";
 import ReactExport from "react-data-export";
-import _ from "lodash";
+import _, { fill } from "lodash";
 import styled from "styled-components";
 import Loader from "../../../../global/Loader";
 import { useExportableDealsMutation } from "../../../../services/api/dealApiSlice";
@@ -15,8 +15,11 @@ const DealTableExportButton = ({ filter }) => {
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
 
-    const [exportableDeals, { data, isLoading, isSuccess }] =
+    const [exportableDeals, { data, isLoading, isSuccess, isUninitialized }] =
         useExportableDealsMutation();
+
+    const deals = data?.data;
+    console.log({ deals });
 
     const fieldStyle = {
         alignment: {
@@ -26,89 +29,105 @@ const DealTableExportButton = ({ filter }) => {
         },
     };
 
-    // get leads
-    const getData = (leads) => {
+
+    // get deals
+    const getData = (deals) => {
         let rows = [];
-        _.forEach(leads, (d) => {
-            // let row = [
-            //     {
-            //         value: d["id"] ?? "--",
-            //         style: fieldStyle,
-            //     },
-            //     {
-            //         value: d["client_name"] ?? "--",
-            //         style: fieldStyle,
-            //     },
-            //     {
-            //         value: d["project_link"] ?? "--",
-            //         style: fieldStyle,
-            //     },
-            //     {
-            //         value: d["project_id"] ?? "--",
-            //         style: fieldStyle,
-            //     },
-            //     {
-            //         value:
-            //             `${d?.currency_symbol}${d?.bid_value} - ${d?.currency_symbol}${d?.bid_value2}` ??
-            //             "--",
-            //         style: {
-            //             ...fieldStyle,
-            //             font:{
-            //                 bold: true
-            //             }
-            //         },
-            //     },
-            //     {
-            //         value: `${d?.currency_symbol}${d?.actual_value}` ?? "--",
-            //         style: {
-            //             ...fieldStyle,
-            //             font:{
-            //                 bold: true
-            //             }
-            //         },
-            //     },
-            //     {
-            //         value: date,
-            //         style: fieldStyle,
-            //     },
-            //     {
-            //         value: d["agent_name"],
-            //         style: fieldStyle,
-            //     },
-            //     {
-            //         value: `${d?.bidding_minutes ?? 0} min ${
-            //             d?.bidding_seconds ?? 0
-            //         } sec`,
-            //         style: fieldStyle,
-            //     },
-            //     {
-            //         value: `${
-            //             d.deal_status === 0
-            //                 ? "Not Converted to Deal"
-            //                 : "Converted to Deal"
-            //         }`,
-            //         style: {
-            //             ...fieldStyle,
-            //             font: {
-            //                 bold: true,
-            //                 color: {rgb: d.deal_status === 0 ? "FFB5BABD" : "FF0AAA29"}
-            //             }
-            //         },
-            //     },
-            //     {
-            //         value: s?.label ?? '--',
-            //         style: {
-            //             ...fieldStyle,
-            //             font:{
-            //                 bold: true,
-            //                 color: {
-            //                     rgb: s?.bgColor ?? 'FFFAA700'
-            //                 }
-            //             }
-            //         },
-            //     },
-            // ];
-            // rows.push(row);
+        _.forEach(deals, (d) => {
+
+          const StatusStyle = (_color) => {
+            let c =_color?.toUpperCase();
+
+            if( c === '#FFFF00'){
+              return {
+                fill: {
+                  fgColor: {rgb:'22E6E600'},
+                },
+                font: {
+                  bold: 500,
+                },
+              }
+            }else{
+              return {
+                fill: {
+                  fgColor: {rgb: c.replace(/#/g, '22')},
+                },
+                font: {
+                  bold: 500,
+                  color: {rgb: 'FFFFFFFF' },
+                },
+              }
+            }
+          }
+
+
+            const date = d?.created_at
+                ? dayjs(d?.created_at).format(`DD-MM-YYYY hh:mm:ss A`)
+                : "--";
+
+            let row = [
+                {
+                    value: d["id"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                  value: d["project_name"] ?? "--",
+                  style: fieldStyle,
+              },
+                {
+                    value: d["client_username"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d["project_link"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d["project_id"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: `${d?.ammount_currency_symbol} ${d?.amount}` ?? "--",
+                    style: {
+                        ...fieldStyle,
+                        font: {
+                            bold: true,
+                        },
+                    },
+                },
+                {
+                    value:
+                        `${d?.actual_amount_currency_symbol}${d?.actual_amount}` ??
+                        "--",
+                    style: {
+                        ...fieldStyle,
+                        font: {
+                            bold: true,
+                        },
+                    },
+                },
+                {
+                    value: date ,
+                    style: fieldStyle,
+                },
+                {
+                    value: d["lead_added_by_name"] ?? '--',
+                    style: fieldStyle,
+                },
+
+                {
+                    value: d["deal_stages_converted_by_name"] ?? '--',
+                    style: fieldStyle,
+                },
+                {
+                    value: d["won_lost"] ?? '--',
+                    style: {
+                        ...fieldStyle,
+                        ...StatusStyle(d?.won_lost_bg)
+                    },
+                },
+            ];
+            rows.push(row);
         });
 
         return rows;
@@ -164,14 +183,13 @@ const DealTableExportButton = ({ filter }) => {
             xSteps: 0,
             ySteps: 2,
             columns: columns,
-            data: [],
+            data: getData(deals),
         },
     ];
 
     const handleRender = async () => {
         setIsRender(false);
-        const res = await exportableDeals(query);
-        console.log({ res });
+        await exportableDeals(query).unwrap();
         setIsRender(true);
     };
 
@@ -189,7 +207,7 @@ const DealTableExportButton = ({ filter }) => {
                 )}
             </ExportButton>
 
-            {isRender && (
+            {isRender && !isLoading && (
                 <ExcelFile filename="lead_table_data" hideElement={true}>
                     <ExcelSheet dataSet={multiDataSet} name="lead_table_data" />
                 </ExcelFile>
