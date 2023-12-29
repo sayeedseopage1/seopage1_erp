@@ -53,7 +53,7 @@ const Content = () => {
     );
 };
 
-const container = document.getElementById("leadTableContainer");
+const container = document.getElementById("");
 if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>

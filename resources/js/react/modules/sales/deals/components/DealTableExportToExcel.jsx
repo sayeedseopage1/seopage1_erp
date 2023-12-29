@@ -5,6 +5,7 @@ import ReactExport from "react-data-export";
 import _ from "lodash";
 import styled from "styled-components";
 import Loader from "../../../../global/Loader";
+import { useExportableDealsMutation } from "../../../../services/api/dealApiSlice";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -13,6 +14,9 @@ const DealTableExportButton = ({ filter }) => {
     const [isRender, setIsRender] = React.useState(false);
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
+
+    const [exportableDeals, { data, isLoading, isSuccess }] =
+        useExportableDealsMutation();
 
     const fieldStyle = {
         alignment: {
@@ -165,8 +169,9 @@ const DealTableExportButton = ({ filter }) => {
     ];
 
     const handleRender = async () => {
-        // setIsRender(false);
-        // await allLeads(`?${query}`).unwrap();
+        setIsRender(false);
+        const res = await exportableDeals(query);
+        console.log({ res });
         setIsRender(true);
     };
 

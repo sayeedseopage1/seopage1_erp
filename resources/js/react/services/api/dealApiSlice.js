@@ -11,6 +11,7 @@ const DealApiSlice = apiSlice.injectEndpoints({
             providesTags: ["DEALS"],
         }),
 
+       
         dealCreate: build.mutation({
             query: (data) => ({
                 url: "/account/accounts/deals/store",
@@ -46,6 +47,16 @@ const DealApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["DEALS"]
         }),
+         
+        // deal export data
+        exportableDeals: build.mutation({
+            query: (query) => ({
+                url: `/account/export-deal-data?${query}`,
+                method: "GET",
+            })
+        }),
+
+ 
     }),
 });
 
@@ -53,5 +64,6 @@ export const {
     useDealsQuery, 
     useDealCreateMutation,
     useDealUpdateMutation,
-    useDealDeleteMutation
+    useDealDeleteMutation,
+    useExportableDealsMutation
 } = DealApiSlice;
