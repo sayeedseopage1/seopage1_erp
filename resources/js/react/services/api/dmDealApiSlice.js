@@ -8,7 +8,7 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         dmDeals: build.query({
             query: (query) => `/account/get-dm-deal-data?${query}`,
-            providesTags: ["DEALS"],
+            providesTags: ["DM_DEALS"],
         }),
 
        
@@ -21,7 +21,7 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
                     _token,
                 },
             }),
-            invalidatesTags: ["DEALS"]
+            invalidatesTags: ["DM_DEALS"]
         }),
 
         dmDealUpdate: build.mutation({
@@ -34,7 +34,7 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ["DEALS"]
+            invalidatesTags: ["DM_DEALS"]
         }),
 
         dmDealDelete: build.mutation({
@@ -45,7 +45,7 @@ const DmDealApiSlice = apiSlice.injectEndpoints({
                     _token,
                 },
             }),
-            invalidatesTags: ["DEALS"]
+            invalidatesTags: ["DM_DEALS"]
         }),
          
         // deal export data
