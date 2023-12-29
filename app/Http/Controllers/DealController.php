@@ -974,6 +974,110 @@ class DealController extends AccountBaseController
         ]);
     }
 
+    public function exportDeal(Request $request){
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+
+        $dealQuery = DealStage::select(
+            'deal_stages.*',
+            'deal_stages.added_by as lead_added_by',
+            'lead_added_by.name as lead_added_by_name',
+            'lead_added_by.image as lead_added_by_image',
+            'deal_stages.converted_by as deal_stages_converted_by',
+            'deal_stages_converted_by.name as deal_stages_converted_by_name',
+            'deal_stages_converted_by.image as deal_stages_converted_by_image',
+            'amount.currency_symbol as ammount_currency_symbol',
+            'actual_amount.currency_symbol as actual_amount_currency_symbol'
+            )
+            ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
+            ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
+            ->leftJoin('currencies as amount', 'amount.id', 'deal_stages.currency_id')
+            ->leftJoin('currencies as actual_amount', 'actual_amount.id', 'deal_stages.original_currency_id')
+            ->where('deal_stages.convert_ld_status' ,'!=','DM');
+
+            if ($startDate !== null && $endDate !== null) {
+                $dealQuery->where(function ($q) use ($startDate, $endDate) {
+                    $q->whereBetween(DB::raw('DATE(deal_stages.`created_at`)'), [$startDate, $endDate]);
+                    $q->orWhereBetween(DB::raw('DATE(deal_stages.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->search !='') {
+                $dealQuery->where(function ($query) {
+                    $query->where('deal_stages.project_name', 'like', '%' . request('search') . '%')
+                        ->orWhere('deal_stages.short_code', 'like', '%' . request('search') . '%')
+                        ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
+                        ->orWhere('deal_stages.client_username', 'like', '%' . request('search') . '%')
+                        ->orWhere('deal_stages.client_name', 'like', '%' . request('search') . '%');
+                });
+            }
+            if ($request->client_username != null) {
+                $dealQuery->where('deal_stages.client_username', $request->client_username);
+            }
+            if ($request->has('closed_by') && $request->input('closed_by') !== 'all') {
+                $dealQuery->where('deal_stages.converted_by', $request->input('closed_by'));
+            }
+            if ($request->status != null) {
+                if ($request->status == 5) {
+                    $dealQuery->where('deal_stages.deal_stage', $request->status)->where('won_lost', '=',null);
+                }
+                elseif ($request->status == 'won') {
+                    $dealQuery->where('deal_stages.won_lost', '=','Yes');
+                }
+                elseif ($request->status == 'lost') {
+                    $dealQuery->where('deal_stages.won_lost', '=','No');
+                }
+                else{
+                    $dealQuery->where('deal_stages.deal_stage', $request->status);
+                }
+            }
+            $deals_data = $dealQuery
+                ->orderBy('id', 'desc')
+                ->get();
+
+            foreach($deals_data as $item){
+                $won_lost = '';
+                $won_lost_bg = '';
+                if($item->won_lost != null){
+                    if($item->won_lost== 'Yes'){
+                        $won_lost = 'Won';
+                        $won_lost_bg = '#00aa00';
+                    }else{
+                        $won_lost = 'Lost';
+                        $won_lost_bg = '#FF0000';
+                    }
+                }else{
+                    if($item->deal_stage == 0){
+                        $won_lost = 'Contact Made';
+                        $won_lost_bg = '#FFFF00';
+                    }elseif ($item->deal_stage == 1) {
+                        $won_lost = 'Qualified';
+                        $won_lost_bg = '#10e0ef';
+                    }elseif ($item->deal_stage == 2) {
+                        $won_lost = 'Requirements Defined';
+                        $won_lost_bg = '#0000FF';
+                    }elseif ($item->deal_stage == 3) {
+                        $won_lost = 'Proposal Made';
+                        $won_lost_bg = '#FFA500';
+                    }elseif ($item->deal_stage == 4) {
+                        $won_lost = 'Negotiation Started';
+                        $won_lost_bg = '#A020F0';
+                    }else{
+                        $won_lost = 'Milestone Breakdown';
+                        $won_lost_bg = '#C525F2';
+                    }
+                }
+                $item->won_lost = $won_lost;
+                $item->won_lost_bg = $won_lost_bg;
+            }
+
+        return response()->json([
+            'status'=> 200,
+            'data' => $deals_data
+        ]);
+    }
+
+
 
     /**ALL Currencie API*/
     public function getAllCurrencie(){

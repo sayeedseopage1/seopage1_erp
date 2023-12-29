@@ -1187,6 +1187,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
     Route::get('get-deal-data', [DealController::class,'getDealData']);
+    Route::get('export-deal-data', [DealController::class,'exportDeal']);
+
+
     /**ALL Currencie API START*/
     Route::get('get-all-currencies', [DealController::class,'getAllCurrencie']);
     /**ALL Currencie API END*/
