@@ -12,16 +12,15 @@ import { useDealContext } from "../context/DealContext";
 import { useDealDeleteMutation } from "../../../../../services/api/dealApiSlice";
 
 const ActionDropdown = ({ ...rest }) => {
-    const {openEditForm} = useDealContext();
-
-    const [deleteLead, { isLoading }] = useDealDeleteMutation();
+    const { openEditForm } = useDealContext();
+    const [deleteDeal, { isLoading }] = useDealDeleteMutation();
     const auth = useAuth();
 
     const handleDelete = () => {
         // submit form
         const submitForm = async () => {
-            const res = await deleteLead(rest.row.original?.id).unwrap();
-             
+            const res = await deleteDeal(rest.row.original?.id).unwrap();
+
             if (res.status) {
                 toast.success("Deal deleted successfully.");
             }
@@ -46,6 +45,11 @@ const ActionDropdown = ({ ...rest }) => {
             });
     };
 
+    // handle redirection
+    const handleRedirection = (url) => {
+        window.location.href = url;
+    };
+
     return (
         <React.Fragment>
             <Dropdown>
@@ -54,7 +58,12 @@ const ActionDropdown = ({ ...rest }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu placement="bottom-end">
-                    <Dropdown.Item className={styles.dropdownItem}>
+                    <Dropdown.Item
+                        onClick={ () => handleRedirection(
+                            `/account/deals/${rest?.row?.original?.id}`
+                        )}
+                        className={styles.dropdownItem}
+                    >
                         <i className="fa-regular fa-eye" />
                         View
                     </Dropdown.Item>
@@ -80,7 +89,7 @@ const ActionDropdown = ({ ...rest }) => {
                         </Dropdown.Item>
                     )}
                 </Dropdown.Menu>
-            </Dropdown>  
+            </Dropdown>
         </React.Fragment>
     );
 };

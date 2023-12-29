@@ -10,6 +10,7 @@ import FilterBar from "../components/FilterBar";
 import DealCreationForm from "../components/DealCreationForm";
 import DealUpdateForm from "../components/DealUpdateForm";
 import { useDealContext } from "../components/context/DealContext";
+import DealTableExportButton from "../components/DealTableExportToExcel";
 
 const Deals = () => {
     const {isEditFormEnable} = useDealContext();
@@ -58,12 +59,16 @@ const Deals = () => {
                         <i className="fa-solid fa-plus" />
                         Create Deal
                     </Button>
-                    {/* refresh */}
-                    <RefreshButton
-                        onClick={refetch}
-                        isLoading={isFetching}
-                        className="font-weight-normal"
-                    />
+                    <Flex>
+                        {/* refresh */}
+                        <RefreshButton
+                            onClick={refetch}
+                            isLoading={isFetching}
+                            className="font-weight-normal"
+                        />
+
+                        <DealTableExportButton filter={filter} />
+                    </Flex>
                 </Flex>
                 <DataTable
                     data={deals}
