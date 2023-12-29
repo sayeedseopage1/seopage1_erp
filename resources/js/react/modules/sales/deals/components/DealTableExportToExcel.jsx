@@ -108,7 +108,7 @@ const DealTableExportButton = ({ filter }) => {
                 },
 
                 {
-                    value: d["deal_stages_converted_by_name"] ?? '--',
+                    value: (d?.deal_stages_converted_by_name &&  d["deal_stages_converted_by_name"] ) ?? '--',
                     style: fieldStyle,
                 },
                 {

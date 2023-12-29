@@ -151,6 +151,11 @@ export const DealsTableColumns = [
         accessorKey: "deal_stages_converted_by_name",
         cell: ({ row }) => {
             const data = row.original;
+
+            if(!data?.deal_stages_converted_by_name) {
+                return <EmptySpace> -- </EmptySpace>
+            }
+
             return (
                 <CreatedBy
                     href={`/account/employees/${data.deal_stages_converted_by}`}
