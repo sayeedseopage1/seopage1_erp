@@ -67,7 +67,7 @@ const ActionDropdown = ({ ...rest }) => {
                         <i className="fa-regular fa-eye" />
                         View
                     </Dropdown.Item>
-
+{/* 
                     {_.includes([1, 7], auth.getRoleId()) && (
                         <Dropdown.Item
                             onClick={() => openEditForm(rest?.row?.original)}
@@ -76,7 +76,7 @@ const ActionDropdown = ({ ...rest }) => {
                             <i className="fa-regular fa-pen-to-square" />
                             Edit
                         </Dropdown.Item>
-                    )}
+                    )} */}
 
                     {/* delete lead */}
                     {auth.getRoleId() === 1 && (
