@@ -2977,13 +2977,13 @@ public function storeClientDeal(Request $request){
             });
         }
         if ($request->pm_id != null) {
-            $dealsQuery->where('pm_id', $request->pm_id);
+            $dealsQuery->where('deals.pm_id', $request->pm_id);
         }
         if ($request->client_id != null) {
-            $dealsQuery->where('client_id', $request->client_id);
+            $dealsQuery->where('deals.client_id', $request->client_id);
         }
         if ($request->closed_by != null) {
-            $dealsQuery->where('added_by', $request->closed_by);
+            $dealsQuery->where('deals.added_by', $request->closed_by);
         }
         if ($request->status != null) {
             $dealsQuery->where('deals.status', $request->status);
@@ -3138,8 +3138,7 @@ public function storeClientDeal(Request $request){
             $amount = '';
             $project_name = '';
             if($itemDeal->project_type=="fixed" && $itemDeal->actual_amount == 0){
-                $badge =  '<span class="badge badge-success ml-1">'. 'Upsold By PM'.'</span>';
-                $amount = $itemDeal->upsell_actual_amount . ' ' . $itemDeal->original_currency->currency_symbol . $badge;
+                $amount = $itemDeal->upsell_actual_amount . ' ' . $itemDeal->original_currency->currency_symbol . ' (Upsold By PM)';
             }else{
                 $amount = $itemDeal->actual_amount. ' ' . $itemDeal->original_currency->currency_symbol;
             }
