@@ -23,14 +23,6 @@ const DealTableExportButton = ({ filter }) => {
     console.log({data});
    
 
-    const fieldStyle = {
-        alignment: {
-            // wrapText: true,
-            vertical: "center",
-            horizontal: "top",
-        },
-    };
-
 
     // get deals
     const getData = (deals) => {
@@ -38,6 +30,22 @@ const DealTableExportButton = ({ filter }) => {
 
 
         _.forEach(deals, (d) => { 
+            
+            const fieldStyle = {
+                alignment: {
+                    // wrapText: true,
+                    vertical: "center",
+                    horizontal: "top",
+                }, 
+                font:{
+                    bold: d?.project_type?.toLowerCase() === 'hourly',
+                    color: {
+                        rgb: d?.project_type?.toLowerCase() === 'hourly' ? 'FF28A745' : ''
+                    }
+                }
+            };
+
+
             const clientContactForm = (d) => {
                 if(d?.toLowerCase() === 'submitted'){
                     return {
@@ -53,6 +61,9 @@ const DealTableExportButton = ({ filter }) => {
                         fill: {
                             fgColor: {rgb: 'FFFCBD01'},
                         }, 
+                        font: { 
+                            color: {rgb: 'FF000000' },
+                        },
                     }
                 }
             }
@@ -83,6 +94,9 @@ const DealTableExportButton = ({ filter }) => {
                         fill: {
                             fgColor: {rgb: 'FFFCBD01'},
                         }, 
+                        font: { 
+                            color: {rgb: 'FF000000' },
+                        },
                     }
                 }
             }
@@ -98,8 +112,10 @@ const DealTableExportButton = ({ filter }) => {
                     style: fieldStyle,
                 },
                 {
-                    value: d["project_name"] ?? "--",
-                    style: fieldStyle,
+                    value: `${d["project_name"]} ${d?.project_type?.toLowerCase() === 'hourly' ? ' ( Hourly )' : ''}` ?? "--",
+                    style: {
+                        ...fieldStyle,
+                    },
                 },
                 {
                     value: d["cms_name"] ?? "--",
