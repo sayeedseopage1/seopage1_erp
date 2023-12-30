@@ -105,7 +105,8 @@ export default WonDeals;
 
 const Container = styled.div`
     background-color: #fff;
-    padding: 2rem;
-    box-shadow: 0 0 6px rgb(0 0 0 / 20%);
-    border-radius: 10px;
+    overflow: hidden;
+    /* box-shadow: 0 0 6px rgb(0 0 0 / 20%); */
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
 `;
