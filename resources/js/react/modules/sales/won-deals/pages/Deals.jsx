@@ -8,6 +8,7 @@ import { Flex } from "../components/table/ui";
 import FilterBar from "../components/FilterBar";
 import { useDealContext } from "../components/context/DealContext";
 import DealTableExportButton from "../components/DealTableExportToExcel";
+import Button from "../../../../global/Button";
 
 const WonDeals = () => {
     const { isEditFormEnable } = useDealContext();
@@ -47,16 +48,26 @@ const WonDeals = () => {
         setPagination(paginate);
     };
 
+    // redirect path
+    const redirectTo = (url) => {
+        window.location.href = url;
+    };
+
     return (
         <React.Fragment>
             <div>
                 <FilterBar setFilter={setFilter} />
                 <Flex justifyContent="space-between" className="mb-3">
                     <Flex>
-                        {/* <Button onClick={() => setIsCreationFormVisible(true)} className="font-weight-normal">
-                            <i className="fa-solid fa-plus" />
-                            Create Deal
-                        </Button>  */}
+                        <Button 
+                            onClick={() =>
+                                redirectTo(`/account/award-time/increase`)
+                            }
+                            className="bg-warning border-0 font-weight-normal"
+                        >
+                            <i className="fa-solid fa-clock" />
+                            Award Time Extension Requests
+                        </Button>
 
                         <DealTableExportButton filter={filter} />
                     </Flex>
