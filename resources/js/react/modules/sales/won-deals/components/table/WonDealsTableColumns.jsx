@@ -175,7 +175,7 @@ export const WonDealsTableColumns = [
         header: "Status",
         cell: ({ row }) => {
             const data = row.original;
-            const status = data?.status?.toLowerCase();
+            const status = data?.status?.toLowerCase(); 
 
             if(status === 'accepted'){
                 return <span className="badge badge-success"> Accepted </span>
