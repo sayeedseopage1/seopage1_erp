@@ -32,7 +32,8 @@ export const apiSlice = createApi({
             "DM_LEADS",
             "ALL_DAILY_SUBMISSION_STATUS",
             "DEALS",
-            "DM_DEALS"
+            "DM_DEALS",
+            "WON_DEALS"
     ],
     endpoints: () => ({}),
 });

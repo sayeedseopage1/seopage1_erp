@@ -47,7 +47,7 @@ const Content = () => {
     return (
         <React.Fragment>
             <DragLayer />
-            <Outlet />
+                <Outlet />
             <Toaster />
         </React.Fragment>
     );
