@@ -5,15 +5,12 @@ import DataTable from "../components/table/DataTable";
 import { WonDealsTableColumns } from "../components/table/WonDealsTableColumns";
 import { useWonDealsQuery } from "../../../../services/api/wonDealsApiSlice";
 import { Flex } from "../components/table/ui";
-import Button from "../../../../global/Button";
 import FilterBar from "../components/FilterBar";
-import DealCreationForm from "../components/DealCreationForm";
-import DealUpdateForm from "../components/DealUpdateForm";
 import { useDealContext } from "../components/context/DealContext";
 import DealTableExportButton from "../components/DealTableExportToExcel";
 
 const WonDeals = () => {
-    const {isEditFormEnable} = useDealContext();
+    const { isEditFormEnable } = useDealContext();
 
     const [isCreationFormVisible, setIsCreationFormVisible] =
         React.useState(false);
@@ -85,18 +82,6 @@ const WonDeals = () => {
                     />
                 </Container>
             </div>
-
-            {/* creation form */}
-            <DealCreationForm
-                isOpen={isCreationFormVisible}
-                close={() => setIsCreationFormVisible(false)}
-            />
-
-            {/* edit form */}
-            {isEditFormEnable && 
-              <DealUpdateForm/>
-            }
-            
         </React.Fragment>
     );
 };
@@ -107,6 +92,6 @@ const Container = styled.div`
     background-color: #fff;
     overflow: hidden;
     /* box-shadow: 0 0 6px rgb(0 0 0 / 20%); */
-    border: 1px solid rgba(0,0,0,.125);
-    border-radius: .25rem;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
 `;

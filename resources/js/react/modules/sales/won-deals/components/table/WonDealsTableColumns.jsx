@@ -1,17 +1,8 @@
 import dayjs from "dayjs";
 import {
-    Action,
-    BidValue,
-    BiddingDelayTime,
     CreatedAt,
-    CreatedBy,
-    DealStatus,
-    EmptySpace,
-    ProjectBudget,
-    ProjectID,
-    Status,
+    CreatedBy, EmptySpace
 } from "./ui";
-import ActionDropdown from "./ActionDropdown";
 import Avatar from "../../../../../global/Avatar";
  
 

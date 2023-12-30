@@ -5,7 +5,7 @@ import ReactExport from "react-data-export";
 import _, { fill } from "lodash";
 import styled from "styled-components";
 import Loader from "../../../../global/Loader";
-import { useExportableDealsMutation } from "../../../../services/api/dealApiSlice";
+import { useExportableWonDealsMutation } from "../../../../services/api/wonDealsApiSlice";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -15,10 +15,12 @@ const DealTableExportButton = ({ filter }) => {
     const queryObject = _.pickBy(filter ?? {}, Boolean);
     const query = new URLSearchParams(queryObject).toString();
 
-    const [exportableDeals, { data, isLoading, isSuccess, isUninitialized }] =
-        useExportableDealsMutation();
+    const [exportableWonDeals, { data, isLoading, isSuccess, isUninitialized }] =
+    useExportableWonDealsMutation();
 
     const deals = data?.data;
+
+    console.log({data});
    
 
     const fieldStyle = {
@@ -32,37 +34,115 @@ const DealTableExportButton = ({ filter }) => {
 
     // get deals
     const getData = (deals) => {
-        let rows = [];
-        _.forEach(deals, (d) => {
+        let rows = []; 
 
-          const StatusStyle = (_color) => {
-            let c =_color?.toUpperCase();
 
-            if( c === '#FFFF00'){
-              return {
-                fill: {
-                  fgColor: {rgb:'22E6E600'},
-                }, 
-              }
-            }else{
-              return {
-                fill: {
-                  fgColor: {rgb: c.replace(/#/g, '22')},
-                },
-                font: { 
-                  color: {rgb: 'FFFFFFFF' },
-                },
-              }
+        _.forEach(deals, (d) => { 
+            const clientContactForm = (d) => {
+                if(d?.toLowerCase() === 'submitted'){
+                    return {
+                        fill: {
+                            fgColor: {rgb: 'FF28A745'},
+                        },
+                        font: { 
+                            color: {rgb: 'FFFFFFFF' },
+                        },
+                    }
+                }else{
+                    return {
+                        fill: {
+                            fgColor: {rgb: 'FFFCBD01'},
+                        }, 
+                    }
+                }
             }
-          }
+           
+            // status
+            const statusStyle = (status) => {
+                const s = status?.toLowerCase();
+                if(s === 'accepted'){
+                    return {
+                        fill: {
+                            fgColor: {rgb: 'FF28A745'},
+                        },
+                        font: { 
+                            color: {rgb: 'FFFFFFFF' },
+                        },
+                    }
+                }else if (s === 'denied'){
+                    return {
+                        fill: {
+                            fgColor: {rgb: 'FFD30000'},
+                        },
+                        font: { 
+                            color: {rgb: 'FFFFFFFF' },
+                        },
+                    }
+                }else {
+                    return {
+                        fill: {
+                            fgColor: {rgb: 'FFFCBD01'},
+                        }, 
+                    }
+                }
+            }
 
-
-            const date = d?.created_at
-                ? dayjs(d?.created_at).format(`DD-MM-YYYY hh:mm:ss A`)
+            // date 
+            const date = (_data) => _data 
+                ? dayjs(_data).format(`DD-MM-YYYY hh:mm:ss A`)
                 : "--";
 
             let row = [
-                
+                {
+                    value: d["deal_id"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d["project_name"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d["cms_name"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d["value"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d["client_name"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d["pm_name"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.["deal_creation_date"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.submission_status?.toLowerCase() === 'submitted' ? 'Submitted' : 'Awaiting for client Response',
+                    style: {
+                        ...fieldStyle,
+                        ...clientContactForm(d?.submission_status)
+                    },
+                },
+                {
+                    value: date(d?.created_at) ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.["added_by_name"] ?? "--",
+                    style: fieldStyle,
+                },
+                {
+                    value: d?.status?.toLowerCase() === 'accepted' ? 'Accepted' : d?.status?.toLowerCase() === 'denied' ? 'Denied' : 'Pending',
+                    style: {
+                        ...fieldStyle,
+                        ...statusStyle(d?.status)
+                    },
+                },
             ];
             rows.push(row);
         });
@@ -128,7 +208,7 @@ const DealTableExportButton = ({ filter }) => {
 
     const handleRender = async () => {
         setIsRender(false);
-        await exportableDeals(query).unwrap();
+        await exportableWonDeals(query).unwrap();
         setIsRender(true);
     };
 

@@ -15,7 +15,7 @@ const JqueryDateRangePicker = ({
             // let today = moment().format('D');
 
             $(function () {
-                let start = moment().subtract(7, "day");
+                let start = moment().subtract(1, "months");
                 let end = moment();
 
                 // if(today > 20){
