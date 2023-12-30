@@ -59,7 +59,7 @@ export const DealsTableColumns = [
             return (
                 <a
                     href={data?.project_link}
-                    className="multiline-ellipsis text-hover-underline pr-2"
+                    className="multiline-ellipsis text-hover-underline mr-2"
                 >
                     { (data?.lead_id ? data?.lead_project_link : data?.project_link) ?? <EmptySpace> -- </EmptySpace>}
                 </a>
