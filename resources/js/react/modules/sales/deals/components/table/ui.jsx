@@ -19,6 +19,7 @@ export const TableHead = styled.thead`
 export const TableBody = styled.tbody``;
 
 export const TableRow = styled.tr`
+    padding-inline: 20px;
     &:nth-child(odd) {
         background-color: rgb(0 0 0 / 3%);
     }
@@ -49,8 +50,8 @@ export const TableHeadItem = styled.th`
     }
 
     &.project_name {
-        width: 256px;
-        min-width: 256px;
+        width: 256px; 
+        /* min-width: 256px; */
     }
 
     &.actual_amount {
@@ -61,16 +62,20 @@ export const TableHeadItem = styled.th`
 `;
 export const TableItem = styled.td`
     padding: 3px 16px;
-    max-width: 256px;
+    max-width: 200px;
     min-width: min-content;
     overflow: hidden;
+
+    & a {
+        color: #28313c;
+    }
 `;
 
 export const TableFooter = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 2rem;
+    margin: 20px;
 `;
 
 export const Flex = styled.div`
@@ -127,10 +132,10 @@ export const Status = styled.div`
 export const DealStatus = styled.div`
     background-color: ${(props) => props.backgroundColor};
     color: ${(props) => props.color};
-    padding: 0 10px;
-    font-size: 10px;
-    font-weight: 600;
-    border-radius: 10px;
+    padding: 3px 4px;
+    font-size: 8px;
+    font-weight: 500;
+    border-radius: 0.5rem;
     width: 100px;
 `;
 
