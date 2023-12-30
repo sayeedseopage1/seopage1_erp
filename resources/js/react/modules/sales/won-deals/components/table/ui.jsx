@@ -64,7 +64,7 @@ export const TableItem = styled.td`
     padding: 3px 16px;
     max-width: 200px;
     min-width: min-content;
-    overflow: hidden;
+    // overflow: hidden;
 
     & a {
         color: #28313c;
