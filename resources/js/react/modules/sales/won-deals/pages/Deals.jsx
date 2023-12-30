@@ -56,10 +56,10 @@ const WonDeals = () => {
                 <FilterBar setFilter={setFilter} />
                 <Flex justifyContent="space-between" className="mb-3">
                     <Flex>
-                        <Button onClick={() => setIsCreationFormVisible(true)} className="font-weight-normal">
+                        {/* <Button onClick={() => setIsCreationFormVisible(true)} className="font-weight-normal">
                             <i className="fa-solid fa-plus" />
                             Create Deal
-                        </Button> 
+                        </Button>  */}
 
                         <DealTableExportButton filter={filter} />
                     </Flex>

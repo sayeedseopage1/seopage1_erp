@@ -62,62 +62,7 @@ const DealTableExportButton = ({ filter }) => {
                 : "--";
 
             let row = [
-                {
-                    value: d["id"] ?? "--",
-                    style: fieldStyle,
-                },
-                {
-                  value: d["project_name"] ?? "--",
-                  style: fieldStyle,
-              },
-                {
-                    value: d["client_username"] ?? "--",
-                    style: fieldStyle,
-                },
-                {
-                    value: (d?.lead_id ? d?.lead_project_link : d?.project_link) ?? "--",
-                    style: fieldStyle,
-                }, 
-                {
-                    value: `${d?.ammount_currency_symbol} ${d?.amount}` ?? "--",
-                    style: {
-                        ...fieldStyle,
-                        font: {
-                            bold: true,
-                        },
-                    },
-                },
-                {
-                    value:
-                        `${d?.actual_amount_currency_symbol} ${d?.actual_amount}` ??
-                        "--",
-                    style: {
-                        ...fieldStyle,
-                        font: {
-                            bold: true,
-                        },
-                    },
-                },
-                {
-                    value: date ,
-                    style: fieldStyle,
-                },
-                {
-                    value: (d?.lead_id ? d?.added_by_name : d?.lead_added_by_name) ?? '--',
-                    style: fieldStyle,
-                },
-
-                {
-                    value: (d?.deal_stages_converted_by_name &&  d["deal_stages_converted_by_name"] ) ?? '--',
-                    style: fieldStyle,
-                },
-                {
-                    value: d["won_lost"] ?? '--',
-                    style: {
-                        ...fieldStyle,
-                        ...StatusStyle(d?.won_lost_bg)
-                    },
-                },
+                
             ];
             rows.push(row);
         });
@@ -127,14 +72,15 @@ const DealTableExportButton = ({ filter }) => {
 
     // columns
     const columns = [
-        { title: "#" },
-        { title: "Deal Name" },
+        { title: "Short Code" },
+        { title: "Project Name" },
+        { title: "CMS Name" },
+        { title: "Amount" },
         { title: "Client" },
-        { title: "Project Link", width: { wpx: 200 } },
-        { title: "Project Budget (USD)" },
-        { title: "Project Budget (Original Currency)" },
-        { title: "Created Date" },
-        { title: "Added By" },
+        { title: "Project Manager"},
+        { title: "Closing Date" },
+        { title: "Client Contract Form" },
+        { title: "Created Date" }, 
         { title: "Closed By" },
         { title: "Status" }, 
     ];
@@ -145,6 +91,7 @@ const DealTableExportButton = ({ filter }) => {
             columns: [
                 { title: "Filter" },
                 { title: "Date" },
+                { title: "Project Manager" },
                 { title: "Client" },
                 { title: "Closed By" },
                 { title: "Status" },
@@ -164,6 +111,7 @@ const DealTableExportButton = ({ filter }) => {
                             },
                         },
                     },
+                    { value: filter?.pm_name ?? "--" },
                     { value: filter?.client_username ?? "--" },
                     { value: filter?.closed_by_name ?? "--" },
                     { value: filter?.status_title ?? "--" },
@@ -199,8 +147,8 @@ const DealTableExportButton = ({ filter }) => {
             </ExportButton>
 
             {isRender && !isLoading && deals?.length > 0 && (
-                <ExcelFile filename="deal_table_data" hideElement={true}>
-                    <ExcelSheet dataSet={multiDataSet} name="deal_table_data" />
+                <ExcelFile filename="won_deals_table" hideElement={true}>
+                    <ExcelSheet dataSet={multiDataSet} name="won_deals_table" />
                 </ExcelFile>
             )}
         </React.Fragment>

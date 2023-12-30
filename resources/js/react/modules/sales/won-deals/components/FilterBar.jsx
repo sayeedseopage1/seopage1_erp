@@ -22,6 +22,7 @@ const FilterBar = ({ setFilter }) => {
     const [search, setSearch] = React.useState("");
     const [searchText, setSearchText] = React.useState('');
     const [client, setClient] = React.useState(null);
+    const [projectManager, setProjectManager] = React.useState(null);
     const [closedBy, setClosedBy] = React.useState(null);
     const [convertStatus, setConvertStatus] = React.useState(null); 
     
@@ -34,6 +35,7 @@ const FilterBar = ({ setFilter }) => {
     const _clientId = React.useMemo(() => client?.id, [clientId]);
     const _convertStatus = React.useMemo(() => convertStatus, [convertStatus]);
     const _closedById = React.useMemo(() => closedBy?.id, [closedBy]);
+    const _projectManagerId = React.useMemo(() => projectManager?.id, [projectManager]);
 
     React.useEffect(() => {
         setFilter((prev) => ({
@@ -47,8 +49,10 @@ const FilterBar = ({ setFilter }) => {
             status_title: convertStatus?.title,
             closed_by: _closedById,
             closed_by_name: closedBy?.name,
+            pm_id: _projectManagerId,
+            pm_name: projectManager?.name,
         }));
-    }, [_startData,_closedById, _endData, _clientId, _convertStatus]);
+    }, [_startData,_closedById, _endData, _clientId, _convertStatus, _projectManagerId]);
 
     // search data
     useDebounce(() => { setSearchText(search)},500,[search] );
@@ -106,6 +110,19 @@ const FilterBar = ({ setFilter }) => {
                         ) : null}
 
                         <PersonFilter
+                            value={projectManager}
+                            onChange={setProjectManager}
+                            title="Project Manager"
+                            display={value => value?.name}
+                            searchBy={value => value?.name}
+                            data={_.filter(
+                                users,
+                                (user) => user.role_id === 4
+                            )}
+                        />
+
+
+                        <PersonFilter
                             value={client}
                             onChange={setClient}
                             title="Client"
@@ -130,14 +147,9 @@ const FilterBar = ({ setFilter }) => {
                             value={convertStatus}
                             onChange={setConvertStatus}
                             data={[
-                                { id: "0", title: "Contact Made" },
-                                { id: "1", title: "Qualified" },
-                                { id: "2", title: "Requirements Defined" },
-                                { id: "3", title: "Proposal Made" },
-                                { id: "4", title: "Negotiation Started" },
-                                { id: "5", title: "Milestone Breakdown" },
-                                { id: "won", title: "Won" },
-                                { id: "lost", title: "Lost" },
+                                { id: "accepted", title: "Accepted" },
+                                { id: "denied", title: "Denied" },
+                                { id: "pending", title: "Pending" },
                             ]}
                         />
                     </FilterWrapper>
