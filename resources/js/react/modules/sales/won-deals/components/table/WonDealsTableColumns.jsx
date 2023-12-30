@@ -19,7 +19,7 @@ export const WonDealsTableColumns = [
     {
         id: "short_code",
         header: "Short Code",
-        cell: ({row}) => row.original?.deal_id ?? <EmptySpace> -- </EmptySpace>,
+        cell: ({row}) => <div dangerouslySetInnerHTML={{__html: row.original?.short_code_html}} />?? <EmptySpace> -- </EmptySpace>,
     },
     {
         id: "project_name",
@@ -197,6 +197,6 @@ export const WonDealsTableColumns = [
     {
         id: "action",
         header: "Action",
-        cell: (props) => <ActionDropdown {...props} />,
+        cell: ({row}) => <div dangerouslySetInnerHTML={{__html: row.original?.action}}></div>
     },
 ];

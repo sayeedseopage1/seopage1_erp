@@ -1174,6 +1174,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('contracts/download/{id}', [ContractController::class, 'download'])->name('contracts.download');
     Route::post('contracts/sign/{id}', [ContractController::class, 'sign'])->name('contracts.sign');
     Route::get('get-contracts-data', [ContractController::class, 'getAllContracts']);
+    Route::get('export-contracts-data', [ContractController::class, 'exportContracts']);
     Route::group(
         ['prefix' => 'contracts'],
         function () {
