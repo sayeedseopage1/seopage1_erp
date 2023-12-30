@@ -23,26 +23,35 @@ export const WonDealsTableColumns = [
     },
     {
         id: "project_name",
-        header: "Deal Name",
-        accessorKey: "cms_name",
+        header: "Project Name",
+        accessorKey: "project_name",
         cell: ({ row }) => {
             const data = row.original;
+
+            const isHourly = data?.project_type?.toLowerCase() === 'hourly';
+
+            if(!data?.project_name){
+                <EmptySpace> -- </EmptySpace>
+            }
+            
             return  (
                 <>
-                    {data?.cms_name ?? <EmptySpace> -- </EmptySpace>}  
+                    <div dangerouslySetInnerHTML={{__html: data?.project_name_html}}/>
+                    {isHourly && <span className="badge badge-success">Hourly</span>}
                 </>
             ) ;
         },
-    },
+    }, 
+
     {
         id: "cms",
         header: "CMS Name",
-        accessorKey: "",
+        accessorKey: "cms_name",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <span className="multiline-ellipsis pr-2">
-                    { data?.client_username || <EmptySpace> -- </EmptySpace>}
+                    { data?.cms_name || <EmptySpace> -- </EmptySpace>}
                 </span>
             );
         },
@@ -54,9 +63,7 @@ export const WonDealsTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <ProjectBudget> 
-                    {`${data?.amount_currency_symbol} ${Number(data?.actual_amount).toFixed(0)}`}
-                </ProjectBudget>
+                <div dangerouslySetInnerHTML={{__html: data?.value}}></div>
             );
         },
     },

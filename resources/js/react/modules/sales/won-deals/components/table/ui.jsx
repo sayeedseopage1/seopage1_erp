@@ -51,7 +51,7 @@ export const TableHeadItem = styled.th`
 
     &.project_name {
         width: 256px; 
-        /* min-width: 256px; */
+        min-width: 256px;
     }
 
     &.actual_amount {
@@ -99,10 +99,9 @@ export const ProjectID = styled.div`
 
 export const ProjectBudget = styled.div`
     text-align: right;
-`;
-export const BidValue = styled.div`
-    width: 80px;
-`;
+`; 
+
+
 export const CreatedAt = styled.div`
     width: 90px;
 `;
