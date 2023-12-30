@@ -2949,8 +2949,18 @@ public function storeClientDeal(Request $request){
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $dealsQuery = Deal::select('deals.*','deals.status as deal_status')
-        ->leftJoin('users', 'users.id', 'deals.added_by')
+        $dealsQuery = Deal::select(
+            'deals.*',
+            'deals.status as deal_status',
+            'added_by.name as added_by_name',
+            'added_by.image as added_by_avatar',
+            'pm.name as pm_name',
+            'pm.image as pm_avatar',
+            'client.image as client_avatar',
+            )
+        ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
+        ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
+        ->leftJoin('users as client', 'client.id', 'deals.client_id')
         ->where('deals.dept_status','WD');
 
         if ($startDate !== null && $endDate !== null) {
@@ -2986,6 +2996,19 @@ public function storeClientDeal(Request $request){
             ->orderBy('deals.id', 'desc')
             ->paginate($limit);
         }
+
+        /**AMOUNT CHECK ITS UPSELL OR NOT START */
+        foreach ($deals as $itemDeal){
+            $amount = '';
+            if($itemDeal->project_type=="fixed" && $itemDeal->actual_amount == 0){
+                $badge =  '<span class="badge badge-success ml-1">'. 'Upsold By PM'.'</span>';
+                $amount = $itemDeal->upsell_actual_amount . ' ' . $itemDeal->original_currency->currency_symbol . $badge;
+            }else{
+                $amount = $itemDeal->actual_amount. ' ' . $itemDeal->original_currency->currency_symbol;
+            }
+            $itemDeal->value = $amount;
+        }
+        /**AMOUNT CHECK ITS UPSELL OR NOT END */
 
         return response()->json([
             'data' => $deals,
