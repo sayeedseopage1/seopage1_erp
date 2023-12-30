@@ -33,6 +33,7 @@ use App\Helper\Reply;
 use App\Models\AwardTimeIncress;
 use App\Models\AuthorizationAction;
 use App\Http\Controllers\HelperPendingActionController;
+use App\Models\DealStage;
 
 class DMContractController extends AccountBaseController
 {
@@ -1546,5 +1547,4 @@ class DMContractController extends AccountBaseController
             }
         }
     }
-
 }
