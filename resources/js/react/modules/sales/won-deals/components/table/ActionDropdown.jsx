@@ -8,12 +8,10 @@ import { useAuth } from "../../../../../hooks/useAuth";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import _ from "lodash";
-import { useDealContext } from "../context/DealContext";
-import { useDealDeleteMutation } from "../../../../../services/api/dealApiSlice";
+
+
 
 const ActionDropdown = ({ ...rest }) => {
-    const { openEditForm } = useDealContext();
-    const [deleteDeal, { isLoading }] = useDealDeleteMutation();
     const auth = useAuth();
 
     const handleDelete = () => {
@@ -60,17 +58,17 @@ const ActionDropdown = ({ ...rest }) => {
                 <Dropdown.Menu placement="bottom-end">
                     <Dropdown.Item
                         onClick={ () => handleRedirection(
-                            `/account/deals/${rest?.row?.original?.id}`
+                            `/account/deal-url/${rest?.row?.original?.id}`
                         )}
                         className={styles.dropdownItem}
                     >
-                        <i className="fa-regular fa-eye" />
-                        View
+                        <i className="fa-regular fa-file" />
+                        Client Form
                     </Dropdown.Item>
 
                     {_.includes([1, 7], auth.getRoleId()) && (
                         <Dropdown.Item
-                            onClick={() => openEditForm(rest?.row?.original)}
+                            onClick={() => handleRedirection(`/deals/details/edit/${rest?.row?.original?.id}`)}
                             className={styles.dropdownItem}
                         >
                             <i className="fa-regular fa-pen-to-square" />
@@ -79,13 +77,13 @@ const ActionDropdown = ({ ...rest }) => {
                     )}
 
                     {/* delete lead */}
-                    {auth.getRoleId() === 1 && (
+                    {auth.getRoleId() === 1 && rest?.row?.original?.status?.toLowerCase() !== 'pending' && (
                         <Dropdown.Item
-                            onClick={handleDelete}
+                            onClick={() => handleRedirection(`/account/contracts/${rest?.row?.original?.id}`)}
                             className={styles.dropdownItem}
                         >
-                            <i className="fa-regular fa-trash-can" />
-                            Delete
+                            <i className="fa-regular fa-user" />
+                            Authorization Details
                         </Dropdown.Item>
                     )}
                 </Dropdown.Menu>
