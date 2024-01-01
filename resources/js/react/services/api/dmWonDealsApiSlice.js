@@ -7,14 +7,14 @@ const _token = document
 const DmWonDealsApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         dmWonDeals: build.query({
-            query: (query) => `/account/get-contracts-data?${query}`,
+            query: (query) => `/account/get-dm-contracts-data?${query}`,
             providesTags: ["WON_DEALS"],
         }),
                 
         // deal export data
         exportableDmWonDeals: build.mutation({
             query: (query) => ({
-                url: `/account/export-contracts-data?${query}`,
+                url: `/account/export-dm-contracts-data?${query}`,
                 method: "GET",
             })
         }),

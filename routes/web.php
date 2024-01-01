@@ -1201,8 +1201,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('dm-contracts', DMContractController::class);
     Route::post('dm-contracts/deal-store', [DMContractController::class, 'storeDMDeal'])->name('dm-store-deals');
     Route::get('dm-deal-url/{id}', [DMContractController::class, 'dmDealUrl']);
-    Route::get('get-dm-contracts-data', [ContractController::class, 'getAllDmContracts']);
-    Route::get('export-dm-contracts-data', [ContractController::class, 'exportDmContracts']);
+    Route::get('get-dm-contracts-data', [DMContractController::class, 'getAllDmContracts']);
+    Route::get('export-dm-contracts-data', [DMContractController::class, 'exportDmContracts']);
 
     /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
 
