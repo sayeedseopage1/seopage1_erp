@@ -239,8 +239,8 @@ const DealTableExportButton = ({ filter }) => {
             </ExportButton>
 
             {isRender && !isLoading && deals?.length > 0 && (
-                <ExcelFile filename="won_deals_table" hideElement={true}>
-                    <ExcelSheet dataSet={multiDataSet} name="won_deals_table" />
+                <ExcelFile filename="digital_marketing_won_deals_table" hideElement={true}>
+                    <ExcelSheet dataSet={multiDataSet} name="digital_marketing_won_deals_table" />
                 </ExcelFile>
             )}
         </React.Fragment>
