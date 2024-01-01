@@ -253,6 +253,7 @@ $currency_id= App\Models\Currency::where('id',$deal_id->original_currency_id)->f
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
+      @if ($deal_id->description4 !=null)
       <div class="row mb-4" >
           <!-- BUDGET VS SPENT START -->
           <div class="col-md-12">
@@ -263,7 +264,7 @@ $currency_id= App\Models\Currency::where('id',$deal_id->original_currency_id)->f
                             Reference websites and what the references are for (Ex: ABC.com is for the color scheme. XYZ.com is for
                               section layouts DEF.com is for header & footer styling. However, none of these can be copied)</h4>
                           <br>
-                          <p>{!! $deal_id->description4 !!}</p>
+                          <p> {!! $deal_id->description4 !!}</p>
 
                       </div>
 
@@ -272,6 +273,7 @@ $currency_id= App\Models\Currency::where('id',$deal_id->original_currency_id)->f
           </div>
           <!-- BUDGET VS SPENT END -->
       </div>
+      @endif
       <div class="row mb-4" >
           <!-- BUDGET VS SPENT START -->
           <div class="col-md-12">
