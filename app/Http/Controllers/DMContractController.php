@@ -1622,56 +1622,46 @@ class DMContractController extends AccountBaseController
             $itemDeal->short_code_html = '<a target="__blank" class="text-primary" href="' . route('contracts.show', $itemDeal->id) . '">' . $itemDeal->deal_id . '</a>';
 
             $action = '
-                <div class="dropdown">
-                    <button class="btn f-14 px-0 py-0 text-dark-grey" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="icon-options-vertical icons"></i>
-                    </button>
-                    <div style="whith:200px; color:black;" class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
+            <div class="dropdown">
+                <button class="btn f-14 px-0 py-0 text-dark-grey" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="icon-options-vertical icons"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
 
-            if ($itemDeal->submission_status == "Awaiting for client Response") {
-                $action .= '<a class="dropdown-item" href="/account/deal-url/' . $itemDeal->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
-            } else {
-                $action .= '<a class="dropdown-item" href="deal-url/' . $itemDeal->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
-            }
-
-            $upDeal = Deal::where('id', $itemDeal->id)->first();
-            $upSellAddedBy = User::where('id', $upDeal->added_by)->first();
-
-            if ($upSellAddedBy->role_id == 4 && Auth::user()->role_id == 4) {
-                $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $itemDeal->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
-            } elseif ($upSellAddedBy->role_id == 7 && Auth::user()->role_id == 7) {
-                $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $itemDeal->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
-            } else {
-                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
-                    $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $itemDeal->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
-                }
-            }
-
-            if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
-                if ($itemDeal->authorization_status == 0 || $itemDeal->authorization_status == '2') {
-                    if (Auth::user()->role_id == 8) {
-                        $action .= '<a class="dropdown-item bg-warning" href="' . route("authorization_request", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Authorization Need') . '</a>';
-                    }
+                if ($itemDeal->submission_status == "Awaiting for client Response") {
+                    $action .= '<a class="dropdown-item" href="/account/dm-deal-url/' . $itemDeal->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
                 } else {
-                    $action .= '<a class="dropdown-item bg-success" href="' . route("contracts.show", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Authorization Details') . '</a>';
+                    $action .= '<a class="dropdown-item" href="dm-deal-url/' . $itemDeal->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
                 }
-            }
 
-            if (Auth::user()->role_id == 4 && $itemDeal->status == 'Denied') {
-                $award_time_request = $itemDeal->has_award_time_request;
+                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 11 || Auth::user()->role_id == 12) {
+                    $action .= '<a class="dropdown-item" href="/dm-deals/details/edit/' . $itemDeal->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+                }
+                if (Auth::user()->role_id == 12 || Auth::user()->role_id == 1) {
+                    if ($itemDeal->authorization_status == 0 || $itemDeal->authorization_status == '2') {
+                        if (Auth::user()->role_id == 12) {
+                            $action .= '<a class="dropdown-item bg-warning" href="' . route("authorization_request", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Authorization Need') . '</a>';
+                        }
 
-                if ($award_time_request) {
-                    if ($award_time_request->status == '2') {
-                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $itemDeal->id . '" href="' . route("award_time_check.index", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                    } else {
+                        $action .= '<a class="dropdown-item bg-success" href="' . route("dm-contracts.show", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Authorization Details') . '</a>';
                     }
-                } else {
-                    $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $itemDeal->id . '" href="' . route("award_time_check.index", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
                 }
-            }
+                if (Auth::user()->role_id == 1 && $itemDeal->status == 'Denied') {
+                    $award_time_request = $itemDeal->has_award_time_request;
 
-            $action .= '
-                    </div>
-                </div>';
+                    if ($award_time_request) {
+                        if ($award_time_request->status == '2') {
+                            $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $itemDeal->id . '" href="' . route("dm_award_time_check.index", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                        }
+                    } else
+                    {
+                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $itemDeal->id . '" href="' . route("dm_award_time_check.index", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                    }
+                }
+                $action .= '
+                </div>
+            </div>';
 
 
             $itemDeal->action = $action;
