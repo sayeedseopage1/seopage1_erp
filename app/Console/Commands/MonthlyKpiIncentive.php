@@ -162,7 +162,7 @@ class MonthlyKpiIncentive extends Command
                 $update_kpisetting_log_h->save();
                
         }
-        if (Carbon::today() == Carbon::now()->startOfMonth()->addDay(1)) {
+        if (Carbon::today() == Carbon::now()->startOfMonth()) {
             $update_kpi_s= kpiSetting::where('kpi_status',"2")->first();
             // dd($update_kpi_s);
             $update_kpi_s->kpi_status = "1";
