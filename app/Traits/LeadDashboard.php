@@ -1128,7 +1128,7 @@ trait LeadDashboard
                   ->leftJoin('projects', 'projects.id', 'tasks.project_id')
                   ->leftJoin('users as client', 'client.id', 'projects.client_id')
                   ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-                  ->where('tasks.id', $task)
+                  ->where('tasks.id', $task->task_id)
                   //->groupBy('tasks.id', $task)
                   ->first();
 
@@ -1177,7 +1177,7 @@ trait LeadDashboard
                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
                ->leftJoin('users as client', 'client.id', 'projects.client_id')
                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-               ->where('tasks.id', $task)
+               ->where('tasks.id', $task->task_id)
                //->groupBy('tasks.id', $task)
                ->first();
 
@@ -2205,6 +2205,7 @@ trait LeadDashboard
  $average_attempts_approve_pm_data_lead = [];
 
  foreach ($task_id_store as $task) {
+   // dd($task);
      //$task= Task::where('id',$task)->select('id')
      $approve_task_data = DB::table('tasks')
      ->select(
@@ -2233,7 +2234,7 @@ trait LeadDashboard
          ->leftJoin('users as client', 'client.id', 'projects.client_id')
          ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
          ->where('tasks.id',
-             $task->id
+             $task
          )
          //->groupBy('tasks.id', $task)
          ->first();
@@ -2242,6 +2243,7 @@ trait LeadDashboard
  }
 
  $this->average_attempts_approve_pm_data_lead  =$average_attempts_approve_pm_data_lead;
+ //dd($this->average_attempts_approve_pm_data_lead);
 
   // --------------Average number of attempts needed for approval(in cycle) Client table-----------------------------//
 
@@ -2263,6 +2265,7 @@ trait LeadDashboard
   ->where('task_users.user_id', $devId)
   ->distinct('tasks.id')
   ->get();
+  
 
   $average_attempts_approve_client_data_lead = [];
 
@@ -2310,7 +2313,7 @@ trait LeadDashboard
   }
 
   $this->average_attempts_approve_client_data_lead  = $average_attempts_approve_client_data_lead;
-
+  
          //---------------------------------Percentage of Revision table----------------------------------------------------//
 
          $assign_task_count_for_revision = 0;
@@ -2388,6 +2391,8 @@ trait LeadDashboard
          }
 
          $this->revision_data_lead= $revision_data_lead;
+       
+       
          //------------------------------average Submission Time(Day) table----------------------------------------------//
 
             //in this month
@@ -2437,6 +2442,8 @@ trait LeadDashboard
             }
 
             $this->average_submit_data_lead = $average_submit_data_lead;
+           
+          
               //Number of disputes filed all table
 
 
@@ -2454,6 +2461,7 @@ trait LeadDashboard
 
           foreach ($number_of_dispute_filed_all_id as $task) {
               //$task= Task::where('id',$task)->select('id')
+             
               $task_data = DB::table('tasks')
                   ->select(
                       'tasks.id',
@@ -2476,7 +2484,7 @@ trait LeadDashboard
                   ->leftJoin('projects', 'projects.id', 'tasks.project_id')
                   ->leftJoin('users as client', 'client.id', 'projects.client_id')
                   ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-                  ->where('tasks.id', $task)
+                  ->where('tasks.id', $task->task_id)
                   //->groupBy('tasks.id', $task)
                   ->first();
 
@@ -2485,6 +2493,7 @@ trait LeadDashboard
 
 
           $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
+        //  dd($this->number_of_dispute_filed_all_data_lead );
            //-------------------Number of disputes filed all table-----------------//
 
 
@@ -2524,7 +2533,7 @@ trait LeadDashboard
                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
                ->leftJoin('users as client', 'client.id', 'projects.client_id')
                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-               ->where('tasks.id', $task)
+               ->where('tasks.id', $task->task_id)
                //->groupBy('tasks.id', $task)
                ->first();
 
@@ -2533,6 +2542,7 @@ trait LeadDashboard
 
 
        $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
+      
 
        //------------ Number of disputes lost own table-----------------//
             $number_of_dispute_lost_own_id = DB::table('task_revision_disputes')
