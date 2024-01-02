@@ -1945,13 +1945,14 @@
                         <div class="d-flex flex-wrap">
 
                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                <a href="#" data-toggle="modal" data-target="#">
+                                <a href="#" data-toggle="modal" data-target="#hours_spent_in_revision_modal{{count($spent_revision_developer_data)}}">
                                  
                                     {{round($spent_revision_developer,2)}} Hours
                                   
                                 </a>
                                
                             </p>
+                            @include('dashboard.ajax.developerdashboard.modals.hours_spent_in_revision_modal')
 
                           
                         </div>
