@@ -259,7 +259,7 @@
             <div class="d-flex flex-wrap">
 
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
+                    <a href="#" data-toggle="modal" data-target="#avg_num_in_progress{{count($total_in_progress_date_range_table)}}">
                      
 
                         {{round($average_in_progress_date_range ,2)}}
@@ -267,6 +267,7 @@
                     </a>
                    
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.avg_num_in_progress')
 
               
             </div>

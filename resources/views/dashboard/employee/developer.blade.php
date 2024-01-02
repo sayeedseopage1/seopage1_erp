@@ -1721,7 +1721,7 @@
                         <div class="d-flex flex-wrap">
 
                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                <a href="#" data-toggle="modal" data-target="#">
+                                <a href="#" data-toggle="modal" data-target="#avg_num_in_progress{{count($total_in_progress_date_range_table)}}">
                                  
 
                                     {{round($average_in_progress_date_range ,2)}}
@@ -1729,6 +1729,7 @@
                                 </a>
                                
                             </p>
+                            @include('dashboard.ajax.developerdashboard.modals.avg_num_in_progress')
 
                           
                         </div>
@@ -1902,26 +1903,28 @@
                             </h5>
                         <div class="d-flex flex-wrap">
 
-                            <h6 class="mb-0 f-18 font-weight-bold mr-5">
+                            <p class="mb-0 f-18 font-weight-bold mr-5">
                                 No. of disputes lost(Raised By Developer):
-                                <a href="#" data-toggle="modal" data-target="#">
+                                <a href="#" data-toggle="modal" data-target="#no_of_dispute_lost{{count($number_of_dispute_filed_own_data) }}">
                                  
 
                                      {{ $number_of_dispute_lost_own}}
     
                                 </a>
+                                @include('dashboard.ajax.developerdashboard.modals.no_of_dispute_lost')
                                
-                            </h6>
-                            <h6 class="mb-0 f-18 font-weight-bold mr-5">
+                            </p>
+                            <p class="mb-0 f-18 font-weight-bold mr-5">
                                 No. of disputes lost(Overall):
-                                <a href="#" data-toggle="modal" data-target="#">
+                                <a href="#" data-toggle="modal" data-target="#no_of_dispute_lost_overall{{count($number_of_dispute_filed_all_data)}}">
                                  
 
                                      {{ $number_of_dispute_lost_all}}
                                   
                                 </a>
+                                @include('dashboard.ajax.developerdashboard.modals.no_of_dispute_lost_overall')
                                
-                            </h6>
+                            </p>
 
                           
                         </div>
