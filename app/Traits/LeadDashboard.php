@@ -706,10 +706,708 @@ trait LeadDashboard
         ->whereBetween('tasks.created_at', [$startDate, $endDate])
         ->groupBy('tasks.id')
         ->orderBy('tasks.created_at','desc')->get();
+
+        //-----------------------------number of tasks approved in first attempt(in cycle) PM table-----------------------//
+
+        $number_of_tasks_approved = DB::table('tasks')
+        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+            ->select('tasks.id')
+            ->where('task_approves.created_at', '>=', $startDate)
+            ->where('task_approves.created_at', '<', $endDate)
+            ->where('task_users.user_id', $devId)
+            ->get();
+        $first_attempt_approve_task = 0;
+        $task_id_store = [];
+        foreach ($number_of_tasks_approved as $task) {
+
+            $min_approve_date = DB::table('task_approves')
+            ->select('task_approves.created_at')
+            ->where('task_approves.task_id', $task->id)
+            ->orderBy('task_approves.created_at', 'asc')
+            ->first();
+
+            $number_of_tasks = DB::table('task_submissions')
+            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+            ->where('task_submissions.task_id', $task->id)
+            ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
+            ->distinct('task_submissions.created_at')
+            ->count();
+            if ($number_of_tasks == 1) {
+                $first_attempt_approve_task++;
+                $task_id_store[] = $task->id;
+            }
+        }
+
+        $first_attempt_approve_task_pm_data_lead = [];
+
+        foreach ($task_id_store as $task) {
+            //$task= Task::where('id',$task)->select('id')
+            $approve_task_data = DB::table('tasks')
+            ->select(
+                'tasks.id',
+                'tasks.heading',
+                'client.id as clientId',
+                'client.name as clientName',
+                'tasks.created_at as assign_date',
+                'task_submissions.created_at as submission_date',
+                'tasks.due_date',
+                'tasks.client_name as client_name',
+                'cl.id as cl_id',
+                'cl.name as cl_name',
+                'tasks.board_column_id',
+                'taskboard_columns.column_name as column_name',
+                'taskboard_columns.label_color'
+            )
+                ->join('task_submissions', 'task_submissions.task_id','=','tasks.id')
+                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                ->where('tasks.id', $task )
+                //->groupBy('tasks.id', $task)
+                ->first();
+
+            $first_attempt_approve_task_pm_data_lead[] = $approve_task_data;
+        }
+
+
+    $this->first_attempt_approve_task_pm_data_lead =$first_attempt_approve_task_pm_data_lead;
+
+    //-----------------------------number of tasks approved in first attempt(in cycle) Client table-----------------------//
+
+    $number_of_tasks_approved = DB::table('tasks')
+    ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+        ->select('tasks.id')
+        ->where('tasks.board_column_id', '=',4 )
+        ->where('tasks.updated_at', '>=', $startDate)
+        ->where('tasks.updated_at', '<', $endDate)
+        ->where('task_approves.created_at', '>=', $startDate)
+        ->where('task_approves.created_at', '<', $endDate)
+        ->where('task_users.user_id', $devId)
+        ->get();
+    $first_attempt_approve_task = 0;
+    $task_id_store = [];
+    foreach ($number_of_tasks_approved as $task) {
+        $number_of_tasks = DB::table('task_submissions')
+        ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+        ->where('task_submissions.task_id', $task->id)
+        ->distinct('task_submissions.created_at')
+        ->count();
+        if ($number_of_tasks == 1) {
+            $task_id_store[] = $task->id;
+            $first_attempt_approve_task++;
+
+        }
+    }
+
+    $first_attempt_approve_task_data_client_lead = [];
+
+    foreach ($task_id_store as $task) {
+        //$task= Task::where('id',$task)->select('id')
+        $approve_task_data = DB::table('tasks')
+        ->select(
+            'tasks.id',
+            'tasks.heading',
+            'client.id as clientId',
+            'client.name as clientName',
+            'tasks.created_at as assign_date',
+            'task_submissions.created_at as submission_date',
+            'tasks.due_date',
+            'tasks.client_name as client_name',
+            'cl.id as cl_id',
+            'cl.name as cl_name',
+            'tasks.board_column_id',
+            'taskboard_columns.column_name as column_name',
+            'taskboard_columns.label_color'
+        )
+        ->join('task_submissions',
+            'task_submissions.task_id',
+            '=',
+            'tasks.id'
+        )
+            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+            ->leftJoin('users as client', 'client.id', 'projects.client_id')
+            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+            ->where('tasks.id',
+                $task
+            )
+            //->groupBy('tasks.id', $task)
+            ->first();
+
+        $first_attempt_approve_task_data_client_lead[] = $approve_task_data;
+    }
+
+
+    $this->first_attempt_approve_task_data_client_lead = $first_attempt_approve_task_data_client_lead;
+     // ----------Average number of attempts needed for approval(in cycle) Project Manager  table-----------------------------//
+
+     $number_of_tasks_approved = DB::table('tasks')
+     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+     ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+     ->select('tasks.id')
+     ->where('task_approves.created_at', '>=', $startDate)
+     ->where('task_approves.created_at', '<', $endDate)
+     ->where('task_users.user_id', $devId)
+     ->get();
+
+ $average_attempts_approve_pm_data_lead = [];
+
+ foreach ($task_id_store as $task) {
+     //$task= Task::where('id',$task)->select('id')
+     $approve_task_data = DB::table('tasks')
+     ->select(
+         'tasks.id',
+         'tasks.heading',
+         'client.id as clientId',
+         'client.name as clientName',
+         'tasks.created_at as assign_date',
+         'task_submissions.created_at as submission_date',
+         'tasks.due_date',
+         'tasks.client_name as client_name',
+         'cl.id as cl_id',
+         'cl.name as cl_name',
+         'tasks.board_column_id',
+         'taskboard_columns.column_name as column_name',
+         'taskboard_columns.label_color'
+     )
+     ->join('task_submissions',
+         'task_submissions.task_id',
+         '=',
+         'tasks.id'
+     )
+         ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+         ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+         ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+         ->leftJoin('users as client', 'client.id', 'projects.client_id')
+         ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+         ->where('tasks.id',
+             $task->id
+         )
+         //->groupBy('tasks.id', $task)
+         ->first();
+
+     $average_attempts_approve_pm_data_lead[] = $approve_task_data;
+ }
+
+ $this->average_attempts_approve_pm_data_lead  =$average_attempts_approve_pm_data_lead;
+  // --------------Average number of attempts needed for approval(in cycle) Client table-----------------------------//
+
+  $number_of_tasks_approved = DB::table('tasks')
+  ->select('tasks.id')
+  ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+  ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+  ->select('tasks.id')
+  ->where('tasks.board_column_id', '=', 4)
+  ->where('tasks.updated_at', '>=',
+      $startDate
+  )
+  ->where('tasks.updated_at',
+      '<',
+      $endDate
+  )
+  ->where('task_approves.created_at', '>=', $startDate)
+  ->where('task_approves.created_at', '<', $endDate)
+  ->where('task_users.user_id', $devId)
+  ->distinct('tasks.id')
+  ->get();
+
+  $average_attempts_approve_client_data_lead = [];
+
+  foreach ( $number_of_tasks_approved as $task) {
+      //$task= Task::where('id',$task)->select('id')
+      $approve_task_data = DB::table('tasks')
+      ->select(
+          'tasks.id',
+          'tasks.heading',
+          'client.id as clientId',
+          'client.name as clientName',
+          'tasks.created_at as assign_date',
+          'task_submissions.created_at as submission_date',
+          'tasks.due_date',
+          'tasks.client_name as client_name',
+          'cl.id as cl_id',
+          'cl.name as cl_name',
+          'tasks.board_column_id',
+          'taskboard_columns.column_name as column_name',
+          'taskboard_columns.label_color'
+      )
+      ->join(
+          'task_submissions',
+          'task_submissions.task_id',
+          '=',
+          'tasks.id'
+      )
+      ->join('task_users',
+          'tasks.id',
+          '=',
+          'task_users.task_id'
+      )
+          ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+          ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+          ->leftJoin('users as client', 'client.id', 'projects.client_id')
+          ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+          ->where(
+              'tasks.id',
+              $task->id
+          )
+          //->groupBy('tasks.id', $task)
+          ->first();
+
+      $average_attempts_approve_client_data_lead[] = $approve_task_data;
+  }
+
+  $this->average_attempts_approve_client_data_lead  = $average_attempts_approve_client_data_lead;
+       //---------------------------------Percentage of Revision table----------------------------------------------------//
+
+       $assign_task_count_for_revision = 0;
+       $number_of_total_revision_for_this_month = 0;
+       $task_id_store=[];
+       foreach ($total_task_assigned as $task) {
+
+           $current_task_id = $task->id;
+           $disput_responsible_for_revision = DB::table('task_revision_disputes')
+               ->where('task_id', $current_task_id)
+               ->where(function ($query) use ($current_task_id, $devId) {
+                   $query->where('raised_by', $devId)
+                   ->orWhere('raised_against', $devId);
+               })
+               ->where(function ($query) {
+                   $query->where('raised_by_percent', '>', 0)
+                   ->orWhere('raised_against_percent', '>', 0);
+               })
+
+               ->count();
+
+           if ($disput_responsible_for_revision > 0) {
+               $disput_responsible_for_revision = 1;
+               $task_id_store[]= $task->id;
+           } // one task for count one revision
+           $responsible_for_revision = DB::table('task_revisions')
+           ->where('task_id', $current_task_id)
+           ->where('final_responsible_person', 'LD')
+           ->count();
+
+           if ($responsible_for_revision > 0) {
+               $responsible_for_revision = 1;
+               $task_id_store[]= $task->id;
+           }  // one task for count one revision
+
+           $total_revision_dispute_without_dispute = $disput_responsible_for_revision + $responsible_for_revision;
+
+           $number_of_total_revision_for_this_month = $number_of_total_revision_for_this_month + $total_revision_dispute_without_dispute;
+
+           //count of assign tasks
+           $assign_task_count_for_revision++;
+       }
+
+       $revision_data_lead = [];
+
+       foreach ($task_id_store as $task) {
+           //$task= Task::where('id',$task)->select('id')
+           $approve_task_data = DB::table('tasks')
+           ->select(
+               'tasks.id',
+               'tasks.heading',
+               'client.id as clientId',
+               'client.name as clientName',
+               'tasks.created_at as assign_date',
+               'task_submissions.created_at as submission_date',
+               'tasks.due_date',
+               'tasks.client_name as client_name',
+               'cl.id as cl_id',
+               'cl.name as cl_name',
+               'tasks.board_column_id',
+               'taskboard_columns.column_name as column_name',
+               'taskboard_columns.label_color'
+           )
+           ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+               ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+               ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+               ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+               ->leftJoin('users as client', 'client.id', 'projects.client_id')
+               ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+               ->where('tasks.id', $task)
+               //->groupBy('tasks.id', $task)
+               ->first();
+
+           $revision_data_lead[] = $approve_task_data;
+       }
+
+       $this->revision_data_lead= $revision_data_lead;
+
+       //------------------------------average Submission Time(Day) table----------------------------------------------//
+
+            //in this month
+            $submit_number_of_tasks_in_this_month_data = DB::table('task_submissions')
+                ->select('tasks.id', 'tasks.created_at', 'task_submissions.created_at')
+                ->selectRaw('DATEDIFF(task_submissions.created_at, tasks.created_at) AS total_duration')
+                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+                ->where('task_submissions.created_at', '>=', $startDate)
+                ->where('task_submissions.created_at', '<', $endDate)
+                ->where('task_submissions.user_id', $devId)
+                ->where('task_submissions.submission_no', '=', 1)
+                ->distinct('task_submissions.created_at')
+                ->distinct('tasks.id')
+                ->get();
+
+            $average_submit_data_lead = [];
+
+            foreach ($submit_number_of_tasks_in_this_month_data as $task) {
+                //$task= Task::where('id',$task)->select('id')
+                $approve_task_data = DB::table('tasks')
+                ->select(
+                    'tasks.id',
+                    'tasks.heading',
+                    'client.id as clientId',
+                    'client.name as clientName',
+                    'tasks.created_at as assign_date',
+                    'task_submissions.created_at as submission_date',
+                    'tasks.due_date',
+                    'tasks.client_name as client_name',
+                    'cl.id as cl_id',
+                    'cl.name as cl_name',
+                    'tasks.board_column_id',
+                    'taskboard_columns.column_name as column_name',
+                    'taskboard_columns.label_color'
+                )
+                    ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                    ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                    ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                    ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                    ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                    ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                    ->where('tasks.id', $task->id)
+                    //->groupBy('tasks.id', $task)
+                    ->first();
+
+                $average_submit_data_lead[] = $approve_task_data;
+            }
+
+            $this->average_submit_data_lead = $average_submit_data_lead;
+              //Number of disputes filed all table
+
+
+              $number_of_dispute_filed_all_id = DB::table('task_revision_disputes')
+              ->select('task_id')
+              ->where(function ($query) use ($devId) {
+                  $query->where('raised_by', $devId)
+                  ->orWhere('raised_against', $devId);
+              })
+              ->where('created_at', '>=', $startDate)
+              ->where('created_at', '<', $endDate)
+              ->get();
+
+          $number_of_dispute_filed_all_data_lead = [];
+
+          foreach ($number_of_dispute_filed_all_id as $task) {
+              //$task= Task::where('id',$task)->select('id')
+              $task_data = DB::table('tasks')
+                  ->select(
+                      'tasks.id',
+                      'tasks.heading',
+                      'client.id as clientId',
+                      'client.name as clientName',
+                      'tasks.created_at as assign_date',
+                      'task_submissions.created_at as submission_date',
+                      'tasks.due_date',
+                      'tasks.client_name as client_name',
+                      'cl.id as cl_id',
+                      'cl.name as cl_name',
+                      'tasks.board_column_id',
+                      'taskboard_columns.column_name as column_name',
+                      'taskboard_columns.label_color'
+                  )
+                  ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                  ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                  ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                  ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                  ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                  ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                  ->where('tasks.id', $task)
+                  //->groupBy('tasks.id', $task)
+                  ->first();
+
+              $number_of_dispute_filed_all_data_lead[] = $task_data;
+          }
+
+
+          $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
+
+           //-------------------Number of disputes filed all table-----------------//
+
+
+           $number_of_dispute_filed_all_id = DB::table('task_revision_disputes')
+           ->select('task_id')
+           ->where(function ($query) use ($devId) {
+               $query->where('raised_by', $devId)
+               ->orWhere('raised_against', $devId);
+           })
+           ->where('created_at', '>=', $startDate)
+           ->where('created_at', '<', $endDate)
+           ->get();
+
+       $number_of_dispute_filed_all_data_lead = [];
+
+       foreach ($number_of_dispute_filed_all_id as $task) {
+           //$task= Task::where('id',$task)->select('id')
+           $task_data = DB::table('tasks')
+               ->select(
+                   'tasks.id',
+                   'tasks.heading',
+                   'client.id as clientId',
+                   'client.name as clientName',
+                   'tasks.created_at as assign_date',
+                   'task_submissions.created_at as submission_date',
+                   'tasks.due_date',
+                   'tasks.client_name as client_name',
+                   'cl.id as cl_id',
+                   'cl.name as cl_name',
+                   'tasks.board_column_id',
+                   'taskboard_columns.column_name as column_name',
+                   'taskboard_columns.label_color'
+               )
+               ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+               ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+               ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+               ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+               ->leftJoin('users as client', 'client.id', 'projects.client_id')
+               ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+               ->where('tasks.id', $task)
+               //->groupBy('tasks.id', $task)
+               ->first();
+
+           $number_of_dispute_filed_all_data_lead[] = $task_data;
+       }
+
+
+       $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
+        //------------ Number of disputes lost own table-----------------//
+        $number_of_dispute_lost_own_id = DB::table('task_revision_disputes')
+        ->select('task_id')
+        ->where(function ($query) use ($devId) {
+            $query->where('raised_by', $devId);
+        })
+            ->where('winner', '!=', $devId)
+            ->where('created_at', '>=', $startDate)
+            ->where('created_at', '<', $endDate)
+            ->get();
+
+
+        $number_of_dispute_lost_own_data = [];
+
+        foreach ($number_of_dispute_lost_own_id  as $task) {
+            //$task= Task::where('id',$task)->select('id')
+            $task_data = DB::table('tasks')
+                ->select(
+                    'tasks.id',
+                    'tasks.heading',
+                    'client.id as clientId',
+                    'client.name as clientName',
+                    'tasks.created_at as assign_date',
+                    'task_submissions.created_at as submission_date',
+                    'tasks.due_date',
+                    'tasks.client_name as client_name',
+                    'cl.id as cl_id',
+                    'cl.name as cl_name',
+                    'tasks.board_column_id',
+                    'taskboard_columns.column_name as column_name',
+                    'taskboard_columns.label_color'
+                )
+                ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                ->where('tasks.id', $task->task_id)
+                //->groupBy('tasks.id', $task)
+                ->first();
+
+            $number_of_dispute_lost_own_data[] = $task_data;
+        }
+
+
+        $this->number_of_dispute_lost_own_data_lead = $number_of_dispute_lost_own_data;
+        //----------------- Number of disputes lost all table----------------------//
+
+        $number_of_dispute_lost_all_id = DB::table('task_revision_disputes')
+        ->select('task_id')
+        ->where(function ($query) use ($devId) {
+            $query->where('raised_by', $devId)
+            ->orWhere('raised_against', $devId);
+        })
+        ->where('winner', '!=', $devId)
+        ->where('created_at', '>=', $startDate)
+        ->where('created_at', '<', $endDate)
+        ->get();
+
+        $number_of_dispute_lost_all_data = [];
+
+        foreach ($number_of_dispute_lost_all_id  as $task) {
+            //$task= Task::where('id',$task)->select('id')
+            $task_data = DB::table('tasks')
+                ->select(
+                    'tasks.id',
+                    'tasks.heading',
+                    'client.id as clientId',
+                    'client.name as clientName',
+                    'tasks.created_at as assign_date',
+                    'task_submissions.created_at as submission_date',
+                    'tasks.due_date',
+                    'tasks.client_name as client_name',
+                    'cl.id as cl_id',
+                    'cl.name as cl_name',
+                    'tasks.board_column_id',
+                    'taskboard_columns.column_name as column_name',
+                    'taskboard_columns.label_color'
+                )
+                ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                ->where('tasks.id', $task->task_id)
+                //->groupBy('tasks.id', $task)
+                ->first();
+
+            $number_of_dispute_lost_all_data[] = $task_data;
+        }
+
+
+        $this->number_of_dispute_lost_all_data_lead = $number_of_dispute_lost_all_data;
+        //----------------Average number of in-progress tasks table-------------------//
+
+        $this->total_in_progress_date_range_table_lead = DB::table('progress_tasks')
+        ->select('count_progress_task','created_at')
+        ->where('user_id', $devId)
+        ->where('created_at', '>=', $startDate)
+        ->where('created_at', '<', $endDate)
+        ->get();
+
+         //---------------Hours spent in revisions data-----------------//
+
+         $spent_revision_developer_data_id = DB::table('project_time_logs')
+         ->select('task_id')
+         ->where('user_id', $devId)
+         ->where('revision_status', 1)
+         ->where('created_at', '>=', $startDate)
+         ->where('created_at', '<', $endDate)
+         ->get();
+
+         $spent_revision_developer_data = [];
+
+         foreach ($spent_revision_developer_data_id  as $task) {
+             //$task= Task::where('id',$task)->select('id')
+             $task_data = DB::table('tasks')
+                 ->select(
+                     'tasks.id',
+                     'tasks.heading',
+                     'client.id as clientId',
+                     'client.name as clientName',
+                     'tasks.created_at as assign_date',
+                     'task_submissions.created_at as submission_date',
+                     'tasks.due_date',
+                     'tasks.client_name as client_name',
+                     'cl.id as cl_id',
+                     'cl.name as cl_name',
+                     'tasks.board_column_id',
+                     'taskboard_columns.column_name as column_name',
+                     'taskboard_columns.label_color'
+                 )
+                 ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                 ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                 ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                 ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                 ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                 ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                 ->where('tasks.id', $task->task_id)
+                 //->groupBy('tasks.id', $task)
+                 ->first();
+
+             $spent_revision_developer_data[] = $task_data;
+         }
+
+         $this->spent_revision_developer_data_lead  =$spent_revision_developer_data;
+
+         //-------------Percentage of tasks where given estimated time was missed table----------------//
+         $estimate_time_missed_id_store=[];
+         $number_of_tasks_received_for_missed_estimate_data = DB::table('tasks')
+             ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+             ->select('tasks.*')
+             ->where('tasks.created_at', '>=', $startDate)
+             ->where('tasks.created_at', '<', $endDate)
+             ->where('task_users.user_id', $devId)
+             ->get();
+
+         $number_task_cross_estimate_time = 0;
+         $percentage_number_task_cross_estimate_time = 0;
+         foreach ($number_of_tasks_received_for_missed_estimate_data as $task) {
+
+             $log_time_per_task = DB::table('project_time_logs')
+             ->where('task_id', $task->id)
+             ->where('revision_status', '=', 0)
+             ->groupBy('task_id')
+             ->sum('total_minutes');
+
+             $estimate_minutes_task = $task->estimate_hours * 60 + $task->estimate_minutes;
+             if ($log_time_per_task > $estimate_minutes_task) {
+                 $number_task_cross_estimate_time++;
+                 $estimate_time_missed_id_store []= $task->id;
+             }
+         }
+         if ($number_of_tasks_received_for_deadline > 0) {
+             $percentage_number_task_cross_estimate_time = ($number_task_cross_estimate_time / $number_of_tasks_received_for_deadline) * 100;
+             $estimate_time_missed_id_store []= $task->id;
+         }
+
+         $estimate_missed_task_data = [];
+
+         foreach ($estimate_time_missed_id_store as $task) {
+             //$task= Task::where('id',$task)->select('id')
+             $task_data = DB::table('tasks')
+                 ->select(
+                     'tasks.id',
+                     'tasks.heading',
+                     'client.id as clientId',
+                     'client.name as clientName',
+                     'tasks.created_at as assign_date',
+                     'task_submissions.created_at as submission_date',
+                     'tasks.due_date',
+                     'tasks.client_name as client_name',
+                     'cl.id as cl_id',
+                     'cl.name as cl_name',
+                     'tasks.board_column_id',
+                     'taskboard_columns.column_name as column_name',
+                     'taskboard_columns.label_color'
+                 )
+                 ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                 ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                 ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                 ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                 ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                 ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                 ->where('tasks.id', $task)
+                 //->groupBy('tasks.id', $task)
+                 ->first();
+
+             $estimate_missed_task_data[] = $task_data;
+         }
+
+
+         $this->estimate_missed_task_data_lead = $estimate_missed_task_data;
+
+
     
     
 
             $html = view('dashboard.ajax.leaddeveloper.month', $this->data)->render();
+
             
  
              return Reply::dataOnly([
@@ -1356,7 +2054,703 @@ trait LeadDashboard
         ->whereBetween('tasks.created_at', [$startDate, $endDate])
         ->groupBy('tasks.id')
         ->orderBy('tasks.created_at','desc')->get();
-    
+
+        //-----------------------------number of tasks approved in first attempt(in cycle) PM table-----------------------//
+
+        $number_of_tasks_approved = DB::table('tasks')
+        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+            ->select('tasks.id')
+            ->where('task_approves.created_at', '>=', $startDate)
+            ->where('task_approves.created_at', '<', $endDate)
+            ->where('task_users.user_id', $devId)
+            ->get();
+        $first_attempt_approve_task = 0;
+        $task_id_store = [];
+        foreach ($number_of_tasks_approved as $task) {
+
+            $min_approve_date = DB::table('task_approves')
+            ->select('task_approves.created_at')
+            ->where('task_approves.task_id', $task->id)
+            ->orderBy('task_approves.created_at', 'asc')
+            ->first();
+
+            $number_of_tasks = DB::table('task_submissions')
+            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+            ->where('task_submissions.task_id', $task->id)
+            ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
+            ->distinct('task_submissions.created_at')
+            ->count();
+            if ($number_of_tasks == 1) {
+                $first_attempt_approve_task++;
+                $task_id_store[] = $task->id;
+            }
+        }
+
+        $first_attempt_approve_task_pm_data_lead = [];
+
+        foreach ($task_id_store as $task) {
+            //$task= Task::where('id',$task)->select('id')
+            $approve_task_data = DB::table('tasks')
+            ->select(
+                'tasks.id',
+                'tasks.heading',
+                'client.id as clientId',
+                'client.name as clientName',
+                'tasks.created_at as assign_date',
+                'task_submissions.created_at as submission_date',
+                'tasks.due_date',
+                'tasks.client_name as client_name',
+                'cl.id as cl_id',
+                'cl.name as cl_name',
+                'tasks.board_column_id',
+                'taskboard_columns.column_name as column_name',
+                'taskboard_columns.label_color'
+            )
+                ->join('task_submissions', 'task_submissions.task_id','=','tasks.id')
+                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                ->where('tasks.id', $task )
+                //->groupBy('tasks.id', $task)
+                ->first();
+
+            $first_attempt_approve_task_pm_data_lead[] = $approve_task_data;
+        }
+
+
+    $this->first_attempt_approve_task_pm_data_lead =$first_attempt_approve_task_pm_data_lead;
+    //-----------------------------number of tasks approved in first attempt(in cycle) Client table-----------------------//
+
+    $number_of_tasks_approved = DB::table('tasks')
+    ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+        ->select('tasks.id')
+        ->where('tasks.board_column_id', '=',4 )
+        ->where('tasks.updated_at', '>=', $startDate)
+        ->where('tasks.updated_at', '<', $endDate)
+        ->where('task_approves.created_at', '>=', $startDate)
+        ->where('task_approves.created_at', '<', $endDate)
+        ->where('task_users.user_id', $devId)
+        ->get();
+    $first_attempt_approve_task = 0;
+    $task_id_store = [];
+    foreach ($number_of_tasks_approved as $task) {
+        $number_of_tasks = DB::table('task_submissions')
+        ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+        ->where('task_submissions.task_id', $task->id)
+        ->distinct('task_submissions.created_at')
+        ->count();
+        if ($number_of_tasks == 1) {
+            $task_id_store[] = $task->id;
+            $first_attempt_approve_task++;
+
+        }
+    }
+
+    $first_attempt_approve_task_data_client_lead = [];
+
+    foreach ($task_id_store as $task) {
+        //$task= Task::where('id',$task)->select('id')
+        $approve_task_data = DB::table('tasks')
+        ->select(
+            'tasks.id',
+            'tasks.heading',
+            'client.id as clientId',
+            'client.name as clientName',
+            'tasks.created_at as assign_date',
+            'task_submissions.created_at as submission_date',
+            'tasks.due_date',
+            'tasks.client_name as client_name',
+            'cl.id as cl_id',
+            'cl.name as cl_name',
+            'tasks.board_column_id',
+            'taskboard_columns.column_name as column_name',
+            'taskboard_columns.label_color'
+        )
+        ->join('task_submissions',
+            'task_submissions.task_id',
+            '=',
+            'tasks.id'
+        )
+            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+            ->leftJoin('users as client', 'client.id', 'projects.client_id')
+            ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+            ->where('tasks.id',
+                $task
+            )
+            //->groupBy('tasks.id', $task)
+            ->first();
+
+        $first_attempt_approve_task_data_client_lead[] = $approve_task_data;
+    }
+
+
+    $this->first_attempt_approve_task_data_client_lead = $first_attempt_approve_task_data_client_lead;
+     // ----------Average number of attempts needed for approval(in cycle) Project Manager  table-----------------------------//
+
+     $number_of_tasks_approved = DB::table('tasks')
+     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+     ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+     ->select('tasks.id')
+     ->where('task_approves.created_at', '>=', $startDate)
+     ->where('task_approves.created_at', '<', $endDate)
+     ->where('task_users.user_id', $devId)
+     ->get();
+
+ $average_attempts_approve_pm_data_lead = [];
+
+ foreach ($task_id_store as $task) {
+     //$task= Task::where('id',$task)->select('id')
+     $approve_task_data = DB::table('tasks')
+     ->select(
+         'tasks.id',
+         'tasks.heading',
+         'client.id as clientId',
+         'client.name as clientName',
+         'tasks.created_at as assign_date',
+         'task_submissions.created_at as submission_date',
+         'tasks.due_date',
+         'tasks.client_name as client_name',
+         'cl.id as cl_id',
+         'cl.name as cl_name',
+         'tasks.board_column_id',
+         'taskboard_columns.column_name as column_name',
+         'taskboard_columns.label_color'
+     )
+     ->join('task_submissions',
+         'task_submissions.task_id',
+         '=',
+         'tasks.id'
+     )
+         ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+         ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+         ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+         ->leftJoin('users as client', 'client.id', 'projects.client_id')
+         ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+         ->where('tasks.id',
+             $task->id
+         )
+         //->groupBy('tasks.id', $task)
+         ->first();
+
+     $average_attempts_approve_pm_data_lead[] = $approve_task_data;
+ }
+
+ $this->average_attempts_approve_pm_data_lead  =$average_attempts_approve_pm_data_lead;
+
+  // --------------Average number of attempts needed for approval(in cycle) Client table-----------------------------//
+
+  $number_of_tasks_approved = DB::table('tasks')
+  ->select('tasks.id')
+  ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+  ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+  ->select('tasks.id')
+  ->where('tasks.board_column_id', '=', 4)
+  ->where('tasks.updated_at', '>=',
+      $startDate
+  )
+  ->where('tasks.updated_at',
+      '<',
+      $endDate
+  )
+  ->where('task_approves.created_at', '>=', $startDate)
+  ->where('task_approves.created_at', '<', $endDate)
+  ->where('task_users.user_id', $devId)
+  ->distinct('tasks.id')
+  ->get();
+
+  $average_attempts_approve_client_data_lead = [];
+
+  foreach ( $number_of_tasks_approved as $task) {
+      //$task= Task::where('id',$task)->select('id')
+      $approve_task_data = DB::table('tasks')
+      ->select(
+          'tasks.id',
+          'tasks.heading',
+          'client.id as clientId',
+          'client.name as clientName',
+          'tasks.created_at as assign_date',
+          'task_submissions.created_at as submission_date',
+          'tasks.due_date',
+          'tasks.client_name as client_name',
+          'cl.id as cl_id',
+          'cl.name as cl_name',
+          'tasks.board_column_id',
+          'taskboard_columns.column_name as column_name',
+          'taskboard_columns.label_color'
+      )
+      ->join(
+          'task_submissions',
+          'task_submissions.task_id',
+          '=',
+          'tasks.id'
+      )
+      ->join('task_users',
+          'tasks.id',
+          '=',
+          'task_users.task_id'
+      )
+          ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+          ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+          ->leftJoin('users as client', 'client.id', 'projects.client_id')
+          ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+          ->where(
+              'tasks.id',
+              $task->id
+          )
+          //->groupBy('tasks.id', $task)
+          ->first();
+
+      $average_attempts_approve_client_data_lead[] = $approve_task_data;
+  }
+
+  $this->average_attempts_approve_client_data_lead  = $average_attempts_approve_client_data_lead;
+
+         //---------------------------------Percentage of Revision table----------------------------------------------------//
+
+         $assign_task_count_for_revision = 0;
+         $number_of_total_revision_for_this_month = 0;
+         $task_id_store=[];
+         foreach ($total_task_assigned as $task) {
+
+             $current_task_id = $task->id;
+             $disput_responsible_for_revision = DB::table('task_revision_disputes')
+                 ->where('task_id', $current_task_id)
+                 ->where(function ($query) use ($current_task_id, $devId) {
+                     $query->where('raised_by', $devId)
+                     ->orWhere('raised_against', $devId);
+                 })
+                 ->where(function ($query) {
+                     $query->where('raised_by_percent', '>', 0)
+                     ->orWhere('raised_against_percent', '>', 0);
+                 })
+
+                 ->count();
+
+             if ($disput_responsible_for_revision > 0) {
+                 $disput_responsible_for_revision = 1;
+                 $task_id_store[]= $task->id;
+             } // one task for count one revision
+             $responsible_for_revision = DB::table('task_revisions')
+             ->where('task_id', $current_task_id)
+             ->where('final_responsible_person', 'LD')
+             ->count();
+
+             if ($responsible_for_revision > 0) {
+                 $responsible_for_revision = 1;
+                 $task_id_store[]= $task->id;
+             }  // one task for count one revision
+
+             $total_revision_dispute_without_dispute = $disput_responsible_for_revision + $responsible_for_revision;
+
+             $number_of_total_revision_for_this_month = $number_of_total_revision_for_this_month + $total_revision_dispute_without_dispute;
+
+             //count of assign tasks
+             $assign_task_count_for_revision++;
+         }
+
+         $revision_data_lead = [];
+
+         foreach ($task_id_store as $task) {
+             //$task= Task::where('id',$task)->select('id')
+             $approve_task_data = DB::table('tasks')
+             ->select(
+                 'tasks.id',
+                 'tasks.heading',
+                 'client.id as clientId',
+                 'client.name as clientName',
+                 'tasks.created_at as assign_date',
+                 'task_submissions.created_at as submission_date',
+                 'tasks.due_date',
+                 'tasks.client_name as client_name',
+                 'cl.id as cl_id',
+                 'cl.name as cl_name',
+                 'tasks.board_column_id',
+                 'taskboard_columns.column_name as column_name',
+                 'taskboard_columns.label_color'
+             )
+             ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                 ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                 ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                 ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                 ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                 ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                 ->where('tasks.id', $task)
+                 //->groupBy('tasks.id', $task)
+                 ->first();
+
+             $revision_data_lead[] = $approve_task_data;
+         }
+
+         $this->revision_data_lead= $revision_data_lead;
+         //------------------------------average Submission Time(Day) table----------------------------------------------//
+
+            //in this month
+            $submit_number_of_tasks_in_this_month_data = DB::table('task_submissions')
+                ->select('tasks.id', 'tasks.created_at', 'task_submissions.created_at')
+                ->selectRaw('DATEDIFF(task_submissions.created_at, tasks.created_at) AS total_duration')
+                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
+                ->where('task_submissions.created_at', '>=', $startDate)
+                ->where('task_submissions.created_at', '<', $endDate)
+                ->where('task_submissions.user_id', $devId)
+                ->where('task_submissions.submission_no', '=', 1)
+                ->distinct('task_submissions.created_at')
+                ->distinct('tasks.id')
+                ->get();
+
+            $average_submit_data_lead = [];
+
+            foreach ($submit_number_of_tasks_in_this_month_data as $task) {
+                //$task= Task::where('id',$task)->select('id')
+                $approve_task_data = DB::table('tasks')
+                ->select(
+                    'tasks.id',
+                    'tasks.heading',
+                    'client.id as clientId',
+                    'client.name as clientName',
+                    'tasks.created_at as assign_date',
+                    'task_submissions.created_at as submission_date',
+                    'tasks.due_date',
+                    'tasks.client_name as client_name',
+                    'cl.id as cl_id',
+                    'cl.name as cl_name',
+                    'tasks.board_column_id',
+                    'taskboard_columns.column_name as column_name',
+                    'taskboard_columns.label_color'
+                )
+                    ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                    ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                    ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                    ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                    ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                    ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                    ->where('tasks.id', $task->id)
+                    //->groupBy('tasks.id', $task)
+                    ->first();
+
+                $average_submit_data_lead[] = $approve_task_data;
+            }
+
+            $this->average_submit_data_lead = $average_submit_data_lead;
+              //Number of disputes filed all table
+
+
+              $number_of_dispute_filed_all_id = DB::table('task_revision_disputes')
+              ->select('task_id')
+              ->where(function ($query) use ($devId) {
+                  $query->where('raised_by', $devId)
+                  ->orWhere('raised_against', $devId);
+              })
+              ->where('created_at', '>=', $startDate)
+              ->where('created_at', '<', $endDate)
+              ->get();
+
+          $number_of_dispute_filed_all_data_lead = [];
+
+          foreach ($number_of_dispute_filed_all_id as $task) {
+              //$task= Task::where('id',$task)->select('id')
+              $task_data = DB::table('tasks')
+                  ->select(
+                      'tasks.id',
+                      'tasks.heading',
+                      'client.id as clientId',
+                      'client.name as clientName',
+                      'tasks.created_at as assign_date',
+                      'task_submissions.created_at as submission_date',
+                      'tasks.due_date',
+                      'tasks.client_name as client_name',
+                      'cl.id as cl_id',
+                      'cl.name as cl_name',
+                      'tasks.board_column_id',
+                      'taskboard_columns.column_name as column_name',
+                      'taskboard_columns.label_color'
+                  )
+                  ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                  ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                  ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                  ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                  ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                  ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                  ->where('tasks.id', $task)
+                  //->groupBy('tasks.id', $task)
+                  ->first();
+
+              $number_of_dispute_filed_all_data_lead[] = $task_data;
+          }
+
+
+          $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
+           //-------------------Number of disputes filed all table-----------------//
+
+
+           $number_of_dispute_filed_all_id = DB::table('task_revision_disputes')
+           ->select('task_id')
+           ->where(function ($query) use ($devId) {
+               $query->where('raised_by', $devId)
+               ->orWhere('raised_against', $devId);
+           })
+           ->where('created_at', '>=', $startDate)
+           ->where('created_at', '<', $endDate)
+           ->get();
+
+       $number_of_dispute_filed_all_data_lead = [];
+
+       foreach ($number_of_dispute_filed_all_id as $task) {
+           //$task= Task::where('id',$task)->select('id')
+           $task_data = DB::table('tasks')
+               ->select(
+                   'tasks.id',
+                   'tasks.heading',
+                   'client.id as clientId',
+                   'client.name as clientName',
+                   'tasks.created_at as assign_date',
+                   'task_submissions.created_at as submission_date',
+                   'tasks.due_date',
+                   'tasks.client_name as client_name',
+                   'cl.id as cl_id',
+                   'cl.name as cl_name',
+                   'tasks.board_column_id',
+                   'taskboard_columns.column_name as column_name',
+                   'taskboard_columns.label_color'
+               )
+               ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+               ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+               ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+               ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+               ->leftJoin('users as client', 'client.id', 'projects.client_id')
+               ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+               ->where('tasks.id', $task)
+               //->groupBy('tasks.id', $task)
+               ->first();
+
+           $number_of_dispute_filed_all_data_lead[] = $task_data;
+       }
+
+
+       $this->number_of_dispute_filed_all_data_lead = $number_of_dispute_filed_all_data_lead;
+
+       //------------ Number of disputes lost own table-----------------//
+            $number_of_dispute_lost_own_id = DB::table('task_revision_disputes')
+            ->select('task_id')
+            ->where(function ($query) use ($devId) {
+                $query->where('raised_by', $devId);
+            })
+                ->where('winner', '!=', $devId)
+                ->where('created_at', '>=', $startDate)
+                ->where('created_at', '<', $endDate)
+                ->get();
+
+
+            $number_of_dispute_lost_own_data = [];
+
+            foreach ($number_of_dispute_lost_own_id  as $task) {
+                //$task= Task::where('id',$task)->select('id')
+                $task_data = DB::table('tasks')
+                    ->select(
+                        'tasks.id',
+                        'tasks.heading',
+                        'client.id as clientId',
+                        'client.name as clientName',
+                        'tasks.created_at as assign_date',
+                        'task_submissions.created_at as submission_date',
+                        'tasks.due_date',
+                        'tasks.client_name as client_name',
+                        'cl.id as cl_id',
+                        'cl.name as cl_name',
+                        'tasks.board_column_id',
+                        'taskboard_columns.column_name as column_name',
+                        'taskboard_columns.label_color'
+                    )
+                    ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                    ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                    ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                    ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                    ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                    ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                    ->where('tasks.id', $task->task_id)
+                    //->groupBy('tasks.id', $task)
+                    ->first();
+
+                $number_of_dispute_lost_own_data[] = $task_data;
+            }
+
+
+            $this->number_of_dispute_lost_own_data_lead = $number_of_dispute_lost_own_data;
+              //----------------- Number of disputes lost all table----------------------//
+
+        $number_of_dispute_lost_all_id = DB::table('task_revision_disputes')
+        ->select('task_id')
+        ->where(function ($query) use ($devId) {
+            $query->where('raised_by', $devId)
+            ->orWhere('raised_against', $devId);
+        })
+        ->where('winner', '!=', $devId)
+        ->where('created_at', '>=', $startDate)
+        ->where('created_at', '<', $endDate)
+        ->get();
+
+        $number_of_dispute_lost_all_data = [];
+
+        foreach ($number_of_dispute_lost_all_id  as $task) {
+            //$task= Task::where('id',$task)->select('id')
+            $task_data = DB::table('tasks')
+                ->select(
+                    'tasks.id',
+                    'tasks.heading',
+                    'client.id as clientId',
+                    'client.name as clientName',
+                    'tasks.created_at as assign_date',
+                    'task_submissions.created_at as submission_date',
+                    'tasks.due_date',
+                    'tasks.client_name as client_name',
+                    'cl.id as cl_id',
+                    'cl.name as cl_name',
+                    'tasks.board_column_id',
+                    'taskboard_columns.column_name as column_name',
+                    'taskboard_columns.label_color'
+                )
+                ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                ->where('tasks.id', $task->task_id)
+                //->groupBy('tasks.id', $task)
+                ->first();
+
+            $number_of_dispute_lost_all_data[] = $task_data;
+        }
+
+
+        $this->number_of_dispute_lost_all_data_lead = $number_of_dispute_lost_all_data;
+         //----------------Average number of in-progress tasks table-------------------//
+
+         $this->total_in_progress_date_range_table_lead = DB::table('progress_tasks')
+         ->select('count_progress_task','created_at')
+         ->where('user_id', $devId)
+         ->where('created_at', '>=', $startDate)
+         ->where('created_at', '<', $endDate)
+         ->get();
+
+          //---------------Hours spent in revisions data-----------------//
+
+          $spent_revision_developer_data_id = DB::table('project_time_logs')
+          ->select('task_id')
+          ->where('user_id', $devId)
+          ->where('revision_status', 1)
+          ->where('created_at', '>=', $startDate)
+          ->where('created_at', '<', $endDate)
+          ->get();
+ 
+          $spent_revision_developer_data = [];
+ 
+          foreach ($spent_revision_developer_data_id  as $task) {
+              //$task= Task::where('id',$task)->select('id')
+              $task_data = DB::table('tasks')
+                  ->select(
+                      'tasks.id',
+                      'tasks.heading',
+                      'client.id as clientId',
+                      'client.name as clientName',
+                      'tasks.created_at as assign_date',
+                      'task_submissions.created_at as submission_date',
+                      'tasks.due_date',
+                      'tasks.client_name as client_name',
+                      'cl.id as cl_id',
+                      'cl.name as cl_name',
+                      'tasks.board_column_id',
+                      'taskboard_columns.column_name as column_name',
+                      'taskboard_columns.label_color'
+                  )
+                  ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                  ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                  ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                  ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                  ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                  ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                  ->where('tasks.id', $task->task_id)
+                  //->groupBy('tasks.id', $task)
+                  ->first();
+ 
+              $spent_revision_developer_data[] = $task_data;
+          }
+ 
+          $this->spent_revision_developer_data_lead  =$spent_revision_developer_data;
+
+          //-------------Percentage of tasks where given estimated time was missed table----------------//
+          $estimate_time_missed_id_store=[];
+          $number_of_tasks_received_for_missed_estimate_data = DB::table('tasks')
+              ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+              ->select('tasks.*')
+              ->where('tasks.created_at', '>=', $startDate)
+              ->where('tasks.created_at', '<', $endDate)
+              ->where('task_users.user_id', $devId)
+              ->get();
+
+          $number_task_cross_estimate_time = 0;
+          $percentage_number_task_cross_estimate_time = 0;
+          foreach ($number_of_tasks_received_for_missed_estimate_data as $task) {
+
+              $log_time_per_task = DB::table('project_time_logs')
+              ->where('task_id', $task->id)
+              ->where('revision_status', '=', 0)
+              ->groupBy('task_id')
+              ->sum('total_minutes');
+
+              $estimate_minutes_task = $task->estimate_hours * 60 + $task->estimate_minutes;
+              if ($log_time_per_task > $estimate_minutes_task) {
+                  $number_task_cross_estimate_time++;
+                  $estimate_time_missed_id_store []= $task->id;
+              }
+          }
+          if ($number_of_tasks_received_for_deadline > 0) {
+              $percentage_number_task_cross_estimate_time = ($number_task_cross_estimate_time / $number_of_tasks_received_for_deadline) * 100;
+              $estimate_time_missed_id_store []= $task->id;
+          }
+
+          $estimate_missed_task_data = [];
+
+          foreach ($estimate_time_missed_id_store as $task) {
+              //$task= Task::where('id',$task)->select('id')
+              $task_data = DB::table('tasks')
+                  ->select(
+                      'tasks.id',
+                      'tasks.heading',
+                      'client.id as clientId',
+                      'client.name as clientName',
+                      'tasks.created_at as assign_date',
+                      'task_submissions.created_at as submission_date',
+                      'tasks.due_date',
+                      'tasks.client_name as client_name',
+                      'cl.id as cl_id',
+                      'cl.name as cl_name',
+                      'tasks.board_column_id',
+                      'taskboard_columns.column_name as column_name',
+                      'taskboard_columns.label_color'
+                  )
+                  ->leftjoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
+                  ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+                  ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+                  ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+                  ->leftJoin('users as client', 'client.id', 'projects.client_id')
+                  ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
+                  ->where('tasks.id', $task)
+                  //->groupBy('tasks.id', $task)
+                  ->first();
+
+              $estimate_missed_task_data[] = $task_data;
+          }
+
+
+          $this->estimate_missed_task_data_lead = $estimate_missed_task_data;
+
+
         
             return view('dashboard.employee.lead', $this->data);
         }

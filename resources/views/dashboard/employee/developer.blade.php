@@ -1748,7 +1748,7 @@
                                     {{round($percentage_of_tasks_deadline,2)}}%
                                 </a>
                             </p>
-                            {{-- @include('dashboard.ajax.developerdashboard.modals.percentage_task_deadline_missed') --}}
+                            @include('dashboard.ajax.developerdashboard.modals.percentage_task_deadline_missed')
                         </div>
                     </div>
                     <div class="d-block">
