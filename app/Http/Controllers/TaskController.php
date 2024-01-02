@@ -118,6 +118,14 @@ class TaskController extends AccountBaseController
         ];
     }
 
+ 
+    // check user has permission 
+    function hasPermission  ($roleToCheck) {
+        $roles = Auth::user()->role;
+        return $roles->contains('role_id', $roleToCheck); 
+    }
+
+
     public function index()
     {
 
@@ -126,6 +134,8 @@ class TaskController extends AccountBaseController
 
         //  return $dataTable->render('tasks.index', $this->data);
     }
+
+    
     public function get_tasks(Request $request)
     {
         $startDate = $request->input('start_date', null);
@@ -1176,10 +1186,13 @@ class TaskController extends AccountBaseController
 
     /**
      * PROJECT MANAGER TO LEAD DEVELOPER/DESIGNER REVISION
+     * ALSO CONTROL LEAD DEVELOPER OR DESIGNER TO DESIGNER
      */
     public function TaskRevision(Request $request)
     {
-
+        // DB::beginTransaction();
+ 
+         
         $revision_type = $request->revision_type; 
 
         if($revision_type == 'GENERAL_REVISION'){
@@ -1212,11 +1225,16 @@ class TaskController extends AccountBaseController
 
         $dispute_between = explode('x', $request->acknowledgement_id)[0];
 
-
+         
 
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
-        if (Auth::user()->role_id == 6) {
+
+        // if has permission
+        if($this->hasPermission(13)){
+            $task_revision->revision_status = 'Lead Designer Revision';
+            $task_revision->lead_comment = $request->comment;
+        }else if ($this-> hasPermission(6)) {
             $task_revision->revision_status = 'Lead Developer Revision';
             $task_revision->lead_comment = $request->comment;
         }
@@ -1252,12 +1270,14 @@ class TaskController extends AccountBaseController
         //     $task_revision->raised_by_percent = 50;
         //     $task_revision->raised_against_percent = 50;
         //     $task_revision->final_responsible_person = '';
-        // }
+        // }  
         $task_revision->save();
  
         //need pending action
 
         $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$task_revision->task_id)->get();
+
+       // dd($actions);
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
@@ -1265,8 +1285,8 @@ class TaskController extends AccountBaseController
                 $project= Project::where('id',$taskId->project_id)->first();
                 $revision_status= TaskRevision::where('task_id',$taskId->id)->first();
                 $task_user= TaskUser::where('task_id',$taskId->id)->first();
-                $user= User::where('id',$task_user->id)->first();
-                $user_role= Role::where('id',$user->role_id)->first();
+                $user= User::where('id',$task_user->user_id)->first();
+                $user_role= Role::where('id',$user->role_id)->first(); // TODO: Sayeed sir
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -3449,7 +3469,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -3592,16 +3612,17 @@ class TaskController extends AccountBaseController
 
     public function accept_or_revision_by_developer(Request $request)
     {
-
+       // DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
         $actions = PendingAction::where('code','TRA')->where('past_status',0)->where('task_id',$task_status->id)->get();
+      //  dd($actions);
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first(); // TODO: Sayeed sir
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -5146,6 +5167,7 @@ class TaskController extends AccountBaseController
     // RE USEABLE METHOD
     public function create_dispute($revision)
     {
+        // DB::beginTransaction();
 
         // dispute between
         $between = $revision->dispute_between;
@@ -5180,6 +5202,7 @@ class TaskController extends AccountBaseController
             }
         }
 
+        // dd($dispute);
 
         $dispute->save();
         $task= Task::where('id',$dispute->task_id)->first();
@@ -5240,6 +5263,8 @@ class TaskController extends AccountBaseController
         // get task details
         function get_task($task_id)
         {
+            // TODO: get task details here...
+             
 
             $task = DB::table('tasks')
                 ->where('tasks.id', $task_id)
@@ -5249,32 +5274,36 @@ class TaskController extends AccountBaseController
                     'tasks.id as id',
                     'tasks.heading as title',
                     'tasks.subtask_id',
-
-                    'task_users.user_id as task_user_id'
+                    'tasks.created_by as task_added_by',
+                    'task_users.user_id as task_user_id',
+                    'tasks.task_category_id as task_category'
                 )
                 ->first();
-                $lead_dev= User::where('role_id',6)->orderBy('id','desc')->first();
-                $task->lead_developer = null;
-
-                if ($lead_dev) {
-                    $task->lead_developer = get_user($lead_dev->id, false);
-                }
-            if ($task->subtask_id) {
-                $subtask = DB::table('sub_tasks')
-                    ->select('sub_tasks.task_id as parent_task_id')
+            
+           
+            // if subtask 
+            if($task->subtask_id){
+                // get subtask details
+                $subtask = DB::table('sub_tasks') 
                     ->where('id', $task->subtask_id)
-                    ->first();
+                    ->first(); 
+                    
+                // lead developer 
+                $lead_dev = $subtask->added_by;
+                $lead_developer = get_user($lead_dev, false);
+                $developer = get_user($subtask->assigned_to, false);
 
-                //  dd($subtask);
+                $task->lead_developer = $lead_developer ?? null;
+                $task->developer = $developer ?? null;
+                $task->parent_task = get_task($subtask->task_id); 
 
-                if ($task->task_user_id) {
-                    $task->developer = get_user($task->task_user_id, false);
-                }
-
-                $task->parent_task = get_task($subtask->parent_task_id);
+                return $task;
+            }else {
+                $lead_developer = get_user($task->task_user_id, false);
+                $task->lead_developer = $lead_developer ?? null; 
+                return $task;
             }
-
-            return $task;
+ 
         }
 
         $disputes = DB::table('task_revision_disputes as disputes')
@@ -5725,42 +5754,49 @@ class TaskController extends AccountBaseController
         }
 
         // get task details
-        function get_task($task_id){
+        function get_task($task_id)
+        {
+            // TODO: get task details here...
+             
 
             $task = DB::table('tasks')
-                ->where('tasks.id',$task_id)
+                ->where('tasks.id', $task_id)
                 ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
                 ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
                 ->select(
                     'tasks.id as id',
                     'tasks.heading as title',
                     'tasks.subtask_id',
-                    'project_members.lead_developer_id as lead_developer',
-                    'task_users.user_id as task_user_id'
+                    'tasks.created_by as task_added_by',
+                    'task_users.user_id as task_user_id',
+                    'tasks.task_category_id as task_category'
                 )
                 ->first();
-
-
-            if($task->lead_developer){
-                $task->lead_developer = get_user($task->lead_developer, false);
-            }
-
+            
+           
+            // if subtask 
             if($task->subtask_id){
-                $subtask = DB::table('sub_tasks')
-                    ->select('sub_tasks.task_id as parent_task_id')
+                // get subtask details
+                $subtask = DB::table('sub_tasks') 
                     ->where('id', $task->subtask_id)
-                    ->first();
+                    ->first(); 
+                    
+                // lead developer 
+                $lead_dev = $subtask->added_by;
+                $lead_developer = get_user($lead_dev, false);
+                $developer = get_user($subtask->assigned_to, false);
 
-                  //  dd($subtask);
+                $task->lead_developer = $lead_developer ?? null;
+                $task->developer = $developer ?? null;
+                $task->parent_task = get_task($subtask->task_id); 
 
-                if($task->task_user_id){
-                    $task->developer = get_user($task->task_user_id, false);
-                }
-
-                $task->parent_task = get_task($subtask->parent_task_id);
+                return $task;
+            }else {
+                $lead_developer = get_user($task->task_user_id, false);
+                $task->lead_developer = $lead_developer ?? null; 
+                return $task;
             }
-
-            return $task;
+ 
         }
 
 

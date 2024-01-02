@@ -82,7 +82,7 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
 
 
 
-    const options = auth?.getRoleId() === 6 ? denyOptions('lead_dev') : denyOptions('dev');
+    const options = (auth?.isHasRolePermission(13) || auth?.isHasRolePermission(6)) ? denyOptions('lead_dev') : denyOptions('dev');
     return (
         <React.Fragment>  
             <form action="">

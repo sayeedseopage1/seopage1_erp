@@ -103,7 +103,7 @@ export const RevisionTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             let text = data.pm_comment || data.lead_comment;
-            text = text.replace(/<a/g, '<a class="word-break"');
+            text = text?.replace(/<a/g, '<a class="word-break"');
 
             return (
                 <Popover>
