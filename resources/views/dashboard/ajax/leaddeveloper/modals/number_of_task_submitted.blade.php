@@ -77,42 +77,4 @@
       new DataTable('#number_of_task_submitted_lead',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
-      $('.revision-count').on('click', function () {
-            var taskId = $(this).data('task-id');
-            var url = '{{ route('revision-count-dashboard', ':taskId') }}'.replace(':taskId', taskId);
-
-            // Reference 'this' to use inside the AJAX success function
-            var self = $(this);
-
-            // Make an AJAX request to fetch task history data
-            $.ajax({
-                url: url,
-                type: 'GET',
-                success: function (data) {
-              //  console.log(data);
-                    // Format the task history data for display in the popover
-                    var popoverContent = '<ul >';
-                    $.each(data, function (index, revision) {
-                        
-                        // popoverContent += '<li class="history_color">' + history.column_name + ' (' + history?.created_on + ')</li>';
-                        popoverContent += `<li> ${revision.created_at} (${revision.final_responsible_person}) </li>`;
-                     
-
-                    });
-                    popoverContent += '</ul>';
-
-                    // Open a Bootstrap popover and display the task history data
-                    self.popover({
-                        content: popoverContent,
-                        html: true,
-                        title: 'Task Revisions',
-                        placement: 'auto',
-                        trigger: 'manual' // Set trigger to 'manual' to control popover manually
-                    }).popover('show');
-                },
-                error: function (xhr, status, error) {
-                    console.error('Error fetching task revisions:', error);
-                }
-            });
-        });
   </script>
