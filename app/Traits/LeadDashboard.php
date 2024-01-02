@@ -2191,6 +2191,7 @@ trait LeadDashboard
 
 
     $this->first_attempt_approve_task_data_client_lead = $first_attempt_approve_task_data_client_lead;
+    // dd($this->first_attempt_approve_task_data_client_lead );
      // ----------Average number of attempts needed for approval(in cycle) Project Manager  table-----------------------------//
 
      $number_of_tasks_approved = DB::table('tasks')

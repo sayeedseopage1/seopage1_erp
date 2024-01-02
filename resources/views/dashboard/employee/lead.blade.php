@@ -240,15 +240,12 @@
 							   <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt by Client</h5>
 							   <div class="d-flex flex-wrap">
 								   <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-									   <a href="#" data-toggle="modal" data-target="#">
+									   <a href="#" data-toggle="modal" data-target="#num_of_approved_task_attempt_by_client{{count($first_attempt_approve_task_data_client_lead)}}">
 										   {{$first_attempt_approve_task_in_this_month_client_lead}}
 									   </a>
 									 
 								   </p>
-							   
-	   
-								 
-								 
+								   @include('dashboard.ajax.leaddeveloper.modals.num_of_approved_task_attempt_by_client')			   
 							   </div>
 						   </div>
 						   <div class="d-block">
