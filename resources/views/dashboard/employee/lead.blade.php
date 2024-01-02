@@ -424,12 +424,13 @@
 							   <div class="d-flex flex-wrap">
 	   
 								   <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-									   <a href="#" data-toggle="modal" data-target="#">
+									   <a href="#" data-toggle="modal" data-target="#percentage_of_tasks_deadline_missed{{count($estimate_missed_task_data_lead)}}">
 										
 	   
 										   {{round($percentage_of_tasks_deadline_lead,2)}}%
 										 
 									   </a>
+									   @include('dashboard.ajax.leaddeveloper.modals.percentage_of_tasks_deadline_missed')			   
 									  
 								   </p>
 	   
@@ -448,11 +449,12 @@
 							   <div class="d-flex flex-wrap">
 	   
 								   <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-									   <a href="#" data-toggle="modal" data-target="#">
+									   <a href="#" data-toggle="modal" data-target="#percentage_task_estimate_time_missed{{count($estimate_missed_task_data_lead)}}">
 										
 										   {{round($percentage_number_task_cross_estimate_time_lead,2)}}%
 										 
 									   </a>
+									   @include('dashboard.ajax.leaddeveloper.modals.percentage_task_estimate_time_missed')	
 									  
 								   </p>
 	   
