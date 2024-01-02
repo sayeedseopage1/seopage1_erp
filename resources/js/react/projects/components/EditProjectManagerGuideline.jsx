@@ -7,6 +7,9 @@ import Button from "../../tasks/components/Button";
 import Modal from "../../tasks/components/Modal";
 import SubmitButton from "../../tasks/components/SubmitButton";
 import Input from "../../tasks/components/form/Input";
+import Switch from '../../global/Switch';
+import validator from 'validator';
+
 
 const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projectId }) => {
     const [themeDetails, setThemeDetails] = React.useState("");
@@ -296,8 +299,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         const err = new Object();
 
         function isURL(value) {
-            const urlRegex = /^(?:ftp|http|https):\/\/(?:www\.)?[^\s]+$/;
-            return typeof value === 'string' && urlRegex.test(value);
+            return validator.isURL(value);
           }
 
           if(!themeDetailsAuthorized() && edit.theme_details){
@@ -502,7 +504,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         }
     }
 
-
+ 
 
     return (
         <React.Fragment>
@@ -531,103 +533,106 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                 <h5>Provide Design Reference</h5>
                             </div>
 
-                            {/* form */}
+                            <Switch>
+                                {/* form */}
                             <div className="py-4 px-3">
                                 {/* theme details */}
-                                <React.Fragment>
-                                    <div className="form-group">
-                                        <label
-                                            htmlFor=""
-                                            className="font-weight-bold"
-                                            style={{ color: "#808080" }}
-                                        >
-                                            <span className="mr-1">1. Theme Details</span>
-                                            {themeDetailsAuthorized() ?
-                                                <span className="badge badge-success mr-1"> Approved </span> :
+                                <Switch.Case condition={data?.task_category?.toLowerCase() !== 'design'}>
+                                    <React.Fragment>
+                                        <div className="form-group">
+                                            <label
+                                                htmlFor=""
+                                                className="font-weight-bold"
+                                                style={{ color: "#808080" }}
+                                            >
+                                                <span className="mr-1">1. Theme Details</span>
+                                                {themeDetailsAuthorized() ?
+                                                    <span className="badge badge-success mr-1"> Approved </span> :
+                                                    <>
+                                                        {themeDetailsAuthorizedStatus()}
+                                                    
+                                                    </>
+                                                }
+                                            </label>
+                                            {
+                                                edit?.theme_details &&
                                                 <>
-                                                    {themeDetailsAuthorizedStatus()}
-                                                   
-                                                </>
-                                            }
-                                        </label>
-                                        {
-                                            edit?.theme_details &&
-                                            <>
-                                                <div className="d-block pl-3">
-                                                    <div className="form-check form-check-inline">
-                                                        <input
-                                                            type="radio"
-                                                            name="theme_details"
-                                                            className="form-check-input"
-                                                            id="themeDetailsYes"
-                                                            value="yes"
-                                                            onChange={(e) =>
-                                                                onChange(e, setThemeDetails)
-                                                            }
-                                                        />
-                                                        <label
-                                                            className="form-check-label"
-                                                            htmlFor="themeDetailsYes"
-                                                        >
-                                                            Yes
-                                                        </label>
+                                                    <div className="d-block pl-3">
+                                                        <div className="form-check form-check-inline">
+                                                            <input
+                                                                type="radio"
+                                                                name="theme_details"
+                                                                className="form-check-input"
+                                                                id="themeDetailsYes"
+                                                                value="yes"
+                                                                onChange={(e) =>
+                                                                    onChange(e, setThemeDetails)
+                                                                }
+                                                            />
+                                                            <label
+                                                                className="form-check-label"
+                                                                htmlFor="themeDetailsYes"
+                                                            >
+                                                                Yes
+                                                            </label>
+                                                        </div>
+
+                                                        <div className="form-check form-check-inline">
+                                                            <input
+                                                                type="radio"
+                                                                name="theme_details"
+                                                                className="form-check-input"
+                                                                id="themeDetailsNo"
+                                                                defaultChecked={true}
+                                                                value="no"
+                                                                onChange={(e) =>
+                                                                    onChange( e, setThemeDetails )
+                                                                }
+                                                            />
+                                                            <label
+                                                                className="form-check-label"
+                                                                htmlFor="themeDetailsNo"
+                                                            >
+                                                                No
+                                                            </label>
+                                                        </div>
+
+                                                        {error?.themeDetails && <div className='' style={{color: 'red'}}> {error?.themeDetails} </div>}
                                                     </div>
+                                                    {themeDetails === "yes" && (
+                                                        <div className="mx-3">
+                                                            <div className="row">
+                                                                <div className="col-12 col-md-6">
+                                                                    <Input
+                                                                        label="Theme Name"
+                                                                        placeholder="Write Theme Name"
+                                                                        value={themeName}
+                                                                        onChange={(e) =>
+                                                                            onChange(e, setThemeName)
+                                                                        }
+                                                                        error={error?.themeName}
+                                                                    />
+                                                                </div>
 
-                                                    <div className="form-check form-check-inline">
-                                                        <input
-                                                            type="radio"
-                                                            name="theme_details"
-                                                            className="form-check-input"
-                                                            id="themeDetailsNo"
-                                                            defaultChecked={true}
-                                                            value="no"
-                                                            onChange={(e) =>
-                                                                onChange( e, setThemeDetails )
-                                                            }
-                                                        />
-                                                        <label
-                                                            className="form-check-label"
-                                                            htmlFor="themeDetailsNo"
-                                                        >
-                                                            No
-                                                        </label>
-                                                    </div>
-
-                                                    {error?.themeDetails && <div className='' style={{color: 'red'}}> {error?.themeDetails} </div>}
-                                                </div>
-                                                {themeDetails === "yes" && (
-                                                    <div className="mx-3">
-                                                        <div className="row">
-                                                            <div className="col-12 col-md-6">
-                                                                <Input
-                                                                    label="Theme Name"
-                                                                    placeholder="Write Theme Name"
-                                                                    value={themeName}
-                                                                    onChange={(e) =>
-                                                                        onChange(e, setThemeName)
-                                                                    }
-                                                                    error={error?.themeName}
-                                                                />
-                                                            </div>
-
-                                                            <div className="col-12 col-md-6">
-                                                                <Input
-                                                                    label="Theme URL"
-                                                                    placeholder="Enter Theme URL"
-                                                                    value={themeUrl}
-                                                                    onChange={(e) =>
-                                                                        onChange( e, setThemeUrl)
-                                                                    }
-                                                                    error={error?.themeUrl}
-                                                                />
+                                                                <div className="col-12 col-md-6">
+                                                                    <Input
+                                                                        label="Theme URL"
+                                                                        placeholder="Enter Theme URL"
+                                                                        value={themeUrl}
+                                                                        onChange={(e) =>
+                                                                            onChange( e, setThemeUrl)
+                                                                        }
+                                                                        error={error?.themeUrl}
+                                                                    />
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                )}
-                                            </>
-                                        }
-                                    </div>
-                                </React.Fragment>
+                                                    )}
+                                                </>
+                                            }
+                                        </div>
+                                    </React.Fragment>
+                                </Switch.Case>
                                 {/* end theme details */}
 
                                 {/* design Provide */}
@@ -985,115 +990,117 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                 {/* end color schema */}
 
                                 {/* Plugin Research */}
-                                    <div className="form-group">
-                                        <label
-                                            htmlFor=""
-                                            className="font-weight-bold"
-                                            style={{ color: "#808080" }}
-                                        >
-                                            <span className="mr-1">4. Plugin Research</span>
-                                            {pluginResearchAuthorized() ?
-                                                <span className="badge badge-success mr-1"> Approved </span> :
-                                                <>
-                                                    {pluginResearchAuthorizedStatus()} 
-                                                </>
-                                            }
-                                        </label>
+                                    <Switch.Case condition={data?.task_category?.toLowerCase() !== 'design'}>
+                                        <div className="form-group">
+                                            <label
+                                                htmlFor=""
+                                                className="font-weight-bold"
+                                                style={{ color: "#808080" }}
+                                            >
+                                                <span className="mr-1">4. Plugin Research</span>
+                                                {pluginResearchAuthorized() ?
+                                                    <span className="badge badge-success mr-1"> Approved </span> :
+                                                    <>
+                                                        {pluginResearchAuthorizedStatus()} 
+                                                    </>
+                                                }
+                                            </label>
 
-                                        {edit.plugin_research && <React.Fragment>
-                                            <div className="d-block pl-3">
-                                                <div className="form-check form-check-inline">
-                                                    <input
-                                                        type="radio"
-                                                        name="plugin"
-                                                        className="form-check-input"
-                                                        id="pluginYes"
-                                                        value="yes"
-                                                        onChange={(e) =>
-                                                            onChange(e, setPlugin)
-                                                        }
-                                                    />
-                                                    <label
-                                                        className="form-check-label"
-                                                        htmlFor="pluginYes"
-                                                    >
-                                                        Yes
-                                                    </label>
+                                            {edit.plugin_research && <React.Fragment>
+                                                <div className="d-block pl-3">
+                                                    <div className="form-check form-check-inline">
+                                                        <input
+                                                            type="radio"
+                                                            name="plugin"
+                                                            className="form-check-input"
+                                                            id="pluginYes"
+                                                            value="yes"
+                                                            onChange={(e) =>
+                                                                onChange(e, setPlugin)
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="form-check-label"
+                                                            htmlFor="pluginYes"
+                                                        >
+                                                            Yes
+                                                        </label>
+                                                    </div>
+
+                                                    <div className="form-check form-check-inline">
+                                                        <input
+                                                            type="radio"
+                                                            name="plugin"
+                                                            className="form-check-input"
+                                                            id="pluginNo"
+                                                            value="no"
+                                                            defaultChecked={true}
+                                                            onChange={(e) =>
+                                                                onChange(e, setPlugin)
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="form-check-label"
+                                                            htmlFor="pluginNo"
+                                                        >
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                    {error?.plugin && <div className='' style={{color: 'red'}}> {error?.plugin} </div>}
                                                 </div>
 
-                                                <div className="form-check form-check-inline">
-                                                    <input
-                                                        type="radio"
-                                                        name="plugin"
-                                                        className="form-check-input"
-                                                        id="pluginNo"
-                                                        value="no"
-                                                        defaultChecked={true}
-                                                        onChange={(e) =>
-                                                            onChange(e, setPlugin)
-                                                        }
-                                                    />
-                                                    <label
-                                                        className="form-check-label"
-                                                        htmlFor="pluginNo"
-                                                    >
-                                                        No
-                                                    </label>
-                                                </div>
-                                                {error?.plugin && <div className='' style={{color: 'red'}}> {error?.plugin} </div>}
-                                            </div>
+                                                {
+                                                    plugin === 'yes' &&
+                                                    <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
+                                                        <div className="row">
+                                                            <div className="col-12 col-md-4">
+                                                                <Input
+                                                                    label="Plugin Name"
+                                                                    required={true}
+                                                                    placeholder="Enter Plugin Name"
+                                                                    value={pluginName}
+                                                                    onChange={e => onChange(e, setPluginName)}
+                                                                    error={error?.pluginName}
+                                                                />
 
-                                            {
-                                                plugin === 'yes' &&
-                                                <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
-                                                    <div className="row">
-                                                        <div className="col-12 col-md-4">
-                                                            <Input
-                                                                label="Plugin Name"
-                                                                required={true}
-                                                                placeholder="Enter Plugin Name"
-                                                                value={pluginName}
-                                                                onChange={e => onChange(e, setPluginName)}
-                                                                error={error?.pluginName}
-                                                            />
+                                                            </div>
+                                                            <div className="col-12 col-md-4">
+                                                                <Input
+                                                                    label="Plugin URL"
+                                                                    required={true}
+                                                                    placeholder="Enter Plugin URL"
+                                                                    error={error?.pluginURL}
+                                                                    value={pluginURL}
+                                                                    onChange={e => onChange(e, setPluginURL)}
+                                                                />
+                                                            </div>
+                                                            <div className="col-12 col-md-4">
+                                                                <Input
+                                                                    label="Share Google Drive Link"
+                                                                    required={true}
+                                                                    error={error?.pluginGoogleDrive}
+                                                                    placeholder="Share Google Drive Link"
+                                                                    value={pluginGoogleDrive}
+                                                                    onChange={e => onChange(e, setPluginGoogleDrive)}
+                                                                />
+                                                            </div>
+                                                            <div className="col-12">
+                                                                <div className="form-group">
+                                                                    <label htmlFor="">Write Instruction for Using This Plugin</label>
+                                                                    <div className="ck-editor-holder">
+                                                                        <CKEditorComponent onChange={(e, editor) => setPluginDescription(editor.getData())} />
+                                                                    </div>
 
-                                                        </div>
-                                                        <div className="col-12 col-md-4">
-                                                            <Input
-                                                                label="Plugin URL"
-                                                                required={true}
-                                                                placeholder="Enter Plugin URL"
-                                                                error={error?.pluginURL}
-                                                                value={pluginURL}
-                                                                onChange={e => onChange(e, setPluginURL)}
-                                                            />
-                                                        </div>
-                                                        <div className="col-12 col-md-4">
-                                                            <Input
-                                                                label="Share Google Drive Link"
-                                                                required={true}
-                                                                error={error?.pluginGoogleDrive}
-                                                                placeholder="Share Google Drive Link"
-                                                                value={pluginGoogleDrive}
-                                                                onChange={e => onChange(e, setPluginGoogleDrive)}
-                                                            />
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="form-group">
-                                                                <label htmlFor="">Write Instruction for Using This Plugin</label>
-                                                                <div className="ck-editor-holder">
-                                                                    <CKEditorComponent onChange={(e, editor) => setPluginDescription(editor.getData())} />
+                                                                    {error?.pluginDescription && <div className='' style={{color: 'red'}}> {error?.pluginDescription} </div>}
                                                                 </div>
-
-                                                                {error?.pluginDescription && <div className='' style={{color: 'red'}}> {error?.pluginDescription} </div>}
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                }
+                                            </React.Fragment>
                                             }
-                                        </React.Fragment>
-                                        }
-                                    </div>
+                                        </div>
+                                    </Switch.Case>
                                 {/* End Plugin Research */}
 
 
@@ -1110,6 +1117,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                    }
                                 </div>
                             </div>
+                            </Switch>
                         </div>
                         {/* end body */}
                     </div>

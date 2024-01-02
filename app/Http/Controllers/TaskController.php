@@ -5613,6 +5613,7 @@ class TaskController extends AccountBaseController
                 "design_details" => $pm_task_guideline->design_details,
                 "color_schema" => $pm_task_guideline->color_schema,
                 "plugin_research" => $pm_task_guideline->plugin_research,
+                "task_category" => $pm_task_guideline->task_category,
                 "status_code" => 200,
                 "is_allow" => $is_allow,
                 "is_submitted_already" => $already_submitted,
