@@ -8,6 +8,8 @@ import SubmitButton from "../../tasks/components/SubmitButton";
 import Input from "../../tasks/components/form/Input";
 import { toast } from "react-toastify";
 import Switch from '../../global/Switch';
+import validator from 'validator';
+
 
 const ProjectManagerGuideline = ({
     isOpen,
@@ -128,8 +130,7 @@ const ProjectManagerGuideline = ({
         const err = new Object();
 
         function isURL(value) {
-            const urlRegex = /^(?:ftp|http|https):\/\/(?:www\.)?[^\s]+$/;
-            return typeof value === "string" && urlRegex.test(value);
+            return validator.isURL(value);
         }
 
         // theme details validation
