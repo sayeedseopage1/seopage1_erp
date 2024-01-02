@@ -13,7 +13,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <table id="avg_task_submission_in_days" class="display" style="width:100%">
+            <table id="avg_logged_time_complete_task_table" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Sl No</th>
@@ -76,7 +76,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#avg_task_submission_in_days',{
+      new DataTable('#avg_logged_time_complete_task_table',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
       $('.revision-count').on('click', function () {

@@ -203,7 +203,7 @@
             <div class="d-flex flex-wrap">
 
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
+                    <a href="#" data-toggle="modal" data-target="#avg_logged_time_complete_task{{$submit_number_of_tasks_in_this_month}}">
                      
 
                         {{round($average_submission_time_in_this_month,2)}} Hours
@@ -211,6 +211,7 @@
                     </a>
                    
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.avg_logged_time_complete_task')
 
               
             </div>
