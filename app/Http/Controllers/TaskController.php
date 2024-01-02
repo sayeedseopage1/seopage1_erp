@@ -3730,12 +3730,23 @@ class TaskController extends AccountBaseController
 
         $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);
 
-        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
-            $pm_task_update->status = 0;
-        } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
-            $pm_task_update->status = 0;
-        } else {
-            $pm_task_update->status = 1;
+        if($request->task_category == 'development'){
+
+            if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
+        }else{
+            if ($data['design_details'] == 0 || $data['color_schema'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['design_details'] == 2 || $data['color_schema'] == 2 ) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
         }
         $pm_task_update->save();
         $pm_task_guideline_authorization = '';
