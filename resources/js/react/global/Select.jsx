@@ -23,6 +23,10 @@ const Select = ({
     const [isOpen, setIsOpen] = React.useState(false);
     const [selected, setSelected] = React.useState(value);
     const [elementRef, setElementRef] = React.useState(null);
+    
+    React.useEffect(() => {
+        setSelected(value);
+    }, [value])
 
     const toggle = () => setIsOpen(!isOpen);
     const close = () => setIsOpen(false);

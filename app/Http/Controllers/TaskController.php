@@ -3730,12 +3730,23 @@ class TaskController extends AccountBaseController
 
         $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);
 
-        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
-            $pm_task_update->status = 0;
-        } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
-            $pm_task_update->status = 0;
-        } else {
-            $pm_task_update->status = 1;
+        if($request->task_category == 'development'){
+
+            if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
+        }else{
+            if ($data['design_details'] == 0 || $data['color_schema'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['design_details'] == 2 || $data['color_schema'] == 2 ) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
         }
         $pm_task_update->save();
         $pm_task_guideline_authorization = '';
@@ -5606,6 +5617,7 @@ class TaskController extends AccountBaseController
                 "design_details" => $pm_task_guideline->design_details,
                 "color_schema" => $pm_task_guideline->color_schema,
                 "plugin_research" => $pm_task_guideline->plugin_research,
+                "task_category" => $pm_task_guideline->task_category,
                 "status_code" => 200,
                 "is_allow" => $is_allow,
                 "is_submitted_already" => $already_submitted,

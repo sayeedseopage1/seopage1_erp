@@ -236,7 +236,6 @@ class WonDealsDataTable extends BaseDataTable
         if ($request->closed_by != 'all') {
             $model->where('added_by', $request->closed_by);
         }
-       // dd($request->status);
         if ($request->status != 'all') {
             $model->where('deals.status', $request->status);
         }
