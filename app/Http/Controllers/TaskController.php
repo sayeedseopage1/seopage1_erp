@@ -1237,7 +1237,7 @@ class TaskController extends AccountBaseController
                 $project= Project::where('id',$taskId->project_id)->first();
                 $revision_status= TaskRevision::where('task_id',$taskId->id)->first();
                 $task_user= TaskUser::where('task_id',$taskId->id)->first();
-                $user= User::where('id',$task_user->id)->first();
+                $user= User::where('id',$task_user->user_id)->first();
                 $user_role= Role::where('id',$user->role_id)->first();
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
@@ -3540,7 +3540,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
