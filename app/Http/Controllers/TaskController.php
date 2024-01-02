@@ -3231,7 +3231,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -3388,7 +3388,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -4061,16 +4061,17 @@ class TaskController extends AccountBaseController
 
     public function task_json(Request $request, $id)
     {
-        $projectTask= Task::where('id',$id)->first();
-        if($projectTask->independent_task_status != 0 )
-        {
-            $projecttaskId= Project::where('id',$projectTask->project_id)->first();
-            if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
-            {
-                 abort(403);
-            }
-        }
+       
         if ($request->mode == 'basic') {
+            $projectTask= Task::where('id',$id)->first();
+            if($projectTask->independent_task_status != 0 )
+            {
+                $projecttaskId= Project::where('id',$projectTask->project_id)->first();
+                if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
+                {
+                     abort(403);
+                }
+            }
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
