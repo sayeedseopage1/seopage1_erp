@@ -130,12 +130,13 @@
                 <div class="d-flex flex-wrap">
     
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
+                        <a href="#" data-toggle="modal" data-target="#avg_num_of_approval_by_client{{count($first_attempt_approve_task_data_client_lead)}}">
                          
     
                             {{round($average_submission_aproval_in_this_month_client_lead,2)}}
                           
                         </a>
+                        @include('dashboard.ajax.leaddeveloper.modals.avg_num_of_approval_by_client')			   
                        
                     </p>
     
@@ -159,13 +160,13 @@
                 <div class="d-flex flex-wrap">
     
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
+                        <a href="#" data-toggle="modal" data-target="#percentage_of_task_with_revision{{count($revision_data_lead)}}">
                          
     
                             {{round($percentage_of_tasks_with_revision_lead,2)}}%
                           
                         </a>
-                       
+                        @include('dashboard.ajax.leaddeveloper.modals.percentage_of_task_with_revision')			   
                     </p>
     
                   
@@ -185,13 +186,13 @@
                 <div class="d-flex flex-wrap">
     
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
+                        <a href="#" data-toggle="modal" data-target="#total_num_of_revision{{count($revision_data_lead)}}">
                          
     
                             {{round($number_of_total_revision_for_this_month_lead,2)}}
                           
                         </a>
-                       
+                        @include('dashboard.ajax.leaddeveloper.modals.total_num_of_revision')			   
                     </p>
     
                   
@@ -493,9 +494,9 @@
         </div>
     
     </div>
-    <div class="row mt-3">
+    <div class="row my-5">
 				
-        <div class="col-sm-6 col-lg-6 ">
+        <div class="col-sm-6 col-lg-6 p-3">
             <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
                 <x-table class="border-0 pb-3 admin-dash-table table-hover mt-3">
                     <x-slot name="thead">
@@ -571,7 +572,7 @@
         </div>
 
 
-        <div class="col-sm-6 col-lg-6">
+        <div class="col-sm-6 col-lg-6 p-3">
             <x-cards.data :title="__('')" padding="false" otherClasses="h-200">
                 <x-table class="border-0 pb-3 admin-dash-table table-hover mt-3">
                     <x-slot name="thead">
