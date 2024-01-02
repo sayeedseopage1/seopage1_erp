@@ -242,12 +242,13 @@
                 <div class="d-flex flex-wrap">
     
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#">
+                        <a href="#" data-toggle="modal" data-target="#avg_num_in_progress_task{{count($total_in_progress_date_range_table_lead)}}">
                          
     
                             {{round($average_in_progress_date_range_lead ,2)}}
                           
                         </a>
+                        @include('dashboard.ajax.leaddeveloper.modals.avg_num_in_progress_task')			   
                        
                     </p>
     
@@ -411,14 +412,14 @@
                     </h6>
                     <h6 class="mb-0 f-18 font-weight-bold mr-5">
                         No. of disputes (Overall):
-                        <a href="#" data-toggle="modal" data-target="#">
+                        <a href="#" data-toggle="modal" data-target="#no_of_dispute_overall{{count($number_of_dispute_filed_all_data_lead)}}">
                          
     
                             {{$number_of_dispute_filed_all_lead}}
                           
                           
                         </a>
-                       
+                        @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_overall')			   
                     </h6>
                   
     
@@ -440,22 +441,24 @@
     
                         <h6 class="mb-0 f-18 font-weight-bold mr-5">
                             No. of disputes lost(Raised By Developer):
-                            <a href="#" data-toggle="modal" data-target="#">
+                            <a href="#" data-toggle="modal" data-target="#no_of_dispute_lost{{count($number_of_dispute_lost_own_data_lead )}}">
                              
     
                                  {{ $number_of_dispute_lost_own_lead}}
     
                             </a>
+                            @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_lost')			   
                            
                         </h6>
                         <h6 class="mb-0 f-18 font-weight-bold mr-5">
                             No. of disputes lost(Overall):
-                            <a href="#" data-toggle="modal" data-target="#">
+                            <a href="#" data-toggle="modal" data-target="#no_of_dispute_lost_overall{{count($number_of_dispute_lost_all_data_lead)}}">
                              
     
                                  {{ $number_of_dispute_lost_all_lead}}
                               
                             </a>
+                            @include('dashboard.ajax.leaddeveloper.modals.no_of_dispute_lost_overall')			   
                            
                         </h6>
     
