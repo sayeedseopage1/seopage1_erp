@@ -886,7 +886,7 @@ trait LeadDashboard
          ->leftJoin('users as client', 'client.id', 'projects.client_id')
          ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
          ->where('tasks.id',
-             $task->id
+             $task
          )
          //->groupBy('tasks.id', $task)
          ->first();
