@@ -4237,7 +4237,12 @@ class TaskController extends AccountBaseController
 
             $task->parent_task_time_log = $timeLog;
             $task->task_category = $task->category;
-            // dd($task);
+            /**  REVISION LOGDEED TIME */
+            $task->revision_log_hour = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_hours');
+            $revision_log_total_min = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_minutes');
+            $task->revision_log_min = $task->revision_log_hour * 60 + $revision_log_total_min;
+
+            // dd($task->revision_log_hour, $task->revision_log_min);
 
             $task->subtask = Subtask::select([
                 'id', 'title'
@@ -4248,7 +4253,6 @@ class TaskController extends AccountBaseController
             $tas_id = Task::where('id', $task->id)->first();
             $subtasks = Subtask::where('task_id', $tas_id->id)->get();
             $subtask_count = Subtask::where('task_id', $tas_id->id)->count();
-            // dd($subtasks);
             $time = 0;
 
             foreach ($subtasks as $subtask) {
