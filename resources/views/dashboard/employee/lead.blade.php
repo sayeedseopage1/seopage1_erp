@@ -367,12 +367,13 @@
 							   <div class="d-flex flex-wrap">
 	   
 								   <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-									   <a href="#" data-toggle="modal" data-target="#">
+									   <a href="#" data-toggle="modal" data-target="#avg_task_submission_in_day{{count($average_submit_data_lead)}}">
 										
 	   
 										   {{round($average_submission_day_in_this_month_lead,2)}} Days
 										 
 									   </a>
+									   @include('dashboard.ajax.leaddeveloper.modals.avg_task_submission_in_day')			   
 									  
 								   </p>
 	   
