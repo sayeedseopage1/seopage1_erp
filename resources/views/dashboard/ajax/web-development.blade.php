@@ -495,7 +495,7 @@ Overview--}}
 
                     <td class="pl-20">{{$loop->index+1}}</td>
                     <td>
-                        <a href="/account/employees/{{$item->id}}" class="text-darkest-grey f-w-500">{{$item->name}}</a>
+                        <a target="_blank" href="{{ route('dev-performance',$item->id) }}" class="f-w-500">{{$item->name}}</a>
                     </td>
                     <td>
                       <?php

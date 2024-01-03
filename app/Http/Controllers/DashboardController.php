@@ -47,12 +47,13 @@ use App\Models\DailySubmission;
 use App\Models\TaskHistory;
 use App\Models\TaskRevision;
 use App\Traits\LeadDashboardAdminView;
+use App\Traits\DevDashboardAdminView;
 
 use function PHPUnit\Framework\isNull;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView,LeadDashboardAdminView;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView,LeadDashboardAdminView,DevDashboardAdminView;
 
     public function __construct()
     {
@@ -817,5 +818,10 @@ class DashboardController extends AccountBaseController
         $this->lead_dev = User::where('id', $id)->first();
         $this->pageTitle = 'Lead Developer Performance';
         return $this->LeadDashboardAdminView($this->lead_dev);
+    }
+    public function devPerformance($id){
+        $this->dev = User::where('id', $id)->first();
+        $this->pageTitle = 'Developer Performance';
+        return $this->DevDashboardAdminView($this->dev);
     }
   }
