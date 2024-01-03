@@ -90,8 +90,13 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($item->reason_status == 0)
+                                    @php
+                                        $current_date = \Carbon\Carbon::now();
+                                    @endphp
+                                    @if ($item->reason_status == 0 && ($current_date > $item->goal_end_date) && $item->goal_status == 0)
                                     <a href="#" data-toggle="modal" data-target="#deadlineExplanation{{$item->project_id}}">Deadline Explanation</a>
+                                    @else 
+                                    N\A
                                     @endif
                                 </td>
                             </tr>
