@@ -82,6 +82,22 @@ class PMGoal extends Command
               //  dd($goal_update);
 
 
+            }elseif($goal->goal_code == 'TSM' && $current_date > $end_date)
+            {
+                $taskId= Task::select('tasks.*','task_history.created_at as submission_date')
+                ->join('task_history','task_history.task_id','tasks.id')
+                ->where('task_history.board_column_id',9)
+                ->where('tasks.project_id',$goal->project_id)->first();
+                if($taskId == null || $current_date > $taskId->submission_date)
+                {
+                    $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
+                    $goal_update->description = 'The first submission has not been completed and it is not ready for submission to the client';
+                    $goal_update->updated_at = Carbon::now();
+                    $goal_update->save();
+
+                }
+                
+                
             }
         }
         

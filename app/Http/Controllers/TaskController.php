@@ -85,6 +85,7 @@ use App\Notifications\PendingParentTasksNotification;
 use App\Notifications\PPAuthDenyNotification;
 use App\Notifications\TaskCommentNotification;
 use App\Notifications\TaskCommentReplyNotification;
+use App\Models\ProjectPmGoal;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -2967,6 +2968,21 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
         $task_status->save();
+        $current_date = Carbon::now();
+    $pm_goal = ProjectPmGoal::where('project_id',$task_status->project_id)->where('goal_code','TSM')->first();
+    if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
+    {
+        $pm_goal->goal_status = 1;
+        
+
+        $pm_goal->description = 'The first submission has been completed and submitted to the client';
+
+                
+        $pm_goal->updated_at= Carbon::now();
+        $pm_goal->save();
+        
+
+    }
         $actions = PendingAction::where('code','SFT')->where('past_status',0)->where('project_id',$task_status->project_id)->get();
         if($actions != null)
         {
