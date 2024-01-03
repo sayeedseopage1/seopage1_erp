@@ -72,6 +72,4 @@
       new DataTable('#table_avg_task_approvel_client',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
-      
-       
   </script>
