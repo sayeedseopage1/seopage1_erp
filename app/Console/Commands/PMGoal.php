@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use App\Models\ContractSign;
 use App\Models\ProjectDeliverable;
 use DB;
+use App\Models\Payment;
+use App\Models\ProjectMilestone;
 
 class PMGoal extends Command
 {
@@ -92,6 +94,21 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = 'The first submission has not been completed and it is not ready for submission to the client';
+                    $goal_update->updated_at = Carbon::now();
+                    $goal_update->save();
+
+                }
+                
+                
+            }elseif($goal->goal_code == 'FPMR' && $current_date > $end_date)
+            {
+                $projectId= Payment::where('project_id',$goal->project_id)->first();
+                $total_milestones= ProjectMilestone::where('project_id',$goal->project_id)->count();
+                $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('status','complete')->count();
+                if($projectId == null || $current_date > $projectId->created_at)
+                {
+                    $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
+                    $goal_update->description = $complete_milestones . ' out of '.$total_milestones. ' milestones could not be released in this week';
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
