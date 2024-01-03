@@ -134,9 +134,9 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 
                               <?php
-                              $task= App\Models\Task::where('milestone_id',$item->id)->where('status','incomplete')->count();
+                              $task= App\Models\Task::where('milestone_id',$item->id)->where('board_column_id','!=',4)->count();
                               $total_tasks=  App\Models\Task::where('milestone_id',$item->id)->count();
-                              $complete_task= App\Models\Task::where('milestone_id',$item->id)->where('status','completed')->count();
+                              $complete_task= App\Models\Task::where('milestone_id',$item->id)->where('board_column_id',4)->count();
                               $milestone_count= App\Models\ProjectMilestone::where('project_id',$project->id)->count();
                               $incomplete_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->count();
                               $canceled_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->where('status','canceled')->count();
@@ -199,7 +199,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                             @if($item->cancelation_status == null)
 
 
-                                     <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" data-id="{{ $item->id }}">Mark As Complete</button>
+                                     <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" data-id="{{ $item->id }}">Mark As Complete </button>
                                      <button type="submit" class="btn-danger btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button>
                             @else
                                     @if(Auth::user()->role_id == 1)
