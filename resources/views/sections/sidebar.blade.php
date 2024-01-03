@@ -319,6 +319,7 @@
                             )
                                 <x-sub-menu-item :link="url('account/independent/tasks')" :text="__('Independent Task')" />
                             @endif
+                            <x-sub-menu-item :link="route('project-status.index')" :text="__('Projects Status')" />
                                 {{-- <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" /> --}}
 
 
@@ -839,6 +840,7 @@
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
                         <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+                        <x-sub-menu-item  :link="route('pm-goal-setting.index')" :text="'PM Goal Settings'" />
                         <x-sub-menu-item  :link="route('dashboard.core.metric')" :text="'PM Core Metrics Settings'" />
 
                         <div class="accordionItemContent pb-2">
