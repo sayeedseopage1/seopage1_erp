@@ -7,6 +7,9 @@ import Modal from "../../tasks/components/Modal";
 import SubmitButton from "../../tasks/components/SubmitButton";
 import Input from "../../tasks/components/form/Input";
 import { toast } from "react-toastify";
+import Switch from '../../global/Switch';
+import validator from 'validator';
+
 
 const ProjectManagerGuideline = ({
     isOpen,
@@ -42,6 +45,7 @@ const ProjectManagerGuideline = ({
             description: "",
         },
     ]);
+    const [taskType, setTaskType] = React.useState("development");
 
     const [error, setError] = React.useState(null);
 
@@ -121,21 +125,20 @@ const ProjectManagerGuideline = ({
     };
 
     // validation
-    const isValide = () => {
+    const isValid = () => {
         var count = 0;
         const err = new Object();
 
         function isURL(value) {
-            const urlRegex = /^(?:ftp|http|https):\/\/(?:www\.)?[^\s]+$/;
-            return typeof value === "string" && urlRegex.test(value);
+            return validator.isURL(value);
         }
 
         // theme details validation
-        if (themeDetails === "") {
+        if (taskType === 'development' && themeDetails === "") {
             err.themeDetails = "You Need to Select An Option";
             count++;
         }
-        if (themeDetails === "yes") {
+        if (taskType === 'development' && themeDetails === "yes") {
             if (themeName === "") {
                 (err.themeName = "You Have to Provide a Theme Name!"), count++;
             }
@@ -220,12 +223,12 @@ const ProjectManagerGuideline = ({
         }
 
         // plugin
-        if (plugin === "") {
+        if (taskType === 'development' && plugin === "") {
             err.plugin = "You Need to Select An Option";
             count++;
         }
 
-        if (plugin === "yes") {
+        if (taskType === 'development' && plugin === "yes") {
             if (pluginName === "") {
                 err.pluginName = "You Have to Provide Plugin Name";
                 count++;
@@ -258,11 +261,12 @@ const ProjectManagerGuideline = ({
         return !count;
     };
 
-    // handle submti
-    const handleSubmit = (e) => {
+    // handle submit
+    const handleSubmit = async(e) => {
         e.preventDefault();
         const data = {
             project_id: projectId,
+            task_category: taskType,
             theme_details: themeDetails === "yes" ? 1 : 0,
             theme_name: themeName,
             theme_url: themeUrl,
@@ -286,15 +290,16 @@ const ProjectManagerGuideline = ({
             ),
         };
 
-        if (isValide()) {
-            storeProjectGuideline(data)
-                .unwrap()
-                .then((res) => {
-                    // openTaskForm();
+        if (isValid()) {
+            try {
+                const res = await storeProjectGuideline(data).unwrap();
+                if(res){
                     toast.success("Task Guideline Store Successfully");
                     close();
-                })
-                .catch((err) => console.log(err));
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
     };
 
@@ -325,545 +330,302 @@ const ProjectManagerGuideline = ({
                                 <h5>Provide Design Reference</h5>
                             </div>
 
-                            {/* form */}
-                            <div className="py-4 px-3">
-                                {/* theme details */}
-                                <React.Fragment>
-                                    <div className="form-group">
-                                        <label
-                                            htmlFor=""
-                                            className="font-weight-bold"
-                                            style={{ color: "#808080" }}
-                                        >
-                                            1. Do You Want to Provide Theme
-                                            Details ?
-                                        </label>
-                                        <div className="d-block pl-3">
-                                            <div className="form-check form-check-inline">
-                                                <input
-                                                    type="radio"
-                                                    name="theme_details"
-                                                    className="form-check-input"
-                                                    id="themeDetailsYes"
-                                                    value="yes"
-                                                    onChange={(e) =>
-                                                        onChange(
-                                                            e,
-                                                            setThemeDetails
-                                                        )
-                                                    }
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="themeDetailsYes"
-                                                >
-                                                    Yes
-                                                </label>
-                                            </div>
+                           <Switch>
+                             {/* form */}
+                                <ol className="py-4 px-3">
+                                    {/* type  */}
+                                    <li style={{listStyle: 'unset'}}>
+                                        <div className="form-group"> 
+                                            <label
+                                                htmlFor=""
+                                                className="font-weight-bold"
+                                                style={{ color: "#808080" }}
+                                            >
+                                                Task Category <sup>*</sup>
+                                            </label>
+                                            <div className="d-block pl-3">
 
-                                            <div className="form-check form-check-inline">
-                                                <input
-                                                    type="radio"
-                                                    name="theme_details"
-                                                    className="form-check-input"
-                                                    id="themeDetailsNo"
-                                                    value="no"
-                                                    onChange={(e) =>
-                                                        onChange(
-                                                            e,
-                                                            setThemeDetails
-                                                        )
-                                                    }
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="themeDetailsNo"
-                                                >
-                                                    No
-                                                </label>
-                                            </div>
-
-                                            {error?.themeDetails && (
-                                                <div
-                                                    className=""
-                                                    style={{ color: "red" }}
-                                                >
-                                                    {" "}
-                                                    {error?.themeDetails}{" "}
-                                                </div>
-                                            )}
-                                        </div>
-                                        {themeDetails === "yes" && (
-                                            <div className="mx-3">
-                                                <div className="row">
-                                                    <div className="col-12 col-md-6">
-                                                        <Input
-                                                            label="Theme Name"
-                                                            type="text"
-                                                            placeholder="Write Theme Name"
-                                                            value={themeName}
-                                                            required={true}
-                                                            onChange={(e) =>
-                                                                onChange(
-                                                                    e,
-                                                                    setThemeName
-                                                                )
-                                                            }
-                                                            error={
-                                                                error?.themeName
-                                                            }
-                                                        />
-                                                    </div>
-
-                                                    <div className="col-12 col-md-6">
-                                                        <Input
-                                                            label="Theme URL"
-                                                            placeholder="Enter Theme URL"
-                                                            value={themeUrl}
-                                                            type="url"
-                                                            required={true}
-                                                            onChange={(e) =>
-                                                                onChange(
-                                                                    e,
-                                                                    setThemeUrl
-                                                                )
-                                                            }
-                                                            error={
-                                                                error?.themeUrl
-                                                            }
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </React.Fragment>
-                                {/* end theme details */}
-
-                                {/* design Provide */}
-                                <React.Fragment>
-                                    <div className="form-group">
-                                        <label
-                                            htmlFor=""
-                                            className="font-weight-bold"
-                                            style={{ color: "#808080" }}
-                                        >
-                                            2. Do You Want to Provide Design
-                                            Details ?
-                                        </label>
-                                        <div className="d-block pl-3">
-                                            <div className="form-check form-check-inline">
-                                                <input
-                                                    type="radio"
-                                                    name="design_details"
-                                                    className="form-check-input"
-                                                    id="designDetailsYes"
-                                                    value="yes"
-                                                    onChange={(e) =>
-                                                        onChange(
-                                                            e,
-                                                            setDesignDetails
-                                                        )
-                                                    }
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="designDetailsYes"
-                                                >
-                                                    Yes
-                                                </label>
-                                            </div>
-
-                                            <div className="form-check form-check-inline">
-                                                <input
-                                                    type="radio"
-                                                    name="design_details"
-                                                    className="form-check-input"
-                                                    id="designDetailsNo"
-                                                    value="no"
-                                                    onChange={(e) =>
-                                                        onChange(
-                                                            e,
-                                                            setDesignDetails
-                                                        )
-                                                    }
-                                                />
-                                                <label
-                                                    className="form-check-label"
-                                                    htmlFor="designDetailsNo"
-                                                >
-                                                    No
-                                                </label>
-                                            </div>
-                                            {error?.designDetials && (
-                                                <div
-                                                    className=""
-                                                    style={{ color: "red" }}
-                                                >
-                                                    {" "}
-                                                    {error?.designDetials}{" "}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        {designDetials === "yes" && (
-                                            <div className="px-3">
-                                                <div className="form-group mt-2">
-                                                    <label htmlFor="exampleFormControlSelect1">
-                                                        Select Design Reference
-                                                        Type<sup>*</sup>
-                                                    </label>
-                                                    <select
-                                                        className="form-control py-2"
-                                                        value={designFileType}
-                                                        onChange={(e) =>
-                                                            onChange(
-                                                                e,
-                                                                setDesignFileType
-                                                            )
-                                                        }
-                                                        id="exampleFormControlSelect1"
+                                                {/* development */}
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        type="radio"
+                                                        name="task_type"
+                                                        className="form-check-input"
+                                                        id="taskType_development"
+                                                        checked={taskType === 'development'}
+                                                        value="development"
+                                                        onChange={(e) => {
+                                                            onChange(e, setTaskType);
+                                                            // themes
+                                                            setThemeDetails("");
+                                                            setThemeName("");
+                                                            setThemeUrl("");
+                                                            // plugin
+                                                            setPlugin("")
+                                                            setPluginDescription("");
+                                                            setPluginGoogleDrive("");
+                                                            setPluginName("");
+                                                            setPluginURL("")
+                                                        }}
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="taskType_development"
                                                     >
-                                                        <option
-                                                            value="--"
-                                                            disabled
+                                                        Development 
+                                                    </label>
+                                                </div>
+
+                                                {/* Design */}
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        type="radio"
+                                                        name="task_type"
+                                                        className="form-check-input"
+                                                        id="taskType_design"
+                                                        checked={taskType === 'design'}
+                                                        value="design"
+                                                        onChange={(e) => {
+                                                            onChange(e, setTaskType)
+                                                            // theme details
+                                                            setThemeDetails("");
+                                                            setThemeName("");
+                                                            setThemeUrl("");
+                                                            // plugin
+                                                            setPlugin("")
+                                                            setPluginDescription("");
+                                                            setPluginGoogleDrive("");
+                                                            setPluginName("");
+                                                            setPluginURL("")
+                                                        }}
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="taskType_design"
+                                                    >
+                                                    Design 
+                                                    </label>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </li> 
+                                    {/* theme details */}
+                                    <Switch.Case condition={taskType === 'development'}>
+                                        <li style={{listStyle: "unset"}}> 
+                                            <div className="form-group"> 
+                                                <label
+                                                    htmlFor=""
+                                                    className="font-weight-bold"
+                                                    style={{ color: "#808080" }}
+                                                >
+                                                    Do You Want to Provide Theme
+                                                    Details ?
+                                                </label>
+                                                <div className="d-block pl-3">
+                                                    <div className="form-check form-check-inline">
+                                                        <input
+                                                            type="radio"
+                                                            name="theme_details"
+                                                            className="form-check-input"
+                                                            id="themeDetailsYes"
+                                                            value="yes"
+                                                            onChange={(e) =>
+                                                                onChange(
+                                                                    e,
+                                                                    setThemeDetails
+                                                                )
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="form-check-label"
+                                                            htmlFor="themeDetailsYes"
                                                         >
-                                                            --
-                                                        </option>
-                                                        <option value="XD/Figma">
-                                                            XD/Figma
-                                                        </option>
-                                                        <option value="Photoshop">
-                                                            Photoshop
-                                                        </option>
-                                                        <option value="The Reference Site That Has to Be Clone">
-                                                            The Reference Site
-                                                            That Has To Be Clone
-                                                        </option>
-                                                    </select>
-                                                    {error?.designFileType && (
+                                                            Yes
+                                                        </label>
+                                                    </div>
+
+                                                    <div className="form-check form-check-inline">
+                                                        <input
+                                                            type="radio"
+                                                            name="theme_details"
+                                                            className="form-check-input"
+                                                            id="themeDetailsNo"
+                                                            value="no"
+                                                            onChange={(e) =>
+                                                                onChange(
+                                                                    e,
+                                                                    setThemeDetails
+                                                                )
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="form-check-label"
+                                                            htmlFor="themeDetailsNo"
+                                                        >
+                                                            No
+                                                        </label>
+                                                    </div>
+
+                                                    {error?.themeDetails && (
                                                         <div
                                                             className=""
-                                                            style={{
-                                                                color: "red",
-                                                            }}
+                                                            style={{ color: "red" }}
                                                         >
                                                             {" "}
-                                                            {
-                                                                error?.designFileType
-                                                            }{" "}
+                                                            {error?.themeDetails}{" "}
                                                         </div>
                                                     )}
                                                 </div>
-                                            </div>
-                                        )}
-
-                                        {/* if design type xd or figma */}
-                                        {designFileType === "XD/Figma" && (
-                                            <div className="px-3">
-                                                <div className="form-group">
-                                                    <Input
-                                                        label="XD/Figma File URL"
-                                                        error={error?.xdFigma}
-                                                        placeholder="Provide the XD/Figma File URL"
-                                                        required={true}
-                                                        value={xDOrFigmaFile}
-                                                        onChange={(e) =>
-                                                            onChange(
-                                                                e,
-                                                                setXDorFigmaFile
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* if design type Photoshop*/}
-                                        {designFileType === "Photoshop" && (
-                                            <div className="px-3">
-                                                <div className="form-group">
-                                                    <Input
-                                                        label="Input Google Drive File / Folder URL"
-                                                        placeholder="Input Google Drive File / Folder URL"
-                                                        required={true}
-                                                        type="url"
-                                                        error={error?.photoshop}
-                                                        value={
-                                                            photoshopReferenceURL
-                                                        }
-                                                        onChange={(e) =>
-                                                            onChange(
-                                                                e,
-                                                                setPhotoshopReferenceURL
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* if design type Photoshop*/}
-                                        {designFileType ===
-                                            "The Reference Site That Has to Be Clone" && (
-                                            <div
-                                                className="mx-3 p-3"
-                                                style={{
-                                                    background: "#F9F9F9",
-                                                    borderRadius: "10px",
-                                                }}
-                                            >
-                                                <div className="form-group">
-                                                    {_.map(
-                                                        designRefURL,
-                                                        (item) => (
-                                                            <div
-                                                                key={item.id}
-                                                                className="multipleInputItem"
-                                                            >
+                                                {themeDetails === "yes" && (
+                                                    <div className="mx-3">
+                                                        <div className="row">
+                                                            <div className="col-12 col-md-6">
                                                                 <Input
-                                                                    label="Reference URL"
-                                                                    placeholder="Reference URL"
-                                                                    required={
-                                                                        true
-                                                                    }
-                                                                    error={
-                                                                        error?.designRef
-                                                                    }
-                                                                    value={
-                                                                        item.url
-                                                                    }
-                                                                    type="url"
-                                                                    onChange={(
-                                                                        e
-                                                                    ) =>
-                                                                        handleRefUrlChange(
+                                                                    label="Theme Name"
+                                                                    type="text"
+                                                                    placeholder="Write Theme Name"
+                                                                    value={themeName}
+                                                                    required={true}
+                                                                    onChange={(e) =>
+                                                                        onChange(
                                                                             e,
-                                                                            item.id
+                                                                            setThemeName
                                                                         )
                                                                     }
+                                                                    error={
+                                                                        error?.themeName
+                                                                    }
                                                                 />
-                                                                {_.size(
-                                                                    designRefURL
-                                                                ) > 1 && (
-                                                                    <button
-                                                                        aria-label="RemoveLink"
-                                                                        onClick={(
-                                                                            e
-                                                                        ) =>
-                                                                            removeDesignRef(
-                                                                                e,
-                                                                                item.id
-                                                                            )
-                                                                        }
-                                                                        type="button"
-                                                                        className="multipleInputItemButton"
-                                                                    >
-                                                                        <i className="fa-solid fa-trash-can" />
-                                                                    </button>
-                                                                )}
                                                             </div>
-                                                        )
-                                                    )}
 
-                                                    <button
-                                                        type="button"
-                                                        onClick={
-                                                            addDesignRefURL
+                                                            <div className="col-12 col-md-6">
+                                                                <Input
+                                                                    label="Theme URL"
+                                                                    placeholder="Enter Theme URL"
+                                                                    value={themeUrl}
+                                                                    type="url"
+                                                                    required={true}
+                                                                    onChange={(e) =>
+                                                                        onChange(
+                                                                            e,
+                                                                            setThemeUrl
+                                                                        )
+                                                                    }
+                                                                    error={
+                                                                        error?.themeUrl
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </li>
+                                    </Switch.Case>
+                                    {/* end theme details */}
+
+                                    {/* design Provide */}
+                                    <li style={{listStyle: "unset"}}>
+                                        <div className="form-group">
+                                            <label
+                                                htmlFor=""
+                                                className="font-weight-bold"
+                                                style={{ color: "#808080" }}
+                                            >
+                                                Do You Want to Provide Design
+                                                Details ?
+                                            </label>
+                                            <div className="d-block pl-3">
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        type="radio"
+                                                        name="design_details"
+                                                        className="form-check-input"
+                                                        id="designDetailsYes"
+                                                        value="yes"
+                                                        onChange={(e) =>
+                                                            onChange(
+                                                                e,
+                                                                setDesignDetails
+                                                            )
                                                         }
-                                                        className="bg-transparent text-primary hover-underline"
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="designDetailsYes"
                                                     >
-                                                        + Another Reference URL
-                                                    </button>
+                                                        Yes
+                                                    </label>
                                                 </div>
 
-                                                <div className="form-group">
-                                                    <label htmlFor="ckeditor">
-                                                        Add Instraction
-                                                        <sup>*</sup>
-                                                    </label>
-                                                    <div className="ck-editor-holder">
-                                                        <CKEditorComponent
-                                                            onChange={(
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        type="radio"
+                                                        name="design_details"
+                                                        className="form-check-input"
+                                                        id="designDetailsNo"
+                                                        value="no"
+                                                        onChange={(e) =>
+                                                            onChange(
                                                                 e,
-                                                                editor
-                                                            ) =>
-                                                                setDesignRefDescription(
-                                                                    editor.getData()
+                                                                setDesignDetails
+                                                            )
+                                                        }
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="designDetailsNo"
+                                                    >
+                                                        No
+                                                    </label>
+                                                </div>
+                                                {error?.designDetials && (
+                                                    <div
+                                                        className=""
+                                                        style={{ color: "red" }}
+                                                    >
+                                                        {" "}
+                                                        {error?.designDetials}{" "}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {designDetials === "yes" && (
+                                                <div className="px-3">
+                                                    <div className="form-group mt-2">
+                                                        <label htmlFor="exampleFormControlSelect1">
+                                                            Select Design Reference
+                                                            Type<sup>*</sup>
+                                                        </label>
+                                                        <select
+                                                            className="form-control py-2"
+                                                            value={designFileType}
+                                                            onChange={(e) =>
+                                                                onChange(
+                                                                    e,
+                                                                    setDesignFileType
                                                                 )
                                                             }
-                                                        />
-                                                    </div>
-                                                    {error?.designRefDescripton && (
-                                                        <div
-                                                            className=""
-                                                            style={{
-                                                                color: "red",
-                                                            }}
+                                                            id="exampleFormControlSelect1"
                                                         >
-                                                            {" "}
-                                                            {
-                                                                error?.designRefDescripton
-                                                            }{" "}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                </React.Fragment>
-                                {/* end design provide */}
-
-                                {/* color schema */}
-                                <div className="form-group">
-                                    <label
-                                        htmlFor=""
-                                        className="font-weight-bold"
-                                        style={{ color: "#808080" }}
-                                    >
-                                        3. Color Scheme
-                                    </label>
-                                    <div className="d-block pl-3">
-                                        <div className="form-check form-check-inline">
-                                            <input
-                                                type="radio"
-                                                name="color_schema"
-                                                className="form-check-input"
-                                                id="colorSchemaYes"
-                                                value="yes"
-                                                onChange={(e) =>
-                                                    onChange(e, setColorSchema)
-                                                }
-                                            />
-                                            <label
-                                                className="form-check-label"
-                                                htmlFor="colorSchemaYes"
-                                            >
-                                                Yes
-                                            </label>
-                                        </div>
-
-                                        <div className="form-check form-check-inline">
-                                            <input
-                                                type="radio"
-                                                name="color_schema"
-                                                className="form-check-input"
-                                                id="colorSchemaNo"
-                                                value="no"
-                                                onChange={(e) =>
-                                                    onChange(e, setColorSchema)
-                                                }
-                                            />
-                                            <label
-                                                className="form-check-label"
-                                                htmlFor="colorSchemaNo"
-                                            >
-                                                No
-                                            </label>
-                                        </div>
-                                        {error?.colorSchema && (
-                                            <div
-                                                className=""
-                                                style={{ color: "red" }}
-                                            >
-                                                {" "}
-                                                {error?.colorSchema}{" "}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {colorSchema === "yes" && (
-                                        <React.Fragment>
-                                            {/* primary color */}
-                                            <div
-                                                className="mt-3 mx-3 p-3"
-                                                style={{
-                                                    background: "#F9F9F9",
-                                                    borderRadius: "10px",
-                                                }}
-                                            >
-                                                <div className="form-group">
-                                                    <label
-                                                        htmlFor=""
-                                                        className="mb-2"
-                                                        style={{
-                                                            fontWeight: 600,
-                                                            color: "#777",
-                                                        }}
-                                                    >
-                                                        1. Primary Color{" "}
-                                                        <sup>*</sup>{" "}
-                                                    </label>
-
-                                                    <div className="form-group px-2">
-                                                        <label htmlFor="">
-                                                            Choose Color:
-                                                        </label>
-                                                        <div className="input-group mb-3 col-12 col-md-6">
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                placeholder="Recipient's username"
-                                                                aria-label="Recipient's username"
-                                                                aria-describedby="basic-addon2"
-                                                                value={
-                                                                    primaryColor
-                                                                }
-                                                                onChange={(e) =>
-                                                                    onChange(
-                                                                        e,
-                                                                        setPrimaryColor
-                                                                    )
-                                                                }
-                                                            />
-                                                            <div className="input-group-append">
-                                                                <span
-                                                                    className="input-group-text px-1 border-0"
-                                                                    id="basic-addon2"
-                                                                >
-                                                                    <input
-                                                                        type="color"
-                                                                        value={
-                                                                            primaryColor
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            onChange(
-                                                                                e,
-                                                                                setPrimaryColor
-                                                                            )
-                                                                        }
-                                                                        style={{
-                                                                            width: "32px",
-                                                                            border: "none",
-                                                                        }}
-                                                                    />
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="form-group pl-2">
-                                                        <label htmlFor="">
-                                                            Where Should
-                                                            Developer Use this
-                                                            Color <sup>*</sup>
-                                                        </label>
-                                                        <div className="ck-editor-holder">
-                                                            <CKEditorComponent
-                                                                onChange={(
-                                                                    e,
-                                                                    editor
-                                                                ) =>
-                                                                    setPrimaryColorDescription(
-                                                                        editor.getData()
-                                                                    )
-                                                                }
-                                                            />
-                                                        </div>
-
-                                                        {error?.pColorDesc && (
+                                                            <option
+                                                                value="--"
+                                                                disabled
+                                                            >
+                                                                --
+                                                            </option>
+                                                            <option value="XD/Figma">
+                                                                XD/Figma
+                                                            </option>
+                                                            <option value="Photoshop">
+                                                                Photoshop
+                                                            </option>
+                                                            <option value="The Reference Site That Has to Be Clone">
+                                                                The Reference Site
+                                                                That Has To Be Clone
+                                                            </option>
+                                                        </select>
+                                                        {error?.designFileType && (
                                                             <div
                                                                 className=""
                                                                 style={{
@@ -872,80 +634,383 @@ const ProjectManagerGuideline = ({
                                                             >
                                                                 {" "}
                                                                 {
-                                                                    error?.pColorDesc
+                                                                    error?.designFileType
                                                                 }{" "}
                                                             </div>
                                                         )}
                                                     </div>
                                                 </div>
+                                            )}
+
+                                            {/* if design type xd or figma */}
+                                            {designFileType === "XD/Figma" && (
+                                                <div className="px-3">
+                                                    <div className="form-group">
+                                                        <Input
+                                                            label="XD/Figma File URL"
+                                                            error={error?.xdFigma}
+                                                            placeholder="Provide the XD/Figma File URL"
+                                                            required={true}
+                                                            value={xDOrFigmaFile}
+                                                            onChange={(e) =>
+                                                                onChange(
+                                                                    e,
+                                                                    setXDorFigmaFile
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* if design type Photoshop*/}
+                                            {designFileType === "Photoshop" && (
+                                                <div className="px-3">
+                                                    <div className="form-group">
+                                                        <Input
+                                                            label="Input Google Drive File / Folder URL"
+                                                            placeholder="Input Google Drive File / Folder URL"
+                                                            required={true}
+                                                            type="url"
+                                                            error={error?.photoshop}
+                                                            value={
+                                                                photoshopReferenceURL
+                                                            }
+                                                            onChange={(e) =>
+                                                                onChange(
+                                                                    e,
+                                                                    setPhotoshopReferenceURL
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* if design type Photoshop*/}
+                                            {designFileType ===
+                                                "The Reference Site That Has to Be Clone" && (
+                                                <div
+                                                    className="mx-3 p-3"
+                                                    style={{
+                                                        background: "#F9F9F9",
+                                                        borderRadius: "10px",
+                                                    }}
+                                                >
+                                                    <div className="form-group">
+                                                        {_.map(
+                                                            designRefURL,
+                                                            (item) => (
+                                                                <div
+                                                                    key={item.id}
+                                                                    className="multipleInputItem"
+                                                                >
+                                                                    <Input
+                                                                        label="Reference URL"
+                                                                        placeholder="Reference URL"
+                                                                        required={
+                                                                            true
+                                                                        }
+                                                                        error={
+                                                                            error?.designRef
+                                                                        }
+                                                                        value={
+                                                                            item.url
+                                                                        }
+                                                                        type="url"
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleRefUrlChange(
+                                                                                e,
+                                                                                item.id
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    {_.size(
+                                                                        designRefURL
+                                                                    ) > 1 && (
+                                                                        <button
+                                                                            aria-label="RemoveLink"
+                                                                            onClick={(
+                                                                                e
+                                                                            ) =>
+                                                                                removeDesignRef(
+                                                                                    e,
+                                                                                    item.id
+                                                                                )
+                                                                            }
+                                                                            type="button"
+                                                                            className="multipleInputItemButton"
+                                                                        >
+                                                                            <i className="fa-solid fa-trash-can" />
+                                                                        </button>
+                                                                    )}
+                                                                </div>
+                                                            )
+                                                        )}
+
+                                                        <button
+                                                            type="button"
+                                                            onClick={
+                                                                addDesignRefURL
+                                                            }
+                                                            className="bg-transparent text-primary hover-underline"
+                                                        >
+                                                            + Another Reference URL
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        <label htmlFor="ckeditor">
+                                                            Add Instraction
+                                                            <sup>*</sup>
+                                                        </label>
+                                                        <div className="ck-editor-holder">
+                                                            <CKEditorComponent
+                                                                onChange={(
+                                                                    e,
+                                                                    editor
+                                                                ) =>
+                                                                    setDesignRefDescription(
+                                                                        editor.getData()
+                                                                    )
+                                                                }
+                                                            />
+                                                        </div>
+                                                        {error?.designRefDescripton && (
+                                                            <div
+                                                                className=""
+                                                                style={{
+                                                                    color: "red",
+                                                                }}
+                                                            >
+                                                                {" "}
+                                                                {
+                                                                    error?.designRefDescripton
+                                                                }{" "}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </li>
+                                    {/* end design provide */}
+
+                                    {/* color schema */}
+                                    <li style={{listStyle: 'unset'}}>
+                                        <div className="form-group">
+                                            <label
+                                                htmlFor=""
+                                                className="font-weight-bold"
+                                                style={{ color: "#808080" }}
+                                            >
+                                                Color Scheme
+                                            </label>
+                                            <div className="d-block pl-3">
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        type="radio"
+                                                        name="color_schema"
+                                                        className="form-check-input"
+                                                        id="colorSchemaYes"
+                                                        value="yes"
+                                                        onChange={(e) =>
+                                                            onChange(e, setColorSchema)
+                                                        }
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="colorSchemaYes"
+                                                    >
+                                                        Yes
+                                                    </label>
+                                                </div>
+
+                                                <div className="form-check form-check-inline">
+                                                    <input
+                                                        type="radio"
+                                                        name="color_schema"
+                                                        className="form-check-input"
+                                                        id="colorSchemaNo"
+                                                        value="no"
+                                                        onChange={(e) =>
+                                                            onChange(e, setColorSchema)
+                                                        }
+                                                    />
+                                                    <label
+                                                        className="form-check-label"
+                                                        htmlFor="colorSchemaNo"
+                                                    >
+                                                        No
+                                                    </label>
+                                                </div>
+                                                {error?.colorSchema && (
+                                                    <div
+                                                        className=""
+                                                        style={{ color: "red" }}
+                                                    >
+                                                        {" "}
+                                                        {error?.colorSchema}{" "}
+                                                    </div>
+                                                )}
                                             </div>
 
-                                            {/* secondary color */}
-                                            <div
-                                                className="mt-3 mx-3 p-3"
-                                                style={{
-                                                    background: "#F9F9F9",
-                                                    borderRadius: "10px",
-                                                }}
-                                            >
-                                                <div className="form-group">
-                                                    <label
-                                                        htmlFor=""
-                                                        className="mb-2"
+                                            {colorSchema === "yes" && (
+                                                <React.Fragment>
+                                                    {/* primary color */}
+                                                    <div
+                                                        className="mt-3 mx-3 p-3"
                                                         style={{
-                                                            fontWeight: 600,
-                                                            color: "#777",
+                                                            background: "#F9F9F9",
+                                                            borderRadius: "10px",
                                                         }}
                                                     >
-                                                        2. Secondary Color{" "}
-                                                        <sup>*</sup>{" "}
-                                                    </label>
-
-                                                    {_.map(
-                                                        secondaryColors,
-                                                        (item, index) => (
-                                                            <div
-                                                                className="p-3"
-                                                                key={item.id}
+                                                        <div className="form-group">
+                                                            <label
+                                                                htmlFor=""
+                                                                className="mb-2"
+                                                                style={{
+                                                                    fontWeight: 600,
+                                                                    color: "#777",
+                                                                }}
                                                             >
-                                                                <div className="form-group">
-                                                                    <label htmlFor="">
-                                                                        <b>
-                                                                            {index +
-                                                                                1}
-                                                                            .
-                                                                        </b>{" "}
-                                                                        Choose
-                                                                        Color:
-                                                                    </label>
-                                                                    <div className="d-flex align-items-center">
-                                                                        <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                                1. Primary Color{" "}
+                                                                <sup>*</sup>{" "}
+                                                            </label>
+
+                                                            <div className="form-group px-2">
+                                                                <label htmlFor="">
+                                                                    Choose Color:
+                                                                </label>
+                                                                <div className="input-group mb-3 col-12 col-md-6">
+                                                                    <input
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        placeholder="Recipient's username"
+                                                                        aria-label="Recipient's username"
+                                                                        aria-describedby="basic-addon2"
+                                                                        value={
+                                                                            primaryColor
+                                                                        }
+                                                                        onChange={(e) =>
+                                                                            onChange(
+                                                                                e,
+                                                                                setPrimaryColor
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    <div className="input-group-append">
+                                                                        <span
+                                                                            className="input-group-text px-1 border-0"
+                                                                            id="basic-addon2"
+                                                                        >
                                                                             <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                placeholder="Recipient's username"
-                                                                                aria-label="Recipient's username"
-                                                                                aria-describedby="basic-addon2"
+                                                                                type="color"
                                                                                 value={
-                                                                                    item.color
+                                                                                    primaryColor
                                                                                 }
                                                                                 onChange={(
                                                                                     e
                                                                                 ) =>
-                                                                                    handleSecondaryColorChange(
+                                                                                    onChange(
                                                                                         e,
-                                                                                        item.id
+                                                                                        setPrimaryColor
                                                                                     )
                                                                                 }
+                                                                                style={{
+                                                                                    width: "32px",
+                                                                                    border: "none",
+                                                                                }}
                                                                             />
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
 
-                                                                            <div className="input-group-append">
-                                                                                <span
-                                                                                    className="input-group-text px-1 border-0"
-                                                                                    id="basic-addon2"
-                                                                                >
+                                                            <div className="form-group pl-2">
+                                                                <label htmlFor="">
+                                                                    Where Should
+                                                                    Developer Use this
+                                                                    Color <sup>*</sup>
+                                                                </label>
+                                                                <div className="ck-editor-holder">
+                                                                    <CKEditorComponent
+                                                                        onChange={(
+                                                                            e,
+                                                                            editor
+                                                                        ) =>
+                                                                            setPrimaryColorDescription(
+                                                                                editor.getData()
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </div>
+
+                                                                {error?.pColorDesc && (
+                                                                    <div
+                                                                        className=""
+                                                                        style={{
+                                                                            color: "red",
+                                                                        }}
+                                                                    >
+                                                                        {" "}
+                                                                        {
+                                                                            error?.pColorDesc
+                                                                        }{" "}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* secondary color */}
+                                                    <div
+                                                        className="mt-3 mx-3 p-3"
+                                                        style={{
+                                                            background: "#F9F9F9",
+                                                            borderRadius: "10px",
+                                                        }}
+                                                    >
+                                                        <div className="form-group">
+                                                            <label
+                                                                htmlFor=""
+                                                                className="mb-2"
+                                                                style={{
+                                                                    fontWeight: 600,
+                                                                    color: "#777",
+                                                                }}
+                                                            >
+                                                                2. Secondary Color{" "}
+                                                                <sup>*</sup>{" "}
+                                                            </label>
+
+                                                            {_.map(
+                                                                secondaryColors,
+                                                                (item, index) => (
+                                                                    <div
+                                                                        className="p-3"
+                                                                        key={item.id}
+                                                                    >
+                                                                        <div className="form-group">
+                                                                            <label htmlFor="">
+                                                                                <b>
+                                                                                    {index +
+                                                                                        1}
+                                                                                    .
+                                                                                </b>{" "}
+                                                                                Choose
+                                                                                Color:
+                                                                            </label>
+                                                                            <div className="d-flex align-items-center">
+                                                                                <div className="input-group mb-3 pl-3 col-10 col-md-6">
                                                                                     <input
-                                                                                        type="color"
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        placeholder="Recipient's username"
+                                                                                        aria-label="Recipient's username"
+                                                                                        aria-describedby="basic-addon2"
                                                                                         value={
                                                                                             item.color
                                                                                         }
@@ -957,47 +1022,248 @@ const ProjectManagerGuideline = ({
                                                                                                 item.id
                                                                                             )
                                                                                         }
-                                                                                        style={{
-                                                                                            width: "32px",
-                                                                                            border: "none",
-                                                                                        }}
                                                                                     />
-                                                                                </span>
+
+                                                                                    <div className="input-group-append">
+                                                                                        <span
+                                                                                            className="input-group-text px-1 border-0"
+                                                                                            id="basic-addon2"
+                                                                                        >
+                                                                                            <input
+                                                                                                type="color"
+                                                                                                value={
+                                                                                                    item.color
+                                                                                                }
+                                                                                                onChange={(
+                                                                                                    e
+                                                                                                ) =>
+                                                                                                    handleSecondaryColorChange(
+                                                                                                        e,
+                                                                                                        item.id
+                                                                                                    )
+                                                                                                }
+                                                                                                style={{
+                                                                                                    width: "32px",
+                                                                                                    border: "none",
+                                                                                                }}
+                                                                                            />
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                {_.size(
+                                                                                    secondaryColors
+                                                                                ) >
+                                                                                    1 && (
+                                                                                    <button
+                                                                                        aria-label="remove"
+                                                                                        onClick={(
+                                                                                            e
+                                                                                        ) =>
+                                                                                            removeSecondaryColor(
+                                                                                                e,
+                                                                                                item.id
+                                                                                            )
+                                                                                        }
+                                                                                        className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                                    >
+                                                                                        <i className="fa-solid fa-trash-can" />
+                                                                                    </button>
+                                                                                )}
                                                                             </div>
                                                                         </div>
 
-                                                                        {_.size(
-                                                                            secondaryColors
-                                                                        ) >
-                                                                            1 && (
-                                                                            <button
-                                                                                aria-label="remove"
-                                                                                onClick={(
-                                                                                    e
-                                                                                ) =>
-                                                                                    removeSecondaryColor(
+                                                                        <div className="form-group pl-3">
+                                                                            <label htmlFor="">
+                                                                                Where
+                                                                                Should
+                                                                                Developer
+                                                                                Use this
+                                                                                Color{" "}
+                                                                                <sup>
+                                                                                    *
+                                                                                </sup>
+                                                                            </label>
+                                                                            <div className="ck-editor-holder">
+                                                                                <CKEditorComponent
+                                                                                    onChange={(
                                                                                         e,
-                                                                                        item.id
-                                                                                    )
-                                                                                }
-                                                                                className="py-2 px-3 ml-auto rounded color_remove_btn"
-                                                                            >
-                                                                                <i className="fa-solid fa-trash-can" />
-                                                                            </button>
-                                                                        )}
-                                                                    </div>
-                                                                </div>
+                                                                                        editor
+                                                                                    ) =>
+                                                                                        handleSecondaryColorDescriptionChange(
+                                                                                            e,
+                                                                                            editor,
+                                                                                            item.id
+                                                                                        )
+                                                                                    }
+                                                                                />
+                                                                            </div>
 
-                                                                <div className="form-group pl-3">
+                                                                            {error?.sDescription && (
+                                                                                <div
+                                                                                    className=""
+                                                                                    style={{
+                                                                                        color: "red",
+                                                                                    }}
+                                                                                >
+                                                                                    {" "}
+                                                                                    {
+                                                                                        error?.sDescription
+                                                                                    }{" "}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            )}
+
+                                                            <div className="d-flex align-items-center px-3">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={
+                                                                        addSecondaryColor
+                                                                    }
+                                                                    className="bg-transparent text-primary hover-underline ml-auto"
+                                                                >
+                                                                    + Another Color
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </React.Fragment>
+                                            )}
+                                        </div>
+                                    </li>
+                                    {/* end color schema */}
+
+                                    {/* Plugin Research */}
+                                    <Switch.Case condition={taskType === 'development'}>
+                                        <li style={{listStyle: 'unset'}}>
+                                            <div className="form-group">
+                                                <label
+                                                    htmlFor=""
+                                                    className="font-weight-bold"
+                                                    style={{ color: "#808080" }}
+                                                >
+                                                Plugin Research
+                                                </label>
+                                                <div className="d-block pl-3">
+                                                    <div className="form-check form-check-inline">
+                                                        <input
+                                                            type="radio"
+                                                            name="plugin"
+                                                            className="form-check-input"
+                                                            id="pluginYes"
+                                                            value="yes"
+                                                            onChange={(e) =>
+                                                                onChange(e, setPlugin)
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="form-check-label"
+                                                            htmlFor="pluginYes"
+                                                        >
+                                                            Yes
+                                                        </label>
+                                                    </div>
+
+                                                    <div className="form-check form-check-inline">
+                                                        <input
+                                                            type="radio"
+                                                            name="plugin"
+                                                            className="form-check-input"
+                                                            id="pluginNo"
+                                                            value="no"
+                                                            onChange={(e) =>
+                                                                onChange(e, setPlugin)
+                                                            }
+                                                        />
+                                                        <label
+                                                            className="form-check-label"
+                                                            htmlFor="pluginNo"
+                                                        >
+                                                            No
+                                                        </label>
+                                                    </div>
+                                                    {error?.plugin && (
+                                                        <div
+                                                            className=""
+                                                            style={{ color: "red" }}
+                                                        >
+                                                            {" "}
+                                                            {error?.plugin}{" "}
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {plugin === "yes" && (
+                                                    <div
+                                                        className="mt-3 mx-3 p-3"
+                                                        style={{
+                                                            background: "#F9F9F9",
+                                                            borderRadius: "10px",
+                                                        }}
+                                                    >
+                                                        <div className="row">
+                                                            <div className="col-12 col-md-4">
+                                                                <Input
+                                                                    label="Plugin Name"
+                                                                    required={true}
+                                                                    placeholder="Enter Plugin Name"
+                                                                    value={pluginName}
+                                                                    onChange={(e) =>
+                                                                        onChange(
+                                                                            e,
+                                                                            setPluginName
+                                                                        )
+                                                                    }
+                                                                    error={
+                                                                        error?.pluginName
+                                                                    }
+                                                                />
+                                                            </div>
+                                                            <div className="col-12 col-md-4">
+                                                                <Input
+                                                                    label="Plugin URL"
+                                                                    required={true}
+                                                                    type="url"
+                                                                    placeholder="Enter Plugin URL"
+                                                                    error={error?.pluginURL}
+                                                                    value={pluginURL}
+                                                                    onChange={(e) =>
+                                                                        onChange(
+                                                                            e,
+                                                                            setPluginURL
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </div>
+                                                            <div className="col-12 col-md-4">
+                                                                <Input
+                                                                    label="Share Google Drive Link"
+                                                                    required={true}
+                                                                    type="url"
+                                                                    error={
+                                                                        error?.pluginGoogleDrive
+                                                                    }
+                                                                    placeholder="Share Google Drive Link"
+                                                                    value={
+                                                                        pluginGoogleDrive
+                                                                    }
+                                                                    onChange={(e) =>
+                                                                        onChange(
+                                                                            e,
+                                                                            setPluginGoogleDrive
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </div>
+                                                            <div className="col-12">
+                                                                <div className="form-group">
                                                                     <label htmlFor="">
-                                                                        Where
-                                                                        Should
-                                                                        Developer
-                                                                        Use this
-                                                                        Color{" "}
-                                                                        <sup>
-                                                                            *
-                                                                        </sup>
+                                                                        Write Instruction
+                                                                        for Using This
+                                                                        Plugin
                                                                     </label>
                                                                     <div className="ck-editor-holder">
                                                                         <CKEditorComponent
@@ -1005,16 +1271,14 @@ const ProjectManagerGuideline = ({
                                                                                 e,
                                                                                 editor
                                                                             ) =>
-                                                                                handleSecondaryColorDescriptionChange(
-                                                                                    e,
-                                                                                    editor,
-                                                                                    item.id
+                                                                                setPluginDescription(
+                                                                                    editor.getData()
                                                                                 )
                                                                             }
                                                                         />
                                                                     </div>
 
-                                                                    {error?.sDescription && (
+                                                                    {error?.pluginDescription && (
                                                                         <div
                                                                             className=""
                                                                             style={{
@@ -1023,210 +1287,37 @@ const ProjectManagerGuideline = ({
                                                                         >
                                                                             {" "}
                                                                             {
-                                                                                error?.sDescription
+                                                                                error?.pluginDescription
                                                                             }{" "}
                                                                         </div>
                                                                     )}
                                                                 </div>
                                                             </div>
-                                                        )
-                                                    )}
-
-                                                    <div className="d-flex align-items-center px-3">
-                                                        <button
-                                                            type="button"
-                                                            onClick={
-                                                                addSecondaryColor
-                                                            }
-                                                            className="bg-transparent text-primary hover-underline ml-auto"
-                                                        >
-                                                            + Another Color
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </React.Fragment>
-                                    )}
-                                </div>
-                                {/* end color schema */}
-
-                                {/* Plugin Research */}
-                                <div className="form-group">
-                                    <label
-                                        htmlFor=""
-                                        className="font-weight-bold"
-                                        style={{ color: "#808080" }}
-                                    >
-                                        4. Plugin Research
-                                    </label>
-                                    <div className="d-block pl-3">
-                                        <div className="form-check form-check-inline">
-                                            <input
-                                                type="radio"
-                                                name="plugin"
-                                                className="form-check-input"
-                                                id="pluginYes"
-                                                value="yes"
-                                                onChange={(e) =>
-                                                    onChange(e, setPlugin)
-                                                }
-                                            />
-                                            <label
-                                                className="form-check-label"
-                                                htmlFor="pluginYes"
-                                            >
-                                                Yes
-                                            </label>
-                                        </div>
-
-                                        <div className="form-check form-check-inline">
-                                            <input
-                                                type="radio"
-                                                name="plugin"
-                                                className="form-check-input"
-                                                id="pluginNo"
-                                                value="no"
-                                                onChange={(e) =>
-                                                    onChange(e, setPlugin)
-                                                }
-                                            />
-                                            <label
-                                                className="form-check-label"
-                                                htmlFor="pluginNo"
-                                            >
-                                                No
-                                            </label>
-                                        </div>
-                                        {error?.plugin && (
-                                            <div
-                                                className=""
-                                                style={{ color: "red" }}
-                                            >
-                                                {" "}
-                                                {error?.plugin}{" "}
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {plugin === "yes" && (
-                                        <div
-                                            className="mt-3 mx-3 p-3"
-                                            style={{
-                                                background: "#F9F9F9",
-                                                borderRadius: "10px",
-                                            }}
-                                        >
-                                            <div className="row">
-                                                <div className="col-12 col-md-4">
-                                                    <Input
-                                                        label="Plugin Name"
-                                                        required={true}
-                                                        placeholder="Enter Plugin Name"
-                                                        value={pluginName}
-                                                        onChange={(e) =>
-                                                            onChange(
-                                                                e,
-                                                                setPluginName
-                                                            )
-                                                        }
-                                                        error={
-                                                            error?.pluginName
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-md-4">
-                                                    <Input
-                                                        label="Plugin URL"
-                                                        required={true}
-                                                        type="url"
-                                                        placeholder="Enter Plugin URL"
-                                                        error={error?.pluginURL}
-                                                        value={pluginURL}
-                                                        onChange={(e) =>
-                                                            onChange(
-                                                                e,
-                                                                setPluginURL
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="col-12 col-md-4">
-                                                    <Input
-                                                        label="Share Google Drive Link"
-                                                        required={true}
-                                                        type="url"
-                                                        error={
-                                                            error?.pluginGoogleDrive
-                                                        }
-                                                        placeholder="Share Google Drive Link"
-                                                        value={
-                                                            pluginGoogleDrive
-                                                        }
-                                                        onChange={(e) =>
-                                                            onChange(
-                                                                e,
-                                                                setPluginGoogleDrive
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                                <div className="col-12">
-                                                    <div className="form-group">
-                                                        <label htmlFor="">
-                                                            Write Instruction
-                                                            for Using This
-                                                            Plugin
-                                                        </label>
-                                                        <div className="ck-editor-holder">
-                                                            <CKEditorComponent
-                                                                onChange={(
-                                                                    e,
-                                                                    editor
-                                                                ) =>
-                                                                    setPluginDescription(
-                                                                        editor.getData()
-                                                                    )
-                                                                }
-                                                            />
                                                         </div>
-
-                                                        {error?.pluginDescription && (
-                                                            <div
-                                                                className=""
-                                                                style={{
-                                                                    color: "red",
-                                                                }}
-                                                            >
-                                                                {" "}
-                                                                {
-                                                                    error?.pluginDescription
-                                                                }{" "}
-                                                            </div>
-                                                        )}
                                                     </div>
-                                                </div>
+                                                )}
                                             </div>
-                                        </div>
-                                    )}
-                                </div>
-                                {/* End Plugin Research */}
+                                        </li>
+                                    </Switch.Case>
+                                    {/* End Plugin Research */}
 
-                                <div className="d-flex align-items-center justify-content-end">
-                                    <Button
-                                        onClick={close}
-                                        variant="tertiary"
-                                        className="mr-2"
-                                    >
-                                        Close
-                                    </Button>
+                                    <div className="d-flex align-items-center justify-content-end">
+                                        <Button
+                                            onClick={close}
+                                            variant="tertiary"
+                                            className="mr-2"
+                                        >
+                                            Close
+                                        </Button>
 
-                                    <SubmitButton
-                                        title="Submit"
-                                        onClick={handleSubmit}
-                                        isLoading={isLoading}
-                                    />
-                                </div>
-                            </div>
+                                        <SubmitButton
+                                            title="Submit"
+                                            onClick={handleSubmit}
+                                            isLoading={isLoading}
+                                        />
+                                    </div>
+                                </ol>
+                           </Switch>
                         </div>
                         {/* end body */}
                     </div>

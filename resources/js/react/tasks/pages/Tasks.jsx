@@ -138,6 +138,7 @@ const Tasks = () => {
 
                     </div>
 
+
                     <TasksTable
                         isLoading={isFetching}
                         filter={filter}
@@ -148,6 +149,8 @@ const Tasks = () => {
                         columnVisibility = {columnVisibility}
                         setColumnVisibility = {setColumnVisibility}
                     />
+
+                    
                 </div>
             </div>
             <PrimaryPageAuthorizationTable />

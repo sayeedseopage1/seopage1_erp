@@ -16,6 +16,7 @@ use App\Models\TaskRevision;
 use App\Models\TaskRevisionDispute;
 use App\Models\Task;
 use App\Models\Taskuser;
+use App\Models\ProjectMember;
 
 class HelperPendingActionController extends AccountBaseController
 {
@@ -434,7 +435,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',8)->get();
+            $authorizers= User::where('role_id',1)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'DFA';
@@ -475,7 +476,7 @@ class HelperPendingActionController extends AccountBaseController
             $client= User::where('id',$project->client_id)->first();
             $project_manager= User::where('id',$project->pm_id)->first();
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
-            $authorizers= User::where('role_id',1)->get();
+            $authorizers= User::where('role_id',8)->get();
                foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'TDA';
@@ -1109,15 +1110,11 @@ class HelperPendingActionController extends AccountBaseController
     $client= User::where('id',$project->client_id)->first();
    
     $commentor= User::where('id',$commentor)->first();
-    if($commentor->role_id == 4)
-    {
-        $authorizers= TaskUser::where('task_id',$task->id)->get();
+   
+        $authorizers= ProjectMember::where('project_id',$task->project_id)->where('user_id','!=',Auth::id())->groupBy('user_id')->get();
+       // dd($authorizers);
 
-    }else 
-    {
-        $authorizers= User::where('id',$project->pm_id)->get();
-
-    }
+   
    // dd($authorizers);
    
     
@@ -1132,53 +1129,42 @@ class HelperPendingActionController extends AccountBaseController
      $action->project_id = $project->id;
      $action->client_id = $client->id;
      $action->task_id = $task->id;
-     $action->authorization_for= $authorizer->id;
+     $action->authorization_for= $authorizer->user_id;
      $button = [
          [
              'button_name' => 'View and Reply',
              'button_color' => 'primary',
              'button_type' => 'modal',
              'button_url' => '',
-             'modal_form'=> true,
-             'form'=> [
-                 [
-                     'type'=> 'textarea',
-                     'label'=>'Write a reply',
-                     'name'=>'reply',
-                     'required'=> true,
-                 ], 
-                 [
-                     'type'=> 'hidden',
-                      'value'=> $task->id,
-                      'readonly'=> true,
+             'modal_form'=> false,
+            //  'form'=> [
+            //      [
+            //          'type'=> 'textarea',
+            //          'label'=>'Write a reply',
+            //          'name'=>'reply',
+            //          'required'=> true,
+            //      ], 
+            //      [
+            //          'type'=> 'hidden',
+            //           'value'=> $task->id,
+            //           'readonly'=> true,
                     
-                     'name'=>'project_id',
-                     'required'=> true,
-                 ], 
-                  [
-                     'type'=> 'hidden',
-                     'value'=> $action->id,
-                     'readonly'=> true,
+            //          'name'=>'project_id',
+            //          'required'=> true,
+            //      ], 
+            //       [
+            //          'type'=> 'hidden',
+            //          'value'=> $action->id,
+            //          'readonly'=> true,
                      
-                     'name'=>'authorization_id',
+            //          'name'=>'authorization_id',
                     
-                     'required'=> true,
+            //          'required'=> true,
                      
-                 ], 
+            //      ], 
                  
-             ], 
-             'form_action'=> [
-                 [
-                     'type'=> 'button',
-                     'method'=>'POST',
-                     'label'=> 'Reply',
-                     'color'=> 'success',
-                     'url'=> '',
-
-                 ], 
-                
-                 
-             ]
+            //  ], 
+            
          ],
          [
             'button_name' => 'Not relevant to me',
@@ -1655,7 +1641,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->message = 'Deadline for your project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next ';
                if($difference_in_hours > 0)
                {
-                $action->timeframe= $difference_in_hours +24;
+                $action->timeframe= $difference_in_hours;
 
                }else 
                {
@@ -1701,7 +1687,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->message = 'Deadline for your task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will be over in the next';
                 if($difference_in_hours > 0)
                 {
-                 $action->timeframe= $difference_in_hours+24;
+                 $action->timeframe= $difference_in_hours;
  
                 }else 
                 {

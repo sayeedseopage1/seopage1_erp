@@ -6,10 +6,10 @@
 @endpush
 
 @section('filter-section')
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-<link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css"> --}}
 
-    <x-filters.filter-box>
+    {{-- <x-filters.filter-box>
         <!-- DATE START -->
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
@@ -107,10 +107,11 @@
             </x-forms.button-secondary>
         </div>
         <!-- RESET END -->
-    </x-filters.filter-box>
+    </x-filters.filter-box> --}}
 
 
-
+    <!-- Deals Table filter  -->
+    <div id="dealTableFilterBarContainer"></div>
 @endsection
 
 @php
@@ -122,7 +123,15 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 @section('content')
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
-        <!-- Add Task Export Buttons Start -->
+
+
+    <!-- Table container -->
+    <div id="dealPageContainer">`
+        <!-- Code here... -->
+    </div>
+
+        
+        {{-- <!-- Add Task Export Buttons Start -->
         <div class="d-flex justify-content-between action-bar">
 
             <div id="table-actions" class="d-flex align-items-center">
@@ -134,8 +143,8 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                     {{-- <x-forms.link-secondary :link="route('deals.create')" class="mr-3" icon="user">
                         @lang('Authorization Request')
                     </x-forms.link-secondary> --}}
-                    @endif
-                @endif
+                    {{-- @endif --}}
+                {{-- @endif --}}
 
               {{--  @if ($manageContractTemplatePermission == 'all' || $manageContractTemplatePermission == 'added')
                     <x-forms.link-secondary :link="route('contract-template.index')"
@@ -143,9 +152,9 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                         @lang('app.menu.contractTemplate')
                     </x-forms.link-secondary>
                 @endif --}}
-            </div>
+            {{-- </div> --}} 
 
-            @if (!in_array('client', user_roles()))
+            {{-- @if (!in_array('client', user_roles()))
                 <x-datatable.actions>
                     <div class="select-status mr-3 pl-3">
                         <select name="action_type" class="form-control select-picker" id="quick-action-type" disabled>
@@ -154,9 +163,9 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                         </select>
                     </div>
                 </x-datatable.actions>
-            @endif
+            @endif --}}
 
-
+{{-- 
         </div>
         <div class="d-flex justify-content-end">
           <div class="btn-group  ml-0 ml-lg-3 ml-md-3" role="group">
@@ -166,25 +175,25 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
               <a href="{{ route('dealboards.index') }}" class="btn btn-secondary f-14" data-toggle="tooltip" data-original-title="@lang('modules.lead.kanbanboard')"><i class="side-icon bi bi-kanban"></i></a>
           </div>
 
-        </div>
+        </div> --}}
 
 
         <!-- Add Task Export Buttons End -->
 
         <!-- Task Box Start -->
-        <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+        {{-- <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
 
             {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
 
-        </div>
+        </div> --}}
         <!-- Task Box End -->
-    </div>
+    {{-- </div> --}}
     <!-- CONTENT WRAPPER END -->
 
 @endsection
 
 
-@push('scripts')
+{{-- @push('scripts')
     @include('sections.datatable_js')
     <script>
 
@@ -388,4 +397,4 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
     });
     </script>
 
-@endpush
+@endpush --}}

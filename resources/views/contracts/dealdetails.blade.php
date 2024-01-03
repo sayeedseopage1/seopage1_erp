@@ -953,6 +953,8 @@
             for (var i = 0; i < message_links.length; i++) {
                 message_links_values.push(message_links[i].value);
             }
+            var deal_category = document.getElementById("deal_category").value;
+            var cms_id = deal_category=="Web Development" ? document.getElementById("cms_id").value : null;
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'project_name': document.getElementById("project_name").value,
@@ -963,8 +965,8 @@
                 'organization': document.getElementById("organization").value,
                 'client_email': document.getElementById("client_email").value,
                 'profile_link': document.getElementById("profile_link").value,
-                'deal_category': document.getElementById("deal_category").value,
-                'cms_id': document.getElementById("cms_id").value,
+                'deal_category': deal_category,
+                'cms_id': cms_id,
                 'message_link': message_links_values,
                 'description2': description2,
                 'description3': description3,
@@ -1131,6 +1133,8 @@
             for (var i = 0; i < message_links.length; i++) {
                 message_links_values.push(message_links[i].value);
             }
+            var deal_category = document.getElementById("deal_category").value;
+            var cms_id = deal_category=="Web Development" ? document.getElementById("cms_id").value : null;
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'project_name': document.getElementById("project_name").value,
@@ -1147,8 +1151,8 @@
                 'client_email': document.getElementById("client_email").value,
                 'profile_link': document.getElementById("profile_link").value,
                 'long_project': document.getElementById("long_project").value,
-                'deal_category': document.getElementById("deal_category").value,
-                'cms_id': document.getElementById("cms_id").value,
+                'deal_category': deal_category,
+                'cms_id': cms_id,
                 'hubstaff_tracking': hubstaff_tracking,
                 'message_link': message_links_values,
                 'description2': description2,

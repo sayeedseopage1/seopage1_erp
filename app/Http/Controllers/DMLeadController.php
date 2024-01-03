@@ -52,7 +52,7 @@ class DMLeadController extends AccountBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(DMLeadsDatatable $dataTable)
+    public function index(Request $request)
     {
         
         $this->viewLeadPermission = $viewPermission = user()->permission('view_lead');
@@ -106,7 +106,7 @@ class DMLeadController extends AccountBaseController
 
         }
 
-        return $dataTable->render('dm-lead.index', $this->data);
+        return view('dm-lead.index', $this->data);
 
     }
 
@@ -149,6 +149,21 @@ class DMLeadController extends AccountBaseController
 
     }
 
+    public function storeDmLeadSource(Request $request){
+        $request->validate([
+            'lead_source' => 'required',
+        ], [
+            'lead_source.required' => 'Please select lead source!',
+        ]);
+
+        $lead_s = new Lead();
+        $lead_s->lead_source = $request->lead_source;
+        $lead_s->save();
+
+        return response()->json(['status'=>200]);
+
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -167,14 +182,12 @@ class DMLeadController extends AccountBaseController
                 'bid_value' => 'required',
                 'bid_value2' => 'required',
                 'value' => 'required',
-                'lead_source' => 'required',
                 'project_type' => 'required',
                 'description' => 'required',
                 'cover_letter' => 'required',
             ], [
                 'client_name.required' => 'Please enter the project name!',
                 'country.required' => 'Please select client country!',
-                'lead_source.required' => 'Please select lead source!',
                 'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
                 'deadline.required' => 'Please select project deadline from Freelancer.com!',
                 'original_currency_id.required' => 'Please select correct currency!',
@@ -195,7 +208,6 @@ class DMLeadController extends AccountBaseController
                 'bid_value' => 'required',
                 'bid_value2' => 'required',
                 'value' => 'required',
-                'lead_source' => 'required',
                 'project_type' => 'required',
                 'description' => 'required',
                 'cover_letter' => 'required',
@@ -203,7 +215,6 @@ class DMLeadController extends AccountBaseController
                 'client_name.required' => 'Please enter the project name!',
                 'project_type.required' => 'The project type field is required!',
                 'country.required' => 'Please select client country!',
-                'lead_source.required' => 'Please select lead source!',
                 'project_link.required' => 'Please enter correct project link (Freelancer.com) with https!',
                 'original_currency_id.required' => 'Please select correct currency!',
                 'bid_value.required' => 'Please enter minimum project budget!',
@@ -239,7 +250,7 @@ class DMLeadController extends AccountBaseController
             $sales_count->save();
 
         }
-        $lead = new Lead();
+        $lead = Lead::where('id',$request->lead_id)->first();
         $lead->client_name= $request->client_name;
         $lead->project_id= $request->project_id;
         $lead->project_link= $request->project_link;
@@ -258,9 +269,9 @@ class DMLeadController extends AccountBaseController
         $lead->currency_id= 1;
         $lead->cover_letter= $request->cover_letter;
         $lead->status= 'DM';
-        $lead->lead_source= $request->lead_source;
 
         $lead->save();
+
         $lead_agent= new LeadAgent();
         $lead_agent->user_id= Auth::id();
         $lead_agent->status= "enabled";
@@ -507,6 +518,7 @@ class DMLeadController extends AccountBaseController
     }
     public function dmDealStageChange(Request $request)
     {
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
             'client_username' => 'required|max:255',
             'profile_link' => 'required',
@@ -797,4 +809,191 @@ class DMLeadController extends AccountBaseController
             'deal_id' => $deal->id,
         ]);
     }
+
+
+    public function getDmLead(Request $request)
+    {
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $lead_source = $request->lead_source ?? null;
+        $convert_status = $request->convert_status;
+        $limit = $request->limit ??  10;
+
+        $leadsQuery = Lead::select(
+            'leads.id',
+            'leads.added_by',
+            'leads.client_id',
+            'leads.category_id',
+            'leads.lead_source',
+            'client_name',
+            'actual_value',
+            'bidding_minutes',
+            'bidding_seconds',
+            'bid_value',
+            'bid_value2',
+            'project_link',
+            'project_id',
+            'company_name',
+            'lead_status.type as statusName',
+            'lead_status.label_color as lead_status_label_color',
+            'status_id',
+            'deal_status',
+            'currency_id',
+            'original_currency_id',
+            'leads.created_at as lead_created_at',
+            'users.name as agent_name',
+            'users.image',
+            'currencies.currency_symbol as currency_symbol',
+        )
+            ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+            ->leftJoin('users', 'users.id', 'leads.added_by')
+            ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+            ->where('leads.status','DM');
+
+            if ($startDate !== null && $endDate !== null) {
+                $leadsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->search != '') {
+                $leadsQuery->where(function ($query) {
+                    $query->where('leads.client_name', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.company_name', 'like', '%' . request('search') . '%')
+    
+                    ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.project_id', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.actual_value', 'like', '%' . request('search') . '%')
+                    ->orWhere('users.name', 'like', '%' . request('search') . '%');
+                });
+            }
+            if ($request->sales_executive_id != '') {
+                $leadsQuery->where('leads.added_by',$request->sales_executive_id);
+            }
+            if ($lead_source != '') {
+                $leadsQuery->where('leads.lead_source',$lead_source);
+            }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
+            }
+
+            $leads = $leadsQuery
+                ->orderBy('leads.id', 'desc')
+                ->paginate($limit);
+
+        $dealStages = DealStage::whereIn('lead_id', $leads->pluck('id'))->get();
+
+        foreach ($leads as $lead) {
+            $wonLost = 0;
+            $leadDealStages = $dealStages->where('lead_id', $lead->id);
+
+            if ($leadDealStages->isNotEmpty()) {
+                $latestDealStage = $leadDealStages->sortByDesc('created_at')->first();
+
+                if ($latestDealStage->deal_status == 'pending' && $latestDealStage->won_lost == 'Yes') {
+                    $wonLost = 1;
+                } elseif ($latestDealStage->deal_status == 'Lost') {
+                    $wonLost = 2;
+                } elseif ($latestDealStage->deal_status == 'pending' && ($latestDealStage->won_lost == 'No' || $latestDealStage->won_lost == null)) {
+                    $wonLost = 3;
+                }
+            }
+
+            $lead->won_lost = $wonLost;
+        }
+
+
+        return response()->json([
+            'data' => $leads,
+            'status' => 200
+        ]);
+    }
+
+
+    public function exportDmLead(Request $request)
+    {
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $lead_source = $request->lead_source ?? null;
+        $convert_status = $request->convert_status;
+
+        $leadsQuery = Lead::select(
+            'leads.id',
+            'leads.added_by',
+            'leads.client_id',
+            'leads.category_id',
+            'leads.lead_source',
+            'client_name',
+            'actual_value',
+            'bidding_minutes',
+            'bidding_seconds',
+            'bid_value',
+            'bid_value2',
+            'project_link',
+            'project_id',
+            'company_name',
+            'lead_status.type as statusName',
+            'lead_status.label_color as lead_status_label_color',
+            'status_id',
+            'deal_status',
+            'currency_id',
+            'original_currency_id',
+            'leads.created_at as lead_created_at',
+            'users.name as agent_name',
+            'users.image',
+            'currencies.currency_symbol as currency_symbol',
+        )
+            ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+            ->leftJoin('users', 'users.id', 'leads.added_by')
+            ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+            ->where('leads.status','DM');
+
+            if ($startDate !== null && $endDate !== null) {
+                $leadsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->sales_executive_id != '') {
+                $leadsQuery->where('leads.added_by',$request->sales_executive_id);
+            }
+            if ($lead_source != '') {
+                $leadsQuery->where('leads.lead_source',$lead_source);
+            }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
+            }
+
+            $leads = $leadsQuery
+                ->orderBy('leads.id', 'desc')
+                ->get();
+
+                $dealStages = DealStage::whereIn('lead_id', $leads->pluck('id'))->get();
+
+            foreach ($leads as $lead) {
+                $wonLost = 0;
+                $leadDealStages = $dealStages->where('lead_id', $lead->id);
+
+                if ($leadDealStages->isNotEmpty()) {
+                    $latestDealStage = $leadDealStages->sortByDesc('created_at')->first();
+
+                    if ($latestDealStage->deal_status == 'pending' && $latestDealStage->won_lost == 'Yes') {
+                        $wonLost = 1;
+                    } elseif ($latestDealStage->deal_status == 'Lost') {
+                        $wonLost = 2;
+                    } elseif ($latestDealStage->deal_status == 'pending' && ($latestDealStage->won_lost == 'No' || $latestDealStage->won_lost == null)) {
+                        $wonLost = 3;
+                    }
+                }
+
+                $lead->won_lost = $wonLost;
+            }
+
+        return response()->json([
+            'data' => $leads,
+            'status' => 200
+        ]);
+    }
+
+
 }

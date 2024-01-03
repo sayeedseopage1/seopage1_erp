@@ -233,7 +233,7 @@
         //     })
         // })
 
-        /*$('#leads-table').on('preXhr.dt', function(e, settings, data) {
+        $('#leads-table').on('preXhr.dt', function(e, settings, data) {
 
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
             var startDate = $('#datatableRange').val();
@@ -260,7 +260,7 @@
 
             data['date_filter_on'] = date_filter_on;
             // showTable()
-        });*/
+        });
 
     </script>
 @endpush

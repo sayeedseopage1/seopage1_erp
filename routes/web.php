@@ -783,6 +783,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/comments/{comment_id}/preview', [TaskController::class, 'previewTaskComment']);
     Route::delete('tasks/{task_id}/comments/{comment_id}/delete-attach-file', [TaskController::class, 'deleteOldFile']);
     Route::delete('tasks/comments/{comment_id}/delete', [TaskController::class, 'deleteComment']);
+    Route::post('tasks-comment-delete', [TaskController::class, 'multipleCommentDelete']);
 
     // SUBMIT TASK FOR CLIENT APPROVAL
     Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');
@@ -943,12 +944,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
 
+    Route::get('get-all-leads', [LeadController::class,'getLead']);
+    Route::get('export-lead-data', [LeadController::class,'exportLead']);
 
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
     Route::resource('digital-marketing-lead',DMLeadController::class);
+    Route::post('/dm-lead-source-store', [DMLeadController::class, 'storeDmLeadSource'])->name('store-dm-lead-source');
     Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
     Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
+    Route::get('get-all-dm-leads', [DMLeadController::class,'getDmLead']);
+    Route::get('export-dm-lead-data', [DMLeadController::class,'exportDmLead']);
 
 
     /*=========================> DIGITAL MERKTING LEAD END <===========================*/
@@ -1186,6 +1192,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('contracts/apply-quick-action', [ContractController::class, 'applyQuickAction'])->name('contracts.apply_quick_action');
     Route::get('contracts/download/{id}', [ContractController::class, 'download'])->name('contracts.download');
     Route::post('contracts/sign/{id}', [ContractController::class, 'sign'])->name('contracts.sign');
+    Route::get('get-contracts-data', [ContractController::class, 'getAllContracts']);
+    Route::get('export-contracts-data', [ContractController::class, 'exportContracts']);
     Route::group(
         ['prefix' => 'contracts'],
         function () {
@@ -1199,12 +1207,21 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contracts', ContractController::class);
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
+    Route::get('get-deal-data', [DealController::class,'getDealData']);
+    Route::get('export-deal-data', [DealController::class,'exportDeal']);
+
+
+    /**ALL Currencie API START*/
+    Route::get('get-all-currencies', [DealController::class,'getAllCurrencie']);
+    /**ALL Currencie API END*/
 
     /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
 
     Route::resource('dm-contracts', DMContractController::class);
     Route::post('dm-contracts/deal-store', [DMContractController::class, 'storeDMDeal'])->name('dm-store-deals');
     Route::get('dm-deal-url/{id}', [DMContractController::class, 'dmDealUrl']);
+    Route::get('get-dm-contracts-data', [DMContractController::class, 'getAllDmContracts']);
+    Route::get('export-dm-contracts-data', [DMContractController::class, 'exportDmContracts']);
 
     /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
 
@@ -1215,6 +1232,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('digital-marketing-deals',DMDealController::class);
     Route::post('/digital-marketing-leads/deals/store', [DMDealController::class, 'storeDMLeadDeal'])->name('digital-marketing-store-deals-stage');
     Route::post('/digital-marketing/deal/stage/lost', [DMDealController::class, 'dmDealStageUpdateLost'])->name('digital-marketing-deal-update-lost');
+    Route::get('get-dm-deal-data', [DMDealController::class,'getDmDealData']);
+    Route::get('export-dm-deal-data', [DMDealController::class,'exportDmDeal']);
 
 
     /*=========================> DIGITAL MERKTING DEALS END <===========================*/

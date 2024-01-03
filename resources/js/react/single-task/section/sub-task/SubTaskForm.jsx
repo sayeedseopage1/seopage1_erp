@@ -312,6 +312,7 @@ const SubTaskForm = ({ close }) => {
             }
         }
 
+            
 
 
             // check violation words
@@ -391,7 +392,19 @@ const SubTaskForm = ({ close }) => {
         }
     }, [])
 
+ 
+    // page type change clear related entries
+    useEffect(() => { 
+        setPageTypeOthers("");
+        setPageName("")
+        setPageURL("")
+        setNumberOfPage(0);
+        setExistingDesignLink("");
+        setPageTypePriority("");
+        setPageTypeName("");
+    }, [pageType]);
 
+     
     return (
         <React.Fragment>
             <div className="sp1-subtask-form --form row">
@@ -479,14 +492,10 @@ const SubTaskForm = ({ close }) => {
                                 date={startDate}
                                 setDate={setStateDate}
                                 onCalendarOpen={() => {
-                                    const min = dayjs.dayjs(task?.startDate).isBefore(dayjs.dayjs()) ?
-                                    dayjs.dayjs().toDate() :
-                                    dayjs.dayjs(task?.startDate).toDate();
-
                                     const max = dueDate ||
                                     dayjs.dayjs(task?.dueDate).toDate();
 
-                                    calenderOpen(min, max);
+                                    calenderOpen(max);
 
                                 }}
                             />
@@ -524,10 +533,8 @@ const SubTaskForm = ({ close }) => {
                                 date={dueDate}
                                 setDate={setDueDate}
                                 onCalendarOpen={() => {
-                                    const min = dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ?
-                                    startDate : dayjs.dayjs().toDate();
                                     const max = dayjs.dayjs(task?.dueDate).toDate();
-                                    calenderOpen(min, max);
+                                    calenderOpen(max);
                                 }}
                             />
                         </div>
@@ -588,7 +595,8 @@ const SubTaskForm = ({ close }) => {
                     <Listbox value={pageType} onChange={setPageType}>
                         <div className="form-group position-relative my-3">
                             <label htmlFor=""> Task Type <sup>*</sup> </label>
-                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                            <Listbox.Button 
+                                className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                 <span className="singleline-ellipsis pr-3">
                                     {pageType ?? "--"}
                                 </span>

@@ -102,21 +102,21 @@ const MarkAsComplete = ({task, auth}) => {
     // check validation
     const isValid = () => {
         let valid = true;
-        if(!_.size(links) || links[0] === ''){
-            setLinkErr('You must provide at least one link to your work');
-            toast.warn('You must provide at least one link to your work');
-            valid = false;
-        }
+        // if(!_.size(links) || links[0] === ''){
+        //     setLinkErr('You must provide at least one link to your work');
+        //     toast.warn('You must provide at least one link to your work');
+        //     valid = false;
+        // }
 
-        if(_.size(links)){
-            _.forEach(links, link => {
-                if(!checkIsURL(link)){
-                    toast.warn('Please provide a valid url');
-                    setLinkErr('Please provide a valid url');
-                    valid = false;
-                }
-            })
-        }
+        // if(_.size(links)){
+        //     _.forEach(links, link => {
+        //         if(!checkIsURL(link)){
+        //             toast.warn('Please provide a valid url');
+        //             setLinkErr('Please provide a valid url');
+        //             valid = false;
+        //         }
+        //     })
+        // }
 
         if(comment === ''){
             setCommentErr("Please describe what you've done !");
@@ -191,12 +191,12 @@ const MarkAsComplete = ({task, auth}) => {
                         <form>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlInput1">
-                                    Submit Links What You've Done<sup>*</sup>
+                                    Submit links to the work you've done! 
                                     <span
                                         className="ml-2"
                                         data-toggle="tooltip"
                                         data-placement="top"
-                                        title="Submit Links What You've Done"
+                                        title="Submit links to the work you've done!"
                                         data-boundary="window"
                                         style={{ cursor: "pointer" }}
                                     >

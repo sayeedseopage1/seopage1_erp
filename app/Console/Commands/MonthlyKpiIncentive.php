@@ -13,6 +13,8 @@ use App\Models\IncentiveSetting;
 use App\Models\GoalSetting;
 use App\Models\Seopage1Team;
 use \Carbon\Carbon;
+use App\Models\kpiSettingGenerateSale;
+use App\Models\kpiSettingLoggedHour;
 
 class MonthlyKpiIncentive extends Command
 {
@@ -47,29 +49,160 @@ class MonthlyKpiIncentive extends Command
     //DB::beginTransaction();
     
     // /dd($shift_users);
-        $check_kpi = kpiSetting::where([
-            'kpi_status' => '2',
-            'cron_status' => '0',
-            'start_month' => Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d')
-        ])->first();
-
+   // DB::beginTransaction();
+        // $check_kpi = kpiSetting::where([
+        //     'kpi_status' => '2',
+        //     'cron_status' => '0',
+        //     'start_month' => Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d')
+        // ])->first();
+    //    / dd($check_kpi);
         $left_days = (int) Carbon::now()->endOfMonth()->format('d') - (int) Carbon::now()->format('d');
+        //dd($left_days);
+        if($left_days == 3)
+        {
+            $kpiSetting= kpiSetting::orderBy('id','desc')->first();
+            $incentivesetting= IncentiveSetting::orderBy('id','desc')->first();
+           // dd($incentivesetting);
+          //  DB::beginTransaction();
+            $update_kpi = new kpiSetting();
+            $update_kpi->the_bidder = $kpiSetting->the_bidder;
+            $update_kpi->qualify = $kpiSetting->qualify;
+            $update_kpi->requirements_defined = $kpiSetting->requirements_defined;
+            $update_kpi->less_than = $kpiSetting->less_than;
+            $update_kpi->less_than_get = $kpiSetting->less_than_get;
+            $update_kpi->more_than = $kpiSetting->more_than;
+            $update_kpi->more_than_get = $kpiSetting->more_than_get;
+            $update_kpi->proposal_made = $kpiSetting->proposal_made;
+            $update_kpi->negotiation_started = $kpiSetting->negotiation_started;
+            $update_kpi->milestone_breakdown = $kpiSetting->milestone_breakdown;
+            $update_kpi->closed_deal = $kpiSetting->closed_deal;
+            $update_kpi->contact_form = $kpiSetting->contact_form;
+            $update_kpi->authorized_by_leader = $kpiSetting->authorized_by_leader;
+            $update_kpi->additional_sales_amount = $kpiSetting->additional_sales_amount;
+            $update_kpi->client_type = $kpiSetting->client_type;
+            $update_kpi->after = $kpiSetting->after;
+            $update_kpi->after_reach_amount = $kpiSetting->after_reach_amount;
+            $update_kpi->generate_project = $kpiSetting->generate_project;
+            $update_kpi->generate_single_deal = $kpiSetting->generate_single_deal;
+            $update_kpi->generate_sales_above = $kpiSetting->generate_sales_above;
+            $update_kpi->generate_sales_above_point = $kpiSetting->generate_sales_above_point;
+            $update_kpi->bonus_point = $kpiSetting->bonus_point;
+            $update_kpi->logged_hours_above = $kpiSetting->logged_hours_above;
+            $update_kpi->logged_hours_above_sales_amount = $kpiSetting->logged_hours_above_sales_amount;
+            $update_kpi->achieve_more_than = $kpiSetting->achieve_more_than;
+            $update_kpi->achieve_less_than = $kpiSetting->achieve_less_than;
+            $update_kpi->accepted_by_pm = $kpiSetting->accepted_by_pm;
+            $update_kpi->kpi_status = "2";
+            $update_kpi->cron_status = "0";
+            $update_kpi->bonus_status = $kpiSetting->bonus_status;
+            $update_kpi->start_month = Carbon::now()->addMonth(1)->startOfMonth()->format('Y-m-d');
+            $update_kpi->created_at = Carbon::now();
+            $update_kpi->updated_at = Carbon::now();
+            $update_kpi->save();
+            $update_incentive= new IncentiveSetting();
+            $update_incentive->every_shift_every_point_above = $incentivesetting->every_shift_every_point_above;
+            $update_incentive->individual_goal_percentage = $incentivesetting->individual_goal_percentage;
+            $update_incentive->point_of_value = $incentivesetting->point_of_value;
+            $update_incentive->point_of_contribute = $incentivesetting->point_of_contribute;
+            $update_incentive->incentive_deduction = $incentivesetting->incentive_deduction;
+            $update_incentive->incentive_status = "2";
+            $update_incentive->cron_status = "0";
+            $update_incentive->start_month = Carbon::now()->addMonth(1)->startOfMonth()->format('Y-m-d');
+            $update_incentive->created_at = Carbon::now();
+            $update_incentive->updated_at = Carbon::now();
+            $update_incentive->save();
+            $kpisetiing_g_sales= kpiSettingGenerateSale::where('kpi_id',$kpiSetting->id)->get();
+           // dd($kpisetiing_g_sales[0]);
+ 
+                $update_kpisetting_g_sale = new kpiSettingGenerateSale();
+                $update_kpisetting_g_sale->kpi_id = $update_kpi->id;
+                $update_kpisetting_g_sale->generate_sales_from = $kpisetiing_g_sales[0]->generate_sales_from;
+                $update_kpisetting_g_sale->generate_sales_to= $kpisetiing_g_sales[0]->generate_sales_to;
+                $update_kpisetting_g_sale->generate_sales_amount = $kpisetiing_g_sales[0]->generate_sales_amount;
+                $update_kpisetting_g_sale->bonus_status = 0;
+                $update_kpisetting_g_sale->created_at = Carbon::now();
+                $update_kpisetting_g_sale->updated_at = Carbon::now();
+                $update_kpisetting_g_sale->save();
+                $update_kpisetting_g_sale = new kpiSettingGenerateSale();
+                $update_kpisetting_g_sale->kpi_id = $update_kpi->id;
+                $update_kpisetting_g_sale->generate_sales_from = $kpisetiing_g_sales[1]->generate_sales_from;
+                $update_kpisetting_g_sale->generate_sales_to= $kpisetiing_g_sales[1]->generate_sales_to;
+                $update_kpisetting_g_sale->generate_sales_amount = $kpisetiing_g_sales[1]->generate_sales_amount;
+                $update_kpisetting_g_sale->bonus_status = 0;
+                $update_kpisetting_g_sale->created_at = Carbon::now();
+                $update_kpisetting_g_sale->updated_at = Carbon::now();
+                $update_kpisetting_g_sale->save();
+                $update_kpisetting_g_sale = new kpiSettingGenerateSale();
+                $update_kpisetting_g_sale->kpi_id = $update_kpi->id;
+                $update_kpisetting_g_sale->generate_sales_from = $kpisetiing_g_sales[2]->generate_sales_from;
+                $update_kpisetting_g_sale->generate_sales_to= $kpisetiing_g_sales[2]->generate_sales_to;
+                $update_kpisetting_g_sale->generate_sales_amount = $kpisetiing_g_sales[2]->generate_sales_amount;
+                $update_kpisetting_g_sale->bonus_status = 0;
+                $update_kpisetting_g_sale->created_at = Carbon::now();
+                $update_kpisetting_g_sale->updated_at = Carbon::now();
+                $update_kpisetting_g_sale->save();
+                $kpisetiing_log_hours= kpiSettingLoggedHour::where('kpi_id',$kpiSetting->id)->get();
+                $update_kpisetting_log_h= new kpiSettingLoggedHour();
+                $update_kpisetting_log_h->kpi_id = $update_kpi->id;
+                $update_kpisetting_log_h->logged_hours_between = $kpisetiing_log_hours[0]->logged_hours_between;
+                $update_kpisetting_log_h->logged_hours_between_to= $kpisetiing_log_hours[0]->logged_hours_between_to;
+                $update_kpisetting_log_h->logged_hours_sales_amount = $kpisetiing_log_hours[0]->logged_hours_sales_amount;
+               
+                $update_kpisetting_log_h->created_at = Carbon::now();
+                $update_kpisetting_log_h->updated_at = Carbon::now();
+                $update_kpisetting_log_h->save();
+                $update_kpisetting_log_h= new kpiSettingLoggedHour();
+                $update_kpisetting_log_h->kpi_id = $update_kpi->id;
+                $update_kpisetting_log_h->logged_hours_between = $kpisetiing_log_hours[1]->logged_hours_between;
+                $update_kpisetting_log_h->logged_hours_between_to= $kpisetiing_log_hours[1]->logged_hours_between_to;
+                $update_kpisetting_log_h->logged_hours_sales_amount = $kpisetiing_log_hours[1]->logged_hours_sales_amount;
+               
+                $update_kpisetting_log_h->created_at = Carbon::now();
+                $update_kpisetting_log_h->updated_at = Carbon::now();
+                $update_kpisetting_log_h->save();
+               
+        }
+        if (Carbon::today() == Carbon::now()->startOfMonth()) {
+            $update_kpi_s= kpiSetting::where('kpi_status',"2")->first();
+            // dd($update_kpi_s);
+            $update_kpi_s->kpi_status = "1";
+            $update_kpi_s->cron_status = "1";
+            $update_kpi_s->updated_at= Carbon::now();
+            $update_kpi_s->save();
+            $update_incentive_s= IncentiveSetting::where('incentive_status',"2")->first();
+            $update_incentive_s->incentive_status = "1";
+            $update_incentive_s->cron_status = "1";
+            $update_incentive_s->updated_at= Carbon::now();
+            $update_incentive_s->save();
+            $kpiSetting->kpi_status = "0";
+            $kpiSetting->cron_status = "1";
+            $kpiSetting->save();
+            $incentivesetting->incentive_status = "0";
+            $incentivesetting->cron_status = "1";
+            $incentivesetting->save();
 
-        if ($left_days == 3 && is_null($check_kpi)) {
-            $existing_kpi = kpiSetting::where([
-                'kpi_status' => '1',
-                'cron_status' => '1',
-                'start_month' => Carbon::now()->startOfMonth()->format('Y-m-d')
-            ])->first();
+         //   dd($update_kpi_s, $update_incentive_s);
+
+        
+        }
+        //dd("bsjdbaskbd");
+       
+        // if ($left_days <= 8 && is_null($check_kpi)) {
+        //     $existing_kpi = kpiSetting::where([
+        //         'kpi_status' => '1',
+        //         'cron_status' => '1',
+        //         'start_month' => Carbon::now()->startOfMonth()->format('Y-m-d')
+        //     ])->first();
             
-            unset($existing_kpi->id, $existing_kpi->created_at, $existing_kpi->updated_at);
+        //     unset($existing_kpi->id, $existing_kpi->created_at, $existing_kpi->updated_at);
             
-            $existing_kpi->kpi_status = '2';
-            $existing_kpi->cron_status = '1';
-            $existing_kpi->start_month = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
+        //     $existing_kpi->kpi_status = '2';
+        //     $existing_kpi->cron_status = '1';
+        //     $existing_kpi->start_month = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
             
-            kpiSetting::insert($existing_kpi->toArray());
-        } else if (Carbon::today() == Carbon::now()->endOfMonth()) {
+        //     kpiSetting::insert($existing_kpi->toArray());
+        // } 
+      if (Carbon::today() == Carbon::now()->startOfMonth()) {
             $this_month_kpi = kpiSetting::where([
                 'kpi_status' => '1',
                 'cron_status' => '1',
@@ -82,133 +215,7 @@ class MonthlyKpiIncentive extends Command
                 'start_month' => Carbon::now()->startOfMonth()->format('Y-m-d')
             ])->first();
 
-        //     if ($this_month_kpi) {
-        //         $shifts = [
-        //             'morning_shift' => [208, 217],
-        //             'evening_shift' => [219, 220],
-        //             'night_shift' => [221, 222],
-        //         ];
-
-        //         foreach ($shifts as $key => $shift) {
-        //             //foreach ($shift as $value) {
-        //                 /*$this_users_shift = Seopage1Team::where([
-        //                     ['id', '!=', 1],
-        //                     ['members' , 'LIKE', '%'.$value.'%']
-        //                 ])->get();
-
-        //                 $team_members = [];
-        //                 foreach($this_users_shift as $user_shift) {
-        //                     $team_array = explode(',', rtrim($user_shift->members, ','));
-        //                     foreach ($team_array as $array_user) {
-        //                         array_push($team_members, $array_user);
-        //                     }
-        //                 }
-        //                 $team_members = array_unique($team_members);*/
-
-        //                 $total_cash_point = CashPoint::whereIn('user_id', $shift)
-        //                 ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
-        //                 ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
-        //                 ->get();
-        //                 $total_cash_point_sum = $total_cash_point->sum('points');
-
-        //                 if ($total_cash_point_sum > $this_month_incentive->every_shift_every_point_above) {
-        //                     $user_incentive_amount = $total_cash_point_sum - $this_month_incentive->every_shift_every_point_above;
-        //                     foreach ($shift as $value) {
-        //                         $deals = CashPoint::where('user_id', $value)
-        //                         ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
-        //                         ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
-        //                         ->get()
-        //                         ->sum('points');
-
-        //                         $deduction_amount = 0;
-        //                         $user_team_goal_monthly = GoalSetting::where([
-        //                             'assigneeType' => 'Team',
-        //                             'goal_status' => 0,
-        //                             'frequency' => 'Monthly',
-        //                             'team_id' => 1,
-        //                         ])->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
-        //                         ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
-        //                         ->first();
-
-        //                         if ($user_team_goal_monthly) {
-        //                             $point_deduction = 100 - $this_month_incentive->individual_goal_percentage;
-                                    
-        //                             $user_incentive_amount_deduction = ($user_incentive_amount * $point_deduction) / 100;
-        //                             $deduction_amount = $deduction_amount + $user_incentive_amount_deduction;
-        //                             $user_incentive_amount = $user_incentive_amount - $user_incentive_amount_deduction;
-        //                         }
-
-
-        //                         $user_goal_from_team = Seopage1Team::where([
-        //                             ['id' , '!=' , 1],
-        //                             ['members' , 'LIKE', '%'.$value.'%']
-        //                         ])->get()->pluck('id');
-
-        //                         $user_team_goal_10_days = GoalSetting::where([
-        //                             'assigneeType' => 'User',
-        //                             'goal_status' => 0,
-        //                             'frequency' => '10 Days',
-        //                         ])->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
-        //                         ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
-        //                         ->whereIn('id', $user_goal_from_team)
-        //                         ->first();
-
-        //                         // if ($user_team_goal_10_days) {
-        //                         //     $user_incentive_amount_deduction = ($user_incentive_amount * $this_month_incentive->incentive_deduction) / 100;
-        //                         //     $deduction_amount = $deduction_amount + $user_incentive_amount_deduction;
-        //                         //     $user_incentive_amount = $user_incentive_amount - $user_incentive_amount_deduction;
-        //                         // }
-
-        //                         $this_user_cashpoint = CashPoint::where('user_id', $value)
-        //                         ->whereDate('created_at', '>=', Carbon::now()->startOfMonth())
-        //                         ->whereDate('created_at', '<=', Carbon::now()->endOfMonth())
-        //                         ->get();
-
-        //                         $this_user_contribution = (100 / $total_cash_point->sum('points')) * $this_user_cashpoint->sum('points');
-
-        //                         $this_user_goal = GoalSetting::where([
-        //                             'goal_status' => 1,
-        //                             'user_id' => $value,
-        //                         ])->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
-        //                         ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
-        //                         ->count();
-
-        //                         $this_users_team = Seopage1Team::where([
-        //                             ['members' , 'LIKE', '%'.$value.'%']
-        //                         ])->get()->pluck('id');
-
-        //                         $this_user_team_goal = GoalSetting::where([
-        //                             'goal_status' => 1,
-        //                         ])->whereIn('team_id', $this_users_team)
-        //                         ->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
-        //                         ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
-        //                         ->count();
-
-        //                         $user_incentive = new UserIncentive();
-        //                         $user_incentive->user_id = $value;
-        //                         $user_incentive->point_earned = $deals;
-        //                         $user_incentive->incentive_earned = ((($this_user_contribution * $user_incentive_amount) / 100)) * $this_month_incentive->point_of_contribute;
-        //                         $user_incentive->redeem_point = $deals;
-        //                         $user_incentive->achieve_goal = $this_user_goal + $this_user_team_goal;
-        //                         $user_incentive->month = $this_month_kpi->start_month;
-        //                         $user_incentive->deduction_amount = $deduction_amount;
-        //                         $user_incentive->deduction_incentive_amount = $deduction_amount * $this_month_incentive->point_of_contribute;
-        //                         //dd($user_incentive);
-        //                         $user_incentive->save();
-
-                               
-        //                     }
-        //                 }
-        //             //}
-        //         }
        
-        // }
-               
-                
-        //       //  dd($total_cash_point_sum);
-        //         $this_month_kpi->kpi_status = '0';
-        //         $this_month_kpi->save();
-        //     }
             $shift_users= User::where('shift','!=',null)->get();
           //  dd($shift_users);
           $shift_users= User::where('shift','!=',null)->get();

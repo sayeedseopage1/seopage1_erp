@@ -1,6 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { useDeveloperCanCompleteTaskQuery, useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
+import { useDailySubmission } from "../../../single-task/hooks/useDailySubmission";
 import { User } from "../../../utils/user-details";
 import {
     approveButtonPermission,
@@ -22,6 +23,7 @@ import ReportControl from "./report/Report";
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const [timerStart, setTimerStart] = React.useState(false);
+    const { isEnable } = useDailySubmission();
 
 
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
@@ -93,7 +95,7 @@ const TaskAction = ({ task, status }) => {
             <ClientApproval task={task} status={status} auth={loggedUser} />
 
              {/* daily submission control */}
-             {_.includes([5, 9, 10], loggedUser?.getRoleId()) && (
+             {_.includes([5, 9, 10], loggedUser?.getRoleId()) && isEnable && (
                 <DailySubmissionControl />
              )}
 

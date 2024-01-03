@@ -26,7 +26,14 @@ export const apiSlice = createApi({
             "TASK_COMMENTS",
             "TASK_COMMENT",
             "TASK_COMMENT_REPLIES",
-            "IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS"
+            "IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS",
+            "COMMENTS",
+            "LEADS",
+            "DM_LEADS",
+            "ALL_DAILY_SUBMISSION_STATUS",
+            "DEALS",
+            "DM_DEALS",
+            "WON_DEALS"
     ],
     endpoints: () => ({}),
 });

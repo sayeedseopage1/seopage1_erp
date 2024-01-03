@@ -294,3 +294,61 @@ p{
   /* border: solid; */
   gap: 0 10px;
 }
+
+
+
+/* ============================== comments modal (start) ============================== */
+
+
+
+
+
+/* --------- comment cancellation modal (start) --------- */
+.comment_cancellation_modal_container{
+  height: 259px;
+  background-color: white;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover 259px;
+  border-radius: 4px;
+  font-family: 'Poppins', sans-serif !important;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 0;
+}
+.comment_cancellation_modal_container > section{
+  font-size: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12.13px;
+}
+.comment_cancellation_modal_container > section > p{
+  font-size: 25px;
+}
+.comment_cancellation_modal_container > section > span{
+  display: inline-block;
+  /* width: 52.5px; */
+  width: 42px;
+  /* height: 44.44px; */
+  height: 36px;
+  padding: 0;
+}
+.comment_cancellation_modal_container > div{
+  font-size: 25px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.comment_cancellation_modal_container > div > button{
+  height: 45px;
+  width: 130px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/* --------- comment cancellation modal (end) --------- */
+
+
+/* ============================== comments modal (end) ============================== */

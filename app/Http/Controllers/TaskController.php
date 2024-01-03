@@ -865,7 +865,7 @@ class TaskController extends AccountBaseController
         $task->task_status = "submitted";
 
         $task->save();
-       
+
             $actions = PendingAction::where('code','NSPT')->where('past_status',0)->where('task_id',$task->id)->get();
             if($actions != null)
             {
@@ -879,7 +879,7 @@ class TaskController extends AccountBaseController
                     $project_manager= User::where('id',$project->pm_id)->first();
                     $client= User::where('id',$project->client_id)->first();
                     $authorize_by= User::where('id',$action->authorized_by)->first();
-    
+
                     $past_action= new PendingActionPast();
                     $past_action->item_name = $action->item_name;
                     $past_action->code = $action->code;
@@ -897,12 +897,12 @@ class TaskController extends AccountBaseController
                     $past_action->project_id = $action->project_id;
                     $past_action->task_id = $action->task_id;
                     $past_action->client_id = $action->client_id;
-    
+
                     $past_action->save();
-    
-    
+
+
             }
-        
+
         }
         //  dd($task);
 
@@ -987,16 +987,20 @@ class TaskController extends AccountBaseController
         }
 
         $task_status->save();
-        $actions= PendingAction::where('code','DTDA')->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
+        $actions= PendingAction::where('code','DTDA')->where('past_status',0)->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-     
-             //need pending action past 
+
+             //need pending action past
              $action= PendingAction::where('id',$action->id)->first();
+             $action->past_status= 1;
+             $action->authorized_by= Auth::id();
+             $action->authorized_at= Carbon::now();
+             $action->save();
              $project=Project::where('id',$action->project_id)->first();
              $current_date= Carbon::now();
-           
+
              $client= User::where('id',$project->client_id)->first();
              $lead_developer= User::where('id',Auth::id())->first();
              $project_manager= User::where('id',$project->pm_id)->first();
@@ -1012,12 +1016,12 @@ class TaskController extends AccountBaseController
              if($current_date > $task->due_date)
              {
                  $past_action->message = 'Task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> & client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by '.$user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> after the deadline was over!';
- 
-             }else 
+
+             }else
              {
                  $past_action->message = 'Task <a href="'.route('tasks.show',$task_status->id).'">'.$task_status->heading.'</a> from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> & client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by '.$user_role->name.' <a href="'.route('employees.show',$developer->id).'">'.$developer->name.'</a> before the deadline was over';
              }
-             
+
           //   $past_action->button = $action->button;
              $past_action->timeframe = $action->timeframe;
              $past_action->authorization_for = $action->authorization_for;
@@ -1030,7 +1034,7 @@ class TaskController extends AccountBaseController
              $past_action->client_id = $action->client_id;
              $past_action->developer_id = $action->developer_id;
              $past_action->save();
- 
+
              //need pending action past
          }
         }
@@ -1058,11 +1062,11 @@ class TaskController extends AccountBaseController
             $parent_task= Subtask::where('id',$task->subtask_id)->first();
             $sub_tasks_count = Subtask::select('tasks.*')
             ->join('tasks','tasks.subtask_id','sub_tasks.id')
-            
+
             ->where('sub_tasks.task_id',$parent_task->task_id)->count();
             $sub_tasks__finished_count = Subtask::select('tasks.*')
             ->join('tasks','tasks.subtask_id','sub_tasks.id')
-            
+
             ->where('sub_tasks.task_id',$parent_task->task_id)
             ->where('tasks.board_column_id',8)
             ->count();
@@ -1070,8 +1074,8 @@ class TaskController extends AccountBaseController
             {
                 $p_task= Task::where('id',$parent_task->task_id)->first();
                 $helper = new HelperPendingActionController();
- 
- 
+
+
                 $helper->NeedtoSubmitParentTask($$p_task);
             }
         }
@@ -1079,7 +1083,7 @@ class TaskController extends AccountBaseController
         $task_user= TaskUser::where('task_id',$taskId->id)->orderBy('id','desc')->first();
         $t_user= User::where('id',$task_user->user_id)->first();
         $user_role= Role::where('id',$t_user->role_id)->first();
-        $revision_status= TaskRevision::where('task_id',$taskId->id)->first(); 
+        $revision_status= TaskRevision::where('task_id',$taskId->id)->first();
         $actions = PendingAction::where('code','TSA')->where('past_status',0)->where('task_id',$taskId->id)->get();
         if($actions != null)
         {
@@ -1104,11 +1108,11 @@ class TaskController extends AccountBaseController
                 {
                     $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
 
-                }else 
+                }else
                 {
                     $past_action->message = 'Task submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
                 }
-               
+
              //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
@@ -1233,7 +1237,7 @@ class TaskController extends AccountBaseController
                 $project= Project::where('id',$taskId->project_id)->first();
                 $revision_status= TaskRevision::where('task_id',$taskId->id)->first();
                 $task_user= TaskUser::where('task_id',$taskId->id)->first();
-                $user= User::where('id',$task_user->id)->first();
+                $user= User::where('id',$task_user->user_id)->first();
                 $user_role= Role::where('id',$user->role_id)->first();
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
@@ -1253,7 +1257,7 @@ class TaskController extends AccountBaseController
                 {
                     $past_action->message = 'Revision submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
 
-                }else 
+                }else
                 {
                     $past_action->message = 'Task submitted by '.$user_role->name.' for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was reviewed by PM <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>!';
                 }
@@ -2604,6 +2608,15 @@ class TaskController extends AccountBaseController
 
     public function show(Request $request, $id)
     {
+        $projectTask= Task::where('id',$id)->first();
+        if($projectTask->independent_task_status == 0 )
+        {
+            $projecttaskId= Project::where('id',$projectTask->project_id)->first();
+            if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
+            {
+                 abort(403);
+            }
+        }
         $viewTaskFilePermission = user()->permission('view_task_files');
         $viewSubTaskPermission = user()->permission('view_sub_tasks');
         $this->viewTaskCommentPermission = user()->permission('view_task_comments');
@@ -3024,12 +3037,12 @@ class TaskController extends AccountBaseController
        if($actions != null)
        {
        foreach ($actions as $key => $action) {
-    
-            //need pending action past 
+
+            //need pending action past
             $action= PendingAction::where('id',$request->id)->first();
             $project=Project::where('id',$action->project_id)->first();
             $current_date= Carbon::now();
-          
+
             $client= User::where('id',$project->client_id)->first();
             $lead_developer= User::where('id',Auth::id())->first();
             $project_manager= User::where('id',$project->pm_id)->first();
@@ -3043,11 +3056,11 @@ class TaskController extends AccountBaseController
             {
                 $past_action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> after the deadline was over!"';
 
-            }else 
+            }else
             {
                 $past_action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was submitted by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> before the deadline was over!';
             }
-            
+
          //   $past_action->button = $action->button;
             $past_action->timeframe = $action->timeframe;
             $past_action->authorization_for = $action->authorization_for;
@@ -3065,7 +3078,7 @@ class TaskController extends AccountBaseController
         }
        }
 
-      
+
         return response()->json([
             'status' => 200,
         ]);
@@ -3159,7 +3172,7 @@ class TaskController extends AccountBaseController
 
         // dd($clientRevisionCount);
 
-        if ($clientRevisionCount >= 5) {
+        if ($request->acknowledgement_id == 'CPRx06' && $clientRevisionCount >= 5) {
             $task_revision->dispute_created = true;
             $task_revision->final_responsible_person = ''; // create dispute
         }else if ($request->acknowledgement_id == 'CPRx06') {
@@ -3194,7 +3207,6 @@ class TaskController extends AccountBaseController
         $task_revision->save();
 
 
-
         // CREATE DISPUTE
         if ($task_revision->dispute_created) {
             $this->create_dispute($task_revision);
@@ -3219,7 +3231,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -3376,7 +3388,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -3528,7 +3540,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -3602,7 +3614,7 @@ class TaskController extends AccountBaseController
         $tasks_accept->save();
         // dd($tasks_accept);
 
-     
+
         $board_column = TaskBoardColumn::where('id', $task_status->board_column_id)->first();
 
 
@@ -3632,12 +3644,15 @@ class TaskController extends AccountBaseController
 
     public function storeTaskGuideline(Request $request)
     {
+        // dd($request->all());
         $request->validate([
+            'task_category' => 'required',
             'theme_details' => 'required',
             'design_details' => 'required',
             'color_schema' => 'required',
             'plugin_research' => 'required',
         ], [
+            'task_category.required' => 'This field is required!',
             'theme_details.required' => 'This field is required!',
             'design_details.required' => 'This field is required!',
             'color_schema.required' => 'This field is required!',
@@ -3650,6 +3665,7 @@ class TaskController extends AccountBaseController
 
         $pm_task_guideline = new PmTaskGuideline();
         $pm_task_guideline->project_id = $data['project_id'];
+        $pm_task_guideline->task_category = $data['task_category'];
         $pm_task_guideline->theme_details = $data['theme_details'];
         $pm_task_guideline->theme_name = $data['theme_name'];
         $pm_task_guideline->theme_url = $data['theme_url'];
@@ -3714,82 +3730,130 @@ class TaskController extends AccountBaseController
 
         $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);
 
-        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
-            $pm_task_update->status = 0;
-        } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
-            $pm_task_update->status = 0;
-        } else {
-            $pm_task_update->status = 1;
+        if($request->task_category == 'development'){
+
+            if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
+        }else{
+            if ($data['design_details'] == 0 || $data['color_schema'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['design_details'] == 2 || $data['color_schema'] == 2 ) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
         }
         $pm_task_update->save();
         $pm_task_guideline_authorization = '';
 
+        if($request->task_category == 'development'){
+            if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+                $name1 = 'Theme Details';
+                $name2 = 'Design Details';
+                $name3 = 'Color Scheme';
+                $name4 = 'Plugin Research';
 
-        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
-            $name1 = 'Theme Details';
-            $name2 = 'Design Details';
-            $name3 = 'Color Scheme';
-            $name4 = 'Plugin Research';
+                if ($data['theme_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name1;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name1;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['design_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['color_schema'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['plugin_research'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name4;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name4;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+            }
+        }else{
+            if ($data['design_details'] == 0 || $data['color_schema'] == 0) {
+                $name2 = 'Design Details';
+                $name3 = 'Color Scheme';
 
-            if ($data['theme_details'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name1;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name1;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['design_details'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name2;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name2;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['color_schema'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name3;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name3;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
-            }
-            if ($data['plugin_research'] == 0) {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name4;
-                $pm_task_guideline_authorization->status = 0;
-                $pm_task_guideline_authorization->save();
-            } else {
-                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
-                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
-                $pm_task_guideline_authorization->project_id = $data['project_id'];
-                $pm_task_guideline_authorization->name = $name4;
-                $pm_task_guideline_authorization->status = 1;
-                $pm_task_guideline_authorization->save();
+                if ($data['design_details'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name2;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
+                if ($data['color_schema'] == 0) {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 0;
+                    $pm_task_guideline_authorization->save();
+                } else {
+                    $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                    $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                    $pm_task_guideline_authorization->project_id = $data['project_id'];
+                    $pm_task_guideline_authorization->name = $name3;
+                    $pm_task_guideline_authorization->status = 1;
+                    $pm_task_guideline_authorization->save();
+                }
             }
         }
         $users = User::where('role_id', 1)->get();
@@ -3997,7 +4061,17 @@ class TaskController extends AccountBaseController
 
     public function task_json(Request $request, $id)
     {
+       
         if ($request->mode == 'basic') {
+            $projectTask= Task::where('id',$id)->first();
+            if($projectTask->independent_task_status != 0 )
+            {
+                $projecttaskId= Project::where('id',$projectTask->project_id)->first();
+                if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
+                {
+                     abort(403);
+                }
+            }
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
@@ -4164,7 +4238,12 @@ class TaskController extends AccountBaseController
 
             $task->parent_task_time_log = $timeLog;
             $task->task_category = $task->category;
-            // dd($task);
+            /**  REVISION LOGDEED TIME */
+            $task->revision_log_hour = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_hours');
+            $revision_log_total_min = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_minutes');
+            $task->revision_log_min = $task->revision_log_hour * 60 + $revision_log_total_min;
+
+            // dd($task->revision_log_hour, $task->revision_log_min);
 
             $task->subtask = Subtask::select([
                 'id', 'title'
@@ -4175,7 +4254,6 @@ class TaskController extends AccountBaseController
             $tas_id = Task::where('id', $task->id)->first();
             $subtasks = Subtask::where('task_id', $tas_id->id)->get();
             $subtask_count = Subtask::where('task_id', $tas_id->id)->count();
-            // dd($subtasks);
             $time = 0;
 
             foreach ($subtasks as $subtask) {
@@ -4597,15 +4675,16 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-            //    DB::beginTransaction();
-           // dd($request);
+             //  DB::beginTransaction();
             $data = new TaskComment();
             $data->comment = $request->comment;
             $data->user_id = $this->user->id;
             $data->task_id = $request->task_id;
             $data->added_by = $this->user->id;
             $data->last_updated_by = $this->user->id;
-           // $data->mention_id = $request->mention_id;
+
+            $data->mention_id = $request->mention_id;
+
 
             $data->save();
             //need pedning action
@@ -4630,20 +4709,31 @@ class TaskController extends AccountBaseController
                 $files = $request->file('file');
                 $destinationPath = storage_path('app/public/');
                 $file_name = [];
+                $original_file_name = [];
                 // foreach ($files as $file) {
                 //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 //     array_push($file_name, $filename);
                 //     $file->move($destinationPath, $filename);
                 // }
                 foreach ($files as $file) {
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $originalfilename = $file->getClientOriginalName();
+                   // dd($originalfilename);
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                
+                  //  $filename= 
+              
                     array_push($file_name, $filename);
+                    array_push($original_file_name, $originalfilename);
+                 //$original_file_name = $originalfilename;
 
                     // Store the file in AWS S3 using the 's3' disk
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 }
                 $data->files = $file_name;
+                $data->original_files = $original_file_name;
+            //  /   dd($original_file_name);
                 $data->save();
+            //   /  dd($data);
             }
 
             $data = TaskComment::find($data->id);
@@ -4660,9 +4750,11 @@ class TaskController extends AccountBaseController
             }
 
 
-            return response()->json($data);
+            return response()->json([
+                'status'=>200,
+                'success'=>true
+            ]);
         } elseif ($request->mode == 'comment_reply_store') {
-
             $data = new TaskReply();
             $data->comment_id = $request->comment_id;
             $data->reply = $request->comment;
@@ -5526,6 +5618,7 @@ class TaskController extends AccountBaseController
                 "design_details" => $pm_task_guideline->design_details,
                 "color_schema" => $pm_task_guideline->color_schema,
                 "plugin_research" => $pm_task_guideline->plugin_research,
+                "task_category" => $pm_task_guideline->task_category,
                 "status_code" => 200,
                 "is_allow" => $is_allow,
                 "is_submitted_already" => $already_submitted,
@@ -5922,6 +6015,8 @@ class TaskController extends AccountBaseController
         $endDate = Carbon::today()->format('Y-m-d');
 
         $date = Carbon::parse($request->date_type);
+        
+
 
         $totalTimeSpentSubquery = DB::table('project_time_logs')
                                 ->select(DB::raw('SUM(total_minutes)'))
@@ -5946,8 +6041,8 @@ class TaskController extends AccountBaseController
         )
             ->mergeBindings($totalTimeSpentSubquery)
             ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
-            ->join('projects', 'projects.id', 'tasks.project_id')
-            ->join('users as clients', 'clients.id', 'projects.client_id')
+            ->leftJoin('projects', 'projects.id', 'tasks.project_id')
+            ->leftJoin('users as clients', 'clients.id', 'projects.client_id')
             ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
             ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
             ->where('project_time_logs.user_id', $id)
@@ -5956,11 +6051,13 @@ class TaskController extends AccountBaseController
             ->groupBy('project_time_logs.task_id')
             ->get();
 
-            // dd($tasks);
+            // dd($tasks, $date);
             foreach($tasks as $task)
             {
                 // dd($task);
                 $dalysubmission = DailySubmission::where('task_id',$task->id)->whereDate('report_date',$date)->first();
+                // dd($dalysubmission);
+
                 if($dalysubmission != null)
                 {
                     $task->daily_submission_status = $dalysubmission->status;
@@ -5973,6 +6070,7 @@ class TaskController extends AccountBaseController
 
             }
 
+            // dd($tasks);
 
 
 
@@ -6093,9 +6191,9 @@ class TaskController extends AccountBaseController
         // } else {
         //     $tasks = $todayData;
         // }
-        // dd($tasks ,$date);
+        //  dd($date);
         return response()->json([
-            'date' => $date,
+            'date' => $date->format('Y-m-d'),
             'data' => $tasks,
             'status' => 200
         ]);
@@ -6516,13 +6614,15 @@ class TaskController extends AccountBaseController
                 $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
                 if($actions != null)
                 {
-                foreach ($actions as $key => $action) {
+                foreach ($actions as $key => $p_action) {
                     $project= Project::where('id',$task->project_id)->first();
 
-                        $action->authorized_by= Auth::id();
-                        $action->authorized_at= Carbon::now();
-                        $action->past_status = 1;
-                        $action->save();
+                    $action= PendingAction::where('id',$p_action->id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+
 
 
                         $project_manager= User::where('id',$project->pm_id)->first();
@@ -6592,14 +6692,13 @@ class TaskController extends AccountBaseController
                 $actions = PendingAction::where('code','PTA')->where('past_status',0)->where('task_id',$id)->get();
                 if($actions != null)
                 {
-                foreach ($actions as $key => $action) {
+                foreach ($actions as $key => $p_action) {
                     $project= Project::where('id',$pendingParentTasks->project_id)->first();
-
-                        $action->authorized_by= Auth::id();
-                        $action->authorized_at= Carbon::now();
-                        $action->past_status = 1;
-                        $action->save();
-
+                    $action= PendingAction::where('id',$p_action->id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
 
                         $project_manager= User::where('id',$project->pm_id)->first();
                         $client= User::where('id',$project->client_id)->first();
@@ -6730,26 +6829,34 @@ class TaskController extends AccountBaseController
 
     public function getTaskComments($task_id)
     {
-        $data = TaskComment::where('task_id', $task_id)->where('root', null)->get();
+        $data = TaskComment::select('task_comments.*','task_comments.created_at as created_date')->where('task_comments.task_id', $task_id)->where('task_comments.root', null)->get();
+        // foreach($data as $item)
+        // {
+        //     $item->
+        // }
 
         foreach ($data as $value) {
-
-            $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
-            $value->total_replies = $replies->count();
-            $value->last_updated_at = strtotime($value->created_at);
-            $value->replies_users = User::whereIn('id', $replies->unique())->get()->map(function ($row) {
-                return [
-                    'id' => $row->id,
-                    'image_url' => $row->image_url,
-                    'name' => $row->name
-                ];
-            });
-            $value->last_updated_date = $value->created_at;
-            $value->replies = [];
+           
+           $value->mention = TaskComment::select('task_comments.*','task_comments.created_at as mention_created_at')->where('task_comments.id',$value->mention_id)->first();
+           if($value->mention != null && $value->mention->original_files != null){
+            $value->mention->original_files = json_decode($value->mention->original_files);
+           }
+          
+           
+         
+           $value->original_files= json_decode($value->original_files);
         }
+        
+        // return response()->json([
+           
+        //     'data' => $data,
+        //   //  'mention'=> $data->mention,
+        //     'status' => 200
+        // ]);
 
         // dd($data);
-        return response()->json($data, 200);
+        $data = json_decode(json_encode($data));
+        return response()->json($data,200);
     }
 
     // Get task comment replied
@@ -7013,6 +7120,29 @@ class TaskController extends AccountBaseController
 
 
         return response()->json(["message" => 'Comment Deleted Successfully'], 200);
+    }
+
+    public function multipleCommentDelete(Request $request){
+        $task_comments = TaskComment::whereIn('id',$request->comments_id)->get();
+        if($task_comments !=null){
+            foreach($task_comments as $item){
+                $delete_cmnt = TaskComment::where('id',$item->id)->first();
+                $delete_cmnt->status = 'deleted';
+                $delete_cmnt->is_deleted = 1;
+                $delete_cmnt->deleted_by = Auth::user()->id;
+                $delete_cmnt->deleted_at = Carbon::now();
+                $delete_cmnt->save();
+            }
+            return response()->json([
+                "message" => 'Comment Deleted Successfully',
+                "status" => 200,
+            ], 200);
+        }else{
+            return response()->json([
+                "message" => 'Comment Not Found!',
+                "status" => 400
+            ], 400);
+        }
     }
 
     /*************** END TASK COMMENT ************/

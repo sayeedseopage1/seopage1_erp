@@ -9,6 +9,7 @@ import Switch from "../../../../../../global/Switch";
 import { Flex } from "../../../../../../global/styled-component/Flex";
 import { useAuth } from "../../../../../../hooks/useAuth";
 import { convertTime } from '../../../../../../utils/converTime';
+import { PlaceholderText } from "../../components/PlaceholderText";
 import { useDateFormat } from "../../hooks/useDateFormat";
 import DailyReportSubmissionForm from "./DailyReportSubmissionForm";
 
@@ -143,7 +144,7 @@ const DailyReportSubmissionEnforcer = ({ close, reminderDate, onSubmit }) => {
                                                         </td>
                                                         <td className="sp1_tlr_td">{date(reminderDate).formatted}</td>
                                                         <td className="sp1_tlr_td"> {convertTime(task.total_time_spent)} </td>
-                                                        <td className="sp1_tlr_td"> {task.client_name} </td>
+                                                        <td className="sp1_tlr_td"> {task?.client_name ?? <PlaceholderText>N/A</PlaceholderText>} </td>
                                                         <td className="sp1_tlr_td">
                                                         <Switch.Case condition={!task?.daily_submission_status}>
                                                             <DailyReportSubmissionButton

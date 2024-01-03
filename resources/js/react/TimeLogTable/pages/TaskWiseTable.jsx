@@ -9,6 +9,10 @@ import Tabbar from "../components/Tabbar";
 import TaskWiseLogTable from '../components/TaskWiseLogTable';
 import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
+import { ExportToExcel } from "../components/ExportToExcel";
+import ExportTaskWiseTableDataToExcel from "../export/excel/ExportTaskWiseTableDataToExcel";
+import { useAuth } from '../../hooks/useAuth';
+import Switch from '../../global/Switch'
 
 const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);
@@ -19,6 +23,9 @@ const TaskWiseLogReport = () => {
     const [trackedTime, setTrackedTime] = useState(0);
     const [filter, setFilter] = useState(null);
     const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
+
+    // current user
+    const auth = useAuth();
 
     // handle data
     const handleData = (data, currentPage, perPageData) => {
@@ -36,13 +43,12 @@ const TaskWiseLogReport = () => {
             .then(res => {
                 setCurrentPage(1);
                 const sortedData = orderBy(res?.data, ["task_id"], ["desc"]);
-                handleData(sortedData, 1, perPageData);
-                setData(sortedData);
+                handleData(sortedData, 1, perPageData); 
+                setData(sortedData); 
                 const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
                 setTrackedTime(totalTrackTime);
             })
     }
-
 
     // data sort handle
     const handleSorting = (sort) => {
@@ -73,11 +79,35 @@ const TaskWiseLogReport = () => {
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
                     <Tabbar/>
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} >
-                        {isLoading ?
-                            <Loader title="Refreshing..."  borderRightColor="white" />
-                        : 'Refresh'}
-                    </RefreshButton>
+
+                    <div className="d-flex align-items-center" style={{gap: '10px'}}>
+                        <RefreshButton onClick={handleRefresh} isLoading={isLoading} >
+                            {isLoading ?
+                                <Loader title="Refreshing..."  borderRightColor="white" />
+                            : 'Refresh'}
+                        </RefreshButton> 
+                        
+                        {/* export button */}
+                        {/* <ExportToExcel>
+                            <i className="fa-solid fa-download" />
+                            Export to Excel
+                        </ExportToExcel> */}
+                        <Switch>
+                            <Switch.Case condition={auth.getRoleId() === 1}>
+                                <ExportTaskWiseTableDataToExcel
+                                    data = {data}
+                                    filter={filter}
+                                    button = {
+                                        <ExportToExcel>
+                                            <i className="fa-solid fa-download" />
+                                            Export to Excel
+                                        </ExportToExcel>
+                                    }
+                                    filename={`task_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
+                                />
+                            </Switch.Case>
+                        </Switch>
+                    </div>
                 </div>
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
                     <span className="mx-auto">

@@ -11,7 +11,7 @@ import User from "./User";
 const currentUser = new USER(window.Laravel.user);
 
 const FilterBar = ({ onFilter, change = false }) => {
-    const { setPerPageItem } = usePagination();
+    const { setPerPageItem, setCurrentPage } = usePagination();
 
     // ------- filter state (start) -------
     const [search, setSearch] = useState("");
@@ -58,6 +58,7 @@ const FilterBar = ({ onFilter, change = false }) => {
 
     useEffect(() => {
         setPerPageItem(show);
+        setCurrentPage(1);
     }, [show]);
 
     return (

@@ -2186,15 +2186,22 @@ class ProjectController extends AccountBaseController
            //     $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
 
-                $helper = new HelperPendingActionController();
-
-
-                $helper->ProjectDeliverableCreation($past_action->project_id);
+               
 
 
         }
     }
+    $pending_actions = PendingAction::where('code','DCA')->where('project_id',$project->id)->where('authorization_for',$project->pm_id)->count();
+    if($pending_actions == 0)
+    {
+        $helper = new HelperPendingActionController();
 
+
+        $helper->ProjectDeliverableCreation($project->id);
+    
+
+    }
+   
         if($project->status == 'not started'){
             if ($request->project_challenge != 'No Challenge') {
                 $project_update = Project::find($request->project_id);
@@ -2390,7 +2397,7 @@ class ProjectController extends AccountBaseController
             || ($this->viewPermission == 'both' && (in_array(user()->id, $memberIds) || user()->id == $this->project->added_by) && in_array('employee', user_roles()))
         ));
 
-        $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 100, " ..."));
+        $this->pageTitle = ucfirst(\Str::limit($this->project->project_name, 50, " ..."));
 
 
         if (!empty($this->project->getCustomFieldGroupsWithFields())) {
@@ -2399,7 +2406,7 @@ class ProjectController extends AccountBaseController
 
         $this->messageSetting = MessageSetting::first();
         $this->projectStatus = ProjectStatusSetting::where('status', 'active')->get();
-        $this->deliverables = ProjectDeliverable::where('project_id', $this->project->id)->orderBy('id','desc')->get();
+        $this->deliverables = ProjectDeliverable::where('project_id', $this->project->id)->get();
 
         $tab = request('tab');
 

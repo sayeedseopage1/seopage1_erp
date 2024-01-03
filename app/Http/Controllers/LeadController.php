@@ -1620,4 +1620,186 @@ if ($request->project_type !='hourly'){
         return $dataTable->render('leads.show', $this->data);
     }
 
+    public function getLead(Request $request)
+    {
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $convert_status = $request->convert_status;
+        $limit = $request->limit ??  10;
+
+        $leadsQuery = Lead::select(
+            'leads.id',
+            'leads.added_by',
+            'leads.client_id',
+            'leads.category_id',
+            'client_name',
+            'actual_value',
+            'bidding_minutes',
+            'bidding_seconds',
+            'bid_value',
+            'bid_value2',
+            'project_link',
+            'project_id',
+            'company_name',
+            'lead_status.type as statusName',
+            'lead_status.label_color as lead_status_label_color',
+            'status_id',
+            'deal_status',
+            'currency_id',
+            'original_currency_id',
+            'leads.created_at as lead_created_at',
+            'users.name as agent_name',
+            'users.image',
+            'currencies.currency_symbol as currency_symbol',
+        )
+            ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+            ->leftJoin('users', 'users.id', 'leads.added_by')
+            ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+            ->where('leads.status', '!=', 'DM');
+
+            if ($startDate !== null && $endDate !== null) {
+                $leadsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->search != '') {
+                $leadsQuery->where(function ($query) {
+                    $query->where('leads.client_name', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.company_name', 'like', '%' . request('search') . '%')
+    
+                    ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.project_id', 'like', '%' . request('search') . '%')
+                    ->orWhere('leads.actual_value', 'like', '%' . request('search') . '%')
+                    ->orWhere('users.name', 'like', '%' . request('search') . '%');
+                });
+            }
+            if ($request->sales_executive_id != '') {
+                $leadsQuery->where('leads.added_by',$request->sales_executive_id);
+            }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
+            }
+
+            $leads = $leadsQuery
+                ->orderBy('leads.id', 'desc')
+                ->paginate($limit);
+
+        $dealStages = DealStage::whereIn('lead_id', $leads->pluck('id'))->get();
+
+        foreach ($leads as $lead) {
+            $wonLost = 0;
+            $leadDealStages = $dealStages->where('lead_id', $lead->id);
+
+            if ($leadDealStages->isNotEmpty()) {
+                $latestDealStage = $leadDealStages->sortByDesc('created_at')->first();
+
+                if ($latestDealStage->deal_status == 'pending' && $latestDealStage->won_lost == 'Yes') {
+                    $wonLost = 1;
+                } elseif ($latestDealStage->deal_status == 'Lost') {
+                    $wonLost = 2;
+                } elseif ($latestDealStage->deal_status == 'pending' && ($latestDealStage->won_lost == 'No' || $latestDealStage->won_lost == null)) {
+                    $wonLost = 3;
+                }
+            }
+
+            $lead->won_lost = $wonLost;
+        }
+
+
+        return response()->json([
+            'data' => $leads,
+            'status' => 200
+        ]);
+    }
+
+
+    public function exportLead(Request $request)
+    {
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $convert_status = $request->convert_status;
+
+        $leadsQuery = Lead::select(
+            'leads.id',
+            'leads.added_by',
+            'leads.client_id',
+            'leads.category_id',
+            'client_name',
+            'actual_value',
+            'bidding_minutes',
+            'bidding_seconds',
+            'bid_value',
+            'bid_value2',
+            'project_link',
+            'project_id',
+            'company_name',
+            'lead_status.type as statusName',
+            'lead_status.label_color as lead_status_label_color',
+            'status_id',
+            'deal_status',
+            'currency_id',
+            'original_currency_id',
+            'leads.created_at as lead_created_at',
+            'users.name as agent_name',
+            'users.image',
+            'currencies.currency_symbol as currency_symbol',
+        )
+            ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+            ->leftJoin('users', 'users.id', 'leads.added_by')
+            ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+            ->where('leads.status', '!=', 'DM');
+
+            if ($startDate !== null && $endDate !== null) {
+                $leadsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(leads.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(leads.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->sales_executive_id != '') {
+                $leadsQuery->where('leads.added_by',$request->sales_executive_id);
+            }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
+            }
+
+            $leads = $leadsQuery
+                ->orderBy('leads.id', 'desc')
+                ->get();
+
+                $dealStages = DealStage::whereIn('lead_id', $leads->pluck('id'))->get();
+
+            foreach ($leads as $lead) {
+                $wonLost = 0;
+                $leadDealStages = $dealStages->where('lead_id', $lead->id);
+
+                if ($leadDealStages->isNotEmpty()) {
+                    $latestDealStage = $leadDealStages->sortByDesc('created_at')->first();
+
+                    if ($latestDealStage->deal_status == 'pending' && $latestDealStage->won_lost == 'Yes') {
+                        $wonLost = 1;
+                    } elseif ($latestDealStage->deal_status == 'Lost') {
+                        $wonLost = 2;
+                    } elseif ($latestDealStage->deal_status == 'pending' && ($latestDealStage->won_lost == 'No' || $latestDealStage->won_lost == null)) {
+                        $wonLost = 3;
+                    }
+                }
+
+                $lead->won_lost = $wonLost;
+            }
+
+        return response()->json([
+            'data' => $leads,
+            'status' => 200
+        ]);
+    }
+
 }
+
+
+/** 
+ * $won_lost = 0 =>Not Applicable
+ * $won_lost = 1 =>Won
+ * $won_lost = 2 =>Lost
+ * $won_lost = 3 =>No Activity Yet
+ */

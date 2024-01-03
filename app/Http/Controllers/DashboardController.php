@@ -580,6 +580,7 @@ class DashboardController extends AccountBaseController
 
 
 
+            // dd($userGetTasks);
             $userTaskCount = $userGetTasks->count();
 
 
@@ -589,8 +590,8 @@ class DashboardController extends AccountBaseController
                                             -> whereDate('report_date',$userClockIn->created_at)
                                             -> get();
 
-                                            
-                                            // dd($report->count(), $userTaskCount);
+
+                    // dd($report->count(), $userTaskCount);
                     if($report->count() === $userTaskCount){
                         $userDailyTaskSubmission = true;
                     }else {
@@ -601,10 +602,10 @@ class DashboardController extends AccountBaseController
                 }else{
                     // dd('2');
                     $userDailyTaskSubmission = true;
-                    
+
                 }
 
-               
+
 
 
         $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
@@ -676,7 +677,7 @@ class DashboardController extends AccountBaseController
 
         if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
 
-        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->first();
+        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('id', 'desc')->first();
         $user->clock_out_time = Carbon::now();
         $user->save();
 
@@ -704,7 +705,10 @@ class DashboardController extends AccountBaseController
             $userDailyTaskSubmission = true;
         }
 
-        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
+        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)
+                                ->whereDate('date','=',$userClockIn->created_at)
+                                ->orderBy('created_at','desc')
+                                ->first();
         $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
         $createdAt = Carbon::parse($userClockIn->created_at);
         
@@ -714,17 +718,19 @@ class DashboardController extends AccountBaseController
          
         if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
             $minimum_log_hours = 270;
-            if($userTotalMin < 270){
+            if($userTotalMin < $minimum_log_hours){
                 $logStatus = false;
             }
         } else {
             $minimum_log_hours = 420;
-            if($userTotalMin < 420){
+            if($userTotalMin < $minimum_log_hours){
                 $logStatus = false;
             }
         }
-        
-        $logStatus = $userDeveloperHoursTrack ? true : false ;
+
+
+        $logStatus = $userDeveloperHoursTrack ? true : $logStatus ;
+
     }
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
@@ -779,4 +785,3 @@ class DashboardController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
   }
-    

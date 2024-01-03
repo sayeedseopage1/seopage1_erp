@@ -6,6 +6,7 @@
     $addLeadSourcesPermission = user()->permission('add_lead_sources');
     $addLeadCategoryPermission = user()->permission('add_lead_category');
     $addLeadNotePermission = user()->permission('add_lead_note');
+    $lead_s = App\Models\Lead::orderBy('id', 'desc')->first();
 @endphp
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 <style>
@@ -181,26 +182,9 @@
                         </div>
                     </div>
                     <!-- BID VALUE END -->
-                    <!-- Lead Source -->
-                    <div class="col-lg-3" style="margin-top: 13px;">
-                        <label class="f-14 text-dark-grey mb-12" data-label="true" for="lead_source">Lead Source
-                            <sup class="f-14 mr-1">*</sup>
-                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select the lead source name." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                            </svg>
-                        </label>
-                        <div class="dropdown bootstrap-select form-control select-picker">
-                            <select name="lead_source" id="lead_source" data-live-search="true" class="form-control select-picker error" data-size="8" onchange="handleLeadSourceChange()">
-                                <option value="">--</option>
-                                    <option value="Upwork.com">Upwork.com</option>
-                                    <option value="Freelancer.com">Freelancer.com</option>
-                            </select>
-                            <label id="lead_sourceError" class="error" for="lead_source"></label>
-                        </div>
-                    </div>
-                    <!-- Lead Source END -->
                     <!-- PROJECT ID START -->
-                    <div class="col-lg-3" id="projectIdBox" style="margin-top: 12px;">
+                    @if ($lead_s->lead_source == 'Freelancer.com')
+                    <div class="col-lg-3" style="margin-top: 12px;">
                         <div class="form-group" required="required">
                             <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_id">Project Id
                                 <sup class="f-14 mr-1">*</sup>
@@ -212,8 +196,10 @@
                             <label id="project_idError" class="error" for="project_id"></label>
                         </div>
                     </div>
+                    @endif
+                    @if ($lead_s->lead_source == 'Upwork.com')
                     <!-- Total spent START -->
-                    <div class="col-md-3 mt-3" id="totalSpentBox">
+                    <div class="col-md-3 mt-3">
                         <label for="">Total Spent
                             <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the total spent." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
                                 <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
@@ -228,6 +214,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                     <!-- Total spent END -->
                     <!-- PROJECT DESCRIPTION START -->
                     <div class="col-md-12 col-lg-12">
@@ -296,22 +283,6 @@
         document.getElementById("deadlineBox").style.display = "none";
         document.getElementById("projectBudgetLabel").textContent = "Hourly Rate";
     }
-    function handleLeadSourceChange() {
-        var leadSource = document.getElementById("lead_source").value;
-        var projectBox = document.getElementById("projectIdBox");
-        var totalSpentBox = document.getElementById("totalSpentBox");
-
-        if (leadSource === "Upwork.com") {
-            projectBox.style.display = "none";
-            totalSpentBox.style.display = "block";
-        } else if (leadSource === "Freelancer.com") {
-            projectBox.style.display = "block";
-            totalSpentBox.style.display = "none";
-        } else {
-            projectBox.style.display = "block";
-            totalSpentBox.style.display = "block";
-        }
-    }
 </script>
 <script>
     $('#submit-button').click(function(e){
@@ -324,7 +295,9 @@
         var data= {
             '_token': "{{ csrf_token() }}",
             'client_name': document.getElementById("client_name").value,
+            @if ($lead_s->lead_source == 'Freelancer.com')
             'project_id': document.getElementById("project_id").value,
+            @endif
             'country': document.getElementById("country").value,
             'project_link': document.getElementById("project_link").value,
             'deadline': document.getElementById("deadline").value,
@@ -332,13 +305,14 @@
             'bid_value': document.getElementById("bid_value").value,
             'bid_value2': document.getElementById("bid_value2").value,
             'value': document.getElementById("value").value,
-            'lead_source': document.getElementById("lead_source").value,
+            @if ($lead_s->lead_source == 'Upwork.com')
             'total_spent': document.getElementById("total_spent").value,
+            @endif
             'description': description,
             'cover_letter': coverLetter,
             'project_type': project_type,
+            'lead_id': {{$lead_s->id}},
         }
-        // console.log(data);
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -392,11 +366,6 @@
                     $('#currencyError').text(error.responseJSON.errors.original_currency_id);
                 }else{
                     $('#currencyError').text('');
-                }
-                if(error.responseJSON.errors.lead_source){
-                    $('#lead_sourceError').text(error.responseJSON.errors.lead_source);
-                }else{
-                    $('#lead_sourceError').text('');
                 }
                 if(error.responseJSON.errors.total_spent){
                     $('#total_spentError').text(error.responseJSON.errors.total_spent);

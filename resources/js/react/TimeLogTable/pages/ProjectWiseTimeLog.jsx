@@ -10,6 +10,10 @@ import { ProjectTableCtx } from "../context/ProjectWiseTableContext";
 import { convertTime } from "../../utils/converTime";
 import Loader from "../../global/Loader";
 import { RefreshButton } from "../components/RefreshButton";
+import ExportProjectWiseTableDataToExcel from "../export/excel/ExportProjectWiseTableDataToExcel";
+import { ExportToExcel } from "../components/ExportToExcel";
+import { useAuth } from '../../hooks/useAuth';
+import Switch from '../../global/Switch'
 
 const ProjectWiseTimeLog = () => {
     const [data, setData] = useState([]);
@@ -19,9 +23,11 @@ const ProjectWiseTimeLog = () => {
     const [sortConfig, setSortConfig] = useState([]);
     const [nSession, setNSession] = useState(0);
     const [trackedTime, setTractedTime] = useState(0);
-
     const {filter, setFilter} = useContext(ProjectTableCtx);
     const [getProjectWiseData, {isLoading}] = useGetProjectWiseDataMutation();
+    
+    // current user
+    const auth = useAuth();
 
     // handle data
     const handleData = (data, currentPage, perPageData) => {
@@ -78,11 +84,29 @@ const ProjectWiseTimeLog = () => {
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
                     <Tabbar/>
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
-                        {isLoading ?
-                            <Loader title="Refreshing..."  borderRightColor="white" />
-                        : 'Refresh'}
-                    </RefreshButton>
+
+                    <div className="d-flex align-items-center" style={{gap: '10px'}}>
+                        <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
+                            {isLoading ?
+                                <Loader title="Refreshing..."  borderRightColor="white" />
+                            : 'Refresh'}
+                        </RefreshButton>
+                        <Switch>
+                            <Switch.Case condition={auth.getRoleId() === 1}>
+                                <ExportProjectWiseTableDataToExcel
+                                    data = {data}
+                                    filter={filter}
+                                    button = {
+                                        <ExportToExcel>
+                                            <i className="fa-solid fa-download" />
+                                            Export to Excel
+                                        </ExportToExcel>
+                                    }
+                                    filename={`project_wise_table_${filter?.start_date}_to_${filter?.end_date}`} 
+                                />
+                            </Switch.Case>
+                        </Switch>
+                    </div>
                 </div>
                 
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
