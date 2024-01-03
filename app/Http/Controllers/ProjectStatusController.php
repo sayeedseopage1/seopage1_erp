@@ -112,40 +112,22 @@ class ProjectStatusController extends AccountBaseController
     }
     public function projectStatusCalendar(Request $request)
     {
-        // dd($request->all());
-        // $this->viewPermission = user()->permission('view_holiday');
-
-        // abort_403(!($this->viewPermission == 'all' || $this->viewPermission == 'added'));
-
         $this->pageTitle = 'app.menu.calendar';
-       // dd(request('start'), request('end'));
 
-       
-            $holidayArray = array();
-
-            // $holidays = Holiday::orderBy('date', 'ASC');
-            $pm_goals= ProjectPmGoal::orderBy('date','ASC');
-
-            // if (request()->searchText != '') {
-            //     $holidays->where('holidays.occassion', 'like', '%' . request()->searchText . '%');
-            // }
-
-            //$holidays = $holidays->get();
+            $projectStatusArray = array();
             $pm_goals= ProjectPmGoal::get();
-           // dd($pm_goals);
 
-            foreach ($pm_goals as $key => $goal) {
+            foreach ($pm_goals as $goal) {
 
-                $holidayArray[] = [
+                $projectStatusArray[] = [
                     'id' => $goal->id,
                     'title' => $goal->goal_name,
                     'start' => Carbon::parse($goal->goal_start_date)->format('Y-m-d'),
                     'end' => Carbon::parse($goal->goal_end_date)->format('Y-m-d'),
                 ];
             }
-        //   /  dd($holidayArray);
 
-            return $holidayArray;
+            return $projectStatusArray;
         
 
         return view('project-status.calendar.index', $this->data);
