@@ -812,4 +812,9 @@ class DashboardController extends AccountBaseController
         ->orderBy('task_revisions.id','desc')->get();
       //  dd($task_revision);
     }
+    public function leadDevPerformance($id){
+        $this->lead_dev = User::where('id', $id)->first();
+        $this->pageTitle = 'Lead Developer Performance';
+        return $this->PmDashboardAdminPmView($this->pm);
+    }
   }

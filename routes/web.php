@@ -338,6 +338,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('dashboard-advanced/show-project-manager-details', [DashboardController::class, 'projectManageDetalsOnAdvanceDashboard'])->name('dashboard.projectManageDetalsOnAdvanceDashboard');
     Route::post('dashboard/widget/{dashboardType}', [DashboardController::class, 'widget'])->name('dashboard.widget');
     Route::post('dashboard/week-timelog', [DashboardController::class, 'weekTimelog'])->name('dashboard.week_timelog');
+    Route::get('dashboard-lead-dev-performance/{id}', [DashboardController::class, 'leadDevPerformance'])->name('lead-dev-performance');
 
     Route::get('attendances/clock-in-modal', [DashboardController::class, 'clockInModal'])->name('attendances.clock_in_modal');
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
