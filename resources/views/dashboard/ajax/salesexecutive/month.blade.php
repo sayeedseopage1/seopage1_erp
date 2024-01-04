@@ -6,7 +6,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#num_of_lead">
-                            00
+                            {{$number_of_leads_received}}
                         </a>
                     </p>
                     @include('dashboard.ajax.salesexecutive.modals.num_of_lead_modal')
@@ -24,7 +24,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#no_of_lead_that_got_converted_to_deals">
-                            00
+                            {{$number_of_leads_convert_deals}}
                         </a>
                     </p>
                     @include('dashboard.ajax.salesexecutive.modals.no_of_lead_that_got_converted_to_deals_modal')
@@ -42,7 +42,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#">
-                            00
+                            {{$number_of_leads_convert_won_deals}}
                         </a>
                     </p>
                 </div>
@@ -59,7 +59,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#">
-                            00
+                            {{round($average_number_of_leads_amount,2)}}
                         </a>
                     </p>
                 </div>
@@ -76,7 +76,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#">
-                            00
+                           {{round($average_bidding_delay_time)}}
                         </a>
                     </p>
                 </div>
@@ -93,7 +93,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#">
-                            00
+                            {{$bidding_frequency}}
                         </a>
                     </p>
                 </div>
@@ -110,7 +110,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#">
-                            00
+                            {{count($country_wise_lead_counts)}}
                         </a>
                     </p>
                 </div>
@@ -134,7 +134,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#">
-                            00
+                            {{$won_deal_count}}
                         </a>
                     </p>
                 </div>
@@ -168,7 +168,7 @@
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#">
-                            00
+                            {{count($leads_country_data)}}
                         </a>
                     </p>
                 </div>
