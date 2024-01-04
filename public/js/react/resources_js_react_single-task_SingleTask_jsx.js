@@ -34,15 +34,7 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
           className: "position-relative",
           style: {
-<<<<<<< HEAD
-<<<<<<< HEAD
             padding: "75px 23px 18px 25px",
-=======
-            padding: "75px 0 18px",
->>>>>>> 1017feaae (Getting pull from master file)
-=======
-            padding: "75px 23px 18px 25px",
->>>>>>> 1de32eb77 (3rd rebase)
             height: "100vh",
             width: "100vw"
           },
@@ -248,27 +240,10 @@ var CommentsContainer = function CommentsContainer(_ref) {
       fetching: isFetching,
       refetch: refetch,
       taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-      task: task,
-      height: "89vh"
-=======
->>>>>>> bc7b03e84 (5th rebase)
-=======
->>>>>>> 9bbe39c20 (Editor work done 70%)
       showFullScreenBtn: width <= 991 ? false : showFullScreenBtn,
       height: height,
       showCommentEditor: showCommentEditor,
       showSearchBtn: showSearchBtn
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 3b35da129 (comment editor and comment modal top action btn conditionally mounted in single comment record view in single task and single independent task page)
->>>>>>> bc7b03e84 (5th rebase)
-=======
->>>>>>> 9bbe39c20 (Editor work done 70%)
     })
   });
 };
@@ -556,86 +531,6 @@ var Shadow = function Shadow() {
 
 /***/ }),
 
-<<<<<<< HEAD
-=======
-/***/ "./resources/js/react/UI/comments/components/Modal.jsx":
-/*!*************************************************************!*\
-  !*** ./resources/js/react/UI/comments/components/Modal.jsx ***!
-  \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-var Modal = function Modal(_ref) {
-  var children = _ref.children,
-    isOpen = _ref.isOpen,
-    className = _ref.className;
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
-    _React$useState2 = _slicedToArray(_React$useState, 2),
-    isBrowser = _React$useState2[0],
-    setIsBrowser = _React$useState2[1];
-  // generate random id for dropdown menu
-  var id = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
-    return Math.random().toString(36).substr(2, 9);
-  }, []);
-  var DOM = document.getElementById(id);
-  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    setIsBrowser(true);
-    var el = document.createElement("div");
-    el.id = id;
-    document.body.appendChild(el);
-    return function () {
-      document.body.removeChild(el);
-    };
-  }, []);
-
-  // React.useEffect(() => {
-  //     if(isOpen){
-  //         document.body.classList.add('cnx_body-overflow-hidden')
-  //     }else{
-  //         document.body.classList.remove('cnx_body-overflow-hidden')
-  //     }
-  // }, [isOpen])
-
-  if (!DOM) return;
-  var modalContent = isOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    className: "cnx_modal ".concat(className),
-    children: children
-  }) : null;
-  if (isBrowser) {
-    return /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal(modalContent, DOM);
-  } else {
-    return null;
-  }
-};
-Modal.propTypes = {
-  children: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().node).isRequired,
-  isOpen: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().bool).isRequired,
-  className: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().string)
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Modal);
-
-/***/ }),
-
->>>>>>> 1017feaae (Getting pull from master file)
 /***/ "./resources/js/react/UI/form/Cheeckbox.jsx":
 /*!**************************************************!*\
   !*** ./resources/js/react/UI/form/Cheeckbox.jsx ***!
@@ -6174,7 +6069,7 @@ var WidgetItem = function WidgetItem(_ref) {
             href: "/account/employees/".concat(comment.user.id),
             className: "hover-underline text-primary",
             children: comment.user.name
-          }), " ", comment.is_deleted ? "deleted" : comment.mention ? "replied to " : "added ", " ", "a comment"]
+          }), " ", comment.is_deleted ? "deleted " : comment.mention ? "replied to " : "added ", " ", "a comment"]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
           className: "text-ellipsis d-flex align-items-center mb-0 pb-0",
           style: {
@@ -9594,20 +9489,10 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         role: "tab",
         "aria-controls": "v-pills-comments",
         "aria-selected": "false",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> df65c4f4d (4th rebase)
         onClick: function onClick(e) {
           commentsRefetch(e);
           setIsCommentShow(true);
         },
-<<<<<<< HEAD
-=======
-        onClick: commentsRefetch,
->>>>>>> 55f624dba (2nd rebase)
-=======
->>>>>>> df65c4f4d (4th rebase)
         children: "Comment"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
         className: "nav-link",
@@ -9650,15 +9535,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         children: "Task Review"
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
-<<<<<<< HEAD
-<<<<<<< HEAD
       className: "tab-content ".concat(isCommentShow ? "p-0" : "p-3", " sp1-subtask-modal-tab-content"),
-=======
-      className: "tab-content p-3 sp1-subtask-modal-tab-content",
->>>>>>> 55f624dba (2nd rebase)
-=======
-      className: "tab-content ".concat(isCommentShow ? "p-0" : "p-3", " sp1-subtask-modal-tab-content"),
->>>>>>> df65c4f4d (4th rebase)
       id: "v-pills-tabContent",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade show active sp1_st_tab_panel",
@@ -9699,29 +9576,12 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
           isOpen: true,
           fullScreenView: false,
           setFullScreenView: function setFullScreenView() {},
-<<<<<<< HEAD
-<<<<<<< HEAD
           height: "741px",
           fetching: commentsFetching,
           refetch: commentsRefetch,
           showFullScreenBtn: false,
           taskId: subTask === null || subTask === void 0 ? void 0 : subTask.id,
           showCloseBtn: false
-=======
-          height: "709px",
-          fetching: commentsFetching,
-          refetch: commentsRefetch,
-          showFullScreenBtn: false,
-          taskId: subTask === null || subTask === void 0 ? void 0 : subTask.id
->>>>>>> 55f624dba (2nd rebase)
-=======
-          height: "741px",
-          fetching: commentsFetching,
-          refetch: commentsRefetch,
-          showFullScreenBtn: false,
-          taskId: subTask === null || subTask === void 0 ? void 0 : subTask.id,
-          showCloseBtn: false
->>>>>>> df65c4f4d (4th rebase)
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade",
