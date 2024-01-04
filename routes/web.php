@@ -1070,6 +1070,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     /* PM PROJECT STATUS */
     Route::resource('project-status',ProjectStatusController::class);
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
+    Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
     Route::post('project-status-reason-submit', [ProjectStatusController::class, 'projectStatusReason'])->name('project-status-reason-submit');
     Route::post('project-status-resolve-submit', [ProjectStatusController::class, 'projectStatusResolve'])->name('project-status-resolve-submit');
     Route::get('project-status-extend-request/{id}', [ProjectStatusController::class, 'projectStatusExtendRequest'])->name('project-status.extendRequest');

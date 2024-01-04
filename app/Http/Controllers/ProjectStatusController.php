@@ -10,6 +10,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Helper\Reply;
+use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
 use Illuminate\Support\Facades\Storage;
 
@@ -113,22 +114,33 @@ class ProjectStatusController extends AccountBaseController
     public function projectStatusCalendar(Request $request)
     {
         $this->pageTitle = 'app.menu.calendar';
+        if (request('start') && request('end')) {
+            $holidayArray = array();
 
-            $projectStatusArray = array();
+            $holidays = Holiday::orderBy('date', 'ASC');
+
+            if (request()->searchText != '') {
+                $holidays->where('holidays.occassion', 'like', '%' . request()->searchText . '%');
+            }
+
             $pm_goals= ProjectPmGoal::get();
 
-            foreach ($pm_goals as $goal) {
-
-                $projectStatusArray[] = [
+            foreach ($pm_goals as $key => $goal) { 
+                $project = Project::find($goal->project_id);
+                $client = User::where('id',$project->client_id)->first();
+                // dd($project);
+                $holidayArray[] = [
                     'id' => $goal->id,
-                    'title' => $goal->goal_name,
+                    'title' => $project->project_name. ' ('.$client->name.') ('.\Str::limit($goal->goal_name,25).')',
                     'start' => Carbon::parse($goal->goal_start_date)->format('Y-m-d'),
                     'end' => Carbon::parse($goal->goal_end_date)->format('Y-m-d'),
                 ];
             }
 
-            return $projectStatusArray;
-        
+            // dd($holidayArray);
+            return $holidayArray;
+        }
+ 
 
         return view('project-status.calendar.index', $this->data);
     }
@@ -243,5 +255,21 @@ class ProjectStatusController extends AccountBaseController
         
         // dd($updateGoal->extended_goal_end_day);
         return response()->json(['status'=>200]);
+    }
+    public function calendarShow($id)
+    {
+        $this->project_status = $id;
+
+        $this->pageTitle = __('Project Status');
+
+        if (request()->ajax()) {
+            $html = view('project-status.show', $this->data)->render();
+            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+        }
+
+        $this->view = 'project-status.show';
+
+        return view('project-status.index', $this->data);
+
     }
 }

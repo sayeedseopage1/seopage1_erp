@@ -49,11 +49,11 @@ $addHolidayPermission = user()->permission('add_holiday');
         <div class="d-flex">
             <div id="table-actions" class="flex-grow-1 align-items-center">
                 @if ($addHolidayPermission == 'all' || $addHolidayPermission == 'added')
-                    <x-forms.link-primary :link="route('holidays.create')"
+                    {{-- <x-forms.link-primary :link="route('holidays.create')"
                         data-redirect-url="{{ route('holidays.calendar') }}" class="mr-3 openRightModal float-left"
                         icon="plus">
                         @lang('modules.holiday.addNewHoliday')
-                    </x-forms.link-primary>
+                    </x-forms.link-primary> --}}
                 @endif
             </div>
 
@@ -122,7 +122,7 @@ $addHolidayPermission = user()->permission('add_holiday');
             editable: false,
             dayMaxEvents: true, // allow "more" link when too many events
             events: {
-                url: "{{ route('holidays.calendar') }}",
+                url: "{{ route('project-status-calendar') }}",
                 extraParams: function() {
                     var searchText = $('#search-text-field').val();
 
@@ -149,7 +149,7 @@ $addHolidayPermission = user()->permission('add_holiday');
         // show leave detail in right modal
         var getEventDetail = function(id) {
             openTaskDetail();
-            var url = "{{ route('holidays.show', ':id') }}";
+            var url = "{{ route('calendar.show', ':id') }}";
             url = url.replace(':id', id);
 
             $.easyAjax({
