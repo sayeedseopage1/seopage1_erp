@@ -28,14 +28,20 @@ const WidgetItem = ({ comment }) => {
                         >
                             {comment.user.name}
                         </a>{" "}
-                        {comment.mention? "replied to " : "added "} a
-                        comment
+                        {comment.is_deleted
+                            ? "deleted "
+                            : comment.mention
+                            ? "replied to "
+                            : "added "}{" "}
+                        a comment
                     </p>
                     <p
                         className="text-ellipsis d-flex align-items-center mb-0 pb-0"
                         style={{ color: "#AEAFB9" }}
                     >
-                        {timeCalculate(comment.created_date)}
+                        {comment.is_deleted
+                            ? timeCalculate(comment.deleted_at)
+                            : timeCalculate(comment.created_date)}
                     </p>
                 </div>
 
@@ -63,7 +69,15 @@ const WidgetItem = ({ comment }) => {
                     commentId={comment.id}
                 />
             </Modal> */}
-            <CommentsContainer singleCommentId={comment.id} close={() => setIsOpen(false)} isOpen={isOpen} />
+            <CommentsContainer
+                singleCommentId={comment.id}
+                close={() => setIsOpen(false)}
+                isOpen={isOpen}
+                showCommentEditor={false}
+                showFullScreenBtn={false}
+                showSearchBtn={false}
+                height="50vh"
+            />
         </React.Fragment>
     );
 };
@@ -77,10 +91,36 @@ const Widget = ({ task }) => {
         skip: !task.id,
     });
 
+    const handleOrdering = (comments = []) => {
+        const sortedComments = [...comments];
+
+        sortedComments.sort((a, b) => {
+            if (a.is_deleted && b.is_deleted) {
+                const a_day = dayjs(a.deleted_at);
+                const b_day = dayjs(b.deleted_at);
+                return b_day.diff(a_day);
+            } else if (a.is_deleted) {
+                const a_day = dayjs(a.deleted_at);
+                const b_day = dayjs(b.created_date);
+                return b_day.diff(a_day);
+            } else if (b.is_deleted) {
+                const a_day = dayjs(a.created_date);
+                const b_day = dayjs(b.deleted_at);
+                return b_day.diff(a_day);
+            } else {
+                const a_day = dayjs(a.created_date);
+                const b_day = dayjs(b.created_date);
+                return b_day.diff(a_day);
+            }
+        });
+
+        return sortedComments;
+    };
+
     // console.log({ widget: data });
     return (
         <React.Fragment>
-            {_.map(_.orderBy(comments, "id", "desc"), (comment) => (
+            {_.map(handleOrdering(comments), (comment) => (
                 <WidgetItem key={comment.id} comment={comment} />
             ))}
         </React.Fragment>

@@ -19,3 +19,9 @@ export default function getFormattedTime(time) {
     return `${target_time.format("MMM DD, YYYY, hh:mm A")}`;
   }
 };
+
+
+export function checkSameDay(target_date, given_date){
+  dayjs.extend(isSameOrAfter);
+  return given_date.isSame(target_date, "day");
+} 
