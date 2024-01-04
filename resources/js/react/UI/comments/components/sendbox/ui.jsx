@@ -130,6 +130,7 @@ export const FileUploadButton = styled.button`
 export const SendButton = styled(FileUploadButton)`
     background: #009cec;
     padding: 10px 16px;
+    height: 48px;
 
     & > svg {
         width: 28px;
