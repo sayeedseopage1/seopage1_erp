@@ -69,6 +69,10 @@
     </style>
 @endpush
 @section('content')
+@php
+    $employ_details = \App\Models\EmployeeDetails::where('user_id',$lead_dev->id)->first();
+    $designation = \App\Models\Designation::where('id',$employ_details->designation_id)->first();
+@endphp
 <div class="px-4 py-2 border-top-0">
     <!-- WELOCOME START -->
     @if (!is_null($checkTodayLeave))
@@ -96,8 +100,9 @@
     <div class="d-lg-flex d-md-flex d-block py-4">
         <!-- WELOCOME NAME START -->
         <div>
+			{{-- {{dd($lead_dev)}} --}}
             <h4 class=" mb-0 f-21 text-capitalize font-weight-bold">@lang('app.welcome')
-                {{ $user->name }}</h4>
+                {{ $lead_dev->name }}</h4>
         </div>
         <!-- WELOCOME NAME END -->
 
@@ -127,12 +132,16 @@
 	    				<div class="card border-0 b-shadow-4 mb-3 e-d-info">
 	    					<div class="card-horizontal align-items-center">
 	    						<div class="card-img">
-	    							<img class="" src=" {{ $user->image_url }}" alt="Card image">
+									@if ($lead_dev->image)
+                                        <img class="" src="{{ asset('user-uploads/avatar/'.$lead_dev->image) }}" alt="Card image">
+                                    @else
+                                        <img class="" src="{{ asset('user-uploads/avatar/avatar_blank.png') }}" alt="Card image">
+                                    @endif
 	    						</div>
 	    						<div class="card-body border-0 pl-0">
-	    							<h4 class="card-title f-18 f-w-500 mb-0">{{ mb_ucwords($user->name) }}</h4>
-	    							<p class="f-14 font-weight-normal text-dark-grey mb-2">{{ $user->employeeDetails->designation->name ?? '--' }}</p>
-	    							<p class="card-text f-12 text-lightest"> @lang('app.employeeId') : {{ mb_strtoupper($user->employeeDetails->employee_id) }}</p>
+	    							<h4 class="card-title f-18 f-w-500 mb-0">{{ mb_ucwords($lead_dev->name) }}</h4>
+	    							<p class="f-14 font-weight-normal text-dark-grey mb-2">{{ $designation->name }}</p>
+	    							<p class="card-text f-12 text-lightest"> @lang('app.employeeId') : {{ mb_strtoupper($employ_details->employee_id) }}</p>
 	    						</div>
 	    					</div>
 	    				</div>

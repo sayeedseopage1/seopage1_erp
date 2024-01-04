@@ -1,19 +1,18 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="first_attempt_approve_task_client{{$first_attempt_approve_task_in_this_month_client}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="estimated_time_was_missed{{count($estimate_missed_task_data)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <div class="modal-header">
-          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
-            <h4>Primary Pages: {{$number_of_tasks_received_primary_page}}</h4> 
-           <h4>Secondary Pages: {{$number_of_tasks_received_secondary_page}} </h4>  
-           <h4>Others:  {{$number_of_tasks_received - ($number_of_tasks_received_primary_page + $number_of_tasks_received_secondary_page)}}</h4>  
-             </div>
+        <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
+          <h4>Primary Pages: {{$number_of_tasks_received_primary_page}}</h4> 
+         <h4>Secondary Pages: {{$number_of_tasks_received_secondary_page}} </h4>  
+         <h4>Others:  {{$number_of_tasks_received - ($number_of_tasks_received_primary_page + $number_of_tasks_received_secondary_page)}}</h4>  
+           </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="first_attempt_approve_task_client" class="display" style="width:100%">
+            <table id="table_estimate_task_date" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Sl No</th>
@@ -27,19 +26,13 @@
                   </tr>
                 </thead>
                 <tbody>
-              
-                    @foreach($first_attempt_approve_task_in_this_month_client_data as $row)
-                   {{-- {{ dd($row)}} --}}
-                 
+                    @foreach($estimate_missed_task_data as $row)
+                    {{-- {{dd($row)}} --}}
                     <tr>
                         <td>{{$loop->index+1}}</td>
+                        <td>{{$row->assign_date}}</td>
                         <td>
-                            {{$row->assign_date}}
-                          
-                        </td>
-                        <td>
-                            <a href="{{route('tasks.show',$row->id)}}">{{$row->heading}}<a>
-                         
+                          <a href="{{route('tasks.show',$row->id)}}">{{$row->heading}}<a>
                         </td>
                         <td>
                             @if($row->cl_id != null)
@@ -48,9 +41,7 @@
                             {{$row->client_name}}
                             @else 
                            <a href="{{route('clients.show',$row->clientId)}}"> {{$row->clientName}}</a>
-
-                            @endif
-
+                           @endif
                         </td>
                         <td>
                             @if($row->board_column_id == 1 || $row->board_column_id == 2 || $row->board_column_id == 3)
@@ -66,7 +57,6 @@
                       
                     </tr>
                     @endforeach
-                   
                 </tbody>
               </table>
         </div>
@@ -78,7 +68,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#first_attempt_approve_task_client',{
+      new DataTable('#table_estimate_task_date',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
       

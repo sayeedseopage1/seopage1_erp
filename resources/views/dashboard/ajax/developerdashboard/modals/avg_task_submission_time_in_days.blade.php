@@ -1,18 +1,19 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="number_of_task_received{{$number_of_tasks_received_lead}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="avg_task_submission_time_in_days{{$submit_number_of_tasks_in_this_month}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received_lead}}</h4>
-           
-           
+          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
+            <h4>Primary Pages: {{$number_of_tasks_received_primary_page}}</h4> 
+           <h4>Secondary Pages: {{$number_of_tasks_received_secondary_page}} </h4>  
+           <h4>Others:  {{$number_of_tasks_received - ($number_of_tasks_received_primary_page + $number_of_tasks_received_secondary_page)}}</h4>  
              </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="number_of_task_received" class="display" style="width:100%">
+            <table id="avg_task_submission_in_days" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Sl No</th>
@@ -26,7 +27,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($number_of_tasks_received_lead_data as $key => $row)
+                    @foreach($submit_number_of_tasks_in_this_month_data as $key=> $row)
                  
                     <tr>
                         <td>{{$loop->index+1}}</td>
@@ -61,9 +62,9 @@
                           <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
                         </td>
                         <td>
-                          <a href="#" data-toggle="modal" data-target="#revision_count_modal{{ $key }}">
+                          {{-- <a href="#" data-toggle="modal" data-target="#revision_count_modal{{ $key }}">
                             {{$row->revision_count}}
-                        </a>
+                          </a> --}}--
                         </td>
                     </tr>
                     @endforeach
@@ -78,13 +79,12 @@
     </div>
   </div>
 
-
-  @foreach($number_of_tasks_received_lead_data as $key => $row)
-  @if ($row->revision_count !='0')
+  {{-- @foreach($submit_number_of_tasks_in_this_month_data as $key => $row)
+  @if ($row->revision_count !=0)
   @php
     $task_revisions = App\Models\TaskRevision::where('task_id',$row->id)->get();
   @endphp
-    <div class="modal fade" id="revision_count_modal{{ $key }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade"  id="revision_count_modal{{ $key }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -102,7 +102,7 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach ($task_revisions as $task_revision)
+                @foreach ($submit_number_of_tasks_in_this_month_data as $task_revision)
                 @php
                   $rp_client = '';
                   $rp_developer = '';
@@ -187,12 +187,11 @@
       </div>
     </div>
   @endif
-  @endforeach
-
+  @endforeach --}}
 
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#number_of_task_received',{
+      new DataTable('#avg_task_submission_in_days',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>

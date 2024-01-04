@@ -420,11 +420,34 @@ Overview--}}
 </div>
 <hr />
 <div class="card col-md-3" style="background-color: #008ff8;"><h5 class="text-center mt-1 text-white">Lead Developer Overview</h5></div>
+<div class="row mt-3">
+    <div class="col-sm-6 col-lg-6 mt-3">
+        <x-cards.data :title="__('')" padding="false">
+            <x-table class="border-0 pb-3  table-hover mt-3">
+                <x-slot name="thead">
+                    <th class="pl-20">#</th>
+                    <th>Name</th>
+                </x-slot>
+
+                @foreach($lead_developer as $lead_dev)
+                <tr>
+                    <td class="pl-20">{{ $loop->index+1 }}</td>
+                    <td>
+                        <a target="_blank" href="{{ route('lead-dev-performance',$lead_dev->id) }}">{{mb_ucwords($lead_dev->name)}}</a>
+                    </td>
+                </tr>
+                @endforeach
+            </x-table>
+        </x-cards.data>
+    </div>
+</div>
 <div class="row mb-3">
     @foreach($lead_developer as $lead_dev)
     <div class="col-sm-12 col-lg-12 mt-3 mb-3">
         <x-cards.data :title="__('')" padding="false">
-            <h5 class="text-center mt-3"><span class="badge badge-primary">{{mb_ucwords($lead_dev->name)}}</span></h5>
+            <h5 class="text-center mt-3">
+                <span class="badge badge-primary">{{mb_ucwords($lead_dev->name)}}</span>
+            </h5>
             <div class="row ml-2">
                 <div class="col-xl-3 col-lg-3 col-md-2 mb-3" style="color: blue;">
                     <?php
@@ -472,7 +495,7 @@ Overview--}}
 
                     <td class="pl-20">{{$loop->index+1}}</td>
                     <td>
-                        <a href="/account/employees/{{$item->id}}" class="text-darkest-grey f-w-500">{{$item->name}}</a>
+                        <a target="_blank" href="{{ route('dev-performance',$item->id) }}" class="f-w-500">{{$item->name}}</a>
                     </td>
                     <td>
                       <?php

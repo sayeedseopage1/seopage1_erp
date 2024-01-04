@@ -1,18 +1,17 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="number_of_task_received{{$number_of_tasks_received_lead}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="percentage_of_tasks_deadline_missed{{count($estimate_missed_task_data_lead)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received_lead}}</h4>
-           
-           
+          <div class="modal-title"><h4>Submitted Tasks: {{$submit_number_of_tasks_in_this_month_lead}}</h4>
+         
              </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="number_of_task_received" class="display" style="width:100%">
+            <table id="percentage_of_tasks_deadline_missed_table" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Sl No</th>
@@ -26,8 +25,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($number_of_tasks_received_lead_data as $key => $row)
-                 
+                    @foreach($estimate_missed_task_data_lead as $row)
                     <tr>
                         <td>{{$loop->index+1}}</td>
                         <td>
@@ -61,9 +59,10 @@
                           <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
                         </td>
                         <td>
-                          <a href="#" data-toggle="modal" data-target="#revision_count_modal{{ $key }}">
-                            {{$row->revision_count}}
-                        </a>
+                          {{-- <a href="#" data-toggle="modal" data-target="#revision_count_modal{{ $key }}">
+                              {{$row->revision_count}}
+                          </a> --}}
+                          --
                         </td>
                     </tr>
                     @endforeach
@@ -78,13 +77,12 @@
     </div>
   </div>
 
-
-  @foreach($number_of_tasks_received_lead_data as $key => $row)
+  {{-- @foreach($estimate_missed_task_data_lead as $key => $row)
   @if ($row->revision_count !='0')
   @php
     $task_revisions = App\Models\TaskRevision::where('task_id',$row->id)->get();
   @endphp
-    <div class="modal fade" id="revision_count_modal{{ $key }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade"  id="revision_count_modal{{ $key }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
@@ -187,12 +185,11 @@
       </div>
     </div>
   @endif
-  @endforeach
-
+  @endforeach --}}
 
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#number_of_task_received',{
+      new DataTable('#percentage_of_tasks_deadline_missed_table',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>
