@@ -161,12 +161,14 @@ export const EditorWrapperWithImageAndToolbar = styled.div`
 export const FilesContainer = styled.div`
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.5rem;
     background-color: #daedf8;
     padding: 1rem;
     border-radius: 10px 10px 0 0;
 `;
 
+ 
 export const FileItem = styled.div`
     width: 69px; 
     height: 72px;

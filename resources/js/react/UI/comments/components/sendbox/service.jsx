@@ -163,9 +163,13 @@ const ServiceProvider = ({ children }) => {
             }
         };
 
+        const plainText = editorState.getCurrentContent().getPlainText();
+
+        if(!plainText) return '';
+
         // get row data
         const rowData = convertToRaw(editorState.getCurrentContent());
-
+         
         // markup
         const markup = draftToHtml(
             rowData,

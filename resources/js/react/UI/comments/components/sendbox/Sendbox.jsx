@@ -12,7 +12,7 @@ import {
     CodeBlockButton,
 } from "@draft-js-plugins/buttons";
 
-import Loader from '../../../../global/Loader';
+import Loader from "../../../../global/Loader";
 
 // react-icons
 import { LuPencilLine } from "react-icons/lu";
@@ -43,9 +43,10 @@ import { IoLinkSharp } from "react-icons/io5";
 import { useGetAllUsersQuery } from "../../../../services/api/userSliceApi";
 import MentionEntry from "./MentionEntry";
 import { usePostCommentMutation } from "../../../../services/api/commentsApiSlice";
-import { useAuth } from  '../../../../hooks/useAuth'
+import { useAuth } from "../../../../hooks/useAuth";
 import { useCommentContext } from "../../CommentsBody";
 import MentionedComment from "./MentiondComment";
+import { toast } from 'react-toastify'
 // service provider
 
 const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
@@ -121,9 +122,22 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     };
 
     // handle post comment
-    const handlePostComment = async () => { 
-        
-        const comment = renderToHtml(editorState) ?? ''; 
+    const handlePostComment = async () => {
+        const comment = renderToHtml(editorState) ?? "";
+ 
+
+        if (!comment && !files?.length > 0) {
+            // Swal.fire({
+            //     icon: "error",
+            //     title: "Please write a comment or upload a images",
+            //     showConfirmButton: true,
+            //     confirmButtonColor: "red",
+            // });
+            toast.error("Please write a comment or upload a images");
+
+            return;
+        }
+
         // form data
         const formData = new FormData();
 
@@ -137,23 +151,23 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         // convert link text to link
 
         formData.append("comment", comment);
-        formData.append("user_id", auth?.getId() ?? '');
+        formData.append("user_id", auth?.getId() ?? "");
         formData.append("task_id", taskId);
-        formData.append("added_by", auth?.getId() ?? '');
-        formData.append("last_updated_by", auth?.getId() ?? '');
+        formData.append("added_by", auth?.getId() ?? "");
+        formData.append("last_updated_by", auth?.getId() ?? "");
         formData.append("mention_id", mentionedComment?.id || null);
         if (files.length) {
             Array.from(files).forEach((file) => {
                 formData.append(`file[]`, file);
             });
-        } 
-        
+        }
+
         //
         try {
             await postComment({ taskId, data: formData });
             await onSubmit(formData);
 
-            /// clear all state                
+            /// clear all state
             clearFiles();
             setEditorState(() => EditorState.createEmpty());
             setMentionedComment(null);
@@ -169,19 +183,25 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
     // handle custom key command
     const handleKeyCommand = (command) => {
-        if (command === "send_comment") { 
-            handlePostComment()  
+        if (command === "send_comment") {
+            handlePostComment();
         }
     };
+
+    // handle key down
+    const handleKeyDown = (e) => {
+        e.preventDefault();
+        if(e.keyCode === 13){
+            handlePostComment();
+        }
+    }
 
     const isExpended = files?.length > 0 || expend;
 
     return (
         <SendboxWrapper>
             <EditorWrapperWithImageAndToolbar>
-                {mentionedComment && 
-                    <MentionedComment />
-                }
+                {mentionedComment && <MentionedComment />}
 
                 {files?.length > 0 ? (
                     <FilesContainer>
@@ -304,7 +324,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
             <RightButtonGroup isExpended={isExpended}>
                 <FileUploadButton>
-                    <input type="file" multiple onChange={handleUploadImage} />
+                    <input type="file" multiple onChange={handleUploadImage} onKeyDown={handleKeyDown} />
                     <svg
                         width="20"
                         height="22"
@@ -327,10 +347,19 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                     </svg>
                 </FileUploadButton>
 
-                <SendButton disabled={commentPostingStatus} onClick={handlePostComment}>
-                    {commentPostingStatus ? 
-                        <Loader title="" borderRightColor="white" width="28px" height="28px" border="2px solid #3c3d3e"/>
-                    :
+                <SendButton
+                    disabled={commentPostingStatus}
+                    onClick={handlePostComment}
+                >
+                    {commentPostingStatus ? (
+                        <Loader
+                            title=""
+                            borderRightColor="white"
+                            width="28px"
+                            height="28px"
+                            border="2px solid #3c3d3e"
+                        />
+                    ) : (
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="23.351"
@@ -346,7 +375,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                                 />
                             </g>
                         </svg>
-                    }
+                    )}
                 </SendButton>
             </RightButtonGroup>
         </SendboxWrapper>

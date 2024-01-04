@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import style from "./styles/comments.module.css";
+import './editor.style.css';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import {
     IoIosArrowDown,
