@@ -121,764 +121,268 @@
             @endif
         @endif
     </div>
-    <div class="accordion" id="accordionExample">
-	    <div class="card">
-	        <div class="card-header" id="headingOne">
-	            <h2 class="mb-0">
-	                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-	                    Sales Executive (Today's Update)
-	                </button>
-	            </h2>
-	        </div>
-
-	        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-	            <div class="card-body bg-amt-grey">
-	            	<div class="row my-2 text-center mx-auto">
-                        <div class="col-sm-12 pb-3">
-                            <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
-                                <div class="fc-toolbar-chunk">
-                                    <div class="fc-button-group">
-                                        <button date-mode="today" class="fc-prev-button fc-button fc-button-primary" type="button" aria-label="prev">
-                                            <span class="fc-icon fc-icon-chevron-left"></span>
-                                        </button>
-                                        <h2 class="fc-toolbar-title mx-3 todayDate"></h2>
-                                        <button class="fc-today-button fc-button fc-button-primary" type="button" disabled="">today</button>
-                                        <button date-mode="today" class="fc-next-button fc-button fc-button-primary" type="button" aria-label="next">
-                                            <span class="fc-icon fc-icon-chevron-right"></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="todayHtml">
-		                <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="col-10 d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Today's Leads</h5>
-		                                <div class="d-flex justify-content-between">
-		                                    <a href="">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayLeadcount}}
-		                                            <span class="f-12 font-weight-normal text-lightest">Leads Created Today</span>
-		                                        </p>
-		                                    </a>
-		                                    <a href="">
-		                                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($avg_bid_value)}} $
-		                                            <span class="f-12 font-weight-normal text-lightest">Avg. Bid Value</span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="col-2 d-block text-right">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="col-10 d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Today Converted Leads</h5>
-		                                <div class="d-flex justify-content-between">
-		                                    <a href="">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayLeadconverted}}<span class="f-12 font-weight-normal text-lightest">Leads Converted Today</span></p>
-		                                    </a>
-		                                    <a href="">
-		                                        <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{round($todayLeadconvertedValue,2)}} $<span class="f-12 font-weight-normal text-lightest">Converted Lead Value</span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		            </div>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="card">
-	        <div class="card-header" id="headingTwo">
-	            <h2 class="mb-0">
-	                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-	                    Sales Executive Monthly Cycle Update (21st - 20th)
-	                </button>
-	            </h2>
-	        </div>
-	        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-	            <div class="card-body bg-amt-grey">
-	            	<div class="row my-2 text-center mx-auto">
-                        <div class="col-sm-12 pb-3">
-                            <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
-                                <div class="fc-toolbar-chunk">
-                                    <div class="fc-button-group">
-                                        <button date-mode="month" class="fc-prev-button fc-button fc-button-primary" type="button" aria-label="prev">
-                                            <span class="fc-icon fc-icon-chevron-left"></span>
-                                        </button>
-                                        <h2 class="fc-toolbar-title mx-3 monthDate"></h2>
-                                        <button date-mode="month" class="fc-next-button fc-button fc-button-primary" type="button" aria-label="next">
-                                            <span class="fc-icon fc-icon-chevron-right"></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="monthHtml">
-		                <div class="row">
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Leads</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$totalLeads->count()}}
-		                                            <span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Leads Converted</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$Leadconverted}}<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Leads Lost</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$totalostdeal}}<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-
-		                </div>
-		                <div class="row mt-3">
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Bids Value</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{round($totalbidsValue,2)}} $<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Bids Value</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{round($avg_value, 2)}} $<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                        
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <div class="row mt-3">
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Won Deals</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$totalwondeal}}<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey"> % of Leads Converted
-		                                </h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                           
-		                                            
-
-
-		                                            {{round( $percentage_of_lead_converted, 2 )}}%
-
-		                                            
-		                                            
-		                                            <span class="f-12 font-weight-normal text-lightest">
-
-
-
-		                                            </span>
-
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Deal Won</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                           
-		                                            {{round($percentage_of_deal_won, 2)}}%
-		                                           
-		                                            <span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <div class="row mt-3">
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Deal Lost</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-
-		                                           
-		                                            {{-- $percentage = $lostLeads->where('deal_status', 'Lost')->count() / $lostLeads->count(); --}}
-		                                           {{round($percentage_of_deal_lost,2)}}%
-
-		                                            <span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Projects Got Rejected by PMs</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$rejectedbyPm}}<span class="f-12 font-weight-normal text-lightest"></span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Won Deals Getting Rejected</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$percentage_of_deal_getting_rejected}}%<span class="f-12 font-weight-normal text-lightest"></span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-	                </div>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="card">
-	        <div class="card-header" id="headingThree">
-	            <h2 class="mb-0">
-	                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-	                    Sales Executive (General View) 
-	                </button>
-	            </h2>
-	        </div>
-	        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-	            <div class="card-body bg-amt-grey">
-	            	<div class="row">
-                        <div class="align-items-center mx-auto h-100 pl-4 ml-5">
-                            <div class="col-auto">
-                                <label class="sr-only" for="inlineFormInputGroup"></label>
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text"><i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
-                                    </div>
-                                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
-                               </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="generalHtml">
-		                <div class="row">
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Leads</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$totalleads}}
-		                                            <span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Leads Converted</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$Leadconverted}}<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Leads Lost</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$totalostdeal}}<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <div class="row mt-3">
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Bids Value</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{round($totalbidsValue,2)}} $<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Bids Value</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{round($avg_value, 2)}} $<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                        
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <div class="row mt-3">
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. of Won Deals</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$totalwondeal}}<span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey"> % of Leads Converted
-		                                </h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                          
-		                                            
-		                                            {{round( $percentage_of_lead_converted, 2 )}}%
-		                                            
-		                                            
-		                                            <span class="f-12 font-weight-normal text-lightest">
-
-
-
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Deal Won</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                           
-		                                            
-		                                            {{round($percentage_of_deal_won, 2)}}%
-		                                           
-		                                            <span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		                <div class="row mt-3">
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Deal Lost</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{round($percentage_of_deal_lost,2)}}%
-		                                            <span class="f-12 font-weight-normal text-lightest">
-		                                            </span>
-		                                        </p>
-		                                    </a>
-
-
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Projects Got Rejected by PMs</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$rejectedbyPm}}<span class="f-12 font-weight-normal text-lightest"></span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-4">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Won Deals Getting Rejected</h5>
-		                                <div class="d-flex">
-		                                    <a href="#">
-		                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-		                                            {{$percentage_of_deal_getting_rejected}}%<span class="f-12 font-weight-normal text-lightest"></span>
-		                                        </p>
-		                                    </a>
-		                                </div>
-		                            </div>
-		                            <div class="d-block">
-		                                <i class="fa fa-list text-lightest f-27"></i>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		              
-		                <div class="row mt-3 mb-3">
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize w-100 h-200">
-		                                <h4 class="f-18 f-w-500 mb-2">Total Leads</h4>
-		                                <x-table class="h-200">
-		                                    <x-slot name="thead">
-		                                        <th class="pl-20 text-capitalize"> SL. No</th>
-		                                        <th class="pl-20 text-capitalize">Lead Name</th>
-		                                        <th class="pl-20 text-capitalize">Lead Value</th>
-		                                        <th class="pl-20 text-capitalize">Bid Value</th>
-		                                        <th class="pl-20 text-capitalize">Created Date</th>
-		                                        <th class="pl-20 text-capitalize">Conversion Status</th>
-		                                    </x-slot>
-		                                    @forelse($totalLeads as $value)
-		                                    <tr>
-		                                        <td>{{$loop->index+1}}</td>
-		                                        <td class="pl-20 text-capitalize ">
-		                                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('leads.show', $value->id)}}" target="_blank">{!!html_entity_decode($value->client_name)!!}</a>
-		                                        </td>
-		                                        <td class="pl-20 text-capitalize">{{$value->bid_value}}-{{$value->bid_value2}}{{$value->original_currency->currency_symbol}}</td>
-		                                        <td class="pl-20 text-capitalize">{{$value->actual_value}}{{$value->original_currency->currency_symbol}}</td>
-		                                        <td class="pl-20 text-capitalize">
-		                                            @if($value->created_at != null)
-		                                            {{$value->created_at->format('Y-m-d')}}
-		                                            @else
-		                                            --
-		                                            @endif
-		                                        </td>
-		                                        <td class="pl-20 text-capitalize">
-		                                            @if($value->deal_status == 0)
-		                                            <i class="fas fa-circle" style="color:red;"></i> Not Converted
-		                                            @else 
-		                                            <i class="fas fa-circle" style="color:green;"></i> Converted
-
-		                                            @endif
-		                                        
-		                                        </td>
-		                                    </tr>
-		                                    @empty
-		                                        <tr>
-													<td colspan="6" class="shadow-none">
-							                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-							                        </td>
-												</tr>
-		                                    @endforelse
-		                                </x-table>
-		                            </div>
-		                        </div>
-		                    </div>
-		                    <div class="col-md-6">
-		                        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-		                            <div class="d-block text-capitalize">
-		                                <h4 class="f-18 f-w-500 mb-2"><strong>Won Deals Table</strong></h4>
-		                                <x-table class="h-200">
-		                                    <x-slot name="thead">
-		                                        <th class="pl-20 text-capitalize">SL. No.</th>
-		                                        <th class="pl-20 text-capitalize">Won Deal Name</th>
-		                                        <th class="pl-20 text-capitalize">Won Deal Value</th>
-		                                        <th class="pl-20 text-capitalize">Won Date</th>
-		                                        <th class="pl-20 text-capitalize">Project Status</th>
-		                                    </x-slot>
-		                                    @forelse($totalDeals as $value)
-		                                    <tr>
-		                                        <td>{{$loop->index+1}}</td>
-		                                        <td class="pl-20 text-capitalize ">
-		                                            <a class="text-darkest-grey openRightModal" title="{{$value->project_name}}" href="{{route('deals.show', $value->id)}}" target="_blank">{{$value->project_name}}</a>
-		                                        </td>
-		                                        <td class="pl-20 text-capitalize">{{$value->actual_amount}}{{$value->original_currency->currency_symbol}}</td>
-		                                        <td class="pl-20 text-capitalize">{{$value->created_at->format('Y-m-d')}}</td>
-		                                        <td class="pl-20 text-capitalize">
-		                                            {{$value->status}}
-		                                            
-		                                        </td>
-		                                    </tr>
-		                                    @empty
-		                                    <tr>
-												<td colspan="5" class="shadow-none">
-						                            <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-						                        </td>
-											</tr>
-		                                    @endforelse
-		                                </x-table>
-		                            </div>
-		                        </div>
-		                    </div>
-		                </div>
-		            </div>
-	            </div>
-	        </div>
-	    </div>
-	    <div class="row mt-3">
-        	<div class="col-md-7">
-        		<div class="card">
-        			<div class="card-body">
-        				<!-- EMP DASHBOARD EVENTS START -->
-		                @if (in_array('my_calender', $activeWidgets))
-		                    <div class="row mt-3">
-		                        <div class="col-md-12">
-		                            <x-cards.data :title="__('app.menu.myCalendar')">
-		                                <div id="calendar"></div>
-		                                <x-slot name="action">
-		                                    <div class="dropdown ml-auto calendar-action">
-		                                        <button id="event-btn" class="btn btn-lg f-14 p-0 text-lightest text-capitalize rounded  dropdown-toggle cal-event" type="button"
-		                                            aria-haspopup="true" aria-expanded="false">
-		                                            <i class="fa fa-ellipsis-h"></i>
-		                                        </button>
-
-		                                            <div id="cal-drop" class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-2">
-		                                                @if(in_array('tasks', user_modules()))
-		                                                <div class="custom-control custom-checkbox cal-filter">
-		                                                    <input type="checkbox" value="task"
-		                                                        class="form-check-input filter-check" name="calendar[]"
-		                                                        id="customCheck1" @if(in_array('task',$event_filter)) checked @endif>
-		                                                    <label
-		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-		                                                        for="customCheck1">@lang('app.menu.tasks')</label>
-		                                                </div>
-		                                                @endif
-		                                                @if(in_array('events', user_modules()))
-		                                                <div class="custom-control custom-checkbox cal-filter">
-		                                                    <input type="checkbox" value="events"
-		                                                        class="form-check-input filter-check" name="calendar[]"
-		                                                        id="customCheck2" @if(in_array('events',$event_filter)) checked @endif>
-		                                                    <label
-		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-		                                                        for="customCheck2">@lang('app.menu.Events')</label>
-		                                                </div>
-		                                                @endif
-		                                                @if(in_array('holidays', user_modules()))
-		                                                <div class="custom-control custom-checkbox cal-filter">
-		                                                    <input type="checkbox" value="holiday"
-		                                                        class="form-check-input filter-check" name="calendar[]"
-		                                                        id="customCheck3" @if(in_array('holiday',$event_filter)) checked @endif>
-		                                                    <label
-		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-		                                                        for="customCheck3">@lang('app.menu.holiday')</label>
-		                                                </div>
-		                                                @endif
-		                                                @if(in_array('tickets', user_modules()))
-		                                                <div class="custom-control custom-checkbox cal-filter">
-		                                                    <input type="checkbox" value="tickets"
-		                                                        class="form-check-input filter-check" name="calendar[]"
-		                                                        id="customCheck4" @if(in_array('tickets',$event_filter)) checked @endif>
-		                                                    <label
-		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-		                                                        for="customCheck4">@lang('app.menu.tickets')</label>
-		                                                </div>
-		                                                @endif
-		                                                @if(in_array('leaves', user_modules()))
-		                                                <div class="custom-control custom-checkbox cal-filter">
-		                                                    <input type="checkbox" value="leaves"
-		                                                        class="form-check-input filter-check" name="calendar[]"
-		                                                        id="customCheck5" @if(in_array('leaves',$event_filter)) checked @endif>
-		                                                    <label
-		                                                        class="form-check-label form_custom_label text-dark-grey pl-2 mr-3 justify-content-start cursor-pointer checkmark-20 pt-2 text-wrap"
-		                                                        for="customCheck5">@lang('app.menu.leaves')</label>
-		                                                </div>
-		                                                @endif
-		                                            </div>
-		                                    </div>
-		                                </x-slot>
-		                            </x-cards.data>
-		                        </div>
-		                    </div>
-		                @endif
-		                <!-- EMP DASHBOARD EVENTS END -->
-        			</div>
-        		</div>
-        	</div>
-        </div>
+	<div class="row d-flex justify-content-between mb-3">
+		<div class="col-md-6">
+			<h4 class="bg-white rounded b-shadow-4 mb-4 mb-md-0 mb-lg-0 d-inline-block" style="padding: 7px;">Core Metrics For Bidders :-</h4>
+		</div>
+		<div class="col-md-6">
+			<div class="d-flex border-right-grey border-right-grey-sm-0 mb-3 ml-auto justify-content-end">
+				<p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
+				<div class="select-status d-flex">
+					<input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
+						id="datatableRange2" placeholder="@lang('placeholders.dateRange')">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of leads</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#num_of_lead">
+								00
+							</a>
+						</p>
+                        @include('dashboard.ajax.salesexecutive.modals.num_of_lead_modal')
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of leads that got converted to deals</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#no_of_lead_that_got_converted_to_deals">
+								00
+							</a>
+						</p>
+                        @include('dashboard.ajax.salesexecutive.modals.no_of_lead_that_got_converted_to_deals_modal')
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of leads that got converted to won deals</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average bidding amount (For leads)</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average bidding delay time</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Bidding frequency</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Country wise bidding breakdown</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row d-flex justify-content-between mb-3">
+		<div class="col-md-6">
+			<h4 class="bg-white rounded b-shadow-4 mb-4 mb-md-0 mb-lg-0 d-inline-block" style="padding: 7px;">Core Metrics For Closers :-</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of won deals</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of won deals</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Country wise won deals</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average deal amount</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion/Won deal ratio</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Canceled project count/won deal ration</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4 mb-3">
+			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+				<div class="d-block text-capitalize">
+					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Rejected project count/won deal ratio</h5>
+					<div class="d-flex flex-wrap">
+						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+							<a href="#" data-toggle="modal" data-target="#">
+								00
+							</a>
+						</p>
+					</div>
+				</div>
+				<div class="d-block">
+					<i class="fa fa-list text-lightest f-27"></i>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 @endsection
