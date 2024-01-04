@@ -17,8 +17,8 @@ import getTextContent, {
     htmlToPreservedText,
     htmlToString,
 } from "../utils/getTextContent";
-import getFormattedTime from "../utils/getFormattedTime";
-import { FcCancel } from "react-icons/fc";
+import getFormattedTime, { checkSameDay } from "../utils/getFormattedTime";
+import { TiCancel } from "react-icons/ti";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
 
 const currentUser = new User(window.Laravel.user);
@@ -94,19 +94,42 @@ const SingleChat = ({
             ) {
                 return <></>;
             } else {
-                return (
-                    <span
-                        style={{
-                            alignSelf: isCurrentUser(comment?.user?.id)
-                                ? "flex-end"
-                                : "flex-start",
-                        }}
-                        className={`${style.singleChat_comment_card_text_time}`}
-                    >
-                        {/* 2:54 PM */}
-                        {`${dayjs(comment?.created_date).format("hh:mm A")}`}
-                    </span>
-                );
+                if (
+                    checkSameDay(
+                        dayjs(previousComment?.created_date),
+                        dayjs(currentComment?.created_date)
+                    )
+                ) {
+                    return (
+                        <span
+                            style={{
+                                alignSelf: isCurrentUser(comment?.user?.id)
+                                    ? "flex-end"
+                                    : "flex-start",
+                            }}
+                            className={`${style.singleChat_comment_card_text_time}`}
+                        >
+                            {/* 2:54 PM */}
+                            {`${dayjs(comment?.created_date).format(
+                                "hh:mm A"
+                            )}`}
+                        </span>
+                    );
+                } else {
+                    return (
+                        <span
+                            style={{
+                                alignSelf: isCurrentUser(comment?.user?.id)
+                                    ? "flex-end"
+                                    : "flex-start",
+                            }}
+                            className={`${style.singleChat_comment_card_text_time}`}
+                        >
+                            {/* 2:54 PM */}
+                            {`${getFormattedTime(comment?.created_date)}`}
+                        </span>
+                    );
+                }
             }
         } else {
             return (
@@ -360,7 +383,11 @@ const SingleChat = ({
                             >
                                 <section
                                     style={{
-                                        alignSelf: isCurrentUser(comment?.user?.id)?"flex-end":"flex-start",
+                                        alignSelf: isCurrentUser(
+                                            comment?.user?.id
+                                        )
+                                            ? "flex-end"
+                                            : "flex-start",
                                         gap:
                                             currentUser.roleId === 1
                                                 ? // || currentUser.roleId === 8
@@ -381,20 +408,35 @@ const SingleChat = ({
                                 >
                                     <span
                                         style={{
-                                            color: "red",
+                                            color:
+                                                currentUser?.roleId === 1
+                                                    ? showDeletedComment
+                                                        ? "#aaaaaa"
+                                                        : "red"
+                                                    : "#aaaaaa",
+                                            fontStyle: "italic",
                                         }}
                                     >
-                                        <FcCancel
+                                        <TiCancel
                                             style={{
-                                                transform: "rotateZ(90deg)",
                                                 height: "100%",
                                                 width: "auto",
-                                                margin: isCurrentUser(comment?.user?.id)?"0 2px 2px 0":"0 2px 2px 2px",
+                                                margin: isCurrentUser(
+                                                    comment?.user?.id
+                                                )
+                                                    ? "0 2px 2px 0"
+                                                    : "0 2px 2px 2px",
+                                                color:
+                                                    currentUser?.roleId === 1
+                                                        ? showDeletedComment
+                                                            ? "#aaaaaa"
+                                                            : "red"
+                                                        : "#aaaaaa",
                                             }}
                                         />
                                         {isCurrentUser(comment?.user?.id)
-                                            ? "You have deleted this comment"
-                                            : "This comment was deleted"}{" "}
+                                            ? `You have deleted this comment, ${getFormattedTime(comment?.deleted_at)}`
+                                            : `This comment was deleted by ${comment?.user?.name}, ${getFormattedTime(comment?.deleted_at)}`}{" "}
                                         {/* {showDeletedComment
                                             ? `(Deleted at : ${dayjs(
                                                   comment?.deleted_at
@@ -413,6 +455,7 @@ const SingleChat = ({
                                                 style={{
                                                     cursor: "pointer",
                                                     height: "15px",
+                                                    color: "#aaaaaa",
                                                 }}
                                             />
                                         ) : (
@@ -423,6 +466,7 @@ const SingleChat = ({
                                                 style={{
                                                     cursor: "pointer",
                                                     height: "15px",
+                                                    color: "#1D82F5",
                                                 }}
                                             />
                                         )
@@ -432,9 +476,19 @@ const SingleChat = ({
                                 </section>
                                 {showDeletedComment ? (
                                     <section
-                                        className={`${style.single_comment_deleted_comment_body}`}
+                                        className={`${
+                                            style.single_comment_deleted_comment_body
+                                        } ${
+                                            isCurrentUser(comment?.user?.id)
+                                                ? style.single_comment_deleted_comment_body_right
+                                                : style.single_comment_deleted_comment_body_left
+                                        }`}
                                         style={{
-                                            margin: isCurrentUser(comment?.user?.id)?"0 11px 0 0":"0 0 0 11px",
+                                            margin: isCurrentUser(
+                                                comment?.user?.id
+                                            )
+                                                ? "0 11px 0 0"
+                                                : "0 0 0 11px",
                                         }}
                                     >
                                         {/* mentioned comment */}
@@ -670,13 +724,12 @@ const SingleChat = ({
                                                     }}
                                                     className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                 >
-                                                    <FcCancel
+                                                    <TiCancel
                                                         style={{
-                                                            transform:
-                                                                "rotateZ(90deg)",
                                                             height: "100%",
                                                             width: "auto",
                                                             margin: "0 2px 2px",
+                                                            color: "#aaaaaa",
                                                         }}
                                                     />
                                                     {isCurrentUser(

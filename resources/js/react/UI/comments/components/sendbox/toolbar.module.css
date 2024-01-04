@@ -1,0 +1,18 @@
+.toolbar {   
+  background: #ffffff;
+  border-radius: 10px 10px 0 0 ;
+  padding: 10px;
+  /* box-shadow: 0 -10px 10px rgb(0 0 0 / 10%); */
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-bottom: transparent;
+}
+
+.toolbar:after { 
+  border-width: 4px;
+  margin-left: -4px;
+}
+
+.toolbar:before { 
+  border-width: 6px;
+  margin-left: -6px;
+}

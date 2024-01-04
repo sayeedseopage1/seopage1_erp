@@ -255,24 +255,54 @@
   /* gap: 0 20px; */
   padding: 7px 11px;
 }
-/* 
-.single_comment_deleted_title::before{
+
+.single_comment_deleted_comment_body_left{
+  position: relative;
+}
+.single_comment_deleted_comment_body_left::before{
   position: absolute;
-  bottom: 50px;
+  /* bottom: 50px; */
+  top: -15px;
+  left: -5.20px;
   content: "";
   height: 50px;
   width: 1px;
   background-color: #626365;
 }
-
-.single_comment_deleted_title::after{
+.single_comment_deleted_comment_body_left::after{
   position: absolute;
-  bottom: 51px;
+  /* bottom: 51px; */
+  top: 35px;
+  left: -5.20px;
   content: "";
   height: 1px;
   width: 5px;
   background-color: #626365;
-} */
+}
+
+.single_comment_deleted_comment_body_right{
+  position: relative;
+}
+.single_comment_deleted_comment_body_right::before{
+  position: absolute;
+  /* bottom: 50px; */
+  top: -15px;
+  right: -5.20px;
+  content: "";
+  height: 50px;
+  width: 1px;
+  background-color: #626365;
+}
+.single_comment_deleted_comment_body_right::after{
+  position: absolute;
+  /* bottom: 51px; */
+  top: 35px;
+  right: -5.20px;
+  content: "";
+  height: 1px;
+  width: 5px;
+  background-color: #626365;
+}
 
 .single_comment_deleted_comment_body {
   padding: 8px 11px;
@@ -725,7 +755,7 @@
 
 /* ---------------------------------------------------------- */
 .comments_selected_action_controller {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
@@ -792,4 +822,33 @@
 }
 
 /* ---------------------------------------------------------- */
+.image_slide_modal_container{
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  position: relative;
+}
+.image_slide_modal_container__close_btn{
+  height: 40px;
+  width: 40px;
+  color: black;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 999;
+}
+.image_slide_modal_container__slider{
+  /* padding: 5px; */
+  border: solid red;
+  /* height: 100vh; */
+}
+.image_slide_modal_container__slider_container{
+  border: solid;
+}
+.image_slide_modal_container__slider_image{
+  height: 90vh;
+  max-width: 100vw;
+  margin: 0 auto;
+}
 /* ---------------------------------------------------------- */

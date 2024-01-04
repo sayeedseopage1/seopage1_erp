@@ -22,22 +22,24 @@ const User = ({ user: userState, setUser, change }) => {
     }, []);
 
     useEffect(() => {
-        const filteredUser = _.orderBy(_.uniqBy([...users],"name"), ["name"], ["asc"]).filter(
-            (user) => {
-                if (
-                    // user.role_id === 1 ||
-                    user.role_id === 2 ||
-                    user.role_id === 3 ||
-                    // user.role_id === 8 ||
-                    user.id === currentUser.id ||
-                    !user.role_id
-                ) {
-                    return false;
-                } else {
-                    return true;
-                }
+        const filteredUser = _.orderBy(
+            _.uniqBy([...users], "name"),
+            ["name"],
+            ["asc"]
+        ).filter((user) => {
+            if (
+                // user.role_id === 1 ||
+                user.role_id === 2 ||
+                user.role_id === 3 ||
+                // user.role_id === 8 ||
+                user.id === currentUser.id ||
+                !user.role_id
+            ) {
+                return false;
+            } else {
+                return true;
             }
-        );
+        });
         // console.log(filteredUser);
         setAllUser([window.Laravel.user, ...filteredUser]);
     }, [users]);
@@ -61,7 +63,7 @@ const User = ({ user: userState, setUser, change }) => {
             <span className={style.user_label}>Employee:</span>
 
             {/* drop down */}
-            <div className={`dropdown`} >
+            <div className={`dropdown`}>
                 <div
                     className={`dropdown-toggle ${style.user_field} ${
                         change ? style.white_bg : style.custom_bg
@@ -98,7 +100,7 @@ const User = ({ user: userState, setUser, change }) => {
                         >
                             <Person name={"current user"} avatar={'http://127.0.0.1:8000/user-uploads/avatar/avatar_blank.png'}/>
                         </button> */}
-                        {!isFetching &&
+                        {!isFetching && [...filteredUser].length ? (
                             [...filteredUser].map((user) => {
                                 return (
                                     // <option key={user.id} value={user.id}>
@@ -136,7 +138,14 @@ const User = ({ user: userState, setUser, change }) => {
                                         )}
                                     </button>
                                 );
-                            })}
+                            })
+                        ) : (
+                            <button
+                                className={`dropdown-item ${style.user_field_dropdown_container_btn}`}
+                            >
+                                <span>No user found</span>
+                            </button>
+                        )}
                     </section>
                 </div>
             </div>

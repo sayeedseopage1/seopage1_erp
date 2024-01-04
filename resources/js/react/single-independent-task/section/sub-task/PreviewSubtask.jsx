@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Genarel from "./preview/Genarel";
 import { SingleTask } from "../../../utils/single-task";
 import {
@@ -14,46 +14,51 @@ import History from "./preview/History";
 import Comments from "./preview/Comments";
 import _ from "lodash";
 import { useSingleTask } from "../../../hooks/useSingleTask";
+import CommentsBody from "../../../UI/comments/CommentsBody";
+import { useGetCommentsQuery } from "../../../services/api/commentsApiSlice";
 
 const PreviewSubtask = ({ parentTask, subTask }) => {
-    const [task, setTask] = React.useState(null)
+    const [task, setTask] = React.useState(null);
     const taskID = subTask?.id;
     const [submittedWork, setSubmittedWork] = React.useState([]);
     const [timeLog, setTimeLog] = React.useState([]);
     const [review, setReview] = React.useState(null);
     const [histories, setHistories] = React.useState([]);
     const [comments, setComments] = React.useState([]);
+    const [isCommentShow, setIsCommentShow] = React.useState(false);
 
-    const { 
-        getTaskById, 
-        getSubmittionInfo, 
-        taskDetailsIsFetching, 
-        submittionInfoIsFetching
-     } = useSingleTask();
-
+    const {
+        getTaskById,
+        getSubmittionInfo,
+        taskDetailsIsFetching,
+        submittionInfoIsFetching,
+    } = useSingleTask();
 
     const [getTaskDetails, { isFetching: detailFetchingStateLoading }] =
         useLazyGetTaskDetailsQuery();
 
+    const {
+        data: subTaskComments,
+        isFetching: commentsFetching,
+        isLoading: commentsLoading,
+        refetch: commentsRefetch,
+    } = useGetCommentsQuery(subTask?.id);
 
     // fetch task details
     React.useEffect(() => {
-        (
-            async () => {
-               let task = await getTaskById(taskID)
-               task = new SingleTask(task)
-               setTask(task);
-            }
-        )()
-    }, [])
-   
+        (async () => {
+            let task = await getTaskById(taskID);
+            task = new SingleTask(task);
+            setTask(task);
+        })();
+    }, []);
 
     //   fetch submitted rtk api
     const fetchData = (url, cb) => {
         getTaskDetails(`/${task?.id}/json?mode=${url}`)
             .unwrap()
-            .then((res) =>{
-                let d = _.orderBy(res, 'id', 'desc');
+            .then((res) => {
+                let d = _.orderBy(res, "id", "desc");
                 cb(d);
             })
             .catch((err) => console.error(err));
@@ -64,7 +69,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         e.preventDefault();
         if (submittedWork.length === 0) {
             const data = await getSubmittionInfo(taskID);
-            console.log({data})
+            console.log({ data });
             setSubmittedWork([...data]);
         }
     };
@@ -101,7 +106,6 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         _comments.unshift(comment);
         setComments(_comments);
     };
- 
 
     return (
         <React.Fragment>
@@ -120,6 +124,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tab"
                     aria-controls="v-pills-home"
                     aria-selected="true"
+                    onClick={() => setIsCommentShow(false)}
                 >
                     General
                 </a>
@@ -131,7 +136,10 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tab"
                     aria-controls="v-pills-submitted-work"
                     aria-selected="false"
-                    onClick={fetchSubmittedWork}
+                    onClick={(e) => {
+                        fetchSubmittedWork(e);
+                        setIsCommentShow(false);
+                    }}
                 >
                     Submitted Works
                 </a>
@@ -143,7 +151,10 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tab"
                     aria-controls="v-pills-comments"
                     aria-selected="false"
-                    onClick={fetchComments}
+                    onClick={(e) => {
+                        commentsRefetch(e);
+                        setIsCommentShow(true);
+                    }}
                 >
                     Comment
                 </a>
@@ -155,7 +166,10 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tab"
                     aria-controls="v-pills-time-log-work"
                     aria-selected="false"
-                    onClick={fetchTimeLogData}
+                    onClick={(e) => {
+                        fetchTimeLogData(e);
+                        setIsCommentShow(false);
+                    }}
                 >
                     Time Logs
                 </a>
@@ -167,7 +181,10 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tab"
                     aria-controls="v-pills-history"
                     aria-selected="false"
-                    onClick={fetchHistories}
+                    onClick={(e) => {
+                        fetchHistories(e);
+                        setIsCommentShow(false);
+                    }}
                 >
                     History
                 </a>
@@ -179,14 +196,19 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tab"
                     aria-controls="v-pills-task-review-work"
                     aria-selected="false"
-                    onClick={fetchReviewData}
+                    onClick={(e) => {
+                        fetchReviewData(e);
+                        setIsCommentShow(false);
+                    }}
                 >
                     Task Review
                 </a>
             </div>
 
             <div
-                className="tab-content p-3 sp1-subtask-modal-tab-content"
+                className={`tab-content ${
+                    isCommentShow ? "p-0" : "p-3"
+                } sp1-subtask-modal-tab-content`}
                 id="v-pills-tabContent"
             >
                 <div
@@ -196,7 +218,11 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     aria-labelledby="v-pills-general-tab"
                 >
                     <div className="mr-3">
-                        <Genarel isFetching={taskDetailsIsFetching} taskID={taskID} task={task} />
+                        <Genarel
+                            isFetching={taskDetailsIsFetching}
+                            taskID={taskID}
+                            task={task}
+                        />
                     </div>
                 </div>
                 <div
@@ -220,13 +246,28 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tabpanel"
                     aria-labelledby="v-pills-comments-tab"
                 >
-                    <Comments
+                    {/* <Comments
                         task={task}
                         comments={comments}
                         onCommentPost={onCommentPost}
                         isLoading={detailFetchingStateLoading}
+                    /> */}
+                    <CommentsBody
+                        close={() => {}}
+                        comments={subTaskComments}
+                        loading={commentsLoading}
+                        onSubmit={() => {}}
+                        isOpen={true}
+                        fullScreenView={false}
+                        setFullScreenView={() => {}}
+                        height={"741px"}
+                        fetching={commentsFetching}
+                        refetch={commentsRefetch}
+                        showFullScreenBtn={false}
+                        taskId={subTask?.id}
+                        showCloseBtn={false}
                     />
-                </div> 
+                </div>
 
                 <div
                     className="tab-pane fade"
