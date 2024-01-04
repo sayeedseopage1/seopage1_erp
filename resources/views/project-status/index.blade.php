@@ -132,7 +132,8 @@ $addPermission = user()->permission('add_holiday');
 
     <script>
         
-        $('#project-status-table').on('preXhr.dt', function(e, settings, data) {
+        $( document ).ready(function() {
+            $('#project-status-table').on('preXhr.dt', function(e, settings, data) {
             // var month = $('#month').val();
             // var year = $('#year').val();
             var searchText = $('#search-text-field').val();
@@ -204,6 +205,7 @@ $addPermission = user()->permission('add_holiday');
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
 
+        });
         });
     </script>
 @endpush

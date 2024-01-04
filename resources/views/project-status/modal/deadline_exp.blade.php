@@ -69,10 +69,11 @@
                             <label class="text-dark-grey" data-label="true" for="reason">Reason
                                 <sup class="mr-1">*</sup>
                             </label>
-                            <textarea name="reason" id="reason" class="form-control"></textarea>
+                            <textarea name="reason" id="reason{{$item->project_id}}" class="form-control"></textarea>
                            <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                             <script>
-                                CKEDITOR.replace('reason');
+                                console.log("reason" + {!! $item->project_id !!});
+                                CKEDITOR.replace("reason" + {!! $item->project_id !!});
                             </script>
                             <label id="reason_error" class="text-danger" for="reason"></label>
                         </div>
@@ -90,6 +91,7 @@
 </div>
 
 <script>
+    $( document ).ready(function() {
     $('#reasonSubmit').click(function(e){
         e.preventDefault();
         $('#reasonSubmit').attr("disabled", true);
@@ -126,6 +128,7 @@
                 $('#reasonSubmit').html("Submit");
             }
         });
+    });
     });
 
 </script>

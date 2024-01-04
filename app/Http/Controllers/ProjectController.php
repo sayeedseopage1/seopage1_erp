@@ -2140,6 +2140,7 @@ class ProjectController extends AccountBaseController
             if($request->project_budget){
                 $findProject = Project::where('id',$request->project_id)->first();
                 $findDeal = Deal::where('id',$findProject->deal_id)->first();
+                if($findDeal->project_type =='fixed'){
                     $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $request->project_budget)
                                 ->where('end_value', '>=', $request->project_budget)
                                 ->first();
@@ -2148,6 +2149,12 @@ class ProjectController extends AccountBaseController
                         $project_status_helper = new HelperPmProjectStatusController();
                         $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
                     }
+                }else{                                
+                    // if($findDeal->project_type !=null){
+                        $project_status_helper = new HelperPmProjectStatusController();
+                        $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
+                    // }
+                }
             }
         }
     // PROJECT PM GOAL SETTINGS END
