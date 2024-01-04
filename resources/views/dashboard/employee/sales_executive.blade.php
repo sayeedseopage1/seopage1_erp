@@ -135,6 +135,7 @@
 			</div>
 		</div>
 	</div>
+    <div id="generalHtml">
 	<div class="row">
 		<div class="col-md-4 mb-3">
 			<div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
@@ -384,6 +385,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 @endsection
 @push('scripts')
@@ -667,6 +669,7 @@
             function showTable() {
                 var dateRangePicker = $('#datatableRange2').data('daterangepicker');
                 var startDate = $('#datatableRange').val();
+                var user_id = {{Auth::user()->id}};
                 if (startDate == '') {
                     startDate = null;
                     endDate = null;
@@ -684,7 +687,7 @@
                     data: {
                         startDate: startDate,
                         endDate: endDate,
-                        mode: 'general'
+                        user_id: user_id,
                     },
                     blockUI: true,
                     success: function(resp) {
