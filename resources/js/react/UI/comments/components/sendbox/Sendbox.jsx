@@ -12,6 +12,8 @@ import {
     CodeBlockButton,
 } from "@draft-js-plugins/buttons";
 
+import Loader from '../../../../global/Loader';
+
 // react-icons
 import { LuPencilLine } from "react-icons/lu";
 import { FiSend } from "react-icons/fi";
@@ -325,22 +327,26 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                     </svg>
                 </FileUploadButton>
 
-                <SendButton onClick={handlePostComment}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="23.351"
-                        height="23.938"
-                        viewBox="0 0 23.351 23.938"
-                    >
-                        <g transform="translate(-4.961 0)">
-                            <path
-                                id="Path_14859"
-                                d="M4.995,22.845c-.2.9.5,1.286,1.141,1L27.9,12.683h0a.828.828,0,0,0,0-1.43h0L6.136.094c-.644-.289-1.338.094-1.141,1,.013.061,1.3,5.792,2,8.909l11.361,1.967L6.994,13.936c-.7,3.117-1.986,8.848-2,8.909Z"
-                                transform="translate(0 0)"
-                                fill="#fff"
-                            />
-                        </g>
-                    </svg>
+                <SendButton disabled={commentPostingStatus} onClick={handlePostComment}>
+                    {commentPostingStatus ? 
+                        <Loader title="" borderRightColor="white" width="28px" height="28px" border="2px solid #3c3d3e"/>
+                    :
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="23.351"
+                            height="23.938"
+                            viewBox="0 0 23.351 23.938"
+                        >
+                            <g transform="translate(-4.961 0)">
+                                <path
+                                    id="Path_14859"
+                                    d="M4.995,22.845c-.2.9.5,1.286,1.141,1L27.9,12.683h0a.828.828,0,0,0,0-1.43h0L6.136.094c-.644-.289-1.338.094-1.141,1,.013.061,1.3,5.792,2,8.909l11.361,1.967L6.994,13.936c-.7,3.117-1.986,8.848-2,8.909Z"
+                                    transform="translate(0 0)"
+                                    fill="#fff"
+                                />
+                            </g>
+                        </svg>
+                    }
                 </SendButton>
             </RightButtonGroup>
         </SendboxWrapper>
