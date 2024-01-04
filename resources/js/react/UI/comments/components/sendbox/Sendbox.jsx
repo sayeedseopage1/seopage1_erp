@@ -327,7 +327,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                     </svg>
                 </FileUploadButton>
 
-                <SendButton onClick={handlePostComment}>
+                <SendButton disabled={commentPostingStatus} onClick={handlePostComment}>
                     {commentPostingStatus ? 
                         <Loader title="" borderRightColor="white" width="28px" height="28px" border="2px solid #3c3d3e"/>
                     :
