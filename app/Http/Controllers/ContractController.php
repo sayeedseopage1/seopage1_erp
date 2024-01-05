@@ -1024,7 +1024,7 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-       // dd($request);
+    //    dd($request->all());
     //    DB::beginTransaction();
         $deal_hourly_checked = Deal::where('id', $request->id)->first();
         if ($deal_hourly_checked->project_type != 'hourly') {
@@ -1562,7 +1562,7 @@ class ContractController extends AccountBaseController
     }
     public function updatedealDetails(Request $request)
     {
-        //        dd($request->all());
+            //    dd($request->all());
         $deal_hourly_checked = Deal::where('id', $request->id)->first();
         if ($deal_hourly_checked->project_type != 'hourly') {
             $validated = $request->validate([
