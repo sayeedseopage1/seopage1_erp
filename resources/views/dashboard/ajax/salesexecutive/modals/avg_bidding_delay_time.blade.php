@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="num_of_lead{{count($number_of_leads_received_get)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="avg_bidding_delay_time{{count($number_of_leads_received_get)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -13,13 +13,14 @@
           </button>
         </div>
         <div class="modal-body">
-            <table id="numOfLead" class="display" style="width:100%">
+            <table id="avg_biddin_delay_time" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
                     <th scope="col">Project Name</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Created</th>
+                    <th scope="col">Bidding Time</th>
                     <th scope="col">Created By</th>
                     <th scope="col">Deal Status</th>
                   </tr>
@@ -41,6 +42,9 @@
                         </td>
                         <td>
                             {{$row->created_at}}
+                        </td>
+                        <td>
+                            {{$row->bidding_minutes .' min '. $row->bidding_seconds .' sec'}}
                         </td>
                         <td>
                             @if($user->id != null)
@@ -70,7 +74,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#numOfLead',{
+      new DataTable('#avg_biddin_delay_time',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });       
   </script>

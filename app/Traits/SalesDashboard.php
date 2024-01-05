@@ -154,6 +154,15 @@ trait SalesDashboard
 		->where('deal_stages.created_at', '<', $endDate)
 		->count();
 
+    $this->number_of_leads_convert_deals_get = DB::table('deal_stages')
+		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
+		->where('leads.added_by', $salesId)
+		->where('leads.created_at', '>=', $startDate)
+		->where('leads.created_at', '<', $endDate)
+		->where('deal_stages.created_at', '>=', $startDate)
+		->where('deal_stages.created_at', '<', $endDate)
+		->get();
+
 	$this->number_of_leads_convert_won_deals_fixed = DB::table('deal_stages')
 		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
 		->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
@@ -194,6 +203,20 @@ trait SalesDashboard
 		->where('deals.created_at', '>=', $startDate)
 		->where('deals.created_at', '<', $endDate)
 		->count();
+
+    $this->number_of_leads_convert_won_deals_get = DB::table('deal_stages')
+		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
+		->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
+		->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
+		->where('leads.added_by', $salesId)
+		->where('leads.created_at', '>=', $startDate)
+		->where('leads.created_at', '<', $endDate)
+		->where('deal_stages.created_at', '>=', $startDate)
+		->where('deal_stages.created_at', '<', $endDate)
+		->where('deals.created_at', '>=', $startDate)
+		->where('deals.created_at', '<', $endDate)
+		->get();
+
 
 	//--------------     won deals  table     --------------------------//
 
@@ -1311,6 +1334,15 @@ trait SalesDashboard
             ->where('deal_stages.created_at', '<', $endDate)
             ->count();
 
+        $this->number_of_leads_convert_deals_get = DB::table('deal_stages')
+            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
+            ->where('leads.added_by', $salesId)
+            ->where('leads.created_at', '>=', $startDate)
+            ->where('leads.created_at', '<', $endDate)
+            ->where('deal_stages.created_at', '>=', $startDate)
+            ->where('deal_stages.created_at', '<', $endDate)
+            ->get();
+
         $this->number_of_leads_convert_won_deals_fixed = DB::table('deal_stages')
             ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
             ->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
@@ -1351,6 +1383,21 @@ trait SalesDashboard
             ->where('deals.created_at', '>=', $startDate)
             ->where('deals.created_at', '<', $endDate)
             ->count();
+
+        $this->number_of_leads_convert_won_deals_get = DB::table('deal_stages')
+            ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
+            ->join('deals', 'deal_stages.lead_id', '=', 'deals.lead_id')
+            ->join('p_m_projects', 'deals.id', '=', 'p_m_projects.deal_id')
+            ->where('leads.added_by', $salesId)
+            ->where('leads.created_at', '>=', $startDate)
+            ->where('leads.created_at', '<', $endDate)
+            ->where('deal_stages.created_at', '>=', $startDate)
+            ->where('deal_stages.created_at', '<', $endDate)
+            ->where('deals.created_at', '>=', $startDate)
+            ->where('deals.created_at', '<', $endDate)
+            ->get();
+
+            
 
         //--------------     won deals  table     --------------------------//
 

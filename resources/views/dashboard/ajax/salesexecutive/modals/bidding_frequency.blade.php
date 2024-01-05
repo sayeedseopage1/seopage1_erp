@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="num_of_lead{{count($number_of_leads_received_get)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="bidding_frequency{{count($number_of_leads_received_get)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -13,7 +13,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <table id="numOfLead" class="display" style="width:100%">
+            <table id="bidding_frequency" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -70,7 +70,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#numOfLead',{
+      new DataTable('#bidding_frequency',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });       
   </script>
