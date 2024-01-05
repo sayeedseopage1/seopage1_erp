@@ -1286,7 +1286,9 @@ class TaskController extends AccountBaseController
                 $revision_status= TaskRevision::where('task_id',$taskId->id)->first();
                 $task_user= TaskUser::where('task_id',$taskId->id)->first();
                 $user= User::where('id',$task_user->user_id)->first();
-                $user_role= Role::where('id',$user->role_id)->first(); // TODO: Sayeed sir
+
+                $user_role= Role::where('id',$user->role_id)->first();
+
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -3312,7 +3314,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->task_id)->first();
+                $taskId= Task::where('id',$task_status->id)->first();
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -3622,7 +3624,9 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-                $taskId= Task::where('id',$task_status->id)->first(); // TODO: Sayeed sir
+
+                $taskId= Task::where('id',$task_status->id)->first();
+
                 $project= Project::where('id',$taskId->project_id)->first();
                 $client= User::where('id',$project->client_id)->first();
                 $developer= User::where('id',Auth::user()->id)->first();
@@ -3812,12 +3816,23 @@ class TaskController extends AccountBaseController
 
         $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);
 
-        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
-            $pm_task_update->status = 0;
-        } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
-            $pm_task_update->status = 0;
-        } else {
-            $pm_task_update->status = 1;
+        if($request->task_category == 'development'){
+
+            if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
+        }else{
+            if ($data['design_details'] == 0 || $data['color_schema'] == 0) {
+                $pm_task_update->status = 0;
+            } elseif ($data['design_details'] == 2 || $data['color_schema'] == 2 ) {
+                $pm_task_update->status = 0;
+            } else {
+                $pm_task_update->status = 1;
+            }
         }
         $pm_task_update->save();
         $pm_task_guideline_authorization = '';
@@ -4132,16 +4147,17 @@ class TaskController extends AccountBaseController
 
     public function task_json(Request $request, $id)
     {
-        $projectTask= Task::where('id',$id)->first();
-        if($projectTask->independent_task_status != 0 )
-        {
-            $projecttaskId= Project::where('id',$projectTask->project_id)->first();
-            if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
-            {
-                 abort(403);
-            }
-        }
+       
         if ($request->mode == 'basic') {
+            $projectTask= Task::where('id',$id)->first();
+            if($projectTask->independent_task_status != 0 )
+            {
+                $projecttaskId= Project::where('id',$projectTask->project_id)->first();
+                if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
+                {
+                     abort(403);
+                }
+            }
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
@@ -4308,7 +4324,12 @@ class TaskController extends AccountBaseController
 
             $task->parent_task_time_log = $timeLog;
             $task->task_category = $task->category;
-            // dd($task);
+            /**  REVISION LOGDEED TIME */
+            $task->revision_log_hour = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_hours');
+            $revision_log_total_min = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_minutes');
+            $task->revision_log_min = $task->revision_log_hour * 60 + $revision_log_total_min;
+
+            // dd($task->revision_log_hour, $task->revision_log_min);
 
             $task->subtask = Subtask::select([
                 'id', 'title'
@@ -4319,7 +4340,6 @@ class TaskController extends AccountBaseController
             $tas_id = Task::where('id', $task->id)->first();
             $subtasks = Subtask::where('task_id', $tas_id->id)->get();
             $subtask_count = Subtask::where('task_id', $tas_id->id)->count();
-            // dd($subtasks);
             $time = 0;
 
             foreach ($subtasks as $subtask) {
@@ -5695,6 +5715,7 @@ class TaskController extends AccountBaseController
                 "design_details" => $pm_task_guideline->design_details,
                 "color_schema" => $pm_task_guideline->color_schema,
                 "plugin_research" => $pm_task_guideline->plugin_research,
+                "task_category" => $pm_task_guideline->task_category,
                 "status_code" => 200,
                 "is_allow" => $is_allow,
                 "is_submitted_already" => $already_submitted,

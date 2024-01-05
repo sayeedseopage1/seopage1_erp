@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { FileIcon, defaultStyles } from "react-file-icon";
 import style from "../styles/comments.module.css";
+import { useCommentContext } from "../CommentsBody";
 
-const handleFileUrl = (url, fileName, file) => {
+export const handleFileUrl = (url, fileName, file) => {
     if (fileName) {
         const file_name = fileName.split(".");
         const [name, ext] = [
@@ -21,19 +22,32 @@ const handleFileUrl = (url, fileName, file) => {
     }
 };
 
+export const isImageFile = (extension) => {
+    if (
+        extension === "png" ||
+        extension === "img" ||
+        extension === "jpg" ||
+        extension === "jpeg" ||
+        extension === "svg" ||
+        extension === "gif" ||
+        extension === "webp"
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+const isObjectURL = (url) => {
+    const parsedUrl = new URL(url);
+    return parsedUrl.protocol === "blob:";
+};
+
 const HandleFileIcon = ({ URL = "", fileName = "", file = null }) => {
+    const {setIsImageModalOpen,setImageModalCurrentFileUrl} = useCommentContext();
     const selectFileComponent = ({ fileName = "", file = null }) => {
         const [url, name, ext] = handleFileUrl(URL, fileName, file);
-        if (
-            // false
-            ext === "img" ||
-            ext === "png" ||
-            ext === "jpg" ||
-            ext === "jpeg" ||
-            ext === "svg" ||
-            ext === "gif" ||
-            ext === "webp"
-        ) {
+        if (isImageFile(ext)) {
             return (
                 <span
                     style={{
@@ -47,7 +61,15 @@ const HandleFileIcon = ({ URL = "", fileName = "", file = null }) => {
                 >
                     <img
                         title={`${name}.${ext}`}
-                        onClick={() => window.open(url, "_blank")}
+                        onClick={() => {
+                            if (isObjectURL(url)) {
+                                window.open(url, "_blank");
+                            } else {
+                                setIsImageModalOpen(true);
+                                // console.log(url);
+                                setImageModalCurrentFileUrl(url);
+                            }
+                        }}
                         style={{
                             objectFit: "cover",
                             width: "69px",

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import style from "./styles/comments.module.css";
+import './editor.style.css';
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import {
     IoIosArrowDown,
@@ -36,7 +37,9 @@ import getTextContent, {
 } from "./utils/getTextContent";
 import { useDeleteCommentsMutation } from "../../services/api/commentsApiSlice";
 import { useParams } from "react-router-dom";
+import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
+import Sendbox from "./components/sendbox/Sendbox";
 
 
 const CommentContext = createContext({
@@ -47,6 +50,11 @@ const CommentContext = createContext({
     setMentionedComment: () => {},
     contextHolder: {},
     setContextHolder: () => {},
+    allComments: [],
+    isImageModalOpen: false,
+    setIsImageModalOpen: () => {},
+    imageModalCurrentFileUrl: "",
+    setImageModalCurrentFileUrl: () => {},
 });
 export function useCommentContext() {
     return useContext(CommentContext);
@@ -64,6 +72,10 @@ const CommentsBody = ({
     taskId,
     task,
     height,
+    showFullScreenBtn = true,
+    showCloseBtn = true,
+    showCommentEditor = true,
+    showSearchBtn = true,
     onSubmit = async () => null,
 }) => {
     const param = useParams();
@@ -85,6 +97,9 @@ const CommentsBody = ({
     const [selectedComments, setSecletedComments] = useState({});
     const [mentionedComment, setMentionedComment] = useState(null);
     const [contextHolder, setContextHolder] = useState(null);
+    const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+    const [imageModalCurrentFileUrl, setImageModalCurrentFileUrl] =
+        useState("");
     // =================================================================
  
 
@@ -442,6 +457,11 @@ const CommentsBody = ({
                 setMentionedComment,
                 contextHolder,
                 setContextHolder,
+                allComments,
+                isImageModalOpen,
+                setIsImageModalOpen,
+                imageModalCurrentFileUrl,
+                setImageModalCurrentFileUrl,
             }}
         >
             <div
@@ -603,7 +623,7 @@ const CommentsBody = ({
                     )}
 
                     {/* search btn */}
-                    {param?.taskId ? (
+                    {param?.taskId && showSearchBtn ? (
                         <span
                             onClick={() => {
                                 if (showSearchBar) {
@@ -637,7 +657,7 @@ const CommentsBody = ({
                     )}
 
                     {/* full screen btn */}
-                    {param?.taskId ? (
+                    {param?.taskId && showFullScreenBtn ? (
                         !fullScreenView ? (
                             <AiOutlineFullscreen
                                 onClick={() => setFullScreenView(true)}
@@ -654,72 +674,76 @@ const CommentsBody = ({
                     )}
 
                     {/* cancel btn */}
-                    <span
-                        onClick={() => {
-                            if (setFullScreenView) {
-                                setFullScreenView(false);
-                            }
-                            close();
-                        }}
-                        className={`${style.commentsBody_header_btn}`}
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            xlink="http://www.w3.org/1999/xlink"
-                            viewBox="15 7 28 28"
+                    {showCloseBtn ? (
+                        <span
+                            onClick={() => {
+                                if (setFullScreenView) {
+                                    setFullScreenView(false);
+                                }
+                                close();
+                            }}
+                            className={`${style.commentsBody_header_btn}`}
                         >
-                            <defs>
-                                <filter
-                                    id="Ellipse_58"
-                                    x="0"
-                                    y="0"
-                                    width="58"
-                                    height="58"
-                                    filterUnits="userSpaceOnUse"
-                                >
-                                    <feOffset dy="8" input="SourceAlpha" />
-                                    <feGaussianBlur
-                                        stdDeviation="5"
-                                        result="blur"
-                                    />
-                                    <feFlood
-                                        floodColor="#757575"
-                                        floodOpacity="0.161"
-                                    />
-                                    <feComposite operator="in" in2="blur" />
-                                    <feComposite in="SourceGraphic" />
-                                </filter>
-                            </defs>
-                            <g
-                                id="Group_3644"
-                                data-name="Group 3644"
-                                transform="translate(-976 -145)"
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xlink="http://www.w3.org/1999/xlink"
+                                viewBox="15 7 28 28"
                             >
+                                <defs>
+                                    <filter
+                                        id="Ellipse_58"
+                                        x="0"
+                                        y="0"
+                                        width="58"
+                                        height="58"
+                                        filterUnits="userSpaceOnUse"
+                                    >
+                                        <feOffset dy="8" input="SourceAlpha" />
+                                        <feGaussianBlur
+                                            stdDeviation="5"
+                                            result="blur"
+                                        />
+                                        <feFlood
+                                            floodColor="#757575"
+                                            floodOpacity="0.161"
+                                        />
+                                        <feComposite operator="in" in2="blur" />
+                                        <feComposite in="SourceGraphic" />
+                                    </filter>
+                                </defs>
                                 <g
-                                    transform="matrix(1, 0, 0, 1, 976, 145)"
-                                    filter="url(#Ellipse_58)"
+                                    id="Group_3644"
+                                    data-name="Group 3644"
+                                    transform="translate(-976 -145)"
                                 >
-                                    <circle
-                                        id="Ellipse_58-2"
-                                        data-name="Ellipse 58"
-                                        cx="14"
-                                        cy="14"
-                                        r="14"
-                                        transform="translate(15 7)"
-                                        fill="#df0b0b"
+                                    <g
+                                        transform="matrix(1, 0, 0, 1, 976, 145)"
+                                        filter="url(#Ellipse_58)"
+                                    >
+                                        <circle
+                                            id="Ellipse_58-2"
+                                            data-name="Ellipse 58"
+                                            cx="14"
+                                            cy="14"
+                                            r="14"
+                                            transform="translate(15 7)"
+                                            fill="#df0b0b"
+                                        />
+                                    </g>
+                                    <path
+                                        id="remove_1_"
+                                        data-name="remove (1)"
+                                        d="M5.059,13A7.941,7.941,0,1,1,13,20.941,7.941,7.941,0,0,1,5.059,13ZM13,4a9,9,0,0,0,0,18,9.139,9.139,0,0,0,6.911-3.235A8.762,8.762,0,0,0,22,13,9,9,0,0,0,13,4ZM9.256,15.995,12.251,13,9.256,10.005,10,9.257,13,12.251l3-3,.748.748-3,3,3,3-.748.748-3-2.995L10,16.743Z"
+                                        transform="translate(992 153)"
+                                        fill="#fff"
+                                        fillRule="evenodd"
                                     />
                                 </g>
-                                <path
-                                    id="remove_1_"
-                                    data-name="remove (1)"
-                                    d="M5.059,13A7.941,7.941,0,1,1,13,20.941,7.941,7.941,0,0,1,5.059,13ZM13,4a9,9,0,0,0,0,18,9.139,9.139,0,0,0,6.911-3.235A8.762,8.762,0,0,0,22,13,9,9,0,0,0,13,4ZM9.256,15.995,12.251,13,9.256,10.005,10,9.257,13,12.251l3-3,.748.748-3,3,3,3-.748.748-3-2.995L10,16.743Z"
-                                    transform="translate(992 153)"
-                                    fill="#fff"
-                                    fillRule="evenodd"
-                                />
-                            </g>
-                        </svg>
-                    </span>
+                            </svg>
+                        </span>
+                    ) : (
+                        <></>
+                    )}
                 </header>
 
                 <main
@@ -784,18 +808,32 @@ const CommentsBody = ({
                         }}
                         ref={chatbottom_ref}
                     />
+                    <ImageSliderModal
+                        isOpen={isImageModalOpen}
+                        close={() => setIsImageModalOpen(false)}
+                        selectedImgUrl={imageModalCurrentFileUrl}
+                        setSelectedImgUrl={setImageModalCurrentFileUrl}
+                    />
                 </main>
                  {isHasPermissionForWriteComment({
                      assignTo: task?.assigneeTo?.id, 
                      assignBy: task?.assigneeBy?.id
                 }) ?  
                     <footer className={`${style.commentsBody_inputField}`}>
-                        <ChatInput
+                        <Sendbox 
                             onSubmit={onSubmit}
                             taskId={taskId}
                             setScroll={setScroll}
                             setIsLoading={setIsLoading}
                         />
+
+                        {/* customize start from there */}
+                        {/* <ChatInput
+                            onSubmit={onSubmit}
+                            taskId={taskId}
+                            setScroll={setScroll}
+                            setIsLoading={setIsLoading}
+                        /> */}
                     </footer>
                  : null} 
 

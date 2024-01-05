@@ -262,6 +262,7 @@ export class SingleTask {
             comment: task?.primary_page_authorization_comment
         });
 
+        this.revisionLogMin = task?.revision_log_min;
         this.subtaskId = task?.subtask_id;
         this.projectManagerId = task?.project_manager_id;
         this.projectManagerAvatar = task?.project_manager_avatar;

@@ -31,6 +31,7 @@ import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubmittedWork from "./section/submitted-work/SubmittedWork";
 import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
+import { convertTime } from "../utils/converTime";
 
 const SingleTaskPage = () => {
     const { task: Task } = useSelector((s) => s.subTask);
@@ -790,6 +791,15 @@ const SingleTaskPage = () => {
                                 </div>
                             </div>
                             {/* End Time Estimate */}
+
+                            <div className="d-flex align-items-center mb-2">
+                                <div className="">Revision Logged Time: </div>
+                                <div
+                                    className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
+                                >
+                                    {convertTime(task?.revisionLogMin)}
+                                </div>
+                            </div>
 
                             {/* <div className="d-flex align-items-center mb-2">
                                 <div className="">

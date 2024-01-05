@@ -4,11 +4,13 @@
 /public/user-uploads
 /storage/*.key
 
-#public/js/app.js.map
+# public/js/app.js.map
 .env
-#public/js/react
+# public/js/react
 #vendor
-#public/js/app.js
+# public/js/app.js
+# public/js/vendor.js.map
+# public/js/vendor.js
 
 .phpunit.result.cache
 Homestead.json
