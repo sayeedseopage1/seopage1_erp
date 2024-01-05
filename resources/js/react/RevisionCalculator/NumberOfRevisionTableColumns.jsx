@@ -76,7 +76,7 @@ export const NumberOfRevisionTableColumns = [
     },
     {
         id: "lead_developer",
-        heading: "Lead Developer Issues",
+        heading: "Lead Developers/Designers Issues",
         moveable: false,
         marge: true,
         sortBy: "lead_developer_issues",
@@ -101,7 +101,7 @@ export const NumberOfRevisionTableColumns = [
     },
     {
         id: "developer",
-        heading: "Developers Issues",
+        heading: "Developers/Designers Issues",
         moveable: false,
         marge: true,
         sortBy: "developer_issues",

@@ -29,30 +29,42 @@ const ClientRevision = ({task, auth}) => {
         setRevisionModal(false)
     }
 
-    const handleSubmitToStore = (data) =>{
+    const handleSubmitToStore = async (data) =>{
         const fData = {
             ...data,
             project_id: task?.projectId
         }
+        const Toast = Swal.mixin({
+            toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+        }) 
   
         // show toster notification
         const showToster= () =>{
-            const Toast = Swal.mixin({
-                toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-            }) 
+            
             Toast.fire({
                 icon: 'success',
                 title: 'Task submitted for Revision successfully'
             })
         }
     
-        storeClientRevisionTask(fData)
+        await storeClientRevisionTask(fData)
         .unwrap()
-        .then(res => showToster())
+        .then(res =>{
+            if(res?.error){
+                Toast.fire({
+                    icon: 'error',
+                    html: res?.message
+                })
+
+                return null;
+            }
+
+            showToster()
+        })
         .catch(err => console.log(err))
     }
 

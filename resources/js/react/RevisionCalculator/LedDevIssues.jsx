@@ -62,7 +62,7 @@ const LeadDevIssue = () => {
               <div className={`sp1_modal-panel ${styles.modal_panel}`}>
                   {/* header */}
                   <div className={`sp1_modal-head ${styles.modal_title_bar}`}>
-                      <div className="sp1_modal-title pl-2">Lead Developer Issues</div>
+                      <div className="sp1_modal-title pl-2">Lead Developers/Designers Issues</div>
                       <Button 
                         onClick={goBack} 
                         aria-label="ModalClose" 

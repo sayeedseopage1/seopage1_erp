@@ -226,8 +226,8 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
         }
 
     };
-
-
+ 
+ 
       const {data: projects, isFetching: isFetchingMilestone} = useGetMilestoneDetailsQuery(task?.projectId)
 
 
@@ -470,7 +470,10 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
                     <div className="col-6">
                         <TaskCategorySelectionBox
                             selected={taskCategory}
-                            onSelect={setTaskCategory}
+                            onSelect={(value) => {
+                                setTaskCategory(value);
+                                setAssignedTo(null);
+                            }}
                         />
                     </div>
 
@@ -478,6 +481,7 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
                         <AssignedToSelection
                             selected={assignedTo}
                             onSelect={setAssignedTo}
+                            taskCategory={taskCategory}
                         />
                     </div>
                     {/*

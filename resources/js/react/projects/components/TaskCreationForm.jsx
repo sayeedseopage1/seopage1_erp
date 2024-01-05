@@ -57,7 +57,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         {isLoading: checking}
     ] = useCheckRestrictedWordsMutation();
 
-
+     
 
     const clearForm = () => {
         setTitle("");
@@ -262,7 +262,15 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(isValid()){
-            setVisibleAcknowledgementModal(true);
+            if(taskCategory && _.includes([5, 7], taskCategory.id)){
+                handleAcknowledgementConfirmation({ 
+                    acknowledgement: '',
+                    subAcknowledgement: '',
+                    authorization: '',
+                })  
+            }else{
+                setVisibleAcknowledgementModal(true);
+            }
         }
     };
 
@@ -490,6 +498,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 <AssginedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
+                                    taskCategory={taskCategory}
                                 />
 
                                 {formError?.assignedTo && (

@@ -12,7 +12,4 @@
 * [X] need to change dispute modal "Review by" text to "Reviewed by"
 
   - ref: Review by er jaigay Reviewed by kore den @Md  Resolve hoye jaoar hobe ei change ta hobe
-
-
-#### Lead Designer
-* []: Case: Lead Design creating self assign task it's show overloaded
+ s
