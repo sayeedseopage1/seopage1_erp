@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setTaskStatus } from '../../../../services/features/subTaskSlice';
 import { User } from '../../../../utils/user-details';
 import { toast } from 'react-toastify';
+import _ from 'lodash';
 
 const DeveloperRevisionView = ({task, close}) => {
   const [show, setShow] = useState("REVISION");
@@ -17,6 +18,7 @@ const DeveloperRevisionView = ({task, close}) => {
   const { data: revision, isFetching: isFetchingRevision } = useGetRevisionDetailsQuery(task?.id);
   const [revisionAcceptOrDeny, {isLoading: isLoadingRevisionReview}] = useRevisionAcceptOrDenyMutation();
   const auth = new User(window?.Laravel?.user);
+ 
 
   // handle Accept and continue submission
   const handleAcceptAndContinueSubmission = async (data, type) => {
@@ -43,17 +45,22 @@ const DeveloperRevisionView = ({task, close}) => {
     })
     .catch(err => console.log(err))
   }
-
+ 
 
   // generate modal title by user role id
 
+  const isTaskTypeDesign = _.includes([5, 7], task?.category?.id);
+
+  const _text = isTaskTypeDesign ? 'Designer' : "Developer";
+
+
   const generateModalTitle = () => {
     if(auth.getRoleId() === 4){
-        return show === "ASSIGNEE_TO_DEV"  ? "Revision For Lead Developer":"Revision By Project Manager";
+        return show === "ASSIGNEE_TO_DEV"  ? `Revision For Lead ${_text}`:"Revision By Project Manager";
     }else if(auth.getRoleId() === 6){
-        return show === "ASSIGNEE_TO_DEV"  ? "Revision For Developer":"Revision By Project Manager";
-    }else if(auth.getRoleId() === 9 || auth.getRoleId() === 10){
-        return "Revision By Project Manager";
+        return show === "ASSIGNEE_TO_DEV"  ? `Revision For ${_text}`:"Revision By Project Manager";
+    }else if((auth.getRoleId() === 9 || auth.getRoleId() === 10) && !auth.isHasRolePermission(13)){
+        return "Revision By Lead Designer";
     }else return "Revision By Lead Developer"
   }
 

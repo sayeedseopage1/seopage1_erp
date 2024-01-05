@@ -1,8 +1,9 @@
+import _ from "lodash";
 
 
 
-export const useRevision = () => {
-
+export const useRevision = (task) => {
+    const taskType = _.includes([5, 7], task?.category?.id) ? 'design' : 'development';
 
     // project menager acknowladgement options
     const getProjectManagerAcknowladgementOptions = () =>{
@@ -26,19 +27,25 @@ export const useRevision = () => {
             },
             {
                 id: 'PLRx3',
-                revision: "The Lead Developer/project coordinator’s delivered work doesn’t match my shared requirement",
+                revision: `The Lead ${taskType === 'design' ? 'designer' : 'developer'}/project coordinator’s delivered work doesn’t match my shared requirement`,
                 isDeniable: true,
             },
             {
                 id: 'PLRx04',
-                revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
+                revision: `The instruction was followed, but the lead ${taskType === 'design' ? 'designer' : 'developer'} missed out some default/basic things or best practices which are not essential to write in instruction`,
                 isDeniable: true
             },
+            {
+                id: 'PLRx05',
+                revision: "I have some general revisions",
+                isDeniable: false,
+                type: 'GENERAL_REVISION'
+            }
         ]
     }
 
     // lead developer acknowladgement Options
-    const getLeadDeveloperAcknowladgementOptions = () => {
+    const getLeadDeveloperAcknowladgementOptions = () => { 
         const isAlreadyAccepted = false;
         // if already accepted
         if(isAlreadyAccepted){
@@ -47,7 +54,7 @@ export const useRevision = () => {
             return [
                 {
                     id: 'LDRx1',
-                    revision: "The concerned developer’s delivered work doesn’t match my shared requirement",
+                    revision: `The concerned ${taskType === 'design' ? 'designer’s' : 'developer’s'}  delivered work doesn’t match my shared requirement`,
                     isDeniable: true,
                 },
                 {
@@ -63,7 +70,7 @@ export const useRevision = () => {
 
                 {
                     id: 'LDRx4',
-                    revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
+                    revision: `The instruction was followed but the ${taskType === 'design' ? 'designer' : 'developer'} missed out on some default/basic things or best practices which are not essential to mention in instruction.`,
                     isDeniable: true,
                 },
             ]

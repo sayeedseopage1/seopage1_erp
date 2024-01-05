@@ -78,14 +78,19 @@ const RevisionViewModal = ({task, close}) => {
   }
 
 
+  
+  // generate modal title by user role id
+
+  const isTaskTypeDesign = _.includes([5, 7], task?.category?.id);
+
+  const _text = isTaskTypeDesign ? 'Designer' : "Developer";
+
   const generateModalTitle = () => {
     if(auth.getRoleId() === 4){
-        return show === "ASSIGNEE_TO_DEV"  ? "Revision For Lead Developer":"Revision By Project Manager";
-    }else if(auth.getRoleId() === 6){
-        return show === "ASSIGNEE_TO_DEV"  ? "Revision For Developer":"Revision By Project Manager";
-    }else if(auth.getRoleId() === 9 || auth.getRoleId() === 10){
-        return "Revision By Project Manager";
-    }else return "Revision By Lead Developer"
+        return show === "ASSIGNEE_TO_DEV"  ? `Revision For Lead ${_text}`:"Revision By Project Manager";
+    }else if(auth?.isHasRolePermission(13) || auth.isHasRolePermission(6)){
+        return show === "ASSIGNEE_TO_DEV"  ? `Revision For ${_text}`:"Revision By Project Manager";
+    }
   }
 
 

@@ -690,7 +690,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useRevision: () => (/* binding */ useRevision)
 /* harmony export */ });
-var useRevision = function useRevision() {
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+var useRevision = function useRevision(task) {
+  var _task$category;
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
+
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
     var isAlreadyAccepted = false;
@@ -707,12 +713,17 @@ var useRevision = function useRevision() {
       isDeniable: false
     }, {
       id: 'PLRx3',
-      revision: "The Lead Developer/project coordinator’s delivered work doesn’t match my shared requirement",
+      revision: "The Lead ".concat(taskType === 'design' ? 'designer' : 'developer', "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
       isDeniable: true
     }, {
       id: 'PLRx04',
-      revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
+      revision: "The instruction was followed, but the lead ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out some default/basic things or best practices which are not essential to write in instruction"),
       isDeniable: true
+    }, {
+      id: 'PLRx05',
+      revision: "I have some general revisions",
+      isDeniable: false,
+      type: 'GENERAL_REVISION'
     }];
   };
 
@@ -725,7 +736,7 @@ var useRevision = function useRevision() {
     } else {
       return [{
         id: 'LDRx1',
-        revision: "The concerned developer’s delivered work doesn’t match my shared requirement",
+        revision: "The concerned ".concat(taskType === 'design' ? 'designer’s' : 'developer’s', "  delivered work doesn\u2019t match my shared requirement"),
         isDeniable: true
       }, {
         id: 'LDRx2',
@@ -737,7 +748,7 @@ var useRevision = function useRevision() {
         isDeniable: false
       }, {
         id: 'LDRx4',
-        revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
+        revision: "The instruction was followed but the ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
         isDeniable: true
       }];
     }
@@ -8991,17 +9002,33 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var AssginedToSelection = function AssginedToSelection(_ref) {
+  var _employees;
   var selected = _ref.selected,
-    onSelect = _ref.onSelect;
+    onSelect = _ref.onSelect,
+    taskCategory = _ref.taskCategory;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(""),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     query = _React$useState2[0],
     setQuery = _React$useState2[1];
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_6__.useParams)();
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useGetTaskDetailsQuery)("/".concat(params === null || params === void 0 ? void 0 : params.taskId, "/json?mode=employees")),
-    employees = _useGetTaskDetailsQue.data,
+    data = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
-  var filteredData = query === "" ? employees : employees === null || employees === void 0 ? void 0 : employees.filter(function (employee) {
+  var employees = [];
+  if (taskCategory && taskCategory.id === 5) {
+    employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
+      return Number(d.role_id) === 9;
+    });
+  } else if (taskCategory && taskCategory.id === 7) {
+    employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
+      return Number(d.role_id) === 10;
+    });
+  } else {
+    employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
+      return Number(d.role_id) === 5;
+    });
+  }
+  var filteredData = query === "" ? employees : (_employees = employees) === null || _employees === void 0 ? void 0 : _employees.filter(function (employee) {
     return employee === null || employee === void 0 ? void 0 : employee.name.toLowerCase().includes(query.toLowerCase());
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Combobox, {
@@ -9034,7 +9061,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
         children: [isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "sp1-select-option-nodata",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Loader__WEBPACK_IMPORTED_MODULE_3__["default"], {})
-        }), (filteredData === null || filteredData === void 0 ? void 0 : filteredData.length) === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        }), !isFetching && (filteredData === null || filteredData === void 0 ? void 0 : filteredData.length) === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "sp1-select-option-nodata",
           children: "Nothing found."
         }) : filteredData === null || filteredData === void 0 ? void 0 : filteredData.map(function (employee) {
@@ -10284,13 +10311,17 @@ var SubtTaskEditForm = function SubtTaskEditForm(_ref) {
             className: "col-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_3__["default"], {
               selected: taskCategory,
-              onSelect: setTaskCategory
+              onSelect: function onSelect(value) {
+                setTaskCategory(value);
+                setAssignedTo(null);
+              }
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
             className: "col-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_4__["default"], {
               selected: assignedTo,
-              onSelect: setAssignedTo
+              onSelect: setAssignedTo,
+              taskCategory: taskCategory
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
             className: "col-6",
@@ -11059,7 +11090,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var SubTaskForm = function SubTaskForm(_ref) {
   var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _ref10, _ref13, _required_error$page_, _required_error$page_2, _required_error$descr, _required_error$descr2;
-  var close = _ref.close;
+  var close = _ref.close,
+    isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -11216,6 +11248,16 @@ var SubTaskForm = function SubTaskForm(_ref) {
     var value = e.target.value;
     setState(value);
   };
+
+  // if task for designer select category default
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    var _task$category, _task$category2, _task$category3;
+    isDesignerTask && setTaskCategory({
+      id: task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id,
+      category_name: task === null || task === void 0 || (_task$category2 = task.category) === null || _task$category2 === void 0 ? void 0 : _task$category2.name,
+      added_by: task === null || task === void 0 || (_task$category3 = task.category) === null || _task$category3 === void 0 ? void 0 : _task$category3.addedBy
+    });
+  }, [isDesignerTask]);
   var isValid = function isValid() {
     var count = 0;
     var error = new Object();
@@ -11398,7 +11440,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               };
             }();
             primaryPageConfirmation = function primaryPageConfirmation() {
-              if (pageTypePriority === "Primary Page Development") {
+              if (!isDesignerTask && pageTypePriority === "Primary Page Development") {
                 Swal.fire({
                   icon: 'info',
                   html: "<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>",
@@ -11636,7 +11678,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
         className: "col-12 col-md-6",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_8__["default"], {
           selected: taskCategory,
-          onSelect: setTaskCategory
+          onSelect: setTaskCategory,
+          isDesignerTask: isDesignerTask
         }), (err === null || err === void 0 ? void 0 : err.taskCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
           style: {
             color: "red"
@@ -11647,7 +11690,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
         className: "col-12 col-md-6",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_6__["default"], {
           selected: assignedTo,
-          onSelect: setAssignedTo
+          onSelect: setAssignedTo,
+          taskCategory: taskCategory
         }), (err === null || err === void 0 ? void 0 : err.assignedTo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
           style: {
             color: "red"
@@ -12065,13 +12109,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _SubTaskForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./SubTaskForm */ "./resources/js/react/single-task/section/sub-task/SubTaskForm.jsx");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
 /* harmony import */ var _LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./LeadConfirmationModal */ "./resources/js/react/single-task/section/sub-task/LeadConfirmationModal.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -12092,27 +12139,28 @@ var WithContainer = function WithContainer(_ref2) {
   var children = _ref2.children,
     close = _ref2.close,
     visibleEnvironmentForm = _ref2.visibleEnvironmentForm;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
     className: "sp1-subtask-form --modal-panel",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel-header",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
         children: visibleEnvironmentForm ? "Working Environment" : "Create Sub Task"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_6__["default"], {
         "aria-label": "close-modal",
         className: "_close-modal",
         onClick: close,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
           className: "fa-solid fa-xmark"
         })
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       className: "sp1-subtask-form --modal-panel-body sp1_subtask_form",
       children: children
     })]
   });
 };
 function SubTaskFormController(_ref3) {
+  var _task$category;
   var close = _ref3.close,
     _ref3$isFirstSubtask = _ref3.isFirstSubtask,
     isFirstSubtask = _ref3$isFirstSubtask === void 0 ? true : _ref3$isFirstSubtask;
@@ -12136,23 +12184,24 @@ function SubTaskFormController(_ref3) {
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)(); // dispatch
   var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_4__.useAuth)(); // logged user
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_3__.SingleTask(taskDetails); // task instance;
+  var isDesignerTask = lodash__WEBPACK_IMPORTED_MODULE_8___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
 
   // environment status
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    var showEnv = (task === null || task === void 0 ? void 0 : task.workingEnvironment) === 0 ? _.size(task === null || task === void 0 ? void 0 : task.subtask) === 0 ? true : false : false;
+    var showEnv = (task === null || task === void 0 ? void 0 : task.workingEnvironment) === 0 ? lodash__WEBPACK_IMPORTED_MODULE_8___default().size(task === null || task === void 0 ? void 0 : task.subtask) === 0 ? true : false : false;
     if (auth.getRoleId() === 6 && showEnv) {
       setVisibleEnvironmentForm(true);
     }
   }, []);
 
   // render
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(VisibleItem, {
-      isVisible: visibleEnvironmentForm,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(WithContainer, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(VisibleItem, {
+      isVisible: !isDesignerTask && visibleEnvironmentForm,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(WithContainer, {
         close: close,
         visibleEnvironmentForm: visibleEnvironmentForm,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
           task: task,
           onSubmit: function onSubmit() {
             setVisibleEnvironmentForm(false);
@@ -12161,22 +12210,23 @@ function SubTaskFormController(_ref3) {
           close: close
         })
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(VisibleItem, {
-      isVisible: !visibleEnvironmentForm && visibleInformationModal,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(VisibleItem, {
+      isVisible: !isDesignerTask && !visibleEnvironmentForm && visibleInformationModal,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_7__["default"], {
         isOpen: true,
         onConfirm: function onConfirm() {
           return setVisibleInformationModal(false);
         },
         close: close
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(VisibleItem, {
-      isVisible: !visibleEnvironmentForm && !visibleInformationModal,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(WithContainer, {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(VisibleItem, {
+      isVisible: isDesignerTask || !visibleEnvironmentForm && !visibleInformationModal,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(WithContainer, {
         close: close,
         visibleEnvironmentForm: visibleEnvironmentForm,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_SubTaskForm__WEBPACK_IMPORTED_MODULE_5__["default"], {
-          close: close
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_SubTaskForm__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          close: close,
+          isDesignerTask: isDesignerTask
         })
       })
     })]
@@ -13046,13 +13096,17 @@ var TaskEditForm = function TaskEditForm(_ref2) {
           className: "col-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_12__["default"], {
             selected: taskCategory,
-            onSelect: setTaskCategory
+            onSelect: function onSelect(value) {
+              setTaskCategory(value);
+              setAssignedTo(null);
+            }
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "col-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_10__["default"], {
             selected: assignedTo,
-            onSelect: setAssignedTo
+            onSelect: setAssignedTo,
+            taskCategory: taskCategory
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "col-6",
@@ -15699,6 +15753,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+/**
+ *  * This component responsible for selecting client revision or Sales revision by Project manager
+ *  * Ref "CLIENT HAS REVISION"
+ */
+
 
 var projectManagerAcknowladgement = [{
   id: "CPRx01",
@@ -15742,6 +15801,12 @@ var projectManagerAcknowladgement = [{
   title: "Sales overpromised: This task is not doable to this extent or in this way and I informed management about it on day 1",
   isDeniable: false,
   createDispute: false
+}, {
+  id: 'CPRx07',
+  title: "The client has general revisions",
+  isDeniable: false,
+  createDispute: false,
+  type: 'GENERAL_REVISION'
 }];
 var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision(_ref) {
   var close = _ref.close,
@@ -15849,7 +15914,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
 
   // handle submission
   var handleSubmission = function handleSubmission(e) {
-    var _additionalInfo$info;
+    var _additionalInfo$info, _reason$type;
     e.preventDefault();
     var data = {
       acknowledgement_id: reason === null || reason === void 0 ? void 0 : reason.id,
@@ -15861,6 +15926,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       additional_amount: Number(additionalAmount),
       additional_status: additionalPaid,
       additional_comment: (_additionalInfo$info = additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.info) !== null && _additionalInfo$info !== void 0 ? _additionalInfo$info : '',
+      revision_type: (_reason$type = reason === null || reason === void 0 ? void 0 : reason.type) !== null && _reason$type !== void 0 ? _reason$type : null,
       dispute_create: (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01" ? true : (reason === null || reason === void 0 ? void 0 : reason.createDispute) || (additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.disputeCreate) || false
     };
     if (validate()) {
@@ -16127,11 +16193,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -16181,31 +16250,51 @@ var ClientRevision = function ClientRevision(_ref) {
   var close = function close() {
     setRevisionModal(false);
   };
-  var handleSubmitToStore = function handleSubmitToStore(data) {
-    var fData = _objectSpread(_objectSpread({}, data), {}, {
-      project_id: task === null || task === void 0 ? void 0 : task.projectId
-    });
-
-    // show toster notification
-    var showToster = function showToster() {
-      var Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-      });
-      Toast.fire({
-        icon: 'success',
-        title: 'Task submitted for Revision successfully'
-      });
+  var handleSubmitToStore = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(data) {
+      var fData, Toast, showToster;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            fData = _objectSpread(_objectSpread({}, data), {}, {
+              project_id: task === null || task === void 0 ? void 0 : task.projectId
+            });
+            Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true
+            }); // show toster notification
+            showToster = function showToster() {
+              Toast.fire({
+                icon: 'success',
+                title: 'Task submitted for Revision successfully'
+              });
+            };
+            _context.next = 5;
+            return storeClientRevisionTask(fData).unwrap().then(function (res) {
+              if (res !== null && res !== void 0 && res.error) {
+                Toast.fire({
+                  icon: 'error',
+                  html: res === null || res === void 0 ? void 0 : res.message
+                });
+                return null;
+              }
+              showToster();
+            })["catch"](function (err) {
+              return console.log(err);
+            });
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }));
+    return function handleSubmitToStore(_x) {
+      return _ref2.apply(this, arguments);
     };
-    storeClientRevisionTask(fData).unwrap().then(function (res) {
-      return showToster();
-    })["catch"](function (err) {
-      return console.log(err);
-    });
-  };
+  }();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       variant: "tertiary",
@@ -16501,7 +16590,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
 /* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -16515,30 +16606,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var denyOptions = function denyOptions(type) {
-  switch (type) {
-    case 'lead_dev':
-      return [{
-        id: 'deny1',
-        title: 'The project manager added new things in the instruction which was not part of the original instruction'
-      }, {
-        id: 'deny2',
-        title: 'The way the project manager is interpreting his original instruction now was not possible to understand from what his writing'
-      }];
-    case 'dev':
-      return [{
-        id: 'deny1',
-        title: 'The lead developer added new things in the instruction which was not part of the original instruction'
-      }, {
-        id: 'deny2',
-        title: 'The way the lead developer is interpreting his original instruction now was not possible to understand from what his writing'
-      }];
-    default:
-      [];
-  }
-};
+
 var DenyAndContinue = function DenyAndContinue(_ref) {
-  var _window;
+  var _window, _task$category;
   var onSubmit = _ref.onSubmit,
     isSubmitting = _ref.isSubmitting,
     onBack = _ref.onBack,
@@ -16564,6 +16634,10 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
     _useState10 = _slicedToArray(_useState9, 2),
     err = _useState10[0],
     setErr = _useState10[1];
+  console.log({
+    denyandcontinue: task
+  });
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
   var handleEditorDataChange = function handleEditorDataChange(e, editor) {
     var data = editor.getData();
     setComment(data);
@@ -16572,6 +16646,28 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
   // radio button change
   var handleChange = function handleChange(e) {
     setReason(e.target.value);
+  };
+  var denyOptions = function denyOptions(type) {
+    switch (type) {
+      case 'lead_dev':
+        return [{
+          id: 'deny1',
+          title: 'The project manager added new things in the instruction which was not part of the original instruction'
+        }, {
+          id: 'deny2',
+          title: 'The way the project manager is interpreting his original instruction now was not possible to understand from what his writing'
+        }];
+      case 'dev':
+        return [{
+          id: 'deny1',
+          title: "The lead ".concat(taskType === 'design' ? 'designer' : 'developer', " added new things in the instruction which was not part of the original instruction")
+        }, {
+          id: 'deny2',
+          title: 'The way the lead developer is interpreting his original instruction now was not possible to understand from what his writing'
+        }];
+      default:
+        [];
+    }
   };
 
   // validation
@@ -16598,25 +16694,25 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
       setErr("You have to Explain Why Did You Deny!");
     }
   };
-  var options = (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 6 ? denyOptions('lead_dev') : denyOptions('dev');
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("form", {
+  var options = auth !== null && auth !== void 0 && auth.isHasRolePermission(13) || auth !== null && auth !== void 0 && auth.isHasRolePermission(6) ? denyOptions('lead_dev') : denyOptions('dev');
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("form", {
       action: "",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Select reason for deny", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("sup", {
+          children: ["Select reason for deny", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("sup", {
             className: "f-16",
             children: "*"
           }), " :"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "px-3",
           children: options.map(function (option) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
               className: "form-check d-flex align-items-start mb-2",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("input", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("input", {
                 className: "form-check-input mr-2",
                 type: "radio",
                 name: "exampleRadios",
@@ -16629,7 +16725,7 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
                   height: "16px",
                   marginTop: "3px"
                 }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("label", {
                 className: "form-check-label",
                 htmlFor: option.id,
                 style: {
@@ -16639,52 +16735,52 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
               })]
             }, option.id);
           })
-        }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("small", {
+        }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: reasonError
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Please Explain Why Did You Deny? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("sup", {
+          children: ["Please Explain Why Did You Deny? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("sup", {
             className: "f-16 text-red",
             children: "*"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "ck-editor-holder",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
             onChange: handleEditorDataChange
           })
-        }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("small", {
+        }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: commentError
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "mt-3 d-flex align-items-center",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           onClick: onBack,
           variant: "tertiary",
           className: "ml-auto mr-2",
           children: "Back"
-        }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: _.includes([4, 6], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([4, 6], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
               onClick: handleOnSubmit,
               children: "Next"
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
               title: "Submit",
               isLoading: isSubmitting,
               onClick: handleOnSubmit
             })
           })
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
             className: "cursor-processing",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               className: "spinner-border text-white",
               role: "status",
               style: {
@@ -16724,7 +16820,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -16748,8 +16846,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
-  var _window;
+  var _window, _task$category;
   var task = _ref.task,
     close = _ref.close;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("REVISION"),
@@ -16788,7 +16887,7 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
             };
             _context.next = 3;
             return revisionAcceptOrDeny(_data).unwrap().then(function (res) {
-              if (_.includes([4, 6], auth === null || auth === void 0 ? void 0 : auth.getRoleId())) {
+              if (lodash__WEBPACK_IMPORTED_MODULE_11___default().includes([4, 6], auth === null || auth === void 0 ? void 0 : auth.getRoleId())) {
                 setShow(type);
               } else {
                 react_toastify__WEBPACK_IMPORTED_MODULE_10__.toast.success('Your request has been successfully processed');
@@ -16811,36 +16910,38 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
 
   // generate modal title by user role id
 
+  var isTaskTypeDesign = lodash__WEBPACK_IMPORTED_MODULE_11___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
+  var _text = isTaskTypeDesign ? 'Designer' : "Developer";
   var generateModalTitle = function generateModalTitle() {
     if (auth.getRoleId() === 4) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager";
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead ".concat(_text) : "Revision By Project Manager";
     } else if (auth.getRoleId() === 6) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager";
-    } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
-      return "Revision By Project Manager";
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For ".concat(_text) : "Revision By Project Manager";
+    } else if ((auth.getRoleId() === 9 || auth.getRoleId() === 10) && !auth.isHasRolePermission(13)) {
+      return "Revision By Lead Designer";
     } else return "Revision By Lead Developer";
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
       style: {
         maxWidth: "550px"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
           className: "font-weight-bold f-16",
           children: ["Task#", task === null || task === void 0 ? void 0 : task.id, ": ", " ", " ", generateModalTitle()]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           onClick: close,
           className: "",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("i", {
             className: "fa-solid fa-xmark"
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         className: "px-3",
-        children: [show === 'REVISION' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_RevisionView__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: [show === 'REVISION' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_RevisionView__WEBPACK_IMPORTED_MODULE_2__["default"], {
           revision: revision,
           isLoading: isFetchingRevision,
           isContinue: isLoadingRevisionReview,
@@ -16858,7 +16959,7 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
               "continue": true
             }, '');
           }
-        }), show === 'ACCEPT_AND_CONTINUE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
+        }), show === 'ACCEPT_AND_CONTINUE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
           task: task,
           isSubmitting: isLoadingRevisionReview,
           onSubmit: function onSubmit(data) {
@@ -16867,7 +16968,7 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
           close: function close() {
             return setShow("REVISION");
           }
-        }), show === "DENY_AND_CONTINUE" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_DenyAndContinue__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        }), show === "DENY_AND_CONTINUE" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_DenyAndContinue__WEBPACK_IMPORTED_MODULE_5__["default"], {
           task: task,
           onSubmit: function onSubmit(data) {
             return handleAcceptAndContinueSubmission(data, "DENY_ASSIGNEE_TO_DEV");
@@ -17071,7 +17172,8 @@ var RevisionControl = function RevisionControl(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     revisionModal = _useState2[0],
     setRevisionModal = _useState2[1];
-  var singleTask = new _utils_single_task__WEBPACK_IMPORTED_MODULE_3__.SingleTask(task);
+  // const singleTask = new SingleTask(task)
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       variant: "tertiary",
@@ -17092,7 +17194,7 @@ var RevisionControl = function RevisionControl(_ref) {
         className: "sp1_single_task--modal-panerl-wrapper",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_RevisionCreationModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
           auth: auth,
-          task: singleTask,
+          task: task,
           close: function close() {
             return setRevisionModal(false);
           }
@@ -17126,6 +17228,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -17167,7 +17273,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     isDeniable = _useState10[0],
     setIsDeniable = _useState10[1];
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
-  var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(),
+  var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(task),
     getLeadDeveloperAcknowladgementOptions = _useRevision.getLeadDeveloperAcknowladgementOptions,
     getProjectManagerAcknowladgementOptions = _useRevision.getProjectManagerAcknowladgementOptions;
   var role = auth.getRoleId();
@@ -17193,60 +17299,88 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     var errorCount = 0;
     if (comment === "") {
       errorCount++;
-      setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.');
+      setCommentError("You have to explain the revision in details, so that lead developer/developer can understand where they need to work.");
     }
     if (!reason) {
       errorCount++;
-      setReasonError('You have to select a reason from above options');
+      setReasonError("You have to select a reason from above options");
     }
     return errorCount === 0;
   };
 
   // handle submission
-  var handleSubmission = function handleSubmission(e) {
-    var _reason$revision, _reason$isDeniable;
-    e.preventDefault();
-    var data = {
-      task_id: task === null || task === void 0 ? void 0 : task.id,
-      user_id: auth === null || auth === void 0 ? void 0 : auth.id,
-      revision_acknowledgement: (_reason$revision = reason === null || reason === void 0 ? void 0 : reason.revision) !== null && _reason$revision !== void 0 ? _reason$revision : '',
-      acknowledgement_id: reason === null || reason === void 0 ? void 0 : reason.id,
-      comment: comment,
-      is_deniable: (_reason$isDeniable = reason === null || reason === void 0 ? void 0 : reason.isDeniable) !== null && _reason$isDeniable !== void 0 ? _reason$isDeniable : false
+  var handleSubmission = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
+      var _task$assigneeTo, _reason$revision, _reason$type, _reason$isDeniable;
+      var data, Toast;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            e.preventDefault();
+            data = {
+              task_id: task === null || task === void 0 ? void 0 : task.id,
+              user_id: auth === null || auth === void 0 ? void 0 : auth.id,
+              against_to: task === null || task === void 0 || (_task$assigneeTo = task.assigneeTo) === null || _task$assigneeTo === void 0 ? void 0 : _task$assigneeTo.id,
+              revision_acknowledgement: (_reason$revision = reason === null || reason === void 0 ? void 0 : reason.revision) !== null && _reason$revision !== void 0 ? _reason$revision : "",
+              acknowledgement_id: reason === null || reason === void 0 ? void 0 : reason.id,
+              comment: comment,
+              revision_type: (_reason$type = reason === null || reason === void 0 ? void 0 : reason.type) !== null && _reason$type !== void 0 ? _reason$type : null,
+              is_deniable: (_reason$isDeniable = reason === null || reason === void 0 ? void 0 : reason.isDeniable) !== null && _reason$isDeniable !== void 0 ? _reason$isDeniable : false
+            };
+            if (!validate()) {
+              _context.next = 7;
+              break;
+            }
+            _context.next = 5;
+            return createRevision(data).unwrap().then(function (res) {
+              var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default().mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+              });
+              if (res !== null && res !== void 0 && res.error) {
+                Toast.fire({
+                  icon: "error",
+                  html: res === null || res === void 0 ? void 0 : res.message
+                });
+                return;
+              }
+              Toast.fire({
+                icon: "success",
+                text: "Task submitted for Revision successfully"
+              });
+              close();
+            })["catch"](function (err) {
+              return console.log(err);
+            });
+          case 5:
+            _context.next = 9;
+            break;
+          case 7:
+            Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default().mixin({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true
+            });
+            Toast.fire({
+              icon: "success",
+              title: "You forgot to fill up some required fields"
+            });
+            // console.log('Your forgot to fill up some required fields')
+          case 9:
+          case "end":
+            return _context.stop();
+        }
+      }, _callee);
+    }));
+    return function handleSubmission(_x) {
+      return _ref2.apply(this, arguments);
     };
-    if (validate()) {
-      createRevision(data).unwrap().then(function (res) {
-        var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default().mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true
-        });
-        Toast.fire({
-          icon: 'success',
-          title: 'Task submitted for Revision successfully'
-        });
-        close();
-      })["catch"](function (err) {
-        return console.log(err);
-      });
-    } else {
-      var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default().mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-      });
-      Toast.fire({
-        icon: 'success',
-        title: 'You forgot to fill up some required fields'
-      });
-      // console.log('Your forgot to fill up some required fields')
-    }
-  };
-
+  }();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
@@ -17389,8 +17523,7 @@ var RevisionView = function RevisionView(_ref) {
     isContinue = _ref.isContinue;
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_4__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
   var getComment = function getComment() {
-    var roleId = auth === null || auth === void 0 ? void 0 : auth.getRoleId();
-    if (roleId === 6 || roleId === 9 || roleId === 10) {
+    if (auth !== null && auth !== void 0 && auth.isHasRolePermission(6) || auth !== null && auth !== void 0 && auth.isHasRolePermission(13)) {
       return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
     } else {
       return revision === null || revision === void 0 ? void 0 : revision.lead_comment;
@@ -17555,7 +17688,7 @@ var RevisionViewControl = function RevisionViewControl(_ref) {
       className: "sp1_single_task--modal",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "sp1_single_task--modal-panerl-wrapper",
-        children: lodash__WEBPACK_IMPORTED_MODULE_4___default().includes([6], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_RevisionViewModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        children: auth !== null && auth !== void 0 && auth.isHasRolePermission(13) || auth !== null && auth !== void 0 && auth.isHasRolePermission(6) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_RevisionViewModal__WEBPACK_IMPORTED_MODULE_3__["default"], {
           task: singleTask,
           close: function close() {
             return setRevisionModal(false);
@@ -17629,7 +17762,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var RevisionViewModal = function RevisionViewModal(_ref) {
-  var _window;
+  var _window, _task$category;
   var task = _ref.task,
     close = _ref.close;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("REVISION"),
@@ -17725,14 +17858,17 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
       }, '');
     }
   };
+
+  // generate modal title by user role id
+
+  var isTaskTypeDesign = lodash__WEBPACK_IMPORTED_MODULE_9___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
+  var _text = isTaskTypeDesign ? 'Designer' : "Developer";
   var generateModalTitle = function generateModalTitle() {
     if (auth.getRoleId() === 4) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager";
-    } else if (auth.getRoleId() === 6) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager";
-    } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
-      return "Revision By Project Manager";
-    } else return "Revision By Lead Developer";
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead ".concat(_text) : "Revision By Project Manager";
+    } else if (auth !== null && auth !== void 0 && auth.isHasRolePermission(13) || auth.isHasRolePermission(6)) {
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For ".concat(_text) : "Revision By Project Manager";
+    }
   };
 
   //   console.log({task})
@@ -18297,7 +18433,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var TimerControl = function TimerControl(_ref) {
-  var _window, _task$ranningTimer;
+  var _window, _task$ranningTimer, _task$category;
   var task = _ref.task,
     timerStart = _ref.timerStart,
     setTimerStart = _ref.setTimerStart,
@@ -18352,7 +18488,7 @@ var TimerControl = function TimerControl(_ref) {
     }; // clear interval
   }, [timerStart]);
 
-  // time formating
+  // time formatting
   var timer = function timer() {
     var hours = Math.floor(seconds / 3600);
     var minutes = Math.floor(seconds % 3600 / 60);
@@ -18365,7 +18501,7 @@ var TimerControl = function TimerControl(_ref) {
     return "".concat(hr, ":").concat(min, ":").concat(sec);
   };
 
-  // tostar
+  // toaster
   var Toast = Swal.mixin({
     toast: true,
     position: "top-end",
@@ -18462,12 +18598,13 @@ var TimerControl = function TimerControl(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
+  var isDesignerTask = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
 
   // start timer function
   var startTimer = function startTimer(e) {
     e.preventDefault();
     startTimerFirstCheck("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=developer_first_task_check&project_id=").concat(task === null || task === void 0 ? void 0 : task.projectId)).unwrap().then(function (res) {
-      if (res.is_first_task) {
+      if (res.is_first_task && !isDesignerTask) {
         setIsOpenConfirmationModal(true);
       } else startTimerControl();
     });
@@ -18632,7 +18769,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 /* harmony import */ var _ckeditor_index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../ckeditor/index */ "./resources/js/react/ckeditor/index.jsx");
@@ -18643,7 +18780,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
 /* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
 /* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -18675,7 +18814,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var ApproveTask = function ApproveTask(_ref) {
+  var _task$category;
   var task = _ref.task,
     status = _ref.status,
     auth = _ref.auth;
@@ -18724,9 +18865,9 @@ var ApproveTask = function ApproveTask(_ref) {
     setErr = _useState16[1];
   (0,react__WEBPACK_IMPORTED_MODULE_3__.useEffect)(function () {
     if (getSubmittedTask) {
-      var data = _.sortBy(getSubmittedTask, ['submission_no']);
-      var latest = _.last(data);
-      var old = _.initial(data);
+      var data = lodash__WEBPACK_IMPORTED_MODULE_14___default().sortBy(getSubmittedTask, ['submission_no']);
+      var latest = lodash__WEBPACK_IMPORTED_MODULE_14___default().last(data);
+      var old = lodash__WEBPACK_IMPORTED_MODULE_14___default().initial(data);
       setOldSubmittion(_toConsumableArray(old));
       setLatestSubmittion(latest);
     }
@@ -18792,95 +18933,95 @@ var ApproveTask = function ApproveTask(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_3___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_3___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
       variant: "success",
       onClick: function onClick() {
         return setShowApproveForm(true);
       },
       className: "d-flex align-items-center border-success",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
         className: "fa-solid fa-handshake-angle"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
         className: "d-inline ml-1",
         children: "Approve"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_12__["default"], {
       isOpen: showApproveForm,
       className: "sp1_single_task--modal w-100",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
         className: "sp1_single_task--modal-panerl-wrapper w-100",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
           className: "sp1_single_task--modal-panel w-100",
           style: {
             maxWidth: '600px',
             minWidth: '320px'
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
             className: "border-bottom pb-2 pl-3 pr-2 mb-3 d-flex align-items-center justify-content-between",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
               className: "font-weight-bold f-16",
               children: " Approve Task "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
               onClick: close,
               className: "",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
                 className: "fa-solid fa-xmark"
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
             className: "px-3",
-            children: [_.size(oldSubmittion) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+            children: [lodash__WEBPACK_IMPORTED_MODULE_14___default().size(oldSubmittion) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
               className: "mb-3",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                 className: "sp1_st--approve-card",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                   className: "sp1_st--approve-card-header",
                   "data-toggle": "collapse",
                   href: "#oldSubmittedSuccess",
                   role: "button",
                   "aria-expanded": "false",
                   "aria-controls": "oldSubmittedSuccess",
-                  children: ["Old Submitted Works (", _.size(oldSubmittion), ")", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("button", {
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_15__.HiOutlineSelector, {})
+                  children: ["Old Submitted Works (", lodash__WEBPACK_IMPORTED_MODULE_14___default().size(oldSubmittion), ")", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_16__.HiOutlineSelector, {})
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                 className: "collapse multi-collapse shadow-none",
                 id: "oldSubmittedSuccess",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                   className: "card card-body",
-                  children: _.size(oldSubmittion) > 0 ? _.map(oldSubmittion, function (task) {
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(SubmittedWorkCard, {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_14___default().size(oldSubmittion) > 0 ? lodash__WEBPACK_IMPORTED_MODULE_14___default().map(oldSubmittion, function (task) {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(SubmittedWorkCard, {
                       data: task,
                       isLoading: isFetching
                     }, "".concat(task.id, "_").concat(task === null || task === void 0 ? void 0 : task.submission_no));
-                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
                     children: "No Old Submittion!"
                   })
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(SubmittedWorkCard, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(SubmittedWorkCard, {
               data: latestSubmittion,
               latest: true,
               isLoading: isFetching
             })]
-          }), !isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+          }), !isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
             className: "mt-4 px-3",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("form", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("form", {
               action: "",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "form-group",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
                   htmlFor: "",
                   className: "font-weight-bold",
-                  children: ["Is This Task Completed Within Deadline?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("sup", {
+                  children: ["Is This Task Completed Within Deadline?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("sup", {
                     className: "f-16",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                   className: "",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_0__.Rating, {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_0__.Rating, {
                     style: {
                       maxWidth: 120
                     },
@@ -18889,18 +19030,18 @@ var ApproveTask = function ApproveTask(_ref) {
                     radius: "small"
                   })
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "form-group",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
                   htmlFor: "",
                   className: "font-weight-bold",
-                  children: ["How Beautifully The Task Is Submitted?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("sup", {
+                  children: ["How Beautifully The Task Is Submitted?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("sup", {
                     className: "f-16",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                   className: "",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_0__.Rating, {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_0__.Rating, {
                     style: {
                       maxWidth: 120
                     },
@@ -18909,18 +19050,18 @@ var ApproveTask = function ApproveTask(_ref) {
                     radius: "small"
                   })
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "form-group",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
                   htmlFor: "",
                   className: "font-weight-bold",
-                  children: ["How Perfectly The Task Requirements Are Fullfilled?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("sup", {
+                  children: ["How Perfectly The Task Requirements Are Fullfilled?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("sup", {
                     className: "f-16",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                   className: "",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_0__.Rating, {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_0__.Rating, {
                     style: {
                       maxWidth: 120
                     },
@@ -18929,29 +19070,29 @@ var ApproveTask = function ApproveTask(_ref) {
                     radius: "small"
                   })
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "form-group",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
                   htmlFor: "",
                   className: "font-weight-bold",
-                  children: ["Any Recommendations For Developer?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("sup", {
+                  children: ["Any Recommendations For ", lodash__WEBPACK_IMPORTED_MODULE_14___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? "Designer" : "Developer", "?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("sup", {
                     className: "f-16",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                   className: "ck-editor-holder",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_ckeditor_index__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_ckeditor_index__WEBPACK_IMPORTED_MODULE_6__["default"], {
                     onChange: onWriteOnEditor
                   })
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "mt-3 d-flex align-items-center",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
                   onClick: close,
                   variant: "tertiary",
                   className: "ml-auto mr-2",
                   children: "Close"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_13__["default"], {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_13__["default"], {
                   onClick: handleOnSubmit,
                   title: "Approve",
                   isLoading: approveTaskLoadingStatus
@@ -18978,64 +19119,64 @@ var SubmittedWorkCard = function SubmittedWorkCard(_ref3) {
     style = _ref3.style,
     _ref3$isLoading = _ref3.isLoading,
     isLoading = _ref3$isLoading === void 0 ? false : _ref3$isLoading;
-  var links = _.compact(_.split(data === null || data === void 0 ? void 0 : data.links, ','));
-  var attaches = _.compact(_.split(data === null || data === void 0 ? void 0 : data.attaches, ','));
+  var links = lodash__WEBPACK_IMPORTED_MODULE_14___default().compact(lodash__WEBPACK_IMPORTED_MODULE_14___default().split(data === null || data === void 0 ? void 0 : data.links, ','));
+  var attaches = lodash__WEBPACK_IMPORTED_MODULE_14___default().compact(lodash__WEBPACK_IMPORTED_MODULE_14___default().split(data === null || data === void 0 ? void 0 : data.attaches, ','));
   if (isLoading) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
       className: "sp1_st--approve-card mb-3 ".concat(className),
       style: style,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
         className: "sp1_st--approve-card-header",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
           height: "14px",
           width: "80px",
           className: "mb-2"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
           height: "14px",
           width: "50px",
           className: "mb-2"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
         className: "sp1_st--approve-card-body",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
           className: "mb-2",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
             height: "14px",
             width: "80px",
             className: "mb-2"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
             className: "ml-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
               height: "14px",
               width: "100%",
               className: "mb-2"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
               height: "14px",
               width: "100%",
               className: "mb-2"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
               height: "14px",
               width: "100%",
               className: "mb-2"
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
           className: "mb-2",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
             height: "14px",
             width: "80px",
             className: "mb-2"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
             className: "ml-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
               height: "14px",
               width: "100%",
               className: "mb-2"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
               height: "14px",
               width: "100%",
               className: "mb-2"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_8__.Placeholder, {
               height: "14px",
               width: "50%",
               className: "mb-2"
@@ -19045,78 +19186,78 @@ var SubmittedWorkCard = function SubmittedWorkCard(_ref3) {
       })]
     });
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
     className: "sp1_st--approve-card mb-3 ".concat(className),
     style: style,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
       className: "sp1_st--approve-card-header",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
         children: [latest ? 'Latest' : "Old", " Submittion ", !latest && "(".concat(data === null || data === void 0 ? void 0 : data.submission_no, ")")]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
         children: dayjs__WEBPACK_IMPORTED_MODULE_2___default()(data === null || data === void 0 ? void 0 : data.submission_date).format('MMM DD, YYYY hh:mm a')
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
       className: "sp1_st--approve-card-body",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
         className: "mb-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
           className: "font-weight-bold f-12",
           style: {
             color: '#81868E'
           },
           children: " Links"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("ol", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("ol", {
           style: {
             listStyle: 'unset',
             marginLeft: "32px"
           },
-          children: _.map(links, function (link, index) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("li", {
+          children: lodash__WEBPACK_IMPORTED_MODULE_14___default().map(links, function (link, index) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
               style: {
                 listStyle: 'numaric'
               },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
                 href: link,
                 children: link
               })
             }, "".concat(link, "_").concat(index));
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
         className: "mb-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
           className: "font-weight-bold f-12",
           style: {
             color: '#81868E'
           },
           children: "Description"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
           className: "sp1_ck_content p-2",
           dangerouslySetInnerHTML: {
             __html: (_data$text = data === null || data === void 0 ? void 0 : data.text) !== null && _data$text !== void 0 ? _data$text : "<span style=\"color:rgb(180,188,196);\">Comment Not Available</span>"
           }
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
         className: "mt-3",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           className: "d-block f-12 font-weight-bold mb-2",
           style: {
             color: "#767581"
           },
           children: "Attached Files"
-        }), _.size(attaches) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          children: _.map(attaches, function (file, index) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"].Preview, {
+        }), lodash__WEBPACK_IMPORTED_MODULE_14___default().size(attaches) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          children: lodash__WEBPACK_IMPORTED_MODULE_14___default().map(attaches, function (file, index) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"].Preview, {
               fileName: file,
               downloadAble: true,
               deleteAble: false,
               downloadUrl: "".concat(file),
               previewUrl: "".concat(file),
-              fileType: _.includes(["png", "jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others',
+              fileType: lodash__WEBPACK_IMPORTED_MODULE_14___default().includes(["png", "jpg", "jpeg", "gif", "svg"], lodash__WEBPACK_IMPORTED_MODULE_14___default().last(lodash__WEBPACK_IMPORTED_MODULE_14___default().split(file, '.'))) ? 'images' : 'others',
               ext: ""
             }, "".concat(file, "_").concat(index));
           })
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
           className: "px-2",
           style: {
             color: "rgb(180, 188, 196)"
