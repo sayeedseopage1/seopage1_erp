@@ -104,8 +104,12 @@ class PMGoal extends Command
             {
                 $projectId= Payment::where('project_id',$goal->project_id)->first();
                 $total_milestones= ProjectMilestone::where('project_id',$goal->project_id)->count();
-                $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('status','complete')->count();
-                if($projectId == null || $current_date > $projectId->created_at)
+                $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('payments.status','complete')->count();
+
+                $total_milestones_value= ProjectMilestone::where('project_id',$goal->project_id)->sum('cost');
+                $total_complete_milestones_value= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('payments.status','complete')->sum('amount');
+                $completion_percent = $total_complete_milestones_value/$total_milestones_value;
+                if(($projectId == null || $current_date > $projectId->created_at) && $completion_percent < 0.5)
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$total_milestones. ' milestones could not be released in this week';
@@ -116,13 +120,86 @@ class PMGoal extends Command
                 
                 
             }
+            
+            elseif($goal->goal_code == 'MPMR' && $current_date > $end_date)
+            {
+                $projectId= Payment::where('project_id',$goal->project_id)->first();
+                $total_milestones= ProjectMilestone::where('project_id',$goal->project_id)->count();
+                $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('payments.status','complete')->count();
+
+                
+                $completion_percent = $total_milestones/2;
+                $required_to_complete= round($completion_percent +1,0);
+                if(($projectId == null || $current_date > $projectId->created_at) && $complete_milestones >= $required_to_complete )
+                {
+                    $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
+                    $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    $goal_update->updated_at = Carbon::now();
+                    $goal_update->save();
+
+                }
+                
+                
+            }
+            elseif($goal->goal_code == 'MMPMR' && $current_date > $end_date)
+            {
+                $projectId= Payment::where('project_id',$goal->project_id)->first();
+                $total_milestones= ProjectMilestone::where('project_id',$goal->project_id)->count();
+                $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('payments.status','complete')->count();
+
+                
+                $completion_percent = $total_milestones/2;
+                $required_to_complete= round($completion_percent +2,0);
+                if(($projectId == null || $current_date > $projectId->created_at) && $complete_milestones >= $required_to_complete )
+                {
+                    $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
+                    $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    $goal_update->updated_at = Carbon::now();
+                    $goal_update->save();
+
+                }
+                
+                
+            }
+            elseif($goal->goal_code == 'LM' && $current_date > $end_date)
+            {
+                $projectId= Payment::where('project_id',$goal->project_id)->first();
+                $total_milestones= ProjectMilestone::where('project_id',$goal->project_id)->count();
+                $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('payments.status','complete')->count();
+
+                
+                $completion_percent = $total_milestones/2;
+                $required_to_complete= round($completion_percent +3,0);
+                if(($projectId == null || $current_date > $projectId->created_at) && $complete_milestones >= $required_to_complete )
+                {
+                    $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
+                    $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    $goal_update->updated_at = Carbon::now();
+                    $goal_update->save();
+
+                }
+                
+                
+            }
+            
+            elseif($goal->goal_code == 'FMR' && $current_date > $end_date)
+            {
+                $projectId= Payment::where('project_id',$goal->project_id)->first();
+                $total_milestones= ProjectMilestone::where('project_id',$goal->project_id)->count();
+                $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$goal->project_id)->where('payments.status','complete')->count();
+
+                if(($projectId == null || $current_date > $projectId->created_at) && $complete_milestones >= 1 )
+                {
+                    $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
+                    $goal_update->description = $complete_milestones . ' out of 1 milestones could not be released in this week';
+                    $goal_update->updated_at = Carbon::now();
+                    $goal_update->save();
+
+                }
+
+            }
         }
-        
-
-        //$daily_bonus= User::where('id',Auth::id())->first();
-        //dd($daily_bonus->packages->price);
-        //dd($sponsor_bonus['royality_bonus']);
-
+  
         
 
         $this->info('PM Goal Check Successfully');

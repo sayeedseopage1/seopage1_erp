@@ -35,6 +35,7 @@ use DateTime;
 use App\Models\PendingAction;
 use App\Models\PendingActionPast;
 use Auth;
+use App\Models\ProjectPmGoal;
 
 
 class PaymentController extends AccountBaseController
@@ -236,13 +237,32 @@ class PaymentController extends AccountBaseController
 
         $payment->status = 'complete';
         $payment->save(); 
+        $current_date = Carbon::now();
+        $pm_goal = ProjectPmGoal::where('project_id',$payment->project_id)->where('goal_code','FPMR')->first();
+        $total_milestones= ProjectMilestone::where('project_id',$payment->project_id)->count();
+        $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->count();
+        $total_milestones_value= ProjectMilestone::where('project_id',$payment->project_id)->sum('cost');
+        $total_complete_milestones_value= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->sum('amount');
+        $completion_percent = $total_complete_milestones_value/$total_milestones_value;
+        if($pm_goal != null && $current_date < $pm_goal->goal_end_date && $completion_percent >= 0.5)
+        {
+            $pm_goal->goal_status = 1;
+            
+    
+            $pm_goal->description = $complete_milestones . ' out of '.$total_milestones. ' milestones released in this week';
+    
+                    
+            $pm_goal->updated_at= Carbon::now();
+            $pm_goal->save();
+            
+    
+        }
         $InvoiceId= Invoice::where('id',$invoice->id)->first();
         $projectId= Project::where('id',$InvoiceId->project_id)->first();
         $milestoneId= ProjectMilestone::where('id',$InvoiceId->milestone_id)->first();
         if($milestoneId->project_completion_status == 1)
         {
 
-        
         $actions = PendingAction::where('code','ALP')->where('past_status',0)->where('milestone_id',$milestoneId->id)->where('authorization_for',Auth::id())->get();
         if($actions != null)
         {

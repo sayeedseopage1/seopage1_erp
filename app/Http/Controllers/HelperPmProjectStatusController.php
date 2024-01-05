@@ -97,7 +97,7 @@ class HelperPmProjectStatusController extends AccountBaseController
             $p_pm_regular_goal->project_type = $findDeal->project_type;
             $p_pm_regular_goal->project_category = 'Regular';
             $p_pm_regular_goal->goal_code = 'LM';
-            $p_pm_regular_goal->goal_name = 'This 1 more milestone loop will continue until the completion of the project after every 7 days';
+            $p_pm_regular_goal->goal_name = 'This 1 more milestone need to be released until the completion of the project following every 7 days';
             $p_pm_regular_goal->goal_type = 'last_milestone';
             $p_pm_regular_goal->goal_start_date = $pm_project->created_at;
             $p_pm_regular_goal->goal_end_date = Carbon::parse($pm_project->created_at)->addDay(29);
