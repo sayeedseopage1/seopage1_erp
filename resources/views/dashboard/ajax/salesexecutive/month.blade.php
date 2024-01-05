@@ -5,7 +5,7 @@
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of leads</h5>
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#num_of_lead">
+                        <a href="#" data-toggle="modal" data-target="#num_of_lead{{count($number_of_leads_received_get)}}">
                             {{$number_of_leads_received}}
                         </a>
                     </p>

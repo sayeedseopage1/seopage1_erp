@@ -119,6 +119,11 @@ trait SalesDashboard
 		->where('created_at', '>=', $startDate)
 		->where('created_at', '<', $endDate)
 		->count();
+    $this->number_of_leads_received_get = DB::table('leads')
+		->where('added_by', $salesId)
+		->where('created_at', '>=', $startDate)
+		->where('created_at', '<', $endDate)
+		->get();
 
 	$this->number_of_leads_convert_deals_fixed = DB::table('deal_stages')
 		->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
@@ -1270,6 +1275,12 @@ trait SalesDashboard
             ->where('created_at', '>=', $startDate)
             ->where('created_at', '<', $endDate)
             ->count();
+
+        $this->number_of_leads_received_get = DB::table('leads')
+            ->where('added_by', $salesId)
+            ->where('created_at', '>=', $startDate)
+            ->where('created_at', '<', $endDate)
+            ->get();
 
         $this->number_of_leads_convert_deals_fixed = DB::table('deal_stages')
             ->join('leads', 'deal_stages.lead_id', '=', 'leads.id')
