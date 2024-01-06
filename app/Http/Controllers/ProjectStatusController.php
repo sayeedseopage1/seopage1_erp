@@ -272,4 +272,17 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.index', $this->data);
 
     }
+    public function allProjectStatus(){
+        $project_pm_goal = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','projects.project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage')
+            ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
+            ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
+            ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
+            ->groupBy('projects.id')
+            ->get();
+
+            return response()->json([
+                'data'=>$project_pm_goal,
+                'status'=>200
+            ]);
+    }
 }

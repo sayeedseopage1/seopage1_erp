@@ -283,6 +283,7 @@ class PaymentController extends AccountBaseController
 
             }
         }
+        // dd('ok');
         $InvoiceId= Invoice::where('id',$invoice->id)->first();
         $projectId= Project::where('id',$InvoiceId->project_id)->first();
         $milestoneId= ProjectMilestone::where('id',$InvoiceId->milestone_id)->first();
