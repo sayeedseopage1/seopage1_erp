@@ -1024,7 +1024,7 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
-       // dd($request);
+    //    dd($request->all());
     //    DB::beginTransaction();
         $deal_hourly_checked = Deal::where('id', $request->id)->first();
         if ($deal_hourly_checked->project_type != 'hourly') {
@@ -1562,7 +1562,7 @@ class ContractController extends AccountBaseController
     }
     public function updatedealDetails(Request $request)
     {
-        //        dd($request->all());
+            //    dd($request->all());
         $deal_hourly_checked = Deal::where('id', $request->id)->first();
         if ($deal_hourly_checked->project_type != 'hourly') {
             $validated = $request->validate([
@@ -1579,7 +1579,7 @@ class ContractController extends AccountBaseController
                 'description8' => 'required',
                 'description9' => 'required',
                 'deal_category' => 'required',
-                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
+               
                 'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -1594,7 +1594,7 @@ class ContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
-                'cms_id.required' => 'This field is required!',
+               
                 'project_summary.required' => 'This field is required!',
             ]);
         } else {
@@ -1617,7 +1617,7 @@ class ContractController extends AccountBaseController
                 'description8' => 'required',
                 'description9' => 'required',
                 'deal_category' => 'required',
-                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
+                
                 'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -1638,7 +1638,7 @@ class ContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
-                'cms_id.required' => 'This field is required!',
+               
                 'project_summary.required' => 'This field is required!',
             ]);
         }

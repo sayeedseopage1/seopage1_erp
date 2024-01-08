@@ -9,16 +9,24 @@ const CommentContainerDecider = ({
     isOpen,
     children,
 }) => {
+    // console.log(width);
     const handleContainer = (children) => {
-        if (fullScreenView) {
+        if (fullScreenView && width <= 991) {
             return (
                 <Modal isOpen={isOpen}>
-                    <div className="position-relative">
+                    <div
+                        className="position-relative"
+                        style={{
+                            padding: "75px 23px 18px 25px",
+                            height: "100vh",
+                            width: "100vw",
+                        }}
+                    >
                         <div
                             className="sp1_task_comment_modal"
                             style={{
-                                width: "100vw",
-                                height: "100vh",
+                                height: "100%",
+                                width: "100%",
                                 maxHeight: "100vh",
                             }}
                         >
@@ -29,18 +37,82 @@ const CommentContainerDecider = ({
                     </div>
                 </Modal>
             );
+        } else if (!fullScreenView && width <= 991) {
+            return (
+                <Modal isOpen={isOpen}>
+                    <div
+                        className="position-relative"
+                        style={{
+                            padding: "75px 23px 18px 25px",
+                            height: "100vh",
+                            width: "100vw",
+                        }}
+                    >
+                        <div
+                            className="sp1_task_comment_modal"
+                            style={{
+                                height: "100%",
+                                width: "100%",
+                                maxHeight: "100vh",
+                            }}
+                        >
+                            {/* modal body (start) */}
+                            {children}
+                            {/* modal body (end) */}
+                        </div>
+                    </div>
+                </Modal>
+            );
+        }  
+        else if (fullScreenView && width > 991) {
+            return (
+                <Modal isOpen={isOpen}>
+                    <div
+                        className="position-relative"
+                        style={{
+                            padding: "79px 41px 21px 261px",
+                            height: "100vh",
+                            width: "100vw",
+                        }}
+                    >
+                        <div
+                            className="sp1_task_comment_modal"
+                            style={{
+                                height: "100%",
+                                width: "100%",
+                                maxHeight: "100vh",
+                            }}
+                        >
+                            {/* modal body (start) */}
+                            {children}
+                            {/* modal body (end) */}
+                        </div>
+                    </div>
+                </Modal>
+            );
+        } else if (!fullScreenView && width > 991) {
+            return (
+                <Modal isOpen={isOpen}>
+                    <div
+                        className="position-relative"
+                        style={{
+                            paddingTop: "79px",
+                        }}
+                    >
+                        <div
+                            style={{
+                                margin:"auto"
+                            }}
+                            className="sp1_task_comment_modal"
+                        >
+                            {/* modal body (start) */}
+                            {children}
+                            {/* modal body (end) */}
+                        </div>
+                    </div>
+                </Modal>
+            );
         }
-        // else if (width > 1200) {
-        //     return (
-        //         <CustomModal toggleRef={toggleRef} isOpen={isOpen}>
-        //             <div className="sp1_task_comment_modal">
-        //                 {/* modal body (start) */}
-        //                 {children}
-        //                 {/* modal body (end) */}
-        //             </div>
-        //         </CustomModal>
-        //     );
-        // }
         // else if (width <= 1200) {
         //     return (
         //         <Modal isOpen={isOpen}>

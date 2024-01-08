@@ -4,7 +4,10 @@ import Button from "../../../components/Button";
 import SubmitButton from "../../../components/SubmitButton";
 
 
-
+/**
+ *  * This component responsible for selecting client revision or Sales revision by Project manager
+ *  * Ref "CLIENT HAS REVISION"
+ */
 
 const projectManagerAcknowladgement = [
     {
@@ -57,7 +60,14 @@ const projectManagerAcknowladgement = [
         title: "Sales overpromised: This task is not doable to this extent or in this way and I informed management about it on day 1",
         isDeniable: false,
         createDispute: false,
-    }
+    }, 
+    {
+        id: 'CPRx07',
+        title: "The client has general revisions",
+        isDeniable: false,
+        createDispute: false,
+        type: 'GENERAL_REVISION'
+    },
 ]
 
 
@@ -157,6 +167,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
             additional_amount: Number(additionalAmount),
             additional_status: additionalPaid,
             additional_comment: additionalInfo?.info ?? '',
+            revision_type: reason?.type ?? null,
             dispute_create: reason?.id === "CPRx01" ? true : (reason?.createDispute || additionalInfo?.disputeCreate || false)
         }
 

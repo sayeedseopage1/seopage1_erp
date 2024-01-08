@@ -238,7 +238,10 @@ class TimelogReportController extends AccountBaseController
             $item->pm_roles = $ppPmRole->display_name;
             $item->project_id = $ppTask->id;
             $item->project_name = $ppTask->heading;
-        }
+            $item->total_minutes =ProjectTimeLog::where('user_id',$item->employee_id)->whereBetween('created_at', [$startDate, $endDate])->sum('total_minutes');
+            $item->number_of_session =ProjectTimeLog::where('user_id',$item->employee_id)->whereBetween('created_at', [$startDate, $endDate])->count();
+
+        
 
 
          if($timer != null )
@@ -255,6 +258,7 @@ class TimelogReportController extends AccountBaseController
 
 
          }
+        }
 
      }
         //timelog end
@@ -403,6 +407,7 @@ class TimelogReportController extends AccountBaseController
            // dd($timer);
            if($item->project_id == null)
             {
+                $status= null;
                 $ppTask = Task::where('id',$item->task_id)->first();
                 $ppClient = User::where('id',$ppTask->client_id)->first();
                 $ppPm = User::where('id',$ppTask->added_by)->first();

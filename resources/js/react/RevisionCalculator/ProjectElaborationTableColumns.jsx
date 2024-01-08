@@ -247,7 +247,7 @@ export const ProjectElaborationTableColumns = [
             },
             {
                 id: "lead_developer",
-                heading: "Lead Developer Issues",
+                heading: "Lead Developers/Designers Issues",
                 moveable: false,
                 marge: true,
                 sortBy: "lead_develoepr_issue",
@@ -272,7 +272,7 @@ export const ProjectElaborationTableColumns = [
             },
             {
                 id: "developer",
-                heading: "Developers Issues",
+                heading: "Developers/Designers Issues",
                 moveable: false,
                 marge: true,
                 sortBy: "develoepr_issue",

@@ -162,6 +162,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                         {isOpen && (
                             <FilterSidebar
+                                page={page}
                                 developer={developer}
                                 setDeveloper={setDeveloper}
                                 client={client}

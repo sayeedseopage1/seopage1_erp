@@ -22,9 +22,9 @@ export class BoardColumn {
 // category
 export class Category {
     constructor(cat) {
-        (this.name = _.startCase(cat?.category_name)),
-            (this.addedBy = cat?.added_by),
-            (this.id = cat?.id);
+        (this.name = cat?.category_name),
+        (this.addedBy = cat?.added_by),
+        (this.id = cat?.id);
     }
 }
 
@@ -262,6 +262,7 @@ export class SingleTask {
             comment: task?.primary_page_authorization_comment
         });
 
+        this.revisionLogMin = task?.revision_log_min;
         this.subtaskId = task?.subtask_id;
         this.projectManagerId = task?.project_manager_id;
         this.projectManagerAvatar = task?.project_manager_avatar;

@@ -1,0 +1,33 @@
+
+
+/* buttons */
+
+.buttonWrapper {
+  display: inline-block; 
+}
+
+.button { 
+  /* font-size: 18px; */
+  border: 0;
+  padding-top: 5px;
+  vertical-align: bottom;
+  width: 36px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.button svg {
+  fill: #777;
+  width: 24px;
+  height: 24px; 
+}
+
+.button:hover svg, .button:focus svg { 
+  fill: #f75f19;
+}
+
+.active svg {
+  fill: #f75f19;
+}

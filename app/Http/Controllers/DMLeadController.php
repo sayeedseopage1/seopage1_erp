@@ -815,7 +815,8 @@ class DMLeadController extends AccountBaseController
     {
         $startDate = $request->start_date ?? null;
         $endDate = $request->end_date ?? null;
-
+        $lead_source = $request->lead_source ?? null;
+        $convert_status = $request->convert_status;
         $limit = $request->limit ??  10;
 
         $leadsQuery = Lead::select(
@@ -823,6 +824,7 @@ class DMLeadController extends AccountBaseController
             'leads.added_by',
             'leads.client_id',
             'leads.category_id',
+            'leads.lead_source',
             'client_name',
             'actual_value',
             'bidding_minutes',
@@ -868,6 +870,12 @@ class DMLeadController extends AccountBaseController
             if ($request->sales_executive_id != '') {
                 $leadsQuery->where('leads.added_by',$request->sales_executive_id);
             }
+            if ($lead_source != '') {
+                $leadsQuery->where('leads.lead_source',$lead_source);
+            }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
+            }
 
             $leads = $leadsQuery
                 ->orderBy('leads.id', 'desc')
@@ -906,12 +914,15 @@ class DMLeadController extends AccountBaseController
     {
         $startDate = $request->start_date ?? null;
         $endDate = $request->end_date ?? null;
+        $lead_source = $request->lead_source ?? null;
+        $convert_status = $request->convert_status;
 
         $leadsQuery = Lead::select(
             'leads.id',
             'leads.added_by',
             'leads.client_id',
             'leads.category_id',
+            'leads.lead_source',
             'client_name',
             'actual_value',
             'bidding_minutes',
@@ -945,6 +956,12 @@ class DMLeadController extends AccountBaseController
             }
             if ($request->sales_executive_id != '') {
                 $leadsQuery->where('leads.added_by',$request->sales_executive_id);
+            }
+            if ($lead_source != '') {
+                $leadsQuery->where('leads.lead_source',$lead_source);
+            }
+            if ($convert_status != '') {
+                $leadsQuery->where('leads.deal_status',$convert_status);
             }
 
             $leads = $leadsQuery

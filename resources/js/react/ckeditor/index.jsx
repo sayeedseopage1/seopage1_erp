@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';  
 import DecoupledEditor from '@ckeditor/ckeditor5-build-decoupled-document';
-import ImageUploadAdapterPlugin from './custom/ImageUploadAdapter'; 
+import ImageUploadAdapterPlugin from './custom/ImageUploadAdapter';
+
 
 
 
@@ -32,7 +33,7 @@ export default function CKEditorComponent ({data="", onChange, placeholder="Type
                 data={data}
                 config={{ 
                     extraPlugins: [ImageUploadAdapterPlugin],
-                    placeholder,
+                    placeholder, 
                     toolbar: [ 
                         'undo','redo', 
                         '|',

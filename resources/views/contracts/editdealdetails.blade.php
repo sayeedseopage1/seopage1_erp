@@ -346,6 +346,7 @@
                                     </label>
                                     <div class="dropdown bootstrap-select form-control select-picker">
                                         <select name="deal_category" id="deal_category" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                            <option>--</option>
                                             <option value="Web Development" {{ $deal->deal_category=='Web Development'? 'selected':'' }}>Web Development</option>
                                             <option value="Website Maintainance" {{ $deal->deal_category=='Website Maintainance'? 'selected':'' }}>Website Maintainance</option>
                                             <option value="Graphic Design" {{ $deal->deal_category=='Graphic Design'? 'selected':'' }}>Graphic Design</option>
@@ -357,7 +358,9 @@
                                         <span id="deal_category_error" class="text-danger"></span>
                                     </div>
                                 </div>
-                                @if($deal->cms_id && $deal->cms_name)
+
+                                @if($deal->cms_id && $deal->cms_name !=null)
+
                                 <div class="col-md-6">
                                     <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_cms">Project CMS
                                         <sup class="f-14 mr-1">*</sup>
@@ -366,7 +369,7 @@
                                         </svg>
                                     </label>
                                     <div class="dropdown bootstrap-select form-control select-picker">
-                                        <select name="cms_id" id="cms_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                        <select name="cmsId" id="cmsId" data-live-search="true" class="form-control select-picker error" data-size="8">
                                             <option value="">--</option>
                                             @foreach ($project_cms as $item)
                                                 <option value="{{ $item->id .'-'. $item->cms_name }}" {{$deal->cms_id==$item->id? 'selected':''}}>{{ $item->cms_name }}</option>
@@ -374,7 +377,26 @@
                                         </select>
                                     </div>
                                 </div>
-                                @endif
+                                @else
+                                <div class="col-md-6" id="cmsSelect" style="display: none">
+                                <div class="col-md-6">
+                                    <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_cms">Project CMS
+                                        <sup class="f-14 mr-1">*</sup>
+                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the project cms name." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                        </svg>
+                                    </label>
+                                    <div class="dropdown bootstrap-select form-control select-picker">
+                                        <select name="cmsId" id="cmsId" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                            <option value="">--</option>
+                                            @foreach ($project_cms as $item)
+                                                <option value="{{ $item->id .'-'. $item->cms_name }}" {{$deal->cms_id==$item->id? 'selected':''}}>{{ $item->cms_name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                             </div>
                           <br>
                           <div class="row">
@@ -819,183 +841,185 @@
     </script>
     <!--EDIT DEAL DETAILS START-->
     @if($deal->project_type !='hourly')
-        <script>
-            $('#updateBtn').click(function(e){
-                e.preventDefault();
-                // alert('ok');
-                $('#updateBtn').attr("disabled", true);
-                $('#updateBtn').html("Processing...");
-                var description2 = CKEDITOR.instances.description2Text.getData();
-                var description3 = CKEDITOR.instances.description3Text.getData();
-                var description4 = CKEDITOR.instances.description4Text.getData();
-                var description5 = CKEDITOR.instances.description5Text.getData();
-                var description6 = CKEDITOR.instances.description6Text.getData();
-                var description7 = CKEDITOR.instances.description7Text.getData();
-                var description8 = CKEDITOR.instances.description8Text.getData();
-                var description9 = CKEDITOR.instances.description9Text.getData();
+
+    <script>
+        $('#updateBtn').click(function(e){
+            e.preventDefault();
+            // alert('ok');
+            $('#updateBtn').attr("disabled", true);
+            $('#updateBtn').html("Processing...");
+            var description2 = CKEDITOR.instances.description2Text.getData();
+            var description3 = CKEDITOR.instances.description3Text.getData();
+            var description4 = CKEDITOR.instances.description4Text.getData();
+            var description5 = CKEDITOR.instances.description5Text.getData();
+            var description6 = CKEDITOR.instances.description6Text.getData();
+            var description7 = CKEDITOR.instances.description7Text.getData();
+            var description8 = CKEDITOR.instances.description8Text.getData();
+            var description9 = CKEDITOR.instances.description9Text.getData();
+            @if ($user->role_id==4)
+                var project_summary = CKEDITOR.instances.project_summary.getData();
+            @endif
+            var message_links = document.getElementsByName("message_link[]");
+            var message_links_values = [];
+            for (var i = 0; i < message_links.length; i++) {
+                message_links_values.push(message_links[i].value);
+            }
+            var deal_category = document.getElementById("deal_category").value;
+            var cms_id = deal_category=="Web Development" ? document.getElementById("cmsId").value : null;
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'project_name': document.getElementById("project_name").value,
+                'deadline': document.getElementById("deadline").value,
+                'original_currency_id': document.getElementById("original_currency_id").value,
+                'amount': document.getElementById("amount").value,
+                'client_name': document.getElementById("client_name").value,
+                'organization': document.getElementById("organization").value,
+                'client_email': document.getElementById("client_email").value,
+                'profile_link': document.getElementById("profile_link").value,
+                'deal_category': deal_category,
+                'cms_id': cms_id,
+                'message_link': message_links_values,
+                'description2': description2,
+                'description3': description3,
+                'description4': description4,
+                'description5': description5,
+                'description6': description6,
+                'description7': description7,
+                'description8': description8,
+                'description9': description9,
                 @if ($user->role_id==4)
-                    var project_summary = CKEDITOR.instances.project_summary.getData();
+                'project_summary': project_summary,
                 @endif
-                var message_links = document.getElementsByName("message_link[]");
-                var message_links_values = [];
-                for (var i = 0; i < message_links.length; i++) {
-                    message_links_values.push(message_links[i].value);
+                'id': '{{$deal->id}}',
+                'pm_id': '{{Auth::user()->role_id}}',
+            }
+            // console.log(data);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-                var data= {
-                    '_token': "{{ csrf_token() }}",
-                    'project_name': document.getElementById("project_name").value,
-                    'deadline': document.getElementById("deadline").value,
-                    'original_currency_id': document.getElementById("original_currency_id").value,
-                    'amount': document.getElementById("amount").value,
-                    'client_name': document.getElementById("client_name").value,
-                    'organization': document.getElementById("organization").value,
-                    'client_email': document.getElementById("client_email").value,
-                    'profile_link': document.getElementById("profile_link").value,
-                    'deal_category': document.getElementById("deal_category").value,
-                    @if ($deal->cms_id && $deal->cms_name)
-                    'cms_id': document.getElementById("cms_id").value,
-                    @endif
-                    'message_link': message_links_values,
-                    'description2': description2,
-                    'description3': description3,
-                    'description4': description4,
-                    'description5': description5,
-                    'description6': description6,
-                    'description7': description7,
-                    'description8': description8,
-                    'description9': description9,
-                    @if ($user->role_id==4)
-                    'project_summary': project_summary,
-                    @endif
-                    'id': '{{$deal->id}}',
-                }
-                // console.log(data);
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "POST",
-                    url: "{{route('update-deal-details')}}",
-                    data: data,
-                    dataType: "json",
-                    success: function (response) {
-                        $('.error').html("");
-                        $(location).prop('href', '{{url('/account/contracts/')}}');
-                        toastr.success('Deal Updated Successfully');
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('update-deal-details')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    $('.error').html("");
+                    $(location).prop('href', '{{url('/account/contracts/')}}');
+                    toastr.success('Deal Updated Successfully');
+                    $('#updateBtn').attr("disabled", false);
+                    $('#updateBtn').html("Update Deal Creation");
+                },
+                error: function(error) {
+                    const errorKeys = Object.keys(error.responseJSON.errors);
+                    const numErrors = errorKeys.length;
+                    // console.log(numErrors);
+                    if(numErrors > 0)
+                    {
+                        $('#commonError').show();
                         $('#updateBtn').attr("disabled", false);
                         $('#updateBtn').html("Update Deal Creation");
-                    },
-                    error: function(error) {
-                        const errorKeys = Object.keys(error.responseJSON.errors);
-                        const numErrors = errorKeys.length;
-                        // console.log(numErrors);
-                        if(numErrors > 0)
-                        {
-                            $('#commonError').show();
-                            $('#updateBtn').attr("disabled", false);
-                            $('#updateBtn').html("Complete Deal Creation");
-                            toastr.error('Some fields are missing, please check again and input all required data properly!');
-                        }
-                        if(error.responseJSON.errors.project_name){
-                            $('#projectNameError').text(error.responseJSON.errors.project_name);
-                        }else{
-                            $('#projectNameError').text('');
-                        }
-                        if(error.responseJSON.errors.deadline){
-                            $('#deadlineError').text(error.responseJSON.errors.deadline);
-                        }else{
-                            $('#deadlineError').text('');
-                        }
-                        if(error.responseJSON.errors.original_currency_id){
-                            $('#currencyError').text(error.responseJSON.errors.original_currency_id);
-                        }else{
-                            $('#currencyError').text('');
-                        }
-                        if(error.responseJSON.errors.amount){
-                            $('#amountError').text(error.responseJSON.errors.amount);
-                        }else{
-                            $('#amountError').text('');
-                        }
-                        if(error.responseJSON.errors.message_link){
-                            $('#messageLinkError').text(error.responseJSON.errors.message_link);
-                        }else{
-                            $('#messageLinkError').text('');
-                        }
-                        if(error.responseJSON.errors.message_link){
-                            $('#messageLinkError').text(error.responseJSON.errors.message_link);
-                        }else{
-                            $('#messageLinkError').text('');
-                        }
-                        if(error.responseJSON.errors.description2){
-                            $('#description2Error').text(error.responseJSON.errors.description2);
-                        }else{
-                            $('#description2Error').text('');
-                        }
-                        if(error.responseJSON.errors.description3){
-                            $('#description3Error').text(error.responseJSON.errors.description3);
-                        }else{
-                            $('#description3Error').text('');
-                        }
-                        if(error.responseJSON.errors.description4){
-                            $('#description4Error').text(error.responseJSON.errors.description4);
-                        }else{
-                            $('#description4Error').text('');
-                        }
-                        if(error.responseJSON.errors.description5){
-                            $('#description5Error').text(error.responseJSON.errors.description5);
-                        }else{
-                            $('#description5Error').text('');
-                        }
-                        if(error.responseJSON.errors.description6){
-                            $('#description6Error').text(error.responseJSON.errors.description6);
-                        }else{
-                            $('#description6Error').text('');
-                        }
-                        if(error.responseJSON.errors.description7){
-                            $('#description7Error').text(error.responseJSON.errors.description7);
-                        }else{
-                            $('#description7Error').text('');
-                        }
-                        if(error.responseJSON.errors.description8){
-                            $('#description8Error').text(error.responseJSON.errors.description8);
-                        }else{
-                            $('#description8Error').text('');
-                        }
-                        if(error.responseJSON.errors.description9){
-                            $('#description9Error').text(error.responseJSON.errors.description9);
-                        }else{
-                            $('#description9Error').text('');
-                        }
-                        if(error.responseJSON.errors.project_summary){
-                            $('#projectSummaryError').text(error.responseJSON.errors.project_summary);
-                        }else{
-                            $('#projectSummaryError').text('');
-                        }
-                        if (error.responseJSON.errors && error.responseJSON.errors.deal_category) {
-                        $('#deal_category_error').text(error.responseJSON.errors.deal_category);
-                        } else {
-                            $('#deal_category_error').text('');
-                        }
-                        if (error.responseJSON.errors && error.responseJSON.errors.cms_id) {
-                            $('#cms_id_error').text(error.responseJSON.errors.cms_id);
-                        } else {
-                            $('#cms_id_error').text('');
-                        }
-                        if (error.responseJSON.errors.milestone_value) {
-                            toastr.error('Please add a milestone!');
-                            $('#updateBtn').attr("disabled", false);
-                            $('#updateBtn').html("Complete Deal Creation");
-                        }
-                        $('#updateBtn').attr("disabled", false);
-                        $('#updateBtn').html("Complete Deal Creation");
-
+                        toastr.error('Some fields are missing, please check again and input all required data properly!');
                     }
-                });
-            });
+                    if(error.responseJSON.errors.project_name){
+                        $('#projectNameError').text(error.responseJSON.errors.project_name);
+                    }else{
+                        $('#projectNameError').text('');
+                    }
+                    if(error.responseJSON.errors.deadline){
+                        $('#deadlineError').text(error.responseJSON.errors.deadline);
+                    }else{
+                        $('#deadlineError').text('');
+                    }
+                    if(error.responseJSON.errors.original_currency_id){
+                        $('#currencyError').text(error.responseJSON.errors.original_currency_id);
+                    }else{
+                        $('#currencyError').text('');
+                    }
+                    if(error.responseJSON.errors.amount){
+                        $('#amountError').text(error.responseJSON.errors.amount);
+                    }else{
+                        $('#amountError').text('');
+                    }
+                    if(error.responseJSON.errors.message_link){
+                        $('#messageLinkError').text(error.responseJSON.errors.message_link);
+                    }else{
+                        $('#messageLinkError').text('');
+                    }
+                    if(error.responseJSON.errors.message_link){
+                        $('#messageLinkError').text(error.responseJSON.errors.message_link);
+                    }else{
+                        $('#messageLinkError').text('');
+                    }
+                    if(error.responseJSON.errors.description2){
+                        $('#description2Error').text(error.responseJSON.errors.description2);
+                    }else{
+                        $('#description2Error').text('');
+                    }
+                    if(error.responseJSON.errors.description3){
+                        $('#description3Error').text(error.responseJSON.errors.description3);
+                    }else{
+                        $('#description3Error').text('');
+                    }
+                    if(error.responseJSON.errors.description4){
+                        $('#description4Error').text(error.responseJSON.errors.description4);
+                    }else{
+                        $('#description4Error').text('');
+                    }
+                    if(error.responseJSON.errors.description5){
+                        $('#description5Error').text(error.responseJSON.errors.description5);
+                    }else{
+                        $('#description5Error').text('');
+                    }
+                    if(error.responseJSON.errors.description6){
+                        $('#description6Error').text(error.responseJSON.errors.description6);
+                    }else{
+                        $('#description6Error').text('');
+                    }
+                    if(error.responseJSON.errors.description7){
+                        $('#description7Error').text(error.responseJSON.errors.description7);
+                    }else{
+                        $('#description7Error').text('');
+                    }
+                    if(error.responseJSON.errors.description8){
+                        $('#description8Error').text(error.responseJSON.errors.description8);
+                    }else{
+                        $('#description8Error').text('');
+                    }
+                    if(error.responseJSON.errors.description9){
+                        $('#description9Error').text(error.responseJSON.errors.description9);
+                    }else{
+                        $('#description9Error').text('');
+                    }
+                    if(error.responseJSON.errors.project_summary){
+                        $('#projectSummaryError').text(error.responseJSON.errors.project_summary);
+                    }else{
+                        $('#projectSummaryError').text('');
+                    }
+                    if (error.responseJSON.errors && error.responseJSON.errors.deal_category) {
+                        $('#deal_category_error').text(error.responseJSON.errors.deal_category);
+                    } else {
+                        $('#deal_category_error').text('');
+                    }
+                    if (error.responseJSON.errors && error.responseJSON.errors.cms_id) {
+                        $('#cms_id_error').text(error.responseJSON.errors.cms_id);
+                    } else {
+                        $('#cms_id_error').text('');
+                    }
+                    if (error.responseJSON.errors.milestone_value) {
+                        toastr.error('Please add a milestone!');
+                        $('#updateBtn').attr("disabled", false);
+                        $('#updateBtn').html("Update Deal Creation");
+                    }
+                    $('#updateBtn').attr("disabled", false);
+                    $('#updateBtn').html("Update Deal Creation");
 
-        </script>
+                }
+            });
+        });
+
+    </script>
     @else
         <script>
             $('#updateBtn').click(function(e){
@@ -1020,6 +1044,8 @@
                 for (var i = 0; i < message_links.length; i++) {
                     message_links_values.push(message_links[i].value);
                 }
+                var deal_category = document.getElementById("deal_category").value;
+                var cms_id = deal_category=="Web Development" ? document.getElementById("cmsId").value : null;
                 var data= {
                     '_token': "{{ csrf_token() }}",
                     'project_name': document.getElementById("project_name").value,
@@ -1036,10 +1062,8 @@
                     'client_email': document.getElementById("client_email").value,
                     'profile_link': document.getElementById("profile_link").value,
                     'long_project': document.getElementById("long_project").value,
-                    'deal_category': document.getElementById("deal_category").value,
-                    @if ($deal->cms_id && $deal->cms_name)
-                    'cms_id': document.getElementById("cms_id").value,
-                    @endif
+                    'deal_category': deal_category,
+                    'cms_id': cmsId,
                     'hubstaff_tracking': hubstaff_tracking,
                     'message_link': message_links_values,
                     'description2': description2,
@@ -1204,8 +1228,8 @@
                         } else {
                             $('#deal_category_error').text('');
                         }
-                        if (error.responseJSON.errors && error.responseJSON.errors.cms_id) {
-                            $('#cms_id_error').text(error.responseJSON.errors.cms_id);
+                        if (error.responseJSON.errors && error.responseJSON.errors.cmsId) {
+                            $('#cms_id_error').text(error.responseJSON.errors.cmsId);
                         } else {
                             $('#cms_id_error').text('');
                         }
@@ -1225,6 +1249,18 @@
     @endif
     <!--ENDI DEAL DETAILS END-->
     @push('scripts')
+
+    <script>
+        var dealCategorySelect = document.getElementById("deal_category");
+        var cmsSection = document.querySelector("#cmsSelect");
+        dealCategorySelect.addEventListener("change", function() {
+            if (dealCategorySelect.value === "Web Development") {
+                cmsSection.style.display = "block";
+            } else {
+                cmsSection.style.display = "none";
+            }
+        });
+    </script>
 
     <script>
              $(document).ready(function () {
@@ -1295,6 +1331,19 @@
                  });
              });
          </script>
+@if($deal->cms_id == null)
+<script>
+        var dealCategorySelect = document.getElementById("deal_category");
+        var cmsSection = document.querySelector("#cmsSelect");
+        dealCategorySelect.addEventListener("change", function() {
+            if (dealCategorySelect.value === "Web Development") {
+                cmsSection.style.display = "block";
+            } else {
+                cmsSection.style.display = "none";
+            }
+        });
+    </script>
+@endif
     <script>
         flatpickr("#deadline", {
             dateFormat: "Y-m-d",

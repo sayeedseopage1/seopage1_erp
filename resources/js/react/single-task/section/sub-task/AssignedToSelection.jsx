@@ -9,14 +9,23 @@ import {
 import Loader from "../../components/Loader";
 import { Placeholder } from '../../../global/Placeholder'
 
-const AssginedToSelection = ({ selected, onSelect }) => {
+const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
     const [query, setQuery] = React.useState("");
 
     const params = useParams();
-    const { data: employees, isFetching } = useGetTaskDetailsQuery(
+    const { data, isFetching } = useGetTaskDetailsQuery(
         `/${params?.taskId}/json?mode=employees`
     );
-
+ 
+    let employees = [];
+    if(taskCategory && taskCategory.id === 5){
+        employees = _.filter(data, d => Number(d.role_id) === 9)
+    }else if(taskCategory && taskCategory.id === 7){
+        employees = _.filter(data, d => Number(d.role_id) === 10)
+    }else{
+        employees = _.filter(data, d => Number(d.role_id) === 5)
+    }
+ 
     const filteredData =
         query === ""
             ? employees
@@ -49,7 +58,7 @@ const AssginedToSelection = ({ selected, onSelect }) => {
                         </div>
                     )}
 
-                    {filteredData?.length === 0 ? (
+                    {!isFetching && filteredData?.length === 0 ? (
                         <div className="sp1-select-option-nodata">
                             Nothing found.
                         </div>

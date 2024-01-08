@@ -2,6 +2,12 @@ import PropTypes from "prop-types";
 import styles from "./button.module.css";
 import Loader from "./Loader";
 
+/**
+ * This is a button Component
+ * props
+ *  * variant ["primary", "secondary", "tertiary", "success", "danger"]
+ */
+
 const Button = ({
     children,
     type = "button",

@@ -8,12 +8,10 @@ import SubmitButton from '../../../components/SubmitButton'
 const RevisionView = ({revision, isLoading, onAccept, onDeny, onContinue, isContinue}) => {
     const auth = new User(window?.Laravel?.user);
 
-
     const getComment = () => {
-        const roleId = auth?.getRoleId();
-        if(roleId === 6 || roleId === 9 || roleId === 10){
+        if(auth?.isHasRolePermission(6) || auth?.isHasRolePermission(13)){
             return revision?.pm_comment;
-        }else {
+        }else { 
             return revision?.lead_comment;
         }
     }

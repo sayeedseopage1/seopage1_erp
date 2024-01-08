@@ -209,6 +209,23 @@ class DeveloperNeedtoAssignTask extends Command
         }
       }
 
+      $p_actions= PendingAction::where('past_status',0)->get();
+      foreach($p_actions as $item)
+     {
+       $creation_date = Carbon::parse($action->created_at)->addHours(240);
+          //  dd($developer,$logged_minutes,$estimate_total_minutes);
+          $current_date = Carbon::now();
+       if($current_date >= $creation_date)
+       {
+           $update_item= PendingAction::find($item->id);
+           $update_item->past_status = 1;
+           $update_item->save();
+
+       }
+     }
+    
+
+
 
 
 

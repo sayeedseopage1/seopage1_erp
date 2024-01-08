@@ -709,7 +709,10 @@ class DashboardController extends AccountBaseController
             $userDailyTaskSubmission = true;
         }
 
-        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
+        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)
+                                ->whereDate('date','=',$userClockIn->created_at)
+                                ->orderBy('created_at','desc')
+                                ->first();
         $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
         $createdAt = Carbon::parse($userClockIn->created_at);
         $logStatus = true;
@@ -718,17 +721,17 @@ class DashboardController extends AccountBaseController
 
         if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
             $minimum_log_hours = 270;
-            if($userTotalMin < 270){
+            if($userTotalMin < $minimum_log_hours){
                 $logStatus = false;
             }
         } else {
             $minimum_log_hours = 420;
-            if($userTotalMin < 420){
+            if($userTotalMin < $minimum_log_hours){
                 $logStatus = false;
             }
         }
 
-        $logStatus = $userDeveloperHoursTrack ? true : false ;
+        $logStatus = $userDeveloperHoursTrack ? true : $logStatus ;
     }
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;

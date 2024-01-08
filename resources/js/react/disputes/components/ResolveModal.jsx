@@ -30,6 +30,7 @@ import UserSection from "./UserSection";
 
 const compareDate = new CompareDate();
 
+// reducers
 const reducer = (state, action) => {
     const getRandomId = () => {
         return (Math.random() + 1).toString(36).substring(7);
@@ -450,6 +451,9 @@ const ResolveModal = ({ state }) => {
 
     const task = row?.task?.parent_task ?? row?.task;
     const resolved = row?.status;
+    const taskCategory = row?.task?.task_category;
+ 
+
 
     return (
         <React.Fragment>
@@ -706,7 +710,7 @@ const ResolveModal = ({ state }) => {
                                         >
                                             <UserSection
                                                 row={row}
-                                                sectionTitle="Lead Developer"
+                                                sectionTitle= {_.includes([5, 7], taskCategory) ? "Lead Designer" : "Lead Developer"}
                                                 user={{
                                                     ...row?.task
                                                         ?.lead_developer,
@@ -742,7 +746,7 @@ const ResolveModal = ({ state }) => {
                                         >
                                             <UserSection
                                                 row={row}
-                                                sectionTitle="Developer"
+                                                sectionTitle={_.includes([5, 7], taskCategory) ? "Designer" : "Developer"}
                                                 user={{
                                                     ...row?.task?.developer,
                                                     avatar: row?.task?.developer
