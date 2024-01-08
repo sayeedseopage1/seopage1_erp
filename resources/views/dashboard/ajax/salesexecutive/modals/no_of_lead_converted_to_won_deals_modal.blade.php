@@ -37,7 +37,11 @@
                           {{$row->client_name}}
                       </td>
                       <td>
-                          {{$row->bid_value . $currency->currency_symbol}}
+                        @if ($currency !=null)
+                        {{$row->bid_value . $currency->currency_symbol}}
+                        @else
+                        {{$row->bid_value}}
+                        @endif
                       </td>
                       <td>
                           {{$row->created_at}}

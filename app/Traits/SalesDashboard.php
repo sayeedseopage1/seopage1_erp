@@ -864,6 +864,11 @@ trait SalesDashboard
 		->where('updated_at', '<', $exclude_end_date)
 		->count();
 
+    $this->won_deal_count_get = DB::table('contracts')
+		->where('last_updated_by', $salesId)
+		->where('updated_at', '<', $exclude_end_date)
+		->get();
+
 	// exclude one for end cycle date and other for today.  suppose today december 20  and end cycle 31. but logic will be  20-exclude date for current month 
 
 	$this->won_deal_count_reject_project = DB::table('contracts')
@@ -2044,6 +2049,12 @@ trait SalesDashboard
             ->where('last_updated_by', $salesId)
             ->where('updated_at', '<', $exclude_end_date)
             ->count();
+
+        $this->won_deal_count_get = DB::table('contracts')
+            ->where('last_updated_by', $salesId)
+            ->where('updated_at', '<', $exclude_end_date)
+            ->get();
+
 
         // exclude one for end cycle date and other for today.  suppose today december 20  and end cycle 31. but logic will be  20-exclude date for current month 
 

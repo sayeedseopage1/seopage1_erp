@@ -276,10 +276,11 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of won deals</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#">
+							<a href="#" data-toggle="modal" data-target="#num_of_won_deal{{$won_deal_count_get}}">
 								{{$won_deal_count}}
 							</a>
 						</p>
+                        {{-- @include('dashboard.ajax.salesexecutive.modals.num_of_won_deal') --}}
 					</div>
 				</div>
 				<div class="d-block">
