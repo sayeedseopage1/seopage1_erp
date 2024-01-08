@@ -1400,7 +1400,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
 
 
 
-            $html = view('dashboard.ajax.developerdashboard.month', $this->data)->render();
+            $html = view('dashboard.ajax.developerdashboard.admin_view_month', $this->data)->render();
 
 
              return Reply::dataOnly([
