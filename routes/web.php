@@ -338,12 +338,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('dashboard-advanced/show-project-manager-details', [DashboardController::class, 'projectManageDetalsOnAdvanceDashboard'])->name('dashboard.projectManageDetalsOnAdvanceDashboard');
     Route::post('dashboard/widget/{dashboardType}', [DashboardController::class, 'widget'])->name('dashboard.widget');
     Route::post('dashboard/week-timelog', [DashboardController::class, 'weekTimelog'])->name('dashboard.week_timelog');
+    Route::get('dashboard-lead-dev-performance/{id}', [DashboardController::class, 'leadDevPerformance'])->name('lead-dev-performance');
+    Route::get('dashboard-developer-performance/{id}', [DashboardController::class, 'devPerformance'])->name('dev-performance');
 
     Route::get('attendances/clock-in-modal', [DashboardController::class, 'clockInModal'])->name('attendances.clock_in_modal');
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
     Route::get('dashboard/pm-cycle-explanation', [DashboardController::class, 'pmDashboardExplanation'])->name('pm-dashboard-explanation');
+    Route::get('task_history_dashboard/{id}', [DashboardController::class, 'task_history'])->name('task_history_dashboard');
+    Route::get('task_revision_dashboard/{id}', [DashboardController::class, 'task_revision'])->name('revision-count-dashboard');
     // Route::resource('points/', PointsController::class)->only
 
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
@@ -1695,3 +1699,4 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
+// asdasdsad

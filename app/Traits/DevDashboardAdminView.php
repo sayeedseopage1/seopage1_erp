@@ -17,9 +17,9 @@ use App\Models\TaskRevision;
 use Auth;
 use Illuminate\Support\Facades\DB;
 
-trait DeveloperDashboard
+trait DevDashboardAdminView
 {
-    public function DeveloperDashboard()
+    public function DevDashboardAdminView($dev)
     {
         $this->viewEventPermission = user()->permission('view_events');
         $this->viewNoticePermission = user()->permission('view_notice');
@@ -68,7 +68,7 @@ trait DeveloperDashboard
         {
         // /   dd(request('startDate'),request('endDate'),request('user_id'));
 
-        $devId = request('user_id');
+        $devId = $dev->id;
         // $this->username = DB::table('users')->where('id',$devId)->value('name');
         $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
         $endDate1 = request('endDate');
@@ -1410,7 +1410,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
 
         }else
         {
-            $devId = Auth::id();
+            $devId = $dev->id;
             // $this->username = DB::table('users')->where('id',$devId)->value('name');
             $startDate = Carbon::now()->startOfMonth();
 
@@ -2746,7 +2746,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
              $this->average_attempts_approve_client_data_lead  = $average_attempts_approve_client_data_lead;
 
 
-            return view('dashboard.employee.developer', $this->data);
+            return view('dashboard.employee.admin_view_developer', $this->data);
         }
 
 

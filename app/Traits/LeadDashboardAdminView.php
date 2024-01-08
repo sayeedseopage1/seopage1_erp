@@ -21,10 +21,11 @@ use App\Models\TaskRevision;
 
 use Carbon\CarbonPeriod;
 
-trait LeadDashboard
+trait LeadDashboardAdminView
 {
-	public function LeadDashboard()
+	public function LeadDashboardAdminView($lead_dev)
 	{
+        
         $this->viewEventPermission = user()->permission('view_events');
         $this->viewNoticePermission = user()->permission('view_notice');
         $this->editTimelogPermission = user()->permission('edit_timelogs');
@@ -72,7 +73,7 @@ trait LeadDashboard
         {
         // /   dd(request('startDate'),request('endDate'),request('user_id'));
 
-        $devId = request('user_id');
+        $devId = $lead_dev->id;
         // $this->username = DB::table('users')->where('id',$devId)->value('name');
         $startDate = Carbon::parse(request('startDate'))->format('Y-m-d');
         $endDate1 = request('endDate');
@@ -1406,7 +1407,7 @@ trait LeadDashboard
     
     
 
-            $html = view('dashboard.ajax.leaddeveloper.month', $this->data)->render();
+            $html = view('dashboard.ajax.leaddeveloper.admin_view_month', $this->data)->render();
 
             
  
@@ -1417,7 +1418,7 @@ trait LeadDashboard
 
         }else 
         {
-            $devId = Auth::id();
+            $devId = $lead_dev->id;
             // $this->username = DB::table('users')->where('id',$devId)->value('name');
             $startDate = Carbon::now()->startOfMonth();
          
@@ -2763,7 +2764,7 @@ trait LeadDashboard
 
 
         
-            return view('dashboard.employee.lead', $this->data);
+            return view('dashboard.employee.admin_view_lead', $this->data);
         }
        
        

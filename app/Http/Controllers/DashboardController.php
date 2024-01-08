@@ -44,12 +44,16 @@ use App\Models\DeveloperStopTimer;
 use Auth;
 use App\Models\Attendance;
 use App\Models\DailySubmission;
+use App\Models\TaskHistory;
+use App\Models\TaskRevision;
+use App\Traits\LeadDashboardAdminView;
+use App\Traits\DevDashboardAdminView;
 
 use function PHPUnit\Framework\isNull;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView,LeadDashboardAdminView,DevDashboardAdminView;
 
     public function __construct()
     {
@@ -780,5 +784,47 @@ class DashboardController extends AccountBaseController
         $stop_time->save();
 
         return response()->json(['status'=>200]);
+    }
+    public function task_history($id)
+    {
+        $status_history= TaskHistory::select('task_history.id','task_history.created_at as created_on',
+        'taskboard_columns.column_name','taskboard_columns.label_color'
+        )
+        ->leftJoin('taskboard_columns','taskboard_columns.id','task_history.board_column_id')
+        ->where('task_history.task_id',$id)
+       
+        ->where('task_history.board_column_id','!=',null)
+        ->groupBy('task_history.id','task_history.created_at')
+      
+        ->orderBy('task_history.created_at','desc')
+        ->get();
+      //  dd($status_history);
+        
+      
+
+
+
+
+      
+    }
+    public function task_revision($id)
+    {
+        $task_revision= TaskRevision::select('task_revisions.created_at','task_revisions.final_responsible_person',
+        'raised_by_percent','raised_against_percent'
+        )->where('task_revisions.task_id',$id)
+        ->where('task_revisions.final_responsible_person','!=',null)
+        ->groupBy('task_revisions.id')
+        ->orderBy('task_revisions.id','desc')->get();
+      //  dd($task_revision);
+    }
+    public function leadDevPerformance($id){
+        $this->lead_dev = User::where('id', $id)->first();
+        $this->pageTitle = 'Lead Developer Performance';
+        return $this->LeadDashboardAdminView($this->lead_dev);
+    }
+    public function devPerformance($id){
+        $this->dev = User::where('id', $id)->first();
+        $this->pageTitle = 'Developer Performance';
+        return $this->DevDashboardAdminView($this->dev);
     }
   }
