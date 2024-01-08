@@ -631,11 +631,10 @@ Overview--}}
                     <th>Avg. Bidding Frequency</th>
                 </x-slot>
                 @forelse($sales as $sale)
-
                 <tr>
                     <td class="pl-20">{{$loop->index+1}}</td>
                     <td>
-                        <a href="/account/employees/{{$sale->user_id}}" class="text-darkest-grey f-w-500">{{$sale->user->name}}</a>
+                        <a target="_blank" href="{{ route('sales-performance',$sale->user_id) }}" class="f-w-500">{{$sale->user->name}}</a>
                     </td>
                     <td>{{$sale->leads_count}}</td>
                     <td>

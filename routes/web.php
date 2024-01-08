@@ -340,6 +340,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('dashboard/week-timelog', [DashboardController::class, 'weekTimelog'])->name('dashboard.week_timelog');
     Route::get('dashboard-lead-dev-performance/{id}', [DashboardController::class, 'leadDevPerformance'])->name('lead-dev-performance');
     Route::get('dashboard-developer-performance/{id}', [DashboardController::class, 'devPerformance'])->name('dev-performance');
+    Route::get('dashboard-sales-performance/{id}', [DashboardController::class, 'salesPerformance'])->name('sales-performance');
 
     Route::get('attendances/clock-in-modal', [DashboardController::class, 'clockInModal'])->name('attendances.clock_in_modal');
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');

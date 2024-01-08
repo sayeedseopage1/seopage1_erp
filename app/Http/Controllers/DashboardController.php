@@ -48,12 +48,13 @@ use App\Models\TaskHistory;
 use App\Models\TaskRevision;
 use App\Traits\LeadDashboardAdminView;
 use App\Traits\DevDashboardAdminView;
+use App\Traits\SalesDashboardAdminView;
 
 use function PHPUnit\Framework\isNull;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView,LeadDashboardAdminView,DevDashboardAdminView;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView,LeadDashboardAdminView,DevDashboardAdminView,SalesDashboardAdminView;
 
     public function __construct()
     {
@@ -826,5 +827,10 @@ class DashboardController extends AccountBaseController
         $this->dev = User::where('id', $id)->first();
         $this->pageTitle = 'Developer Performance';
         return $this->DevDashboardAdminView($this->dev);
+    }
+    public function salesPerformance($id){
+        $this->sales = User::where('id', $id)->first();
+        $this->pageTitle = 'Sales Performance';
+        return $this->SalesDashboardAdminView($this->sales);
     }
   }
