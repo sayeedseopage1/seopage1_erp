@@ -164,7 +164,8 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             });
         }
 
-        //
+        
+
         try {
             await postComment({ taskId, data: formData });
             await onSubmit(formData);
