@@ -14,6 +14,7 @@ import isCurrentUser from "../utils/isCurrentUser";
 import { User } from "../utils/user-details";
 import Swal from "sweetalert2";
 import getTextContent, {
+    getCommentInHtml,
     htmlToPreservedText,
     htmlToString,
 } from "../utils/getTextContent";
@@ -45,6 +46,34 @@ const SingleChat = ({
     const [showDeletedComment, setShowDeletedComment] = useState(false);
     const menuRef = useRef(null);
     const menuBtnRef = useRef(null);
+
+    const gotoTarget = (url) => {
+        window.open(url, "_blank");
+    };
+
+    // useEffect(() => {
+    //     // console.log(comment);
+    //     if (comment?.comment) {
+    //         const commentInHtmlFormat = getCommentInHtml(comment?.comment);
+    //         const targetArray =
+    //             commentInHtmlFormat.querySelectorAll(".comment-mention");
+    //         targetArray.forEach((targetItem) => {
+    //             targetItem.setAttribute(
+    //                 "onclick",
+    //                 "gotoTarget('/account/tasks/3952')"
+    //             );
+    //         });
+    //         console.log(targetArray);
+    //         console.log(commentInHtmlFormat);
+    //     }
+    // }, []);
+
+    useEffect(()=>{
+      const targetArr = document.querySelectorAll('.comment_text_container a');
+      targetArr.forEach((targetItem)=>{
+        targetItem.target = '_blank';
+      })
+    },[])
 
     const closeContext = () => {
         setShowCommentMenu(false);
@@ -436,8 +465,14 @@ const SingleChat = ({
                                             }}
                                         />
                                         {isCurrentUser(comment?.user?.id)
-                                            ? `You have deleted this comment, ${getFormattedTime(comment?.deleted_at)}`
-                                            : `This comment was deleted by ${comment?.user?.name}, ${getFormattedTime(comment?.deleted_at)}`}{" "}
+                                            ? `You have deleted this comment, ${getFormattedTime(
+                                                  comment?.deleted_at
+                                              )}`
+                                            : `This comment was deleted by ${
+                                                  comment?.user?.name
+                                              }, ${getFormattedTime(
+                                                  comment?.deleted_at
+                                              )}`}{" "}
                                     </span>
                                     {currentUser.roleId === 1 ? (
                                         // || currentUser.roleId === 8
