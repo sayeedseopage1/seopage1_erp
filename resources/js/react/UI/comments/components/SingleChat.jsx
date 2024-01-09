@@ -20,6 +20,7 @@ import getTextContent, {
 import getFormattedTime, { checkSameDay } from "../utils/getFormattedTime";
 import { TiCancel } from "react-icons/ti";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import "../styles/single-comment.css";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -437,13 +438,6 @@ const SingleChat = ({
                                         {isCurrentUser(comment?.user?.id)
                                             ? `You have deleted this comment, ${getFormattedTime(comment?.deleted_at)}`
                                             : `This comment was deleted by ${comment?.user?.name}, ${getFormattedTime(comment?.deleted_at)}`}{" "}
-                                        {/* {showDeletedComment
-                                            ? `(Deleted at : ${dayjs(
-                                                  comment?.deleted_at
-                                              ).format(
-                                                  "MMM DD, YYYY, hh:mm A"
-                                              )})`
-                                            : ""} */}
                                     </span>
                                     {currentUser.roleId === 1 ? (
                                         // || currentUser.roleId === 8
@@ -537,6 +531,7 @@ const SingleChat = ({
                                                                         ?.mention
                                                                         ?.comment,
                                                                 }}
+                                                                className="comment_text_container"
                                                             />
                                                         </span>
                                                     ) : (
@@ -642,6 +637,7 @@ const SingleChat = ({
                                                     dangerouslySetInnerHTML={{
                                                         __html: comment?.comment,
                                                     }}
+                                                    className="comment_text_container"
                                                 />
                                             </div>
                                         ) : (
@@ -778,6 +774,7 @@ const SingleChat = ({
                                                                     ?.mention
                                                                     .comment,
                                                             }}
+                                                            className="comment_text_container"
                                                         />
                                                     </span>
                                                 ) : (
@@ -884,6 +881,7 @@ const SingleChat = ({
                                             dangerouslySetInnerHTML={{
                                                 __html: comment?.comment,
                                             }}
+                                            className="comment_text_container"
                                         />
                                     </div>
                                 ) : (

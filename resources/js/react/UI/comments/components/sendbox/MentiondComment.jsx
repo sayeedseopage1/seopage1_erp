@@ -4,6 +4,7 @@ import style from "../../styles/comments.module.css";
 import { MdClose } from "react-icons/md";
 import HandleFileIcon from "../../utils/HandleFileIcon";
 import getFormattedTime from "../../utils/getFormattedTime";
+import '../../styles/single-comment.css';
 
 
 export default function MentionedComment() {
@@ -35,6 +36,7 @@ export default function MentionedComment() {
                           dangerouslySetInnerHTML={{
                               __html: mentionedComment?.comment,
                           }}
+                          className="comment_text_container"
                       />
                   </span>
               ) : (

@@ -8,6 +8,7 @@ import { store } from "../../../services/store";
 
 import Leads from "./pages/Leads";
 import Toaster from "../../../global/Toaster";
+import LeadContextProvider from "./components/context/LeadContext";
 
 // custom drag layer
 const DragLayer = () => {
@@ -47,11 +48,14 @@ const Content = () => {
     return (
         <React.Fragment>
             <DragLayer />
-                <Outlet />
+            <Outlet />
             <Toaster />
         </React.Fragment>
     );
 };
+
+// filter container 
+// id: leadTableFilterBarContainer
 
 const container = document.getElementById("leadTableContainer");
 if (container) {
@@ -59,13 +63,15 @@ if (container) {
         <React.StrictMode>
             <Provider store={store}>
                 <DndProvider backend={HTML5Backend}>
-                    <BrowserRouter basename="/account/leads">
-                        <Routes>
-                            <Route path="/" element={<Content />}>
-                              <Route index element={<Leads />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                    <LeadContextProvider>
+                        <BrowserRouter basename="/account/leads">
+                            <Routes>
+                                <Route path="/" element={<Content />}>
+                                    <Route index element={<Leads />} />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter>
+                    </LeadContextProvider>
                 </DndProvider>
             </Provider>
         </React.StrictMode>

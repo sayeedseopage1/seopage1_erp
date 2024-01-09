@@ -80,6 +80,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         setMentionedComment,
         setContextHolder,
         setSecletedComments,
+        setRefetchType,
     } = useCommentContext();
 
     const auth = useAuth();
@@ -123,6 +124,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
     // handle post comment
     const handlePostComment = async () => {
+        setRefetchType("");
         const comment = renderToHtml(editorState) ?? "";
  
 

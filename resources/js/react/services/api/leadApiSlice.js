@@ -6,6 +6,21 @@ const leadApiSlice = apiSlice.injectEndpoints({
             query: (query) => `/account/get-all-leads?${query}`,
             providesTags: ["LEADS"],
         }),
+
+        leadCreate: build.mutation({
+            query: (data) => ({
+                url: "/lead/store",
+                method: "POST",
+                body: {
+                    ...data,
+                    _token:document
+                    .querySelector("meta[name='csrf-token']")
+                    .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["LEADS"]
+        }),
+
         dealConversion: build.mutation({
             query: (data) => ({
                 url: `/deal/stage`,
@@ -36,14 +51,22 @@ const leadApiSlice = apiSlice.injectEndpoints({
         // export lead
         allLeads: build.query({
             query: (query) => `/account/export-lead-data${query}`,
+        }),
+
+        // get countries
+        getCountry: build.query({
+            query:`/account/get-all-country`,
+            providesTags: []
         })
     }),
 });
 
 export const {
     useLeadsQuery,
+    useLeadCreateMutation,
     useDealConversionMutation,
     useDeleteLeadMutation,
     useAllLeadsQuery,
-    useLazyAllLeadsQuery
+    useLazyAllLeadsQuery,
+    useGetCountryQuery
 } = leadApiSlice;
