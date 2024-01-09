@@ -19,6 +19,20 @@ $project->members->pluck('user_id')->toArray(); @endphp
 </style>
 <div class="d-lg-flex">
     <div class="project-leftxx w-100 py-0 py-lg-5 py-md-0" id="project-left">
+        @if(Auth::user()->role_id == 4)
+            <div style="margin-bottom: -40px;">
+                <button type="button" class="btn btn-success project-deadline-extension" data-project-id="{{$project->id}}"> 
+                    Extend Deadline
+                </button>
+            </div>
+        @endif
+        {{-- @if(Auth::user()->role_id == 1)
+            <div style="margin-bottom: -40px;">
+                <button type="button" class="btn btn-success project-deadline-extension" data-project-id="{{$project->id}}"> 
+                    Extend Deadline
+                </button>
+            </div>
+        @endif --}}
         @php
             $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
         @endphp
@@ -1933,6 +1947,17 @@ if (list && list.length > 0) {
             }
         });
     })
+</script>
+<script>
+    $('body').on('click', '.project-deadline-extension', function() {
+        let projectId = $(this).data('project-id');
+        console.log(projectId);
+        let searchQuery = "?project_id=" + projectId;
+        let url = "{{ route('project-deadline-extension') }}" + searchQuery;
+
+        $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+        $.ajaxModal(MODAL_LG, url);
+    });
 </script>
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 

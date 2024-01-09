@@ -556,6 +556,19 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
         };
 
     </script>
+
+
+    <script>
+        $('body').on('click', '.project-deadline-extension', function() {
+            let projectId = $(this).data('project-id');
+            console.log(projectId);
+            let searchQuery = "?project_id=" + projectId;
+            let url = "{{ route('project-deadline-extension') }}" + searchQuery;
+
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
+    </script>
    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
 
 @endpush

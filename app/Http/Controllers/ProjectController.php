@@ -48,6 +48,7 @@ use App\DataTables\ExpensesDataTable;
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\PaymentsDataTable;
 use App\DataTables\ProjectsDataTable;
+use App\DataTables\ProjectDeadlineExtensionDataTable;
 use App\DataTables\TimeLogsDataTable;
 use App\DataTables\DiscussionDataTable;
 use Illuminate\Support\Facades\Artisan;
@@ -6328,5 +6329,14 @@ public function updatePmBasicSEO(Request $request){
             'challenge' => $challenge,
             'status' => 200,
         ]);
+    }
+    public function projectDeadlineExtension(Request $request)
+    {
+        $this->projectId = $request->project_id;
+        return view('projects.modals.project_deadline_extension_modal', $this->data);
+    }
+    public function pDERequest(ProjectDeadlineExtensionDataTable $datatable){
+        $this->pageTitle = 'Project Deadline Extension Requests';
+        return $datatable->render('projects.ajax.project_deadline_extension',$this->data);
     }
 }
