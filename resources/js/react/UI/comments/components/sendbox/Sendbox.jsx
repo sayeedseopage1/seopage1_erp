@@ -9,7 +9,7 @@ import {
     BoldButton,
     UnderlineButton,
     BlockquoteButton,
-    CodeBlockButton,
+    CodeButton,
 } from "@draft-js-plugins/buttons";
 
 import Loader from "../../../../global/Loader";
@@ -237,7 +237,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                                     <BoldButton {...externalProps} />
                                     <ItalicButton {...externalProps} />
                                     <UnderlineButton {...externalProps} />
-                                    {/* <CodeBlockButton {...externalProps} /> */}
+                                    <CodeButton {...externalProps} /> 
                                     <BlockquoteButton {...externalProps} />
                                     <AnchorLinkButton
                                         onClick={() =>

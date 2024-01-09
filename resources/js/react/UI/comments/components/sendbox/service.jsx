@@ -150,6 +150,7 @@ const ServiceProvider = ({ children }) => {
 
     // render control
     const renderToHtml = (editorState) => {
+
         // hash config
         const hashConfig = {
             trigger: "#",
@@ -177,6 +178,7 @@ const ServiceProvider = ({ children }) => {
             true,
             customEntityTransform
         ); 
+
         return replaceEmojiWithHighQualityEmoji(markup);
     };
 
