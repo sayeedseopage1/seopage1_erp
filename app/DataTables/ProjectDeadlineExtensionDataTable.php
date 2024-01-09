@@ -5,12 +5,12 @@ namespace App\DataTables;
 use App\DataTables\BaseDataTable;
 use Carbon\Carbon;
 use App\Models\Project;
+use App\Models\ProjectDeadlineExtension;
+use App\Models\ProjectMilestone;
+use App\Models\Task;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
-use App\Models\Currency;
-use App\Models\Deal;
-use App\Models\ProjectPmGoal;
 use Yajra\DataTables\EloquentDataTable;
 use Auth;
 
@@ -29,38 +29,22 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             ->addColumn('check', function ($row) {
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
-            ->editColumn('action', function ($row) {
-
-                if(Auth::user()->role_id == 4){
-
-                $actions = '<div class="task_view">
-
+            ->editColumn('action', function ($row) {    
+                $action = '<div class="task_view">
+    
                     <div class="dropdown">
-                        <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link" id="dropdownMenuLink-41" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
+                            id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="icon-options-vertical icons"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-41" tabindex="0" x-placement="bottom-end" style="position: absolute; transform: translate3d(-137px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">';
-
-                        $actions .= '<a href="javascript:;" class="dropdown-item extendRequest" data-id="'.$row->projectId.'"><i class="fa fa-eye mr-2"></i>'.__('Extend Request').'</a>';
-                $actions .= '</div> </div> </div>';
-                return $actions;
-                }
-                if(Auth::user()->role_id == 1 || Auth::use()->role_id == 8){
-                    if($row->extended_request_status == 1){
-
-                        $actions = '<div class="task_view">
-        
-                            <div class="dropdown">
-                                <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link" id="dropdownMenuLink-41" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="icon-options-vertical icons"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-41" tabindex="0" x-placement="bottom-end" style="position: absolute; transform: translate3d(-137px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">';
-        
-                                $actions .= '<a href="javascript:;" class="dropdown-item reviewExtendRequest" data-id="'.$row->projectId.'"><i class="fa fa-eye mr-2"></i>'.__('Review Extend Request').'</a>';
-                        $actions .= '</div> </div> </div>';
-                        return $actions;
-                    }
-                }
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
+                        
+                            $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-auth" href="javascript:;"><i class="fa fa-plus mr-2"></i>' . __('Take Action') . '</a>';
+                $action .= '</div>
+                    </div>
+                </div>';
+    
+                return $action;
             })
             ->editColumn('clientName', function ($row) {
                 return '<div class="media align-items-center">
@@ -83,42 +67,62 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                         </div>
                     </div>';
             })
-            ->editColumn('project_budget', function ($row) {
-                $project = Project::where('id', $row->projectId)->first();
-                $deal = Deal::where('id', $project->deal_id)->first();
-                $currency = Currency::where('id', $deal->original_currency_id)->first();
-
-                $project_value = $project->project_budget . $currency->currency_symbol ;
-
-                return $project_value;
-
+            ->editColumn('milestone_status', function ($row) {
+                $p_milestone = ProjectMilestone::where('project_id', $row->project_id)->count();
+                $p_milestone_complete = ProjectMilestone::where('project_id', $row->project_id)->where('status','complete')->count();
+                return $p_milestone_complete.' / '.$p_milestone;
             })
-            ->editColumn('project_category', function ($row) {
-                return $row->project_category;
+            ->editColumn('parent_task_status', function ($row) {
+                $task = Task::where('project_id', $row->project_id)->where('subtask_id', null)->count();
+                $task_complete = Task::where('project_id', $row->project_id)->where('subtask_id', null)->where('status','complete')->count();
+                return $task_complete.' / '.$task;
             })
-            ->editColumn('start_date', function ($row) {
-                return $row->goal_start_date;
+            ->editColumn('sub_task_status', function ($row) {
+                $task = Task::where('project_id', $row->project_id)->where('subtask_id', '!=null')->count();
+                $task_complete = Task::where('project_id', $row->project_id)->where('subtask_id', '!=null')->where('status','complete')->count();
+                return $task_complete.' / '.$task;
             })
-            
+            ->editColumn('old_deadline', function ($row) {
+                return $row->old_deadline;
+            })
+            ->editColumn('new_deadline', function ($row) {
+                return $row->new_deadline;
+            })
+            ->editColumn('deadline_extended', function ($row) {
+                $oldDeadline = Carbon::createFromFormat('Y-m-d', $row->old_deadline);
+                $newDeadline = Carbon::createFromFormat('Y-m-d', $row->new_deadline);
+                $dayDifference = $newDeadline->diffInDays($oldDeadline);
+                return $dayDifference;
+            })
+            ->editColumn('requested_on', function ($row) {
+                $requestOn = Carbon::parse($row->created_at)->format('Y-m-d');
+                return $requestOn;
+            })
+            ->editColumn('approved_on', function ($row) {
+                // $approvedOn = Carbon::parse($row->approved_on)->format('Y-m-d');
+                return $approvedOn ?? '--';
+            })
+            ->editColumn('approved_by', function ($row) {
+                return '--';
+            })
             ->addIndexColumn()
             ->smart(false)
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['check','action' ,'clientName','project_name','pmName','project_budget','project_category','start_date']);
+            ->rawColumns(['check','action' ,'clientName','project_name','pmName','milestone_status','old_deadline','new_deadline','deadline_extended','requested_on','approved_on','approved_by']);
     }
     /**
      * @param Project $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(ProjectPmGoal $model)
+    public function query(ProjectDeadlineExtension $model)
     {
         $model = $model
-            ->select('project_pm_goals.*','projects.id as projectId','projects.project_name','projects.project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage')
-            ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
-            ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
+            ->select('project_deadline_extensions.*','projects.id as projectId','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage')
+            ->leftJoin('projects', 'project_deadline_extensions.project_id', '=', 'projects.id')
             ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
-            ->groupBy('projects.id');
+            ->leftJoin('users as client', 'projects.client_id', '=', 'client.id');
 
         return $model;
     }
@@ -174,9 +178,16 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
             __('clientName') => ['data' => 'clientName', 'name' => 'clientName', 'title' => __('Client')],
             __('project_name') => ['data' => 'project_name', 'name' => 'project_name', 'title' => __('Project Name')],
-            __('project_budget') => ['data' => 'project_budget', 'name' => 'project_budget', 'title' => __('Project Budget')],
-            __('project_category') => ['data' => 'project_category', 'name' => 'project_category', 'title' => __('Project Category')],
-            __('start_date') => ['data' => 'start_date', 'name' => 'start_date', 'title' => __('Start Date')],
+            __('pmName') => ['data' => 'pmName', 'name' => 'pmName', 'title' => __('Project Manager')],
+            __('milestone_status') => ['data' => 'milestone_status', 'name' => 'milestone_status', 'title' => __('Milestone Status')],
+            __('parent_task_status') => ['data' => 'parent_task_status', 'name' => 'parent_task_status', 'title' => __('Parent Task Status')],
+            __('sub_task_status') => ['data' => 'sub_task_status', 'name' => 'sub_task_status', 'title' => __('Sub Task Status')],
+            __('old_deadline') => ['data' => 'old_deadline', 'name' => 'old_deadline', 'title' => __('Previous Deadline')],
+            __('new_deadline') => ['data' => 'new_deadline', 'name' => 'new_deadline', 'title' => __('New Deadline')],
+            __('deadline_extended') => ['data' => 'deadline_extended', 'name' => 'deadline_extended', 'title' => __('Deadline Extended')],
+            __('requested_on') => ['data' => 'requested_on', 'name' => 'requested_on', 'title' => __('Requested On')],
+            __('approved_on') => ['data' => 'approved_on', 'name' => 'approved_on', 'title' => __('Approved On')],
+            __('approved_by') => ['data' => 'approved_by', 'name' => 'approved_by', 'title' => __('Approved By')],
             Column::computed('action', __('app.action'))
             ->exportable(false)
             ->printable(false)

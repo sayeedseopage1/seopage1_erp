@@ -114,4 +114,15 @@
         });
     });
     </script>
+
+    <script>
+        $('body').on('click', '.project-deadline-auth', function() {
+            let id = $(this).data('project-id');
+            let searchQuery = "?id=" + id;
+            let url = "{{ route('pde-authorization') }}" + searchQuery;
+
+            $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
+            $.ajaxModal(MODAL_LG, url);
+        });
+    </script>
 @endpush

@@ -26,13 +26,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </button>
             </div>
         @endif
-        {{-- @if(Auth::user()->role_id == 1)
+        @if(Auth::user()->role_id == 1)
             <div style="margin-bottom: -40px;">
-                <button type="button" class="btn btn-success project-deadline-extension" data-project-id="{{$project->id}}"> 
-                    Extend Deadline
-                </button>
+                <a target="_blank" href="{{route('pde-request')}}" class="btn btn-success">Project Deadline Extension Requests</a>
             </div>
-        @endif --}}
+        @endif
         @php
             $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
         @endphp

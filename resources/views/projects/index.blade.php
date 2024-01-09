@@ -561,7 +561,6 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
     <script>
         $('body').on('click', '.project-deadline-extension', function() {
             let projectId = $(this).data('project-id');
-            console.log(projectId);
             let searchQuery = "?project_id=" + projectId;
             let url = "{{ route('project-deadline-extension') }}" + searchQuery;
 

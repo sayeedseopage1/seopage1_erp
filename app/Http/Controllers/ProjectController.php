@@ -6350,7 +6350,7 @@ public function updatePmBasicSEO(Request $request){
             'extension.required' => 'This filed is required!',
             'description.required' => 'This filed is required!',
         ]);
-
+        
         $pd_ext = new ProjectDeadlineExtension();
         $pd_ext->project_id = $request->project_id;
         $pd_ext->milestone_id = $request->milestone_id == '--' ? null : $request->milestone_id;
@@ -6360,13 +6360,18 @@ public function updatePmBasicSEO(Request $request){
         $pd_ext->extension = $request->extension;
         $pd_ext->description = $request->description;
         $pd_ext->save();
-
+        
         $project = Project::where('id',$request->project_id)->first();
         $project->deadline = $pd_ext->new_deadline;
         $project->save();
-
+        
         return response()->json([
             'status'=>200
         ]);
+    }
+    public function pDExtensionAuthorization(Request $request)
+    {
+        $this->id = $request->id;
+        return view('projects.modals.project_deadline_extension_auth_modal', $this->data);
     }
 }

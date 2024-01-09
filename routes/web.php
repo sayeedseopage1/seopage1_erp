@@ -1543,8 +1543,9 @@ Route::post('/projects/deny-request-extension', [ProjectController::class, 'deny
 
 
 Route::get('/project-deadline-extension-request', [ProjectController::class, 'projectDeadlineExtension'])->name('project-deadline-extension');
-Route::get('/pde-request', [ProjectController::class, 'pDERequest'])->name('pde-request');
+Route::get('/project-deadline-extension', [ProjectController::class, 'pDERequest'])->name('pde-request');
 Route::post('store-project-deadline-exp', [ProjectController::class, 'storeProjectDeadline'])->name('store-project-deadline-exp');
+Route::get('/project-deadline-extension-authorization', [ProjectController::class, 'pDExtensionAuthorization'])->name('pde-authorization');
 
 //add project niche
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
