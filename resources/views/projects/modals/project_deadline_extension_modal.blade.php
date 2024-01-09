@@ -24,19 +24,20 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="current_deadline">Current Deadline</label>
-                    <input type="text" class="form-control height-35 f-14" id="current_deadline" name="current_deadline" value="{{$project->deadline}}" readonly>
+                    <input type="text" class="form-control height-35 f-14" id="current_deadline" name="current_deadline" value="{{\Carbon\Carbon::parse($project->deadline)->format('Y-m-d')}}" readonly>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="new_deadline">New Deadline</label>
+                    <label for="new_deadline">New Deadline <span class="text-danger">*</span></label>
                     <input type="date" class="form-control height-35 f-14" id="new_deadline" name="new_deadline">
+                    <span id="new_deadline_error" class="text-danger"></span>
                 </div>
             </div>
         </div>
         <div class="row mt-2">
-            <div class="col-md-6">
-                <label for="">Explain why you need more time to complete this project?</label>
+            <div class="col-md-8">
+                <label for="">Explain why you need more time to complete this project? <span class="text-danger">*</span></label>
                 @if ($milestones->isNotEmpty())
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="extension" id="extension1" value="Client Ordered New Things">
@@ -68,24 +69,26 @@
                     </div>
                 @endif
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="extension" id="extension2" value="option2">
+                    <input class="form-check-input" type="radio" name="extension" id="extension2" value="Client Was Unavailable">
                     <label class="form-check-label ml-2 mt-1" for="extension2">Client Was Unavailable</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="extension" id="extension3" value="option2">
+                    <input class="form-check-input" type="radio" name="extension" id="extension3" value="Couldn't Complete On Time">
                     <label class="form-check-label ml-2 mt-1" for="extension3">Couldn't Complete On Time</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="extension" id="extension4" value="option2">
+                    <input class="form-check-input" type="radio" name="extension" id="extension4" value="Others">
                     <label class="form-check-label ml-2 mt-1" for="extension4">Others</label>
                 </div>
+                <span id="extension_error" class="text-danger"></span>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="description">Description</label>
+                    <label for="description">Description <span class="text-danger">*</span></label>
                     <textarea name="description" id="description" class="form-control"></textarea>
+                    <span id="description_error" class="text-danger"></span>
                    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                     <script>
                         CKEDITOR.replace('description');
@@ -93,7 +96,7 @@
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
     </form>
 </div>
 <div class="modal-footer">
@@ -111,27 +114,64 @@
         }
       });
     });
-  </script>
+</script>
 
-{{-- <script>
-    // save leave
-    $('#save-leave').click(function() {
-        let url = '{{ route("leaves.leave_action") }}';
-        let action = '{{ $leaveAction }}';
-        let leaveId = '{{ $leaveID }}';
-        let userId = $('.leave-action-reject').data('user-id');
-        let reason = $('#reason').val();
-
-        $.easyAjax({
-            url: url,
-            type: "POST",
-            blockUI: true,
-            data: { 'action': action, 'leaveId': leaveId, '_token': '{{ csrf_token() }}', 'reason': reason, 'userId': userId },
-            success: function(response) {
-                if (response.status == "success") {
-                    window.location.reload();
-                }
+<script>
+    $('#submitBtn').click(function(e){
+        e.preventDefault();
+        $('#submitBtn').attr("disabled", true);
+        $('#submitBtn').html("Processing...");
+        var description = CKEDITOR.instances.description.getData();
+        var extension = $('input[name="extension"]:checked').val();
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'old_deadline': document.getElementById("current_deadline").value,
+            'new_deadline': document.getElementById("new_deadline").value,
+            @if ($milestones->isNotEmpty())
+            'milestone_id': document.getElementById("milestone_id").value,
+                @if ($deliverables->isNotEmpty())
+                'deliverable_id': document.getElementById("deliverable_id").value,
+                @endif
+            @endif
+            'description': description,
+            'extension': extension,
+            'project_id': {{$project->id}},
+        }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
-        })
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route('store-project-deadline-exp')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                toastr.success('Project Deadline Extension Submit Successfully');
+                window.location.reload();
+                $('#submitBtn').attr("disabled", false);
+                $('#submitBtn').html("Submit");
+            },
+            error: function(error) {
+                if(error.responseJSON.errors.new_deadline){
+                    $('#new_deadline_error').text(error.responseJSON.errors.new_deadline);
+                }else{
+                    $('#new_deadline_error').text('');
+                }
+                if(error.responseJSON.errors.extension){
+                    $('#extension_error').text(error.responseJSON.errors.extension);
+                }else{
+                    $('#extension_error').text('');
+                }
+                if(error.responseJSON.errors.description){
+                    $('#description_error').text(error.responseJSON.errors.description);
+                }else{
+                    $('#description_error').text('');
+                }
+                $('#submitBtn').attr("disabled", false);
+                $('#submitBtn').html("Submit");
+            }
+        });
     });
-</script> --}}
+</script>
