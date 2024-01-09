@@ -257,7 +257,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                 // console.log(_serverError,_errorMssg);
                 setError(_serverError);
             } else {
-                toast.success("Deal Created Successfully");
+                toast.success("Lead Created Successfully");
                 handleClose();
             }
         } catch (error) {

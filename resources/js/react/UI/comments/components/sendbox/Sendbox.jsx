@@ -164,9 +164,6 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             });
         }
 
-        console.log({comment});
-        return;
-
         try {
             await postComment({ taskId, data: formData });
             await onSubmit(formData);
@@ -240,7 +237,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                                     <BoldButton {...externalProps} />
                                     <ItalicButton {...externalProps} />
                                     <UnderlineButton {...externalProps} />
-                                    <CodeBlockButton {...externalProps} />
+                                    {/* <CodeBlockButton {...externalProps} /> */}
                                     <BlockquoteButton {...externalProps} />
                                     <AnchorLinkButton
                                         onClick={() =>
