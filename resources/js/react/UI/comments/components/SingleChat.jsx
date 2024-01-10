@@ -14,12 +14,14 @@ import isCurrentUser from "../utils/isCurrentUser";
 import { User } from "../utils/user-details";
 import Swal from "sweetalert2";
 import getTextContent, {
+    getCommentInHtml,
     htmlToPreservedText,
     htmlToString,
 } from "../utils/getTextContent";
 import getFormattedTime, { checkSameDay } from "../utils/getFormattedTime";
 import { TiCancel } from "react-icons/ti";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import "../styles/single-comment.css";
 
 const currentUser = new User(window.Laravel.user);
 
@@ -44,6 +46,19 @@ const SingleChat = ({
     const [showDeletedComment, setShowDeletedComment] = useState(false);
     const menuRef = useRef(null);
     const menuBtnRef = useRef(null);
+
+    const gotoTarget = (url) => {
+        window.open(url, "_blank");
+    };
+
+    useEffect(() => {
+        const targetArr = document.querySelectorAll(
+            ".comment_text_container a"
+        );
+        targetArr.forEach((targetItem) => {
+            targetItem.target = "_blank";
+        });
+    }, []);
 
     const closeContext = () => {
         setShowCommentMenu(false);
@@ -435,15 +450,14 @@ const SingleChat = ({
                                             }}
                                         />
                                         {isCurrentUser(comment?.user?.id)
-                                            ? `You have deleted this comment, ${getFormattedTime(comment?.deleted_at)}`
-                                            : `This comment was deleted by ${comment?.user?.name}, ${getFormattedTime(comment?.deleted_at)}`}{" "}
-                                        {/* {showDeletedComment
-                                            ? `(Deleted at : ${dayjs(
+                                            ? `You have deleted this comment, ${getFormattedTime(
                                                   comment?.deleted_at
-                                              ).format(
-                                                  "MMM DD, YYYY, hh:mm A"
-                                              )})`
-                                            : ""} */}
+                                              )}`
+                                            : `This comment was deleted by ${
+                                                  comment?.user?.name
+                                              }, ${getFormattedTime(
+                                                  comment?.deleted_at
+                                              )}`}{" "}
                                     </span>
                                     {currentUser.roleId === 1 ? (
                                         // || currentUser.roleId === 8
@@ -532,11 +546,13 @@ const SingleChat = ({
                                                             className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                         >
                                                             <span
+                                                                id={id}
                                                                 dangerouslySetInnerHTML={{
                                                                     __html: comment
                                                                         ?.mention
                                                                         ?.comment,
                                                                 }}
+                                                                className="comment_text_container"
                                                             />
                                                         </span>
                                                     ) : (
@@ -639,9 +655,11 @@ const SingleChat = ({
                                                 className={`${style.singleChat_comment_card_text_message}`}
                                             >
                                                 <div
+                                                    id={id}
                                                     dangerouslySetInnerHTML={{
                                                         __html: comment?.comment,
                                                     }}
+                                                    className="comment_text_container"
                                                 />
                                             </div>
                                         ) : (
@@ -773,11 +791,13 @@ const SingleChat = ({
                                                         className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                     >
                                                         <div
+                                                            id={id}
                                                             dangerouslySetInnerHTML={{
                                                                 __html: comment
                                                                     ?.mention
                                                                     .comment,
                                                             }}
+                                                            className="comment_text_container"
                                                         />
                                                     </span>
                                                 ) : (
@@ -881,9 +901,11 @@ const SingleChat = ({
                                         className={`${style.singleChat_comment_card_text_message}`}
                                     >
                                         <div
+                                            id={id}
                                             dangerouslySetInnerHTML={{
                                                 __html: comment?.comment,
                                             }}
+                                            className="comment_text_container"
                                         />
                                     </div>
                                 ) : (

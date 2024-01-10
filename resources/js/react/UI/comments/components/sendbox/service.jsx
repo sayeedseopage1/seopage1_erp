@@ -150,6 +150,7 @@ const ServiceProvider = ({ children }) => {
 
     // render control
     const renderToHtml = (editorState) => {
+
         // hash config
         const hashConfig = {
             trigger: "#",
@@ -158,8 +159,9 @@ const ServiceProvider = ({ children }) => {
 
         // styled mention 
         const customEntityTransform = (entity, text) => { 
+            // console.log(entity.data.mention.id);
             if (entity.type === "mention") {
-                return `<span class="comment-mention" style="font-family:cursive;color:#0f79dd;">${text}</span>`;
+                return `<a href='/account/employees/${entity?.data?.mention?.id}' class="comment-mention" style="font-family:cursive;color:#0f79dd;">${text}</a>`;
             }
         };
 
@@ -177,6 +179,7 @@ const ServiceProvider = ({ children }) => {
             true,
             customEntityTransform
         ); 
+
         return replaceEmojiWithHighQualityEmoji(markup);
     };
 

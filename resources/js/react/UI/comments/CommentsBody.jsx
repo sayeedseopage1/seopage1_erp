@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
 import style from "./styles/comments.module.css";
-import './editor.style.css';
+import "./editor.style.css";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
 import {
     IoIosArrowDown,
@@ -40,7 +40,7 @@ import { useParams } from "react-router-dom";
 import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
 import Sendbox from "./components/sendbox/Sendbox";
-
+import axios from "axios";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -55,6 +55,8 @@ const CommentContext = createContext({
     setIsImageModalOpen: () => {},
     imageModalCurrentFileUrl: "",
     setImageModalCurrentFileUrl: () => {},
+    refetchType: "",
+    setRefetchType: () => {},
 });
 export function useCommentContext() {
     return useContext(CommentContext);
@@ -91,6 +93,7 @@ const CommentsBody = ({
     const [animation, setAnimation] = useState(false);
     const [isloading, setIsLoading] = useState(false);
     const [selectMentionIndex, setSelectMentionIndex] = useState(0);
+    const [thisTask, setThisTask] = useState(null);
 
     // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
@@ -100,8 +103,17 @@ const CommentsBody = ({
     const [isImageModalOpen, setIsImageModalOpen] = useState(false);
     const [imageModalCurrentFileUrl, setImageModalCurrentFileUrl] =
         useState("");
+    const [refetchType, setRefetchType] = useState("refetch");
     // =================================================================
- 
+
+    // fetch this task from api
+    useEffect(() => {
+        axios
+            .get(`/account/task/${taskId}/json?mode=basic`)
+            .then(({ data }) => {
+                setThisTask(data.task);
+            });
+    }, []);
 
     useEffect(() => {
         setAllComments(comments);
@@ -307,7 +319,7 @@ const CommentsBody = ({
         // console.log({ commentsId,selectedComments });
         // return;
         // setIsLoading(true),
-        const deleteComments = async ({commentsId}) => {
+        const deleteComments = async ({ commentsId }) => {
             await deleteComments({ commentsId })
                 .then(() => {
                     Swal.fire({
@@ -328,28 +340,27 @@ const CommentsBody = ({
                         timerProgressBar: true,
                     });
                 });
-        }
+        };
         // setScroll(prev=>!prev);
         // refetch();
         // setIsLoading(false);
 
-
         Swal.fire({
-            icon: 'warning',
-            title: 'Are you sure?',
-            text: 'If you click on Yes, the comment will be deleted. If you click on no, the comment will not be deleted.',
+            icon: "warning",
+            title: "Are you sure?",
+            text: "If you click on Yes, the comment will be deleted. If you click on no, the comment will not be deleted.",
             showConfirmButton: true,
-            confirmButtonText: 'Yes',
+            confirmButtonText: "Yes",
             showDenyButton: true,
-            denyButtonText: 'No',
+            denyButtonText: "No",
             customClass: {
-                confirmButton: 'btn btn-primary',
+                confirmButton: "btn btn-primary",
+            },
+        }).then((res) => {
+            if (res.isConfirmed) {
+                deleteComments({ commentsId });
             }
-        }).then(res => {
-            if(res.isConfirmed){
-                deleteComments({commentsId})
-            }
-        })
+        });
     };
 
     const handleCopySingleComment = (comment) => {
@@ -395,55 +406,55 @@ const CommentsBody = ({
     const handleDeleteSingleComment = (comment) => {
         // console.log({ id: comment.id });
         // return;
-        const deleteComment = async(commentId) => {
+        const deleteComment = async (commentId) => {
             await deleteComments({ commentsId: [commentId] })
-            .then((res) => {
-                if (res.data.status == 200) {
-                    Swal.fire({
-                        icon: "success",
-                        title: `${res.data.message}`,
-                        timer: 2000,
-                        showConfirmButton: true,
-                        timerProgressBar: true,
-                    });
-                } else if (res.data.status == 400) {
+                .then((res) => {
+                    if (res.data.status == 200) {
+                        Swal.fire({
+                            icon: "success",
+                            title: `${res.data.message}`,
+                            timer: 2000,
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                        });
+                    } else if (res.data.status == 400) {
+                        Swal.fire({
+                            icon: "error",
+                            title: `${res.data.comment}`,
+                            timer: 2000,
+                            showConfirmButton: true,
+                            timerProgressBar: true,
+                        });
+                    }
+                })
+                .catch(() => {
                     Swal.fire({
                         icon: "error",
-                        title: `${res.data.comment}`,
+                        title: "An error occured to delete the comment",
                         timer: 2000,
                         showConfirmButton: true,
                         timerProgressBar: true,
                     });
-                }
-            })
-            .catch(() => {
-                Swal.fire({
-                    icon: "error",
-                    title: "An error occured to delete the comment",
-                    timer: 2000,
-                    showConfirmButton: true,
-                    timerProgressBar: true,
                 });
-            });
-        }
-       
+        };
 
-            Swal.fire({
-                icon: 'warning',
-                title: 'Are you sure?',
-                text: 'If you click on Yes, the comment will be deleted. If you click on no, the comment will not be deleted.',
-                showConfirmButton: true,
-                confirmButtonText: 'Yes',
-                showDenyButton: true,
-                denyButtonText: 'No',
-                customClass: {
-                    confirmButton: 'btn btn-primary',
-                }
-            }).then(res => {
-                if(res.isConfirmed){
-                    deleteComment(comment.id);
-                }
-            })
+        Swal.fire({
+            icon: "warning",
+            title: "Are you sure?",
+            text: "If you click on Yes, the comment will be deleted. If you click on no, the comment will not be deleted.",
+            showConfirmButton: true,
+            confirmButtonText: "Yes",
+            showDenyButton: true,
+            denyButtonText: "No",
+            customClass: {
+                confirmButton: "btn btn-primary",
+            },
+        }).then((res) => {
+            if (res.isConfirmed) {
+                setRefetchType("");
+                deleteComment(comment.id);
+            }
+        });
     };
 
     // console.log({allComments});
@@ -462,6 +473,8 @@ const CommentsBody = ({
                 setIsImageModalOpen,
                 imageModalCurrentFileUrl,
                 setImageModalCurrentFileUrl,
+                refetchType,
+                setRefetchType,
             }}
         >
             <div
@@ -479,7 +492,10 @@ const CommentsBody = ({
                 <header className={style.commentsBody_header}>
                     {/* refresh btn */}
                     <span
-                        onClick={refetch}
+                        onClick={() => {
+                            setRefetchType("refetch");
+                            refetch();
+                        }}
                         className={style.commentsBody_header_btn}
                     >
                         <svg
@@ -751,7 +767,7 @@ const CommentsBody = ({
                     className={`position-relative ${style.commentsBody_commentArea}`}
                 >
                     {/* {loading || isloading || deleteLoading ? ( */}
-                    {loading ? (
+                    {(loading || fetching) && refetchType === "refetch" ? (
                         <CommentsPlaceholder />
                     ) : (
                         <>
@@ -785,7 +801,7 @@ const CommentsBody = ({
                                     />
                                 );
                             })}
-                            {fetching || isloading || deleteLoading ? (
+                            {isloading || deleteLoading ? (
                                 <div className="d-flex justify-content-center mt-2">
                                     <div
                                         className="spinner-border"
@@ -815,12 +831,12 @@ const CommentsBody = ({
                         setSelectedImgUrl={setImageModalCurrentFileUrl}
                     />
                 </main>
-                 {isHasPermissionForWriteComment({
-                     assignTo: task?.assigneeTo?.id, 
-                     assignBy: task?.assigneeBy?.id
-                }) ?  
+                {isHasPermissionForWriteComment({
+                    assignTo: thisTask?.users[0],
+                    assignBy: thisTask?.create_by,
+                }) ? (
                     <footer className={`${style.commentsBody_inputField}`}>
-                        <Sendbox 
+                        <Sendbox
                             onSubmit={onSubmit}
                             taskId={taskId}
                             setScroll={setScroll}
@@ -835,7 +851,7 @@ const CommentsBody = ({
                             setIsLoading={setIsLoading}
                         /> */}
                     </footer>
-                 : null} 
+                ) : null}
 
                 {Object.keys(selectedComments).length > 0 ? (
                     <div

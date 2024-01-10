@@ -29,8 +29,7 @@
   width: 100%;
 }
 
-.slider-parent .mySwiper_container{
-  /* border: solid 5px red; */
+.slider-parent .mySwiper_container {
   height: 20%;
   box-sizing: border-box;
   padding: 10px 0;
@@ -49,6 +48,7 @@
   background-color: white;
   /* border: solid; */
   padding: 5px;
+  height: 20%;
 }
 
 .slider-parent .mySwiper .swiper-slide img{

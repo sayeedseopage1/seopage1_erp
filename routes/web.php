@@ -1201,6 +1201,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-all-currencies', [DealController::class,'getAllCurrencie']);
     /**ALL Currencie API END*/
 
+
+    /**ALL Country API START*/
+    Route::get('get-all-country', [DealController::class,'getAllCountry']);
+    /**ALL Country API END*/
+
+
     /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
 
     Route::resource('dm-contracts', DMContractController::class);

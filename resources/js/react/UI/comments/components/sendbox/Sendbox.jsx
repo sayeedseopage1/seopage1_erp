@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // editor
 import "draft-js/dist/Draft.css";
@@ -9,7 +9,7 @@ import {
     BoldButton,
     UnderlineButton,
     BlockquoteButton,
-    CodeBlockButton,
+    CodeButton,
 } from "@draft-js-plugins/buttons";
 
 import Loader from "../../../../global/Loader";
@@ -47,6 +47,7 @@ import { useAuth } from "../../../../hooks/useAuth";
 import { useCommentContext } from "../../CommentsBody";
 import MentionedComment from "./MentiondComment";
 import { toast } from 'react-toastify'
+import { getFormDataObj } from "../../utils/getFormDataObj";
 // service provider
 
 const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
@@ -58,6 +59,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const [suggestions, setSuggestions] = React.useState([]);
     const { data: usersData, isLoading } = useGetAllUsersQuery();
     const [expend, setExpend] = useState(false);
+    const [mentionedUser, setMentionedUser] = useState([]);
     // editor
     const {
         plugins,
@@ -80,6 +82,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         setMentionedComment,
         setContextHolder,
         setSecletedComments,
+        setRefetchType,
     } = useCommentContext();
 
     const auth = useAuth();
@@ -116,13 +119,19 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
     // handle on mention
     const handleMention = (...arg) => {
-        console.log(...arg);
-
+        const user = arg[0];
+        // console.log(arg);
+        setMentionedUser(prev=>[...prev,user.id]);
         // here mention api goes to...
     };
 
+    // useEffect(()=>{
+    //   console.log(mentionedUser);
+    // },[mentionedUser])
+
     // handle post comment
     const handlePostComment = async () => {
+        setRefetchType("");
         const comment = renderToHtml(editorState) ?? "";
  
 
@@ -156,13 +165,18 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         formData.append("added_by", auth?.getId() ?? "");
         formData.append("last_updated_by", auth?.getId() ?? "");
         formData.append("mention_id", mentionedComment?.id || null);
+        [...mentionedUser].forEach((user)=>{
+            formData.append("mention_user_id",user);
+        })
         if (files.length) {
             Array.from(files).forEach((file) => {
                 formData.append(`file[]`, file);
             });
         }
 
-        //
+        // console.log(getFormDataObj(formData));
+        // return;
+
         try {
             await postComment({ taskId, data: formData });
             await onSubmit(formData);
@@ -236,7 +250,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                                     <BoldButton {...externalProps} />
                                     <ItalicButton {...externalProps} />
                                     <UnderlineButton {...externalProps} />
-                                    <CodeBlockButton {...externalProps} />
+                                    <CodeButton {...externalProps} /> 
                                     <BlockquoteButton {...externalProps} />
                                     <AnchorLinkButton
                                         onClick={() =>

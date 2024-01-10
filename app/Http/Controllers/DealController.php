@@ -1114,4 +1114,12 @@ class DealController extends AccountBaseController
             'data'=>$currencies
         ]);
     }
+    public function getAllCountry(){
+        $countries = Country::all();
+
+        return response()->json([
+            'status'=>200,
+            'data'=>$countries
+        ]);
+    }
 }

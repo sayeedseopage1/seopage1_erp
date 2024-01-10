@@ -39,5 +39,3 @@ const MentionEntry = (props) => {
 };
 
 export default MentionEntry;
-
-
