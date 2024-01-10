@@ -1541,6 +1541,14 @@ Route::post('/projects/store-request-extension', [ProjectController::class, 'sto
 Route::post('/projects/approved-request-extension', [ProjectController::class, 'approvedRequestExtension'])->name('approved-request-extension');
 Route::post('/projects/deny-request-extension', [ProjectController::class, 'denyRequestExtension'])->name('deny-request-extension');
 
+
+Route::get('/project-deadline-extension-request', [ProjectController::class, 'projectDeadlineExtension'])->name('project-deadline-extension');
+Route::get('/project-deadline-extension', [ProjectController::class, 'pDERequest'])->name('pde-request');
+Route::post('store-project-deadline-exp', [ProjectController::class, 'storeProjectDeadline'])->name('store-project-deadline-exp');
+Route::get('/project-deadline-extension-authorization', [ProjectController::class, 'pDExtensionAuthorization'])->name('pde-authorization');
+Route::post('store-project-deadline-exp-auth', [ProjectController::class, 'storeAuthorization'])->name('store-pde-authorization');
+Route::get('/project-deadline-ext-view', [ProjectController::class, 'pDExtensionView'])->name('project-deadline-ext-view');
+
 //add project niche
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}', [ProjectController::class, 'parentCategoryId']);
