@@ -347,7 +347,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+								{{round($finished_project_ratio,2)}}
 							</a>
 						</p>
 					</div>
@@ -364,7 +364,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+								{{round($canceled_project_ratio,2)}}
 							</a>
 						</p>
 					</div>
@@ -381,7 +381,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+                                {{round($rejected_project_ratio,2)}}
 							</a>
 						</p>
 					</div>
