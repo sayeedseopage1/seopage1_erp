@@ -165,7 +165,9 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         formData.append("added_by", auth?.getId() ?? "");
         formData.append("last_updated_by", auth?.getId() ?? "");
         formData.append("mention_id", mentionedComment?.id || null);
-        formData.append("mention_user", [...mentionedUser]);
+        [...mentionedUser].forEach((user)=>{
+            formData.append("mention_user_id",user);
+        })
         if (files.length) {
             Array.from(files).forEach((file) => {
                 formData.append(`file[]`, file);
