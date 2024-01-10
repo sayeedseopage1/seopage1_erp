@@ -6374,4 +6374,30 @@ public function updatePmBasicSEO(Request $request){
         $this->id = $request->id;
         return view('projects.modals.project_deadline_extension_auth_modal', $this->data);
     }
+
+    public function storeAuthorization(Request $request){
+        $validator = $request->validate([
+            'new_deadline' => 'required',
+        ], [
+            'new_deadline.required' => 'This filed is required!',
+        ]);
+
+        $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
+        $pde->new_deadline = $request->new_deadline;
+        $pde->admin_comment = $request->admin_comment;
+        $pde->approved_on = Carbon::now();
+        $pde->approved_by = Auth::user()->id;
+        $pde->status = 1;
+        $pde->save();
+
+        return response()->json([
+            'status'=> 200
+        ]);
+    }
+
+    public function pDExtensionView(Request $request)
+    {
+        $this->id = $request->id;
+        return view('projects.modals.project_deadline_ext_view_modal', $this->data);
+    }
 }

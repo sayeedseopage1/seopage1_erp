@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Models\ProjectDeadlineExtension;
 use App\Models\ProjectMilestone;
 use App\Models\Task;
+use App\Models\User;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Illuminate\Support\Facades\DB;
@@ -38,8 +39,12 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                             <i class="icon-options-vertical icons"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-                        
+                        if($row->status == 0){
                             $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-auth" href="javascript:;"><i class="fa fa-plus mr-2"></i>' . __('Take Action') . '</a>';
+                        }else{
+                            $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-view" href="javascript:;"><i class="fa fa-eye mr-2"></i>' . __('View Details') . '</a>';
+                        }
+
                 $action .= '</div>
                     </div>
                 </div>';
@@ -99,11 +104,21 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                 return $requestOn;
             })
             ->editColumn('approved_on', function ($row) {
-                // $approvedOn = Carbon::parse($row->approved_on)->format('Y-m-d');
-                return $approvedOn ?? '--';
+                return $row->approved_on ?? '--';
             })
             ->editColumn('approved_by', function ($row) {
+                if ($row->approved_on !=null){
+                $user = User::where('id', $row->approved_by)->first();
+                return '<div class="media align-items-center">
+                        <a href="' . route('employees.show', [$user->id]) . '">
+                        <img src="' . $user->image . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
+                        <div class="media-body">
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
+                        </div>
+                    </div>';
+                }else{
                 return '--';
+                }
             })
             ->addIndexColumn()
             ->smart(false)

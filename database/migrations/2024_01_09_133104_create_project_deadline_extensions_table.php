@@ -22,6 +22,10 @@ return new class extends Migration
             $table->date('new_deadline');
             $table->string('extension');
             $table->longText('description');
+            $table->longText('admin_comment')->nullable();
+            $table->date('approved_on')->nullable();
+            $table->integer('approved_by')->nullable();
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }

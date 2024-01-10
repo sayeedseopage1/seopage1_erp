@@ -4,7 +4,7 @@
     $pm = App\Models\User::where('id',$project->pm_id)->first();
 @endphp
 <div class="modal-header">
-    <h5 class="modal-title" id="modelHeading">Project Deadline Extension Form</h5>
+    <h5 class="modal-title" id="modelHeading">Project Deadline Authorization Form</h5>
     <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span
             aria-hidden="true">×</span></button>
 </div>
@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="current_deadline">Explanation why <span class="text-success">{{$pm->name}}</span> needs more time to complete this project?</label>
+                    <label for="current_deadline">Explanation why <span class="text-warning">{{$pm->name}}</span> needs more time to complete this project?</label>
                     <p>{!! $pde->description!!}</p>
                 </div>
             </div>
@@ -36,19 +36,59 @@
         <div class="row mt-3">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="description">Description <span class="text-danger">*</span></label>
-                    <textarea name="description" id="description" class="form-control"></textarea>
-                    <span id="description_error" class="text-danger"></span>
+                    <label for="admin_comment">Comment on Authorization from <span class="text-warning">{{Auth::user()->name}}</span></label>
+                    <textarea name="admin_comment" id="admin_comment" class="form-control"></textarea>
+                    <span id="admin_comment_error" class="text-danger"></span>
                    <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
                     <script>
-                        CKEDITOR.replace('description');
+                        CKEDITOR.replace('admin_comment');
                     </script>
                 </div>
             </div>
         </div>
-        <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+        <button type="button" id="authorizeBtn" class="btn btn-primary">Authorize</button>
     </form>
 </div>
 <div class="modal-footer">
     <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.close')</x-forms.button-cancel>
 </div>
+<script>
+    $('#authorizeBtn').click(function(e){
+        e.preventDefault();
+        $('#authorizeBtn').attr("disabled", true);
+        $('#authorizeBtn').html("Processing...");
+        var admin_comment = CKEDITOR.instances.admin_comment.getData();
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'new_deadline': document.getElementById("new_deadline").value,
+            'admin_comment': admin_comment,
+            'pde_id': {{$pde->id}},
+        }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route('store-pde-authorization')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                toastr.success('Authorized Successfully');
+                window.location.reload();
+                $('#authorizeBtn').attr("disabled", false);
+                $('#authorizeBtn').html("Authorize");
+            },
+            error: function(error) {
+                if(error.responseJSON.errors.new_deadline){
+                    $('#new_deadline_error').text(error.responseJSON.errors.new_deadline);
+                }else{
+                    $('#new_deadline_error').text('');
+                }
+                $('#authorizeBtn').attr("disabled", false);
+                $('#authorizeBtn').html("Authorize");
+            }
+        });
+    });
+</script>
