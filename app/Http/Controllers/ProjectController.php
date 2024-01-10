@@ -6361,10 +6361,6 @@ public function updatePmBasicSEO(Request $request){
         $pd_ext->description = $request->description;
         $pd_ext->save();
         
-        $project = Project::where('id',$request->project_id)->first();
-        $project->deadline = $pd_ext->new_deadline;
-        $project->save();
-        
         return response()->json([
             'status'=>200
         ]);
@@ -6376,6 +6372,7 @@ public function updatePmBasicSEO(Request $request){
     }
 
     public function storeAuthorization(Request $request){
+        // dd($request->all());
         $validator = $request->validate([
             'new_deadline' => 'required',
         ], [
@@ -6389,6 +6386,10 @@ public function updatePmBasicSEO(Request $request){
         $pde->approved_by = Auth::user()->id;
         $pde->status = 1;
         $pde->save();
+
+        $project = Project::where('id',$request->project_id)->first();
+        $project->deadline = $pde->new_deadline;
+        $project->save();
 
         return response()->json([
             'status'=> 200

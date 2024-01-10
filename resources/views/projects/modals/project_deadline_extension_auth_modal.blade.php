@@ -63,6 +63,7 @@
             'new_deadline': document.getElementById("new_deadline").value,
             'admin_comment': admin_comment,
             'pde_id': {{$pde->id}},
+            'project_id': {{$pde->project_id}},
         }
         $.ajaxSetup({
             headers: {
