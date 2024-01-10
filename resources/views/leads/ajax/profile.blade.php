@@ -188,6 +188,11 @@
                               @else
                               <li><i class="fa-solid fa-file-lines"></i> <span>Project ID:</span> Not Available </li>
                               @endif
+                              @if($lead->project_type != null)
+                              <li><i class="fa-solid fa-file-lines"></i> <span>Project Type:</span> {{$lead->project_type}} </li>
+                              @else
+                              <li><i class="fa-solid fa-file-lines"></i> <span>Project Type:</span> Not Available </li>
+                              @endif
 
                               <li><i class="fa-solid fa-globe"></i> <span>Client Country:</span> {{ucwords($lead->country)}} </li>
                               @if($lead->deal_status == 0)
