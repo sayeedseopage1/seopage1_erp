@@ -40,6 +40,7 @@ import { useParams } from "react-router-dom";
 import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
 import Sendbox from "./components/sendbox/Sendbox";
+import axios from "axios";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -92,6 +93,7 @@ const CommentsBody = ({
     const [animation, setAnimation] = useState(false);
     const [isloading, setIsLoading] = useState(false);
     const [selectMentionIndex, setSelectMentionIndex] = useState(0);
+    const [thisTask, setThisTask] = useState(null);
 
     // ============== ( CommentContext.Provider states ) ==============
     const [scroll, setScroll] = useState(false);
@@ -103,6 +105,15 @@ const CommentsBody = ({
         useState("");
     const [refetchType, setRefetchType] = useState("refetch");
     // =================================================================
+
+    // fetch this task from api
+    useEffect(() => {
+        axios
+            .get(`/account/task/${taskId}/json?mode=basic`)
+            .then(({ data }) => {
+                setThisTask(data.task);
+            });
+    }, []);
 
     useEffect(() => {
         setAllComments(comments);
@@ -481,7 +492,7 @@ const CommentsBody = ({
                 <header className={style.commentsBody_header}>
                     {/* refresh btn */}
                     <span
-                        onClick={()=>{
+                        onClick={() => {
                             setRefetchType("refetch");
                             refetch();
                         }}
@@ -790,7 +801,7 @@ const CommentsBody = ({
                                     />
                                 );
                             })}
-                            {(isloading || deleteLoading) ? (
+                            {isloading || deleteLoading ? (
                                 <div className="d-flex justify-content-center mt-2">
                                     <div
                                         className="spinner-border"
@@ -821,8 +832,8 @@ const CommentsBody = ({
                     />
                 </main>
                 {isHasPermissionForWriteComment({
-                    assignTo: task?.assigneeTo?.id,
-                    assignBy: task?.assigneeBy?.id,
+                    assignTo: thisTask?.users[0],
+                    assignBy: thisTask?.create_by,
                 }) ? (
                     <footer className={`${style.commentsBody_inputField}`}>
                         <Sendbox
