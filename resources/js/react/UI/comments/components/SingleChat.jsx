@@ -51,29 +51,14 @@ const SingleChat = ({
         window.open(url, "_blank");
     };
 
-    // useEffect(() => {
-    //     // console.log(comment);
-    //     if (comment?.comment) {
-    //         const commentInHtmlFormat = getCommentInHtml(comment?.comment);
-    //         const targetArray =
-    //             commentInHtmlFormat.querySelectorAll(".comment-mention");
-    //         targetArray.forEach((targetItem) => {
-    //             targetItem.setAttribute(
-    //                 "onclick",
-    //                 "gotoTarget('/account/tasks/3952')"
-    //             );
-    //         });
-    //         console.log(targetArray);
-    //         console.log(commentInHtmlFormat);
-    //     }
-    // }, []);
-
-    useEffect(()=>{
-      const targetArr = document.querySelectorAll('.comment_text_container a');
-      targetArr.forEach((targetItem)=>{
-        targetItem.target = '_blank';
-      })
-    },[])
+    useEffect(() => {
+        const targetArr = document.querySelectorAll(
+            ".comment_text_container a"
+        );
+        targetArr.forEach((targetItem) => {
+            targetItem.target = "_blank";
+        });
+    }, []);
 
     const closeContext = () => {
         setShowCommentMenu(false);
@@ -561,6 +546,7 @@ const SingleChat = ({
                                                             className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                         >
                                                             <span
+                                                                id={id}
                                                                 dangerouslySetInnerHTML={{
                                                                     __html: comment
                                                                         ?.mention
@@ -669,6 +655,7 @@ const SingleChat = ({
                                                 className={`${style.singleChat_comment_card_text_message}`}
                                             >
                                                 <div
+                                                    id={id}
                                                     dangerouslySetInnerHTML={{
                                                         __html: comment?.comment,
                                                     }}
@@ -804,6 +791,7 @@ const SingleChat = ({
                                                         className={`${style.chatInput_mentioned_comment_text_area_mssg}`}
                                                     >
                                                         <div
+                                                            id={id}
                                                             dangerouslySetInnerHTML={{
                                                                 __html: comment
                                                                     ?.mention
@@ -913,6 +901,7 @@ const SingleChat = ({
                                         className={`${style.singleChat_comment_card_text_message}`}
                                     >
                                         <div
+                                            id={id}
                                             dangerouslySetInnerHTML={{
                                                 __html: comment?.comment,
                                             }}

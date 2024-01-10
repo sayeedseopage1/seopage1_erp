@@ -159,8 +159,9 @@ const ServiceProvider = ({ children }) => {
 
         // styled mention 
         const customEntityTransform = (entity, text) => { 
+            // console.log(entity.data.mention.id);
             if (entity.type === "mention") {
-                return `<span class="comment-mention" style="font-family:cursive;color:#0f79dd;">${text}</span>`;
+                return `<a href='/account/employees/${entity?.data?.mention?.id}' class="comment-mention" style="font-family:cursive;color:#0f79dd;">${text}</a>`;
             }
         };
 
