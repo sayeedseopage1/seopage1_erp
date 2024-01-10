@@ -4150,7 +4150,7 @@ class TaskController extends AccountBaseController
        
         if ($request->mode == 'basic') {
             $projectTask= Task::where('id',$id)->first();
-            if($projectTask->independent_task_status != 0 )
+            if($projectTask->independent_task_status == 0 )
             {
                 $projecttaskId= Project::where('id',$projectTask->project_id)->first();
                 if(Auth::user()->role_id == 4 && Auth::user()->id != $projecttaskId->pm_id)
