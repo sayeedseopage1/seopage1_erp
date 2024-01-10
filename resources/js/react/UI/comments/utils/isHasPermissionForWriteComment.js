@@ -7,7 +7,6 @@ export const isHasPermissionForWriteComment = ({assignBy, assignTo}) => {
   const auth = new User(window.Laravel.user); 
   const isTopManagement = _.includes([1, 8], auth.getRoleId());
   const isHasPermission = _.includes([assignBy?.id, assignTo?.id], auth.getId());
-  // const isHasPermission = true;
  
   return isTopManagement || isHasPermission;
 }
