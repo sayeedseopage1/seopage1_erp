@@ -277,7 +277,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#num_of_won_deal{{$won_deal_count_get}}">
-								{{$won_deal_count}}
+								{{count($no_of_won_deals_count)}}
 							</a>
 						</p>
                         {{-- @include('dashboard.ajax.salesexecutive.modals.num_of_won_deal') --}}
@@ -295,7 +295,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+								${{round($no_of_won_deals_value,2)}}
 							</a>
 						</p>
 					</div>
@@ -311,8 +311,8 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Country wise won deals</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#country_wise_won_deal{{count($leads_country_data)}}">
-								{{count($leads_country_data)}}
+							<a href="#" data-toggle="modal" data-target="#country_wise_won_deal{{count($country_wise_won_deals_count)}}">
+								{{count($country_wise_won_deals_count)}}
 							</a>
 						</p>
                         @include('dashboard.ajax.salesexecutive.modals.country_wise_won_deal')
@@ -330,7 +330,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+                                ${{round($avg_deal_amount,2)}}
 							</a>
 						</p>
 					</div>
@@ -347,7 +347,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+								{{round($finished_project_ratio,2)}}
 							</a>
 						</p>
 					</div>
@@ -364,7 +364,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+								{{round($canceled_project_ratio,2)}}
 							</a>
 						</p>
 					</div>
@@ -381,7 +381,7 @@
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
 							<a href="#" data-toggle="modal" data-target="#">
-								00
+                                {{round($rejected_project_ratio,2)}}
 							</a>
 						</p>
 					</div>
