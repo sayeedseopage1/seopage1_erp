@@ -276,11 +276,11 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of won deals</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#num_of_won_deal{{$won_deal_count_get}}">
-								{{$won_deal_count}}
+							<a href="#" data-toggle="modal" data-target="#num_of_won_deal{{count($no_of_won_deals_count)}}">
+								{{count($no_of_won_deals_count)}}
 							</a>
 						</p>
-                        {{-- @include('dashboard.ajax.salesexecutive.modals.num_of_won_deal') --}}
+                        @include('dashboard.ajax.salesexecutive.modals.num_of_won_deal')
 					</div>
 				</div>
 				<div class="d-block">
@@ -294,10 +294,11 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of won deals</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#">
-								00
+							<a href="#" data-toggle="modal" data-target="#value_of_won_deal{{count($no_of_won_deals_count)}}">
+								${{round($no_of_won_deals_value,2)}}
 							</a>
 						</p>
+                        @include('dashboard.ajax.salesexecutive.modals.value_of_won_deals')
 					</div>
 				</div>
 				<div class="d-block">
@@ -311,8 +312,8 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Country wise won deals</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#country_wise_won_deal{{count($leads_country_data)}}">
-								{{count($leads_country_data)}}
+							<a href="#" data-toggle="modal" data-target="#country_wise_won_deal{{count($country_wise_won_deals_count)}}">
+								{{count($country_wise_won_deals_count)}}
 							</a>
 						</p>
                         @include('dashboard.ajax.salesexecutive.modals.country_wise_won_deal')
@@ -329,10 +330,11 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average deal amount</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#">
-								00
+							<a href="#" data-toggle="modal" data-target="#avg_deal_amount{{count($no_of_won_deals_count)}}">
+                                ${{round($avg_deal_amount,2)}}
 							</a>
 						</p>
+                        @include('dashboard.ajax.salesexecutive.modals.avg_deal_amount')
 					</div>
 				</div>
 				<div class="d-block">
@@ -346,10 +348,11 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion/Won deal ratio</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#">
-								00
+							<a href="#" data-toggle="modal" data-target="#finished_project{{count($finished_project_count)}}">
+								{{round($finished_project_ratio,2)}}
 							</a>
 						</p>
+                        @include('dashboard.ajax.salesexecutive.modals.finished_project')
 					</div>
 				</div>
 				<div class="d-block">
@@ -363,10 +366,11 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Canceled project count/won deal ration</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#">
-								00
+							<a href="#" data-toggle="modal" data-target="#canceled_project{{(count($canceled_project_count))}}">
+								{{round($canceled_project_ratio,2)}}
 							</a>
 						</p>
+                        @include('dashboard.ajax.salesexecutive.modals.canceled_project')
 					</div>
 				</div>
 				<div class="d-block">
@@ -380,10 +384,11 @@
 					<h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Rejected project count/won deal ratio</h5>
 					<div class="d-flex flex-wrap">
 						<p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-							<a href="#" data-toggle="modal" data-target="#">
-								00
+							<a href="#" data-toggle="modal" data-target="#rejected_project{{count($rejected_project_count)}}">
+                                {{round($rejected_project_ratio,2)}}
 							</a>
 						</p>
+                        @include('dashboard.ajax.salesexecutive.modals.rejected_project')
 					</div>
 				</div>
 				<div class="d-block">

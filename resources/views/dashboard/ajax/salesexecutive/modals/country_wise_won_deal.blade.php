@@ -23,13 +23,13 @@
                     <tr>
                         <td>{{$loop->index+1}}</td>
                         <td>
-                            {{$row->country}}
+                            {{$row->countries_name}}
                         </td>
                         <td>
-                            {{$row->won_deals_count}}
+                            {{$row->won_deals_count ?? '--'}}
                         </td>
                         <td>
-                            {{$row->won_deals_value}}
+                            {{$row->won_deals_value ?? '--'}}
                         </td>
                     </tr>
                     @endforeach

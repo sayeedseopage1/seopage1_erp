@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="num_of_won_deal{{count($no_of_won_deals_count)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="value_of_won_deal{{count($no_of_won_deals_count)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -13,7 +13,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <table id="numOfWonDeals" class="display" style="width:100%">
+            <table id="valueOfWonDeals" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -66,7 +66,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#numOfWonDeals',{
+      new DataTable('#valueOfWonDeals',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });       
   </script>

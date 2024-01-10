@@ -2545,8 +2545,9 @@ trait SalesDashboard
 
          }
         
-        $this->country_wise_won_deals_count = Deal::
-        join('users as client','client.id','deals.client_id')
+        $this->country_wise_won_deals_count = Deal::select('deals.*','countries.nicename as countries_name')
+        ->join('users as client','client.id','deals.client_id')
+        ->join('countries','client.country_id','countries.id')
         ->where('deals.added_by',$salesId)
         ->where('deals.created_at', '>=', $startDate)
        ->where('deals.created_at', '<', $endDate)

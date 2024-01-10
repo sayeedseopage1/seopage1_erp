@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="num_of_won_deal{{count($no_of_won_deals_count)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="finished_project{{count($finished_project_count)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title">
-                <h4>Total Number of Leads: {{count($no_of_won_deals_count)}}</h4>  
+                <h4>Total Number of Leads: {{count($finished_project_count)}}</h4>  
                 {{-- <h4>Total Number of Leads for fixed Project: {{$number_of_leads_received_fixed}}</h4>  
                 <h4>Total Number of Leads for hourly Project: {{$number_of_leads_received_hourly}}</h4>   --}}
             </div>
@@ -13,7 +13,7 @@
           </button>
         </div>
         <div class="modal-body">
-            <table id="numOfWonDeals" class="display" style="width:100%">
+            <table id="finished_project_count_table" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -24,7 +24,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($no_of_won_deals_count as $row)
+                    @foreach($finished_project_count as $row)
                     @php
                       $currency = App\Models\Currency::where('id',$row->currency_id)->first();
                       $user = App\Models\User::where('id',$row->added_by)->first();
@@ -66,7 +66,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#numOfWonDeals',{
+      new DataTable('#finished_project_count_table',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });       
   </script>
