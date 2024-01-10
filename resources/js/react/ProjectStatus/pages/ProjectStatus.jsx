@@ -3,7 +3,10 @@ import styled from "styled-components";
 
 import FilterBar from "../components/FilterBar";
 
-import { useGetProjectStatusQuery } from "../../services/api/projectStatusApiSlice";
+import {
+    useGetPmGoalQuery,
+    useGetProjectStatusQuery,
+} from "../../services/api/projectStatusApiSlice";
 import ProjectStatusTable from "../components/table/ProjectStatusTable";
 import ActionDropdown from "../components/table/ActionDropdown";
 import Avatar from "../../global/Avatar";
@@ -11,9 +14,28 @@ import ProjectModal from "../components/modal/ProjectModal";
 
 const ProjectStatus = () => {
     const [sorting, setSorting] = React.useState([]);
+    const [projectId, setProjectId] = React.useState("900");
     const [filtering, setFiltering] = React.useState("");
     const { data, isFetching, refetch } = useGetProjectStatusQuery();
+    const {
+        data: pmGoalData,
+        isFetching: isFetchingPmGoal,
+        refetch: refetchPmGoal,
+    } = useGetPmGoalQuery(projectId);
+
+    // const { data, isFetching, refetch } = useDealsQuery(
+    //     queryString({
+    //         page: pageIndex + 1,
+    //         limit: pageSize,
+    //         sort_by: sorting[0]?.id,
+    //         sort_type: sorting[0]?.desc ? "desc" : "asc",
+    //         ...filter,
+    //     }),
+    //     { refetchOnMountOrArgChange: true, skip: !filter?.start_date }
+    // );
+
     const leads = data?.data;
+    const pmGoal = pmGoalData?.data;
 
     const onPageChange = (paginate) => {
         setPagination(paginate);
@@ -59,6 +81,7 @@ const ProjectStatus = () => {
                 return (
                     <a
                         onClick={() => {
+                            setProjectId(data.project_id);
                             setIsModalOneOpen(true);
                             setSelectedProjectName(data.project_name);
                         }}
@@ -108,6 +131,8 @@ const ProjectStatus = () => {
             />
 
             <ProjectModal
+                isFetchingPmGoal={isFetchingPmGoal}
+                pmGoal={pmGoal}
                 isOpen={isModalOneOpen}
                 closeModal={closeModalOne}
                 selectedProjectName={selectedProjectName}

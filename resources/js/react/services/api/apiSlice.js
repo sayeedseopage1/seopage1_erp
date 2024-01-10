@@ -33,6 +33,7 @@ export const apiSlice = createApi({
         "DM_DEALS",
         "WON_DEALS",
         "GET_PROJECT_STATUS",
+        "GET_PM_GOAL",
     ],
     endpoints: () => ({}),
 });
