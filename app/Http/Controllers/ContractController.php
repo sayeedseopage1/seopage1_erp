@@ -2943,5 +2943,221 @@ public function storeClientDeal(Request $request){
             'redirectUrl' => route('dealDetails', $deal->id)
         ]);
 }
+public function getAllContracts(Request $request){
+    $startDate = $request->start_date ?? null;
+    $endDate = $request->end_date ?? null;
+    $limit = $request->limit ??  10;
+
+    $dealsQuery = Deal::select(
+        'deals.*',
+        'deals.status as deal_status',
+        'added_by.name as added_by_name',
+        'added_by.image as added_by_avatar',
+        'pm.name as pm_name',
+        'pm.image as pm_avatar',
+        'client.image as client_avatar',
+        )
+    ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
+    ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
+    ->leftJoin('users as client', 'client.id', 'deals.client_id')
+    ->where('deals.dept_status','WD');
+
+    if ($startDate !== null && $endDate !== null) {
+        $dealsQuery->where(function ($q) use ($startDate, $endDate) {
+            $q->whereBetween(DB::raw('DATE(deals.`created_at`)'), [$startDate, $endDate]);
+            $q->WhereBetween(DB::raw('DATE(deals.`updated_at`)'), [$startDate, $endDate]);
+        });
+    }
+    if ($request->search != '') {
+        $dealsQuery->where(function ($query) {
+            $query->where('deals.project_name', 'like', '%' . request('search') . '%')
+                ->orWhere('deals.deal_id', 'like', '%' . request('search') . '%')
+                ->orWhere('users.name', 'like', '%' . request('search') . '%');
+        });
+    }
+    if ($request->pm_id != null) {
+        $dealsQuery->where('deals.pm_id', $request->pm_id);
+    }
+    if ($request->client_id != null) {
+        $dealsQuery->where('deals.client_id', $request->client_id);
+    }
+    if ($request->closed_by != null) {
+        $dealsQuery->where('deals.added_by', $request->closed_by);
+    }
+    if ($request->status != null) {
+        $dealsQuery->where('deals.status', $request->status);
+    }
+    
+    if (Auth::user()->role_id == 4) {
+        $dealsQuery->where('pm_id',Auth::id());
+    }else {
+    $deals = $dealsQuery
+        ->orderBy('deals.id', 'desc')
+        ->paginate($limit);
+    }
+
+    /**AMOUNT CHECK ITS UPSELL OR NOT START */
+    foreach ($deals as $itemDeal){
+        $amount = '';
+        $project_name = '';
+        if($itemDeal->project_type=="fixed" && $itemDeal->actual_amount == 0){
+            $badge =  '<span class="badge badge-success ml-1">'. 'Upsold By PM'.'</span>';
+            $amount = $itemDeal->upsell_actual_amount . ' ' . $itemDeal->original_currency->currency_symbol . $badge;
+        }else{
+            $amount = $itemDeal->actual_amount. ' ' . $itemDeal->original_currency->currency_symbol;
+        }
+        $itemDeal->value = $amount;
+
+        if ($itemDeal->status == 'Accepted') {
+            $project_id = Project::where('deal_id', $itemDeal->id)->first();
+            $project_name = '<a class="openRightModal multiline-ellipsis text-hover-underline" href="' . route('projects.show', $project_id->id) . '" title="' . $itemDeal->project_name . '">' . $itemDeal->project_name . '</a>';
+        } else {
+            $project_name = '<p class="multiline-ellipsis" title="' . $itemDeal->project_name . '">' . $itemDeal->project_name . '</p>';
+        }
+        $itemDeal->project_name_html = $project_name;
+        $itemDeal->short_code_html = '<a target="__blank" class="text-primary" href="' . route('contracts.show', $itemDeal->id) . '">' . $itemDeal->deal_id . '</a>';
+
+        $action = '
+            <div class="dropdown">
+                <button class="btn f-14 px-0 py-0 text-dark-grey" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="icon-options-vertical icons"></i>
+                </button>
+                <div style="whith:200px; color:black;" class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
+
+        if ($itemDeal->submission_status == "Awaiting for client Response") {
+            $action .= '<a class="dropdown-item" href="/account/deal-url/' . $itemDeal->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
+        } else {
+            $action .= '<a class="dropdown-item" href="deal-url/' . $itemDeal->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
+        }
+
+        $upDeal = Deal::where('id', $itemDeal->id)->first();
+        $upSellAddedBy = User::where('id', $upDeal->added_by)->first();
+
+        if ($upSellAddedBy->role_id == 4 && Auth::user()->role_id == 4) {
+            $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $itemDeal->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+        } elseif ($upSellAddedBy->role_id == 7 && Auth::user()->role_id == 7) {
+            $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $itemDeal->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+        } else {
+            if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
+                $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $itemDeal->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+            }
+        }
+
+        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
+            if ($itemDeal->authorization_status == 0 || $itemDeal->authorization_status == '2') {
+                if (Auth::user()->role_id == 8) {
+                    $action .= '<a class="dropdown-item bg-warning" href="' . route("authorization_request", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Authorization Need') . '</a>';
+                }
+            } else {
+                $action .= '<a class="dropdown-item bg-success" href="' . route("contracts.show", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Authorization Details') . '</a>';
+            }
+        }
+
+        if (Auth::user()->role_id == 4 && $itemDeal->status == 'Denied') {
+            $award_time_request = $itemDeal->has_award_time_request;
+
+            if ($award_time_request) {
+                if ($award_time_request->status == '2') {
+                    $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $itemDeal->id . '" href="' . route("award_time_check.index", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                }
+            } else {
+                $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $itemDeal->id . '" href="' . route("award_time_check.index", $itemDeal->id) . '"><i class="fa-solid fa-user mr-2' . ($itemDeal->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+            }
+        }
+
+        $action .= '
+                </div>
+            </div>';
+
+
+        $itemDeal->action = $action;
+    }
+    /**AMOUNT CHECK ITS UPSELL OR NOT END */
+
+    return response()->json([
+        'data' => $deals,
+        'status'=> 200,
+    ]);
+}
+
+public function exportContracts(Request $request){
+    $startDate = $request->start_date ?? null;
+    $endDate = $request->end_date ?? null;
+
+    $dealsQuery = Deal::select(
+        'deals.*',
+        'deals.status as deal_status',
+        'added_by.name as added_by_name',
+        'added_by.image as added_by_avatar',
+        'pm.name as pm_name',
+        'pm.image as pm_avatar',
+        'client.image as client_avatar',
+        )
+    ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
+    ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
+    ->leftJoin('users as client', 'client.id', 'deals.client_id')
+    ->where('deals.dept_status','WD');
+
+    if ($startDate !== null && $endDate !== null) {
+        $dealsQuery->where(function ($q) use ($startDate, $endDate) {
+            $q->whereBetween(DB::raw('DATE(deals.`created_at`)'), [$startDate, $endDate]);
+            $q->WhereBetween(DB::raw('DATE(deals.`updated_at`)'), [$startDate, $endDate]);
+        });
+    }
+    if ($request->search != '') {
+        $dealsQuery->where(function ($query) {
+            $query->where('deals.project_name', 'like', '%' . request('search') . '%')
+                ->orWhere('deals.deal_id', 'like', '%' . request('search') . '%')
+                ->orWhere('users.name', 'like', '%' . request('search') . '%');
+        });
+    }
+    if ($request->pm_id != null) {
+        $dealsQuery->where('pm_id', $request->pm_id);
+    }
+    if ($request->client_id != null) {
+        $dealsQuery->where('client_id', $request->client_id);
+    }
+    if ($request->closed_by != null) {
+        $dealsQuery->where('added_by', $request->closed_by);
+    }
+    if ($request->status != null) {
+        $dealsQuery->where('deals.status', $request->status);
+    }
+    
+    if (Auth::user()->role_id == 4) {
+        $dealsQuery->where('pm_id',Auth::id());
+    }else {
+    $deals = $dealsQuery
+        ->orderBy('deals.id', 'desc')
+        ->get();
+    }
+
+    /**AMOUNT CHECK ITS UPSELL OR NOT START */
+    foreach ($deals as $itemDeal){
+        $amount = '';
+        $project_name = '';
+        if($itemDeal->project_type=="fixed" && $itemDeal->actual_amount == 0){
+            $amount = $itemDeal->upsell_actual_amount . ' ' . $itemDeal->original_currency->currency_symbol . ' (Upsold By PM)';
+        }else{
+            $amount = $itemDeal->actual_amount. ' ' . $itemDeal->original_currency->currency_symbol;
+        }
+        $itemDeal->value = $amount;
+
+        if ($itemDeal->status == 'Accepted') {
+            $project_id = Project::where('deal_id', $itemDeal->id)->first();
+            $project_name = '<a class="openRightModal multiline-ellipsis text-hover-underline" href="' . route('projects.show', $project_id->id) . '" title="' . $itemDeal->project_name . '">' . $itemDeal->project_name . '</a>';
+        } else {
+            $project_name = '<p class="multiline-ellipsis" title="' . $itemDeal->project_name . '">' . $itemDeal->project_name . '</p>';
+        }
+        $itemDeal->project_name_html = $project_name;
+        $itemDeal->short_code_html = '<a target="__blank" class="text-primary" href="' . route('contracts.show', $itemDeal->id) . '">' . $itemDeal->deal_id . '</a>';
+    }
+    /**AMOUNT CHECK ITS UPSELL OR NOT END */
+
+    return response()->json([
+        'data' => $deals,
+        'status'=> 200,
+    ]);
+}
 
 }
