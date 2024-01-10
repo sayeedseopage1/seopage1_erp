@@ -48,6 +48,7 @@ use App\DataTables\ExpensesDataTable;
 use App\DataTables\InvoicesDataTable;
 use App\DataTables\PaymentsDataTable;
 use App\DataTables\ProjectsDataTable;
+use App\DataTables\ProjectDeadlineExtensionDataTable;
 use App\DataTables\TimeLogsDataTable;
 use App\DataTables\DiscussionDataTable;
 use Illuminate\Support\Facades\Artisan;
@@ -117,6 +118,7 @@ use App\Models\PmProductDescription;
 use App\Models\PmWebContent;
 use App\Models\ProductCategoryCollection;
 use App\Models\ProductDescription;
+use App\Models\ProjectDeadlineExtension;
 use App\Models\SalesBasicSeo;
 use App\Models\SalesBlogArticle;
 use App\Models\SalesProductCategory;
@@ -6328,5 +6330,74 @@ public function updatePmBasicSEO(Request $request){
             'challenge' => $challenge,
             'status' => 200,
         ]);
+    }
+    public function projectDeadlineExtension(Request $request)
+    {
+        $this->projectId = $request->project_id;
+        return view('projects.modals.project_deadline_extension_modal', $this->data);
+    }
+    public function pDERequest(ProjectDeadlineExtensionDataTable $datatable){
+        $this->pageTitle = 'Project Deadline Extension Requests';
+        return $datatable->render('projects.ajax.project_deadline_extension',$this->data);
+    }
+    public function storeProjectDeadline(Request $request){
+        $validator = $request->validate([
+            'new_deadline' => 'required',
+            'extension' => 'required',
+            'description' => 'required',
+        ], [
+            'new_deadline.required' => 'This filed is required!',
+            'extension.required' => 'This filed is required!',
+            'description.required' => 'This filed is required!',
+        ]);
+        
+        $pd_ext = new ProjectDeadlineExtension();
+        $pd_ext->project_id = $request->project_id;
+        $pd_ext->milestone_id = $request->milestone_id == '--' ? null : $request->milestone_id;
+        $pd_ext->deliverable_id = $request->deliverable_id == '--' ? null : $request->deliverable_id;
+        $pd_ext->old_deadline = $request->old_deadline;
+        $pd_ext->new_deadline = $request->new_deadline;
+        $pd_ext->extension = $request->extension;
+        $pd_ext->description = $request->description;
+        $pd_ext->save();
+        
+        $project = Project::where('id',$request->project_id)->first();
+        $project->deadline = $pd_ext->new_deadline;
+        $project->save();
+        
+        return response()->json([
+            'status'=>200
+        ]);
+    }
+    public function pDExtensionAuthorization(Request $request)
+    {
+        $this->id = $request->id;
+        return view('projects.modals.project_deadline_extension_auth_modal', $this->data);
+    }
+
+    public function storeAuthorization(Request $request){
+        $validator = $request->validate([
+            'new_deadline' => 'required',
+        ], [
+            'new_deadline.required' => 'This filed is required!',
+        ]);
+
+        $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
+        $pde->new_deadline = $request->new_deadline;
+        $pde->admin_comment = $request->admin_comment;
+        $pde->approved_on = Carbon::now();
+        $pde->approved_by = Auth::user()->id;
+        $pde->status = 1;
+        $pde->save();
+
+        return response()->json([
+            'status'=> 200
+        ]);
+    }
+
+    public function pDExtensionView(Request $request)
+    {
+        $this->id = $request->id;
+        return view('projects.modals.project_deadline_ext_view_modal', $this->data);
     }
 }
