@@ -68,11 +68,17 @@ class ProjectStatusController extends AccountBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id){
+        //
+    }
+    public function allProjectPmGoal($id)
     {
-        $this->pageTitle = 'Goal Details';
-        $this->project_pm_goals = ProjectPmGoal::where('project_id',$id)->get();
-        return view('project-status.modal.goal_details',$this->data);
+        $project_pm_goals = ProjectPmGoal::where('project_id',$id)->get();
+
+        return response()->json([
+            'data' => $project_pm_goals,
+            'status' => 200
+        ]);
        
 
       
