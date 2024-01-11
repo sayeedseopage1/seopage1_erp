@@ -477,7 +477,8 @@ class SubTaskController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
-
+      
+       // DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find($id);
         $startDate = $task->start_date->format($setting->date_format);
@@ -563,6 +564,9 @@ class SubTaskController extends AccountBaseController
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
         $task_s->save();
+        $task_user= TaskUser::where('task_id',$task_s->id)->first();
+        $task_user->user_id= $request->user_id;
+        $task_user->save();
 
         if ($request->hasFile('file')) {
             $files = $request->file('file');
