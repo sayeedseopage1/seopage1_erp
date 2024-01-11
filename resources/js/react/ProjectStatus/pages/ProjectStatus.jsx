@@ -41,7 +41,6 @@ const ProjectStatus = () => {
         refetch: refetchPmGoal,
     } = useGetPmGoalQuery(projectId);
 
-    console.log("query string", queryString);
     const leads = data?.data;
     const pmGoal = pmGoalData?.data;
 

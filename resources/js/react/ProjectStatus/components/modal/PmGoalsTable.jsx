@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import ReactPaginate from "react-paginate";
-import { Flex } from "../table/ui";
+import React from "react";
+
+import PaginationPmGoalTable from "./PaginationPmGoalTable";
+import DeadlineExplainModal from "./DeadlineExplainModal";
 
 const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
+    const [projectId, setProjectId] = React.useState("900");
     // Table styles
     const tableStyle = {
         borderCollapse: "collapse",
@@ -22,14 +24,15 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
         backgroundColor: "#f2f2f2",
     };
 
+    //pagination start
     // Number of items to display per page
-    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [itemsPerPage, setItemsPerPage] = React.useState(5);
 
     // Calculate the total number of pages
     const pageCount = Math.ceil(pmGoal.length / itemsPerPage);
 
     // State to keep track of the current page
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = React.useState(0);
 
     // Function to handle page change
     const handlePageClick = (data) => {
@@ -43,14 +46,22 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
         setItemsPerPage(selectedItemsPerPage);
         setCurrentPage(0); // Reset to the first page when changing items per page
     };
+    //pagination end
+
+    //modal
+    const [isModalTwoOpen, setIsModalTwoOpen] = React.useState(false);
+
+    const closeModalTwo = () => {
+        setIsModalTwoOpen(false);
+        setSelectedProjectName("");
+    };
 
     // Calculate the starting and ending indices for the current page
     const startIndex = currentPage * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-
     return (
         <div>
-            {/* Table component */}
+            {/* Table comptwont */}
             <table style={tableStyle}>
                 <thead>
                     <tr>
@@ -79,47 +90,43 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
                                 <td style={thTdStyle}>
                                     {goal.suggestion ? goal.suggestion : "--"}
                                 </td>
-                                <td style={thTdStyle}>N\A</td>
+                                <td style={thTdStyle}>
+                                    {new Date(goal.goal_end_date) <
+                                    new Date() ? (
+                                        <button
+                                            style={{
+                                                color: "blue",
+                                                padding: "2px",
+                                            }}
+                                            onClick={() => {
+                                                setIsModalTwoOpen(true);
+                                                setProjectId(goal.project_id);
+                                            }}
+                                        >
+                                            Deadline Explanation
+                                        </button>
+                                    ) : (
+                                        "N/A"
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
                 )}
             </table>
 
-            {/* Entries per page dropdown bar */}
-
-            <Flex justifyContent="space-between" margin="20px 30px 0px 30px">
-                <Flex style={{ marginBottom: "10px" }}>
-                    <div htmlFor="itemsPerPage">Show</div>
-                    <select
-                        id="itemsPerPage"
-                        value={itemsPerPage}
-                        onChange={handleItemsPerPageChange}
-                    >
-                        {[5, 10, 15, 20].map((option) => (
-                            <option key={option} value={option}>
-                                {option}
-                            </option>
-                        ))}
-                    </select>
-                    <div>Entries</div>
-                </Flex>
-
-                {/* Pagination component */}
-                {!isFetchingPmGoal && (
-                    <Flex justifyContent="space-between">
-                        <div>Showing to of entries</div>
-                        <ReactPaginate
-                            pageCount={pageCount}
-                            pageRangeDisplayed={3}
-                            marginPagesDisplayed={2}
-                            onPageChange={handlePageClick}
-                            containerClassName={"pagination"}
-                            activeClassName={"active"}
-                        />
-                    </Flex>
-                )}
-            </Flex>
+            <PaginationPmGoalTable
+                isFetchingPmGoal={isFetchingPmGoal}
+                pageCount={pageCount}
+                handlePageClick={handlePageClick}
+                handleItemsPerPageChange={handleItemsPerPageChange}
+                itemsPerPage={itemsPerPage}
+            />
+            <DeadlineExplainModal
+                projectId={projectId}
+                isModalTwoOpen={isModalTwoOpen}
+                closeModalTwo={closeModalTwo}
+            />
         </div>
     );
 };
