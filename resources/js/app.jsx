@@ -13,6 +13,7 @@ import "./react/projects/index";
 import "./react/single-independent-task/index";
 import "./react/single-task/index";
 import "./react/tasks/index";
+import "./react/ProjectStatus/main";
 // headless features
 import "./react/headless-features/main";
 import "./react/modules/main";
@@ -48,4 +49,3 @@ document.addEventListener("DOMContentLoaded", function () {
         e.currentTarget.blur();
     });
 });
-
