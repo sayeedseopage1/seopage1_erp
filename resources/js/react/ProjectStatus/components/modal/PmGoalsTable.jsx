@@ -61,7 +61,7 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
     const endIndex = startIndex + itemsPerPage;
     return (
         <div>
-            {/* Table comptwont */}
+            {/* Table component */}
             <table style={tableStyle}>
                 <thead>
                     <tr>
@@ -96,7 +96,7 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
                                         <button
                                             style={{
                                                 color: "blue",
-                                                padding: "2px",
+                                                padding: "3px",
                                             }}
                                             onClick={() => {
                                                 setIsModalTwoOpen(true);
