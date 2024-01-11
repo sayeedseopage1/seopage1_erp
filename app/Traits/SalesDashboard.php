@@ -1256,10 +1256,63 @@ trait SalesDashboard
 	}
 
 	$this->number_of_leads_convert_won_deals_table_hourly = $number_of_leads_convert_won_deals_table_hourly;
+    $this->no_of_won_deals_count= Deal::where('deals.added_by',$salesId)
+    ->where('deals.created_at', '>=', $startDate)
+   ->where('deals.created_at', '<', $endDate)
+  
+   ->get();
+   $this->no_of_won_deals_value= Deal::where('deals.added_by',$salesId)
+    ->where('deals.created_at', '>=', $startDate)
+   ->where('deals.created_at', '<', $endDate)
+  
+   ->sum('deals.amount');
+   $this->finished_project_count = Deal::join('projects','projects.deal_id','deals.id')
+         ->where('deals.added_by',$salesId)
+         ->where('deals.created_at', '>=', $startDate)
+        ->where('deals.created_at', '<', $endDate)
+       
+        ->where('projects.status','finished')
+        ->get();
+        $this->canceled_project_count = Deal::join('projects','projects.deal_id','deals.id')
+        ->where('deals.added_by',$salesId)
+        ->where('deals.created_at', '>=', $startDate)
+       ->where('deals.created_at', '<', $endDate)
+      
+       ->where('projects.status','partially finished')
+       ->orWhere('projects.status','canceled')
+       ->get();
+       $this->rejected_project_count = Deal::join('projects','projects.deal_id','deals.id')
+       ->where('deals.added_by',$salesId)
+       ->where('deals.created_at', '>=', $startDate)
+      ->where('deals.created_at', '<', $endDate)
+      ->where('deals.status','!=','Denied')
+     
+      ->get();
+         if(count($this->no_of_won_deals_count) > 0)
+         {
+            $this->avg_deal_amount = $this->no_of_won_deals_value/count($this->no_of_won_deals_count);
+            $this->finished_project_ratio= count($this->finished_project_count)/count($this->no_of_won_deals_count);
+            $this->canceled_project_ratio= count($this->canceled_project_count)/count($this->no_of_won_deals_count);
+            $this->rejected_project_ratio= count($this->rejected_project_count)/count($this->no_of_won_deals_count);
 
+         }else 
+         {
+            $this->avg_deal_amount = 0;
+            $this->finished_project_ratio= 0;
+            $this->canceled_project_ratio= 0;
+            $this->rejected_project_ratio= 0;
 
-    
-    
+         }
+   $this->country_wise_won_deals_count = Deal::
+   join('users as client','client.id','deals.client_id')
+   ->where('deals.added_by',$salesId)
+   ->where('deals.created_at', '>=', $startDate)
+  ->where('deals.created_at', '<', $endDate)
+  ->groupBy('client.country_id')
+  ->where('deals.status','!=','Denied')
+  ->get();
+   
+
 	//		dd("nksadnkasl");
             $html = view('dashboard.ajax.salesexecutive.month', $this->data)->render();
 
@@ -2443,11 +2496,66 @@ trait SalesDashboard
         }
 
         $this->number_of_leads_convert_won_deals_table_hourly = $number_of_leads_convert_won_deals_table_hourly;
-    
-        
+       //sayeed code
+       $this->no_of_won_deals_count= Deal::where('deals.added_by',$salesId)
+    ->where('deals.created_at', '>=', $startDate)
+   ->where('deals.created_at', '<', $endDate)
+  
+   ->get();
+   $this->no_of_won_deals_value= Deal::where('deals.added_by',$salesId)
+    ->where('deals.created_at', '>=', $startDate)
+   ->where('deals.created_at', '<', $endDate)
+  
+   ->sum('deals.amount');
+   $this->finished_project_count = Deal::join('projects','projects.deal_id','deals.id')
+         ->where('deals.added_by',$salesId)
+         ->where('deals.created_at', '>=', $startDate)
+        ->where('deals.created_at', '<', $endDate)
+       
+        ->where('projects.status','finished')
+        ->get();
+        $this->canceled_project_count = Deal::join('projects','projects.deal_id','deals.id')
+        ->where('deals.added_by',$salesId)
+        ->where('deals.created_at', '>=', $startDate)
+       ->where('deals.created_at', '<', $endDate)
+      
+       ->where('projects.status','partially finished')
+       ->orWhere('projects.status','canceled')
+       ->get();
+       $this->rejected_project_count = Deal::join('projects','projects.deal_id','deals.id')
+       ->where('deals.added_by',$salesId)
+       ->where('deals.created_at', '>=', $startDate)
+      ->where('deals.created_at', '<', $endDate)
+      ->where('deals.status','!=','Denied')
+     
+      ->get();
+         if(count($this->no_of_won_deals_count) > 0)
+         {
+            $this->avg_deal_amount = $this->no_of_won_deals_value/count($this->no_of_won_deals_count);
+            $this->finished_project_ratio= count($this->finished_project_count)/count($this->no_of_won_deals_count);
+            $this->canceled_project_ratio= count($this->canceled_project_count)/count($this->no_of_won_deals_count);
+            $this->rejected_project_ratio= count($this->rejected_project_count)/count($this->no_of_won_deals_count);
 
+         }else 
+         {
+            $this->avg_deal_amount = 0;
+            $this->finished_project_ratio= 0;
+            $this->canceled_project_ratio= 0;
+            $this->rejected_project_ratio= 0;
 
+         }
         
+        $this->country_wise_won_deals_count = Deal::select('deals.*','countries.nicename as countries_name')
+        ->join('users as client','client.id','deals.client_id')
+        ->join('countries','client.country_id','countries.id')
+        ->where('deals.added_by',$salesId)
+        ->where('deals.created_at', '>=', $startDate)
+       ->where('deals.created_at', '<', $endDate)
+       ->groupBy('client.country_id')
+       ->where('deals.status','!=','Denied')
+       ->get();
+        
+  
             return view('dashboard.employee.sales_executive', $this->data);
         }
        

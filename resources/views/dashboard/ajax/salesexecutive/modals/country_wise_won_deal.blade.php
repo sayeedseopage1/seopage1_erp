@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="country_wise_won_deal{{count($leads_country_data)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="country_wise_won_deal{{count($country_wise_won_deals_count)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -19,17 +19,17 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($leads_country_data as $row)
+                    @foreach($country_wise_won_deals_count as $row)
                     <tr>
                         <td>{{$loop->index+1}}</td>
                         <td>
-                            {{$row->country}}
+                            {{$row->countries_name}}
                         </td>
                         <td>
-                            {{$row->won_deals_count}}
+                            {{$row->won_deals_count ?? '--'}}
                         </td>
                         <td>
-                            {{$row->won_deals_value}}
+                            {{$row->won_deals_value ?? '--'}}
                         </td>
                     </tr>
                     @endforeach
