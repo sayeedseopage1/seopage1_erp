@@ -6,14 +6,16 @@ import { IoClose } from "react-icons/io5";
 const customStyles = {
     overlay: {
         zIndex: 9999998,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+
+        margin: "auto auto",
+        padding: "20px",
     },
     content: {
         zIndex: 9999999,
-        width: "70%",
-        height: "70%",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
+        maxWidth: "80%",
+
+        margin: "auto auto",
         padding: "20px",
     },
 };
@@ -34,7 +36,15 @@ const ProjectModal = ({ isFetchingPmGoal, pmGoal, isOpen, closeModal }) => {
                 }}
             >
                 <div style={{ fontSize: "25px" }}> Goal Details</div>
-                <button onClick={closeModal}>
+                <button
+                    onClick={closeModal}
+                    style={{
+                        backgroundColor: "red",
+                        padding: "2px 4px 2px 4px",
+
+                        color: "white",
+                    }}
+                >
                     <IoClose />
                 </button>
             </div>

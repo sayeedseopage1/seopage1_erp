@@ -15,25 +15,33 @@ import ProjectModal from "../components/modal/ProjectModal";
 const ProjectStatus = () => {
     const [sorting, setSorting] = React.useState([]);
     const [projectId, setProjectId] = React.useState("900");
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
     const [filtering, setFiltering] = React.useState("");
-    const { data, isFetching, refetch } = useGetProjectStatusQuery();
+
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
+    const { data, isFetching, refetch } = useGetProjectStatusQuery(
+        queryString({
+            page: pageIndex + 1,
+            limit: pageSize,
+
+            ...filtering,
+        })
+    );
     const {
         data: pmGoalData,
         isFetching: isFetchingPmGoal,
         refetch: refetchPmGoal,
     } = useGetPmGoalQuery(projectId);
 
-    // const { data, isFetching, refetch } = useDealsQuery(
-    //     queryString({
-    //         page: pageIndex + 1,
-    //         limit: pageSize,
-    //         sort_by: sorting[0]?.id,
-    //         sort_type: sorting[0]?.desc ? "desc" : "asc",
-    //         ...filter,
-    //     }),
-    //     { refetchOnMountOrArgChange: true, skip: !filter?.start_date }
-    // );
-
+    console.log("query string", queryString);
     const leads = data?.data;
     const pmGoal = pmGoalData?.data;
 
@@ -117,7 +125,7 @@ const ProjectStatus = () => {
 
     return (
         <Container>
-            <FilterBar filtering={filtering} setFiltering={setFiltering} />
+            <FilterBar setFiltering={setFiltering} />
 
             <ProjectStatusTable
                 data={leads}
@@ -126,7 +134,6 @@ const ProjectStatus = () => {
                 onPageChange={onPageChange}
                 sorting={sorting}
                 setSorting={setSorting}
-                filtering={filtering}
                 setFiltering={setFiltering}
             />
 

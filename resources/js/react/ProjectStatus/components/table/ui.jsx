@@ -51,6 +51,7 @@ export const Flex = styled.div`
     align-items: ${(props) => props.alignItems ?? "center"};
     justify-content: ${(props) => props.justifyContent ?? "center"};
     gap: ${(props) => props.gap ?? "10px"};
+    margin: ${(props) => props.margin ?? "0px 0px 0px 0px"};
 `;
 
 // select

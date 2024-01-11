@@ -121,7 +121,7 @@ const ProjectStatusTable = ({
         onColumnOrderChange: setColumnOrder,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
+        // getFilteredRowModel: getFilteredRowModel(),
         getSortedRowModel: getSortedRowModel(),
         onGlobalFilterChange: setFiltering,
     });

@@ -7,7 +7,7 @@ const _token = document
 const projectStatusApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getProjectStatus: build.query({
-            query: (query = "") => `/account/get-project-status-date${query}`,
+            query: (query) => `/account/get-project-status-date?${query}`,
             providesTags: ["GET_PROJECT_STATUS"],
         }),
 
