@@ -120,12 +120,12 @@ trait webdevelopmentDashboard
         $this->leads=Lead::whereBetween(DB::raw('DATE(`created_at`)'),[$startDate,$endDate])->get();
         $this->deals=Lead::where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'),[$startDate,$endDate])->get();
         $this->sales=SalesCount::whereBetween(DB::raw('DATE(`updated_at`)'),[$startDate,$endDate])->get();
-        $this->developers=User::where('role_id',5)->get();
+        $this->developers=User::where('role_id',5)->orderBy('id','desc')->get();
         $this->tasks=TaskUser::with('task')->first();
         $this->leads=Lead::whereBetween(DB::raw('DATE(`created_at`)'),[$startDate,$endDate])->get();
         $this->deals=Lead::where('deal_status',1)->whereBetween(DB::raw('DATE(`created_at`)'),[$startDate,$endDate])->get();
         $this->sales=SalesCount::whereBetween(DB::raw('DATE(`updated_at`)'),[$startDate,$endDate])->get();
-        $this->developers=User::where('role_id',5)->get();
+        $this->developers=User::where('role_id',5)->orderBy('id','desc')->get();
         $this->tasks=TaskUser::with('task')->first();
 
         $this->firstDayofPreviousMonth = Carbon::now()->startOfMonth()->subMonthsNoOverflow()->toDateString();

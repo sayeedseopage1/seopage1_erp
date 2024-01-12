@@ -1,0 +1,25 @@
+.mention{
+  color: #0f79dd;
+  font-family: cursive;
+}
+
+.mentionSuggestionsPopup{
+  max-height: 200px;
+  overflow-x: hidden;
+  overflow-y: atuo;
+  background-color: #fff;
+  z-index: 999;
+}
+
+
+.mentionSuggestionsEntryContainer{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 10px;
+}
+
+.mentionSuggestionsEntryContainer:hover{
+  background-color: #e8f3fe;
+  color: #1d82f5;;
+}

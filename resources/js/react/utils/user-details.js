@@ -37,6 +37,8 @@ export class User {
       this.role = data?.role.map(roleData => new UserRole(roleData));
       this.rtl = data?.rtl;
       this.roleId = Number(data?.role_id);
+      this.roleIds = data?.role?.map(r => Number(r.role_id));
+      this.roles = data?.role;
       this.salutation = data?.salutation;
       this.session = data?.session;
       this.status = data?.status;
@@ -74,7 +76,11 @@ export class User {
     // designation name
     getDesignationName(){ 
       return this.employeeDetail.getEmployeeDesignationName();
-    } 
+    }
+
+    isHasRolePermission(roleId){ 
+      return this.roleIds?.includes(Number(roleId));
+    }
   }
   
   class Employee {
@@ -88,7 +94,7 @@ export class User {
       this.designation = new Designation(data?.designation);
     }
 
-    //employe degenation name 
+    //employee designation name 
     getEmployeeDesignationName(){
       return this.designation.getDesignationName();
     }
@@ -104,7 +110,7 @@ export class User {
       this.lastUpdatedBy = data?.last_updated_by;
     }
 
-    // gesination name
+    // designation name
     getDesignationName(){
       return this.name
     }

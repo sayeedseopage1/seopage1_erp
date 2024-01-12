@@ -34,7 +34,28 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
           className: "position-relative",
           style: {
-            padding: "10px",
+            padding: "75px 23px 18px 25px",
+            height: "100vh",
+            width: "100vw"
+          },
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "sp1_task_comment_modal",
+            style: {
+              height: "100%",
+              width: "100%",
+              maxHeight: "100vh"
+            },
+            children: children
+          })
+        })
+      });
+    } else if (!fullScreenView && width <= 991) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        isOpen: isOpen,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "position-relative",
+          style: {
+            padding: "75px 23px 18px 25px",
             height: "100vh",
             width: "100vw"
           },
@@ -66,6 +87,24 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
               width: "100%",
               maxHeight: "100vh"
             },
+            children: children
+          })
+        })
+      });
+    } else if (!fullScreenView && width > 991) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        isOpen: isOpen,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          className: "position-relative",
+          style: {
+            paddingTop: "79px",
+            paddingBottom: "18px"
+          },
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            style: {
+              margin: "auto"
+            },
+            className: "sp1_task_comment_modal",
             children: children
           })
         })
@@ -156,7 +195,15 @@ var CommentsContainer = function CommentsContainer(_ref) {
     comments = _ref$comments === void 0 ? null : _ref$comments,
     onCommentPost = _ref.onCommentPost,
     taskId = _ref.taskId,
-    singleCommentId = _ref.singleCommentId;
+    singleCommentId = _ref.singleCommentId,
+    _ref$showCommentEdito = _ref.showCommentEditor,
+    showCommentEditor = _ref$showCommentEdito === void 0 ? true : _ref$showCommentEdito,
+    _ref$showSearchBtn = _ref.showSearchBtn,
+    showSearchBtn = _ref$showSearchBtn === void 0 ? true : _ref$showSearchBtn,
+    _ref$showFullScreenBt = _ref.showFullScreenBtn,
+    showFullScreenBtn = _ref$showFullScreenBt === void 0 ? true : _ref$showFullScreenBt,
+    _ref$height = _ref.height,
+    height = _ref$height === void 0 ? "89vh" : _ref$height;
   // ---------------------------------------------------------
   var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useParams)();
 
@@ -173,135 +220,6 @@ var CommentsContainer = function CommentsContainer(_ref) {
     isFetching = _useGetCommentsQuery.isFetching,
     isLoading = _useGetCommentsQuery.isLoading,
     refetch = _useGetCommentsQuery.refetch;
-
-  // console.log({ param,data });
-  // if (fullScreenView) {
-  //     return (
-  //         <Modal isOpen={isOpen}>
-  //             <div className="position-relative">
-  //                 <div
-  //                     className="sp1_task_comment_modal"
-  //                     style={{
-  //                         width: "100vw",
-  //                         height: "100vh",
-  //                         maxHeight: "100vh",
-  //                     }}
-  //                 >
-  //                     {/* modal body (start) */}
-  //                     {isOpen && (
-  //                         <CommentsBody
-  //                             fullScreenView={fullScreenView}
-  //                             setFullScreenView={setFullScreenView}
-  //                             close={close}
-  //                             comments={param?.taskId?data:comments}
-  //                             // comments={demoComments}
-  //                             loading={isFetching || isLoading}
-  //                             refetch={refetch}
-  //                             taskId={taskId?taskId:param?.taskId}
-  //                         />
-  //                     )}
-  //                     {/* modal body (end) */}
-  //                 </div>
-  //             </div>
-  //         </Modal>
-  //     );
-  // }
-
-  // return (
-  //     <React.Fragment>
-  //         {width > 1200 ? (
-  //             <CustomModal toggleRef={toggleRef} isOpen={isOpen}>
-  //                 <div className="sp1_task_comment_modal">
-  //                     {/* modal body (start) */}
-  //                     {/* <div className='border-bottom pb-2 d-flex align-items-center'>
-  //                 <Button
-  //                     aria-label="close-modal"
-  //                     className='_close-modal ml-auto'
-  //                     onClick={close}
-  //                 >
-  //                     <i className="fa-solid fa-xmark" />
-  //                 </Button>
-  //             </div>
-  //             <div className='d-flex flex-column pt-3'>
-  //                 <CommentSendBox  onCommentPost ={onCommentPost} task={task}/>
-  //                 <div className='sp1_task_comment_list mt-4'>
-  //                     <div className='font-weight-bold pb-3'>Comments: </div>
-  //                     <div className='sp1_task_comment_list_items'>
-  //                         {comments?.length > 0 && comments?.map(comment => (
-  //                             <React.Fragment key={comment.id} >
-  //                                 <React.Suspense fallback={<InnerCommentLoader />}>
-  //                                     <InnerComment comment={comment} />
-  //                                 </React.Suspense>
-  //                             </React.Fragment>
-  //                         )) }
-  //                     </div>
-  //                 </div>
-  //             </div>  */}
-  //                     {isOpen && (
-  //                         <CommentsBody
-  //                             fullScreenView={fullScreenView}
-  //                             setFullScreenView={setFullScreenView}
-  //                             close={close}
-  //                             comments={param?.taskId?data:comments}
-  //                             // comments={demoComments}
-  //                             loading={isFetching || isLoading}
-  //                             refetch={refetch}
-  //                             taskId={taskId?taskId:param?.taskId}
-  //                         />
-  //                     )}
-  //                     {/* modal body (end) */}
-  //                 </div>
-  //             </CustomModal>
-  //         ) : (
-  //             <React.Fragment>
-  //                 <Modal isOpen={isOpen}>
-  //                     <div className="position-relative">
-  //                         <div className="sp1_task_comment_modal --small-device">
-  //                             {/* modal body (start) */}
-  //                             {/* <div className='border-bottom pb-2 d-flex align-items-center'>
-  //                     <Button
-  //                         aria-label="close-modal"
-  //                         className='_close-modal ml-auto'
-  //                         onClick={close}
-  //                     >
-  //                         <i className="fa-solid fa-xmark" />
-  //                     </Button>
-  //                 </div>
-  //                 <div className='d-flex flex-column pt-3'>
-  //                     <CommentSendBox  onCommentPost ={onCommentPost} task={task}/>
-  //                     <div className='sp1_task_comment_list mt-4'>
-  //                         <div className='font-weight-bold pb-3'>Comments: </div>
-  //                         <div className='sp1_task_comment_list_items'>
-  //                             {comments?.length > 0 && comments?.map(comment => (
-  //                                 <React.Fragment key={comment.id} >
-  //                                     <React.Suspense fallback={<InnerCommentLoader />}>
-  //                                         <InnerComment comment={comment} />
-  //                                     </React.Suspense>
-  //                                 </React.Fragment>
-  //                             ))}
-  //                         </div>
-  //                     </div>
-  //                 </div>  */}
-  //                             {isOpen && (
-  //                                 <CommentsBody
-  //                                     fullScreenView={fullScreenView}
-  //                                     setFullScreenView={setFullScreenView}
-  //                                     close={close}
-  //                                     comments={param?.taskId?data:comments}
-  //                                     // comments={demoComments}
-  //                                     loading={isFetching || isLoading}
-  //                                     refetch={refetch}
-  //                                     taskId={taskId?taskId:param?.taskId}
-  //                                 />
-  //                             )}
-  //                             {/* modal body (end) */}
-  //                         </div>
-  //                     </div>
-  //                 </Modal>
-  //             </React.Fragment>
-  //         )}
-  //     </React.Fragment>
-  // );
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_CommentContainerDecider__WEBPACK_IMPORTED_MODULE_6__["default"], {
     fullScreenView: fullScreenView,
     isOpen: isOpen,
@@ -323,8 +241,10 @@ var CommentsContainer = function CommentsContainer(_ref) {
       fetching: isFetching,
       refetch: refetch,
       taskId: taskId ? taskId : param === null || param === void 0 ? void 0 : param.taskId,
-      task: task,
-      height: "89vh"
+      showFullScreenBtn: width <= 991 ? false : showFullScreenBtn,
+      height: height,
+      showCommentEditor: showCommentEditor,
+      showSearchBtn: showSearchBtn
     })
   });
 };
@@ -612,83 +532,6 @@ var Shadow = function Shadow() {
 
 /***/ }),
 
-/***/ "./resources/js/react/UI/comments/components/Modal.jsx":
-/*!*************************************************************!*\
-  !*** ./resources/js/react/UI/comments/components/Modal.jsx ***!
-  \*************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-var Modal = function Modal(_ref) {
-  var children = _ref.children,
-    isOpen = _ref.isOpen,
-    className = _ref.className;
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
-    _React$useState2 = _slicedToArray(_React$useState, 2),
-    isBrowser = _React$useState2[0],
-    setIsBrowser = _React$useState2[1];
-  // generate random id for dropdown menu
-  var id = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
-    return Math.random().toString(36).substr(2, 9);
-  }, []);
-  var DOM = document.getElementById(id);
-  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    setIsBrowser(true);
-    var el = document.createElement('div');
-    el.id = id;
-    document.body.appendChild(el);
-    return function () {
-      document.body.removeChild(el);
-    };
-  }, []);
-
-  // React.useEffect(() => {
-  //     if(isOpen){
-  //         document.body.classList.add('cnx_body-overflow-hidden')
-  //     }else{
-  //         document.body.classList.remove('cnx_body-overflow-hidden')
-  //     }
-  // }, [isOpen]) 
-
-  if (!DOM) return;
-  var modalContent = isOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    className: "cnx_modal ".concat(className),
-    children: children
-  }) : null;
-  if (isBrowser) {
-    return /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal(modalContent, DOM);
-  } else {
-    return null;
-  }
-};
-Modal.propTypes = {
-  children: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().node).isRequired,
-  isOpen: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().bool).isRequired,
-  className: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().string)
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Modal);
-
-/***/ }),
-
 /***/ "./resources/js/react/UI/form/Cheeckbox.jsx":
 /*!**************************************************!*\
   !*** ./resources/js/react/UI/form/Cheeckbox.jsx ***!
@@ -848,7 +691,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useRevision: () => (/* binding */ useRevision)
 /* harmony export */ });
-var useRevision = function useRevision() {
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+
+var useRevision = function useRevision(task) {
+  var _task$category;
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
+
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
     var isAlreadyAccepted = false;
@@ -865,12 +714,17 @@ var useRevision = function useRevision() {
       isDeniable: false
     }, {
       id: 'PLRx3',
-      revision: "The Lead Developer/project coordinator’s delivered work doesn’t match my shared requirement",
+      revision: "The Lead ".concat(taskType === 'design' ? 'designer' : 'developer', "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
       isDeniable: true
     }, {
       id: 'PLRx04',
-      revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
+      revision: "The instruction was followed, but the lead ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out some default/basic things or best practices which are not essential to write in instruction"),
       isDeniable: true
+    }, {
+      id: 'PLRx05',
+      revision: "I have some general revisions",
+      isDeniable: false,
+      type: 'GENERAL_REVISION'
     }];
   };
 
@@ -883,7 +737,7 @@ var useRevision = function useRevision() {
     } else {
       return [{
         id: 'LDRx1',
-        revision: "The concerned developer’s delivered work doesn’t match my shared requirement",
+        revision: "The concerned ".concat(taskType === 'design' ? 'designer’s' : 'developer’s', "  delivered work doesn\u2019t match my shared requirement"),
         isDeniable: true
       }, {
         id: 'LDRx2',
@@ -895,7 +749,7 @@ var useRevision = function useRevision() {
         isDeniable: false
       }, {
         id: 'LDRx4',
-        revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
+        revision: "The instruction was followed but the ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
         isDeniable: true
       }];
     }
@@ -5955,6 +5809,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _UI_comments_CommentsContainer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../UI/comments/CommentsContainer */ "./resources/js/react/UI/comments/CommentsContainer.jsx");
 /* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -5995,13 +5853,13 @@ var WidgetItem = function WidgetItem(_ref) {
             href: "/account/employees/".concat(comment.user.id),
             className: "hover-underline text-primary",
             children: comment.user.name
-          }), " ", comment.mention ? "replied to " : "added ", " a comment"]
+          }), " ", comment.is_deleted ? "deleted " : comment.mention ? "replied to " : "added ", " ", "a comment"]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("p", {
           className: "text-ellipsis d-flex align-items-center mb-0 pb-0",
           style: {
             color: "#AEAFB9"
           },
-          children: (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_4__.timeCalculate)(comment.created_date)
+          children: comment.is_deleted ? (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_4__.timeCalculate)(comment.deleted_at) : (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_4__.timeCalculate)(comment.created_date)
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "d-flex align-items-center",
@@ -6022,7 +5880,11 @@ var WidgetItem = function WidgetItem(_ref) {
       close: function close() {
         return setIsOpen(false);
       },
-      isOpen: isOpen
+      isOpen: isOpen,
+      showCommentEditor: false,
+      showFullScreenBtn: false,
+      showSearchBtn: false,
+      height: "50vh"
     })]
   });
 };
@@ -6037,10 +5899,34 @@ var Widget = function Widget(_ref2) {
     }),
     comments = _useGetCommentsQuery.data,
     isLoading = _useGetCommentsQuery.isLoading;
+  var handleOrdering = function handleOrdering() {
+    var comments = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var sortedComments = _toConsumableArray(comments);
+    sortedComments.sort(function (a, b) {
+      if (a.is_deleted && b.is_deleted) {
+        var a_day = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(a.deleted_at);
+        var b_day = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(b.deleted_at);
+        return b_day.diff(a_day);
+      } else if (a.is_deleted) {
+        var _a_day = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(a.deleted_at);
+        var _b_day = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(b.created_date);
+        return _b_day.diff(_a_day);
+      } else if (b.is_deleted) {
+        var _a_day2 = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(a.created_date);
+        var _b_day2 = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(b.deleted_at);
+        return _b_day2.diff(_a_day2);
+      } else {
+        var _a_day3 = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(a.created_date);
+        var _b_day3 = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(b.created_date);
+        return _b_day3.diff(_a_day3);
+      }
+    });
+    return sortedComments;
+  };
 
   // console.log({ widget: data });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: lodash__WEBPACK_IMPORTED_MODULE_1___default().map(lodash__WEBPACK_IMPORTED_MODULE_1___default().orderBy(comments, "id", "desc"), function (comment) {
+    children: lodash__WEBPACK_IMPORTED_MODULE_1___default().map(handleOrdering(comments), function (comment) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(WidgetItem, {
         comment: comment
       }, comment.id);
@@ -9148,7 +9034,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_9__);
 /* harmony import */ var _hooks_useSingleTask__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../hooks/useSingleTask */ "./resources/js/react/hooks/useSingleTask.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _UI_comments_CommentsBody__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../UI/comments/CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
+/* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -9163,6 +9051,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -9205,6 +9095,10 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
     _React$useState12 = _slicedToArray(_React$useState11, 2),
     comments = _React$useState12[0],
     setComments = _React$useState12[1];
+  var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
+    _React$useState14 = _slicedToArray(_React$useState13, 2),
+    isCommentShow = _React$useState14[0],
+    setIsCommentShow = _React$useState14[1];
   var _useSingleTask = (0,_hooks_useSingleTask__WEBPACK_IMPORTED_MODULE_10__.useSingleTask)(),
     getTaskById = _useSingleTask.getTaskById,
     getSubmittionInfo = _useSingleTask.getSubmittionInfo,
@@ -9214,6 +9108,11 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
     _useLazyGetTaskDetail2 = _slicedToArray(_useLazyGetTaskDetail, 2),
     getTaskDetails = _useLazyGetTaskDetail2[0],
     detailFetchingStateLoading = _useLazyGetTaskDetail2[1].isFetching;
+  var _useGetCommentsQuery = (0,_services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_12__.useGetCommentsQuery)(subTask === null || subTask === void 0 ? void 0 : subTask.id),
+    subTaskComments = _useGetCommentsQuery.data,
+    commentsFetching = _useGetCommentsQuery.isFetching,
+    commentsLoading = _useGetCommentsQuery.isLoading,
+    commentsRefetch = _useGetCommentsQuery.refetch;
 
   // fetch task details
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
@@ -9239,7 +9138,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
   //   fetch submitted rtk api
   var fetchData = function fetchData(url, cb) {
     getTaskDetails("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=").concat(url)).unwrap().then(function (res) {
-      var d = lodash__WEBPACK_IMPORTED_MODULE_9___default().orderBy(res, 'id', 'desc');
+      var d = lodash__WEBPACK_IMPORTED_MODULE_9___default().orderBy(res, "id", "desc");
       cb(d);
     })["catch"](function (err) {
       return console.error(err);
@@ -9309,13 +9208,13 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
     _comments.unshift(comment);
     setComments(_comments);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
       className: "nav flex-column nav-pills sp1-subtask-modal-sidebar",
       id: "v-pills-tab",
       role: "tablist",
       "aria-orientation": "vertical",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
         className: "nav-link active",
         id: "v-pills-general-tab",
         "data-toggle": "pill",
@@ -9323,8 +9222,11 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         role: "tab",
         "aria-controls": "v-pills-home",
         "aria-selected": "true",
+        onClick: function onClick() {
+          return setIsCommentShow(false);
+        },
         children: "General"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-submitted-work-tab",
         "data-toggle": "pill",
@@ -9332,9 +9234,12 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         role: "tab",
         "aria-controls": "v-pills-submitted-work",
         "aria-selected": "false",
-        onClick: fetchSubmittedWork,
+        onClick: function onClick(e) {
+          fetchSubmittedWork(e);
+          setIsCommentShow(false);
+        },
         children: "Submitted Works"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-comments-tab",
         "data-toggle": "pill",
@@ -9342,9 +9247,12 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         role: "tab",
         "aria-controls": "v-pills-comments",
         "aria-selected": "false",
-        onClick: fetchComments,
+        onClick: function onClick(e) {
+          commentsRefetch(e);
+          setIsCommentShow(true);
+        },
         children: "Comment"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-time-log-work-tab",
         "data-toggle": "pill",
@@ -9352,9 +9260,12 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         role: "tab",
         "aria-controls": "v-pills-time-log-work",
         "aria-selected": "false",
-        onClick: fetchTimeLogData,
+        onClick: function onClick(e) {
+          fetchTimeLogData(e);
+          setIsCommentShow(false);
+        },
         children: "Time Logs"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-history-tab",
         "data-toggle": "pill",
@@ -9362,9 +9273,12 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         role: "tab",
         "aria-controls": "v-pills-history",
         "aria-selected": "false",
-        onClick: fetchHistories,
+        onClick: function onClick(e) {
+          fetchHistories(e);
+          setIsCommentShow(false);
+        },
         children: "History"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-task-review-work-tab",
         "data-toggle": "pill",
@@ -9372,80 +9286,92 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         role: "tab",
         "aria-controls": "v-pills-task-review-work",
         "aria-selected": "false",
-        onClick: fetchReviewData,
+        onClick: function onClick(e) {
+          fetchReviewData(e);
+          setIsCommentShow(false);
+        },
         children: "Task Review"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
-      className: "tab-content p-3 sp1-subtask-modal-tab-content",
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+      className: "tab-content ".concat(isCommentShow ? "p-0" : "p-3", " sp1-subtask-modal-tab-content"),
       id: "v-pills-tabContent",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade show active sp1_st_tab_panel",
         id: "v-pills-home",
         role: "tabpanel",
         "aria-labelledby": "v-pills-general-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_preview_Genarel__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_Genarel__WEBPACK_IMPORTED_MODULE_1__["default"], {
             isFetching: taskDetailsIsFetching,
             taskID: taskID,
             task: task
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-submitted-work",
         role: "tabpanel",
         "aria-labelledby": "v-pills-submitted-work-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_preview_SubmittedWork__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_SubmittedWork__WEBPACK_IMPORTED_MODULE_4__["default"], {
             task: task,
             submittedWork: submittedWork,
             loading: submittionInfoIsFetching
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-comments",
         role: "tabpanel",
         "aria-labelledby": "v-pills-comments-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_preview_Comments__WEBPACK_IMPORTED_MODULE_8__["default"], {
-          task: task,
-          comments: comments,
-          onCommentPost: onCommentPost,
-          isLoading: detailFetchingStateLoading
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_UI_comments_CommentsBody__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          close: function close() {},
+          comments: subTaskComments,
+          loading: commentsLoading,
+          onSubmit: function onSubmit() {},
+          isOpen: true,
+          fullScreenView: false,
+          setFullScreenView: function setFullScreenView() {},
+          height: "741px",
+          fetching: commentsFetching,
+          refetch: commentsRefetch,
+          showFullScreenBtn: false,
+          taskId: subTask === null || subTask === void 0 ? void 0 : subTask.id,
+          showCloseBtn: false
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-time-log-work",
         role: "tabpanel",
         "aria-labelledby": "v-pills-time-log-work-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_preview_TimeLog__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_TimeLog__WEBPACK_IMPORTED_MODULE_5__["default"], {
             task: task,
             timeLog: timeLog,
             isLoading: detailFetchingStateLoading
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-history",
         role: "tabpanel",
         "aria-labelledby": "v-pills-history-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_preview_History__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_History__WEBPACK_IMPORTED_MODULE_7__["default"], {
             histories: histories,
             isLoading: detailFetchingStateLoading
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-task-review-work",
         role: "tabpanel",
         "aria-labelledby": "v-pills-task-review-work-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_preview_TaskReview__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_TaskReview__WEBPACK_IMPORTED_MODULE_6__["default"], {
           review: review,
           isLoading: detailFetchingStateLoading
         })

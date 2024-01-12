@@ -178,6 +178,7 @@ export default ChatInput;
 function MentionedComment() {
     const { mentionedComment, setMentionedComment } = useCommentContext();
 
+    // console.log({mentionedComment});
     return (
         <div
             style={{
@@ -241,7 +242,7 @@ function MentionedComment() {
                 >
                     {/* Nafis, 30 Nov, 2023 at 3:15 PM */}
                     {`${mentionedComment?.user?.name}, ${getFormattedTime(
-                        mentionedComment?.mention_created_at
+                        mentionedComment?.created_date
                     )}`}
                 </span>
             </article>

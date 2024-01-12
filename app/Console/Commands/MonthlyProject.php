@@ -33,7 +33,7 @@ class MonthlyProject extends Command
    }
     public function handle()
     {
-      $pm_projects= PMAssign::where('status','1')->get();
+      $pm_projects= PMAssign::get();
 
 
 
@@ -43,7 +43,7 @@ class MonthlyProject extends Command
             //$current_date = Carbon::now()->startOfMonth();
             $firstDay =  Carbon::now()->startOfMonth();
             $month_end= Carbon::now()->startOfMonth()->addDays(15);
-          //  dd($today_date,$firstDay,$month_end);
+           // dd($today_date,$firstDay,$month_end);
             if ($today_date->equalTo($month_end)) {
           $pm_update= PmAssign::find($manager->id);
           $pm_update->monthly_project_count =0;

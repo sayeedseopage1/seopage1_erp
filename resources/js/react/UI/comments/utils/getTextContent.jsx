@@ -70,3 +70,12 @@ export function getTrimmedHtml(html){
     }
     return newHtml;
 }
+
+
+
+
+export function getCommentInHtml(comment){
+    const commentTag = document.createElement('div');
+    commentTag.innerHTML = comment;
+    return commentTag;
+}

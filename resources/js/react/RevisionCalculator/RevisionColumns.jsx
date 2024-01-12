@@ -97,7 +97,7 @@ export const revisionColumns = [
     },
     {
         id: 'total_time_spent_in_revision',
-        heading: 'Hours spent in revisions (On developers end)',
+        heading: 'Hours spent in revisions (On developers/designers end)',
         moveable: true,
         sort: row => row?.minutes_spent,
         rowSpan: 2,
@@ -169,7 +169,7 @@ export const revisionColumns = [
             },
             {
                 id: 'lead_developer',
-                heading: 'Lead Developer Issues',
+                heading: 'Lead Developers/Designers Issues',
                 moveable: false,
                 sort: row => row?.lead_developer_issues,
                 searchText: (row) => `${row?.lead_developer_issues}`,
@@ -188,7 +188,7 @@ export const revisionColumns = [
             },
             {
                 id: 'developer',
-                heading: 'Developers Issues',
+                heading: 'Developers/Designers Issues',
                 moveable: false,
                 sort: row => row?.developer_issues,
                 searchText: (row) => `${row?.developer_issues}`,

@@ -17,7 +17,7 @@ const CommentContainerDecider = ({
                     <div
                         className="position-relative"
                         style={{
-                            padding: "10px",
+                            padding: "75px 23px 18px 25px",
                             height: "100vh",
                             width: "100vw",
                         }}
@@ -37,7 +37,34 @@ const CommentContainerDecider = ({
                     </div>
                 </Modal>
             );
-        } else if (fullScreenView && width > 991) {
+        } else if (!fullScreenView && width <= 991) {
+            return (
+                <Modal isOpen={isOpen}>
+                    <div
+                        className="position-relative"
+                        style={{
+                            padding: "75px 23px 18px 25px",
+                            height: "100vh",
+                            width: "100vw",
+                        }}
+                    >
+                        <div
+                            className="sp1_task_comment_modal"
+                            style={{
+                                height: "100%",
+                                width: "100%",
+                                maxHeight: "100vh",
+                            }}
+                        >
+                            {/* modal body (start) */}
+                            {children}
+                            {/* modal body (end) */}
+                        </div>
+                    </div>
+                </Modal>
+            );
+        }  
+        else if (fullScreenView && width > 991) {
             return (
                 <Modal isOpen={isOpen}>
                     <div
@@ -55,6 +82,29 @@ const CommentContainerDecider = ({
                                 width: "100%",
                                 maxHeight: "100vh",
                             }}
+                        >
+                            {/* modal body (start) */}
+                            {children}
+                            {/* modal body (end) */}
+                        </div>
+                    </div>
+                </Modal>
+            );
+        } else if (!fullScreenView && width > 991) {
+            return (
+                <Modal isOpen={isOpen}>
+                    <div
+                        className="position-relative"
+                        style={{
+                            paddingTop: "79px",
+                            paddingBottom: "18px"
+                        }}
+                    >
+                        <div
+                            style={{
+                                margin:"auto"
+                            }}
+                            className="sp1_task_comment_modal"
                         >
                             {/* modal body (start) */}
                             {children}

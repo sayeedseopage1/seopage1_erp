@@ -47,15 +47,15 @@ class ProjectManagerAction extends Command
         foreach ($projects_tasks as $project) {
             $pm_project= PMProject::where('project_id',$project->id)->orderBy('id','desc')->first();
             $creation_date= $pm_project->created_at;
-            $task_submission_date= Carbon::parse($pm_project->created_at)->addDay(5);
-            $milestone_submission_date= Carbon::parse($pm_project->created_at)->addDay(7);
+            $task_submission_date= Carbon::parse($pm_project->created_at)->addDay(4);
+
             $task = Task::where('project_id', $project->id)
             ->where('subtask_id', null)
             ->whereIn('board_column_id', [9, 4])
             ->count();
-           $milestones= ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
+
             $current_date= Carbon::now();
-            if($current_date == $task_submission_date) {
+            if($current_date > $task_submission_date) {
                // dd("true");
                 if($task == 0)
             {
@@ -67,17 +67,18 @@ class ProjectManagerAction extends Command
 
                 $helper->SubmitFirstTask($project);
 
+                }
+        }
+
+
             }
-        }
 
 
-            } 
-           
-            
-            
-          
+
+
 
         }
+      //  dd("djasnd");
         $month = '2023-12-07';
         $projects =  Project::where('status', 'in progress')->whereDate('created_at','>=',$month)->get();
         foreach ($projects as $project) {
@@ -88,7 +89,7 @@ class ProjectManagerAction extends Command
             $task = Task::where('project_id',$project->id)->where('subtask_id',null)->whereIn('board_column_id',[9,4])->count();
            $milestones= ProjectMilestone::where('project_id',$project->id)->where('status','complete')->count();
             $current_date= Carbon::now();
-          
+
             if($current_date >= $milestone_submission_date) {
                 // dd("true");
                  if($milestones == 0)
@@ -97,20 +98,20 @@ class ProjectManagerAction extends Command
                  if($pending_action == 0)
                  {
                     $helper = new HelperPendingActionController();
- 
- 
+
+
                     $helper->CompleteFirstMilestone($project);
 
                  }
-               
- 
+
+
              }
- 
- 
+
+
              }
-            
-            
-          
+
+
+
 
         }
      //
@@ -122,7 +123,7 @@ class ProjectManagerAction extends Command
         $current_date = Carbon::now();
         $deadline = $project->deadline;
         $difference_in_hours = $current_date->diffInHours($deadline);
-        
+
         if ($current_date > $deadline) {
             // Deadline is in the past
             $difference_in_hours = -$difference_in_hours;
@@ -134,12 +135,12 @@ class ProjectManagerAction extends Command
             if($pending_action == 0)
             {
                 $helper = new HelperPendingActionController();
- 
- 
+
+
                 $helper->ProjectDeadline($project, $difference_in_hours);
 
             }
-           
+
 
 
         }
@@ -154,15 +155,15 @@ class ProjectManagerAction extends Command
             $project_manager= User::where('id',$project->pm_id)->first();
             $client= User::where('id',$project->client_id)->first();
             $authorize_by= User::where('id',$p_action->authorization_for)->first();
-      
+
             $action= PendingAction::where('id',$p_action->id)->first();
             $action->authorized_by= $authorize_by->id;
             $action->authorized_at= Carbon::now();
             $action->past_status = 1;
             $action->save();
-      
-      
-          
+
+
+
             $past_action= new PendingActionPast();
             $past_action->item_name = $action->item_name;
             $past_action->code = $action->code;
@@ -182,10 +183,10 @@ class ProjectManagerAction extends Command
             $past_action->client_id = $action->client_id;
            // $past_action->deliverable_id = $action->deliverable_id;
             $past_action->save();
-    
+
 
         }
-       
+
       }
       $pen_actions = PendingAction::where('code','DCA')->where('past_status',0)->get();
       foreach($pen_actions as $p_action)
@@ -197,15 +198,15 @@ class ProjectManagerAction extends Command
             $project_manager= User::where('id',$project->pm_id)->first();
             $client= User::where('id',$project->client_id)->first();
             $authorize_by= User::where('id',$p_action->authorization_for)->first();
-      
+
             $action= PendingAction::where('id',$p_action->id)->first();
             $action->authorized_by= $authorize_by->id;
             $action->authorized_at= Carbon::now();
             $action->past_status = 1;
             $action->save();
-      
-      
-          
+
+
+
             $past_action= new PendingActionPast();
             $past_action->item_name = $action->item_name;
             $past_action->code = $action->code;
@@ -225,13 +226,13 @@ class ProjectManagerAction extends Command
             $past_action->client_id = $action->client_id;
            // $past_action->deliverable_id = $action->deliverable_id;
             $past_action->save();
-    
+
 
         }
-       
+
       }
 
-     
+
     //   $project_deadlines= PendingAction::where('code','PDA')->where('past_status',0)->get();
     //   foreach($project_deadlines as $action)
     //   {
@@ -240,11 +241,11 @@ class ProjectManagerAction extends Command
     //     PendingAction::where('id', $action->id)
     //     ->where('created_at', '<', $oneHourAgo)
     //     ->update(['created_at' => Carbon::now()]);
-    
+
     // PendingAction::where('id', $action->id)
     //     ->update(['timeframe' => $action->timeframe - 1]);
     //   }
-       
+
         $this->info('Pending action created');
     }
 }

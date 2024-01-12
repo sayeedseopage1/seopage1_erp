@@ -14,6 +14,7 @@ use App\Models\Subtask;
 use App\Models\ProjectMilestone;
 use App\Models\TaskBoardColumn;
 use App\Models\Scopes\OrderByDesc;
+use App\Models\TaskSubmission;
 
 /**
  * App\Models\Task
@@ -491,6 +492,10 @@ class Task extends BaseModel
     public function stat()
     {
         return $this->belongsTo(TaskBoardColumn::class, 'board_column_id');
+    }
+    public function submissions()
+    {
+        return $this->hasMany(TaskSubmission::class);
     }
 
     /*public function review()

@@ -1,0 +1,19 @@
+.comment_text_container blockquote {
+  border-left: solid 4px #80808078 !important;
+  padding: 5px 0 5px 10px !important;
+  line-height: 1.4 !important;
+  text-align: justify !important;
+  margin-bottom: 0 !important;
+  color: gray !important;
+  margin-left: 3px;
+}
+
+.comment_text_container code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: rgb(43, 41, 41);
+  /* background-color: #f9f2f4; */
+  border-radius: 4px;
+  width: 100%;
+  line-height: 0px;
+}

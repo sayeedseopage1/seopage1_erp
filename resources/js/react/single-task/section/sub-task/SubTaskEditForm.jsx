@@ -344,11 +344,14 @@ const estimateError= (err) =>{
                     </div>
 
                     <div className="col-6">
-                        <TaskCategorySelectionBox selected={taskCategory} onSelect={setTaskCategory}  />
+                        <TaskCategorySelectionBox selected={taskCategory} onSelect={value => {
+                            setTaskCategory(value);
+                            setAssignedTo(null);
+                        }}  />
                     </div>
 
                     <div className="col-6">
-                        <AssginedToSelection selected={assignedTo} onSelect={setAssignedTo} />
+                        <AssginedToSelection selected={assignedTo} onSelect={setAssignedTo} taskCategory={taskCategory}/>
                     </div>
 {/*
                     <div className="col-6">
