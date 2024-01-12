@@ -2,8 +2,9 @@ import React from "react";
 
 import PaginationPmGoalTable from "./PaginationPmGoalTable";
 import DeadlineExplainModal from "./DeadlineExplainModal";
-
+import { useAuth } from "../../../hooks/useAuth";
 const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
+    const auth = useAuth();
     const [projectId, setProjectId] = React.useState("900");
     // Table styles
     const tableStyle = {
@@ -91,22 +92,28 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
                                     {goal.suggestion ? goal.suggestion : "--"}
                                 </td>
                                 <td style={thTdStyle}>
-                                    {new Date(goal.goal_end_date) <
-                                    new Date() ? (
-                                        <button
-                                            style={{
-                                                color: "blue",
-                                                padding: "3px",
-                                            }}
-                                            onClick={() => {
-                                                setIsModalTwoOpen(true);
-                                                setProjectId(goal.project_id);
-                                            }}
-                                        >
-                                            Deadline Explanation
-                                        </button>
+                                    {auth.roleId === 4 ? (
+                                        new Date(goal.goal_end_date) <
+                                        new Date() ? (
+                                            <button
+                                                style={{
+                                                    color: "blue",
+                                                    padding: "3px",
+                                                }}
+                                                onClick={() => {
+                                                    setIsModalTwoOpen(true);
+                                                    setProjectId(
+                                                        goal.project_id
+                                                    );
+                                                }}
+                                            >
+                                                Deadline Explanation
+                                            </button>
+                                        ) : (
+                                            "N/A"
+                                        )
                                     ) : (
-                                        "N/A"
+                                        "--"
                                     )}
                                 </td>
                             </tr>

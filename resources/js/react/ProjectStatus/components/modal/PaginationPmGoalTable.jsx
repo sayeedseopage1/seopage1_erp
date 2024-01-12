@@ -34,6 +34,7 @@ const PaginationPmGoalTable = ({
                     <ReactPaginate
                         pageCount={pageCount}
                         pageRangeDisplayed={3}
+                        php
                         marginPagesDisplayed={2}
                         onPageChange={handlePageClick}
                         containerClassName={"pagination"}
