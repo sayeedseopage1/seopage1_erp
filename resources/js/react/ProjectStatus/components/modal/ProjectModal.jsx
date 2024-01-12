@@ -13,14 +13,20 @@ const customStyles = {
     },
     content: {
         zIndex: 9999999,
-        maxWidth: "80%",
-
+        maxWidth: "90%",
+        maxHeight: "70vh",
         margin: "auto auto",
         padding: "20px",
     },
 };
 
-const ProjectModal = ({ isFetchingPmGoal, pmGoal, isOpen, closeModal }) => {
+const ProjectModal = ({
+    projectDetails,
+    isFetchingPmGoal,
+    pmGoal,
+    isOpen,
+    closeModal,
+}) => {
     return (
         <ReactModal
             style={customStyles}
@@ -49,7 +55,11 @@ const ProjectModal = ({ isFetchingPmGoal, pmGoal, isOpen, closeModal }) => {
                 </button>
             </div>
 
-            <PMGoalsTable pmGoal={pmGoal} isFetchingPmGoal={isFetchingPmGoal} />
+            <PMGoalsTable
+                projectDetails={projectDetails}
+                pmGoal={pmGoal}
+                isFetchingPmGoal={isFetchingPmGoal}
+            />
         </ReactModal>
     );
 };

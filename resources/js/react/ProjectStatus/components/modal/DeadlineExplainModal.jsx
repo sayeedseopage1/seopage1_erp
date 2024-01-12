@@ -2,6 +2,8 @@ import React from "react";
 import ReactModal from "react-modal";
 
 import { IoClose } from "react-icons/io5";
+import CKEditorComponent from "../../../ckeditor";
+import DeadlineExplanation from "./DeadlineExplanation";
 
 const customStyles = {
     overlay: {
@@ -13,14 +15,19 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "70%",
+        maxWidth: "40%",
+        maxHeight: "80vh",
 
         margin: "auto auto",
         padding: "20px",
     },
 };
 
-const DeadlineExplainModal = ({ isModalTwoOpen, closeModalTwo, projectId }) => {
+const DeadlineExplainModal = ({
+    projectDetails,
+    isModalTwoOpen,
+    closeModalTwo,
+}) => {
     return (
         <ReactModal
             style={customStyles}
@@ -50,9 +57,7 @@ const DeadlineExplainModal = ({ isModalTwoOpen, closeModalTwo, projectId }) => {
                 </button>
             </div>
 
-            <div style={{ fontSize: "25px", marginTop: "50px" }}>
-                ProjectId:{projectId}
-            </div>
+            <DeadlineExplanation projectDetails={projectDetails} />
         </ReactModal>
     );
 };

@@ -3,19 +3,19 @@ import React from "react";
 import PaginationPmGoalTable from "./PaginationPmGoalTable";
 import DeadlineExplainModal from "./DeadlineExplainModal";
 import { useAuth } from "../../../hooks/useAuth";
-const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
+const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
     const auth = useAuth();
-    const [projectId, setProjectId] = React.useState("900");
+
     // Table styles
     const tableStyle = {
         borderCollapse: "collapse",
         width: "100%",
-        fontFamily: "Arial, sans-serif",
     };
 
     // Styles for table headers and cells
     const thTdStyle = {
-        textAlign: "left",
+        textAlign: "center",
+
         padding: "8px",
     };
 
@@ -70,6 +70,7 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
                         <th style={thStyle}>Goal Start Date</th>
                         <th style={thStyle}>Goal DeadLine</th>
                         <th style={thStyle}>Duration</th>
+                        <th style={thStyle}>Description</th>
                         <th style={thStyle}>Suggestion</th>
                         <th style={thStyle}>Reason</th>
                         <th style={thStyle}>Action</th>
@@ -85,6 +86,9 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
                                 </td>
                                 <td style={thTdStyle}>{goal.goal_end_date}</td>
                                 <td style={thTdStyle}>{goal.duration} Days</td>
+                                <td style={thTdStyle}>
+                                    {goal.description ? goal.description : "--"}
+                                </td>
                                 <td style={thTdStyle}>
                                     {goal.reason ? goal.reason : "--"}
                                 </td>
@@ -102,9 +106,6 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
                                                 }}
                                                 onClick={() => {
                                                     setIsModalTwoOpen(true);
-                                                    setProjectId(
-                                                        goal.project_id
-                                                    );
                                                 }}
                                             >
                                                 Deadline Explanation
@@ -130,7 +131,7 @@ const PMGoalsTable = ({ isFetchingPmGoal, pmGoal }) => {
                 itemsPerPage={itemsPerPage}
             />
             <DeadlineExplainModal
-                projectId={projectId}
+                projectDetails={projectDetails}
                 isModalTwoOpen={isModalTwoOpen}
                 closeModalTwo={closeModalTwo}
             />
