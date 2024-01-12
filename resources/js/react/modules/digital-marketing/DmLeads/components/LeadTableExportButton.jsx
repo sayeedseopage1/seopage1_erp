@@ -221,12 +221,13 @@ const LeadTableExportButton = ({ filter }) => {
 export default LeadTableExportButton;
 
 const ExportButton = styled.button`
-    padding: 10px;
-    border-radius: 6px;
+    padding: 5px 10px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     gap: 8px;
     /* color: #DAF7A6; */
     color: #000;
     background-color: #c4de95;
+    height: 32.7334px;
 `;

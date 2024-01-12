@@ -920,9 +920,6 @@ if ($request->project_type !='hourly'){
 }
     if ($validator->fails()) {
         return response()->json(['status'=>400,'message'=> $validator]);
-        // return redirect('post/create')
-        //             ->withErrors($validator)
-        //             ->withInput();
     }
 
         if (Auth::user()->role_id == 7) {

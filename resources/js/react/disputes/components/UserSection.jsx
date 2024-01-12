@@ -3,6 +3,8 @@ import React from "react";
 import Avatar from "../../global/Avatar";
 import { useAuth } from "../../hooks/useAuth";
 import AnswerQuestion from "./AnswerQuestion";
+import disputesStyle from "./disputes.module.css";
+import dayjs from "dayjs";
 
 /**
  *
@@ -11,6 +13,7 @@ import AnswerQuestion from "./AnswerQuestion";
  */
 
 const UserSection = ({
+    row,
     sectionTitle = "section_title",
     user = {
         id: null,
@@ -115,13 +118,16 @@ const UserSection = ({
                     {comment ?
                         <tr>
                             <td className="py-2">Explanation:</td>
-                            <td className="px-3 py-2">
+                            <td className={`px-3 py-2 ${disputesStyle.explanation_container}`}>
                                 <div
-                                    className="sp1_ck_content"
+                                    className={`sp1_ck_content`}
                                     dangerouslySetInnerHTML={{
                                         __html: comment,
                                     }}
                                 />
+                                <div className={disputesStyle.explanation_date}>
+                                    <span>- by <a href={`/account/employees/${user?.id}`}>{user?.name}</a> on {dayjs(row?.revision_created_at).format(`MMM DD, YYYY [at] hh:mm A`)}</span>
+                                </div>
                             </td>
                         </tr>
                     :null }

@@ -63,12 +63,12 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
-            <div id="table-actions" class="flex-grow-1 align-items-center">
+            <div id="table-actions" class="d-flex flex-grow-1 align-items-center">
                 @if ($addLeadPermission == 'all' || $addLeadPermission == 'added')
-                <button type="button" class="btn btn-primary mr-3 float-left mb-2 mb-lg-0 mb-md-0" data-toggle="modal" data-target="#lead_source_add_modal">
+                <!-- <button type="button" class="btn btn-primary mr-3 float-left mb-2 mb-lg-0 mb-md-0" data-toggle="modal" data-target="#lead_source_add_modal">
                     <i class="fa fa-plus mr-2" aria-hidden="true"></i>Add Lead
-                </button>
-                @include('dm-lead.modal.add_lead_source')
+                </button> -->
+                <div id="dmLeadAddButton"></div>
                     {{-- <x-forms.link-primary :link="url('/account/digital-marketing-lead/create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
                         @lang('app.add')
                         @lang('app.lead')

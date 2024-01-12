@@ -1,0 +1,32 @@
+
+.explanation_container{
+  position: relative;
+}
+
+.explanation_date{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: right;
+  padding-right: 15px;
+}
+
+.explanation_date span{
+  font-size: 12px;
+  color: #818181;
+}
+
+.explanation_date span a{
+  font-size: 12px;
+  color: #818181;
+  font-weight: bold;
+}
+
+.explanation_date span a:hover{
+  font-size: 12px;
+  color: #818181;
+  font-weight: bold;
+  text-decoration: underline;
+}

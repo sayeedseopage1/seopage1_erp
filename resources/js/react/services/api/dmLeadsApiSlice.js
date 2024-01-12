@@ -24,7 +24,7 @@ const dmLeadApiSlice = apiSlice.injectEndpoints({
             query: (id) => ({
                 url: `/account/digital-marketing-lead/${id}`,
                 method: "DELETE",
-                body:{
+                body: {
                     _token: document
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
@@ -36,7 +36,22 @@ const dmLeadApiSlice = apiSlice.injectEndpoints({
         // export lead
         allDmLeads: build.query({
             query: (query) => `/account/export-dm-lead-data${query}`,
-        })
+        }),
+
+        // store dm lead
+        storeDmLead: build.mutation({
+            query: (data) => ({
+                url: `/account/dm-lead-store`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                }
+            }),
+            invalidatesTags: ["DM_LEADS"]
+        }),
     }),
 });
 
@@ -45,5 +60,7 @@ export const {
     useDmDealConversionMutation,
     useDeleteDmLeadMutation,
     useAllDmLeadsQuery,
-    useLazyAllDmLeadsQuery
+    useLazyAllDmLeadsQuery,
+    useStoreDmLeadMutation,
+    useStoreDmLeadSourceMutation,
 } = dmLeadApiSlice;

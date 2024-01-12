@@ -25,8 +25,9 @@ export const Input = styled.input`
   border-radius: 6px;
 
 
-  &:read-only{
-    background-color: rgb(0 0 0 / 8%);
+  &:read-only,
+  &:disabled {
+    background-color: rgb(0 0 0 / 5%);
   }
 `;
 
@@ -35,4 +36,14 @@ export const Input = styled.input`
 export const ErrorText = styled.div`
   color: red;
   font-size: 14px;
+`;
+
+export const RadioLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const RadioInput = styled.input`
+  
 `;
