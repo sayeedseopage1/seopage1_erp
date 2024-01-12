@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Models\Subtask;
 use DateTime;
 use Carbon\Carbon;
+use App\models\TaskHistory;
 
 
 
@@ -53,6 +54,14 @@ class TaskStatusChange extends Command
                 $task_update= Task::find($task->id);
                 $task_update->board_column_id = 8;
                 $task_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $task_update->board_column_id; 
+                $task_history->task_id= $task_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                
+                $task_history->save();	
 
             }
 
@@ -63,6 +72,13 @@ class TaskStatusChange extends Command
                 $task_update= Task::find($task->id);
                 $task_update->board_column_id = 8;
                 $task_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $task_update->board_column_id; 
+                $task_history->task_id= $task_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                $task_history->save();	
 
             }
 
@@ -89,6 +105,13 @@ class TaskStatusChange extends Command
                 $task_update= Task::find($task->id);
                 $task_update->board_column_id = 9;
                 $task_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $task_update->board_column_id; 
+                $task_history->task_id= $task_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                $task_history->save();	
             $subtasks_tasks = Subtask::select('tasks.*')
             ->leftJoin('tasks','tasks.subtask_id','sub_tasks.id')
             ->where('sub_tasks.task_id',$task->id)->get();
@@ -97,6 +120,13 @@ class TaskStatusChange extends Command
                 $subtask_update= Task::find($subtask->id);
                 $subtask_update->board_column_id = 9;
                 $subtask_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $subtask_update->board_column_id; 
+                $task_history->task_id= $subtask_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                $task_history->save();	
 
             }
 
@@ -110,6 +140,13 @@ class TaskStatusChange extends Command
                 $task_update= Task::find($task->id);
                 $task_update->board_column_id = 9;
                 $task_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $task_update->board_column_id; 
+                $task_history->task_id= $task_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                $task_history->save();	
                 $subtasks_tasks = Subtask::select('tasks.*')
             ->leftJoin('tasks','tasks.subtask_id','sub_tasks.id')
             ->where('sub_tasks.task_id',$task->id)->get();
@@ -118,6 +155,13 @@ class TaskStatusChange extends Command
                 $subtask_update= Task::find($subtask->id);
                 $subtask_update->board_column_id = 9;
                 $subtask_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $subtask_update->board_column_id; 
+                $task_history->task_id= $subtask_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                $task_history->save();	
 
             }
 
@@ -142,6 +186,13 @@ class TaskStatusChange extends Command
                 $task_update= Task::find($task->id);
                 $task_update->board_column_id = 9;
                 $task_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $task_update->board_column_id; 
+                $task_history->task_id= $task_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                $task_history->save();	
             $subtasks_tasks = Subtask::select('tasks.*')
             ->leftJoin('tasks','tasks.subtask_id','sub_tasks.id')
             ->where('sub_tasks.task_id',$task->id)->get();
@@ -150,6 +201,13 @@ class TaskStatusChange extends Command
                 $subtask_update= Task::find($subtask->id);
                 $subtask_update->board_column_id = 9;
                 $subtask_update->save();
+                $task_history= new TaskHistory();
+                $task_history->details= 'statusActivity'; 
+                $task_history->board_column_id= $subtask_update->board_column_id; 
+                $task_history->task_id= $subtask_update->id;
+                $task_history->user_id= 1;
+                $task_history->created_at= Carbon::now();
+                $task_history->save();	
 
             }
 

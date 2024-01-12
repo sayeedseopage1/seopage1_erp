@@ -6,7 +6,7 @@ import RevisionCreationModal from './RevisionCreationModal';
 
 const RevisionControl = ({task, auth}) => {
     const [revisionModal, setRevisionModal] = useState(false);
-    const singleTask = new SingleTask(task)
+    // const singleTask = new SingleTask(task)
 
   return (
     <React.Fragment>
@@ -21,7 +21,7 @@ const RevisionControl = ({task, auth}) => {
 
         <Modal isOpen={revisionModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
-                <RevisionCreationModal auth={auth} task={singleTask} close={() => setRevisionModal(false)} />
+                <RevisionCreationModal auth={auth} task={task} close={() => setRevisionModal(false)} />
             </div>
         </Modal> 
     </React.Fragment>

@@ -19,15 +19,16 @@
     <div class="content-wrapper">
         <!-- Add Task Export Buttons Start -->
         <div class="d-block d-lg-flex d-md-flex justify-content-between action-bar">
-            <div id="table-actions" class="flex-grow-1 align-items-center">
+            <div id="table-actions" class="d-flex flex-grow-1 gap-3">
                 @if ($addLeadPermission == 'all' || $addLeadPermission == 'added')
-                    <x-forms.link-primary :link="url('/account/leads/create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
+                    <!-- <x-forms.link-primary :link="url('/account/leads/create')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="plus">
                         @lang('app.add')
                         @lang('app.lead')
-                    </x-forms.link-primary>
+                    </x-forms.link-primary> -->
+                    <span id="leadTableAddButton"></span>
                 @endif
 
-                <div id="leadTableExportButton"></div>
+                <span id="leadTableExportButton"></span>
 
                 {{--      @if ($addLeadCustomFormPermission == 'all')
                     <x-forms.button-secondary icon="pencil-alt" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" id="add-lead">

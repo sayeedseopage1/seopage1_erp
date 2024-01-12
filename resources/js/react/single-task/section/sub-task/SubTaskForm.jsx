@@ -27,7 +27,7 @@ import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
 import { calenderOpen } from "./helper/calender_open";
 
-const SubTaskForm = ({ close }) => {
+const SubTaskForm = ({ close, isDesignerTask }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
@@ -99,6 +99,16 @@ const SubTaskForm = ({ close }) => {
         let value = e.target.value;
         setState(value);
     };
+
+    // if task for designer select category default
+    React.useEffect(() => {
+        isDesignerTask && setTaskCategory({
+            id: task?.category?.id,
+            category_name: task?.category?.name,
+            added_by: task?.category?.addedBy,
+        })
+    }, [isDesignerTask])
+
 
 
     const isValid = () => {
@@ -296,7 +306,7 @@ const SubTaskForm = ({ close }) => {
         }
 
         const primaryPageConfirmation = () => {
-            if(pageTypePriority === "Primary Page Development"){
+            if(!isDesignerTask && pageTypePriority === "Primary Page Development"){
                 Swal.fire({
                     icon: 'info',
                     html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
@@ -556,6 +566,7 @@ const SubTaskForm = ({ close }) => {
                     <TaskCategorySelectionBox
                         selected={taskCategory}
                         onSelect={setTaskCategory}
+                        isDesignerTask={isDesignerTask}
                     />
 
                     {err?.taskCategory && (
@@ -569,6 +580,7 @@ const SubTaskForm = ({ close }) => {
                     <AssginedToSelection
                         selected={assignedTo}
                         onSelect={setAssignedTo}
+                        taskCategory={taskCategory}
                     />
 
                     {err?.assignedTo && (

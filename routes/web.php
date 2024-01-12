@@ -340,12 +340,17 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('dashboard-advanced/show-project-manager-details', [DashboardController::class, 'projectManageDetalsOnAdvanceDashboard'])->name('dashboard.projectManageDetalsOnAdvanceDashboard');
     Route::post('dashboard/widget/{dashboardType}', [DashboardController::class, 'widget'])->name('dashboard.widget');
     Route::post('dashboard/week-timelog', [DashboardController::class, 'weekTimelog'])->name('dashboard.week_timelog');
+    Route::get('dashboard-lead-dev-performance/{id}', [DashboardController::class, 'leadDevPerformance'])->name('lead-dev-performance');
+    Route::get('dashboard-developer-performance/{id}', [DashboardController::class, 'devPerformance'])->name('dev-performance');
+    Route::get('dashboard-sales-performance/{id}', [DashboardController::class, 'salesPerformance'])->name('sales-performance');
 
     Route::get('attendances/clock-in-modal', [DashboardController::class, 'clockInModal'])->name('attendances.clock_in_modal');
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
     Route::get('dashboard/pm-cycle-explanation', [DashboardController::class, 'pmDashboardExplanation'])->name('pm-dashboard-explanation');
+    Route::get('task_history_dashboard/{id}', [DashboardController::class, 'task_history'])->name('task_history_dashboard');
+    Route::get('task_revision_dashboard/{id}', [DashboardController::class, 'task_revision'])->name('revision-count-dashboard');
     // Route::resource('points/', PointsController::class)->only
 
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
@@ -1218,6 +1223,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-all-currencies', [DealController::class,'getAllCurrencie']);
     /**ALL Currencie API END*/
 
+
+    /**ALL Country API START*/
+    Route::get('get-all-country', [DealController::class,'getAllCountry']);
+    /**ALL Country API END*/
+
+
     /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
 
     Route::resource('dm-contracts', DMContractController::class);
@@ -1558,6 +1569,14 @@ Route::post('/projects/store-request-extension', [ProjectController::class, 'sto
 Route::post('/projects/approved-request-extension', [ProjectController::class, 'approvedRequestExtension'])->name('approved-request-extension');
 Route::post('/projects/deny-request-extension', [ProjectController::class, 'denyRequestExtension'])->name('deny-request-extension');
 
+
+Route::get('/project-deadline-extension-request', [ProjectController::class, 'projectDeadlineExtension'])->name('project-deadline-extension');
+Route::get('/project-deadline-extension', [ProjectController::class, 'pDERequest'])->name('pde-request');
+Route::post('store-project-deadline-exp', [ProjectController::class, 'storeProjectDeadline'])->name('store-project-deadline-exp');
+Route::get('/project-deadline-extension-authorization', [ProjectController::class, 'pDExtensionAuthorization'])->name('pde-authorization');
+Route::post('store-project-deadline-exp-auth', [ProjectController::class, 'storeAuthorization'])->name('store-pde-authorization');
+Route::get('/project-deadline-ext-view', [ProjectController::class, 'pDExtensionView'])->name('project-deadline-ext-view');
+
 //add project niche
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');
 Route::get('/projects/get-sub-category/{id}', [ProjectController::class, 'parentCategoryId']);
@@ -1717,3 +1736,4 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
+// asdasdsad

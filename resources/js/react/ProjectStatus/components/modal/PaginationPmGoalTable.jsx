@@ -27,17 +27,31 @@ const PaginationPmGoalTable = ({
                 <div>Entries</div>
             </Flex>
 
-            {/* Pagination component */}
+            {/* Pagination component with added styles */}
             {!isFetchingPmGoal && (
-                <Flex justifyContent="space-between">
-                    <div>Showing to of entries</div>
+                <Flex justifyContent="space-between" alignItems="center">
+                    <div>Showing 1 to {itemsPerPage} of 1 entries</div>
                     <ReactPaginate
                         pageCount={pageCount}
                         pageRangeDisplayed={3}
+                        php
                         marginPagesDisplayed={2}
                         onPageChange={handlePageClick}
                         containerClassName={"pagination"}
                         activeClassName={"active"}
+                        previousLabel={"Previous"}
+                        nextLabel={"Next"}
+                        breakLabel={"..."}
+                        breakClassName={"break-me"}
+                        pageClassName={"page-item"}
+                        pageLinkClassName={"page-link"}
+                        previousClassName={"page-item"}
+                        previousLinkClassName={"page-link"}
+                        nextClassName={"page-item"}
+                        nextLinkClassName={"page-link"}
+                        disabledClassName={"disabled"}
+                        previousStyle={{ padding: "10px" }}
+                        nextStyle={{ padding: "10px" }}
                     />
                 </Flex>
             )}

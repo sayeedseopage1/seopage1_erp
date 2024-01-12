@@ -21,6 +21,10 @@ const CommentsContainer = ({
     onCommentPost,
     taskId,
     singleCommentId,
+    showCommentEditor = true,
+    showSearchBtn = true,
+    showFullScreenBtn = true,
+    height = "89vh",
 }) => {
     // ---------------------------------------------------------
     const param = useParams();
@@ -32,135 +36,6 @@ const CommentsContainer = ({
     const { data, isFetching, isLoading, refetch } = useGetCommentsQuery(
         param?.taskId
     );
-
-    // console.log({ param,data });
-    // if (fullScreenView) {
-    //     return (
-    //         <Modal isOpen={isOpen}>
-    //             <div className="position-relative">
-    //                 <div
-    //                     className="sp1_task_comment_modal"
-    //                     style={{
-    //                         width: "100vw",
-    //                         height: "100vh",
-    //                         maxHeight: "100vh",
-    //                     }}
-    //                 >
-    //                     {/* modal body (start) */}
-    //                     {isOpen && (
-    //                         <CommentsBody
-    //                             fullScreenView={fullScreenView}
-    //                             setFullScreenView={setFullScreenView}
-    //                             close={close}
-    //                             comments={param?.taskId?data:comments}
-    //                             // comments={demoComments}
-    //                             loading={isFetching || isLoading}
-    //                             refetch={refetch}
-    //                             taskId={taskId?taskId:param?.taskId}
-    //                         />
-    //                     )}
-    //                     {/* modal body (end) */}
-    //                 </div>
-    //             </div>
-    //         </Modal>
-    //     );
-    // }
-
-    // return (
-    //     <React.Fragment>
-    //         {width > 1200 ? (
-    //             <CustomModal toggleRef={toggleRef} isOpen={isOpen}>
-    //                 <div className="sp1_task_comment_modal">
-    //                     {/* modal body (start) */}
-    //                     {/* <div className='border-bottom pb-2 d-flex align-items-center'>
-    //                 <Button
-    //                     aria-label="close-modal"
-    //                     className='_close-modal ml-auto'
-    //                     onClick={close}
-    //                 >
-    //                     <i className="fa-solid fa-xmark" />
-    //                 </Button>
-    //             </div>
-    //             <div className='d-flex flex-column pt-3'>
-    //                 <CommentSendBox  onCommentPost ={onCommentPost} task={task}/>
-    //                 <div className='sp1_task_comment_list mt-4'>
-    //                     <div className='font-weight-bold pb-3'>Comments: </div>
-    //                     <div className='sp1_task_comment_list_items'>
-    //                         {comments?.length > 0 && comments?.map(comment => (
-    //                             <React.Fragment key={comment.id} >
-    //                                 <React.Suspense fallback={<InnerCommentLoader />}>
-    //                                     <InnerComment comment={comment} />
-    //                                 </React.Suspense>
-    //                             </React.Fragment>
-    //                         )) }
-    //                     </div>
-    //                 </div>
-    //             </div>  */}
-    //                     {isOpen && (
-    //                         <CommentsBody
-    //                             fullScreenView={fullScreenView}
-    //                             setFullScreenView={setFullScreenView}
-    //                             close={close}
-    //                             comments={param?.taskId?data:comments}
-    //                             // comments={demoComments}
-    //                             loading={isFetching || isLoading}
-    //                             refetch={refetch}
-    //                             taskId={taskId?taskId:param?.taskId}
-    //                         />
-    //                     )}
-    //                     {/* modal body (end) */}
-    //                 </div>
-    //             </CustomModal>
-    //         ) : (
-    //             <React.Fragment>
-    //                 <Modal isOpen={isOpen}>
-    //                     <div className="position-relative">
-    //                         <div className="sp1_task_comment_modal --small-device">
-    //                             {/* modal body (start) */}
-    //                             {/* <div className='border-bottom pb-2 d-flex align-items-center'>
-    //                     <Button
-    //                         aria-label="close-modal"
-    //                         className='_close-modal ml-auto'
-    //                         onClick={close}
-    //                     >
-    //                         <i className="fa-solid fa-xmark" />
-    //                     </Button>
-    //                 </div>
-    //                 <div className='d-flex flex-column pt-3'>
-    //                     <CommentSendBox  onCommentPost ={onCommentPost} task={task}/>
-    //                     <div className='sp1_task_comment_list mt-4'>
-    //                         <div className='font-weight-bold pb-3'>Comments: </div>
-    //                         <div className='sp1_task_comment_list_items'>
-    //                             {comments?.length > 0 && comments?.map(comment => (
-    //                                 <React.Fragment key={comment.id} >
-    //                                     <React.Suspense fallback={<InnerCommentLoader />}>
-    //                                         <InnerComment comment={comment} />
-    //                                     </React.Suspense>
-    //                                 </React.Fragment>
-    //                             ))}
-    //                         </div>
-    //                     </div>
-    //                 </div>  */}
-    //                             {isOpen && (
-    //                                 <CommentsBody
-    //                                     fullScreenView={fullScreenView}
-    //                                     setFullScreenView={setFullScreenView}
-    //                                     close={close}
-    //                                     comments={param?.taskId?data:comments}
-    //                                     // comments={demoComments}
-    //                                     loading={isFetching || isLoading}
-    //                                     refetch={refetch}
-    //                                     taskId={taskId?taskId:param?.taskId}
-    //                                 />
-    //                             )}
-    //                             {/* modal body (end) */}
-    //                         </div>
-    //                     </div>
-    //                 </Modal>
-    //             </React.Fragment>
-    //         )}
-    //     </React.Fragment>
-    // );
     return (
         <CommentContainerDecider
             fullScreenView={fullScreenView}
@@ -169,21 +44,31 @@ const CommentsContainer = ({
             width={width}
         >
             {/* {isOpen && ( */}
-                <CommentsBody
-                    fullScreenView={fullScreenView}
-                    setFullScreenView={setFullScreenView}
-                    isOpen={isOpen}
-                    close={close}
-                    // comments={param?.taskId ? data : comments}
-                    comments={param?.taskId? singleCommentId?data?.filter((comment)=>comment.id===singleCommentId):data : comments}
-                    // comments={demoComments}
-                    loading={isLoading}
-                    fetching={isFetching}
-                    refetch={refetch}
-                    taskId={taskId ? taskId : param?.taskId}
-                    task={task}
-                    height={"89vh"}
-                />
+            <CommentsBody
+                fullScreenView={fullScreenView}
+                setFullScreenView={setFullScreenView}
+                isOpen={isOpen}
+                close={close}
+                // comments={param?.taskId ? data : comments}
+                comments={
+                    param?.taskId
+                        ? singleCommentId
+                            ? data?.filter(
+                                  (comment) => comment.id === singleCommentId
+                              )
+                            : data
+                        : comments
+                }
+                // comments={demoComments}
+                loading={isLoading}
+                fetching={isFetching}
+                refetch={refetch}
+                taskId={taskId ? taskId : param?.taskId}
+                showFullScreenBtn={width <= 991 ? false : showFullScreenBtn}
+                height={height}
+                showCommentEditor={showCommentEditor}
+                showSearchBtn={showSearchBtn}
+            />
             {/* )} */}
         </CommentContainerDecider>
     );

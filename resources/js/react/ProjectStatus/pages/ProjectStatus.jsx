@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 import FilterBar from "../components/FilterBar";
-
+import { useAuth } from "../../hooks/useAuth.jsx";
 import {
     useGetPmGoalQuery,
     useGetProjectStatusQuery,
@@ -13,6 +13,9 @@ import Avatar from "../../global/Avatar";
 import ProjectModal from "../components/modal/ProjectModal";
 
 const ProjectStatus = () => {
+    const auth = useAuth();
+
+    console.log("auth", auth);
     const [sorting, setSorting] = React.useState([]);
     const [projectId, setProjectId] = React.useState("900");
     const [{ pageIndex, pageSize }, setPagination] = React.useState({

@@ -62,6 +62,7 @@ use App\Models\GoalSetting;
 
 
 
+
 class LeadController extends AccountBaseController
 {
 
@@ -847,7 +848,7 @@ class LeadController extends AccountBaseController
     {
 //        dd($request->all());
 if ($request->project_type !='hourly'){
-    $request->validate([
+    $validator = Validator::make($request->all(), [
         'client_name' => 'required|max:255',
         'project_id' => 'required|unique:leads,project_id,'.$request->project_id.'|numeric',
         'country' => 'required',
@@ -883,7 +884,7 @@ if ($request->project_type !='hourly'){
         'projectpage_screenshot.required' => 'Please enter project page screenshot link (Freelancer.com) with https!',
     ]);
 }else{
-    $request->validate([
+    $validator = Validator::make($request->all(), [
         'client_name' => 'required|max:255',
         'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
         'country' => 'required',
@@ -917,7 +918,12 @@ if ($request->project_type !='hourly'){
         'projectpage_screenshot.required' => 'Please enter project page screenshot link (Freelancer.com) with https!',
     ]);
 }
-
+    if ($validator->fails()) {
+        return response()->json(['status'=>400,'message'=> $validator]);
+        // return redirect('post/create')
+        //             ->withErrors($validator)
+        //             ->withInput();
+    }
 
         if (Auth::user()->role_id == 7) {
 

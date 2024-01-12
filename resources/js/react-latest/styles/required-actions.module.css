@@ -288,7 +288,7 @@
 }
 .user_field_dropdown_container_search{
   width: calc(100% - 6px);
-  min-width: 0;
+  min-width: 286.15px;
   padding: 10px;
   font-size: 16px;
   color: #28313c;

@@ -6,6 +6,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import SubTaskForm from "./SubTaskForm";
 import Button from "../../components/Button";
 import LeadConfirmationModal from "./LeadConfirmationModal";
+import _ from "lodash";
 
 const VisibleItem = ({ isVisible, children }) => {
     if (!isVisible) return null;
@@ -57,7 +58,8 @@ export default function SubTaskFormController({
     const dispatch = useDispatch(); // dispatch
     const auth = useAuth(); // logged user
     const task = new SingleTask(taskDetails); // task instance;
-
+    const isDesignerTask = _.includes([5, 7], task?.category?.id); 
+ 
     // environment status
     React.useEffect(() => {
         const showEnv =
@@ -75,7 +77,7 @@ export default function SubTaskFormController({
     return (
         <React.Fragment>
             {/* working environment form */}
-            <VisibleItem isVisible={visibleEnvironmentForm}>
+            <VisibleItem isVisible={!isDesignerTask && visibleEnvironmentForm}>
                 <WithContainer
                     close={close}
                     visibleEnvironmentForm={visibleEnvironmentForm}
@@ -93,7 +95,7 @@ export default function SubTaskFormController({
 
             {/* task creation guideline */}
             <VisibleItem
-                isVisible={!visibleEnvironmentForm && visibleInformationModal}
+                isVisible={!isDesignerTask && !visibleEnvironmentForm && visibleInformationModal}
             >
                 <LeadConfirmationModal
                     isOpen={true}
@@ -104,13 +106,13 @@ export default function SubTaskFormController({
 
             {/* task creation form */}
             <VisibleItem
-                isVisible={!visibleEnvironmentForm && !visibleInformationModal}
+                isVisible={isDesignerTask || (!visibleEnvironmentForm && !visibleInformationModal)}
             >
                 <WithContainer
                     close={close}
                     visibleEnvironmentForm={visibleEnvironmentForm}
                 >
-                    <SubTaskForm close={close} />
+                    <SubTaskForm close={close} isDesignerTask={isDesignerTask} />
                 </WithContainer>
             </VisibleItem>
         </React.Fragment>

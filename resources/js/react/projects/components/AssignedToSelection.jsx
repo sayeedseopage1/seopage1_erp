@@ -4,14 +4,31 @@ import _  from 'lodash';
 import { useUsers } from '../../hooks/useUsers';
 import Loader from '../../tasks/components/Loader';
 import { useAuth } from '../../hooks/useAuth';
+import { User } from '../../utils/user-details';
 
 
-const AssginedToSelection = ({selected, onSelect}) => {
+const AssginedToSelection = ({selected, onSelect, taskCategory}) => {
     const [query, setQuery] = React.useState('');
     const {users, usersIsFetching: isFetching} = useUsers();
-    const auth = useAuth();
+    const auth = useAuth(); 
 
-    const employees = _.filter(users, user => _.includes([6, 9, 10], Number(user?.role_id)) || Number(user?.id) === auth.getId() )
+    const filterUser = (user, roles) => { 
+        const _user = new User(user);
+        if(typeof roles === "number"){ 
+            return _user.isHasRolePermission(roles);
+        }else if(_.isArray(roles)){ 
+            return _.map(roles, role => _user.isHasRolePermission(role));
+        }
+    }
+
+    let employees = [] ; 
+    if(taskCategory && taskCategory.id === 5){
+        employees = _.filter(users, user => filterUser(user, 13) || filterUser(user, 9))
+    }else if(taskCategory && taskCategory.id === 7){
+        employees = _.filter(users, user => filterUser(user, 13) || filterUser(user, 10))
+    }else{
+        employees = _.filter(users, user => filterUser(user, 6) || Number(user?.id) === auth.getId() )
+    }
 
     const filteredData =
     query === ''
