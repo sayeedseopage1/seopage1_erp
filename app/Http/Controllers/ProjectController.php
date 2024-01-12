@@ -929,7 +929,7 @@ class ProjectController extends AccountBaseController
 
 
         //kpi distribution start from here
-    //    DB::beginTransaction();
+      //  DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
@@ -2136,6 +2136,7 @@ class ProjectController extends AccountBaseController
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
+       // dd($project);
 
         // PROJECT PM GOAL SETTINGS START
         if($project->status = 'not started'){

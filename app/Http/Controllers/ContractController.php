@@ -389,7 +389,7 @@ class ContractController extends AccountBaseController
 
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+        $project->project_budget = (($request->amount) + ($request->upsell_amount)) / $currency->exchange_rate;
 
         $project->completion_percent = 0;
         $project->deal_id = $deal->id;
@@ -414,6 +414,7 @@ class ContractController extends AccountBaseController
                 $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
             }
         }
+       // dd($project);
 
         if ($existing_client != null) {
             // /dd("true");
@@ -685,7 +686,7 @@ class ContractController extends AccountBaseController
         $project->deliverable_authorization = 0;
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+        $project->project_budget = (($request->amount) + ($request->upsell_amount) )/ $currency->exchange_rate;
         $project->due = $deal->amount + $deal->upsell_amount;
 
         $project->completion_percent = 0;
@@ -694,6 +695,7 @@ class ContractController extends AccountBaseController
         $project->status = 'not started';
         $project->public = 0;
         $project->save();
+     //   dd($project);
 
         // dd($existing_client);
         if ($existing_client != null) {
@@ -1192,11 +1194,12 @@ class ContractController extends AccountBaseController
 
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+            $project->project_budget = (($request->amount) + ($request->upsell_amount)) / $currency->exchange_rate;
             $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
           //  $project->project_summary = $request->project_summary;
             $project->save();
+          //  dd($project);
 
             if ($deal->project_type == 'hourly') {
                 // dd("true");
@@ -1725,11 +1728,12 @@ class ContractController extends AccountBaseController
             $project->deadline = $request->deadline;
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount) + ($request->upsell_amount) / $currency->exchange_rate;
+            $project->project_budget = (($request->amount) + ($request->upsell_amount)) / $currency->exchange_rate;
             $project->due = $deal->amount + $deal->upsell_amount;
             $project->currency_id = 1;
           //  $project->project_summary = $request->project_summary;
             $project->save();
+        //    dd($project);
 
             if ($deal->project_type == 'hourly') {
 
