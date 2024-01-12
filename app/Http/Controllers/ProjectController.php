@@ -5899,7 +5899,7 @@ public function updatePmBasicSEO(Request $request){
             $project->deliverable_authorization= 1;
             $project->save();
         }
-        $actions = PendingAction::where('code','DGA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+        $actions = PendingAction::whereIn('code',['DGA','DOA','DDA'])->where('past_status',0)->where('project_id',$request->project_id)->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
@@ -5931,7 +5931,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
 
         }
