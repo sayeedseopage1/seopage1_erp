@@ -285,6 +285,12 @@ const FreeLancerModal = ({ close, source }) => {
         <div>
             <form>
                 <div className="row">
+
+                    {/* Source */}
+                    <div className="col-md-12 mb-2">
+                        <h2 className="text-center">{source}</h2>
+                    </div>
+
                     {/* Project Name */}
                     <div className="col-md-6">
                         <InputGroup>
