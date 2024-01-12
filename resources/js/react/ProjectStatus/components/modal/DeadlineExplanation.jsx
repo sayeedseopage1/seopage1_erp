@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CKEditorComponent from "../../../ckeditor";
 import Button from "../../../global/Button";
+import { useCreateDeadlineExplanationReasonMutation } from "../../../services/api/projectStatusApiSlice";
 
-const DeadlineExplanation = ({ projectDetails }) => {
+const DeadlineExplanation = ({
+    closeModalTwo,
+    projectPmGoalId,
+    projectDetails,
+}) => {
     const {
         project_name,
         clientName,
@@ -12,6 +17,21 @@ const DeadlineExplanation = ({ projectDetails }) => {
         goal_end_date,
         description,
     } = projectDetails;
+    const [editorData, setEditorData] = React.useState("");
+    const [submitData, { isLoading }] =
+        useCreateDeadlineExplanationReasonMutation();
+    const handleEditorChange = (e, editor) => {
+        setEditorData(editor.getData());
+    };
+
+    const handleSubmit = () => {
+        submitData({
+            reason: editorData,
+            project_pm_goal_id: projectPmGoalId,
+        });
+        setEditorData("");
+        closeModalTwo();
+    };
 
     return (
         <div style={styles.container}>
@@ -44,11 +64,16 @@ const DeadlineExplanation = ({ projectDetails }) => {
                     <p>
                         <strong>Reason</strong>
                     </p>
-                    <CKEditorComponent />
+                    <CKEditorComponent onChange={handleEditorChange} />
                 </div>
 
-                <Button variant="success" style={styles.button}>
-                    Submit
+                <Button
+                    variant="success"
+                    style={styles.button}
+                    onClick={handleSubmit}
+                    disabled={isLoading}
+                >
+                    {isLoading ? "Submitting..." : "Submit"}
                 </Button>
             </div>
         </div>

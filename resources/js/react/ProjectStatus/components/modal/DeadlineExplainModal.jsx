@@ -2,7 +2,7 @@ import React from "react";
 import ReactModal from "react-modal";
 
 import { IoClose } from "react-icons/io5";
-import CKEditorComponent from "../../../ckeditor";
+
 import DeadlineExplanation from "./DeadlineExplanation";
 
 const customStyles = {
@@ -15,7 +15,7 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "40%",
+        maxWidth: "550px",
         maxHeight: "80vh",
 
         margin: "auto auto",
@@ -24,6 +24,7 @@ const customStyles = {
 };
 
 const DeadlineExplainModal = ({
+    projectPmGoalId,
     projectDetails,
     isModalTwoOpen,
     closeModalTwo,
@@ -42,7 +43,13 @@ const DeadlineExplainModal = ({
                     marginBottom: "20px",
                 }}
             >
-                <div style={{ fontSize: "25px" }}>Deadline Explanation</div>
+                <div
+                    style={{
+                        fontSize: "25px",
+                    }}
+                >
+                    Deadline Explanation
+                </div>
 
                 <button
                     onClick={closeModalTwo}
@@ -57,7 +64,11 @@ const DeadlineExplainModal = ({
                 </button>
             </div>
 
-            <DeadlineExplanation projectDetails={projectDetails} />
+            <DeadlineExplanation
+                closeModalTwo={closeModalTwo}
+                projectPmGoalId={projectPmGoalId}
+                projectDetails={projectDetails}
+            />
         </ReactModal>
     );
 };

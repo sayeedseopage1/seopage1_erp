@@ -15,8 +15,26 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             query: (project_id) => `/account/get-pm-goal-date/${project_id}`,
             providesTags: "GET_PM_GOAL",
         }),
+
+        createDeadlineExplanationReason: build.mutation({
+            query: (data) => ({
+                url: `/account/project-status-reason-submit`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: _token,
+                },
+            }),
+            invalidatesTags: [
+                "PENDING_DEADLINE_EXPLANATION_REASON",
+                "AUTHORIZE_PARENT_TASK",
+            ],
+        }),
     }),
 });
 
-export const { useGetProjectStatusQuery, useGetPmGoalQuery } =
-    projectStatusApiSlice;
+export const {
+    useGetProjectStatusQuery,
+    useGetPmGoalQuery,
+    useCreateDeadlineExplanationReasonMutation,
+} = projectStatusApiSlice;

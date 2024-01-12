@@ -3,9 +3,10 @@ import React from "react";
 import PaginationPmGoalTable from "./PaginationPmGoalTable";
 import DeadlineExplainModal from "./DeadlineExplainModal";
 import { useAuth } from "../../../hooks/useAuth";
+import ResolveModal from "./ResolveModal";
 const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
     const auth = useAuth();
-
+    const [projectPmGoalId, setProjectPmGoalId] = React.useState(1);
     // Table styles
     const tableStyle = {
         borderCollapse: "collapse",
@@ -49,12 +50,19 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
     };
     //pagination end
 
-    //modal
+    //deadline explanation modal
     const [isModalTwoOpen, setIsModalTwoOpen] = React.useState(false);
 
     const closeModalTwo = () => {
         setIsModalTwoOpen(false);
-        setSelectedProjectName("");
+    };
+
+    //resolve modal
+
+    const [isModalThreeOpen, setIsModalThreeOpen] = React.useState(false);
+
+    const closeModalThree = () => {
+        setIsModalThreeOpen(false);
     };
 
     // Calculate the starting and ending indices for the current page
@@ -71,8 +79,8 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                         <th style={thStyle}>Goal DeadLine</th>
                         <th style={thStyle}>Duration</th>
                         <th style={thStyle}>Description</th>
-                        <th style={thStyle}>Suggestion</th>
                         <th style={thStyle}>Reason</th>
+                        <th style={thStyle}>Suggestion</th>
                         <th style={thStyle}>Action</th>
                     </tr>
                 </thead>
@@ -89,14 +97,20 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                                 <td style={thTdStyle}>
                                     {goal.description ? goal.description : "--"}
                                 </td>
-                                <td style={thTdStyle}>
-                                    {goal.reason ? goal.reason : "--"}
-                                </td>
+                                <td
+                                    style={thTdStyle}
+                                    dangerouslySetInnerHTML={{
+                                        __html: goal.reason
+                                            ? goal.reason
+                                            : "--",
+                                    }}
+                                />
+
                                 <td style={thTdStyle}>
                                     {goal.suggestion ? goal.suggestion : "--"}
                                 </td>
                                 <td style={thTdStyle}>
-                                    {auth.roleId === 4 ? (
+                                    {auth.roleId === 4 && !goal.reason ? (
                                         new Date(goal.goal_end_date) <
                                         new Date() ? (
                                             <button
@@ -105,6 +119,7 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                                                     padding: "3px",
                                                 }}
                                                 onClick={() => {
+                                                    setProjectPmGoalId(goal.id);
                                                     setIsModalTwoOpen(true);
                                                 }}
                                             >
@@ -114,7 +129,18 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                                             "N/A"
                                         )
                                     ) : (
-                                        "--"
+                                        <button
+                                            style={{
+                                                color: "blue",
+                                                padding: "3px",
+                                            }}
+                                            onClick={() => {
+                                                setIsModalThreeOpen(true);
+                                                setProjectPmGoalId(goal.id);
+                                            }}
+                                        >
+                                            Resolve
+                                        </button>
                                     )}
                                 </td>
                             </tr>
@@ -131,9 +157,17 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                 itemsPerPage={itemsPerPage}
             />
             <DeadlineExplainModal
+                projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
                 isModalTwoOpen={isModalTwoOpen}
                 closeModalTwo={closeModalTwo}
+            />
+
+            <ResolveModal
+                projectPmGoalId={projectPmGoalId}
+                projectDetails={projectDetails}
+                isModalThreeOpen={isModalThreeOpen}
+                closeModalThree={closeModalThree}
             />
         </div>
     );

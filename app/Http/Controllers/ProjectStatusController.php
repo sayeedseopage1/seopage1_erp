@@ -151,6 +151,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request){
+        
         $validator =  $request->validate([
             'reason' => 'required',
 
