@@ -113,6 +113,7 @@ use App\Models\BlogArticle;
 use App\Models\DeliverableReAuthorization;
 use App\Models\PmBasicSeo;
 use App\Models\PmBlogArticle;
+use App\Models\PmGoalSetting;
 use App\Models\PmProductCategory;
 use App\Models\PmProductDescription;
 use App\Models\PmWebContent;
@@ -135,6 +136,7 @@ use App\Notifications\UpdateClientBlogArticlesNotification;
 use App\Notifications\UpdateClientFormNotification;
 use App\Notifications\UpdateClientProductCategoryNotification;
 use App\Notifications\UpdateClientProductDescriptionNotification;
+use App\Models\ProjectPmGoal;
 
 class ProjectController extends AccountBaseController
 {
@@ -927,7 +929,7 @@ class ProjectController extends AccountBaseController
 
 
         //kpi distribution start from here
-    //    DB::beginTransaction();
+      //  DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
@@ -2134,6 +2136,31 @@ class ProjectController extends AccountBaseController
         $project->project_summary = ($request->project_summary !== '<p><br></p>') ? $request->project_summary : null;
 
         $project->save();
+       // dd($project);
+
+        // PROJECT PM GOAL SETTINGS START
+        if($project->status = 'not started'){
+            if($request->project_budget){
+                $findProject = Project::where('id',$request->project_id)->first();
+                $findDeal = Deal::where('id',$findProject->deal_id)->first();
+                if($findDeal->project_type =='fixed'){
+                    $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $request->project_budget)
+                                ->where('end_value', '>=', $request->project_budget)
+                                ->first();
+                                
+                    if($pmGoalSetting !=null){
+                        $project_status_helper = new HelperPmProjectStatusController();
+                        $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
+                    }
+                }else{                                
+                    // if($findDeal->project_type !=null){
+                        $project_status_helper = new HelperPmProjectStatusController();
+                        $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
+                    // }
+                }
+            }
+        }
+    // PROJECT PM GOAL SETTINGS END
 
        $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
         if($actions != null)
@@ -3140,6 +3167,7 @@ class ProjectController extends AccountBaseController
     public function sign(SignRequest $request, $id)
     {
      //  dd($request,$id);
+    // DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
 
         if ($this->project && $this->project->signature) {
@@ -3172,44 +3200,7 @@ class ProjectController extends AccountBaseController
         $sign->signature = $imageName;
         $sign->save();
 
-        $actions = PendingAction::where('code','SDCA')->where('past_status',0)->where('project_id',$sign->project_id)->get();
-        if($actions != null)
-        {
-        foreach ($actions as $key => $action) {
-                $project=Project::where('id',$sign->project_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $project_manager= User::where('id',$project->client_id)->first();
-                $action->authorized_by= Auth::id();
-                $action->authorized_at= Carbon::now();
-                $action->past_status = 1;
-                $action->save();
-                $project_manager= User::where('id',$project->pm_id)->first();
-                $client= User::where('id',$project->client_id)->first();
-                $authorize_by= User::where('id',$action->authorized_by)->first();
-
-                $past_action= new PendingActionPast();
-                $past_action->item_name = $action->item_name;
-                $past_action->code = $action->code;
-                $past_action->serial = $action->serial;
-                $past_action->action_id = $action->id;
-                $past_action->heading = $action->heading;
-                $past_action->message = 'Deliverables for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> were shared with the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>!';
-             //   $past_action->button = $action->button;
-                $past_action->timeframe = $action->timeframe;
-                $past_action->authorization_for = $action->authorization_for;
-                $past_action->authorized_by = $action->authorized_by;
-                $past_action->authorized_at = $action->authorized_at;
-                $past_action->expired_status = $action->expired_status;
-                $past_action->past_status = $action->past_status;
-                $past_action->project_id = $action->project_id;
-                $past_action->task_id = $action->task_id;
-                $past_action->client_id = $action->client_id;
-                $past_action->milestone_id = $action->milestone_id;
-                $past_action->save();
-
-
-        }
-    }
+      
 
 
 
@@ -5908,7 +5899,7 @@ public function updatePmBasicSEO(Request $request){
             $project->deliverable_authorization= 1;
             $project->save();
         }
-        $actions = PendingAction::where('code','DGA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+        $actions = PendingAction::whereIn('code',['DGA','DOA','DDA'])->where('past_status',0)->where('project_id',$request->project_id)->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
@@ -5940,7 +5931,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
 
         }

@@ -879,6 +879,8 @@ $this->first_attempt_approve_task_in_this_month_client_data
 
         $differenceInDays= $differenceInDays+1;
         $this->average_in_progress_date_range = $total_in_progress_date_range / $differenceInDays;
+
+        
         $this->tasks = Task::select('tasks.id','tasks.heading','projects.project_name','projects.id as ProjectId','client.name as clientName',
         'client.id as client_id','tasks.client_name as task_client_name','tasks.board_column_id',
         'taskboard_columns.column_name','taskboard_columns.label_color',

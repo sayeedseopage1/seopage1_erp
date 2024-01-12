@@ -31,6 +31,11 @@ use Notification;
 use App\Notifications\ClientDeliverableSignNotification;
 use App\Models\User;
 use App\Models\AuthorizationAction;
+use App\Models\ProjectPmGoal;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
+use Auth;
+use App\Models\Task;
 
 
 class PublicUrlController extends Controller
@@ -90,6 +95,7 @@ class PublicUrlController extends Controller
     public function projectSign(SignRequest $request, $id)
     {
         // dd($request->all());
+       // DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
         //dd($this->project);
 
@@ -151,18 +157,71 @@ class PublicUrlController extends Controller
         $user->save();
 
         }
+        $actions = PendingAction::where('code','SDCA')->where('past_status',0)->where('project_id',$sign->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $project=Project::where('id',$sign->project_id)->first();
+                
+               
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = 'Deliverables for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> were shared with the client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> by PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>!';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+
+        }
+    }
+   // dd("dnkasmdasl");
+    $current_date = Carbon::now();
+    $pm_goal = ProjectPmGoal::where('project_id',$this->project->id)->where('goal_code','DCS')->first();
+    if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
+    {
+        $pm_goal->goal_status = 1;
+        
+       
+        $task_count= Task::where('project_id',$this->project->id)->count();
+            if($task_count > 0)
+                {
+                    $pm_goal->description = 'Deliverables is signed and tasks has been created properly';
+
+                }elseif($task_count < 1)
+                {
+                    $pm_goal->description = 'Deliverables is signed and tasks has not been created properly';
+
+                }
+                $pm_goal->save();
+        
+
+    }
+
 
        // dd($sign,$client,$deal_id);
 
-        $authorization_action= AuthorizationAction::where('project_id',$this->project->id)->where('type','deliverable_modification_by_client')->first();
-        if($authorization_action != null)
-        {
-            $action=  AuthorizationAction::find($authorization_action->id);
-            $action->status= 1;
-            $action->authorization_by= $this->project->pm_id;
-            $action->save();
-
-        }
+       
         $project = Project::findOrFail($this->project->id);
         $global = $settings = global_setting();
 

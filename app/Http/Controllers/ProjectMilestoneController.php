@@ -37,6 +37,7 @@ use App\Notifications\MilestoneCancelNotification;
 use App\Notifications\MilestoneCancelApproveNotification;
 use App\Notifications\ProjectCompleteNotification;
 use DateTime;
+use App\Models\ProjectPmGoal;
 class ProjectMilestoneController extends AccountBaseController
 {
 
