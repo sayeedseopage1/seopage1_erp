@@ -716,10 +716,11 @@ class DashboardController extends AccountBaseController
                                 ->first();
         $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
         $createdAt = Carbon::parse($userClockIn->created_at);
+        
         $logStatus = true;
 
         $minimum_log_hours = 0;
-
+         
         if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
             $minimum_log_hours = 270;
             if($userTotalMin < $minimum_log_hours){
@@ -732,7 +733,9 @@ class DashboardController extends AccountBaseController
             }
         }
 
+
         $logStatus = $userDeveloperHoursTrack ? true : $logStatus ;
+
     }
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;

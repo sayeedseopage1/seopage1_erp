@@ -198,6 +198,8 @@ use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
+use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\ProjectStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -946,8 +948,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
+
     Route::get('get-all-leads', [LeadController::class,'getLead']);
     Route::get('export-lead-data', [LeadController::class,'exportLead']);
+
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
     Route::resource('digital-marketing-lead',DMLeadController::class);
@@ -1063,6 +1067,24 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');
 
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
+
+    //Pm goal Settings
+    Route::resource('pm-goal-setting', PmGoalSetingController::class);
+    Route::post('pm-goal-setting-update',[PmGoalSetingController::class,'pmGoalUpdate'])->name('pm-goal-setting-update');
+
+    /* PM PROJECT STATUS */
+    Route::resource('project-status',ProjectStatusController::class);
+    Route::get('get-project-status-date', [ProjectStatusController::class, 'allProjectStatus']);
+    Route::get('get-pm-goal-date/{id}', [ProjectStatusController::class, 'allProjectPmGoal']);
+    Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
+    Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
+    Route::post('project-status-reason-submit', [ProjectStatusController::class, 'projectStatusReason'])->name('project-status-reason-submit');
+    Route::post('project-status-resolve-submit', [ProjectStatusController::class, 'projectStatusResolve'])->name('project-status-resolve-submit');
+    Route::get('project-status-extend-request/{id}', [ProjectStatusController::class, 'projectStatusExtendRequest'])->name('project-status.extendRequest');
+    Route::post('pm-extend-request-store', [ProjectStatusController::class, 'storePMExtendRequest'])->name('store_pm_extend_request');
+    Route::get('project-status-review-extend-request/{id}', [ProjectStatusController::class, 'reviewExtendRequest'])->name('project-status.reviewExtendRequest');
+    Route::post('project-status-accept-extend-request', [ProjectStatusController::class, 'acceptOrDenyExtendRequest'])->name('project-status-extend-request-accept');
+
     //qualified sales Settings
 
 

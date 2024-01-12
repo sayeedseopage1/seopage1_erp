@@ -464,7 +464,7 @@ class ContractController extends AccountBaseController
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
         $aw_dt = date('Y-m-d H:i:s', $award_date);
-
+        
         $validated = $request->validate([
             //            'user_name' => 'required',
             'client_name' => 'required',
@@ -573,6 +573,7 @@ class ContractController extends AccountBaseController
             $deal->client_badge = 'new client';
         }
         $deal->save();
+       // dd($deal);
         //$lead_con_id = Lead::where('id', $request->lead_id)->first();
         if (Auth::id() != null) {
             $agent_id = SalesCount::where('user_id', Auth::id())->first();
