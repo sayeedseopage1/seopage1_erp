@@ -951,7 +951,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
     Route::resource('digital-marketing-lead',DMLeadController::class);
-    Route::post('/dm-lead-source-store', [DMLeadController::class, 'storeDmLeadSource'])->name('store-dm-lead-source');
+    Route::post('/dm-lead-store', [DMLeadController::class, 'storeDmLead']);
     Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
     Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
     Route::get('get-all-dm-leads', [DMLeadController::class,'getDmLead']);

@@ -17,6 +17,8 @@ import CKEditor from "../../../../ckeditor/index";
 import Select from "../../../../global/Select";
 import axios from "axios";
 import Button from "../../../../global/Button";
+import { useStoreDmLeadMutation } from "../../../../services/api/dmLeadsApiSlice";
+import { toast } from "react-toastify";
 
 // initial form data
 const initialData = {
@@ -31,6 +33,7 @@ const initialData = {
     original_currency_id: "",
     description: "",
     cover_letter: "",
+    total_spent: "",
     // project_id: "",
     // project_name: "",
     // bidding_minutes: "",
@@ -44,7 +47,7 @@ const initialData = {
     // amount: "",
 };
 
-const UpWorkModal = ({ close }) => {
+const UpWorkModal = ({ close, source }) => {
     const [formData, setFormData] = React.useState(initialData);
     const [error, setError] = React.useState(initialData);
     const [currency, setCurrency] = React.useState(null);
@@ -55,7 +58,7 @@ const UpWorkModal = ({ close }) => {
 
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
-    // const [leadCreate, { isLoading }] = useLeadCreateMutation();
+    const [storeDmLead, { isLoading }] = useStoreDmLeadMutation();
 
     React.useEffect(() => {
         axios.get(`/account/get-all-country`).then(({ data }) => {
@@ -90,7 +93,7 @@ const UpWorkModal = ({ close }) => {
     }, [formData.project_type]);
 
     React.useEffect(() => {
-        formData.project_type = "fixed";
+        setFormData(prev => ({...prev, project_type: "fixed"}));
     }, []);
 
     // handle submission
@@ -126,7 +129,7 @@ const UpWorkModal = ({ close }) => {
                     } else if (key === "deadline") {
                         if (!formData[key]) {
                             _error[key] =
-                                "Please select project deadline from Freelancer.com!";
+                                "Please select project deadline from Upwork.com!";
                         }
                     } else if (key === "bid_value") {
                         if (!formData[key]) {
@@ -186,6 +189,10 @@ const UpWorkModal = ({ close }) => {
                         if (!formData[key]) {
                             _error[key] = "Please select client country!";
                         }
+                    } else if (key === "total_spent") {
+                        if (!formData[key]) {
+                            _error[key] = "Please enter total spent!";
+                        }
                     }
                 }
             }
@@ -206,9 +213,9 @@ const UpWorkModal = ({ close }) => {
         }
 
         try {
-            const res = await leadCreate(formData).unwrap();
+            const res = await storeDmLead({...formData,lead_source:source}).unwrap();
             // console.log(res);
-            if (res.status === 400) {
+            if (res?.status === 400) {
                 const _serverError = {};
                 const _errorMssg = { ...res?.message?.customMessages };
 
@@ -229,7 +236,7 @@ const UpWorkModal = ({ close }) => {
 
     // handle close form
     const handleClose = () => {
-        setFormData({ initialData });
+        setFormData({ ...initialData });
         setCurrency(null);
         setClientCountry(null);
         setDeadline(null);
@@ -291,7 +298,7 @@ const UpWorkModal = ({ close }) => {
                                 name="client_name"
                                 value={formData.client_name}
                                 onChange={handleInputChange}
-                                placeholder="Enter project name"
+                                placeholder="Type project name from Upwork.com"
                             />
                             {error?.client_name ? (
                                 <ErrorText> {error?.client_name} </ErrorText>
@@ -389,7 +396,7 @@ const UpWorkModal = ({ close }) => {
                                 name="project_link"
                                 value={formData.project_link}
                                 onChange={handleInputChange}
-                                placeholder="Enter project link"
+                                placeholder="Copy the project URL from the browser and paste it here."
                             />
                             {error?.project_link ? (
                                 <ErrorText> {error?.project_link} </ErrorText>
@@ -471,7 +478,7 @@ const UpWorkModal = ({ close }) => {
                                         onChange={(date) => {
                                             setDeadline(date);
                                         }}
-                                        placeholderText="Project Deadline"
+                                        placeholderText="dd-mm-yyyy"
                                     />
                                     {error?.deadline ? (
                                         <ErrorText>
@@ -667,13 +674,13 @@ const UpWorkModal = ({ close }) => {
                             </Label>
                             <Input
                                 type="number"
-                                name="value"
-                                value={formData.value}
+                                name="total_spent"
+                                value={formData.total_spent}
                                 onChange={handleInputChange}
                                 placeholder="Enter Total Spent"
                             />
-                            {error?.value ? (
-                                <ErrorText> {error?.value} </ErrorText>
+                            {error?.total_spent ? (
+                                <ErrorText> {error?.total_spent} </ErrorText>
                             ) : (
                                 <></>
                             )}
@@ -735,7 +742,11 @@ const UpWorkModal = ({ close }) => {
 
                     {/* Submit */}
                     <div className="col-12 d-flex justify-content-end">
-                        <Button onClick={handleSubmit}>
+                        <Button
+                            isLoading={isLoading}
+                            loaderTitle="Submitting..."
+                            onClick={handleSubmit}
+                        >
                             Submit
                         </Button>
                     </div>

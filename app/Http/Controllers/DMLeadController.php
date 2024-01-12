@@ -149,31 +149,20 @@ class DMLeadController extends AccountBaseController
 
     }
 
-    public function storeDmLeadSource(Request $request){
-        $request->validate([
-            'lead_source' => 'required',
-        ], [
-            'lead_source.required' => 'Please select lead source!',
-        ]);
-
-        $lead_s = new Lead();
-        $lead_s->lead_source = $request->lead_source;
-        $lead_s->save();
-
-        return response()->json(['status'=>200]);
-
-    }
-
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request){
+        //
+    }
+    public function storeDmLead(Request $request)
     {
+        // dd($request->all());
         if ($request->project_type !='hourly'){
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 'client_name' => 'required|max:255',
                 'country' => 'required',
                 'project_link' => 'required|url',
@@ -225,6 +214,10 @@ class DMLeadController extends AccountBaseController
             ]);
         }
 
+        if ($validator->fails()) {
+            return response()->json(['status'=>400,'message'=> $validator]);
+        }
+
         if (Auth::user()->role_id == 7) {
 
             $sales_ex= SalesCount::where('user_id',Auth::id())->first();
@@ -250,12 +243,13 @@ class DMLeadController extends AccountBaseController
             $sales_count->save();
 
         }
-        $lead = Lead::where('id',$request->lead_id)->first();
+        $lead = new Lead();
         $lead->client_name= $request->client_name;
         $lead->project_id= $request->project_id;
         $lead->project_link= $request->project_link;
         $lead->actual_value= $request->value;
         $lead->deadline= $request->deadline;
+        $lead->lead_source= $request->lead_source;
         $currency= Currency::where('id',$request->original_currency_id)->first();
         $lead->value= ($request->value)/$currency->exchange_rate;
         $lead->original_currency_id =$request->original_currency_id;

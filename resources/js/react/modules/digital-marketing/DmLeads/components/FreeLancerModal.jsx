@@ -18,12 +18,13 @@ import CKEditor from "../../../../ckeditor/index";
 import Button from "../../../../global/Button";
 import axios from "axios";
 import Select from "../../../../global/Select";
+import { useStoreDmLeadMutation } from "../../../../services/api/dmLeadsApiSlice";
+import { toast } from "react-toastify";
 
 // initial form data
 const initialData = {
     client_name: "",
     project_id: "",
-    country: "",
     project_link: "",
     deadline: "",
     bid_value: "",
@@ -31,6 +32,7 @@ const initialData = {
     value: "",
     project_type: "",
     original_currency_id: "",
+    country: "",
     description: "",
     cover_letter: "",
     // project_name: "",
@@ -45,7 +47,7 @@ const initialData = {
     // amount: "",
 };
 
-const FreeLancerModal = ({ close }) => {
+const FreeLancerModal = ({ close, source }) => {
     const [formData, setFormData] = React.useState(initialData);
     const [error, setError] = React.useState(initialData);
     const [currency, setCurrency] = React.useState(null);
@@ -56,7 +58,7 @@ const FreeLancerModal = ({ close }) => {
 
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
-    // const [leadCreate, { isLoading }] = useLeadCreateMutation();
+    const [storeDmLead, { isLoading }] = useStoreDmLeadMutation();
 
     React.useEffect(() => {
         axios.get(`/account/get-all-country`).then(({ data }) => {
@@ -91,7 +93,7 @@ const FreeLancerModal = ({ close }) => {
     }, [formData.project_type]);
 
     React.useEffect(() => {
-        formData.project_type = "fixed";
+        setFormData(prev => ({...prev, project_type: "fixed"}));
     }, []);
 
     // handle submission
@@ -207,9 +209,12 @@ const FreeLancerModal = ({ close }) => {
         }
 
         try {
-            const res = await leadCreate(formData).unwrap();
+            const res = await storeDmLead({
+                ...formData,
+                lead_source: source,
+            }).unwrap();
             // console.log(res);
-            if (res.status === 400) {
+            if (res?.status === 400) {
                 const _serverError = {};
                 const _errorMssg = { ...res?.message?.customMessages };
 
@@ -230,7 +235,7 @@ const FreeLancerModal = ({ close }) => {
 
     // handle close form
     const handleClose = () => {
-        setFormData({ initialData });
+        setFormData({ ...initialData });
         setCurrency(null);
         setClientCountry(null);
         setDeadline(null);
@@ -292,7 +297,7 @@ const FreeLancerModal = ({ close }) => {
                                 name="client_name"
                                 value={formData.client_name}
                                 onChange={handleInputChange}
-                                placeholder="Enter project name"
+                                placeholder="Type project name from Freelancer.com"
                             />
                             {error?.client_name ? (
                                 <ErrorText> {error?.client_name} </ErrorText>
@@ -301,7 +306,7 @@ const FreeLancerModal = ({ close }) => {
                             )}
                         </InputGroup>
                     </div>
-                    
+
                     {/* Project Id */}
                     <div className="col-md-6">
                         <InputGroup>
@@ -314,7 +319,7 @@ const FreeLancerModal = ({ close }) => {
                                 name="project_id"
                                 value={formData.project_id}
                                 onChange={handleInputChange}
-                                placeholder="Enter project id"
+                                placeholder="Type project id from Freelancer.com"
                             />
                             {error?.project_id ? (
                                 <ErrorText> {error?.project_id} </ErrorText>
@@ -336,7 +341,7 @@ const FreeLancerModal = ({ close }) => {
                                 name="project_link"
                                 value={formData.project_link}
                                 onChange={handleInputChange}
-                                placeholder="Enter project link"
+                                placeholder="Copy the project URL from the browser and paste it here."
                             />
                             {error?.project_link ? (
                                 <ErrorText> {error?.project_link} </ErrorText>
@@ -418,7 +423,7 @@ const FreeLancerModal = ({ close }) => {
                                         onChange={(date) => {
                                             setDeadline(date);
                                         }}
-                                        placeholderText="Project Deadline"
+                                        placeholderText="dd-mm-yyyy"
                                     />
                                     {error?.deadline ? (
                                         <ErrorText>
@@ -604,7 +609,7 @@ const FreeLancerModal = ({ close }) => {
                             )}
                         </InputGroup>
                     </div>
-                    
+
                     {/* Client Country */}
                     <div className="col-md-4">
                         <InputGroup>
@@ -714,7 +719,13 @@ const FreeLancerModal = ({ close }) => {
 
                     {/* Submit */}
                     <div className="col-12 d-flex justify-content-end">
-                        <Button onClick={handleSubmit}>Submit</Button>
+                        <Button
+                            isLoading={isLoading}
+                            loaderTitle="Submitting..."
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button>
                     </div>
                 </div>
             </form>

@@ -146,9 +146,9 @@ const LeadAddModalContainer = ({ isOpen, close }) => {
                                     }
                                     else{
                                       if (source === "Upwork.com") {
-                                        return <UpWorkModal close={close}/>
+                                        return <UpWorkModal close={close} source={source}/>
                                       }else{
-                                        return <FreeLancerModal close={close}/>
+                                        return <FreeLancerModal close={close} source={source}/>
                                       }
                                     }
                                 })()}
