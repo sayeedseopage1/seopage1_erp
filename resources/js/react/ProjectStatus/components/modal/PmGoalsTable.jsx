@@ -81,6 +81,7 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                         <th style={thStyle}>Description</th>
                         <th style={thStyle}>Reason</th>
                         <th style={thStyle}>Suggestion</th>
+                        <th style={thStyle}>Comment</th>
                         <th style={thStyle}>Action</th>
                     </tr>
                 </thead>
@@ -106,42 +107,94 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                                     }}
                                 />
 
+                                <td
+                                    style={thTdStyle}
+                                    dangerouslySetInnerHTML={{
+                                        __html: goal.suggestion
+                                            ? goal.suggestion
+                                            : "--",
+                                    }}
+                                />
+
+                                <td
+                                    style={thTdStyle}
+                                    dangerouslySetInnerHTML={{
+                                        __html: goal.admin_comment
+                                            ? goal.admin_comment
+                                            : "--",
+                                    }}
+                                />
                                 <td style={thTdStyle}>
-                                    {goal.suggestion ? goal.suggestion : "--"}
-                                </td>
-                                <td style={thTdStyle}>
-                                    {auth.roleId === 4 && !goal.reason ? (
-                                        new Date(goal.goal_end_date) <
-                                        new Date() ? (
-                                            <button
-                                                style={{
-                                                    color: "blue",
-                                                    padding: "3px",
-                                                }}
-                                                onClick={() => {
-                                                    setProjectPmGoalId(goal.id);
-                                                    setIsModalTwoOpen(true);
-                                                }}
-                                            >
-                                                Deadline Explanation
-                                            </button>
-                                        ) : (
-                                            "N/A"
-                                        )
-                                    ) : (
-                                        <button
-                                            style={{
-                                                color: "blue",
-                                                padding: "3px",
-                                            }}
-                                            onClick={() => {
-                                                setIsModalThreeOpen(true);
-                                                setProjectPmGoalId(goal.id);
-                                            }}
-                                        >
-                                            Resolve
-                                        </button>
-                                    )}
+                                    {(() => {
+                                        if (auth.roleId === 4) {
+                                            if (!goal.reason) {
+                                                if (
+                                                    new Date(
+                                                        goal.goal_end_date
+                                                    ) < new Date()
+                                                ) {
+                                                    return (
+                                                        <button
+                                                            style={{
+                                                                color: "blue",
+                                                                padding: "3px",
+                                                            }}
+                                                            onClick={() => {
+                                                                setProjectPmGoalId(
+                                                                    goal.id
+                                                                );
+                                                                setIsModalTwoOpen(
+                                                                    true
+                                                                );
+                                                            }}
+                                                        >
+                                                            Deadline Explanation
+                                                        </button>
+                                                    );
+                                                } else {
+                                                    return "N/A";
+                                                }
+                                            }
+                                        } else if (
+                                            auth.roleId === 1 &&
+                                            goal.reason
+                                        ) {
+                                            if (
+                                                goal.admin_comment &&
+                                                goal.suggestion
+                                            ) {
+                                                return (
+                                                    <button
+                                                        style={{
+                                                            padding: "3px",
+                                                        }}
+                                                    >
+                                                        Resolved
+                                                    </button>
+                                                );
+                                            }
+                                            return (
+                                                <button
+                                                    style={{
+                                                        color: "blue",
+                                                        padding: "3px",
+                                                    }}
+                                                    onClick={() => {
+                                                        setIsModalThreeOpen(
+                                                            true
+                                                        );
+                                                        setProjectPmGoalId(
+                                                            goal.id
+                                                        );
+                                                    }}
+                                                >
+                                                    Resolve
+                                                </button>
+                                            );
+                                        }
+
+                                        return "--"; // Default case
+                                    })()}
                                 </td>
                             </tr>
                         ))}

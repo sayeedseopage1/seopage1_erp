@@ -1073,8 +1073,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('get-pm-goal-date/{id}', [ProjectStatusController::class, 'allProjectPmGoal']);
     Route::get('project-status-calendar', [ProjectStatusController::class, 'projectStatusCalendar'])->name('project-status-calendar');
     Route::get('calendar-show/{id}', [ProjectStatusController::class, 'calendarShow'])->name('calendar.show');
-    Route::post('project-status-reason-submit', [ProjectStatusController::class, 'projectStatusReason'])->name('project-status-reason-submit');
-    Route::post('project-status-resolve-submit', [ProjectStatusController::class, 'projectStatusResolve'])->name('project-status-resolve-submit');
+    Route::post('project-status-reason-submit', [ProjectStatusController::class, 'projectStatusReason']);
+    Route::post('project-status-resolve-submit', [ProjectStatusController::class, 'projectStatusResolve']);
     Route::get('project-status-extend-request/{id}', [ProjectStatusController::class, 'projectStatusExtendRequest'])->name('project-status.extendRequest');
     Route::post('pm-extend-request-store', [ProjectStatusController::class, 'storePMExtendRequest'])->name('store_pm_extend_request');
     Route::get('project-status-review-extend-request/{id}', [ProjectStatusController::class, 'reviewExtendRequest'])->name('project-status.reviewExtendRequest');

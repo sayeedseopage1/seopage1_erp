@@ -1,27 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 import { IoClose } from "react-icons/io5";
 import CKEditorComponent from "../../../ckeditor";
 import { Flex } from "../table/ui";
-
+import { useCreateResolveSuggestionCommentMutation } from "../../../services/api/projectStatusApiSlice";
 const ResolveModal = ({
     projectPmGoalId,
     projectDetails,
     isModalThreeOpen,
     closeModalThree,
 }) => {
-    const {
-        project_name,
-        clientName,
-        project_budget,
-        project_category,
-        goal_start_date,
-        goal_end_date,
-        description,
-        reason,
-    } = projectDetails;
+    const [suggestionData, setSuggestionData] = useState("");
+    const [commentData, setCommentData] = useState("");
+    const [ratingValue, setRatingValue] = useState("1");
+    const [submitData, { isLoading }] =
+        useCreateResolveSuggestionCommentMutation();
 
+    const handleSuggestionChange = (e, editor) => {
+        setSuggestionData(editor.getData());
+    };
+    const handleCommentChange = (e, editor) => {
+        setCommentData(editor.getData());
+    };
+    const handleRatingValueChange = (e) => {
+        setRatingValue(e.target.value);
+    };
+
+    const handleSubmit = () => {
+        submitData({
+            project_pm_goal_id: projectPmGoalId,
+            rating: ratingValue,
+            suggestion: suggestionData,
+            comment: commentData,
+        });
+
+        closeModalThree();
+    };
+
+    console.log("s r c", suggestionData, ratingValue, commentData);
     return (
         <ReactModal
             style={customStyles}
@@ -60,46 +77,53 @@ const ResolveModal = ({
             <section style={styles.container}>
                 <div>
                     <p>
-                        <strong>Project Name</strong> {project_name}
+                        <strong>Project Name</strong>{" "}
+                        {projectDetails.project_name}
                     </p>
                     <p>
-                        <strong>Client:</strong> {clientName}
+                        <strong>Client:</strong> {projectDetails.clientName}
                     </p>
                     <p>
-                        <strong>Project Budget:</strong> ${project_budget}
+                        <strong>Project Budget:</strong> $
+                        {projectDetails.project_budget}
                     </p>
                     <p>
-                        <strong>Project Category:</strong> {project_category}
+                        <strong>Project Category:</strong>{" "}
+                        {projectDetails.project_category}
                     </p>
                     <p>
                         <strong>Start Date:</strong>{" "}
-                        {new Date(goal_start_date).toLocaleDateString()}
+                        {new Date(
+                            projectDetails.goal_start_date
+                        ).toLocaleDateString()}
                     </p>
                     <p>
                         <strong>Deadline:</strong>{" "}
-                        {new Date(goal_end_date).toLocaleDateString()}
+                        {new Date(
+                            projectDetails.goal_end_date
+                        ).toLocaleDateString()}
                     </p>
                     <p>
-                        <strong>Description:</strong> {description}
+                        <strong>Description:</strong>{" "}
+                        {projectDetails.description}
                     </p>
                     <Flex justifyContent="left">
                         <strong>Reason: </strong>
                         <span
                             dangerouslySetInnerHTML={{
-                                __html: reason ? reason : "--",
+                                __html: projectDetails.reason
+                                    ? projectDetails.reason
+                                    : "--",
                             }}
                         />
                     </Flex>
 
-                    <Flex
-                        justifyContent="left"
-                        style={{ marginBottom: "10px" }}
-                    >
+                    <Flex justifyContent="left" style={{ marginTop: "10px" }}>
                         <div htmlFor="itemsPerPage">Rating:</div>
                         <select
                             id="itemsPerPage"
-                            // value={itemsPerPage}
-                            // onChange={handleItemsPerPageChange}
+                            value={ratingValue}
+                            onChange={handleRatingValueChange}
                         >
                             {[1, 2, 3, 4, 5].map((option) => (
                                 <option key={option} value={option}>
@@ -113,25 +137,22 @@ const ResolveModal = ({
                         <p>
                             <strong>Suggestion:</strong>
                         </p>
-                        <CKEditorComponent /* onChange={handleEditorChange} */
-                        />
+                        <CKEditorComponent onChange={handleSuggestionChange} />
                     </div>
                     <div style={styles.reasonContainer}>
                         <p>
                             <strong>Comment:</strong>
                         </p>
-                        <CKEditorComponent /* onChange={handleEditorChange} */
-                        />
+                        <CKEditorComponent onChange={handleCommentChange} />
                     </div>
 
                     <Button
                         variant="success"
                         style={styles.button}
-                        // onClick={handleSubmit}
-                        // disabled={isLoading}
+                        onClick={handleSubmit}
+                        disabled={isLoading}
                     >
-                        {/* {isLoading ? "Submitting..." : "Submit"} */}
-                        Submit
+                        {isLoading ? "Submitting..." : "Submit"}
                     </Button>
                 </div>
             </section>

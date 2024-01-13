@@ -30,6 +30,23 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
                 "AUTHORIZE_PARENT_TASK",
             ],
         }),
+        createResolveSuggestionComment: build.mutation({
+            query: (data) => ({
+                url: `/account/project-status-resolve-submit`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: _token,
+                },
+                headers: {
+                    _token: _token,
+                },
+            }),
+            invalidatesTags: [
+                "PENDING_RESOLVE_SUGGESTION_COMMENT",
+                "AUTHORIZE_PARENT_TASK",
+            ],
+        }),
     }),
 });
 
@@ -37,4 +54,5 @@ export const {
     useGetProjectStatusQuery,
     useGetPmGoalQuery,
     useCreateDeadlineExplanationReasonMutation,
+    useCreateResolveSuggestionCommentMutation,
 } = projectStatusApiSlice;
