@@ -4,6 +4,7 @@ import ReactModal from "react-modal";
 import { IoClose } from "react-icons/io5";
 
 import DeadlineExplanation from "./DeadlineExplanation";
+import { Flex } from "../table/ui";
 
 const customStyles = {
     overlay: {
@@ -15,8 +16,8 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "550px",
-        maxHeight: "500px",
+        maxWidth: "600px",
+        maxHeight: "550px",
 
         margin: "auto auto",
         padding: "20px",

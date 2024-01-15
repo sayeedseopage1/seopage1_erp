@@ -88,9 +88,8 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                     </p>
 
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <div htmlFor="itemsPerPage">Extended Days:</div>
+                        <strong>Extended Days:</strong>
                         <input
-                            id="itemsPerPage"
                             value={ratingValue}
                             onChange={handleRatingValueChange}
                         ></input>
