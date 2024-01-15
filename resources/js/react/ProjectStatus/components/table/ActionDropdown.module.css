@@ -20,3 +20,30 @@
 .dropdownItem:hover{
   cursor: pointer;
 }
+
+
+.modalOverlay {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.modalOverlay--after-open {
+  opacity: 1;
+}
+
+.modalOverlay--before-close {
+  opacity: 0;
+}
+
+.modalContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}

@@ -40,7 +40,9 @@ const ProjectStatus = () => {
         data: pmGoalData,
         isFetching: isFetchingPmGoal,
         refetch: refetchPmGoal,
-    } = useGetPmGoalQuery(projectId);
+    } = useGetPmGoalQuery(projectId, {
+        refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
+    });
 
     const leads = data?.data;
     const pmGoal = pmGoalData?.data;
@@ -139,6 +141,8 @@ const ProjectStatus = () => {
             />
 
             <ProjectModal
+                isLoading={isFetchingPmGoal}
+                onClick={refetchPmGoal}
                 isFetchingPmGoal={isFetchingPmGoal}
                 pmGoal={pmGoal}
                 isOpen={isModalOneOpen}

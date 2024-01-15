@@ -64,7 +64,22 @@ const DeadlineExplanation = ({
                     <p>
                         <strong>Reason</strong>
                     </p>
-                    <CKEditorComponent onChange={handleEditorChange} />
+
+                    <div
+                        style={{
+                            border: "1px solid #ccc",
+                            borderRadius: "5px",
+                        }}
+                    >
+                        <div
+                            style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        >
+                            <CKEditorComponent onChange={handleEditorChange} />
+                        </div>
+                    </div>
                 </div>
 
                 <Button

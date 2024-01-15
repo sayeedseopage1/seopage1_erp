@@ -2,6 +2,7 @@ import React from "react";
 import ReactModal from "react-modal";
 import PMGoalsTable from "./PmGoalsTable";
 import { IoClose } from "react-icons/io5";
+import RefreshButton from "../RefreshButton";
 
 const customStyles = {
     overlay: {
@@ -14,13 +15,15 @@ const customStyles = {
     content: {
         zIndex: 9999999,
         maxWidth: "90%",
-        maxHeight: "50vh",
+        maxHeight: "500px",
         margin: "auto auto",
         padding: "20px",
     },
 };
 
 const ProjectModal = ({
+    onClick,
+    isLoading,
     projectDetails,
     isFetchingPmGoal,
     pmGoal,
@@ -42,7 +45,7 @@ const ProjectModal = ({
                 }}
             >
                 <div style={{ fontSize: "25px" }}> Goal Details</div>
-                <button
+                {/* <button
                     onClick={closeModal}
                     style={{
                         backgroundColor: "red",
@@ -52,7 +55,9 @@ const ProjectModal = ({
                     }}
                 >
                     <IoClose />
-                </button>
+                </button> */}
+
+                <RefreshButton onClick={onClick} isLoading={isLoading} />
             </div>
 
             <PMGoalsTable

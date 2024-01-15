@@ -38,7 +38,6 @@ const ResolveModal = ({
         closeModalThree();
     };
 
-    console.log("s r c", suggestionData, ratingValue, commentData);
     return (
         <ReactModal
             style={customStyles}
@@ -137,13 +136,30 @@ const ResolveModal = ({
                         <p>
                             <strong>Suggestion:</strong>
                         </p>
-                        <CKEditorComponent onChange={handleSuggestionChange} />
+                        <div
+                            style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        >
+                            <CKEditorComponent
+                                onChange={handleSuggestionChange}
+                            />
+                        </div>
                     </div>
                     <div style={styles.reasonContainer}>
                         <p>
                             <strong>Comment:</strong>
                         </p>
-                        <CKEditorComponent onChange={handleCommentChange} />
+
+                        <div
+                            style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                            }}
+                        >
+                            <CKEditorComponent onChange={handleCommentChange} />
+                        </div>
                     </div>
 
                     <Button
@@ -171,7 +187,7 @@ const customStyles = {
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        maxHeight: "80vh",
+        maxHeight: "700px",
 
         margin: "auto auto",
         padding: "20px",
