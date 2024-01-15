@@ -333,43 +333,70 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('account-unverified', [DashboardController::class, 'accountUnverified'])->name('account_unverified');
     Route::get('checklist', [DashboardController::class, 'checklist'])->name('checklist');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // admin advance dashboard
     Route::get('dashboard-advanced', [DashboardController::class, 'advancedDashboard'])->name('dashboard.advanced');
+
+    //dashboard pm performance
     Route::get('dashboard-pm-performance/{id}', [DashboardController::class, 'pmPerformance'])->name('pm-performance');
     Route::get('dashboard-core-metric', [DashboardController::class, 'coreMetric'])->name('dashboard.core.metric');
     Route::put('update-core-metric/{id}', [DashboardController::class, 'updateCoreMetric'])->name('update-core-metrics');
+
     Route::post('dashboard-advanced/show-project-manager-details', [DashboardController::class, 'projectManageDetalsOnAdvanceDashboard'])->name('dashboard.projectManageDetalsOnAdvanceDashboard');
     Route::post('dashboard/widget/{dashboardType}', [DashboardController::class, 'widget'])->name('dashboard.widget');
     Route::post('dashboard/week-timelog', [DashboardController::class, 'weekTimelog'])->name('dashboard.week_timelog');
+    //lead developer dashboard
     Route::get('dashboard-lead-dev-performance/{id}', [DashboardController::class, 'leadDevPerformance'])->name('lead-dev-performance');
+    //developer dashboard
     Route::get('dashboard-developer-performance/{id}', [DashboardController::class, 'devPerformance'])->name('dev-performance');
+    //sales dashboard
     Route::get('dashboard-sales-performance/{id}', [DashboardController::class, 'salesPerformance'])->name('sales-performance');
 
+    //clockin clock out routes
     Route::get('attendances/clock-in-modal', [DashboardController::class, 'clockInModal'])->name('attendances.clock_in_modal');
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
+
+    //pm core metrics cycle explanation route
     Route::get('dashboard/pm-cycle-explanation', [DashboardController::class, 'pmDashboardExplanation'])->name('pm-dashboard-explanation');
+    //task history route
     Route::get('task_history_dashboard/{id}', [DashboardController::class, 'task_history'])->name('task_history_dashboard');
+
+    //task revision route
     Route::get('task_revision_dashboard/{id}', [DashboardController::class, 'task_revision'])->name('revision-count-dashboard');
     // Route::resource('points/', PointsController::class)->only
-
+    // filters route
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
+    //employee filter
     Route::get('/menu/filter/get-employee', [PointsController::class, 'get_employe_by_filter_options']);
+    //sales point routes
     Route::post('/point-table-data', [PointsController::class, 'get_point_table_data']);
+    //search bar routes
     Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
+    //sales points all routes
     Route::get('/points/{any?}', [PointsController::class, 'index'])->where('any', '.*')->name('points.index');
+
+    //sales incentive points
     Route::post('/incentives-json/get', [IncentiveController::class, 'index_json'])->name('incentives.json');
+    //sales incentive points disbursed amount
     Route::get('/incentives/disbursed-amounts/disbursed-get', [IncentiveController::class, 'DisbursedAmount'])->name('disbursed-amount');
+    //sales incentives help amount
     Route::get('/incentives/held-amounts/held-get', [IncentiveController::class, 'HeldAmount'])->name('held-amount');
     Route::get('/incentives/{any?}/', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
 
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
+    //pending action live
     Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
-
+    //pending action expired
     Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
+
+    //pending action past
     Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
+    //delete staging sites route
     Route::post('delete-staging-site', [PendingActionController::class, 'DeleteStagingSite'])->name('delete-staging');
+    //lead developer assign task ignore
     Route::get('assign-task-ignore/{id}', [PendingActionController::class, 'AssignTaskIgnore'])->name('ignore-assign-task');
 
     /** DEVELOPER CHECK IN CHECK OUT START*/
@@ -688,12 +715,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('project-notes/check-password', [ProjectNoteController::class, 'checkPassword'])->name('project_notes.check_password');
     Route::post('project-notes/apply-quick-action', [ProjectNoteController::class, 'applyQuickAction'])->name('project_notes.apply_quick_action');
     Route::resource('project-notes', ProjectNoteController::class);
-
+    //project task routes
     Route::get('projects/{project_id}/tasks/{any}', [ProjectController::class, 'tasks'])
     ->where('any', '^(?!api\/)[\/\w\.-]*')
     ->where('any', '^(?:(?!\d+).)*');
     Route::resource('projects', ProjectController::class);
-
+    //projects json route
     Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
 
     /* PRODUCTS */
@@ -759,14 +786,19 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('event-files', EventFileController::class);
 
     /* TASKS */
+    //task timer check
     Route::get('tasks/task-timer-check/{id}', [TaskController::class, 'TaskTimeCheck']);
-
+    //get task status
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
-
+    //task revision
     Route::get('tasks/revisions', [TaskController::class, 'task_revisions']);
+    //task revision json routes
     Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
+    //developer daily routes
     Route::get('tasks/get-developer-tasks/{id}', [TaskController::class, 'DeveloperTask'])->name('get-developer-tasks');
+    //developer task submission routes
     Route::get('tasks/get-task-submissions/{id}', [TaskController::class, 'GetTaskSubmission'])->name('get-task-submission');
+    //change task status route
     Route::post('tasks/change-status', [TaskController::class, 'changeStatus'])->name('tasks.change_status');
     Route::post('tasks/apply-quick-action', [TaskController::class, 'applyQuickAction'])->name('tasks.apply_quick_action');
     Route::post('tasks/store-pin', [TaskController::class, 'storePin'])->name('tasks.store_pin');
@@ -775,29 +807,48 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/check-task/{taskID}', [TaskController::class, 'checkTask'])->name('tasks.check_task');
     Route::post('tasks/gantt-task-update/{id}', [TaskController::class, 'updateTaskDuration'])->name('tasks.gantt_task_update');
     Route::get('tasks/members/{id}', [TaskController::class, 'members'])->name('tasks.members');
+
+    //project single tasks
     Route::get('tasks/project_tasks/{id}', [TaskController::class, 'projectTasks'])->name('tasks.project_tasks');
+    //projects subtasks
     Route::get('tasks/show-subtask/{id}/{tableView?}/{tableViews?}', [TaskController::class, 'show_subtask'])->name('tasks.show_subtask');
     Route::get('tasks/search-subtask', [TaskController::class, 'searchSubTask'])->name('tasks.search_subtask');
 
     // TASK COMMENTS
+    //get task comment
     Route::get('tasks/{task_id}/comments', [TaskController::class, 'getTaskComments']);
+
+    //get task replies
     Route::get('tasks/comments/{comment_id}/replies', [TaskController::class, 'getTaskCommentReplies']);
+    //task comment edit
     Route::post('tasks/comment-edit', [TaskController::class, 'editComment']);
+    //task comment reply
     Route::post('tasks/comment-reply', [TaskController::class, 'commentReply']);
     Route::get('tasks/comments-widget-data/{task_id}', [TaskController::class, 'taskCommentWidgetData']);
+    //task comment preview
     Route::get('tasks/comments/{comment_id}/preview', [TaskController::class, 'previewTaskComment']);
+    //task comment attach file delete
     Route::delete('tasks/{task_id}/comments/{comment_id}/delete-attach-file', [TaskController::class, 'deleteOldFile']);
+    //task comment delete
     Route::delete('tasks/comments/{comment_id}/delete', [TaskController::class, 'deleteComment']);
+    //task comment multiple delete
     Route::post('tasks-comment-delete', [TaskController::class, 'multipleCommentDelete']);
 
     // SUBMIT TASK FOR CLIENT APPROVAL
+    //submit for task approval
     Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');
+    //client approve task
     Route::post('tasks/client-approved-task', [TaskController::class, 'clientApprovedTask'])->name('tasks.client_approved_task');
+    //client revision
+
     Route::post('tasks/client-has-revision-task', [TaskController::class, 'clientHasRevision'])->name('tasks.client_has_revision');
+    //revision accept and continue
     Route::post('tasks/accept-continue', [TaskController::class, 'acceptContinue'])->name('tasks.accept_continue');
     Route::post('tasks/deny-continue', [TaskController::class, 'denyContinue'])->name('tasks.deny_continue');
+    // revision reason
     Route::post('tasks/revision-reason', [TaskController::class, 'revisionReason'])->name('tasks.revision_reason');
     Route::post('tasks/revision/accept-or-revision-by-developer', [TaskController::class, 'accept_or_revision_by_developer'])->name('accept_or_revision_by_developer');
+    //sales responsible on revision
     Route::put('tasks/sales-response-on-revision', [TaskController::class, 'sales_response_on_pm_revision'])->name('sales-response-on-revision');
     Route::group(
         ['prefix' => 'tasks'],
@@ -835,31 +886,52 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     //Route::resource('tasks', TaskController::class)->only([ 'show', 'create', 'store', 'edit', 'update', 'destroy']);
     //pm task guidelines
+    //get task project deliverables
     Route::get('tasks/add-tasks/project-deliverables/{id}', [TaskController::class, 'get_tasks_project_deliverable']);
+    //new task store
     Route::post('new-task/store',[TaskController::class,'StoreNewTask'])->name('store-new-tasks');
+    //new task edit
     Route::post('new-task/edit',[TaskController::class,'EditTask'])->name('edit-new-tasks');
+    //pending parent task
     Route::get('tasks/pending-parent-tasks', [TaskController::class, 'PendingParentTasks']);
+    //pending task authorization
     Route::put('tasks/auth-pending-tasks/{id}', [TaskController::class, 'AuthPendingParentTasks']);
+    //pm task guideline checking
     Route::get('tasks/check-pm-taskguideline/{id}', [TaskController::class, 'CheckPmTaskGuideline']);
+    //task guideline store
     Route::post('task-guideline-store',[TaskController::class,'storeTaskGuideline'])->name('task-guideline-store');
+    //task report issue resolve
     Route::post('tasks/report-issues/resolve', [TaskController::class, 'resolve_report']);
+    //get parent tasks report table data
     Route::get('tasks/get-parent-tasks/report-issues/{id}', [TaskController::class, 'get_parent_tasks_report_issues']);
+    //get sub task table report data
     Route::get('tasks/get-sub-tasks/report-issues/{id}', [TaskController::class, 'get_sub_tasks_report_issues']);
+    //subtasks table data
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
+    //get tasks data
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
+    //developers today task data
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
+    //developer daily submissions
     Route::post('tasks/daily-submissions', [TaskController::class, 'storeDailySubmission']);
+    //developer daily submissions details
     Route::get('tasks/daily-submissions/{id}', [TaskController::class, 'getDailySubmission']);
+    //all developer today task submission data
     Route::get('tasks/all-daily-submissions', [TaskController::class, 'allDailySubmission']);
+    //get in progress task data
     Route::get('tasks/get-inprogress-tasks/{id}', [TaskController::class, 'checkInProgressTask']);
+    //get tasks subtasks data
     Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
+    //tasks all data
     Route::get('tasks/{any?}', [TaskController::class, 'index'])
     ->where('any', '^(?!api\/)[\/\w\.-]*')
     ->where('any', '^(?:(?!\d+).)*');
     Route::resource('tasks', TaskController::class)->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
-
+    //view tasl guideline
     Route::get('task-guideline/{project_id}', [TaskController::class, 'viewTaskGuideline'])->name('task-guideline');
+    //store task guideline
     Route::post('task-guideline-store', [TaskController::class, 'storeTaskGuideline'])->name('task-guideline-store');
+    //get working environment of project
     Route::get('working-environment/{project_id}', [TaskController::class, 'viewWorkingEnvironment'])->name('working-environment');
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
     Route::get('working-environment/task/{task_id}', [TaskController::class, 'taskWorkingEnvironment']);
@@ -947,6 +1019,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::post('import/process', [LeadController::class, 'importProcess'])->name('leads.import.process');
         }
     );
+    //web development leads
     Route::resource('leads', LeadController::class)->middleware('clearCookies');
 
     Route::get('get-all-leads', [LeadController::class,'getLead']);
@@ -1161,6 +1234,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::resource('timelog-break', ProjectTimelogBreakController::class);
         }
     );
+    //timers and timelogs
     Route::get('timelogs/export', [TimelogController::class, 'export'])->name('timelogs.export');
     Route::get('timelogs/show-active-timer', [TimelogController::class, 'showActiveTimer'])->name('timelogs.show_active_timer');
     Route::get('timelogs/show-timer', [TimelogController::class, 'showTimer'])->name('timelogs.show_timer');
@@ -1174,8 +1248,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('timelogs/user_time_logs', [TimelogController::class, 'userTimelogs'])->name('timelogs.user_time_logs');
     Route::post('timelogs/approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
     Route::resource('timelogs', TimelogController::class);
-
+    //task revision disputes
     Route::resource('disputes', DisputeController::class);
+    //revision calculator
     Route::any('revision-calculator/{any?}', [RevisionCalculatorController::class, 'index'])->where('any', '.*');
     Route::resource('revision-calculator', RevisionCalculatorController::class);
     Route::get('revision-calculator-data', [RevisionCalculatorController::class, 'getData']);
@@ -1385,6 +1460,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('mark_notification_read', [NotificationController::class, 'markAllRead'])->name('mark_notification_read');
 
     // Update app
+
+    //sales goal
     Route::get('/insights/deals', [InsightsController::class, 'DealConversion'])->name('insights-deals');
 
     Route::get('/insights/goals/get/{id}', [InsightsController::class, 'getGoal'])->name('insights-goals-get');
@@ -1396,6 +1473,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('update-settings/manual-update', [UpdateAppController::class, 'manual'])->name('update-settings.manual');
     Route::resource('search', SearchController::class);
     Route::resource('update-settings', UpdateAppController::class);
+    //sales goal
     Route::get('/insights/sections/get', [InsightsController::class, 'getSection'])->name('insights-sections-get');
     Route::get('/insights/deal-details/{data}', [InsightsController::class, 'getGoalDetails'])->name('insights-goal-details');
 
@@ -1405,6 +1483,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goals/edit/{id}', [InsightsController::class, 'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
+    //basic apis for react for data checking
     Route::get('/tasks/developer-task-history/{id}', [TimelogReportController::class,'DeveloperTaskHistory']);
     Route::get('/tasks/parent-task-subtasks/{id}', [TaskController::class,'CHeckSubtasks'])->name('check-subtasks');
     Route::post('/tasks/develoepr/report-issue', [TaskController::class,'DeveloperReportIssue'])->name('developer-report-issue');
@@ -1423,7 +1502,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
 
-
+    //task type
     Route::get('/tasks-type',[TaskController::class,'getTasksType']);
     Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
 
@@ -1431,14 +1510,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('client-review', ClientReviewController::class);
     Route::resource('task-report-issues', IssuedTaskReportController::class);
     Route::get('get-task-report',[IssuedTaskReportController::class,'getTaskReport']);
-
+    //cross departmental work
     Route::resource('cross-dept-work',CrossDeptWork::class);
     Route::get('view-web-content',[CrossDeptWork::class,'adminViewWebContent'])->name('adminViewWebContent');
     Route::get('view-blog-article',[CrossDeptWork::class,'adminViewBlogArticle'])->name('adminViewBlogArticle');
     Route::get('view-product-description',[CrossDeptWork::class,'adminViewProductDescription'])->name('adminViewProductDescription');
     Route::get('view-product-category',[CrossDeptWork::class,'adminViewProductCategory'])->name('adminViewProductCategory');
     Route::get('view-basic-seo',[CrossDeptWork::class,'adminViewBasicSEO'])->name('adminViewBasicSEO');
-
+    //task revisions
     Route::get('revision/{any?}', [RevisionController::class, 'index'])->where('any', '.*');
     Route::resource('revision',RevisionController::class);
 
@@ -1688,8 +1767,10 @@ Route::controller(DealController::class)->group(function () {
 
     Route::get('search-client', 'SearchClient')->name('client-search');
 });
+//milestone cancellation
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
+//create auto milestonesw
 Route::post('/create-auto-milestone', [ProjectMilestoneController::class, 'createAutoMilestone'])->name('create-auto-milestone');
 Route::post('get-timelogs/time_log_history', [TimelogReportController::class, 'timelog_history'])->name('get-timelogs-report');
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
@@ -1729,11 +1810,10 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 Route::get('get-board-column-list', [TimelogReportController::class, 'board_column_json'])->name('board_column_json');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
-
+//task guidelines routes
 Route::get('/task-guideline-approved-authorization/{id}', [TaskController::class, 'taskGuidelineApprovedAuthorization']);
 Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 'taskGuidelineDenyAuthorization']);
 Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
-// asdasdsad
