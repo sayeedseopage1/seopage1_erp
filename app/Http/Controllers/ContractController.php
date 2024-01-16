@@ -80,7 +80,7 @@ class ContractController extends AccountBaseController
             return $next($request);
         });
     }
-
+//this function belongs to won deal table page. At first we used laravel yajra datatables and then we converted it to react table
     public function index(WonDealsDataTable $dataTable)
     {
         abort_403(user()->permission('view_contract') == 'none');
@@ -110,75 +110,75 @@ class ContractController extends AccountBaseController
         return $dataTable->render('contracts.index', $this->data);
     }
 
-    public function applyQuickAction(Request $request)
-    {
-        if ($request->action_type == 'delete') {
-            $this->deleteRecords($request);
-            return Reply::success(__('messages.deleteSuccess'));
-        }
+    // public function applyQuickAction(Request $request)
+    // {
+    //     if ($request->action_type == 'delete') {
+    //         $this->deleteRecords($request);
+    //         return Reply::success(__('messages.deleteSuccess'));
+    //     }
 
-        return Reply::error(__('messages.selectAction'));
-    }
+    //     return Reply::error(__('messages.selectAction'));
+    // }
 
-    protected function deleteRecords($request)
-    {
-        abort_403(user()->permission('delete_contract') !== 'all');
+    // protected function deleteRecords($request)
+    // {
+    //     abort_403(user()->permission('delete_contract') !== 'all');
 
-        Contract::whereIn('id', explode(',', $request->row_ids))->delete();
-        return true;
-    }
+    //     Contract::whereIn('id', explode(',', $request->row_ids))->delete();
+    //     return true;
+    // }
 
-    public function destroy($id)
-    {
-        $contract = Contract::findOrFail($id);
-        $this->deletePermission = user()->permission('delete_contract');
+    // public function destroy($id)
+    // {
+    //     $contract = Contract::findOrFail($id);
+    //     $this->deletePermission = user()->permission('delete_contract');
 
-        abort_403(
-            !($this->deletePermission == 'all' ||
-                ($this->deletePermission == 'added' && user()->id == $contract->added_by) ||
-                ($this->deletePermission == 'owned' && user()->id == $contract->client_id) ||
-                ($this->deletePermission == 'both' && (user()->id == $contract->client_id || user()->id == $contract->added_by))
-            )
-        );
+    //     abort_403(
+    //         !($this->deletePermission == 'all' ||
+    //             ($this->deletePermission == 'added' && user()->id == $contract->added_by) ||
+    //             ($this->deletePermission == 'owned' && user()->id == $contract->client_id) ||
+    //             ($this->deletePermission == 'both' && (user()->id == $contract->client_id || user()->id == $contract->added_by))
+    //         )
+    //     );
 
-        Contract::destroy($id);
-        return Reply::success(__('messages.contactDeleted'));
-    }
+    //     Contract::destroy($id);
+    //     return Reply::success(__('messages.contactDeleted'));
+    // }
 
-    public function create()
-    {
-        $this->addPermission = user()->permission('add_contract');
+    // public function create()
+    // {
+    //     $this->addPermission = user()->permission('add_contract');
 
-        abort_403(!in_array($this->addPermission, ['all', 'added']));
+    //     abort_403(!in_array($this->addPermission, ['all', 'added']));
 
-        $this->contractId = request('id');
-        $this->contract = null;
+    //     $this->contractId = request('id');
+    //     $this->contract = null;
 
-        if ($this->contractId != '') {
-            $this->contract = Contract::findOrFail($this->contractId);
-        }
+    //     if ($this->contractId != '') {
+    //         $this->contract = Contract::findOrFail($this->contractId);
+    //     }
 
-        $this->templates = ContractTemplate::all();
-        $this->clients = User::allClients();
-        $this->contractTypes = ContractType::all();
-        $this->currencies = Currency::all();
-        $contract = new ContractCustomForm();
+    //     $this->templates = ContractTemplate::all();
+    //     $this->clients = User::allClients();
+    //     $this->contractTypes = ContractType::all();
+    //     $this->currencies = Currency::all();
+    //     $contract = new ContractCustomForm();
 
-        if (!empty($contract->getCustomFieldGroupsWithFields())) {
-            $this->fields = $contract->getCustomFieldGroupsWithFields()->fields;
-        }
+    //     if (!empty($contract->getCustomFieldGroupsWithFields())) {
+    //         $this->fields = $contract->getCustomFieldGroupsWithFields()->fields;
+    //     }
 
-        $this->contractTemplate = request('template') ? ContractTemplate::findOrFail(request('template')) : null;
+    //     $this->contractTemplate = request('template') ? ContractTemplate::findOrFail(request('template')) : null;
 
-        if (request()->ajax()) {
-            $this->pageTitle = __('app.add') . ' ' . __('app.menu.contract');
-            $html = view('contracts.ajax.create', $this->data)->render();
-            return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
-        }
+    //     if (request()->ajax()) {
+    //         $this->pageTitle = __('app.add') . ' ' . __('app.menu.contract');
+    //         $html = view('contracts.ajax.create', $this->data)->render();
+    //         return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
+    //     }
 
-        $this->view = 'contracts.ajax.create';
-        return view('contracts.create', $this->data);
-    }
+    //     $this->view = 'contracts.ajax.create';
+    //     return view('contracts.create', $this->data);
+    // }
 
     // Custom module for seopage 1 to store deals
 
@@ -227,6 +227,7 @@ class ContractController extends AccountBaseController
 
         return view('contracts.editdealdetails', $this->data, compact('deal'));
     }
+//storing new deals
     public function storeDeal(Request $request)
     {
         // dd($request->all());
@@ -458,6 +459,7 @@ class ContractController extends AccountBaseController
             'redirectUrl' => route('dealDetails', $deal->id)
         ]);
     }
+    //storing lead to deal
     public function storeLeadDeal(Request $request)
     {
             //    dd($request->all());
@@ -834,6 +836,7 @@ class ContractController extends AccountBaseController
             'milestones' => $milestones,
         ]);
     }
+    //storing milestone on deal details
     public function storeMilestone(Request $request)
     {
             //    dd($request->all());
@@ -932,6 +935,7 @@ class ContractController extends AccountBaseController
             ]);
         }
     }
+    //edit milestones on deal details
     public function editMilestone($id)
     {
         $milestone = ProjectMilestone::find($id);
@@ -947,6 +951,7 @@ class ContractController extends AccountBaseController
             ]);
         }
     }
+    //updating milestones on deal details page
     public function updateMilestone(Request $request, $id)
     {
 
@@ -1015,7 +1020,7 @@ class ContractController extends AccountBaseController
             }
         }
     }
-
+//deleting mielstone on deal details page
     public function deleteMilestone($id)
     {
         $milestone = ProjectMilestone::find($id);
@@ -1025,6 +1030,9 @@ class ContractController extends AccountBaseController
             'message' => 'Milestone Deleted Successfully',
         ]);
     }
+    //storing deal large form
+
+    
     public function storedealDetails(Request $request)
     {
     //    dd($request->all());
