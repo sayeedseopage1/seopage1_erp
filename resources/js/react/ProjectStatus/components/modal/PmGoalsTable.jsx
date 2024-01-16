@@ -1,30 +1,16 @@
 import React from "react";
-
+import _ from "lodash";
+import Toaster from "../../../global/Toaster";
 import PaginationPmGoalTable from "./PaginationPmGoalTable";
 import DeadlineExplainModal from "./DeadlineExplainModal";
 import { useAuth } from "../../../hooks/useAuth";
 import ResolveModal from "./ResolveModal";
+import { TableItem, TableRow } from "../table/ui";
+import { Placeholder } from "../../../global/Placeholder";
+
 const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
     const auth = useAuth();
     const [projectPmGoalId, setProjectPmGoalId] = React.useState(1);
-    // Table styles
-    const tableStyle = {
-        borderCollapse: "collapse",
-        width: "100%",
-    };
-
-    // Styles for table headers and cells
-    const thTdStyle = {
-        textAlign: "center",
-
-        padding: "8px",
-    };
-
-    // Style for table headers with background color
-    const thStyle = {
-        ...thTdStyle,
-        backgroundColor: "#f2f2f2",
-    };
 
     //pagination start
     // Number of items to display per page
@@ -70,7 +56,6 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
     const endIndex = startIndex + itemsPerPage;
     return (
         <div>
-            {/* Table component */}
             <table style={tableStyle}>
                 <thead>
                     <tr>
@@ -200,6 +185,16 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                         ))}
                     </tbody>
                 )}
+                {isFetchingPmGoal &&
+                    _.times(itemsPerPage, (item) => (
+                        <TableRow key={item}>
+                            {_.times(9, (col) => (
+                                <TableItem key={col} className="py-3">
+                                    <Placeholder />
+                                </TableItem>
+                            ))}
+                        </TableRow>
+                    ))}
             </table>
 
             <PaginationPmGoalTable
@@ -222,8 +217,29 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                 isModalThreeOpen={isModalThreeOpen}
                 closeModalThree={closeModalThree}
             />
+
+            <Toaster />
         </div>
     );
 };
 
 export default PMGoalsTable;
+
+// Table styles
+const tableStyle = {
+    borderCollapse: "collapse",
+    width: "100%",
+};
+
+// Styles for table headers and cells
+const thTdStyle = {
+    textAlign: "center",
+
+    padding: "8px",
+};
+
+// Style for table headers with background color
+const thStyle = {
+    ...thTdStyle,
+    backgroundColor: "#f2f2f2",
+};

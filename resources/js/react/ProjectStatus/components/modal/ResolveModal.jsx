@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 import { IoClose } from "react-icons/io5";
@@ -27,15 +28,26 @@ const ResolveModal = ({
         setRatingValue(e.target.value);
     };
 
-    const handleSubmit = () => {
-        submitData({
-            project_pm_goal_id: projectPmGoalId,
-            rating: ratingValue,
-            suggestion: suggestionData,
-            comment: commentData,
-        });
+    const handleSubmit = async () => {
+        try {
+            const result = await submitData({
+                project_pm_goal_id: projectPmGoalId,
+                rating: ratingValue,
+                suggestion: suggestionData,
+                comment: commentData,
+            }).unwrap();
 
-        closeModalThree();
+            if (result?.status) {
+                closeModalThree();
+                toast.success("Submission was successful");
+            } else {
+                toast.error("Submission was not successful");
+            }
+        } catch (error) {
+            toast.error("Error submitting data");
+        } finally {
+            setEditorData("");
+        }
     };
 
     return (

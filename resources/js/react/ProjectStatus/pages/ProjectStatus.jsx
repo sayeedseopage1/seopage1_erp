@@ -131,6 +131,7 @@ const ProjectStatus = () => {
             <FilterBar setFiltering={setFiltering} />
 
             <ProjectStatusTable
+                refetch={refetch}
                 data={leads}
                 columns={TableColumns}
                 isLoading={isFetching}
@@ -141,8 +142,7 @@ const ProjectStatus = () => {
             />
 
             <ProjectModal
-                isLoading={isFetchingPmGoal}
-                onClick={refetchPmGoal}
+                refetchPmGoal={refetchPmGoal}
                 isFetchingPmGoal={isFetchingPmGoal}
                 pmGoal={pmGoal}
                 isOpen={isModalOneOpen}

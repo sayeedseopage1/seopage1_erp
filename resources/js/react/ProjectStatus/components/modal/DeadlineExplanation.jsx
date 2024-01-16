@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import CKEditorComponent from "../../../ckeditor";
 import Button from "../../../global/Button";
 import { useCreateDeadlineExplanationReasonMutation } from "../../../services/api/projectStatusApiSlice";
-
+import { toast } from "react-toastify";
 const DeadlineExplanation = ({
     closeModalTwo,
     projectPmGoalId,
@@ -24,13 +24,24 @@ const DeadlineExplanation = ({
         setEditorData(editor.getData());
     };
 
-    const handleSubmit = () => {
-        submitData({
-            reason: editorData,
-            project_pm_goal_id: projectPmGoalId,
-        });
-        setEditorData("");
-        closeModalTwo();
+    const handleSubmit = async () => {
+        try {
+            const result = await submitData({
+                reason: editorData,
+                project_pm_goal_id: projectPmGoalId,
+            }).unwrap();
+
+            if (result?.status) {
+                closeModalTwo();
+                toast.success("Submission was successful");
+            } else {
+                toast.error("Submission was not successful");
+            }
+        } catch (error) {
+            toast.error("Error submitting data");
+        } finally {
+            setEditorData("");
+        }
     };
 
     return (
