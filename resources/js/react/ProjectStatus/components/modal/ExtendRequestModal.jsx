@@ -72,23 +72,20 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
             <section style={styles.container}>
                 <div>
                     <p>
-                        <strong>Project Name</strong>{" "}
+                        <strong>Project Name </strong>{" "}
                         {projectDetails.project_name}
                     </p>
                     <p>
                         <strong>Client:</strong> {projectDetails.clientName}
                     </p>
-                    {/* <p>
-                        <strong>Project Manager:</strong>
-                        {projectDetails.pmName}
-                    </p> */}
+
                     <p>
                         <strong>Project Budget:</strong> $
                         {projectDetails.project_budget}
                     </p>
 
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <div htmlFor="itemsPerPage">Rating:</div>
+                        <div htmlFor="itemsPerPage">Extended days:</div>
                         <input
                             id="itemsPerPage"
                             value={ratingValue}

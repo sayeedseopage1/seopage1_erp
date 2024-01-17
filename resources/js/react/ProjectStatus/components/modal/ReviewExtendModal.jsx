@@ -80,7 +80,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                     </p>
                     <p>
                         <p>
-                            <strong>Project Manager:</strong>
+                            <strong>Project Manager: </strong>
                             {projectDetails.pmName}
                         </p>
                         <strong>Project Budget:</strong> $
