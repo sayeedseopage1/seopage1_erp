@@ -1,3 +1,4 @@
+import { method } from "lodash";
 import { apiSlice } from "./apiSlice";
 
 const _token = document
@@ -47,6 +48,23 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
                 "AUTHORIZE_PARENT_TASK",
             ],
         }),
+        createExtendRequest: build.mutation({
+            query: (data) => ({
+                url: `account/pm-extend-request-store`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: _token,
+                },
+                headers: {
+                    _token: _token,
+                },
+            }),
+            invalidatesTags: [
+                "PENDING_EXTEND_REQUEST",
+                "AUTHORIZE_PARENT_TASK",
+            ],
+        }),
     }),
 });
 
@@ -55,4 +73,5 @@ export const {
     useGetPmGoalQuery,
     useCreateDeadlineExplanationReasonMutation,
     useCreateResolveSuggestionCommentMutation,
+    useCreateExtendRequestMutation,
 } = projectStatusApiSlice;

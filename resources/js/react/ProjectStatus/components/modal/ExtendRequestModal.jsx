@@ -2,39 +2,47 @@ import React, { useState } from "react";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 import { IoClose } from "react-icons/io5";
-
-// import { useCreateResolveSuggestionCommentMutation } from "../../../services/api/projectStatusApiSlice";
+import { toast } from "react-toastify";
 import { Flex } from "../table/ui";
 import CKEditorComponent from "../../../ckeditor";
 
+import FileUpload from "./FileUpload";
+import { useCreateExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
+
 const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
-    const [suggestionData, setSuggestionData] = useState("");
-    const [commentData, setCommentData] = useState("");
-    const [ratingValue, setRatingValue] = useState("1");
-    // const [submitData, { isLoading }] =
-    //     useCreateResolveSuggestionCommentMutation();
-    console.log("project details", projectDetails);
-    const handleSuggestionChange = (e, editor) => {
-        setSuggestionData(editor.getData());
+    const [extendedDaysData, setExtendedDaysData] = useState("");
+    const [reasonData, setReasonData] = useState("");
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [submitData, { isLoading }] = useCreateExtendRequestMutation();
+
+    const handleReasonChange = (e, editor) => {
+        setReasonData(editor.getData());
     };
-    const handleCommentChange = (e, editor) => {
-        setCommentData(editor.getData());
+    const handleExtendedDaysDataChange = (e) => {
+        setExtendedDaysData(e.target.value);
     };
-    const handleRatingValueChange = (e) => {
-        setRatingValue(e.target.value);
+    const handleSubmit = async () => {
+        try {
+            const result = await submitData({
+                screenshot: selectedFiles,
+                extended_day: extendedDaysData,
+                is_client_communication: reasonData,
+            }).unwrap();
+
+            if (result?.status) {
+                onClose();
+                toast.success("Submission was successful");
+            } else {
+                toast.error("Submission was not successful");
+            }
+        } catch (error) {
+            toast.error("Error submitting data");
+        } finally {
+            setEditorData("");
+        }
     };
 
-    const handleSubmit = () => {
-        // submitData({
-        //     project_pm_goal_id: projectPmGoalId,
-        //     rating: ratingValue,
-        //     suggestion: suggestionData,
-        //     comment: commentData,
-        // });
-
-        onClose();
-    };
-
+    console.log("e ,r s", extendedDaysData, reasonData, selectedFiles);
     return (
         <ReactModal
             style={customStyles}
@@ -85,12 +93,19 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                     </p>
 
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <div htmlFor="itemsPerPage">Extended days:</div>
+                        <strong htmlFor="itemsPerPage">Extended days:</strong>
                         <input
                             id="itemsPerPage"
-                            value={ratingValue}
-                            onChange={handleRatingValueChange}
+                            value={extendedDaysData}
+                            onChange={handleExtendedDaysDataChange}
                         ></input>
+                    </Flex>
+                    <Flex justifyContent="left" style={{ marginTop: "10px" }}>
+                        <strong htmlFor="itemsPerPage">Screenshots:</strong>
+                        <FileUpload
+                            selectedFiles={selectedFiles}
+                            setSelectedFiles={setSelectedFiles}
+                        />
                     </Flex>
 
                     <div style={styles.reasonContainer}>
@@ -104,7 +119,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={handleCommentChange} />
+                            <CKEditorComponent onChange={handleReasonChange} />
                         </div>
                     </div>
 
@@ -112,10 +127,9 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                         variant="success"
                         style={styles.button}
                         onClick={handleSubmit}
-                        // disabled={isLoading}
+                        disabled={isLoading}
                     >
-                        {/* {isLoading ? "Submitting..." : "Submit"} */}
-                        submit
+                        {isLoading ? "Submitting..." : "Submit"}
                     </Button>
                 </div>
             </section>
@@ -134,7 +148,7 @@ const customStyles = {
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        maxHeight: "450px",
+        maxHeight: "500px",
 
         margin: "auto auto",
         padding: "20px",

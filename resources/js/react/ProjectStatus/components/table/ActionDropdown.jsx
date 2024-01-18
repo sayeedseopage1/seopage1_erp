@@ -32,6 +32,7 @@ const ActionDropdown = ({ ...rest }) => {
     };
 
     const projectDetails = rest.row.original;
+    console.log("projectDetails in action dropdown", projectDetails.id);
 
     return (
         <React.Fragment>

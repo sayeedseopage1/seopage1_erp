@@ -200,16 +200,16 @@ class ProjectStatusController extends AccountBaseController
     }
     public function storePMExtendRequest(Request $request){
         // \DB::beginTransaction();
-        $validator =  $request->validate([
-            'screenshot' => 'required',
-            'extended_day' => 'required',
-            'is_client_communication' => 'required',
+        // $validator =  $request->validate([
+        //     'screenshot' => 'required',
+        //     'extended_day' => 'required',
+        //     'is_client_communication' => 'required',
 
-        ], [
-            'screenshot.required' => 'This field is required!',
-            'extended_day.required' => 'This field is required!',
-            'is_client_communication.required' => 'This field is required!',
-        ]);
+        // ], [
+        //     'screenshot.required' => 'This field is required!',
+        //     'extended_day.required' => 'This field is required!',
+        //     'is_client_communication.required' => 'This field is required!',
+        // ]);
         $pmGoals = ProjectPmGoal::where('project_id',$request->project_id)->get();
         $goal = '';
         foreach($pmGoals as $pmGoal){
