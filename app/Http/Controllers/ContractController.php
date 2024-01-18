@@ -110,6 +110,8 @@ class ContractController extends AccountBaseController
         return $dataTable->render('contracts.index', $this->data);
     }
 
+    //there is no use of below functions currently
+
     // public function applyQuickAction(Request $request)
     // {
     //     if ($request->action_type == 'delete') {
