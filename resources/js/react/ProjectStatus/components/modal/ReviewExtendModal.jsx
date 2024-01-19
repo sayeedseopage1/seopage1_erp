@@ -3,17 +3,22 @@ import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 import { IoClose } from "react-icons/io5";
 
-// import { useCreateResolveSuggestionCommentMutation } from "../../../services/api/projectStatusApiSlice";
 import { Flex } from "../table/ui";
 import CKEditorComponent from "../../../ckeditor";
+import { useGetProjectExtendImagesQuery } from "../../../services/api/projectStatusApiSlice";
+import ImageViewer from "./ImageViewer";
+import RefreshButton from "../RefreshButton";
 
 const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
     const [suggestionData, setSuggestionData] = useState("");
     const [commentData, setCommentData] = useState("");
     const [ratingValue, setRatingValue] = useState("1");
-    // const [submitData, { isLoading }] =
-    //     useCreateResolveSuggestionCommentMutation();
-    console.log("project details", projectDetails);
+    const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
+        projectDetails?.project_id
+    );
+
+    const imageData = data?.data;
+
     const handleSuggestionChange = (e, editor) => {
         setSuggestionData(editor.getData());
     };
@@ -56,17 +61,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                     Review Extend Time
                 </div>
 
-                <button
-                    onClick={onClose}
-                    style={{
-                        backgroundColor: "red",
-                        padding: "2px 4px 2px 4px",
-
-                        color: "white",
-                    }}
-                >
-                    <IoClose />
-                </button>
+                <RefreshButton onClick={refetch} isLoading={isFetching} />
             </div>
 
             <section style={styles.container}>
@@ -93,6 +88,10 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                             value={ratingValue}
                             onChange={handleRatingValueChange}
                         ></input>
+                    </Flex>
+                    <Flex justifyContent="left" style={{ marginTop: "10px" }}>
+                        <strong htmlFor="itemsPerPage">Screenshots:</strong>
+                        <ImageViewer imageData={imageData} />
                     </Flex>
 
                     <div style={styles.reasonContainer}>
@@ -146,7 +145,7 @@ const customStyles = {
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        maxHeight: "450px",
+        maxHeight: "600px",
 
         margin: "auto auto",
         padding: "20px",
@@ -163,7 +162,6 @@ const styles = {
     },
     button: {
         marginTop: "10px",
-        //     marginLeft: "auto",
     },
 };
 export default ReviewExtendRequestModal;

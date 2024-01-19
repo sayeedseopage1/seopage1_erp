@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 import { IoClose } from "react-icons/io5";
@@ -13,7 +13,17 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
     const [extendedDaysData, setExtendedDaysData] = useState("");
     const [reasonData, setReasonData] = useState("");
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [formError, setFormError] = React.useState(null);
+    const handleResetForm = () => {
+        setExtendedDaysData("");
+        setReasonData("");
+        setSelectedFiles([]);
+    };
     const [submitData, { isLoading }] = useCreateExtendRequestMutation();
+
+    useEffect(() => {
+        handleResetForm();
+    }, []);
 
     const handleReasonChange = (e, editor) => {
         setReasonData(editor.getData());
@@ -21,28 +31,67 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
     const handleExtendedDaysDataChange = (e) => {
         setExtendedDaysData(e.target.value);
     };
-    const handleSubmit = async () => {
-        try {
-            const result = await submitData({
-                screenshot: selectedFiles,
-                extended_day: extendedDaysData,
-                is_client_communication: reasonData,
-            }).unwrap();
 
-            if (result?.status) {
-                onClose();
-                toast.success("Submission was successful");
-            } else {
-                toast.error("Submission was not successful");
-            }
-        } catch (error) {
-            toast.error("Error submitting data");
-        } finally {
-            setEditorData("");
+    // check validation
+    const isValid = () => {
+        let err = new Object();
+        let errCount = 0;
+
+        if (extendedDaysData === "") {
+            (err.extendedDaysData = "This field is required!"), errCount++;
+        }
+
+        if (reasonData === "") {
+            (err.reasonData = "This field is required!"), errCount++;
+        }
+        // if (selectedFiles === "") {
+        //     (err.selectedFiles = "This field is required!"), errCount++;
+        // }
+
+        setFormError(err);
+        return !errCount;
+    };
+
+    const handleSubmit = async (e) => {
+        if (!isValid()) {
+            toast.error("Missing required field or invalid input");
+            return;
+        }
+
+        e.preventDefault();
+        const fd = new FormData();
+
+        fd.append("extended_day", extendedDaysData ?? "");
+        fd.append("is_client_communication", reasonData ?? "");
+        fd.append("project_id", projectDetails?.project_id ?? "");
+        Array.from(selectedFiles).forEach((file) => {
+            fd.append("screenshot[]", file);
+        });
+        fd.append(
+            "_token",
+            document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content")
+        );
+
+        if (isValid()) {
+            submitData(fd)
+                .unwrap()
+                .then((res) => {
+                    onClose();
+                    toast.success("Submission was successful");
+                    handleResetForm();
+                })
+                .catch((err) => {
+                    if (err?.status === 422) {
+                        toast.error("Please fillup all required fields");
+                    }
+                });
+        } else {
+            toast.error("Please fillup all required fields");
         }
     };
 
-    console.log("e ,r s", extendedDaysData, reasonData, selectedFiles);
     return (
         <ReactModal
             style={customStyles}
@@ -93,15 +142,18 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                     </p>
 
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <strong htmlFor="itemsPerPage">Extended days:</strong>
+                        <strong>Extended days:</strong>
                         <input
-                            id="itemsPerPage"
+                            placeholder="Enter the extended days"
                             value={extendedDaysData}
+                            error={formError?.extendedDaysData}
+                            required={true}
                             onChange={handleExtendedDaysDataChange}
+                            style={{ padding: "5px" }}
                         ></input>
                     </Flex>
-                    <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <strong htmlFor="itemsPerPage">Screenshots:</strong>
+                    <Flex justifyContent="left">
+                        <strong>Screenshots:</strong>
                         <FileUpload
                             selectedFiles={selectedFiles}
                             setSelectedFiles={setSelectedFiles}

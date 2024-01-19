@@ -52,18 +52,18 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: `account/pm-extend-request-store`,
                 method: "POST",
-                body: {
-                    ...data,
-                    _token: _token,
-                },
-                headers: {
-                    _token: _token,
-                },
+                body: data,
+                formData: true,
             }),
             invalidatesTags: [
                 "PENDING_EXTEND_REQUEST",
                 "AUTHORIZE_PARENT_TASK",
             ],
+        }),
+        getProjectExtendImages: build.query({
+            query: (project_id) =>
+                `/account/project-extend-image/${project_id}`,
+            providesTags: "GET_PROJECT_EXTEND_IMAGE",
         }),
     }),
 });
@@ -74,4 +74,5 @@ export const {
     useCreateDeadlineExplanationReasonMutation,
     useCreateResolveSuggestionCommentMutation,
     useCreateExtendRequestMutation,
+    useGetProjectExtendImagesQuery,
 } = projectStatusApiSlice;

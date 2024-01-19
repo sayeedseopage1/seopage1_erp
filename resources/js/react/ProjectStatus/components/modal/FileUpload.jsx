@@ -2,17 +2,16 @@ import ReactModal from "react-modal";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { useState } from "react";
 import Button from "../../../global/Button";
-
+import { RiDeleteBin6Line } from "react-icons/ri";
 const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
 
     const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
-        setSelectedFiles(files);
+        const uploadedFiles = e.target.files;
+        setSelectedFiles((prev) => [...prev, ...uploadedFiles]);
     };
 
-    console.log(selectedFiles);
     const handleImageClick = (index) => {
         setSelectedImage(index);
         setModalIsOpen(true);
@@ -40,6 +39,12 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
         setModalIsOpen(false);
     };
 
+    const handleDeleteImage = (index) => {
+        setSelectedFiles((prevFiles) =>
+            prevFiles.filter((_, i) => i !== index)
+        );
+    };
+
     const [isZoomed, setIsZoomed] = useState(false);
 
     const toggleZoom = () => {
@@ -64,16 +69,22 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
                                     : file.name}
                                 ...
                             </p>
+                            {/* Add this button for deleting the image */}
+                            <button
+                                backgroundColor="white"
+                                onClick={() => handleDeleteImage(index)}
+                            >
+                                <RiDeleteBin6Line color="red" />
+                            </button>
                         </div>
                     ))}
                 </div>
 
                 <input
+                    style={fileInputStyle}
                     type="file"
                     multiple
                     onChange={handleFileChange}
-                    accept="image/*"
-                    style={fileInputStyle}
                 />
 
                 <ReactModal
@@ -184,13 +195,6 @@ const previewText = {
     fontSize: "14px",
 };
 
-const fileInputStyle = {
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-    width: "180px",
-    fontSize: "12px",
-};
-
 const modalContainer = {
     display: "flex",
     flexDirection: "row",
@@ -199,4 +203,28 @@ const modalContainer = {
     textAlign: "center",
     gap: "10px",
 };
+
+const fileInputStyle = {
+    backgroundColor: "#f8f8f8", // Light grey background
+    padding: "10px",
+    margin: "10px 0", // Margin around the input
+    fontSize: "14px", // Font size
+    color: "#333", // Text color
+    fontFamily: "'Times New Roman', serif", // Classic serif font
+    cursor: "pointer", // Cursor changes to pointer when hovering over the input
+    transition: "all 0.3s ease", // Smooth transition for hover effects
+
+    // Hover state
+    ":hover": {
+        backgroundColor: "#e8e8e8", // Slightly darker background on hover
+        borderColor: "#bbb", // Darker border on hover
+    },
+
+    // Active state
+    ":active": {
+        backgroundColor: "#e0e0e0", // Even darker background when active
+        borderColor: "#aaa", // Even darker border when active
+    },
+};
+
 export default FileUpload;

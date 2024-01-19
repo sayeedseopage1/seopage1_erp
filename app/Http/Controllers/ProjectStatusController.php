@@ -199,17 +199,8 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.extend_request',$this->data);
     }
     public function storePMExtendRequest(Request $request){
+        // dd($request->all());
         // \DB::beginTransaction();
-        // $validator =  $request->validate([
-        //     'screenshot' => 'required',
-        //     'extended_day' => 'required',
-        //     'is_client_communication' => 'required',
-
-        // ], [
-        //     'screenshot.required' => 'This field is required!',
-        //     'extended_day.required' => 'This field is required!',
-        //     'is_client_communication.required' => 'This field is required!',
-        // ]);
         $pmGoals = ProjectPmGoal::where('project_id',$request->project_id)->get();
         $goal = '';
         foreach($pmGoals as $pmGoal){
@@ -241,6 +232,13 @@ class ProjectStatusController extends AccountBaseController
         // dd('ok');
         
         return response()->json(['status'=>200]);
+    }
+    public function extendImage($id){
+        $projectFile = ProjectPmGoalFile::where('project_id',$id)->get();
+        return response()->json([
+            'status'=>200,
+            'data'=>$projectFile
+        ]);
     }
 
     public function reviewExtendRequest($id){
