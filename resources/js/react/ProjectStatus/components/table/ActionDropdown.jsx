@@ -37,9 +37,14 @@ const ActionDropdown = ({ ...rest }) => {
     return (
         <React.Fragment>
             <Dropdown>
-                <Dropdown.Toggle icon={false} className={styles.dropdownToggle}>
-                    <BsThreeDotsVertical />
-                </Dropdown.Toggle>
+                {projectDetails.extended_request_status === 1 && (
+                    <Dropdown.Toggle
+                        icon={false}
+                        className={styles.dropdownToggle}
+                    >
+                        <BsThreeDotsVertical />
+                    </Dropdown.Toggle>
+                )}
 
                 <Dropdown.Menu placement="bottom-end">
                     <Switch>
@@ -51,7 +56,12 @@ const ActionDropdown = ({ ...rest }) => {
                                 Extend Request
                             </Dropdown.Item>
                         </Switch.Case>
-                        <Switch.Case condition={auth.roleId === 1}>
+                        <Switch.Case
+                            condition={
+                                projectDetails.extended_request_status === 1 &&
+                                (auth.roleId === 1 || auth.roleId === 8)
+                            }
+                        >
                             <Dropdown.Item
                                 className={styles.dropdownItem}
                                 onClick={handleReviewExtendRequestClick}
@@ -62,7 +72,7 @@ const ActionDropdown = ({ ...rest }) => {
                     </Switch>
                 </Dropdown.Menu>
             </Dropdown>
-
+            {}
             <ExtendRequestModal
                 projectDetails={projectDetails}
                 isOpen={isOpenExtendRequestModal}

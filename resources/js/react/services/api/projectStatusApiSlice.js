@@ -65,6 +65,14 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
                 `/account/project-extend-image/${project_id}`,
             providesTags: "GET_PROJECT_EXTEND_IMAGE",
         }),
+        createReviewExtendRequest: build.mutation({
+            query: (data) => ({
+                url: `account/project-status-accept-extend-request`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+        }),
     }),
 });
 
@@ -75,4 +83,5 @@ export const {
     useCreateResolveSuggestionCommentMutation,
     useCreateExtendRequestMutation,
     useGetProjectExtendImagesQuery,
+    useCreateReviewExtendRequestMutation,
 } = projectStatusApiSlice;

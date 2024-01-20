@@ -53,12 +53,6 @@ const ImageViewer = ({ imageData }) => {
                                 alt={`Preview ${index}`}
                                 onClick={() => handleImageClick(index)}
                             />
-                            <p style={previewText}>
-                                {file.file_name.length >= 6
-                                    ? file.file_name.slice(0, 6)
-                                    : file.file_name}
-                                ...
-                            </p>
                         </div>
                     ))}
                 </div>

@@ -3,6 +3,8 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { useState } from "react";
 import Button from "../../../global/Button";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { Flex } from "../table/ui";
+import FileInputWithCustomIcon from "./CustomInput";
 const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
@@ -54,6 +56,12 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     return (
         <>
             <div style={containerStyle}>
+                <Flex justifyContent="left" gap="20px">
+                    <strong style={{ marginTop: "10px" }}>Screenshots:</strong>
+                    <FileInputWithCustomIcon
+                        handleFileChange={handleFileChange}
+                    />
+                </Flex>
                 <div style={previewContainerStyle}>
                     {selectedFiles.map((file, index) => (
                         <div key={index} style={previewItemStyle}>
@@ -63,14 +71,12 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
                                 alt={`Preview ${index}`}
                                 onClick={() => handleImageClick(index)}
                             />
-                            <p style={previewText}>
-                                {file.name.length >= 6
-                                    ? file.name.slice(0, 6)
-                                    : file.name}
-                                ...
-                            </p>
-                            {/* Add this button for deleting the image */}
+
                             <button
+                                style={{
+                                    margin: "2px",
+                                    backgroundColor: "transparent",
+                                }}
                                 backgroundColor="white"
                                 onClick={() => handleDeleteImage(index)}
                             >
@@ -79,13 +85,6 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
                         </div>
                     ))}
                 </div>
-
-                <input
-                    style={fileInputStyle}
-                    type="file"
-                    multiple
-                    onChange={handleFileChange}
-                />
 
                 <ReactModal
                     isOpen={modalIsOpen}
@@ -175,10 +174,14 @@ const previewContainerStyle = {
     display: "flex",
     justifyContent: "center",
     flexWrap: "wrap",
-    marginTop: "20px",
+    marginTop: "10px",
 };
 
 const previewItemStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
     margin: "0 5px 5px 0",
 };
 
@@ -190,11 +193,6 @@ const previewImageStyle = {
     cursor: "pointer",
 };
 
-const previewText = {
-    marginTop: "5px",
-    fontSize: "14px",
-};
-
 const modalContainer = {
     display: "flex",
     flexDirection: "row",
@@ -202,29 +200,6 @@ const modalContainer = {
     justifyContent: "center",
     textAlign: "center",
     gap: "10px",
-};
-
-const fileInputStyle = {
-    backgroundColor: "#f8f8f8", // Light grey background
-    padding: "10px",
-    margin: "10px 0", // Margin around the input
-    fontSize: "14px", // Font size
-    color: "#333", // Text color
-    fontFamily: "'Times New Roman', serif", // Classic serif font
-    cursor: "pointer", // Cursor changes to pointer when hovering over the input
-    transition: "all 0.3s ease", // Smooth transition for hover effects
-
-    // Hover state
-    ":hover": {
-        backgroundColor: "#e8e8e8", // Slightly darker background on hover
-        borderColor: "#bbb", // Darker border on hover
-    },
-
-    // Active state
-    ":active": {
-        backgroundColor: "#e0e0e0", // Even darker background when active
-        borderColor: "#aaa", // Even darker border when active
-    },
 };
 
 export default FileUpload;

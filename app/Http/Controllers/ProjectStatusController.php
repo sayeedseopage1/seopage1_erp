@@ -247,6 +247,7 @@ class ProjectStatusController extends AccountBaseController
     }
     public function acceptOrDenyExtendRequest(Request $request){
         // \DB::beginTransaction();
+        // dd($request->all());
         $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
         $updateGoal = '';
         if($request->status==1){

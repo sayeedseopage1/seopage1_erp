@@ -1,44 +1,98 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
-import { IoClose } from "react-icons/io5";
-
+toast;
 import { Flex } from "../table/ui";
 import CKEditorComponent from "../../../ckeditor";
-import { useGetProjectExtendImagesQuery } from "../../../services/api/projectStatusApiSlice";
+import {
+    useCreateReviewExtendRequestMutation,
+    useGetProjectExtendImagesQuery,
+} from "../../../services/api/projectStatusApiSlice";
 import ImageViewer from "./ImageViewer";
 import RefreshButton from "../RefreshButton";
-
+import { toast } from "react-toastify";
 const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
-    const [suggestionData, setSuggestionData] = useState("");
     const [commentData, setCommentData] = useState("");
-    const [ratingValue, setRatingValue] = useState("1");
+    const [extendedDay, setExtendedDay] = useState(
+        projectDetails?.extended_day
+    );
     const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
         projectDetails?.project_id
     );
+    const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 
     const imageData = data?.data;
 
-    const handleSuggestionChange = (e, editor) => {
-        setSuggestionData(editor.getData());
+    const handleResetForm = () => {
+        setCommentData("");
+    };
+
+    console.log("comment data", commentData);
+    const handleAccept = async (e) => {
+        e.preventDefault();
+        const fd = new FormData();
+        console.log("accept data", fd);
+        fd.append("extended_day", extendedDay ?? "");
+        fd.append("is_any_negligence", commentData ?? "");
+        fd.append("project_id", projectDetails?.project_id ?? "");
+        fd.append("status", "1");
+        fd.append(
+            "_token",
+            document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content")
+        );
+
+        submitData(fd)
+            .unwrap()
+            .then((res) => {
+                onClose();
+                toast.success("Submission was successful");
+                handleResetForm();
+            })
+            .catch((err) => {
+                if (err?.status === 422) {
+                    toast.error("Please fill up all required fields");
+                }
+            });
+    };
+
+    const handleReject = async (e) => {
+        e.preventDefault();
+        const fd = new FormData();
+
+        fd.append("extended_day", extendedDay ?? "");
+        fd.append("is_any_negligence", commentData ?? "");
+        fd.append("project_id", projectDetails?.project_id ?? "");
+        fd.append("status", "0");
+        fd.append(
+            "_token",
+            document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content")
+        );
+
+        submitData(fd)
+            .unwrap()
+            .then((res) => {
+                onClose();
+                toast.success("Rejection was successful");
+                handleResetForm();
+            })
+            .catch((err) => {
+                if (err?.status === 422) {
+                    toast.error("Please fill up all required fields");
+                }
+            });
     };
     const handleCommentChange = (e, editor) => {
         setCommentData(editor.getData());
     };
-    const handleRatingValueChange = (e) => {
-        setRatingValue(e.target.value);
+    const handleExtendedDayChange = (e) => {
+        setExtendedDay(e.target.value);
     };
 
-    const handleSubmit = () => {
-        // submitData({
-        //     project_pm_goal_id: projectPmGoalId,
-        //     rating: ratingValue,
-        //     suggestion: suggestionData,
-        //     comment: commentData,
-        // });
-
-        onClose();
-    };
+    console.log("extend days", extendedDay);
 
     return (
         <ReactModal
@@ -85,8 +139,8 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
                         <strong>Extended Days:</strong>
                         <input
-                            value={ratingValue}
-                            onChange={handleRatingValueChange}
+                            value={extendedDay}
+                            onChange={handleExtendedDayChange}
                         ></input>
                     </Flex>
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
@@ -112,20 +166,18 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                         <Button
                             variant="success"
                             style={styles.button}
-                            onClick={handleSubmit}
-                            // disabled={isLoading}
+                            onClick={handleAccept}
+                            disabled={isLoading}
                         >
-                            {/* {isLoading ? "Submitting..." : "Submit"} */}
-                            Accept
+                            {isLoading ? "Accepting..." : "Accept"}
                         </Button>
                         <Button
                             variant="danger"
                             style={styles.button}
-                            onClick={handleSubmit}
-                            // disabled={isLoading}
+                            onClick={handleReject}
+                            disabled={isLoading}
                         >
-                            {/* {isLoading ? "Submitting..." : "Submit"} */}
-                            Reject
+                            {isLoading ? "Rejecting..." : "Reject"}
                         </Button>
                     </Flex>
                 </div>
@@ -145,7 +197,8 @@ const customStyles = {
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        maxHeight: "600px",
+        height: "650px",
+        maxHeight: "100vh",
 
         margin: "auto auto",
         padding: "20px",

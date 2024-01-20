@@ -152,15 +152,13 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                             style={{ padding: "5px" }}
                         ></input>
                     </Flex>
-                    <Flex justifyContent="left">
-                        <strong>Screenshots:</strong>
-                        <FileUpload
-                            selectedFiles={selectedFiles}
-                            setSelectedFiles={setSelectedFiles}
-                        />
-                    </Flex>
 
-                    <div style={styles.reasonContainer}>
+                    <FileUpload
+                        selectedFiles={selectedFiles}
+                        setSelectedFiles={setSelectedFiles}
+                    />
+
+                    <div>
                         <p>
                             <strong>Reason:</strong>
                         </p>
@@ -200,7 +198,8 @@ const customStyles = {
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        maxHeight: "500px",
+        height: "550px",
+        maxHeight: "100vh",
 
         margin: "auto auto",
         padding: "20px",
@@ -212,9 +211,7 @@ const styles = {
         display: "flex",
         justifyContent: "center",
     },
-    reasonContainer: {
-        marginTop: "20px",
-    },
+
     button: {
         marginTop: "20px",
         marginLeft: "auto",
