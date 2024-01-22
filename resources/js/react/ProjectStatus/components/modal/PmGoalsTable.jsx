@@ -11,7 +11,7 @@ import { Placeholder } from "../../../global/Placeholder";
 const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
     const auth = useAuth();
     const [projectPmGoalId, setProjectPmGoalId] = React.useState(1);
-
+    const [pmGoalExtendReason, setPmGoalExtendReason] = React.useState("");
     //pagination start
     // Number of items to display per page
     const [itemsPerPage, setItemsPerPage] = React.useState(5);
@@ -171,6 +171,9 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                                                         setProjectPmGoalId(
                                                             goal.id
                                                         );
+                                                        setPmGoalExtendReason(
+                                                            goal.reason
+                                                        );
                                                     }}
                                                 >
                                                     Resolve
@@ -212,6 +215,7 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
             />
 
             <ResolveModal
+                pmGoalExtendReason={pmGoalExtendReason}
                 projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
                 isModalThreeOpen={isModalThreeOpen}

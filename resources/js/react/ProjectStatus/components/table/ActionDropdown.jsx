@@ -37,7 +37,8 @@ const ActionDropdown = ({ ...rest }) => {
     return (
         <React.Fragment>
             <Dropdown>
-                {projectDetails.extended_request_status === 1 && (
+                {(projectDetails.extended_request_status === 1 ||
+                    auth.roleId === 4) && (
                     <Dropdown.Toggle
                         icon={false}
                         className={styles.dropdownToggle}

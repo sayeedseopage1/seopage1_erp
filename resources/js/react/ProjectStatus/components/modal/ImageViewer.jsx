@@ -11,8 +11,8 @@ const ImageViewer = ({ imageData }) => {
         setSelectedImage(index);
         setModalIsOpen(true);
     };
+    
     if (imageData) {
-        console.log("image data", imageData);
     }
     const handleNextImage = () => {
         setSelectedImage((prevIndex) =>
@@ -156,11 +156,6 @@ const previewImageStyle = {
     objectFit: "cover",
     borderRadius: "5px",
     cursor: "pointer",
-};
-
-const previewText = {
-    marginTop: "5px",
-    fontSize: "14px",
 };
 
 const modalContainer = {

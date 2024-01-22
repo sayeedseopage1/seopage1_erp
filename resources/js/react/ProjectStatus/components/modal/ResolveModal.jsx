@@ -7,6 +7,7 @@ import CKEditorComponent from "../../../ckeditor";
 import { Flex } from "../table/ui";
 import { useCreateResolveSuggestionCommentMutation } from "../../../services/api/projectStatusApiSlice";
 const ResolveModal = ({
+    pmGoalExtendReason,
     projectPmGoalId,
     projectDetails,
     isModalThreeOpen,
@@ -122,11 +123,13 @@ const ResolveModal = ({
                         <strong>Reason: </strong>
                         <span
                             dangerouslySetInnerHTML={{
-                                __html: projectDetails.reason
-                                    ? projectDetails.reason
+                                __html: pmGoalExtendReason
+                                    ? pmGoalExtendReason
                                     : "--",
                             }}
                         />
+
+                        {console.log("pmGoalExtendReason", pmGoalExtendReason)}
                     </Flex>
 
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
