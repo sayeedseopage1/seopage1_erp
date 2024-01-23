@@ -788,13 +788,7 @@ class ProjectController extends AccountBaseController
 
         $helper->DisputeFormAuthorization($project);
 
-        $project_milestones= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
-        foreach ($project_milestones as $milestone) {
-            $milestone_update= ProjectMilestone::find($milestone->id);
-            $milestone_update->status ='canceled';
-            $milestone_update->save();
-            # code...
-        }
+       
         $project->save();
         $users = User::where('role_id', 1)->get();
         foreach ($users as $user) {
@@ -876,6 +870,13 @@ class ProjectController extends AccountBaseController
         $project->dispute_admin_comment = $request->dispute_admin_comment;
         $project->status = 'canceled';
         $project->save();
+        $project_milestones= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
+        foreach ($project_milestones as $milestone) {
+            $milestone_update= ProjectMilestone::find($milestone->id);
+            $milestone_update->status ='canceled';
+            $milestone_update->save();
+            # code...
+        }
 
         $actions = PendingAction::where('code','DFA')->where('past_status',0)->where('project_id',$project->id)->get();
         if($actions != null)

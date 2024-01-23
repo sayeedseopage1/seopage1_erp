@@ -87,7 +87,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     {{ trans('app.' . $item->status) }}
                                 @else
                                     <i class="fa fa-circle mr-1 text-red f-10"></i>
-                                     @if($item->status == 'cancelled')
+                                     @if($item->status == 'canceled')
 
 
                                       <span>  {{ trans('app.' . $item->status) }}
@@ -227,7 +227,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                             @endif
 
-                    @elseif($item->status == 'cancelled')
+                    @elseif($item->status == 'canceled')
                                 @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                                         @if($item->qc_status == 0)
@@ -389,7 +389,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
     @endif
 
-@elseif($item->status == 'cancelled')
+@elseif($item->status == 'canceled')
         @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                 @if($item->qc_status == 0)
