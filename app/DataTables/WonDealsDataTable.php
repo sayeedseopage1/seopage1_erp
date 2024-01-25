@@ -133,7 +133,7 @@ class WonDealsDataTable extends BaseDataTable
                 }elseif($upSellAddedBy->role_id==7 && Auth::user()->role_id == 7){
                     $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
                 }else{
-                    if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
+                    if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 7) {
                         $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
                     }
                 }
