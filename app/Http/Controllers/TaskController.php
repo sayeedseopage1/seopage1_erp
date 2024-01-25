@@ -4824,7 +4824,7 @@ class TaskController extends AccountBaseController
                     $originalfilename = $file->getClientOriginalName();
                    // dd($originalfilename);
                   //  $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
-                    $filename = $file->getClientOriginalName().'_'. \Carbon\Carbon::now() . '.' . $file->getClientOriginalExtension(); 
+                    $filename = $originalfilename.'_'. \Carbon\Carbon::now() . '.' . $file->getClientOriginalExtension(); 
                 
                   //  $filename= 
               
