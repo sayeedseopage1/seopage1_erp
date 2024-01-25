@@ -4822,9 +4822,10 @@ class TaskController extends AccountBaseController
                 // }
                 foreach ($files as $file) {
                     $originalfilename = $file->getClientOriginalName();
+                    $filenameWithoutExtension = pathinfo($originalfilename, PATHINFO_FILENAME);
                    // dd($originalfilename);
                   //  $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
-                    $filename = $file->getClientOriginalName().'_'. \Carbon\Carbon::now() . '.' . $file->getClientOriginalExtension(); 
+                    $filename = $filenameWithoutExtension .'_'. \Carbon\Carbon::now() . '.' . $file->getClientOriginalExtension(); 
                 
                   //  $filename= 
               
