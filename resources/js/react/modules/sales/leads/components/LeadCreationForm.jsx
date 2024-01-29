@@ -286,7 +286,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         setClientCountry(value);
         setFormData((state) => ({
             ...state,
-            country: value.id,
+            country: value.nicename,
         }));
     };
 

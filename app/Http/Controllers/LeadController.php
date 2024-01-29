@@ -849,7 +849,7 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
-//        dd($request->all());
+      //  dd($request->all());
 if ($request->project_type !='hourly'){
     $validator = Validator::make($request->all(), [
         'client_name' => 'required|max:255',
