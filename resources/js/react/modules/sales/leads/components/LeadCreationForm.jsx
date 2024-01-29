@@ -391,168 +391,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 )}
                             </InputGroup>
                         </div>
-
-                        {type === "hourly" ? (
-                            <>
-                                {/* hourly rate */}
-                                <div className="col-md-6">
-                                    <InputGroup>
-                                        <Label>
-                                            {" "}
-                                            Hourly Rate <sup>*</sup> :{" "}
-                                        </Label>
-                                        <div className="row">
-                                            <div className="col-md-6">
-                                                <Input
-                                                    type="text"
-                                                    name="bid_value"
-                                                    value={formData.bid_value}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Minimum"
-                                                />
-                                                {error?.bid_value ? (
-                                                    <ErrorText>
-                                                        {" "}
-                                                        {error?.bid_value}{" "}
-                                                    </ErrorText>
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </div>
-                                            <div className="col-md-6">
-                                                <Input
-                                                    type="text"
-                                                    name="bid_value2"
-                                                    value={formData.bid_value2}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Maximum"
-                                                />
-                                                {error?.bid_value2 ? (
-                                                    <ErrorText>
-                                                        {" "}
-                                                        {error?.bid_value2}{" "}
-                                                    </ErrorText>
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </InputGroup>
-                                </div>
-                            </>
-                        ) : (
-                            <>
-                                {/* Deadline */}
-                                <div className="col-md-4">
-                                    <InputGroup className="d-flex flex-column">
-                                        <Label>
-                                            {" "}
-                                            Project Deadline <sup>*</sup> :{" "}
-                                        </Label>
-                                        <ReactDatePicker
-                                            className={`${style.deadline_picker}`}
-                                            name="deadline"
-                                            minDate={new Date()}
-                                            selected={deadline}
-                                            value={
-                                                deadline
-                                                    ? dayjs(deadline).format(
-                                                          "DD-MM-YYYY"
-                                                      )
-                                                    : ""
-                                            }
-                                            onChange={(date) => {
-                                                setDeadline(date);
-                                            }}
-                                            placeholderText="Project Deadline"
-                                        />
-                                        {error?.deadline ? (
-                                            <ErrorText>
-                                                {" "}
-                                                {error?.deadline}{" "}
-                                            </ErrorText>
-                                        ) : (
-                                            <></>
-                                        )}
-                                    </InputGroup>
-                                </div>
-
-                                {/* Project budget */}
-                                <div className="col-md-4">
-                                    <InputGroup>
-                                        <Label>
-                                            {" "}
-                                            Project Budget <sup>*</sup> :{" "}
-                                        </Label>
-                                        <div className="row">
-                                            <div className="col-md-6">
-                                                <Input
-                                                    type="text"
-                                                    name="bid_value"
-                                                    value={formData.bid_value}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Minimum"
-                                                />
-                                                {error?.bid_value ? (
-                                                    <ErrorText>
-                                                        {" "}
-                                                        {error?.bid_value}{" "}
-                                                    </ErrorText>
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </div>
-                                            <div className="col-md-6">
-                                                <Input
-                                                    type="text"
-                                                    name="bid_value2"
-                                                    value={formData.bid_value2}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Maximum"
-                                                />
-                                                {error?.bid_value2 ? (
-                                                    <ErrorText>
-                                                        {" "}
-                                                        {error?.bid_value2}{" "}
-                                                    </ErrorText>
-                                                ) : (
-                                                    <></>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </InputGroup>
-                                </div>
-                            </>
-                        )}
-
-                        {/* Bid value */}
-                        <div
-                            className={`${
-                                type === "hourly" ? "col-md-6" : "col-md-4"
-                            }`}
-                        >
-                            <InputGroup>
-                                <Label>
-                                    {" "}
-                                    Bid value <sup>*</sup> :{" "}
-                                </Label>
-                                <Input
-                                    type="number"
-                                    name="value"
-                                    value={formData.value}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter Bid value"
-                                />
-                                {error?.value ? (
-                                    <ErrorText> {error?.value} </ErrorText>
-                                ) : (
-                                    <></>
-                                )}
-                            </InputGroup>
-                        </div>
-
-                        {/* Project Type */}
-                        <div className="col-md-4">
+                           {/* Project Type */}
+                           <div className="col-md-4">
                             <InputGroup>
                                 <Label>
                                     {" "}
@@ -715,6 +555,167 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 )}
                             </InputGroup>
                         </div>
+
+                        {type === "hourly" ? (
+                            <>
+                                {/* hourly rate */}
+                                <div className="col-md-6">
+                                    <InputGroup>
+                                        <Label>
+                                            {" "}
+                                            Hourly Rate <sup>*</sup> :{" "}
+                                        </Label>
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <Input
+                                                    type="text"
+                                                    name="bid_value"
+                                                    value={formData.bid_value}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Minimum"
+                                                />
+                                                {error?.bid_value ? (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        {error?.bid_value}{" "}
+                                                    </ErrorText>
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </div>
+                                            <div className="col-md-6">
+                                                <Input
+                                                    type="text"
+                                                    name="bid_value2"
+                                                    value={formData.bid_value2}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Maximum"
+                                                />
+                                                {error?.bid_value2 ? (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        {error?.bid_value2}{" "}
+                                                    </ErrorText>
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </InputGroup>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {/* Deadline */}
+                                <div className="col-md-4">
+                                    <InputGroup className="d-flex flex-column">
+                                        <Label>
+                                            {" "}
+                                            Project Deadline <sup>*</sup> :{" "}
+                                        </Label>
+                                        <ReactDatePicker
+                                            className={`${style.deadline_picker}`}
+                                            name="deadline"
+                                            minDate={new Date()}
+                                            selected={deadline}
+                                            value={
+                                                deadline
+                                                    ? dayjs(deadline).format(
+                                                          "DD-MM-YYYY"
+                                                      )
+                                                    : ""
+                                            }
+                                            onChange={(date) => {
+                                                setDeadline(date);
+                                            }}
+                                            placeholderText="Project Deadline"
+                                        />
+                                        {error?.deadline ? (
+                                            <ErrorText>
+                                                {" "}
+                                                {error?.deadline}{" "}
+                                            </ErrorText>
+                                        ) : (
+                                            <></>
+                                        )}
+                                    </InputGroup>
+                                </div>
+
+                                {/* Project budget */}
+                                <div className="col-md-4">
+                                    <InputGroup>
+                                        <Label>
+                                            {" "}
+                                            Project Budget <sup>*</sup> :{" "}
+                                        </Label>
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <Input
+                                                    type="text"
+                                                    name="bid_value"
+                                                    value={formData.bid_value}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Minimum"
+                                                />
+                                                {error?.bid_value ? (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        {error?.bid_value}{" "}
+                                                    </ErrorText>
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </div>
+                                            <div className="col-md-6">
+                                                <Input
+                                                    type="text"
+                                                    name="bid_value2"
+                                                    value={formData.bid_value2}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Maximum"
+                                                />
+                                                {error?.bid_value2 ? (
+                                                    <ErrorText>
+                                                        {" "}
+                                                        {error?.bid_value2}{" "}
+                                                    </ErrorText>
+                                                ) : (
+                                                    <></>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </InputGroup>
+                                </div>
+                            </>
+                        )}
+
+                        {/* Bid value */}
+                        <div
+                            className={`${
+                                type === "hourly" ? "col-md-6" : "col-md-4"
+                            }`}
+                        >
+                            <InputGroup>
+                                <Label>
+                                    {" "}
+                                    Bid value <sup>*</sup> :{" "}
+                                </Label>
+                                <Input
+                                    type="number"
+                                    name="value"
+                                    value={formData.value}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter Bid value"
+                                />
+                                {error?.value ? (
+                                    <ErrorText> {error?.value} </ErrorText>
+                                ) : (
+                                    <></>
+                                )}
+                            </InputGroup>
+                        </div>
+
+                     
 
                         {/* Bidding Delay Time  */}
                         <div className="col-md-12">
