@@ -722,6 +722,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('projects', ProjectController::class);
     //projects json route
     Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
+    Route::get('get-clients/{type?}', [ProjectController::class, 'get_client_json']);
 
     /* PRODUCTS */
     Route::post('products/apply-quick-action', [ProductController::class, 'applyQuickAction'])->name('products.apply_quick_action');

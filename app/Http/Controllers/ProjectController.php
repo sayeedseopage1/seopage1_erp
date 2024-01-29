@@ -6209,6 +6209,12 @@ public function updatePmBasicSEO(Request $request){
 
         return response()->json($data);
     }
+    public function get_client_json($type = null)
+    {
+      $data= User::where('role_id',null)->get();
+
+        return response()->json($data);
+    }
 
     public function get_project_details($id)
     {

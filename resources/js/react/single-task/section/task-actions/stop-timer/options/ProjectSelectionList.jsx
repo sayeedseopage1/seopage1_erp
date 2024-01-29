@@ -20,7 +20,6 @@ const ProjectSelectionList = ({ project, setProject }) => {
                       _.lowerCase(projectQuery)
                   )
               );
-   
 
     return (
         <div className="position-relative w-100 mb-3">
