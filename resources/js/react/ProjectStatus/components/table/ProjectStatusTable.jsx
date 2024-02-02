@@ -30,11 +30,13 @@ import { useSearchParams } from "react-router-dom";
 import { useLocalStorage } from "react-use";
 import EmptyTable from "../../../global/EmptyTable";
 import { Placeholder } from "../../../global/Placeholder";
+import RefreshButton from "../RefreshButton";
 
 const ProjectStatusTable = ({
     data,
     columns = [],
     isLoading,
+    refetch,
     onPageChange,
     sorting,
     tableName = "ProjectStatusTable",
@@ -129,6 +131,11 @@ const ProjectStatusTable = ({
     return (
         <>
             <>
+                <RefreshButton
+                    style={{ marginLeft: "auto" }}
+                    onClick={refetch}
+                    isLoading={isLoading}
+                />
                 <TableContainer>
                     <Table>
                         <TableHeader

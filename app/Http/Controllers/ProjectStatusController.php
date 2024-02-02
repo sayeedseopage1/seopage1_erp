@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Helper\Reply;
 use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectStatusController extends AccountBaseController
@@ -151,6 +152,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.calendar.index', $this->data);
     }
     public function projectStatusReason(Request $request){
+        // dd($request->all());
         $validator =  $request->validate([
             'reason' => 'required',
 
@@ -165,7 +167,9 @@ class ProjectStatusController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
     public function projectStatusResolve(Request $request){
-        $validator =  $request->validate([
+        // dd($request->all());
+        // \DB::beginTransaction();
+        $validator = Validator::make($request->all(), [
             'rating' => 'required',
             'suggestion' => 'required',
             'comment' => 'required',
@@ -175,12 +179,17 @@ class ProjectStatusController extends AccountBaseController
             'suggestion.required' => 'This field is required!',
             'comment.required' => 'This field is required!',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
         $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
         $projectPG->rating = $request->rating;
         $projectPG->suggestion = $request->suggestion;
         $projectPG->admin_comment = $request->comment;
         $projectPG->reason_status = 2;
         $projectPG->save();
+
+        // dd($projectPG)
 
         return response()->json(['status'=>200]);
     }
@@ -190,17 +199,8 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.extend_request',$this->data);
     }
     public function storePMExtendRequest(Request $request){
+        // dd($request->all());
         // \DB::beginTransaction();
-        $validator =  $request->validate([
-            'screenshot' => 'required',
-            'extended_day' => 'required',
-            'is_client_communication' => 'required',
-
-        ], [
-            'screenshot.required' => 'This field is required!',
-            'extended_day.required' => 'This field is required!',
-            'is_client_communication.required' => 'This field is required!',
-        ]);
         $pmGoals = ProjectPmGoal::where('project_id',$request->project_id)->get();
         $goal = '';
         foreach($pmGoals as $pmGoal){
@@ -233,6 +233,13 @@ class ProjectStatusController extends AccountBaseController
         
         return response()->json(['status'=>200]);
     }
+    public function extendImage($id){
+        $projectFile = ProjectPmGoalFile::where('project_id',$id)->get();
+        return response()->json([
+            'status'=>200,
+            'data'=>$projectFile
+        ]);
+    }
 
     public function reviewExtendRequest($id){
         $this->project_id = $id;
@@ -240,6 +247,7 @@ class ProjectStatusController extends AccountBaseController
     }
     public function acceptOrDenyExtendRequest(Request $request){
         // \DB::beginTransaction();
+        // dd($request->all());
         $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
         $updateGoal = '';
         if($request->status==1){

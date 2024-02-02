@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import Button from "../../../../global/Button";
 
-export default function RefreshButton({onClick, isLoading, ...rest}) {
+export default function RefreshButton({ onClick, isLoading, ...rest }) {
     return ReactDOM.createPortal(
         <Button
             onClick={onClick}

@@ -3,6 +3,9 @@ import ReactModal from "react-modal";
 
 import { IoClose } from "react-icons/io5";
 
+import DeadlineExplanation from "./DeadlineExplanation";
+import { Flex } from "../table/ui";
+
 const customStyles = {
     overlay: {
         zIndex: 99999998,
@@ -13,14 +16,20 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "70%",
+        maxWidth: "600px",
+        maxHeight: "550px",
 
         margin: "auto auto",
         padding: "20px",
     },
 };
 
-const DeadlineExplainModal = ({ isModalTwoOpen, closeModalTwo, projectId }) => {
+const DeadlineExplainModal = ({
+    projectPmGoalId,
+    projectDetails,
+    isModalTwoOpen,
+    closeModalTwo,
+}) => {
     return (
         <ReactModal
             style={customStyles}
@@ -35,7 +44,13 @@ const DeadlineExplainModal = ({ isModalTwoOpen, closeModalTwo, projectId }) => {
                     marginBottom: "20px",
                 }}
             >
-                <div style={{ fontSize: "25px" }}>Deadline Explanation</div>
+                <div
+                    style={{
+                        fontSize: "25px",
+                    }}
+                >
+                    Deadline Explanation
+                </div>
 
                 <button
                     onClick={closeModalTwo}
@@ -50,9 +65,11 @@ const DeadlineExplainModal = ({ isModalTwoOpen, closeModalTwo, projectId }) => {
                 </button>
             </div>
 
-            <div style={{ fontSize: "25px", marginTop: "50px" }}>
-                ProjectId:{projectId}
-            </div>
+            <DeadlineExplanation
+                closeModalTwo={closeModalTwo}
+                projectPmGoalId={projectPmGoalId}
+                projectDetails={projectDetails}
+            />
         </ReactModal>
     );
 };

@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 import FilterBar from "../components/FilterBar";
-import { useAuth } from "../../hooks/useAuth.jsx";
+
 import {
     useGetPmGoalQuery,
     useGetProjectStatusQuery,
@@ -13,9 +13,7 @@ import Avatar from "../../global/Avatar";
 import ProjectModal from "../components/modal/ProjectModal";
 
 const ProjectStatus = () => {
-    const auth = useAuth();
-
-    console.log("auth", auth);
+    const [projectDetails, setProjectDetails] = React.useState({});
     const [sorting, setSorting] = React.useState([]);
     const [projectId, setProjectId] = React.useState("900");
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
@@ -42,7 +40,9 @@ const ProjectStatus = () => {
         data: pmGoalData,
         isFetching: isFetchingPmGoal,
         refetch: refetchPmGoal,
-    } = useGetPmGoalQuery(projectId);
+    } = useGetPmGoalQuery(projectId, {
+        refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
+    });
 
     const leads = data?.data;
     const pmGoal = pmGoalData?.data;
@@ -91,6 +91,7 @@ const ProjectStatus = () => {
                 return (
                     <a
                         onClick={() => {
+                            setProjectDetails(row.original);
                             setProjectId(data.project_id);
                             setIsModalOneOpen(true);
                             setSelectedProjectName(data.project_name);
@@ -130,6 +131,7 @@ const ProjectStatus = () => {
             <FilterBar setFiltering={setFiltering} />
 
             <ProjectStatusTable
+                refetch={refetch}
                 data={leads}
                 columns={TableColumns}
                 isLoading={isFetching}
@@ -140,11 +142,13 @@ const ProjectStatus = () => {
             />
 
             <ProjectModal
+                refetchPmGoal={refetchPmGoal}
                 isFetchingPmGoal={isFetchingPmGoal}
                 pmGoal={pmGoal}
                 isOpen={isModalOneOpen}
                 closeModal={closeModalOne}
                 selectedProjectName={selectedProjectName}
+                projectDetails={projectDetails}
             />
         </Container>
     );

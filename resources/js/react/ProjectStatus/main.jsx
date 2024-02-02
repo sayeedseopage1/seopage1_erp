@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import { store } from "../services/store";
-import Toaster from "../global/Toaster";
+// import Toaster from "../global/Toaster";
 import ProjectStatus from "./pages/ProjectStatus";
 
 // custom drag layer
@@ -45,7 +45,7 @@ const DragLayer = () => {
 const Container = () => {
     return (
         <React.Fragment>
-            <Toaster />
+            {/* <Toaster /> */}
             <DragLayer />
             <Outlet />
         </React.Fragment>

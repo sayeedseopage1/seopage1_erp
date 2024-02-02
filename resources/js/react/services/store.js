@@ -1,4 +1,4 @@
-import { configureStore, miniSerializeError } from "@reduxjs/toolkit";
+import { configureStore,  } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import employeeWiseTableDataReducer from "./features/employeeWiseTableDataSlice";
 import projectWiseDataTableReducer from "./features/projectWiseTableDataSlice";

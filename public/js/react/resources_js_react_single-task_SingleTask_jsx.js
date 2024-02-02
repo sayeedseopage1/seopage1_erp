@@ -4715,8 +4715,8 @@ var CommentWritingModal = function CommentWritingModal(_ref) {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "sp1_st_comment_panel",
         style: {
-          maxWidth: '60vw',
-          minHeight: '50vh'
+          maxWidth: "60vw",
+          minHeight: "50vh"
         },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "border-bottom pb-2 d-flex",
@@ -4734,7 +4734,7 @@ var CommentWritingModal = function CommentWritingModal(_ref) {
             className: "sp1_st_write_comment-sendbox",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               style: {
-                minWidth: '48px'
+                minWidth: "48px"
               },
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
                 src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
@@ -4750,7 +4750,7 @@ var CommentWritingModal = function CommentWritingModal(_ref) {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                 className: "py-3",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-                  children: ["Attach Files here (if need) ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                  children: ["Attach Files here (if need)", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                     className: "fa-solid fa-paperclip ml-1 text-primary"
                   })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
