@@ -75,6 +75,7 @@ class LeadController extends AccountBaseController
             return $next($request);
         });
     }
+ //convert lead to deal and creating deal
     public function DealStageChange(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -372,6 +373,7 @@ class LeadController extends AccountBaseController
             'deal_id' => $deal->id,
         ]);
     }
+   //convert to deal to next step
     public function DealStageUpdate(Request $request)
     {
         $request->validate([
@@ -652,6 +654,7 @@ class LeadController extends AccountBaseController
             'status'=>400
         ]);
     }
+    //lost deal
     public function DealStageUpdateLost(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -681,7 +684,7 @@ class LeadController extends AccountBaseController
         ]);
 //    return back()->with('status_updated', 'Status Updated!!');
     }
-
+//leads datatable
     public function index(LeadsDataTable $dataTable)
     {
         $this->viewLeadPermission = $viewPermission = user()->permission('view_lead');
@@ -738,7 +741,7 @@ class LeadController extends AccountBaseController
         return $dataTable->render('leads.index', $this->data);
 
     }
-
+//lead single page
     public function show($id)
     {
         $this->lead = Lead::with(['leadAgent', 'leadAgent.user', 'leadStatus'])->findOrFail($id)->withCustomFields();
@@ -846,7 +849,7 @@ class LeadController extends AccountBaseController
     }
     public function storeLead(Request $request)
     {
-//        dd($request->all());
+      //  dd($request->all());
 if ($request->project_type !='hourly'){
     $validator = Validator::make($request->all(), [
         'client_name' => 'required|max:255',

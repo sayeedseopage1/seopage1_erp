@@ -60,7 +60,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
             ->sum('cost');
     $this->total_canceled_amount_for_this_cycle = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
     ->where('projects.pm_id', $pmId)
-    ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
+   // ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
     ->whereBetween('project_milestones.updated_at', [$startDate, $assignEndDate])
     ->where('projects.project_status', 'Accepted')
     ->where('project_milestones.status', 'canceled')
@@ -84,6 +84,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
             ->where('projects.pm_id', $pmId)
             ->where('projects.project_status','Accepted')
             ->sum('project_milestones.cost');
+     //   dd($this->pm_pending_milestone_value);
          
 
         //Pending Amount(upto last month)
@@ -105,6 +106,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
 
 
         //Total Unreleased Amount(For this Cycle)
+
 
         $this->pm_unreleased_amount_month = DB::table('users')    // this is used for finding upto last month pending and this is selected cycle pending amount and that will be minus to whole pending amount
         ->join('projects', 'users.id', '=', 'projects.pm_id')   //cancel  milestone  is not allowed
@@ -201,7 +203,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
             ->sum('cost');
             $this->total_canceled_amount_for_this_cycle = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
     ->where('projects.pm_id', $pmId)
-    ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
+    //->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
     ->whereBetween('project_milestones.updated_at', [$startDate, $assignEndDate])
     ->where('projects.project_status', 'Accepted')
     ->where('project_milestones.status', 'canceled')

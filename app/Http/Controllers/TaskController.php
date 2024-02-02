@@ -4822,8 +4822,10 @@ class TaskController extends AccountBaseController
                 // }
                 foreach ($files as $file) {
                     $originalfilename = $file->getClientOriginalName();
+                    $filenameWithoutExtension = pathinfo($originalfilename, PATHINFO_FILENAME);
                    // dd($originalfilename);
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                  //  $filename = uniqid() . '.' . $file->getClientOriginalExtension(); 
+                    $filename = $filenameWithoutExtension .'_'. \Carbon\Carbon::now()->format('Y-m-d_H_i_s'). '.' . $file->getClientOriginalExtension(); 
                 
                   //  $filename= 
               
@@ -5325,7 +5327,7 @@ class TaskController extends AccountBaseController
                     ->first(); 
                     
                 // lead developer 
-                $lead_dev = $subtask->added_by;
+                $lead_dev = 2252;
                 $lead_developer = get_user($lead_dev, false);
                 $developer = get_user($subtask->assigned_to, false);
 
@@ -5366,6 +5368,7 @@ class TaskController extends AccountBaseController
                 'projects.deal_id as project_deal_id',
                 'deals.added_by as deal_added_by'
             )
+            ->groupBy('revision.id')
             ->where(function ($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $client_id, $start_date, $end_date, $logged_user) {
                 if ($task_id) {
                     $query->where('disputes.task_id', $task_id);
@@ -5404,6 +5407,7 @@ class TaskController extends AccountBaseController
                     $query->whereDate('disputes.created_at', '<=', Carbon::create($end_date)->format('Y-m-d'));
                 }
             })
+            
             ->get();
 
 

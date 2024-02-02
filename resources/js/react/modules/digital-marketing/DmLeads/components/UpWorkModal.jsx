@@ -255,7 +255,7 @@ const UpWorkModal = ({ close, source }) => {
         setClientCountry(value);
         setFormData((state) => ({
             ...state,
-            country: value.id,
+            country: value.nicename,
         }));
     };
 
@@ -406,6 +406,127 @@ const UpWorkModal = ({ close, source }) => {
                             />
                             {error?.project_link ? (
                                 <ErrorText> {error?.project_link} </ErrorText>
+                            ) : (
+                                <></>
+                            )}
+                        </InputGroup>
+                    </div>
+                       {/* Project Type */}
+                       <div className="col-md-4">
+                        <InputGroup>
+                            <Label>
+                                {" "}
+                                Project Type <sup>*</sup> :{" "}
+                            </Label>
+                            <Flex justifyContent="flex-start">
+                                <RadioLabel>
+                                    <RadioInput
+                                        type="radio"
+                                        name="project_type"
+                                        value="fixed"
+                                        checked={
+                                            formData.project_type === "fixed"
+                                        }
+                                        onChange={(e) => {
+                                            setType(e.target.value);
+                                            handleInputChange(e);
+                                        }}
+                                    />
+                                    Fixed Project
+                                </RadioLabel>
+
+                                <RadioLabel>
+                                    <RadioInput
+                                        type="radio"
+                                        name="project_type"
+                                        value="hourly"
+                                        checked={
+                                            formData.project_type === "hourly"
+                                        }
+                                        onChange={(e) => {
+                                            setType(e.target.value);
+                                            handleInputChange(e);
+                                        }}
+                                    />
+                                    Hourly Project
+                                </RadioLabel>
+                            </Flex>
+                        </InputGroup>
+                    </div>
+
+                    {/* Currency */}
+                    <div className="col-md-4">
+                        <InputGroup>
+                            <Label>
+                                {" "}
+                                Currency <sup>*</sup> :{" "}
+                            </Label>
+                            <SelectionMenuWrapper>
+                                <Select
+                                    value={currency}
+                                    onChange={handleCurrencySelection}
+                                    display={(value) =>
+                                        value?.currency_code ?? "--"
+                                    }
+                                    className="selection"
+                                >
+                                    <Select.Options>
+                                        <Select.SearchControllerWrapper>
+                                            {(query) =>
+                                                getCurrencies(
+                                                    currencies?.data,
+                                                    query
+                                                )?.map((currency) => (
+                                                    <Select.Option
+                                                        key={currency.id}
+                                                        value={currency}
+                                                    >
+                                                        {({ selected }) => (
+                                                            <div>
+                                                                {
+                                                                    currency?.currency_code
+                                                                }{" "}
+                                                                ({" "}
+                                                                {
+                                                                    currency?.currency_symbol
+                                                                }{" "}
+                                                                )
+                                                            </div>
+                                                        )}
+                                                    </Select.Option>
+                                                ))
+                                            }
+                                        </Select.SearchControllerWrapper>
+                                    </Select.Options>
+                                </Select>
+                            </SelectionMenuWrapper>
+                            {error?.original_currency_id ? (
+                                <ErrorText>
+                                    {" "}
+                                    {error?.original_currency_id}{" "}
+                                </ErrorText>
+                            ) : (
+                                <></>
+                            )}
+                        </InputGroup>
+                    </div>
+
+                    {/* Total spent  */}
+                    <div className="col-md-4">
+                        <InputGroup>
+                            <Label>
+                                {" "}
+                                Total Spent <sup>*</sup> :{" "}
+                            </Label>
+                            <Input
+                                type="number"
+                                name="total_spent"
+                                value={formData.total_spent}
+                                onChange={handleInputChange}
+                                placeholder="Enter Total Spent"
+                            />
+                            {error?.total_spent ? (
+                                <ErrorText> {error?.total_spent} </ErrorText>
                             ) : (
                                 <></>
                             )}
@@ -571,127 +692,7 @@ const UpWorkModal = ({ close, source }) => {
                         </InputGroup>
                     </div>
 
-                    {/* Project Type */}
-                    <div className="col-md-4">
-                        <InputGroup>
-                            <Label>
-                                {" "}
-                                Project Type <sup>*</sup> :{" "}
-                            </Label>
-                            <Flex justifyContent="flex-start">
-                                <RadioLabel>
-                                    <RadioInput
-                                        type="radio"
-                                        name="project_type"
-                                        value="fixed"
-                                        checked={
-                                            formData.project_type === "fixed"
-                                        }
-                                        onChange={(e) => {
-                                            setType(e.target.value);
-                                            handleInputChange(e);
-                                        }}
-                                    />
-                                    Fixed Project
-                                </RadioLabel>
-
-                                <RadioLabel>
-                                    <RadioInput
-                                        type="radio"
-                                        name="project_type"
-                                        value="hourly"
-                                        checked={
-                                            formData.project_type === "hourly"
-                                        }
-                                        onChange={(e) => {
-                                            setType(e.target.value);
-                                            handleInputChange(e);
-                                        }}
-                                    />
-                                    Hourly Project
-                                </RadioLabel>
-                            </Flex>
-                        </InputGroup>
-                    </div>
-
-                    {/* Currency */}
-                    <div className="col-md-4">
-                        <InputGroup>
-                            <Label>
-                                {" "}
-                                Currency <sup>*</sup> :{" "}
-                            </Label>
-                            <SelectionMenuWrapper>
-                                <Select
-                                    value={currency}
-                                    onChange={handleCurrencySelection}
-                                    display={(value) =>
-                                        value?.currency_code ?? "--"
-                                    }
-                                    className="selection"
-                                >
-                                    <Select.Options>
-                                        <Select.SearchControllerWrapper>
-                                            {(query) =>
-                                                getCurrencies(
-                                                    currencies?.data,
-                                                    query
-                                                )?.map((currency) => (
-                                                    <Select.Option
-                                                        key={currency.id}
-                                                        value={currency}
-                                                    >
-                                                        {({ selected }) => (
-                                                            <div>
-                                                                {
-                                                                    currency?.currency_code
-                                                                }{" "}
-                                                                ({" "}
-                                                                {
-                                                                    currency?.currency_symbol
-                                                                }{" "}
-                                                                )
-                                                            </div>
-                                                        )}
-                                                    </Select.Option>
-                                                ))
-                                            }
-                                        </Select.SearchControllerWrapper>
-                                    </Select.Options>
-                                </Select>
-                            </SelectionMenuWrapper>
-                            {error?.original_currency_id ? (
-                                <ErrorText>
-                                    {" "}
-                                    {error?.original_currency_id}{" "}
-                                </ErrorText>
-                            ) : (
-                                <></>
-                            )}
-                        </InputGroup>
-                    </div>
-
-                    {/* Total spent  */}
-                    <div className="col-md-4">
-                        <InputGroup>
-                            <Label>
-                                {" "}
-                                Total Spent <sup>*</sup> :{" "}
-                            </Label>
-                            <Input
-                                type="number"
-                                name="total_spent"
-                                value={formData.total_spent}
-                                onChange={handleInputChange}
-                                placeholder="Enter Total Spent"
-                            />
-                            {error?.total_spent ? (
-                                <ErrorText> {error?.total_spent} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
-                        </InputGroup>
-                    </div>
+                 
 
                     {/* Project Description */}
                     <div className="col-12">

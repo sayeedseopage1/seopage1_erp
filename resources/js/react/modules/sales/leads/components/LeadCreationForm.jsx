@@ -286,7 +286,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         setClientCountry(value);
         setFormData((state) => ({
             ...state,
-            country: value.id,
+            country: value.nicename,
         }));
     };
 
@@ -386,6 +386,170 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         {" "}
                                         {error?.project_link}{" "}
                                     </ErrorText>
+                                ) : (
+                                    <></>
+                                )}
+                            </InputGroup>
+                        </div>
+                           {/* Project Type */}
+                           <div className="col-md-4">
+                            <InputGroup>
+                                <Label>
+                                    {" "}
+                                    Project Type <sup>*</sup> :{" "}
+                                </Label>
+                                <Flex justifyContent="flex-start">
+                                    <RadioLabel>
+                                        <RadioInput
+                                            type="radio"
+                                            name="project_type"
+                                            value="fixed"
+                                            checked={
+                                                formData.project_type ===
+                                                "fixed"
+                                            }
+                                            onChange={(e) => {
+                                                setType(e.target.value);
+                                                handleInputChange(e);
+                                            }}
+                                        />
+                                        Fixed Project
+                                    </RadioLabel>
+
+                                    <RadioLabel>
+                                        <RadioInput
+                                            type="radio"
+                                            name="project_type"
+                                            value="hourly"
+                                            checked={
+                                                formData.project_type ===
+                                                "hourly"
+                                            }
+                                            onChange={(e) => {
+                                                setType(e.target.value);
+                                                handleInputChange(e);
+                                            }}
+                                        />
+                                        Hourly Project
+                                    </RadioLabel>
+                                </Flex>
+
+                                {/* {error?.project_type ? (
+                                    <ErrorText>
+                                        {" "}
+                                        {error?.project_type}{" "}
+                                    </ErrorText>
+                                ) : (
+                                    <></>
+                                )} */}
+                            </InputGroup>
+                        </div>
+
+                        {/* Currency */}
+                        <div className="col-md-4">
+                            <InputGroup>
+                                <Label>
+                                    {" "}
+                                    Currency <sup>*</sup> :{" "}
+                                </Label>
+                                <SelectionMenuWrapper>
+                                    <Select
+                                        value={currency}
+                                        onChange={handleCurrencySelection}
+                                        display={(value) =>
+                                            value?.currency_code ?? "--"
+                                        }
+                                        className="selection"
+                                    >
+                                        <Select.Options>
+                                            <Select.SearchControllerWrapper>
+                                                {(query) =>
+                                                    getCurrencies(
+                                                        currencies?.data,
+                                                        query
+                                                    )?.map((currency) => (
+                                                        <Select.Option
+                                                            key={currency.id}
+                                                            value={currency}
+                                                        >
+                                                            {({ selected }) => (
+                                                                <div>
+                                                                    {
+                                                                        currency?.currency_code
+                                                                    }{" "}
+                                                                    ({" "}
+                                                                    {
+                                                                        currency?.currency_symbol
+                                                                    }{" "}
+                                                                    )
+                                                                </div>
+                                                            )}
+                                                        </Select.Option>
+                                                    ))
+                                                }
+                                            </Select.SearchControllerWrapper>
+                                        </Select.Options>
+                                    </Select>
+                                </SelectionMenuWrapper>
+                                {error?.original_currency_id ? (
+                                    <ErrorText>
+                                        {" "}
+                                        {error?.original_currency_id}{" "}
+                                    </ErrorText>
+                                ) : (
+                                    <></>
+                                )}
+                            </InputGroup>
+                        </div>
+
+                        {/* Client Country */}
+                        <div className="col-md-4">
+                            <InputGroup>
+                                <Label>
+                                    {" "}
+                                    Client Country <sup>*</sup> :{" "}
+                                </Label>
+                                <SelectionMenuWrapper>
+                                    <Select
+                                        value={clientCountry}
+                                        onChange={handleClientCountrySelection}
+                                        display={(value) =>
+                                            value
+                                                ? `${value?.nicename} ( ${value?.iso3} )`
+                                                : "--"
+                                        }
+                                        className="selection"
+                                    >
+                                        <Select.Options>
+                                            <Select.SearchControllerWrapper>
+                                                {(query) =>
+                                                    getCountries(
+                                                        countries?.data,
+                                                        query
+                                                    )?.map((country) => (
+                                                        <Select.Option
+                                                            key={country.id}
+                                                            value={country}
+                                                        >
+                                                            {({ selected }) => (
+                                                                <div>
+                                                                    {
+                                                                        country?.nicename
+                                                                    }{" "}
+                                                                    {country?.iso3
+                                                                        ? `( ${country?.iso3} )`
+                                                                        : ""}
+                                                                </div>
+                                                            )}
+                                                        </Select.Option>
+                                                    ))
+                                                }
+                                            </Select.SearchControllerWrapper>
+                                        </Select.Options>
+                                    </Select>
+                                </SelectionMenuWrapper>
+                                {error?.country ? (
+                                    <ErrorText> {error?.country} </ErrorText>
                                 ) : (
                                     <></>
                                 )}
@@ -551,170 +715,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                             </InputGroup>
                         </div>
 
-                        {/* Project Type */}
-                        <div className="col-md-4">
-                            <InputGroup>
-                                <Label>
-                                    {" "}
-                                    Project Type <sup>*</sup> :{" "}
-                                </Label>
-                                <Flex justifyContent="flex-start">
-                                    <RadioLabel>
-                                        <RadioInput
-                                            type="radio"
-                                            name="project_type"
-                                            value="fixed"
-                                            checked={
-                                                formData.project_type ===
-                                                "fixed"
-                                            }
-                                            onChange={(e) => {
-                                                setType(e.target.value);
-                                                handleInputChange(e);
-                                            }}
-                                        />
-                                        Fixed Project
-                                    </RadioLabel>
-
-                                    <RadioLabel>
-                                        <RadioInput
-                                            type="radio"
-                                            name="project_type"
-                                            value="hourly"
-                                            checked={
-                                                formData.project_type ===
-                                                "hourly"
-                                            }
-                                            onChange={(e) => {
-                                                setType(e.target.value);
-                                                handleInputChange(e);
-                                            }}
-                                        />
-                                        Hourly Project
-                                    </RadioLabel>
-                                </Flex>
-
-                                {/* {error?.project_type ? (
-                                    <ErrorText>
-                                        {" "}
-                                        {error?.project_type}{" "}
-                                    </ErrorText>
-                                ) : (
-                                    <></>
-                                )} */}
-                            </InputGroup>
-                        </div>
-
-                        {/* Currency */}
-                        <div className="col-md-4">
-                            <InputGroup>
-                                <Label>
-                                    {" "}
-                                    Currency <sup>*</sup> :{" "}
-                                </Label>
-                                <SelectionMenuWrapper>
-                                    <Select
-                                        value={currency}
-                                        onChange={handleCurrencySelection}
-                                        display={(value) =>
-                                            value?.currency_code ?? "--"
-                                        }
-                                        className="selection"
-                                    >
-                                        <Select.Options>
-                                            <Select.SearchControllerWrapper>
-                                                {(query) =>
-                                                    getCurrencies(
-                                                        currencies?.data,
-                                                        query
-                                                    )?.map((currency) => (
-                                                        <Select.Option
-                                                            key={currency.id}
-                                                            value={currency}
-                                                        >
-                                                            {({ selected }) => (
-                                                                <div>
-                                                                    {
-                                                                        currency?.currency_code
-                                                                    }{" "}
-                                                                    ({" "}
-                                                                    {
-                                                                        currency?.currency_symbol
-                                                                    }{" "}
-                                                                    )
-                                                                </div>
-                                                            )}
-                                                        </Select.Option>
-                                                    ))
-                                                }
-                                            </Select.SearchControllerWrapper>
-                                        </Select.Options>
-                                    </Select>
-                                </SelectionMenuWrapper>
-                                {error?.original_currency_id ? (
-                                    <ErrorText>
-                                        {" "}
-                                        {error?.original_currency_id}{" "}
-                                    </ErrorText>
-                                ) : (
-                                    <></>
-                                )}
-                            </InputGroup>
-                        </div>
-
-                        {/* Client Country */}
-                        <div className="col-md-4">
-                            <InputGroup>
-                                <Label>
-                                    {" "}
-                                    Client Country <sup>*</sup> :{" "}
-                                </Label>
-                                <SelectionMenuWrapper>
-                                    <Select
-                                        value={clientCountry}
-                                        onChange={handleClientCountrySelection}
-                                        display={(value) =>
-                                            value
-                                                ? `${value?.nicename} ( ${value?.iso3} )`
-                                                : "--"
-                                        }
-                                        className="selection"
-                                    >
-                                        <Select.Options>
-                                            <Select.SearchControllerWrapper>
-                                                {(query) =>
-                                                    getCountries(
-                                                        countries?.data,
-                                                        query
-                                                    )?.map((country) => (
-                                                        <Select.Option
-                                                            key={country.id}
-                                                            value={country}
-                                                        >
-                                                            {({ selected }) => (
-                                                                <div>
-                                                                    {
-                                                                        country?.nicename
-                                                                    }{" "}
-                                                                    {country?.iso3
-                                                                        ? `( ${country?.iso3} )`
-                                                                        : ""}
-                                                                </div>
-                                                            )}
-                                                        </Select.Option>
-                                                    ))
-                                                }
-                                            </Select.SearchControllerWrapper>
-                                        </Select.Options>
-                                    </Select>
-                                </SelectionMenuWrapper>
-                                {error?.country ? (
-                                    <ErrorText> {error?.country} </ErrorText>
-                                ) : (
-                                    <></>
-                                )}
-                            </InputGroup>
-                        </div>
+                     
 
                         {/* Bidding Delay Time  */}
                         <div className="col-md-12">

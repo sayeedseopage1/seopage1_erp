@@ -138,7 +138,7 @@
         </div>
         <div class="modal-footer">
             @if (Auth::user()->role_id==1 && $canceledProject->dispute_admin_comment == null)
-                <button type="button" class="btn btn-primary" id="authBtn">Authorized</button>
+                <button type="button" class="btn btn-primary" id="authBtn">Authorize</button>
             @endif
         </div>
         </form>

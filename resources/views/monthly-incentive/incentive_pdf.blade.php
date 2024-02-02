@@ -392,7 +392,7 @@
                                 <tr><td> <h4>Authorized By</h4></td></tr>
                                 <tr><td style="height: 14px"> </td></tr>
                                 <tr><td style="height: 5px"> ..............................</td></tr>
-                                <tr><td> Rajat Chakraboty</td></tr>
+                                <tr><td> Rajat Chakraborty</td></tr>
                                 <tr><td>Date:  {{\Carbon\Carbon::today()->format('Y-m-d')}}</td></tr>
                             </tbody>
                         </table>

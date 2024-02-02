@@ -87,7 +87,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
                                     {{ trans('app.' . $item->status) }}
                                 @else
                                     <i class="fa fa-circle mr-1 text-red f-10"></i>
-                                     @if($item->status == 'cancelled')
+                                     @if($item->status == 'canceled')
 
 
                                       <span>  {{ trans('app.' . $item->status) }}
@@ -200,6 +200,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 
                                      <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" data-id="{{ $item->id }}">Mark As Complete </button>
+                                     <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
                                      <button type="submit" class="btn-danger btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button>
                             @else
                                     @if(Auth::user()->role_id == 1)
@@ -226,7 +227,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
                             @endif
 
-                    @elseif($item->status == 'cancelled')
+                    @elseif($item->status == 'canceled')
                                 @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                                         @if($item->qc_status == 0)
@@ -361,6 +362,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
 
              <button type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone" data-id="{{ $item->id }}">Mark As Complete ({{$complete_task}}/{{$total_tasks}})</button>
+             <a href="{{route('invoices.create')}}?project_id={{$item->project_id}}&client_id={{$project->client_id}}&milestone_id={{$item->id}}" type="submit" class="btn-primary btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 mt-3"  id="{{$item->id}}"  data-row-id="{{ $item->id }}" >Partial Payment</a>
              <button type="submit" class="btn-danger btn-sm rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 cancel_milestone" data-row-id="{{ $item->id }}" >Cancel Milestone</button>
     @else
             @if(Auth::user()->role_id == 1)
@@ -387,7 +389,7 @@ $deleteProjectMilestonePermission = ($project->project_admin == user()->id) ? 'a
 
     @endif
 
-@elseif($item->status == 'cancelled')
+@elseif($item->status == 'canceled')
         @if($incomplete_milestone == 0 && $qc_count == 0 && $item->id == $last_milestone->id)
 
                 @if($item->qc_status == 0)
