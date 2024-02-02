@@ -13,8 +13,9 @@ import {
 import { useAuth } from "../../../../../../../../hooks/useAuth";
 import ProjectList from "./ProjectList";
 import UserList from "./UserList";
-
+import TaskList from "./TaskList";
 const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
+  
     const [data, setData] = React.useState({
         comment: "",
         responsible_person: "",
@@ -22,10 +23,12 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         durations: "",
         reason_for_less_tracked_hours_a_day_task: "I couldn't log hours.",
         related_to_any_project: "",
-        project_id: "",
+        task_id: task?.id,
         responsible: "",
         client: "",
     });
+    
+    const [task, setTask] = React.useState(null);
     const [durationStart, setDurationStart] = React.useState("08:00 AM");
     const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
     const [person, setPerson] = React.useState({});
@@ -34,13 +37,16 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [isEnableEmployeeSelectionList, setIsEnableEmployeeSelectionList] =
         React.useState(false);
     const [isOutsideOfErp, setIsOutsideOfErp] = React.useState(false);
-    const [sType, setSType] = React.useState(''); // submission type
+    const [sType, setSType] = React.useState(""); // submission type
     const auth = useAuth();
 
+    console.log("data", data);
+    console.log("task", task);
     // editor data change
     const handleEditorChange = (e, editor) => {
         const editorData = editor.getData();
-        setData({ ...data, comment: editorData });
+        
+        setData({ ...data, comment: editorData , task_id:task.id  });
     };
 
     // handle form on change event
@@ -65,6 +71,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             .timepicker("setTime", durationStart)
             .on("changeTime.timepicker", function (e) {
                 setDurationStart(e.target.value);
+                setData({ ...data});
             });
 
         // end time
@@ -73,6 +80,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             .timepicker("setTime", durationEnd)
             .on("changeTime.timepicker", function (e) {
                 setDurationEnd(e.target.value);
+                setData({ ...data, task: task });
                 // console.log(e.timeStamp)
             });
     }, [checked]);
@@ -82,66 +90,65 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         setData({ ...data, responsible_person_id: id });
     };
 
-
-
     // validate form data
     const isValid = () => {
         let errCount = 0;
         let err = new Object();
 
         // if comment not written
-        if(data.comment === ''){
+        if (data.comment === "") {
             err.comment = "Please explain the reason!";
             errCount++;
         }
 
         // responsible person
-        if(data.responsible_person === ''){
-            err.reason = "Please selected responsible person/system!"
+        if (data.responsible_person === "") {
+            err.reason = "Please selected responsible person/system!";
             errCount++;
         }
 
         // if responsible person other
-        if(isEnableEmployeeSelectionList && !data.responsible_person_id){
+        if (isEnableEmployeeSelectionList && !data.responsible_person_id) {
             err.responsiblePerson = "Please select who is responsible!";
             errCount++;
         }
 
         // if outside erp
-        if(isOutsideOfErp && !data.client){
+        if (isOutsideOfErp && !data.client) {
             err.responsiblePerson = "Please select who is responsible!";
             errCount++;
         }
 
         // if not outside of project check is provided related project
-        if(!isOutsideOfErp && !data.related_to_any_project){
+        if (!isOutsideOfErp && !data.related_to_any_project) {
             err.relativeProject = "You have to pick an option.";
             errCount++;
         }
 
-        if(data.related_to_any_project.toLowerCase() === 'yes' && !data.project_id){
-            err.project = "You have to pick an option.";
+        if (data.related_to_any_project.toLowerCase() === "yes" && !task) {
+            err.task = "You have to pick an option.";
             errCount++;
         }
 
-
         setError(err);
-        return errCount === 0
-    }
-
+        return errCount === 0;
+    };
 
     // handle submission
-    const handleSubmission = (e,submissionType) => {
+    const handleSubmission = (e, submissionType) => {
         e.preventDefault();
         const fd = {
             ...data,
-            durations: JSON.stringify([{id: 'de2sew', start: durationStart, end: durationEnd}]),
-        }
+            durations: JSON.stringify([
+                { id: "de2sew", start: durationStart, end: durationEnd },
+            ]),
+            
+        };
 
-        setSType(submissionType)
-        if(isValid()){
+        setSType(submissionType);
+        if (isValid()) {
             onSubmit(fd, submissionType, onBack);
-        }else {
+        } else {
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -149,7 +156,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                 showConfirmButton: true,
             });
         }
-    }
+    };
 
     return (
         <React.Fragment>
@@ -171,21 +178,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                     <Switch.Case condition={checked}>
                         {/* comment field */}
                         <div className="mt-3 pl-3">
-                            <Label color="#777" className="font-weight-bold">
-                                Write your comments here<sup>*</sup>
-                            </Label>
-                            <div className="ck-editor-holder stop-timer-options">
-                                <CKEditorComponent
-                                    data={data.comment}
-                                    onChange={handleEditorChange}
-                                />
-                            </div>
-                            <Switch.Case condition={error?.comment}>
-                                <div className="f-14" style={{color: 'red'}}>
-                                    {error?.comment}
-                                </div>
-                            </Switch.Case>
-
+                           
                             {/* responsible person */}
                             <div className="mt-3">
                                 <Label
@@ -274,12 +267,11 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 </RadioGroups>
 
                                 <Switch.Case condition={error?.reason}>
-                                    <div style={{color:'red'}}>
+                                    <div style={{ color: "red" }}>
                                         {error?.reason}
                                     </div>
                                 </Switch.Case>
                             </div>
-
                             {/* person selection */}
                             <Switch.Case
                                 condition={isEnableEmployeeSelectionList}
@@ -293,23 +285,25 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                         value={person}
                                         onChange={(d) => {
                                             setPerson(d);
-                                            responsiblePersonId(d.id)
+                                            responsiblePersonId(d.id);
                                         }}
                                     />
                                 </div>
 
-                                <Switch.Case condition={error?.responsiblePerson}>
-                                    <div style={{color: 'red'}}>
+                                <Switch.Case
+                                    condition={error?.responsiblePerson}
+                                >
+                                    <div style={{ color: "red" }}>
                                         {error?.responsiblePerson}
                                     </div>
                                 </Switch.Case>
                             </Switch.Case>
-
-
                             {/* outside erp project */}
                             <Switch.Case condition={isOutsideOfErp}>
                                 <FormGroup className="mt-3">
-                                    <Label>Write the client name <sup>*</sup></Label>
+                                    <Label>
+                                        Write the client name <sup>*</sup>
+                                    </Label>
                                     <Input
                                         type="text"
                                         placeholder="Write the client name"
@@ -320,17 +314,21 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     />
                                 </FormGroup>
 
-                                <Switch.Case condition={error?.responsiblePerson}>
-                                    <div style={{color: 'red'}}>
+                                <Switch.Case
+                                    condition={error?.responsiblePerson}
+                                >
+                                    <div style={{ color: "red" }}>
                                         {error?.responsiblePerson}
                                     </div>
                                 </Switch.Case>
                             </Switch.Case>
-
                             {/* outside erp project */}
                             <Switch.Case condition={!isOutsideOfErp}>
                                 <FormGroup className="mt-3">
-                                    <Label>Was This Related To Any Project? <sup>*</sup></Label>
+                                    <Label>
+                                        Was This Related To Any Task?{" "}
+                                        <sup>*</sup>
+                                    </Label>
                                     <RadioGroups>
                                         <RadioGroup>
                                             <input
@@ -338,7 +336,11 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                                 id="relatedProject"
                                                 value="Yes"
                                                 name="related_to_any_project"
-                                                required={isOutsideOfErp === false ? true : false}
+                                                required={
+                                                    isOutsideOfErp === false
+                                                        ? true
+                                                        : false
+                                                }
                                                 onChange={handleOnChange}
                                             />
                                             <label htmlFor="relatedProject">
@@ -353,7 +355,11 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                                 name="related_to_any_project"
                                                 id="notRelatedProject"
                                                 onChange={handleOnChange}
-                                                required={isOutsideOfErp === false ? true : false}
+                                                required={
+                                                    isOutsideOfErp === false
+                                                        ? true
+                                                        : false
+                                                }
                                             />
                                             <label htmlFor="notRelatedProject">
                                                 No
@@ -361,34 +367,59 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                         </RadioGroup>
                                     </RadioGroups>
 
-                                    <Switch.Case condition={error?.relativeProject}>
-                                        <div style={{color: 'red'}}>
+                                    <Switch.Case
+                                        condition={error?.relativeProject}
+                                    >
+                                        <div style={{ color: "red" }}>
                                             {error?.relativeProject}
                                         </div>
                                     </Switch.Case>
                                 </FormGroup>
 
-                                <Switch.Case condition={data.related_to_any_project.toLowerCase() === 'yes'}>
+                                <Switch.Case
+                                    condition={
+                                        data.related_to_any_project.toLowerCase() ===
+                                        "yes"
+                                    }
+                                >
                                     <FormGroup className="mt-3">
-                                        <Label>Select the project <sup>*</sup></Label>
-                                        <ProjectList
-                                            project={project}
-                                            onSelect={d => {
-                                                setProject(d);
-                                                setData({...data, project_id: d.id})
-                                            }}
+                                        <Label>
+                                            Select the task <sup>*</sup>
+                                        </Label>
+                                        <TaskList
+                                            task={task}
+                                            onSelect={setTask}
                                         />
+                                        <Switch.Case condition={error?.task}>
+                                            <div style={{ color: "red" }}>
+                                                {error?.task}
+                                            </div>
+                                        </Switch.Case>
                                     </FormGroup>
-                                    <Switch.Case condition={error?.project}>
-                                        <div style={{color: 'red'}}>
-                                            {error?.project}
-                                        </div>
-                                    </Switch.Case>
                                 </Switch.Case>
                             </Switch.Case>
 
+                            
+                            <Label color="#777" className="font-weight-bold">
+                                Write your comments here<sup>*</sup>
+                            </Label>
+                            <div className="ck-editor-holder stop-timer-options">
+                                <CKEditorComponent
+                                    data={data.comment}
+                                    onChange={handleEditorChange}
+                                />
+                            </div>
+                            <Switch.Case condition={error?.comment}>
+                                <div className="f-14" style={{ color: "red" }}>
+                                    {error?.comment}
+                                </div>
+                            </Switch.Case>
+
+
+                           
+
                             {/* approximate time */}
-                             {/* time selection */}
+                            {/* time selection */}
                             <FormGroup className="mt-3">
                                 <Label className="font-weight-bold">
                                     Select an approximate time here <sup>*</sup>
@@ -421,32 +452,37 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     </div>
                                 </div>
                             </FormGroup>
-
                             {/* footer section */}
-                            <div className='mt-3 w-100 d-flex align-items-center'>
+                            <div className="mt-3 w-100 d-flex align-items-center">
                                 {/* back button */}
                                 <Button
-                                    variant='tertiary'
+                                    variant="tertiary"
                                     onClick={() => onBack(null)}
-                                    className='ml-auto mr-2'
+                                    className="ml-auto mr-2"
                                 >
                                     Back
                                 </Button>
 
                                 <Button
-                                    onClick={e => handleSubmission(e, '')}
-                                    isLoading={sType !== 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    onClick={(e) => handleSubmission(e, "")}
+                                    isLoading={
+                                        sType !== "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit
                                 </Button>
 
                                 <Button
-                                    variant='success'
-                                    className='ml-2'
-                                    onClick={e => handleSubmission(e, 'CONTINUE')}
-                                    isLoading={sType === 'CONTINUE' && isLoading}
-                                    loaderTitle='Processing...'
+                                    variant="success"
+                                    className="ml-2"
+                                    onClick={(e) =>
+                                        handleSubmission(e, "CONTINUE")
+                                    }
+                                    isLoading={
+                                        sType === "CONTINUE" && isLoading
+                                    }
+                                    loaderTitle="Processing..."
                                 >
                                     Submit and add more
                                 </Button>

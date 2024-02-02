@@ -57,7 +57,7 @@ const List = () => {
     const filterProjectBySearchQuery = (tasks, query) => {
         if (_.size(tasks) === 0) return [];
         return _.filter(tasks, (task) =>
-            task.heading.toLowerCase().includes(query.toLowerCase())
+            task.client_name.toLowerCase().includes(query.toLowerCase())
         );
     };
 

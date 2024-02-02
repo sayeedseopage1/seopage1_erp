@@ -47,7 +47,7 @@ var ProjectSelectionList = function ProjectSelectionList(_ref) {
 
   // project filter
   var filteredProject = projectQuery === "" ? projects : projects.filter(function (project) {
-    return lodash__WEBPACK_IMPORTED_MODULE_1___default().lowerCase(project.project_name).includes(lodash__WEBPACK_IMPORTED_MODULE_1___default().lowerCase(projectQuery));
+    return lodash__WEBPACK_IMPORTED_MODULE_1___default().lowerCase(project.client_name).includes(lodash__WEBPACK_IMPORTED_MODULE_1___default().lowerCase(projectQuery));
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
     className: "position-relative w-100 mb-3",

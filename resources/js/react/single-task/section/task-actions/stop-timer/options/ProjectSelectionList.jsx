@@ -16,7 +16,7 @@ const ProjectSelectionList = ({ project, setProject }) => {
         projectQuery === ""
             ? projects
             : projects.filter((project) =>
-                  _.lowerCase(project.project_name).includes(
+                  _.lowerCase(project.client_name).includes(
                       _.lowerCase(projectQuery)
                   )
               );

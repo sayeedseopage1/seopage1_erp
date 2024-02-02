@@ -86,9 +86,11 @@ use App\Notifications\PPAuthDenyNotification;
 use App\Notifications\TaskCommentNotification;
 use App\Notifications\TaskCommentReplyNotification;
 use App\Models\ProjectPmGoal;
+use Illuminate\Support\Collection;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
+
 
 use Validator;
 
@@ -4624,28 +4626,35 @@ class TaskController extends AccountBaseController
                 return response()->json($data);
             } else {
                 $subtasks = SubTask::select('tasks.id')
-                    ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-
-                    ->where('sub_tasks.task_id', $id)->get();
-
-                foreach ($subtasks as $subtask) {
-                    $data1 = TaskHistory::with('user')->where('task_id', $id)->get();
-                    foreach ($data1 as $item1) {
-                        $item1->lang = __('modules.tasks.' . $item1->details) . ' ' . $item1->user->name;
-                        $created_at = $item1->created_at;
-                        $item1->formatted_created_at = $created_at;
-                    }
-
-                    $data2 = TaskHistory::with('user')->where('task_id', $subtask->id)->get();
-                    foreach ($data2 as $item2) {
-                        $item2->lang = __('modules.tasks.' . $item2->details) . ' ' . $item2->user->name;
-                        $created_at = $item2->created_at;
-                        $item2->formatted_created_at = $created_at;
-                    }
-                    $data = $data1->concat($data2);
-
-                    return response()->json($data);
+                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                ->where('sub_tasks.task_id', $id)
+                ->get();
+            
+            $dataall = new Collection();
+            $data1 = TaskHistory::with('user')->where('task_id', $id)->get();
+                foreach ($data1 as $item1) {
+                    $item1->lang = __('modules.tasks.' . $item1->details) . ' ' . $item1->user->name;
+                    $created_at = $item1->created_at;
+                    $item1->formatted_created_at = $created_at;
                 }
+            foreach ($subtasks as $subtask) {
+                
+            
+                $data2 = TaskHistory::with('user')->where('task_id', $subtask->id)->get();
+                foreach ($data2 as $item2) {
+                    $item2->lang = __('modules.tasks.' . $item2->details) . ' ' . $item2->user->name;
+                    $created_at = $item2->created_at;
+                    $item2->formatted_created_at = $created_at;
+                }
+            
+                $dataall = $dataall->merge($data1)->merge($data2);
+            }
+            
+            // Group the data by 'id'
+          // $data = $dataall->groupBy('created_at');
+           $data= $dataall;
+        //  dd($data);
+            return response()->json($data);
             }
         } elseif ($request->mode == 'task_approve') {
             $data = TaskApprove::where('task_id', $id)->latest()->first();

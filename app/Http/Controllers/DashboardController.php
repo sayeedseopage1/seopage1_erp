@@ -769,7 +769,7 @@ class DashboardController extends AccountBaseController
 
     public function developerDailytrackHoursLog(Request $request)
     {
-    // dd($request->all());
+     //dd($request->all());
         $stop_time = new DeveloperStopTimer();
         $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
         $stop_time->durations = $request->durations;
@@ -784,8 +784,16 @@ class DashboardController extends AccountBaseController
         $stop_time->transition_hours = $request->transition_hours;
         $stop_time->transition_minutes = $request->transition_minutes;
         $stop_time->date = $request->date;
-        $stop_time->client_id = $request->client_id;
+       
         $stop_time->project_id = $request->project_id;
+        $stop_time->task_id = $request->task_id;
+        $project= Project::where('id',$request->project_id)->first();
+        if($project != null)
+        {
+            $stop_time->client_id = $project->client_id;
+
+        }
+       
 
         $stop_time->save();
 

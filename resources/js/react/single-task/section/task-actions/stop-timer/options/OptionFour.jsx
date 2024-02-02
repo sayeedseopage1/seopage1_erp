@@ -4,12 +4,16 @@ import { User } from "../../../../../utils/user-details";
 import Button from "../../../../components/Button";
 const ProjectSelectionList = lazy(() => import("./ProjectSelectionList"));
 const UserSelectionList = lazy(() => import("./UserSelectionList"));
+const DeveloperTaskSelectionMenu = lazy(() =>
+    import("./DevloperTaskSelectionMenu")
+);
 
 const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     // form data
     const [person, setPerson] = useState(null);
     const [client, setClient] = useState("");
     const [project, setProject] = useState(null);
+    
     const [responsible, setResponsible] = useState('');
     const [task, setTask] = useState(null);
     const [isSystemGlitch, setIsSystemGlitch] = useState(undefined);
@@ -104,8 +108,8 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
         //     err.project = "You have to pick an option.";
         //     errCount++;
         // }
-        if(activeProjectDropdown && !project){
-            err.project = "You have to pick an option.";
+        if(activeProjectDropdown && !task){
+            err.task = "You have to pick an option.";
             errCount++;
         }
 
@@ -125,8 +129,8 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                     isOutsideERP ? 'Outside ERP Project' :
                     loggedUser?.getId() === Number(person?.id) ? "Due to MySelf" : "Due to Another Person",
             responsible_person_id: person?.id ?? null,
-            related_to_any_project: project ? "yes" : "no",
-            project_id: project ? project.id : project,
+            related_to_any_project: task ? "yes" : "no",
+            task_id: task ? task.id : task,
             responsible,
             client: client,
         };
@@ -292,7 +296,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                 {/* Related To Any Project */}
                                     <div className="mt-3">
                                         <div className="mb-2 font-weight-bold">
-                                            Was This Related To Any Project? <sup style={{color: 'red'}}>*</sup>
+                                            Was This Related To Any Task? <sup style={{color: 'red'}}>*</sup>
                                         </div>
                                         <div
                                             className="d-flex align-items-center w-100"
@@ -328,24 +332,27 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                         </div>
 
 
-                                        {error?.project && <div className="f-14" style={{color:'red'}}>{error?.project}</div>}
+                                     
                                     </div>
 
                                     { activeProjectDropdown && (
                                         <>
-                                            <label htmlFor="">Select the project</label>
-                                            <Suspense
-                                                fallback={
-                                                    <div className="w-100 bg-white py-2 pl-2 pr-1 mb-3 border d-flex align-items-center justify-content-between">
-                                                        Loading...
-                                                    </div>
-                                                }
-                                            >
-                                                <ProjectSelectionList
-                                                    project={project}
-                                                    setProject={setProject}
-                                                />
-                                            </Suspense>
+                                            <label htmlFor="">Select the task</label>
+                                            <div className="position-relative">
+                                <Suspense
+                                    fallback={
+                                        <div className="w-100 bg-white py-2 pl-2 pr-1 mb-3 border d-flex align-items-center justify-content-between">
+                                            Loading...
+                                        </div>
+                                    }
+                                >
+                                    <DeveloperTaskSelectionMenu
+                                        task={task}
+                                        setTask={setTask}
+                                    />
+                                </Suspense>
+                            </div>
+                            {error?.task && <div className="f-14" style={{color:'red'}}>{error?.task}</div>}
                                         </>
                                     )}
                                     {/* Related To Any Project */}
