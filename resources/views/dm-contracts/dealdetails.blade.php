@@ -385,6 +385,9 @@
                             <div class="dropdown bootstrap-select form-control select-picker">
                                 <select name="deal_category" id="deal_category" data-live-search="true" class="form-control select-picker error" data-size="8">
                                     <option value="">--</option>
+                                    <option value="Web Development">Web Development</option>
+                                    <option value="Graphics Design">Graphics Design</option>
+                                    <option value="UI Design">UI Design</option>
                                     <option value="SEO">SEO</option>
                                     <option value="Paid Campaigns">Paid Campaigns</option>
                                     <option value="Social Media Marketing ">Social Media Marketing </option>

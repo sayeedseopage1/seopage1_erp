@@ -346,6 +346,9 @@
                                     </label>
                                     <div class="dropdown bootstrap-select form-control select-picker">
                                         <select name="deal_category" id="deal_category" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                            <option value="Web Development" {{ $deal->deal_category=='Web Development'? 'selected':'' }}>Web Development</option>
+                                            <option value="Graphics Design" {{ $deal->deal_category=='Graphics Design'? 'selected':'' }}>Graphics Design</option>
+                                            <option value="UI Design" {{ $deal->deal_category=='UI Design'? 'selected':'' }}>UI Design</option>
                                             <option value="SEO" {{ $deal->deal_category=='SEO'? 'selected':'' }}>SEO</option>
                                             <option value="Paid Campaigns" {{ $deal->deal_category=='Paid Campaigns'? 'selected':'' }}>Paid Campaigns</option>
                                             <option value="Social Media Marketing" {{ $deal->deal_category=='Social Media Marketing'? 'selected':'' }}>Social Media Marketing</option>
