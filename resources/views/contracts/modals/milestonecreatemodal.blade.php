@@ -67,6 +67,9 @@
                             <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
                                 @if ($deal->dept_status=='DM')
                                 <option >--</option>
+                                <option value="web-development">Web Development</option>
+                                <option value="graphics-design">Graphics Design</option>
+                                <option value="ui-design">UI Design</option>
                                 <option value="seo">SEO</option>
                                 <option value="paid-campaign-setup">Paid Campaign Setup</option>
                                 <option value="social-media-marketing">Social Media Marketing</option>
@@ -202,6 +205,8 @@
 
     selectElement.addEventListener("change", function() {
         if (selectElement.value === "web-content" ||
+            selectElement.value === "graphics-design" ||
+            selectElement.value === "ui-design" ||
             selectElement.value === "blogs-articles" ||
             selectElement.value === "product-description" ||
             selectElement.value === "product-category" ||
