@@ -6551,7 +6551,9 @@ class TaskController extends AccountBaseController
 
     public function DeveloperInprogressTask($id)
     {
-        $tasks = Task::select('tasks.id')
+        if($id != 228)
+        {
+            $tasks = Task::select('tasks.id')
             ->leftJoin('task_users', 'task_users.task_id', 'tasks.id')
             ->where('task_users.user_id', $id)
 
@@ -6572,6 +6574,9 @@ class TaskController extends AccountBaseController
 
             ]);
         }
+
+        }
+        
     }
     public function checkEditableTask($id)
     {
