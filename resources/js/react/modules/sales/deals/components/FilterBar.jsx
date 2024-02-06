@@ -20,20 +20,23 @@ const FilterBar = ({ setFilter }) => {
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
-    const [searchText, setSearchText] = React.useState('');
+    const [searchText, setSearchText] = React.useState("");
     const [client, setClient] = React.useState(null);
+    const [addedBy, setAddedBy] = React.useState(null);
     const [closedBy, setClosedBy] = React.useState(null);
-    const [convertStatus, setConvertStatus] = React.useState(null); 
-    
+    const [convertStatus, setConvertStatus] = React.useState(null);
+
     const SIZE = useWindowSize();
 
     const clientId = client?.id;
+    const addedById = addedBy?.id;
 
     const _startData = React.useMemo(() => startDate, [startDate]);
     const _endData = React.useMemo(() => endDate, [endDate]);
     const _clientId = React.useMemo(() => client?.id, [clientId]);
     const _convertStatus = React.useMemo(() => convertStatus, [convertStatus]);
     const _closedById = React.useMemo(() => closedBy?.id, [closedBy]);
+    const _addedById = React.useMemo(() => addedBy?.id, [addedBy]);
 
     React.useEffect(() => {
         setFilter((prev) => ({
@@ -47,15 +50,22 @@ const FilterBar = ({ setFilter }) => {
             status_title: convertStatus?.title,
             closed_by: _closedById,
             closed_by_name: closedBy?.name,
+            added_by_id: _addedById,
+            added_by_name: addedBy?.name,
         }));
-    }, [_startData,_closedById, _endData, _clientId, _convertStatus]);
+    }, [_startData, _closedById, _endData, _clientId, _convertStatus]);
 
     // search data
-    useDebounce(() => { setSearchText(search)},500,[search] );
+    useDebounce(
+        () => {
+            setSearchText(search);
+        },
+        500,
+        [search]
+    );
     React.useEffect(() => {
         setFilter((prev) => ({ ...prev, search: searchText }));
     }, [searchText]);
-
 
     return ReactDOM.createPortal(
         <React.Fragment>
@@ -109,11 +119,21 @@ const FilterBar = ({ setFilter }) => {
                             value={client}
                             onChange={setClient}
                             title="Client"
-                            display={value => value?.user_name}
-                            searchBy={value => value?.user_name}
+                            display={(value) => value?.user_name}
+                            searchBy={(value) => value?.user_name}
                             data={_.filter(
                                 users,
                                 (user) => user.role_id === null
+                            )}
+                        />
+                        <PersonFilter
+                            value={addedBy}
+                            onChange={setAddedBy}
+                            title="Added By"
+                            display={(value) => value?.name}
+                            searchBy={(value) => value?.name}
+                            data={_.filter(users, (user) =>
+                                _.includes([7, 9], Number(user.role_id))
                             )}
                         />
 
