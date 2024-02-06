@@ -240,50 +240,44 @@ class PaymentController extends AccountBaseController
         $current_date = Carbon::now();
         $pm_goals = ProjectPmGoal::where('project_id',$payment->project_id)->get();
         $total_milestones= ProjectMilestone::where('project_id',$payment->project_id)->count();
-        $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->count();
+        $complete_milestones= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->groupBy('project_milestones.id')->count();
         $total_milestones_value= ProjectMilestone::where('project_id',$payment->project_id)->sum('cost');
-        $total_complete_milestones_value= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->sum('amount');
+        $total_complete_milestones_value= ProjectMilestone::join('payments','payments.project_id','project_milestones.project_id')->where('project_milestones.project_id',$payment->project_id)->where('payments.status','complete')->groupBy('project_milestones.id')->sum('amount');
         $completion_percent = $total_complete_milestones_value/$total_milestones_value;
         $requierd_milestone = round($total_milestones/2,0);
         foreach ($pm_goals as $pm_goal){
-            if($pm_goal != null && $current_date < $pm_goal->goal_end_date && $completion_percent >= 0.5 && $pm_goal->code == 'FPMR')
+            if($pm_goal != null && $current_date < $pm_goal->goal_end_date && $completion_percent >= 0.5 && $pm_goal->goal_code == 'FPMR')
             {
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = $complete_milestones . ' out of '.$total_milestones. ' milestones released in this week';
+                $pm_goal->description = $total_milestones . ' out of '.$complete_milestones. ' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
-
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && $requierd_milestone +1 >= $complete_milestones && $pm_goal->code == 'MPMR'){
+            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 2 <= $complete_milestones && $pm_goal->goal_code == 'MPMR'){
 
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = $complete_milestones . ' out of '.$requierd_milestone + 1 . ' milestones released in this week';
+                $pm_goal->description = '2 out of '.$complete_milestones.' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
-
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && $requierd_milestone + 2 >= $complete_milestones && $pm_goal->code == 'MMPMR'){
+            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 3 <= $complete_milestones && $pm_goal->goal_code == 'MMPMR'){
 
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = $complete_milestones . ' out of '.$requierd_milestone + 2 . ' milestones released in this week';
+                $pm_goal->description = '3 out of '.$complete_milestones.' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
-
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && $requierd_milestone + 3 >= $complete_milestones && $pm_goal->code == 'LM'){
+            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 4 <= $complete_milestones && $pm_goal->goal_code == 'LM'){
 
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = $complete_milestones . ' out of '.$requierd_milestone + 3 . ' milestones released in this week';
+                $pm_goal->description = '4 out of '.$complete_milestones.' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
-
-            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && $complete_milestones >= 1 && $pm_goal->code == 'FMR'){
+            }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && $complete_milestones >= 1 && $pm_goal->goal_code == 'FMR'){
 
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = $complete_milestones . ' out of '. '1' . ' milestones released in this week';
+                $pm_goal->description = '1 out of '.$complete_milestones. ' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
-
             }
         }
-        // dd('ok');
         $InvoiceId= Invoice::where('id',$invoice->id)->first();
         $projectId= Project::where('id',$InvoiceId->project_id)->first();
         $milestoneId= ProjectMilestone::where('id',$InvoiceId->milestone_id)->first();
