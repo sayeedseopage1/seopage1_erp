@@ -32,7 +32,11 @@ const LeadTableFilterBar = ({ setFilter }) => {
             end_date: _endData,
             sales_executive_id: _saleId,
             sale_name: sale?.name,
-            convert_status: convertStatus?.id ? (convertStatus?.status ? "1" : "0") : 0
+            convert_status: convertStatus?.id
+                ? convertStatus?.status
+                    ? "1"
+                    : "0"
+                : 0,
         }));
     }, [_startData, _endData, _saleId, _convertStatus]);
 
@@ -66,21 +70,21 @@ const LeadTableFilterBar = ({ setFilter }) => {
                             _.includes([1, 7, 8], Number(user.role_id))
                         )}
                     />
-                     <ConvertStatus
-                     value={convertStatus}
-                     onChange={setConvertStatus}
-                     data={[
-                         {
-                            id: 1,
-                            name: 'Converted to Deal ',
-                            status: true
-                         },
-                         {
-                            id: 2,
-                            name: 'Not Converted to Deal ',
-                            status: false
-                         }
-                     ]}
+                    <ConvertStatus
+                        value={convertStatus}
+                        onChange={setConvertStatus}
+                        data={[
+                            {
+                                id: 1,
+                                name: "Converted to Deal ",
+                                status: true,
+                            },
+                            {
+                                id: 2,
+                                name: "Not Converted to Deal ",
+                                status: false,
+                            },
+                        ]}
                     />
                 </Flex>
             </div>
