@@ -4343,9 +4343,9 @@ class TaskController extends AccountBaseController
             $task->parent_task_time_log = $timeLog;
             $task->task_category = $task->category;
             /**  REVISION LOGDEED TIME */
-            $task->revision_log_hour = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_hours');
+            $task->revision_log_hour = round(ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_minutes')/60,0);
             $revision_log_total_min = ProjectTimeLog::where('task_id',$task->id)->where('revision_status',1)->sum('total_minutes');
-            $task->revision_log_min = $task->revision_log_hour * 60 + $revision_log_total_min;
+            $task->revision_log_min = $revision_log_total_min % 60;
 
             // dd($task->revision_log_hour, $task->revision_log_min);
 
@@ -4359,11 +4359,20 @@ class TaskController extends AccountBaseController
             $subtasks = Subtask::where('task_id', $tas_id->id)->get();
             $subtask_count = Subtask::where('task_id', $tas_id->id)->count();
             $time = 0;
+            $revision_time_hours= 0;
+            $revision_time_minutes= 0;
 
             foreach ($subtasks as $subtask) {
                 $stask = Task::where('subtask_id', $subtask->id)->first();
                 $time += $stask->timeLogged->sum('total_minutes');
+                $revision_time_hours = round(ProjectTimeLog::where('task_id',$stask->id)->where('revision_status',1)->sum('total_minutes')/60,0);
+                $revision_log_total_min_subtask = ProjectTimeLog::where('task_id',$stask->id)->where('revision_status',1)->sum('total_minutes');
+                $revision_time_minutes = $revision_log_total_min_subtask % 60;
             }
+            $task->revision_log_hour =  $task->revision_log_hour+ $revision_time_hours;
+          
+            $task->revision_log_min = $task->revision_log_min+ $revision_time_minutes;
+          
             $timeL = intdiv($time, 60) . ' ' . __('app.hrs') . ' ';
 
             if ($time % 60 > 0) {
