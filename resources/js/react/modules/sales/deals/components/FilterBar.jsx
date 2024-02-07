@@ -29,7 +29,6 @@ const FilterBar = ({ setFilter }) => {
     const SIZE = useWindowSize();
 
     const clientId = client?.id;
-    const addedById = addedBy?.id;
 
     const _startData = React.useMemo(() => startDate, [startDate]);
     const _endData = React.useMemo(() => endDate, [endDate]);
@@ -53,7 +52,15 @@ const FilterBar = ({ setFilter }) => {
             added_by_id: _addedById,
             added_by_name: addedBy?.name,
         }));
-    }, [_startData, _closedById, _endData, _clientId, _convertStatus]);
+    }, [
+        _startData,
+        _closedById,
+        _endData,
+        _clientId,
+        _convertStatus,
+        _addedById,
+        addedBy,
+    ]);
 
     // search data
     useDebounce(
@@ -130,10 +137,8 @@ const FilterBar = ({ setFilter }) => {
                             value={addedBy}
                             onChange={setAddedBy}
                             title="Added By"
-                            display={(value) => value?.name}
-                            searchBy={(value) => value?.name}
                             data={_.filter(users, (user) =>
-                                _.includes([7, 9], Number(user.role_id))
+                                _.includes([1, 7, 8], Number(user.role_id))
                             )}
                         />
 
