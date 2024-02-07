@@ -20,7 +20,6 @@ const SearchBox = ({
     return (
         <div className="cnx__ins__ui_search">
             <input
-                style={{ maxWidth: "220px" }}
                 type="text"
                 placeholder={placeholder}
                 value={value}
