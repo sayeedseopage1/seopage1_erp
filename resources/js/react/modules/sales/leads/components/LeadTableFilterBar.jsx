@@ -48,7 +48,11 @@ const LeadTableFilterBar = ({ setFilter }) => {
     return ReactDOM.createPortal(
         <React.Fragment>
             <div className="w-100 bg-white py-2">
-                <Flex justifyContent="flex-start" className="px-3">
+                <Flex
+                    justifyContent="flex-start"
+                    className="px-3"
+                    flexWrap="wrap"
+                >
                     <JqueryDateRangePicker
                         startDate={startDate}
                         setStartDate={setStartDate}
