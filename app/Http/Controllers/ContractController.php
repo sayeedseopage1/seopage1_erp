@@ -1173,7 +1173,13 @@ class ContractController extends AccountBaseController
             $deal->cms_id = $item[0] ?? null;
             $deal->cms_name = $item[1] ?? null;
             $deal->deal_category = $request->deal_category;
-            $deal->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $deal->deadline = $deadline;
+            }else{
+                $deal->deadline = $request->deadline;
+            }
             $deal->estimated_hour_task = $request->estimated_hour_task;
             $deal->hourly_rate = $request->hourly_rate;
             $deal->hubstaff_tracking = $request->hubstaff_tracking;
@@ -1200,7 +1206,13 @@ class ContractController extends AccountBaseController
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
 
-            $project->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $project->deadline = $deadline;
+            }else{
+                $project->deadline = $request->deadline;
+            }
 
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
@@ -1705,7 +1717,13 @@ class ContractController extends AccountBaseController
                     $value = $value  . $link . ' <br> ';
                 }
             }
-            $deal->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $deal->deadline = $deadline;
+            }else{
+                $deal->deadline = $request->deadline;
+            }
             $deal->estimated_hour_task = $request->estimated_hour_task;
             $deal->hourly_rate = $request->hourly_rate;
             $deal->hubstaff_tracking = $request->hubstaff_tracking;
@@ -1735,7 +1753,13 @@ class ContractController extends AccountBaseController
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
 
-            $project->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $project->deadline = $deadline;
+            }else{
+                $project->deadline = $request->deadline;
+            }
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
             $project->project_budget = (($request->amount) + ($request->upsell_amount)) / $currency->exchange_rate;
