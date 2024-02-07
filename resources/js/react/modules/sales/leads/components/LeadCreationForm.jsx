@@ -49,8 +49,37 @@ const LeadCreationForm = ({ isOpen, close }) => {
 
 export default LeadCreationForm;
 
+const urlRegex =
+    /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,63})(:[0-9]{1,5})?\/?(\S*)?$/;
+
 // initial form data
 const initialData = {
+    client_name: "",
+    project_id: "",
+    // project_name: "",
+    project_link: "",
+    project_type: "",
+    deadline: "",
+    bid_value: "",
+    bid_value2: "",
+    value: "",
+    bidding_minutes: "",
+    bidding_seconds: "",
+    description: "",
+    cover_letter: "", // cover letter
+    explanation: "",
+    insight_screenshot: "",
+    bidpage_screenshot: "",
+    projectpage_screenshot: "",
+
+    original_currency_id: "",
+    country: "",
+
+    // client_username: "",
+    // amount: "",
+    // original_currency_id: "",
+};
+const initialError = {
     client_name: "",
     project_id: "",
     // project_name: "",
@@ -82,7 +111,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const [formData, setFormData] = React.useState(
         presetInitialData ?? initialData
     );
-    const [error, setError] = React.useState(initialData);
+    const [error, setError] = React.useState(initialError);
     const [currency, setCurrency] = React.useState(null);
     const [clientCountry, setClientCountry] = React.useState(null);
     const [countries, setCountries] = React.useState(null);
@@ -158,9 +187,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                             _error[key] =
                                 "Please enter correct project link (Freelancer.com) with https!";
                         }
-                        // else if (!validator.isURL(formData[key])) {
-                        //     _error[key] = "Invalid URL";
-                        // }
                     } else if (key === "deadline") {
                         if (!formData[key]) {
                             _error[key] =
@@ -245,17 +271,29 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
         try {
             const res = await leadCreate(formData).unwrap();
-            // console.log(res);
-            if (res.status === 400) {
-                const _serverError = {};
-                const _errorMssg = { ...res?.message?.customMessages };
 
-                for (const key in _errorMssg) {
-                    const [clientErrorKey] = key.split(".");
-                    _serverError[clientErrorKey] = _errorMssg[key];
+            if (res.status === 400) {
+                const _error = { ...initialError };
+
+                // Validation for "project_id"
+                if (res.message.customMessages["project_id.required"]) {
+                    _error.project_id =
+                        res.message.customMessages["project_id.required"];
                 }
-                // console.log(_serverError,_errorMssg);
-                setError(_serverError);
+
+                // Validation for "project_link"
+                if (
+                    !formData.project_link ||
+                    !urlRegex.test(formData.project_link)
+                ) {
+                    _error.project_link =
+                        "Please enter a correct project link (Freelancer.com) with https!";
+                }
+
+                // Add other validations for different fields if needed
+
+                // Update the error state
+                setError(_error);
             } else {
                 toast.success("Lead Created Successfully");
                 handleClose();
@@ -391,8 +429,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 )}
                             </InputGroup>
                         </div>
-                           {/* Project Type */}
-                           <div className="col-md-4">
+                        {/* Project Type */}
+                        <div className="col-md-4">
                             <InputGroup>
                                 <Label>
                                     {" "}
@@ -714,8 +752,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 )}
                             </InputGroup>
                         </div>
-
-                     
 
                         {/* Bidding Delay Time  */}
                         <div className="col-md-12">
