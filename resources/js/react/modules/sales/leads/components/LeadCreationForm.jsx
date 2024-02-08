@@ -896,7 +896,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                             <InputGroup>
                                 <Label>
                                     {" "}
-                                    Bids Insight Page (Screenshot) <sup>
+                                    Bid's Insight Page (Screenshot) <sup>
                                         *
                                     </sup>{" "}
                                     :{" "}
@@ -906,7 +906,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                     name="insight_screenshot"
                                     value={formData.insight_screenshot}
                                     onChange={handleInputChange}
-                                    placeholder="Take a screenshot of the bids insight page, and share the link here."
+                                    placeholder="Take a screenshot of the bid's insight page, and share the link here."
                                 />
                                 {error?.insight_screenshot ? (
                                     <ErrorText>
@@ -922,13 +922,13 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                         {/* Bids page (screenshot link) */}
                         <div className="col-md-12">
                             <InputGroup>
-                                <Label> Bids Page (Screenshot) : </Label>
+                                <Label> Bid's Page (Screenshot) : </Label>
                                 <Input
                                     type="url"
                                     name="bidpage_screenshot"
                                     value={formData.bidpage_screenshot}
                                     onChange={handleInputChange}
-                                    placeholder="Take a screenshot of the bid page, and share the link here."
+                                    placeholder="Take a screenshot of the bid's page, and share the link here."
                                 />
                                 {error?.bidpage_screenshot ? (
                                     <ErrorText>
