@@ -271,29 +271,36 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
 
         try {
             const res = await leadCreate(formData).unwrap();
+            const _error = { ...initialError };
+
+            if (
+                !formData.project_link ||
+                !urlRegex.test(formData.project_link)
+            ) {
+                _error.project_link =
+                    "Please enter a correct project link (Freelancer.com) with https!";
+            } else if (
+                !formData.insight_screenshot ||
+                !urlRegex.test(formData.insight_screenshot)
+            ) {
+                _error.insight_screenshot =
+                    "Please enter a correct project link (Freelancer.com) with https!";
+            } else if (
+                !formData.projectpage_screenshot ||
+                !urlRegex.test(formData.projectpage_screenshot)
+            ) {
+                _error.projectpage_screenshot =
+                    "Please enter a correct project link (Freelancer.com) with https!";
+            }
+
+            setError(_error);
 
             if (res.status === 400) {
-                const _error = { ...initialError };
-
                 // Validation for "project_id"
                 if (res.message.customMessages["project_id.required"]) {
                     _error.project_id =
                         res.message.customMessages["project_id.required"];
                 }
-
-                // Validation for "project_link"
-                if (
-                    !formData.project_link ||
-                    !urlRegex.test(formData.project_link)
-                ) {
-                    _error.project_link =
-                        "Please enter a correct project link (Freelancer.com) with https!";
-                }
-
-                // Add other validations for different fields if needed
-
-                // Update the error state
-                setError(_error);
             } else {
                 toast.success("Lead Created Successfully");
                 handleClose();
