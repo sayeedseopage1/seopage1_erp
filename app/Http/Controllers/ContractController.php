@@ -2577,7 +2577,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
-       // dd($request);
+    //    dd($request->all());
         $data = new AwardTimeIncress();
         $data->request_from = Auth::id();
         $data->deal_id = $request->id;
@@ -2593,8 +2593,9 @@ class ContractController extends AccountBaseController
 
            $helper->ProjectAcceptTimeExtensionAuthorization($project);
            //need pending action
-
+           $total_request = AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
             return response()->json([
+                'data' => $total_request,
                 'status' => 'success'
             ]);
         }
@@ -2699,7 +2700,9 @@ class ContractController extends AccountBaseController
                        
                     }
                 }
+                $total_request = AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
                     return response()->json([
+                        'data' => $total_request,
                         'status' => 'success'
                     ]);
                 }
@@ -3031,11 +3034,11 @@ public function getAllContracts(Request $request){
     
     if (Auth::user()->role_id == 4) {
         $dealsQuery->where('pm_id',Auth::id());
-    }else {
+    }
     $deals = $dealsQuery
         ->orderBy('deals.id', 'desc')
         ->paginate($limit);
-    }
+    
 
     /**AMOUNT CHECK ITS UPSELL OR NOT START */
     foreach ($deals as $itemDeal){
