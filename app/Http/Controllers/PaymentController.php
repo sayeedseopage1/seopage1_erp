@@ -249,7 +249,7 @@ class PaymentController extends AccountBaseController
             if($pm_goal != null && $current_date < $pm_goal->goal_end_date && $completion_percent >= 0.5 && $pm_goal->goal_code == 'FPMR')
             {
                 $pm_goal->goal_status = 1;
-                $pm_goal->description = $total_milestones . ' out of '.$complete_milestones. ' milestones released in this week';
+                $pm_goal->description = $complete_milestones . ' out of '.$total_milestones. ' milestones released in this week';
                 $pm_goal->updated_at= Carbon::now();
                 $pm_goal->save();
             }elseif($pm_goal != null && $current_date < $pm_goal->goal_end_date && 2 <= $complete_milestones && $pm_goal->goal_code == 'MPMR'){
