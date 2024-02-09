@@ -3011,7 +3011,9 @@ public function getAllContracts(Request $request){
         $dealsQuery->where(function ($query) {
             $query->where('deals.project_name', 'like', '%' . request('search') . '%')
                 ->orWhere('deals.deal_id', 'like', '%' . request('search') . '%')
-                ->orWhere('users.name', 'like', '%' . request('search') . '%');
+                ->orWhere('added_by.name', 'like', '%' . request('search') . '%')
+                ->orWhere('pm.name', 'like', '%' . request('search') . '%')
+                ->orWhere('client.name', 'like', '%' . request('search') . '%');
         });
     }
     if ($request->pm_id != null) {
