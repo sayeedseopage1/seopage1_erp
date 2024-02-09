@@ -56,14 +56,12 @@ const LeadTableFilterBar = ({ setFilter }) => {
                     className="px-3"
                     flexWrap="wrap"
                 >
-                    <div style={{ width: "150px" }}>
-                        <JqueryDateRangePicker
-                            startDate={startDate}
-                            setStartDate={setStartDate}
-                            endDate={endDate}
-                            setEndDate={setEndDate}
-                        />
-                    </div>
+                    <JqueryDateRangePicker
+                        startDate={startDate}
+                        setStartDate={setStartDate}
+                        endDate={endDate}
+                        setEndDate={setEndDate}
+                    />
 
                     <div
                         style={{ width: "256px" }}
