@@ -9,8 +9,6 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import _ from "lodash";
 
-
-
 const ActionDropdown = ({ ...rest }) => {
     const auth = useAuth();
 
@@ -57,9 +55,11 @@ const ActionDropdown = ({ ...rest }) => {
 
                 <Dropdown.Menu placement="bottom-end">
                     <Dropdown.Item
-                        onClick={ () => handleRedirection(
-                            `/account/deal-url/${rest?.row?.original?.id}`
-                        )}
+                        onClick={() =>
+                            handleRedirection(
+                                `/account/deal-url/${rest?.row?.original?.id}`
+                            )
+                        }
                         className={styles.dropdownItem}
                     >
                         <i className="fa-regular fa-file" />
@@ -68,7 +68,11 @@ const ActionDropdown = ({ ...rest }) => {
 
                     {_.includes([1, 7], auth.getRoleId()) && (
                         <Dropdown.Item
-                            onClick={() => handleRedirection(`/deals/details/edit/${rest?.row?.original?.id}`)}
+                            onClick={() =>
+                                handleRedirection(
+                                    `/deals/details/edit/${rest?.row?.original?.id}`
+                                )
+                            }
                             className={styles.dropdownItem}
                         >
                             <i className="fa-regular fa-pen-to-square" />
@@ -77,14 +81,24 @@ const ActionDropdown = ({ ...rest }) => {
                     )}
 
                     {/* delete lead */}
-                    {auth.getRoleId() === 1 && rest?.row?.original?.status?.toLowerCase() !== 'pending' && (
-                        <Dropdown.Item
-                            onClick={() => handleRedirection(`/account/contracts/${rest?.row?.original?.id}`)}
-                            className={styles.dropdownItem}
-                        >
-                            <i className="fa-regular fa-user" />
-                            Authorization Details
-                        </Dropdown.Item>
+                    {auth.getRoleId() === (1 || 4) &&
+                        rest?.row?.original?.status?.toLowerCase() !==
+                            "pending" && (
+                            <Dropdown.Item
+                                onClick={() =>
+                                    handleRedirection(
+                                        `/account/contracts/${rest?.row?.original?.id}`
+                                    )
+                                }
+                                className={styles.dropdownItem}
+                            >
+                                <i className="fa-regular fa-user" />
+                                Authorization Details
+                            </Dropdown.Item>
+                        )}
+                    {console.log(
+                        "get id from action won deal in",
+                        auth.getRoleId()
                     )}
                 </Dropdown.Menu>
             </Dropdown>
