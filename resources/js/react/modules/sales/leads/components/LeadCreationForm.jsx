@@ -181,7 +181,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     } else if (key === "project_link") {
                         if (!formData[key]) {
                             _error[key] =
-                                "Please enter correct project link (Freelancer.com) with https!";
+                                "Invalid URL, Please enter correct project link (Freelancer.com)";
                         }
                     } else if (key === "deadline") {
                         if (!formData[key]) {
@@ -225,7 +225,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     } else if (key === "insight_screenshot") {
                         if (!formData[key]) {
                             _error[key] =
-                                "Please enter project insight page screenshot link (Freelancer.com) with https!";
+                                "Invalid Url, Please enter project insight page screenshot link (Freelancer.com) ";
                         }
                         // else if (!validator.isURL(formData[key])) {
                         //     _error[key] = "Invalid URL";
@@ -233,7 +233,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     } else if (key === "projectpage_screenshot") {
                         if (!formData[key]) {
                             _error[key] =
-                                "Please enter project page screenshot link (Freelancer.com) with https!";
+                                "Invalid Url, Please enter project page screenshot link (Freelancer.com) ";
                         }
                         // else if (!validator.isURL(formData[key])) {
                         //     _error[key] = "Invalid URL";
@@ -260,19 +260,19 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                 !validator.isURL(formData.project_link)
             ) {
                 _error.project_link =
-                    "Please enter a correct project link (Freelancer.com) with https!";
+                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
             } else if (
                 !formData.insight_screenshot ||
                 !validator.isURL(formData.insight_screenshot)
             ) {
                 _error.insight_screenshot =
-                    "Please enter a correct project link (Freelancer.com) with https!";
+                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
             } else if (
                 !formData.projectpage_screenshot ||
                 !validator.isURL(formData.projectpage_screenshot)
             ) {
                 _error.projectpage_screenshot =
-                    "Please enter a correct project link (Freelancer.com) with https!";
+                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
             }
 
             setError(_error);
