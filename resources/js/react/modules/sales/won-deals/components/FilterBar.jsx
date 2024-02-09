@@ -20,12 +20,12 @@ const FilterBar = ({ setFilter }) => {
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
-    const [searchText, setSearchText] = React.useState('');
+    const [searchText, setSearchText] = React.useState("");
     const [client, setClient] = React.useState(null);
     const [projectManager, setProjectManager] = React.useState(null);
     const [closedBy, setClosedBy] = React.useState(null);
-    const [convertStatus, setConvertStatus] = React.useState(null); 
-    
+    const [convertStatus, setConvertStatus] = React.useState(null);
+
     const SIZE = useWindowSize();
 
     const clientId = client?.id;
@@ -35,7 +35,10 @@ const FilterBar = ({ setFilter }) => {
     const _clientId = React.useMemo(() => client?.id, [clientId]);
     const _convertStatus = React.useMemo(() => convertStatus, [convertStatus]);
     const _closedById = React.useMemo(() => closedBy?.id, [closedBy]);
-    const _projectManagerId = React.useMemo(() => projectManager?.id, [projectManager]);
+    const _projectManagerId = React.useMemo(
+        () => projectManager?.id,
+        [projectManager]
+    );
 
     React.useEffect(() => {
         setFilter((prev) => ({
@@ -52,14 +55,26 @@ const FilterBar = ({ setFilter }) => {
             pm_id: _projectManagerId,
             pm_name: projectManager?.name,
         }));
-    }, [_startData,_closedById, _endData, _clientId, _convertStatus, _projectManagerId]);
+    }, [
+        _startData,
+        _closedById,
+        _endData,
+        _clientId,
+        _convertStatus,
+        _projectManagerId,
+    ]);
 
     // search data
-    useDebounce(() => { setSearchText(search)},500,[search] );
+    useDebounce(
+        () => {
+            setSearchText(search);
+        },
+        500,
+        [search]
+    );
     React.useEffect(() => {
         setFilter((prev) => ({ ...prev, search: searchText }));
     }, [searchText]);
-
 
     return ReactDOM.createPortal(
         <React.Fragment>
@@ -68,7 +83,7 @@ const FilterBar = ({ setFilter }) => {
                     <JqueryDateRangePicker
                         startDate={startDate}
                         setStartDate={setStartDate}
-                        endDate={endDate}
+                        endDate={endDate}   
                         setEndDate={setEndDate}
                     />
 
@@ -113,21 +128,17 @@ const FilterBar = ({ setFilter }) => {
                             value={projectManager}
                             onChange={setProjectManager}
                             title="Project Manager"
-                            display={value => value?.name}
-                            searchBy={value => value?.name}
-                            data={_.filter(
-                                users,
-                                (user) => user.role_id === 4
-                            )}
+                            display={(value) => value?.name}
+                            searchBy={(value) => value?.name}
+                            data={_.filter(users, (user) => user.role_id === 4)}
                         />
-
 
                         <PersonFilter
                             value={client}
                             onChange={setClient}
                             title="Client"
-                            display={value => value?.name}
-                            searchBy={value => value?.name}
+                            display={(value) => value?.name}
+                            searchBy={(value) => value?.name}
                             data={_.filter(
                                 users,
                                 (user) => user.role_id === null

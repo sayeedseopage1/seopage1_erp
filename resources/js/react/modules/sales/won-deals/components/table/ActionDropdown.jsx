@@ -81,7 +81,7 @@ const ActionDropdown = ({ ...rest }) => {
                     )}
 
                     {/* delete lead */}
-                    {auth.getRoleId() === (1 || 4) &&
+                    {(auth.getRoleId() === 1 || auth.getRoleId() === 4) &&
                         rest?.row?.original?.status?.toLowerCase() !==
                             "pending" && (
                             <Dropdown.Item
@@ -96,10 +96,6 @@ const ActionDropdown = ({ ...rest }) => {
                                 Authorization Details
                             </Dropdown.Item>
                         )}
-                    {console.log(
-                        "get id from action won deal in",
-                        auth.getRoleId()
-                    )}
                 </Dropdown.Menu>
             </Dropdown>
         </React.Fragment>
