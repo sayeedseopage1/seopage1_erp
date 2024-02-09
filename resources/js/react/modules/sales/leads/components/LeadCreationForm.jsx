@@ -3,7 +3,7 @@ import { useCurrencyListQuery } from "../../../../services/api/currencyApiSlice"
 import { Dialog } from "@headlessui/react";
 import { toast } from "react-toastify";
 import style from "./lead.module.css";
-
+const validator = require("validator");
 // styled component
 import {
     DialogPanelWrapper,
@@ -18,7 +18,6 @@ import {
     RadioLabel,
 } from "./ui/form";
 import { Flex } from "./table/ui";
-import validator from "validator";
 
 // custom component
 import Card from "../../../../global/Card";
@@ -48,9 +47,6 @@ const LeadCreationForm = ({ isOpen, close }) => {
 };
 
 export default LeadCreationForm;
-
-const urlRegex =
-    /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,63})(:[0-9]{1,5})?\/?(\S*)?$/;
 
 // initial form data
 const initialData = {
@@ -259,10 +255,29 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                 delete _error["deadline"];
             }
 
+            if (
+                !formData.project_link ||
+                !validator.isURL(formData.project_link)
+            ) {
+                _error.project_link =
+                    "Please enter a correct project link (Freelancer.com) with https!";
+            } else if (
+                !formData.insight_screenshot ||
+                !validator.isURL(formData.insight_screenshot)
+            ) {
+                _error.insight_screenshot =
+                    "Please enter a correct project link (Freelancer.com) with https!";
+            } else if (
+                !formData.projectpage_screenshot ||
+                !validator.isURL(formData.projectpage_screenshot)
+            ) {
+                _error.projectpage_screenshot =
+                    "Please enter a correct project link (Freelancer.com) with https!";
+            }
+
             setError(_error);
             return Object.keys(_error)?.length === 0;
         };
-        // console.log(formData,error);
 
         if (!isValid()) {
             toast.error("Please provide all required data!");
@@ -270,37 +285,17 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         }
 
         try {
-            const res = await leadCreate(formData).unwrap();
             const _error = { ...initialError };
 
-            if (
-                !formData.project_link ||
-                !urlRegex.test(formData.project_link)
-            ) {
-                _error.project_link =
-                    "Please enter a correct project link (Freelancer.com) with https!";
-            } else if (
-                !formData.insight_screenshot ||
-                !urlRegex.test(formData.insight_screenshot)
-            ) {
-                _error.insight_screenshot =
-                    "Please enter a correct project link (Freelancer.com) with https!";
-            } else if (
-                !formData.projectpage_screenshot ||
-                !urlRegex.test(formData.projectpage_screenshot)
-            ) {
-                _error.projectpage_screenshot =
-                    "Please enter a correct project link (Freelancer.com) with https!";
-            }
-
-            setError(_error);
-
+            const res = await leadCreate(formData).unwrap();
             if (res.status === 400) {
                 // Validation for "project_id"
                 if (res.message.customMessages["project_id.required"]) {
                     _error.project_id =
                         res.message.customMessages["project_id.required"];
                 }
+
+                setError(_error);
             } else {
                 toast.success("Lead Created Successfully");
                 handleClose();
