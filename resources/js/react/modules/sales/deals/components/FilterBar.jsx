@@ -50,7 +50,6 @@ const FilterBar = ({ setFilter }) => {
             closed_by: _closedById,
             closed_by_name: closedBy?.name,
             added_by_id: _addedById,
-            added_by_name: addedBy?.name,
         }));
     }, [
         _startData,
