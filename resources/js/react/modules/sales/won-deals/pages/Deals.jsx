@@ -67,8 +67,9 @@ const WonDeals = () => {
                             className="bg-warning border-0 font-weight-normal"
                         >
                             <i className="fa-solid fa-clock" />
-                            Award Time Extension Requests
-                            {`(${extensionRequest})`}
+                            {extensionRequest
+                                ? ` Award Time Extension Requests (${extensionRequest})`
+                                : "Award Time Extension Requests"}
                         </Button>
 
                         <DealTableExportButton filter={filter} />
