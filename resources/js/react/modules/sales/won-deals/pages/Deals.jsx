@@ -9,8 +9,10 @@ import FilterBar from "../components/FilterBar";
 import { useDealContext } from "../components/context/DealContext";
 import DealTableExportButton from "../components/DealTableExportToExcel";
 import Button from "../../../../global/Button";
+import { useAuth } from "../../../../hooks/useAuth";
 
 const WonDeals = () => {
+    const auth = useAuth();
     const { isEditFormEnable } = useDealContext();
 
     const [isCreationFormVisible, setIsCreationFormVisible] =
@@ -60,17 +62,19 @@ const WonDeals = () => {
                 <FilterBar setFilter={setFilter} />
                 <Flex justifyContent="space-between" className="mb-3">
                     <Flex>
-                        <Button
-                            onClick={() =>
-                                redirectTo(`/account/award-time/increase`)
-                            }
-                            className="bg-warning border-0 font-weight-normal"
-                        >
-                            <i className="fa-solid fa-clock" />
-                            {extensionRequest
-                                ? ` Award Time Extension Requests (${extensionRequest})`
-                                : "Award Time Extension Requests"}
-                        </Button>
+                        {auth.getRoleId() === 1 && (
+                            <Button
+                                onClick={() =>
+                                    redirectTo(`/account/award-time/increase`)
+                                }
+                                className="bg-warning border-0 font-weight-normal"
+                            >
+                                <i className="fa-solid fa-clock" />
+                                {extensionRequest
+                                    ? ` Award Time Extension Requests (${extensionRequest})`
+                                    : "Award Time Extension Requests"}
+                            </Button>
+                        )}
 
                         <DealTableExportButton filter={filter} />
                     </Flex>
