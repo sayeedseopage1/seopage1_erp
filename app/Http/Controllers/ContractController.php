@@ -2567,7 +2567,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_increase_index()
     {
-        if ($this->user->role_id == 1 || $this->user->role_id == 4) {
+        if ($this->user->role_id == 1) {
             $this->award_time_request = AwardTimeIncress::where('status', '0')->orderBy('id', 'desc')->get();
             return view('contracts.award_time_extention', $this->data);
         } else {
