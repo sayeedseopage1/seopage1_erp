@@ -66,7 +66,7 @@ const DealCreationFormControl = ({ close }) => {
 
     const [suggestions, setSuggestions] = React.useState([]);
     const [showBar, setShowBar] = React.useState(false);
-    const [clientStatus, setClientStatus] = React.useState(null);
+    const [clientStatus, setClientStatus] = React.useState("");
     const [clients, setClients] = React.useState(null);
 
     React.useEffect(() => {
@@ -84,9 +84,11 @@ const DealCreationFormControl = ({ close }) => {
                 setClients(data);
             });
         }
-    }, []);
 
-    console.log("clientList", clients);
+        if (formData.client_username === "") {
+            setClientStatus("");
+        }
+    }, []);
 
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
@@ -263,7 +265,7 @@ const DealCreationFormControl = ({ close }) => {
                                         style={{
                                             position: "absolute",
                                             top: "70px",
-                                            textAlign: "center",
+                                            textAlign: "left",
                                             listStyle: "none",
                                             padding: "10px",
                                             zIndex: 10000000,
@@ -283,6 +285,7 @@ const DealCreationFormControl = ({ close }) => {
                                                 <li
                                                     style={{
                                                         cursor: "pointer",
+                                                        marginBottom: "3px",
                                                     }}
                                                     key={index}
                                                     onClick={() =>
@@ -324,15 +327,22 @@ const DealCreationFormControl = ({ close }) => {
                                     onChange={handleInputChange}
                                     placeholder="Enter client name"
                                 />
-                                {clientStatus === "existing client" ? (
-                                    <div className="badge badge-primary">
-                                        Existing Client
+                                {clientStatus ? (
+                                    <div
+                                        className={`badge ${
+                                            clientStatus === "existing client"
+                                                ? "badge-primary"
+                                                : "badge-warning"
+                                        }`}
+                                    >
+                                        {clientStatus === "existing client"
+                                            ? "Existing Client"
+                                            : "New Client"}
                                     </div>
                                 ) : (
-                                    <div class="badge badge-warning">
-                                        New Client
-                                    </div>
+                                    ""
                                 )}
+
                                 {error?.client_name && (
                                     <ErrorText>
                                         {" "}
