@@ -2593,9 +2593,7 @@ class ContractController extends AccountBaseController
 
            $helper->ProjectAcceptTimeExtensionAuthorization($project);
            //need pending action
-           $total_request = AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
             return response()->json([
-                'data' => $total_request,
                 'status' => 'success'
             ]);
         }
@@ -2700,9 +2698,7 @@ class ContractController extends AccountBaseController
                        
                     }
                 }
-                $total_request = AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
                     return response()->json([
-                        'data' => $total_request,
                         'status' => 'success'
                     ]);
                 }
@@ -3117,9 +3113,12 @@ public function getAllContracts(Request $request){
         $itemDeal->action = $action;
     }
     /**AMOUNT CHECK ITS UPSELL OR NOT END */
-
+    /**COUNT OF AWARD TIME REQUEST DATA START */
+    $total_request = AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
+    /**COUNT OF AWARD TIME REQUEST DATA END */
     return response()->json([
         'data' => $deals,
+        'total_request' =>$total_request,
         'status'=> 200,
     ]);
 }
