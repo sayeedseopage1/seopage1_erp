@@ -2577,7 +2577,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
-    //    dd($request->all());
+        // DB::beginTransaction();
         $data = new AwardTimeIncress();
         $data->request_from = Auth::id();
         $data->deal_id = $request->id;
