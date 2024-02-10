@@ -43,6 +43,7 @@ const WonDeals = () => {
     );
 
     const wonDeals = data?.data;
+    const extensionRequest = data?.total_request;
 
     const onPageChange = (paginate) => {
         setPagination(paginate);
@@ -59,7 +60,7 @@ const WonDeals = () => {
                 <FilterBar setFilter={setFilter} />
                 <Flex justifyContent="space-between" className="mb-3">
                     <Flex>
-                        <Button 
+                        <Button
                             onClick={() =>
                                 redirectTo(`/account/award-time/increase`)
                             }
@@ -67,6 +68,7 @@ const WonDeals = () => {
                         >
                             <i className="fa-solid fa-clock" />
                             Award Time Extension Requests
+                            {`(${extensionRequest})`}
                         </Button>
 
                         <DealTableExportButton filter={filter} />
