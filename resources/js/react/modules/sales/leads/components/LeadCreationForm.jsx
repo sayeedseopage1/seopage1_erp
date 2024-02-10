@@ -891,7 +891,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                             <InputGroup>
                                 <Label>
                                     {" "}
-                                    Bid's Insight Page (Screenshot) <sup>
+                                    Bid Insights Page (Screenshot) <sup>
                                         *
                                     </sup>{" "}
                                     :{" "}
@@ -917,7 +917,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                         {/* Bids page (screenshot link) */}
                         <div className="col-md-12">
                             <InputGroup>
-                                <Label> Bid's Page (Screenshot) : </Label>
+                                <Label> Bid Page (Screenshot) : </Label>
                                 <Input
                                     type="url"
                                     name="bidpage_screenshot"
