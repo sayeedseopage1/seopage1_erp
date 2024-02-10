@@ -2,7 +2,7 @@ import * as React from "react";
 import { useCurrencyListQuery } from "../../../../services/api/currencyApiSlice";
 import { Dialog } from "@headlessui/react";
 import { toast } from "react-toastify";
-
+import axios from "axios";
 // styled component
 import {
     DialogPanelWrapper,
@@ -25,6 +25,7 @@ import Button from "../../../../global/Button";
 import Select from "../../../../global/Select";
 import CKEditor from "../../../../ckeditor/index";
 import { useDealCreateMutation } from "../../../../services/api/dealApiSlice";
+import { useClientListQuery } from "../../../../services/api/clientApiSlice";
 
 const DealCreationForm = ({ isOpen, close }) => {
     return (
@@ -61,24 +62,95 @@ const DealCreationFormControl = ({ close }) => {
     const [error, setError] = React.useState(initialData);
     const [currency, setCurrency] = React.useState(null);
 
+    //client suggestions
+
+    const [suggestions, setSuggestions] = React.useState([]);
+    const [showBar, setShowBar] = React.useState(false);
+    const [clientStatus, setClientStatus] = React.useState(null);
+    const [clients, setClients] = React.useState(null);
+
+    React.useEffect(() => {
+        // Check if clients data is already in sessionStorage
+        const storedClients = sessionStorage.getItem("clients");
+
+        if (storedClients) {
+            // Use clients data from sessionStorage
+            setClients(JSON.parse(storedClients));
+        } else {
+            // Fetch clients data
+            axios.get(`/account/get-clients`).then(({ data }) => {
+                // Save clients data in sessionStorage
+                sessionStorage.setItem("clients", JSON.stringify(data));
+                setClients(data);
+            });
+        }
+    }, []);
+
+    console.log("clientList", clients);
+
     // api hooks
     const { data: currencies } = useCurrencyListQuery();
     const [dealCreate, { isLoading }] = useDealCreateMutation();
 
     // input field change
     const handleInputChange = (e) => {
-        setFormData((state) => ({
-            ...state,
-            [e.target.name]: e.target.value,
+        const { name, value } = e.target;
+        setShowBar(true);
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
         }));
+
+        if (clients) {
+            const filteredClients = clients?.filter((client) =>
+                client.user_name?.toLowerCase().includes(value?.toLowerCase())
+            );
+
+            console.log("inside clients", clients);
+
+            if (filteredClients.length === 0 && value.trim() !== "") {
+                setClientStatus("new client");
+            } else {
+                setClientStatus("existing client");
+            }
+
+            setSuggestions(filteredClients);
+        }
+    };
+
+    const handleUserSelection = (user) => {
+        setShowBar(false);
+        setFormData({
+            client_username: user.user_name,
+            client_name: user.name,
+        });
+
+        setClientStatus("existing client");
+    };
+
+    const highlightMatch = (text, query) => {
+        const index = text.toLowerCase().indexOf(query.toLowerCase());
+        if (index !== -1) {
+            return (
+                <span>
+                    {text.substring(0, index)}
+                    <strong>
+                        {text.substring(index, index + query.length)}
+                    </strong>
+                    {text.substring(index + query.length)}
+                </span>
+            );
+        }
+        return text;
     };
 
     // rich editor field change
 
-    const handleEditorDataChange = (editor, key) => {
-        setFormData((state) => ({
-            ...state,
-            [key]: editor.getData(),
+    const handleEditorDataChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
         }));
     };
 
@@ -168,9 +240,12 @@ const DealCreationFormControl = ({ close }) => {
 
             <Card.Body className="p-4 pb-0">
                 <form>
-                    <div className="row">
+                    <div className="row" onClick={() => setShowBar(false)}>
                         {/* client username */}
-                        <div className="col-md-6">
+                        <div
+                            className="col-md-6"
+                            style={{ position: "relative" }}
+                        >
                             <InputGroup>
                                 <Label>
                                     {" "}
@@ -183,6 +258,49 @@ const DealCreationFormControl = ({ close }) => {
                                     onChange={handleInputChange}
                                     placeholder="Enter client username"
                                 />
+                                {suggestions.length > 0 && showBar && (
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            top: "70px",
+                                            textAlign: "center",
+                                            listStyle: "none",
+                                            padding: "10px",
+                                            zIndex: 10000000,
+                                            backgroundColor: "white",
+                                            maxHeight: "200px",
+                                            maxWidth: "250px",
+                                            overflowY: "hidden",
+                                            overflowX: "hidden",
+                                            boxShadow:
+                                                "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                                            border: "1px solid #ccc",
+                                            borderRadius: "5px",
+                                        }}
+                                    >
+                                        <ul>
+                                            {suggestions.map((user, index) => (
+                                                <li
+                                                    style={{
+                                                        cursor: "pointer",
+                                                    }}
+                                                    key={index}
+                                                    onClick={() =>
+                                                        handleUserSelection(
+                                                            user
+                                                        )
+                                                    }
+                                                >
+                                                    {highlightMatch(
+                                                        user.user_name,
+                                                        formData.client_username
+                                                    )}
+                                                    {`(${user.name})`}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                                 {error?.client_username && (
                                     <ErrorText>
                                         {" "}
@@ -206,6 +324,15 @@ const DealCreationFormControl = ({ close }) => {
                                     onChange={handleInputChange}
                                     placeholder="Enter client name"
                                 />
+                                {clientStatus === "existing client" ? (
+                                    <div className="badge badge-primary">
+                                        Existing Client
+                                    </div>
+                                ) : (
+                                    <div class="badge badge-warning">
+                                        New Client
+                                    </div>
+                                )}
                                 {error?.client_name && (
                                     <ErrorText>
                                         {" "}
