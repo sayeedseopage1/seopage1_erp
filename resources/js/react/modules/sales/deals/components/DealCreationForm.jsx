@@ -270,7 +270,7 @@ const DealCreationFormControl = ({ close }) => {
                                             padding: "10px",
                                             zIndex: 10000000,
                                             backgroundColor: "white",
-                                            maxHeight: "200px",
+                                            maxHeight: "205px",
                                             maxWidth: "250px",
                                             overflowY: "hidden",
                                             overflowX: "hidden",
@@ -284,8 +284,12 @@ const DealCreationFormControl = ({ close }) => {
                                             {suggestions.map((user, index) => (
                                                 <li
                                                     style={{
+                                                        padding: "4px",
+
                                                         cursor: "pointer",
                                                         marginBottom: "3px",
+                                                        transition:
+                                                            "background-color 0.3s ease",
                                                     }}
                                                     key={index}
                                                     onClick={() =>
@@ -293,6 +297,14 @@ const DealCreationFormControl = ({ close }) => {
                                                             user
                                                         )
                                                     }
+                                                    onMouseOver={(e) => {
+                                                        e.currentTarget.style.backgroundColor =
+                                                            "#f0f0f0";
+                                                    }}
+                                                    onMouseOut={(e) => {
+                                                        e.currentTarget.style.backgroundColor =
+                                                            "transparent";
+                                                    }}
                                                 >
                                                     {highlightMatch(
                                                         user.user_name,
