@@ -17,7 +17,7 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
     const [itemsPerPage, setItemsPerPage] = React.useState(5);
 
     // Calculate the total number of pages
-    const pageCount = Math.ceil(pmGoal.length / itemsPerPage);
+    const pageCount = Math.ceil(pmGoal?.length / itemsPerPage);
 
     // State to keep track of the current page
     const [currentPage, setCurrentPage] = React.useState(0);
@@ -72,7 +72,7 @@ const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
                 </thead>
                 {!isFetchingPmGoal && (
                     <tbody>
-                        {pmGoal.slice(startIndex, endIndex).map((goal) => (
+                        {pmGoal?.slice(startIndex, endIndex).map((goal) => (
                             <tr key={goal.id}>
                                 <td style={thTdStyle}>{goal.id}</td>
                                 <td style={thTdStyle}>

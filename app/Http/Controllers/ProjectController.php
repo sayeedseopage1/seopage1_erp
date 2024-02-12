@@ -184,12 +184,21 @@ class ProjectController extends AccountBaseController
 
         }
 
-        //dd($this->data);
+        /** CHECK PM GOAL DEADLINE START */
+        $pm_goal = ProjectPmGoal::all();
 
-
-
-
-        return $dataTable->render('projects.index', $this->data);
+        foreach ($pm_goal as $item) {
+            $goal_end_date = Carbon::parse($item->goal_end_date);
+            $current_date = Carbon::now();
+            $difference_in_hours = $current_date->diffInHours($goal_end_date);
+            if ($difference_in_hours >= 24) {
+                return view('projects.ajax.gole_alert',$this->data);
+            }else{
+                return $dataTable->render('projects.index', $this->data);
+            }
+        }
+        /** CHECK PM GOAL DEADLINE END */
+        
     }
     public function ProjectOverviewFilter(Request $request)
     {
