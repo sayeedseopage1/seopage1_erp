@@ -1,6 +1,7 @@
 import * as React from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Autolinker from "autolinker";
 
 // editor
 import {
@@ -150,16 +151,14 @@ const ServiceProvider = ({ children }) => {
 
     // render control
     const renderToHtml = (editorState) => {
-
         // hash config
         const hashConfig = {
             trigger: "#",
             separator: " ",
         };
 
-        // styled mention 
-        const customEntityTransform = (entity, text) => { 
-            // console.log(entity.data.mention.id);
+        // styled mention
+        const customEntityTransform = (entity, text) => {
             if (entity.type === "mention") {
                 return `<a href='/account/employees/${entity?.data?.mention?.id}' class="comment-mention" style="font-family:cursive;color:#0f79dd;">${text}</a>`;
             }
@@ -167,31 +166,39 @@ const ServiceProvider = ({ children }) => {
 
         const plainText = editorState.getCurrentContent().getPlainText();
 
-        if(!plainText) return '';
+        if (!plainText) return "";
 
         // get row data
         const rowData = convertToRaw(editorState.getCurrentContent());
-         
+
         // markup
         const markup = draftToHtml(
             rowData,
             hashConfig,
             true,
             customEntityTransform
-        ); 
+        );
 
-        return replaceEmojiWithHighQualityEmoji(markup);
+        // convert to link
+
+        const text = replaceEmojiWithHighQualityEmoji(markup);
+
+        const linkedText = Autolinker.link(text, {
+            newWindow: false,
+        });
+
+        return linkedText;
     };
 
     // on files paste
     const handlePastedFiles = (files) => {
-        setFiles(prev => ([...prev, ...files]))
-    }
+        setFiles((prev) => [...prev, ...files]);
+    };
 
     // clear files
     const clearFiles = () => {
-        setFiles([])
-    }
+        setFiles([]);
+    };
 
     return (
         <EditorContext.Provider
@@ -209,7 +216,7 @@ const ServiceProvider = ({ children }) => {
                 mentionFilter,
                 handlePastedFiles,
                 Toolbar,
-                clearFiles
+                clearFiles,
             }}
         >
             {children}

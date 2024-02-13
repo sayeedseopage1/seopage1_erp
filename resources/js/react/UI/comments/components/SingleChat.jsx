@@ -36,6 +36,7 @@ const SingleChat = ({
     selectMentionIndex,
     setSelectMentionIndex,
 }) => {
+    // console.log("comment in single chat", comment);
     const {
         setContextHolder,
         setMentionedComment,
@@ -46,6 +47,16 @@ const SingleChat = ({
     const [showDeletedComment, setShowDeletedComment] = useState(false);
     const menuRef = useRef(null);
     const menuBtnRef = useRef(null);
+
+    const replaceCodeWithAnchor = (html) => {
+        const modifiedHtml = html
+            .replace(/<code>/g, '<a href="#">')
+            .replace(/<\/code>/g, "</a>");
+        return modifiedHtml;
+    };
+    const commentHtml = comment?.comment
+        ? replaceCodeWithAnchor(comment.comment)
+        : "";
 
     const gotoTarget = (url) => {
         window.open(url, "_blank");

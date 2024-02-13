@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // editor
+import EditIcon from "../../_Data/editor.svg";
 import "draft-js/dist/Draft.css";
 import Editor from "@draft-js-plugins/editor";
 import { EditorState } from "draft-js";
@@ -46,7 +47,7 @@ import { usePostCommentMutation } from "../../../../services/api/commentsApiSlic
 import { useAuth } from "../../../../hooks/useAuth";
 import { useCommentContext } from "../../CommentsBody";
 import MentionedComment from "./MentiondComment";
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
 import { getFormDataObj } from "../../utils/getFormDataObj";
 // service provider
 
@@ -60,6 +61,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const { data: usersData, isLoading } = useGetAllUsersQuery();
     const [expend, setExpend] = useState(false);
     const [mentionedUser, setMentionedUser] = useState([]);
+
     // editor
     const {
         plugins,
@@ -121,7 +123,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const handleMention = (...arg) => {
         const user = arg[0];
         // console.log(arg);
-        setMentionedUser(prev=>[...prev,user.id]);
+        setMentionedUser((prev) => [...prev, user.id]);
         // here mention api goes to...
     };
 
@@ -133,7 +135,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const handlePostComment = async () => {
         setRefetchType("");
         const comment = renderToHtml(editorState) ?? "";
- 
+        console.log({ comment });
 
         if (!comment && !files?.length > 0) {
             // Swal.fire({
@@ -165,9 +167,9 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         formData.append("added_by", auth?.getId() ?? "");
         formData.append("last_updated_by", auth?.getId() ?? "");
         formData.append("mention_id", mentionedComment?.id || null);
-        [...mentionedUser].forEach((user)=>{
-            formData.append("mention_user_id",user);
-        })
+        [...mentionedUser].forEach((user) => {
+            formData.append("mention_user_id", user);
+        });
         if (files.length) {
             Array.from(files).forEach((file) => {
                 formData.append(`file[]`, file);
@@ -185,6 +187,10 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             clearFiles();
             setEditorState(() => EditorState.createEmpty());
             setMentionedComment(null);
+            // console.log(
+            //     "form data in sendBox",
+            //     JSON.stringify(Array.from(formData.entries()))
+            // );
         } catch (err) {
             Swal.fire({
                 icon: "error",
@@ -205,10 +211,10 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     // handle key down
     const handleKeyDown = (e) => {
         e.preventDefault();
-        if(e.keyCode === 13){
+        if (e.keyCode === 13) {
             handlePostComment();
         }
-    }
+    };
 
     const isExpended = files?.length > 0 || expend;
 
@@ -250,7 +256,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                                     <BoldButton {...externalProps} />
                                     <ItalicButton {...externalProps} />
                                     <UnderlineButton {...externalProps} />
-                                    <CodeButton {...externalProps} /> 
+                                    <CodeButton {...externalProps} />
                                     <BlockquoteButton {...externalProps} />
                                     <AnchorLinkButton
                                         onClick={() =>
@@ -299,46 +305,19 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                     </EditorWrapper>
 
                     <ExpendEditor onClick={() => setExpend(!expend)}>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="21.831"
-                            height="14.845"
-                            viewBox="0 0 21.831 14.845"
-                        >
-                            <g transform="translate(-42)">
-                                <g
-                                    id="Group_3601"
-                                    data-name="Group 3601"
-                                    transform="translate(42)"
-                                >
-                                    <path
-                                        id="Path_1"
-                                        d="M17.924,7.735,14.665,4.474,7.59,11.551l-1.9,5.726,5.671-1.951,7.074-7.076-.512-.515Zm-11.11,8.4,1.047-3.345,2.266,2.266Z"
-                                        transform="translate(1.351 -2.431)"
-                                        fill="#6f6f6f"
-                                    />
-                                    <path
-                                        id="Path_2"
-                                        d="M18.572,6.285,15.2,2.906a.279.279,0,0,0-.4,0L13.456,4.251a.281.281,0,0,0,0,.4l3.378,3.378a.281.281,0,0,0,.393,0l1.345-1.346A.273.273,0,0,0,18.572,6.285Z"
-                                        transform="translate(3.175 -2.823)"
-                                        fill="#6f6f6f"
-                                    />
-                                    <path
-                                        id="Path_3"
-                                        d="M0,15.111H6.225l.552-1.52H0Z"
-                                        transform="translate(0 -0.267)"
-                                        fill="#6f6f6f"
-                                    />
-                                </g>
-                            </g>
-                        </svg>
+                        <img src={EditIcon} />
                     </ExpendEditor>
                 </EditorContainer>
             </EditorWrapperWithImageAndToolbar>
 
             <RightButtonGroup isExpended={isExpended}>
                 <FileUploadButton>
-                    <input type="file" multiple onChange={handleUploadImage} onKeyDown={handleKeyDown} />
+                    <input
+                        type="file"
+                        multiple
+                        onChange={handleUploadImage}
+                        onKeyDown={handleKeyDown}
+                    />
                     <svg
                         width="20"
                         height="22"
