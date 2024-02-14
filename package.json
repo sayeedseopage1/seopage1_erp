@@ -12,7 +12,7 @@
     "devDependencies": {
         "@ckeditor/ckeditor5-alignment": "^38.0.1",
         "@faker-js/faker": "^8.0.2",
-        "axios": "^0.21.1",
+        "axios": "^0.21.4",
         "browser-sync": "^2.29.3",
         "browser-sync-webpack-plugin": "^2.3.0",
         "cross-env": "^5.1",
