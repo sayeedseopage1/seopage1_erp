@@ -49,8 +49,11 @@ import { useAuth } from "../../../../hooks/useAuth";
 import { useCommentContext } from "../../CommentsBody";
 import MentionedComment from "./MentiondComment";
 import { toast } from "react-toastify";
-
+import { useSelector } from "react-redux";
 const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
+    const { task } = useSelector((s) => s.subTask);
+
+    console.log("inside a single task", task);
     //progress bar
     const [isFetching, setIsFetching] = React.useState(false);
     // State to track overall upload progress
@@ -64,7 +67,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         setOverallProgress(0);
     };
 
-    console.log("overall progress", overallProgress);
+    // console.log("overall progress", overallProgress);
     const [editorState, setEditorState] = React.useState(() =>
         EditorState.createEmpty()
     );
@@ -76,6 +79,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const [expend, setExpend] = useState(false);
     const [mentionedUser, setMentionedUser] = useState([]);
 
+    console.log("users data in sendbox", usersData);
     // editor
     const {
         plugins,
@@ -103,8 +107,8 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
     const auth = useAuth();
 
-    const [postComment, { isLoading: commentPostingStatus }] =
-        usePostCommentMutation();
+    // const [postComment, { isLoading: commentPostingStatus }] =
+    //     usePostCommentMutation();
 
     React.useEffect(() => {
         if (usersData?.length > 0) {
@@ -118,6 +122,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         setIsMentionBoxOpen(_open);
     }, []);
 
+    //mention people
     const onSearchChange = React.useCallback(
         ({ value }) => {
             let data =
@@ -126,7 +131,12 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                         user?.name
                             ?.toLowerCase()
                             ?.includes(value?.toLowerCase()) &&
-                        user?.role_id !== null
+                        user?.role_id !== null &&
+                        (user?.role_id == 1 ||
+                            user?.id == task?.added_by ||
+                            user?.id == task?.users?.[0].id ||
+                            user?.role_id == 8 ||
+                            user?.role_id == 6)
                 ) || [];
             setSuggestions(data);
         },
@@ -147,7 +157,6 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         resetProgress(); // Reset progress when starting a new upload
         setRefetchType("");
         const comment = renderToHtml(editorState) ?? "";
-        console.log({ comment });
 
         if (!comment && !files?.length > 0) {
             toast.error("Please write a comment or upload a images");
@@ -199,8 +208,6 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                     },
                 }
             );
-
-            console.log("comment submission response", response);
 
             await onSubmit(formData);
 

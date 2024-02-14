@@ -1218,6 +1218,7 @@ var SingleTaskPage = function SingleTaskPage() {
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_9__.SingleTask(Task); // task instance
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user); // logged users data
 
+  // console.log("Task in task page", Task);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     (function () {
       if (data) {
@@ -1497,7 +1498,7 @@ var SingleTaskPage = function SingleTaskPage() {
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"], {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"].Case, {
-                      condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.taskType) === 'New Page Design',
+                      condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.taskType) === "New Page Design",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
                         className: "sp1_st-list-item",
                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
@@ -1512,9 +1513,9 @@ var SingleTaskPage = function SingleTaskPage() {
                             condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.status) === 2,
                             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
                               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
-                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("span", {
                                   className: "badge badge-warning",
-                                  children: " Primary page request denied "
+                                  children: [" ", "Primary page request denied", " "]
                                 })
                               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Panel, {
                                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
@@ -1555,7 +1556,7 @@ var SingleTaskPage = function SingleTaskPage() {
                         })]
                       })]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"].Case, {
-                      condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.taskType) === 'Cloning Existing Design',
+                      condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.taskType) === "Cloning Existing Design",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
                         className: "sp1_st-list-item",
                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
@@ -1569,9 +1570,9 @@ var SingleTaskPage = function SingleTaskPage() {
                             condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.status) === 2,
                             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"], {
                               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Button, {
-                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("span", {
                                   className: "badge badge-warning",
-                                  children: " Primary page request denied "
+                                  children: [" ", "Primary page request denied", " "]
                                 })
                               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_global_Popover__WEBPACK_IMPORTED_MODULE_5__["default"].Panel, {
                                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
@@ -1610,7 +1611,7 @@ var SingleTaskPage = function SingleTaskPage() {
                         })]
                       })]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_6__["default"].Case, {
-                      condition: (task === null || task === void 0 || (_task$taskTypeDetails8 = task.taskTypeDetails) === null || _task$taskTypeDetails8 === void 0 ? void 0 : _task$taskTypeDetails8.taskType) === 'Others',
+                      condition: (task === null || task === void 0 || (_task$taskTypeDetails8 = task.taskTypeDetails) === null || _task$taskTypeDetails8 === void 0 ? void 0 : _task$taskTypeDetails8.taskType) === "Others",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
                         className: "sp1_st-list-item",
                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
@@ -1618,7 +1619,7 @@ var SingleTaskPage = function SingleTaskPage() {
                           children: "Other Task Type:"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
                           className: "sp1_st-list-item-value",
-                          children: (_task$taskTypeDetails9 = task === null || task === void 0 || (_task$taskTypeDetails10 = task.taskTypeDetails) === null || _task$taskTypeDetails10 === void 0 ? void 0 : _task$taskTypeDetails10.taskTypeOther) !== null && _task$taskTypeDetails9 !== void 0 ? _task$taskTypeDetails9 : '--'
+                          children: (_task$taskTypeDetails9 = task === null || task === void 0 || (_task$taskTypeDetails10 = task.taskTypeDetails) === null || _task$taskTypeDetails10 === void 0 ? void 0 : _task$taskTypeDetails10.taskTypeOther) !== null && _task$taskTypeDetails9 !== void 0 ? _task$taskTypeDetails9 : "--"
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
                         className: "sp1_st-list-item",
@@ -1627,7 +1628,7 @@ var SingleTaskPage = function SingleTaskPage() {
                           children: "Page Name:"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
                           className: "sp1_st-list-item-value",
-                          children: (_task$taskTypeDetails11 = task === null || task === void 0 || (_task$taskTypeDetails12 = task.taskTypeDetails) === null || _task$taskTypeDetails12 === void 0 ? void 0 : _task$taskTypeDetails12.pageName) !== null && _task$taskTypeDetails11 !== void 0 ? _task$taskTypeDetails11 : '--'
+                          children: (_task$taskTypeDetails11 = task === null || task === void 0 || (_task$taskTypeDetails12 = task.taskTypeDetails) === null || _task$taskTypeDetails12 === void 0 ? void 0 : _task$taskTypeDetails12.pageName) !== null && _task$taskTypeDetails11 !== void 0 ? _task$taskTypeDetails11 : "--"
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
                         className: "sp1_st-list-item",
@@ -1741,9 +1742,9 @@ var SingleTaskPage = function SingleTaskPage() {
                   type: "TASK_DESCRIPTION"
                 }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(task === null || task === void 0 ? void 0 : task.attachments) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
                   className: "mt-3",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("h4", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("h4", {
                     className: "mb-2",
-                    children: "Task Attachments: "
+                    children: ["Task Attachments:", " "]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
                     children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(task === null || task === void 0 ? void 0 : task.attachments, function (attachment) {
                       return attachment !== null && attachment !== void 0 && attachment.task_file_name ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
@@ -1752,7 +1753,7 @@ var SingleTaskPage = function SingleTaskPage() {
                         deleteAble: false,
                         downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_url,
                         previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_url,
-                        fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon) ? 'images' : 'others',
+                        fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon) ? "images" : "others",
                         classname: "comment_file",
                         ext: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon
                       }, attachment === null || attachment === void 0 ? void 0 : attachment.task_file_id) : null;
