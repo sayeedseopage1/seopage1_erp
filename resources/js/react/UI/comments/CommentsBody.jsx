@@ -41,6 +41,7 @@ import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
 import Sendbox from "./components/sendbox/Sendbox";
 import axios from "axios";
+import { useCommentStore } from "./zustand/store";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -87,7 +88,7 @@ const CommentsBody = ({
     const comments_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchText, setSearchText] = useState("");
-    const [allComments, setAllComments] = useState([]);
+
     const [commentIndex, setCommentIndex] = useState(0);
     const [searchIndexes, setSearchIndexes] = useState([]);
     const [animation, setAnimation] = useState(false);
@@ -105,7 +106,7 @@ const CommentsBody = ({
         useState("");
     const [refetchType, setRefetchType] = useState("refetch");
     // =================================================================
-
+    const { allComments, setAllComments } = useCommentStore();
     // fetch this task from api
     useEffect(() => {
         axios
@@ -119,6 +120,7 @@ const CommentsBody = ({
         setAllComments(comments);
     }, [comments]);
 
+    console.log("all comments in console", allComments);
     const hnadleSelectComment = useCallback(() => {
         setSecletedComments((prev) => ({
             ...prev,
@@ -842,14 +844,6 @@ const CommentsBody = ({
                             setScroll={setScroll}
                             setIsLoading={setIsLoading}
                         />
-
-                        {/* customize start from there */}
-                        {/* <ChatInput
-                            onSubmit={onSubmit}
-                            taskId={taskId}
-                            setScroll={setScroll}
-                            setIsLoading={setIsLoading}
-                        /> */}
                     </footer>
                 ) : null}
 

@@ -4854,22 +4854,6 @@ var CommentSection = function CommentSection(_ref) {
     isFetching = _useGetTaskCommentsQu.isLoading;
   var comments = lodash__WEBPACK_IMPORTED_MODULE_6___default().orderBy(data, "id", "desc");
 
-  // console.log({comments})
-  // // if task notes fetch completed store data into redux store
-  // React.useEffect(() => {
-  //     if (task && task.id) {
-  //         getTaskDetails(`/${task?.id}/json?mode=task_comment`)
-  //             .unwrap()
-  //             .then((res) => {
-  //                 let r = _.orderBy([...res], "id", "desc");
-  //                 setComments(r);
-  //             })
-  //             .catch((err) => {
-  //                 console.log(err);
-  //             });
-  //     }
-  // }, []);
-
   // on comment post
   var onCommentPost = function onCommentPost(comment) {
     var _comments = _toConsumableArray(comments);

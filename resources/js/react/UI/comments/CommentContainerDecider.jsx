@@ -63,8 +63,7 @@ const CommentContainerDecider = ({
                     </div>
                 </Modal>
             );
-        }  
-        else if (fullScreenView && width > 991) {
+        } else if (fullScreenView && width > 991) {
             return (
                 <Modal isOpen={isOpen}>
                     <div
@@ -97,12 +96,12 @@ const CommentContainerDecider = ({
                         className="position-relative"
                         style={{
                             paddingTop: "79px",
-                            paddingBottom: "18px"
+                            paddingBottom: "18px",
                         }}
                     >
                         <div
                             style={{
-                                margin:"auto"
+                                margin: "auto",
                             }}
                             className="sp1_task_comment_modal"
                         >

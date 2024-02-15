@@ -1,61 +1,109 @@
-import React, { useState } from "react";
-import axios from "axios";
-
-// ...
+// ... (your existing imports)
 
 const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [editorState, setEditorState] = React.useState(() =>
-        EditorState.createEmpty()
-    );
-    // ... (other states)
+    // ... (your existing code)
 
+    // State to track overall upload progress
+    const [overallProgress, setOverallProgress] = useState(0);
+
+    // Axios instance with onUploadProgress callback and cancelToken
+    const axiosInstance = axios.create();
+
+    // Function to reset overall progress
+    const resetProgress = () => {
+        setOverallProgress(0);
+    };
+
+    // handle post comment
     const handlePostComment = async () => {
-        setIsLoading(true); // Set loading to true when starting the upload
+        resetProgress(); // Reset progress when starting a new upload
         setRefetchType("");
+        const comment = renderToHtml(editorState) ?? "";
+        console.log({ comment });
+
+        if (!comment && !files?.length > 0) {
+            toast.error("Please write a comment or upload images");
+            return;
+        }
+
+        // form data
+        const formData = new FormData();
+
+        formData.append(
+            "_token",
+            document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content")
+        );
+
+        // convert link text to link
+
+        formData.append("comment", comment);
+        formData.append("user_id", auth?.getId() ?? "");
+        formData.append("task_id", taskId);
+        formData.append("added_by", auth?.getId() ?? "");
+        formData.append("last_updated_by", auth?.getId() ?? "");
+        formData.append("mention_id", mentionedComment?.id || null);
+        [...mentionedUser].forEach((user) => {
+            formData.append("mention_user_id", user);
+        });
+        if (files.length) {
+            Array.from(files).forEach((file) => {
+                formData.append(`file[]`, file);
+            });
+        }
 
         try {
-            // ... (other code)
+            const cancelSource = axios.CancelToken.source();
 
-            const response = await axios.post(`/your-api-endpoint`, formData, {
-                onUploadProgress: (progressEvent) => {
-                    if (progressEvent.lengthComputable) {
-                        const percentage = Math.round(
-                            (progressEvent.loaded * 100) / progressEvent.total
+            // Use axiosInstance for comment submission with cancelToken
+            const response = await axiosInstance.post(
+                `/account/task/${taskId}/json?mode=comment_store`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    onUploadProgress: (progressEvent) => {
+                        const progress = Math.round(
+                            (progressEvent.loaded / progressEvent.total) * 100
                         );
+                        setOverallProgress(progress);
+                    },
+                    cancelToken: cancelSource.token,
+                }
+            );
 
-                        setProgressMap((prevProgressMap) => {
-                            const newProgressMap = new Map(prevProgressMap);
-                            files.forEach((file) => {
-                                newProgressMap.set(file.name, percentage);
-                            });
-                            return newProgressMap;
-                        });
+            console.log("comment submission response", response);
+            console.log("overall progress after submit", overallProgress);
 
-                        console.log("Updated Progress Map:", progressMap);
-                    }
-                },
-            });
+            await onSubmit(formData);
 
-            // Handle the response as needed
-            console.log("Response:", response.data);
-
-            // Additional logic...
-        } catch (error) {
-            console.error("Error:", error);
-
-            // Additional error handling...
-        } finally {
-            setIsLoading(false); // Set loading to false when the upload is complete
+            /// clear all state
+            if (response.status === 200) {
+                clearFiles();
+                setEditorState(() => EditorState.createEmpty());
+                setMentionedComment(null);
+            }
+        } catch (err) {
+            if (axios.isCancel(err)) {
+                console.log("Upload canceled");
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Comment not sent",
+                    showConfirmButton: true,
+                    confirmButtonColor: "red",
+                });
+            }
         }
     };
 
-    return (
-        <div>
-            {/* Your existing JSX */}
-            {isLoading && <div>Loading...</div>}
-        </div>
-    );
+    // ... (your existing code)
+
+    return <SendboxWrapper>{/* ... (your existing code) */}</SendboxWrapper>;
 };
 
-export default EditorComponent;
+export default function Sendbox({ setScroll, taskId, setIsLoading, onSubmit }) {
+    // ... (your existing code)
+}
