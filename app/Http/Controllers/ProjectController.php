@@ -183,26 +183,20 @@ class ProjectController extends AccountBaseController
             //dd($project);
 
         }
-        if(Auth::user()->role_id==4){
-            /** CHECK PM GOAL DEADLINE START */
+        if (Auth::user()->role_id == 4) {
             $pm_goal = ProjectPmGoal::all();
-
-            foreach ($pm_goal as $item) {
-                $goal_end_date = Carbon::parse($item->goal_end_date);
-                $current_date = Carbon::now();
-                $difference_in_hours = $current_date->diffInHours($goal_end_date);
-                if(Auth::user()->id == $item->pm_id){
-                    if ($difference_in_hours >= 24) {
-                        return view('projects.ajax.gole_alert',$this->data);
+            if (!is_null($pm_goal) && $pm_goal->isNotEmpty()) {
+                foreach ($pm_goal as $item) {
+                    $current_date = now();
+                    $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
+                    if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date)) { 
+                        return view('projects.ajax.goale_alert', $this->data); 
                     }
-                }else{
-                    return $dataTable->render('projects.index', $this->data);
                 }
             }
-            /** CHECK PM GOAL DEADLINE END */
-        }else{
-            return $dataTable->render('projects.index', $this->data);
         }
+        
+        return $dataTable->render('projects.index', $this->data);
     }
     public function ProjectOverviewFilter(Request $request)
     {
@@ -5881,7 +5875,7 @@ public function updatePmBasicSEO(Request $request){
         //need pending action
 
         $users = User::where('role_id', 1)->get();
-        foreach ($users as $user) {
+        foreach ($users as $user) { 
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
                 'role_id' => 1,

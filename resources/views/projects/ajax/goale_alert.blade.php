@@ -33,7 +33,7 @@
             allowEnterKey: false,
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "{{ route('project-status.index') }}";
+                window.location.href = "{{ route('project-status.index') }}?modal_type=individual_goal_details&status=expired";
             }
         });
     </script>
