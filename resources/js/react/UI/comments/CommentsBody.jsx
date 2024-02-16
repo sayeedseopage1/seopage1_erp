@@ -29,6 +29,7 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import _ from "lodash";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
+
 import isCurrentUser from "./utils/isCurrentUser";
 import CommentsPlaceholder from "./utils/CommentsPlaceholder";
 import getTextContent, {
@@ -120,7 +121,6 @@ const CommentsBody = ({
         setAllComments(comments);
     }, [comments]);
 
-    console.log("all comments in console", allComments);
     const hnadleSelectComment = useCallback(() => {
         setSecletedComments((prev) => ({
             ...prev,

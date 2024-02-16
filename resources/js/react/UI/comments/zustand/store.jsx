@@ -3,4 +3,8 @@ import { create } from "zustand";
 export const useCommentStore = create((set) => ({
     allComments: [],
     setAllComments: (comments) => set({ allComments: comments }),
+    commentState: true,
+
+    setCommentState: () =>
+        set((prev) => ({ commentState: !prev.commentState })),
 }));
