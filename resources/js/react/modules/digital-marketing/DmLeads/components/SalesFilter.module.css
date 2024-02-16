@@ -9,7 +9,8 @@
 }
 
 .dropdownToggle {
-  width: 250px;
+  
+  width: 110px;
   border: 1px solid #ddd;
   height: 36px;
   border-radius: 6px;
@@ -48,6 +49,7 @@
 
 
 .searchBox{
+  
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
@@ -61,6 +63,7 @@
 }
 
 .searchBox > input{
+  
   padding: 8px 10px;
   border: none; 
 }
@@ -69,3 +72,4 @@
   overflow-y: auto;
   max-height: 350px;
 } 
+

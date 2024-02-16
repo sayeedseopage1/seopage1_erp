@@ -913,6 +913,9 @@ class DealController extends AccountBaseController
             if ($request->client_username != null) {
                 $dealQuery->where('deal_stages.client_username', $request->client_username);
             }
+            if ($request->has('added_by_id') && $request->input('added_by_id') !== 'all') {
+                $dealQuery->where('deal_stages.added_by', $request->input('added_by_id'));
+            }
             if ($request->has('closed_by') && $request->input('closed_by') !== 'all') {
                 $dealQuery->where('deal_stages.converted_by', $request->input('closed_by'));
             }

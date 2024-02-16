@@ -3,7 +3,7 @@ import { useCurrencyListQuery } from "../../../../services/api/currencyApiSlice"
 import { Dialog } from "@headlessui/react";
 import { toast } from "react-toastify";
 import style from "./lead.module.css";
-
+const validator = require("validator");
 // styled component
 import {
     DialogPanelWrapper,
@@ -18,7 +18,6 @@ import {
     RadioLabel,
 } from "./ui/form";
 import { Flex } from "./table/ui";
-import validator from "validator";
 
 // custom component
 import Card from "../../../../global/Card";
@@ -76,13 +75,39 @@ const initialData = {
     // amount: "",
     // original_currency_id: "",
 };
+const initialError = {
+    client_name: "",
+    project_id: "",
+    // project_name: "",
+    project_link: "",
+    project_type: "",
+    deadline: "",
+    bid_value: "",
+    bid_value2: "",
+    value: "",
+    bidding_minutes: "",
+    bidding_seconds: "",
+    description: "",
+    cover_letter: "", // cover letter
+    explanation: "",
+    insight_screenshot: "",
+    bidpage_screenshot: "",
+    projectpage_screenshot: "",
+
+    original_currency_id: "",
+    country: "",
+
+    // client_username: "",
+    // amount: "",
+    // original_currency_id: "",
+};
 
 // form
 const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const [formData, setFormData] = React.useState(
         presetInitialData ?? initialData
     );
-    const [error, setError] = React.useState(initialData);
+    const [error, setError] = React.useState(initialError);
     const [currency, setCurrency] = React.useState(null);
     const [clientCountry, setClientCountry] = React.useState(null);
     const [countries, setCountries] = React.useState(null);
@@ -156,11 +181,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     } else if (key === "project_link") {
                         if (!formData[key]) {
                             _error[key] =
-                                "Please enter correct project link (Freelancer.com) with https!";
+                                "Invalid URL, Please enter correct project link (Freelancer.com)";
                         }
-                        // else if (!validator.isURL(formData[key])) {
-                        //     _error[key] = "Invalid URL";
-                        // }
                     } else if (key === "deadline") {
                         if (!formData[key]) {
                             _error[key] =
@@ -203,7 +225,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     } else if (key === "insight_screenshot") {
                         if (!formData[key]) {
                             _error[key] =
-                                "Please enter project insight page screenshot link (Freelancer.com) with https!";
+                                "Invalid Url, Please enter project insight page screenshot link (Freelancer.com) ";
                         }
                         // else if (!validator.isURL(formData[key])) {
                         //     _error[key] = "Invalid URL";
@@ -211,7 +233,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                     } else if (key === "projectpage_screenshot") {
                         if (!formData[key]) {
                             _error[key] =
-                                "Please enter project page screenshot link (Freelancer.com) with https!";
+                                "Invalid Url, Please enter project page screenshot link (Freelancer.com) ";
                         }
                         // else if (!validator.isURL(formData[key])) {
                         //     _error[key] = "Invalid URL";
@@ -233,10 +255,29 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                 delete _error["deadline"];
             }
 
+            if (
+                !formData.project_link ||
+                !validator.isURL(formData.project_link)
+            ) {
+                _error.project_link =
+                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
+            } else if (
+                !formData.insight_screenshot ||
+                !validator.isURL(formData.insight_screenshot)
+            ) {
+                _error.insight_screenshot =
+                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
+            } else if (
+                !formData.projectpage_screenshot ||
+                !validator.isURL(formData.projectpage_screenshot)
+            ) {
+                _error.projectpage_screenshot =
+                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
+            }
+
             setError(_error);
             return Object.keys(_error)?.length === 0;
         };
-        // console.log(formData,error);
 
         if (!isValid()) {
             toast.error("Please provide all required data!");
@@ -244,18 +285,17 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         }
 
         try {
-            const res = await leadCreate(formData).unwrap();
-            // console.log(res);
-            if (res.status === 400) {
-                const _serverError = {};
-                const _errorMssg = { ...res?.message?.customMessages };
+            const _error = { ...initialError };
 
-                for (const key in _errorMssg) {
-                    const [clientErrorKey] = key.split(".");
-                    _serverError[clientErrorKey] = _errorMssg[key];
+            const res = await leadCreate(formData).unwrap();
+            if (res.status === 400) {
+                // Validation for "project_id"
+                if (res.message.customMessages["project_id.required"]) {
+                    _error.project_id =
+                        res.message.customMessages["project_id.required"];
                 }
-                // console.log(_serverError,_errorMssg);
-                setError(_serverError);
+
+                setError(_error);
             } else {
                 toast.success("Lead Created Successfully");
                 handleClose();
@@ -391,8 +431,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 )}
                             </InputGroup>
                         </div>
-                           {/* Project Type */}
-                           <div className="col-md-4">
+                        {/* Project Type */}
+                        <div className="col-md-4">
                             <InputGroup>
                                 <Label>
                                     {" "}
@@ -715,8 +755,6 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                             </InputGroup>
                         </div>
 
-                     
-
                         {/* Bidding Delay Time  */}
                         <div className="col-md-12">
                             <InputGroup>
@@ -853,7 +891,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                             <InputGroup>
                                 <Label>
                                     {" "}
-                                    Bids Insight Page (Screenshot) <sup>
+                                    Bid Insights Page (Screenshot) <sup>
                                         *
                                     </sup>{" "}
                                     :{" "}
@@ -863,7 +901,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                     name="insight_screenshot"
                                     value={formData.insight_screenshot}
                                     onChange={handleInputChange}
-                                    placeholder="Take a screenshot of the bids insight page, and share the link here."
+                                    placeholder="Take a screenshot of the bid's insight page, and share the link here."
                                 />
                                 {error?.insight_screenshot ? (
                                     <ErrorText>
@@ -879,13 +917,13 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                         {/* Bids page (screenshot link) */}
                         <div className="col-md-12">
                             <InputGroup>
-                                <Label> Bids Page (Screenshot) : </Label>
+                                <Label> Bid Page (Screenshot) : </Label>
                                 <Input
                                     type="url"
                                     name="bidpage_screenshot"
                                     value={formData.bidpage_screenshot}
                                     onChange={handleInputChange}
-                                    placeholder="Take a screenshot of the bid page, and share the link here."
+                                    placeholder="Take a screenshot of the bid's page, and share the link here."
                                 />
                                 {error?.bidpage_screenshot ? (
                                     <ErrorText>

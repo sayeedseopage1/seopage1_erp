@@ -15,9 +15,8 @@ const LeadTableFilterBar = ({ setFilter }) => {
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
     const [sale, setSale] = React.useState(null);
-    const [leadSource, setLeadSource] = React.useState('');
+    const [leadSource, setLeadSource] = React.useState("");
     const [convertStatus, setConvertStatus] = React.useState(null);
-    
 
     const searchText = React.useDeferredValue(search);
 
@@ -28,7 +27,6 @@ const LeadTableFilterBar = ({ setFilter }) => {
     const _saleId = React.useMemo(() => sale?.id, [saleId]);
     const _convertStatus = React.useMemo(() => convertStatus, [convertStatus]);
 
-
     React.useEffect(() => {
         setFilter((prev) => ({
             ...prev,
@@ -37,19 +35,27 @@ const LeadTableFilterBar = ({ setFilter }) => {
             sales_executive_id: _saleId,
             sale_name: sale?.name,
             lead_source: leadSource,
-            convert_status: convertStatus?.id ? (convertStatus?.status ? "1" : "0") : 0
+            convert_status: convertStatus?.id
+                ? convertStatus?.status
+                    ? "1"
+                    : "0"
+                : 0,
         }));
     }, [_startData, _endData, _saleId, leadSource, _convertStatus]);
 
     // search data
     React.useEffect(() => {
-        setFilter((prev) => ({ ...prev, search: searchText}));
+        setFilter((prev) => ({ ...prev, search: searchText }));
     }, [searchText]);
 
     return ReactDOM.createPortal(
         <React.Fragment>
-            <div className="w-100 bg-white py-2">
-                <Flex justifyContent="flex-start" className="px-3">
+            <div className="w-100 bg-white py-2" style={{ width: "100vw" }}>
+                <Flex
+                    justifyContent="flex-start"
+                    className="px-3"
+                    flexWrap="wrap"
+                >
                     <JqueryDateRangePicker
                         startDate={startDate}
                         setStartDate={setStartDate}
@@ -72,31 +78,27 @@ const LeadTableFilterBar = ({ setFilter }) => {
                         )}
                     />
 
-
                     <LeadSource
                         value={leadSource}
                         onChange={setLeadSource}
-                        data={[
-                            "Freelancer.com",
-                            "Upwork.com"
-                        ]}
+                        data={["Freelancer.com", "Upwork.com"]}
                     />
 
                     <ConvertStatus
-                     value={convertStatus}
-                     onChange={setConvertStatus}
-                     data={[
-                         {
-                            id: 1,
-                            name: 'Converted to Deal ',
-                            status: true
-                         },
-                         {
-                            id: 2,
-                            name: 'Not Converted to Deal ',
-                            status: false
-                         }
-                     ]}
+                        value={convertStatus}
+                        onChange={setConvertStatus}
+                        data={[
+                            {
+                                id: 1,
+                                name: "Converted to Deal ",
+                                status: true,
+                            },
+                            {
+                                id: 2,
+                                name: "Not Converted to Deal ",
+                                status: false,
+                            },
+                        ]}
                     />
                 </Flex>
             </div>
