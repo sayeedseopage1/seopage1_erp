@@ -1,3 +1,7 @@
+import { User } from "../../../utils/user-details";
+import Switch from "../Switch";
+import styles from "../styles/pm-goals-table-column.module.css";
+
 
 export const PmGoalsTableColumns = [
     {
@@ -78,10 +82,16 @@ export const PmGoalsTableColumns = [
         accessorKey: "action",
         cell: ({ row }) => {
             const data = row?.original;
+            const user = new User(window?.Laravel?.user)
+            console.log(user)
             return (
                <div className="d-flex">
-                <button className="mr-2">ded</button>
-                <div className={`${styles.status} ${styles.pending} f-12`}> Extend Request </div>
+                <Switch>
+                    <Switch.Case condition={data?.status === "pending"}>
+
+                    </Switch.Case>
+                </Switch>
+                <div className={`${styles.action} ${styles.extend} f-12`}> Extend Request </div>
                </div>
             
             )
