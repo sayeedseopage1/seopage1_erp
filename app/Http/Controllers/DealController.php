@@ -871,6 +871,7 @@ class DealController extends AccountBaseController
     }
 /** DEAL TABLE GET API */
     public function getDealData(Request $request){
+      //  dd($request->added_by_id, $request->closed_by);
         $startDate = $request->start_date ?? null;
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
@@ -892,6 +893,7 @@ class DealController extends AccountBaseController
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by')
             ->leftJoin('currencies as amount', 'amount.id', 'deal_stages.currency_id')
             ->leftJoin('currencies as actual_amount', 'actual_amount.id', 'deal_stages.original_currency_id')
+            ->leftJoin('deals', 'deals.deal_id', '=', 'deal_stages.short_code')
             ->where('deal_stages.convert_ld_status' ,'!=','DM');
 
             if ($startDate !== null && $endDate !== null) {
@@ -907,7 +909,8 @@ class DealController extends AccountBaseController
                         ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
                         ->orWhere('deal_stages.client_username', 'like', '%' . request('search') . '%')
                         ->orWhere('deal_stages.client_name', 'like', '%' . request('search') . '%')
-                        ->orWhere('added_by.name', 'like', '%' . request('search') . '%');
+                      //  ->orWhere('added_by.name', 'like', '%' . request('search') . '%');
+                      ;
                 });
             }
             if ($request->client_username != null) {
@@ -917,7 +920,7 @@ class DealController extends AccountBaseController
                 $dealQuery->where('deal_stages.added_by', $request->input('added_by_id'));
             }
             if ($request->has('closed_by') && $request->input('closed_by') !== 'all') {
-                $dealQuery->where('deal_stages.converted_by', $request->input('closed_by'));
+                $dealQuery->where('deals.added_by', $request->input('closed_by'));
             }
             if ($request->status != null) {
                 if ($request->status == 5) {
