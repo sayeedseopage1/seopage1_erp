@@ -143,7 +143,7 @@ const ProjectStatusTable = ({
                             {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id} className='sp1_tasks_tr'>
                                 {headerGroup.headers.map(header => {
-                                return <DragableColumnHeader key={header.id} header={header} table={table} />
+                                return <DragableColumnHeader key={header.id} header={header}  table={table} />
                                 })}
                             </tr>
                             ))}
