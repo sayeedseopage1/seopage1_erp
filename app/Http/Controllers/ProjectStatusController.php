@@ -135,16 +135,13 @@ class ProjectStatusController extends AccountBaseController
             foreach ($pm_goals as $key => $goal) { 
                 $project = Project::find($goal->project_id);
                 $client = User::where('id',$project->client_id)->first();
-                // dd($project);
                 $holidayArray[] = [
                     'id' => $goal->id,
                     'title' => $project->project_name. ' ('.$client->name.') ('.\Str::limit($goal->goal_name,25).')',
                     'start' => Carbon::parse($goal->goal_start_date)->format('Y-m-d'),
-                    'end' => Carbon::parse($goal->goal_end_date)->format('Y-m-d'),
+                    // 'end' => Carbon::parse($goal->goal_end_date)->format('Y-m-d'),
                 ];
             }
-
-            // dd($holidayArray);
             return $holidayArray;
         }
  
