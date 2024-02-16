@@ -10,7 +10,7 @@ import Loader from "./Loader";
 
 const Button = ({
     children,
-    type = "button",
+    type = "submit",
     disabled = false,
     className = "",
     variant = "primary",
@@ -18,6 +18,7 @@ const Button = ({
     onClick,
     isLoading = false,
     loaderTitle = "Loading...",
+
     ...props
 }) => {
     const variantClass = {
@@ -43,7 +44,7 @@ const Button = ({
 
     return (
         <button
-            type="button"
+            type={type}
             className={`${classes} ${isLoading ? styles.cnx__btn_loading : ""}`}
             disabled={disabled || isLoading}
             onClick={disabled || isLoading ? null : handleOnClick}
