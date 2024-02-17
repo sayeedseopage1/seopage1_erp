@@ -32,7 +32,11 @@ const LeadTableFilterBar = ({ setFilter }) => {
             end_date: _endData,
             sales_executive_id: _saleId,
             sale_name: sale?.name,
-            convert_status: convertStatus?.id ? (convertStatus?.status ? "1" : "0") : 0
+            convert_status: convertStatus?.id
+                ? convertStatus?.status
+                    ? "1"
+                    : "0"
+                : 0,
         }));
     }, [_startData, _endData, _saleId, _convertStatus]);
 
@@ -44,7 +48,11 @@ const LeadTableFilterBar = ({ setFilter }) => {
     return ReactDOM.createPortal(
         <React.Fragment>
             <div className="w-100 bg-white py-2">
-                <Flex justifyContent="flex-start" className="px-3">
+                <Flex
+                    justifyContent="flex-start"
+                    className="px-3"
+                    flexWrap="wrap"
+                >
                     <JqueryDateRangePicker
                         startDate={startDate}
                         setStartDate={setStartDate}
@@ -66,21 +74,21 @@ const LeadTableFilterBar = ({ setFilter }) => {
                             _.includes([1, 7, 8], Number(user.role_id))
                         )}
                     />
-                     <ConvertStatus
-                     value={convertStatus}
-                     onChange={setConvertStatus}
-                     data={[
-                         {
-                            id: 1,
-                            name: 'Converted to Deal ',
-                            status: true
-                         },
-                         {
-                            id: 2,
-                            name: 'Not Converted to Deal ',
-                            status: false
-                         }
-                     ]}
+                    <ConvertStatus
+                        value={convertStatus}
+                        onChange={setConvertStatus}
+                        data={[
+                            {
+                                id: 1,
+                                name: "Converted to Deal ",
+                                status: true,
+                            },
+                            {
+                                id: 2,
+                                name: "Not Converted to Deal ",
+                                status: false,
+                            },
+                        ]}
                     />
                 </Flex>
             </div>

@@ -1,229 +1,193 @@
 import * as React from "react";
-import styles from "./paginate.module.css";
 
 import {
-    useReactTable,
-    getCoreRowModel,
+    useReactTable, getCoreRowModel,
     getPaginationRowModel,
     getFilteredRowModel,
     getExpandedRowModel,
     getSortedRowModel,
-    flexRender,
-} from "@tanstack/react-table";
-import ReactPaginate from "react-paginate";
+    flexRender
+  } from '@tanstack/react-table';
 
 // ui component
-import {
-    TableContainer,
-    Table,
-    TableRow,
-    TableBody,
-    TableItem,
-    Flex,
-    TableFooter,
-    Select,
-} from "./ui";
-import TableHeader from "./TableHeader";
 import _ from "lodash";
 
 import { useSearchParams } from "react-router-dom";
 import { useLocalStorage } from "react-use";
 import EmptyTable from "../../../global/EmptyTable";
 import { Placeholder } from "../../../global/Placeholder";
-import RefreshButton from "../RefreshButton";
+import { DragableColumnHeader } from "./DragableColumnHeader";
+import ProjectStatusTablePagination from "../ProjectStatusTablePagination";
+import { User } from "../../../utils/user-details";
+import ProjectStatusTableLoader from "../loader/ProjectStatusTableLoader";
 
 const ProjectStatusTable = ({
-    data,
-    columns = [],
     isLoading,
-    refetch,
-    onPageChange,
-    sorting,
-    tableName = "ProjectStatusTable",
-    setSorting,
-    filtering,
-    setFiltering,
+    filter,
+    tableName,
+    search,
+    reportPermission,
+    hideColumns,
+    tableColumns,
+    tableData,
+    handlePmGoalModal
 }) => {
-    // const [tableData, setTableData] = React.useState([]);
-    const [tableColumns, setTableColumns] = React.useState(columns);
+    const [data, setData] = React.useState(tableData || []);
+    const [expanded, setExpanded] = React.useState({});
+    const [ globalFilter, setGlobalFilter ] = React.useState('');
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
-
+    const [skipPageReset, setSkipPageReset] = React.useState(false);
+    const [sorting, setSorting] = React.useState([]);
     const [value, setValue] = useLocalStorage(tableName);
 
-    // on pagination
-    const handlePageChange = ({ selected }) => {
-        const paginate = {
-            pageIndex: selected,
-            pageSize,
-        };
 
-        setPagination({ ...paginate, pageIndex: 0 });
-        onPageChange(paginate);
-    };
-
-    // handle page size change
-    const handlePageSizeChange = (e) => {
-        e.preventDefault();
-
-        const paginate = {
-            pageIndex,
-            pageSize: e.target.value,
-        };
-        setPagination({ ...paginate, pageIndex: 0 });
-        onPageChange(paginate);
-    };
-
-    // columns order
-    const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
-
-    // if has table columns record on local store
-    // organize column orders
-    React.useEffect(() => {
-        if (value && value.columnOrder) {
-            setColumnOrder(value.columnOrder);
-        }
-    }, []);
-
-    // formate data
-
-    // use effect
-    // React.useEffect(() => {
-    //     data ? setTableData(_.orderBy(data?.data, "desc")) : setTableData([]);
-    // }, [data]);
+    const _projectStatus = React.useMemo(()=> tableData, [tableData]);
 
     React.useEffect(() => {
-        if (data) {
-            setTableData(data);
+        if(_.size(_projectStatus) === _.size(data)){
+          setSkipPageReset(true);
+          _projectStatus && setData(_projectStatus)
+        }else{
+            _projectStatus && setData(_projectStatus);
         }
-    }, []);
+      }, [_projectStatus])
 
-    // pagination
-    const pagination = React.useMemo(
-        () => ({ pageIndex, pageSize }),
-        [pageIndex, pageSize]
-    );
+    // clear skipPageReset
+    React.useEffect(() => {
+        if(skipPageReset){
+        setSkipPageReset(false);
+        }
+    }, [data])
 
-    // console.log("table data ", tableData, " table column", tableColumns);
-    // table instance
-    const tableInstance = useReactTable({
+    // default columns
+    const defaultColumns = React.useMemo(() => [...tableColumns])
+
+    // columns
+    const [columns, setColumns] = React.useState([...defaultColumns]);
+
+    React.useEffect(() => {
+        let auth = new User(window?.Laravel?.user);
+        let _cols = [...defaultColumns?.filter(f => !_.includes(hideColumns, f.id))];
+
+        if(!_.includes(reportPermission, auth?.getRoleId())){
+        _cols = _cols?.filter(col => col.id !== 'report')
+        }
+        setColumns([..._cols]);
+    }, [])
+
+    const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id'));
+
+    // reset columns
+    const resetColumnsOrder = () => setColumnOrder(_.map(columns, 'id'))
+    const pagination = React.useMemo(() => ({pageIndex, pageSize}), [pageIndex, pageSize]);
+
+    // columns orders
+    React.useEffect(() => {
+        if(value?.columnOrders){
+        setColumnOrder(value.columnOrders);
+        }
+    }, [])
+
+    // table instance...
+    const table = useReactTable({
         data,
-        columns: tableColumns,
+        columns,
         state: {
             sorting,
+            expanded,
+            columnOrder,
             pagination,
             tableName,
-            columnOrder,
-            globalFilter: filtering,
+            filter,
+            globalFilter: _.trim(search)
         },
-        // onPaginationChange: setPagination,
+        onGlobalFilterChange: setGlobalFilter,
+        autoResetPageIndex: !skipPageReset,
+        onPaginationChange: setPagination,
         onSortingChange: setSorting,
+        onExpandedChange: setExpanded,
+        getSubRows: row => row.subtasks,
         onColumnOrderChange: setColumnOrder,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
-        // getFilteredRowModel: getFilteredRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        onGlobalFilterChange: setFiltering,
-    });
+        paginateExpandedRows: false,
+        meta: {
+                /**
+                 * Additional metadata associated with the column.
+                 * This metadata can be accessed anywhere the column is available.
+                 * @typedef {Object} ColumnMeta
+                 * @property {Function} onClickHandler - Function triggered when a specific action, such as a click event,  occurs on the associated column.
+                 * Accepts rowData as an argument representing the clicked row.
+                 * Example usage: onClickHandler(rowData)
+                 * This function can be accessed through table.options.meta.onClickHandler().
+                 */
+            onClickHandler: (rowData) => {
+                handlePmGoalModal(rowData);
+            }
+        }
+    })
 
+
+    
     return (
-        <>
-            <>
-                <RefreshButton
-                    style={{ marginLeft: "auto" }}
-                    onClick={refetch}
-                    isLoading={isLoading}
-                />
-                <TableContainer>
-                    <Table>
-                        <TableHeader
-                            tableInstance={tableInstance}
-                            columns={tableColumns}
-                        />
-
-                        <TableBody>
-                            {!isLoading &&
-                                tableInstance.getRowModel().rows.map((row) => (
-                                    <TableRow key={row.id}>
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableItem key={cell.id}>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </TableItem>
-                                        ))}
-                                    </TableRow>
-                                ))}
-
-                            {isLoading &&
-                                _.times(pageSize, (item) => (
-                                    <TableRow key={item}>
-                                        {_.times(tableColumns.length, (col) => (
-                                            <TableItem
-                                                key={col}
-                                                className="py-3"
-                                            >
-                                                <Placeholder />
-                                            </TableItem>
-                                        ))}
-                                    </TableRow>
-                                ))}
-
-                            {!isLoading && _.size(data) === 0 && (
-                                <TableRow>
-                                    <TableItem colSpan={_.size(tableColumns)}>
-                                        <EmptyTable />
-                                    </TableItem>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                <TableFooter>
-                    <Flex>
-                        Show
-                        <Select
-                            value={pageSize}
-                            onChange={handlePageSizeChange}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </Select>
-                        Entries
-                    </Flex>
-
-                    <Flex>
-                        <span>
-                            Showing {data?.from} to {data?.to} of {data?.total}{" "}
-                            entries
-                        </span>
-
-                        <ReactPaginate
-                            breakLabel="..."
-                            onPageChange={handlePageChange}
-                            previousLabel="Previous"
-                            nextLabel="Next"
-                            pageRangeDisplayed={3}
-                            marginPagesDisplayed={1}
-                            pageCount={data?.last_page ?? 1}
-                            renderOnZeroPageCount={null}
-                            containerClassName={styles.containerClassName}
-                            pageLinkClassName={styles.pageLinkClassName}
-                            activeLinkClassName={styles.activeLinkClassName}
-                            previousLinkClassName={styles.pageLinkClassName}
-                            nextLinkClassName={styles.pageLinkClassName}
-                        />
-                    </Flex>
-                </TableFooter>
-            </>
-        </>
+        <React.Fragment>
+            <div className="sp1_tasks_table_wrapper">
+                <table className='sp1_tasks_table'>
+                    <thead className="sp1_tasks_thead">
+                            {table.getHeaderGroups().map(headerGroup => (
+                            <tr key={headerGroup.id} className='sp1_tasks_tr'>
+                                {headerGroup.headers.map(header => {
+                                return <DragableColumnHeader key={header.id} header={header}  table={table} />
+                                })}
+                            </tr>
+                            ))}
+                    </thead>
+                    <tbody className='sp1_tasks_tbody'>
+                            {!isLoading &&table.getRowModel().rows.map(row => {
+                            return (
+                                <tr
+                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
+                                    key={row.id}
+                                >
+                                {row.getVisibleCells().map(cell => {
+                                    return (
+                                    <td key={cell.id} className='px-2 sp1_tasks_td'>
+                                         
+                                        { flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                            )
+                                        }
+                                    </td>
+                                    )
+                                })}
+                                </tr>
+                            )
+                            })}
+                            {isLoading && <ProjectStatusTableLoader />}
+                    </tbody>
+                </table>
+                {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}   
+            </div>
+            <ProjectStatusTablePagination
+                currentPage = {pageIndex + 1}
+                perpageRow= {pageSize}
+                onPageSize = {(size) => table?.setPageSize(size)}
+                onPaginate = {(page) => table?.setPageIndex(page - 1)}
+                totalEntry= {_.size(data)}
+                onNext = {() => table.getCanNextPage() && table.nextPage()}
+                disableNext = {!table?.getCanNextPage()}
+                onPrevious = {() => table?.getCanPreviousPage() && table?.previousPage()}
+                disablePrevious = {!table?.getCanPreviousPage()}
+                totalPages = {table?.getPageCount()}
+            />
+        </React.Fragment>
     );
 };
 

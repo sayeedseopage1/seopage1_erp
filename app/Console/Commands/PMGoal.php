@@ -13,6 +13,8 @@ use App\Models\ProjectDeliverable;
 use DB;
 use App\Models\Payment;
 use App\Models\ProjectMilestone;
+use App\Notifications\PmGoalMissNotification;
+use Notification;
 
 class PMGoal extends Command
 {
@@ -198,6 +200,24 @@ class PMGoal extends Command
                 }
 
             }
+
+
+            $goal_check = ProjectPmGoal::where('id',$goal->id)->first();
+            $current_date = now();
+            if($goal_check->extended_goal_end_day ==null){
+                $goal_end_date = Carbon::parse($goal_check->goal_end_date)->addHours(24);
+            }else{
+                $goal_end_date = Carbon::parse($goal_check->extended_goal_end_day)->addHours(24);
+            }
+            if($goal_check->goal_status ==0 && $goal_check->goal_end_date >= $current_date){
+            $pm = $goal_check->pm_id;
+            $users = User::where('id',$pm)->get();
+                foreach ($users as $user) {
+                    Notification::send($user, new PmGoalMissNotification($goal_check));
+                }
+            }
+
+            
         }
   
         

@@ -13,13 +13,12 @@ import {
 } from "./ui";
 import ActionDropdown from "./ActionDropdown";
 import Avatar from "../../../../../global/Avatar";
- 
 
 export const DealsTableColumns = [
     {
         id: "id",
         header: "#",
-        cell: ({row}) => row.original?.id,
+        cell: ({ row }) => row.original?.id,
     },
     {
         id: "project_name",
@@ -45,7 +44,7 @@ export const DealsTableColumns = [
             const data = row.original;
             return (
                 <span className="multiline-ellipsis pr-2">
-                    { data?.client_username || <EmptySpace> -- </EmptySpace>}
+                    {data?.client_username || <EmptySpace> -- </EmptySpace>}
                 </span>
             );
         },
@@ -61,7 +60,9 @@ export const DealsTableColumns = [
                     href={data?.project_link}
                     className="multiline-ellipsis text-hover-underline mr-2"
                 >
-                    { (data?.lead_id ? data?.lead_project_link : data?.project_link) ?? <EmptySpace> -- </EmptySpace>}
+                    {(data?.lead_id
+                        ? data?.lead_project_link
+                        : data?.project_link) ?? <EmptySpace> -- </EmptySpace>}
                 </a>
             );
         },
@@ -73,8 +74,10 @@ export const DealsTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <ProjectBudget> 
-                    {`${data?.ammount_currency_symbol} ${Number(data?.amount).toFixed(0)}`}
+                <ProjectBudget>
+                    {`${data?.ammount_currency_symbol} ${Number(
+                        data?.amount
+                    ).toFixed(0)}`}
                 </ProjectBudget>
             );
         },
@@ -87,7 +90,9 @@ export const DealsTableColumns = [
             const data = row.original;
             return (
                 <ProjectBudget>
-                    {`${data?.actual_amount_currency_symbol} ${Number(data?.actual_amount).toFixed(2)}`}
+                    {`${data?.actual_amount_currency_symbol} ${Number(
+                        data?.actual_amount
+                    ).toFixed(2)}`}
                 </ProjectBudget>
             );
         },
@@ -98,49 +103,54 @@ export const DealsTableColumns = [
         accessorKey: "created_at",
         cell: ({ row }) => {
             const data = row.original;
-            const date = data?.created_at
-                ? dayjs(data?.created_at).format(`DD-MM-YYYY hh:mm:ss A`)
-                : <EmptySpace> -- </EmptySpace>;
+            const date = data?.created_at ? (
+                dayjs(data?.created_at).format(`DD-MM-YYYY hh:mm:ss A`)
+            ) : (
+                <EmptySpace> -- </EmptySpace>
+            );
             return <CreatedAt>{date}</CreatedAt>;
         },
-    }, 
+    },
     {
-        id: "lead_added_by_name",
+        id: "added_by_name",
         header: "Added By",
-        accessorKey: "lead_added_by_name",
+        accessorKey: "added_by_name",
         cell: ({ row }) => {
             const data = row.original;
-            
 
-            if(!data?.lead_id){ 
+            if (!data?.lead_id) {
                 return (
-                    <CreatedBy
-                        href={`/account/employees/${data.added_by}`}
-                    >
+                    <CreatedBy href={`/account/employees/${data.added_by}`}>
                         <Avatar
                             type="circle"
                             name={data?.added_by_name}
-                            src={data?.added_by_image ? `/user-uploads/avatar/${data?.added_by_image}` : null}
+                            src={
+                                data?.added_by_image
+                                    ? `/user-uploads/avatar/${data?.added_by_image}`
+                                    : null
+                            }
                         />
 
                         <span>{data?.added_by_name}</span>
                     </CreatedBy>
-                )
-            }else if(!data?.lead_added_by_name){
-                return <EmptySpace> -- </EmptySpace>
+                );
+            } else if (!data?.added_by_name) {
+                return <EmptySpace> -- </EmptySpace>;
             }
 
             return (
-                <CreatedBy
-                    href={`/account/employees/${data.lead_added_by}`}
-                >
+                <CreatedBy href={`/account/employees/${data.lead_added_by}`}>
                     <Avatar
                         type="circle"
-                        name={data?.lead_added_by_name}
-                        src={data?.lead_added_by_image ? `/user-uploads/avatar/${data?.lead_added_by_image}` : null}
+                        name={data?.added_by_name}
+                        src={
+                            data?.lead_added_by_image
+                                ? `/user-uploads/avatar/${data?.lead_added_by_image}`
+                                : null
+                        }
                     />
 
-                    <span>{data?.lead_added_by_name}</span>
+                    <span>{data?.added_by_name}</span>
                 </CreatedBy>
             );
         },
@@ -152,8 +162,8 @@ export const DealsTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            if(!data?.deal_stages_converted_by_name) {
-                return <EmptySpace> -- </EmptySpace>
+            if (!data?.deal_stages_converted_by_name) {
+                return <EmptySpace> -- </EmptySpace>;
             }
 
             return (
@@ -163,7 +173,11 @@ export const DealsTableColumns = [
                     <Avatar
                         type="circle"
                         name={data?.deal_stages_converted_by_name}
-                        src={data?.deal_stages_converted_by_image ? `/user-uploads/avatar/${data?.deal_stages_converted_by_image}` : null}
+                        src={
+                            data?.deal_stages_converted_by_image
+                                ? `/user-uploads/avatar/${data?.deal_stages_converted_by_image}`
+                                : null
+                        }
                     />
 
                     <span>{data?.deal_stages_converted_by_name}</span>
@@ -178,13 +192,11 @@ export const DealsTableColumns = [
             const data = row.original;
 
             return (
-                <Status bgColor={data?.won_lost_bg}>
-                   {data?.won_lost} 
-                </Status>
+                <Status bgColor={data?.won_lost_bg}>{data?.won_lost}</Status>
             );
         },
     },
-    
+
     {
         id: "action",
         header: "Action",

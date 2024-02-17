@@ -11,7 +11,7 @@
 @endpush
 
 @section('filter-section')
- <div id="leadTableFilterContainer"></div>
+ <div id="projectStatusFilterContainer"></div>
 @endsection
 
 @php
