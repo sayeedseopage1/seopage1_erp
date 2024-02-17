@@ -85,6 +85,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         handlePastedFiles,
         renderToHtml,
         Toolbar,
+        inputKey,
     } = useEditor();
 
     const {
@@ -106,7 +107,6 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const { task } = useSelector((s) => s.subTask);
     const param = useParams();
 
-    console.log("selected task", task);
     const [isFetching, setIsFetching] = React.useState(false);
     // State to track overall upload progress
     const [overallProgress, setOverallProgress] = useState(0);
@@ -326,6 +326,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
                         <FileItemInput>
                             <input
+                                key={inputKey} // Use the dynamic key for the input
                                 type="file"
                                 multiple
                                 onChange={handleUploadImage}
@@ -467,6 +468,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             <RightButtonGroup isExpended={isExpended}>
                 <FileUploadButton>
                     <input
+                        key={inputKey}
                         type="file"
                         multiple
                         onChange={handleUploadImage}

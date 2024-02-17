@@ -39,11 +39,18 @@ const ServiceProvider = ({ children }) => {
         return { MentionSuggestions };
     }, []);
 
+    //same name input issue was fixed by updating the state of the input
+    //and not updating when selection or adding files inside existing selected files
+    const [inputKey, setInputKey] = React.useState(Date.now());
+
     // handle upload image
     // user upload button click
     const handleUploadImage = (e) => {
-        const uploadedFiles = e.target.files;
-        setFiles((prev) => [...prev, ...uploadedFiles]);
+        const newFiles = Array.from(e.target.files);
+        if (newFiles.length > 0) {
+            setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            setInputKey(Date.now());
+        }
     };
 
     // remove image form list
@@ -217,6 +224,7 @@ const ServiceProvider = ({ children }) => {
                 handlePastedFiles,
                 Toolbar,
                 clearFiles,
+                inputKey,
             }}
         >
             {children}
