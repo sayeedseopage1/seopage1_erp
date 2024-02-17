@@ -20,4 +20,6 @@ const FractionalRating = () => {
   )
 }
 
+
+
 export default FractionalRating
