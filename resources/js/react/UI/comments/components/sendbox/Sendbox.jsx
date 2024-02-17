@@ -107,6 +107,8 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const { task } = useSelector((s) => s.subTask);
     const param = useParams();
 
+    console.log("task", task);
+
     const [isFetching, setIsFetching] = React.useState(false);
     // State to track overall upload progress
     const [overallProgress, setOverallProgress] = useState(0);
@@ -146,7 +148,8 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                         user?.role_id !== null &&
                         (user?.role_id === 1 ||
                             user?.id === task?.added_by ||
-                            user?.id === task?.project_manager_id ||
+                            (user?.id === task?.project_manager_id &&
+                                task.subtask_id === null) ||
                             user?.id === task?.users?.[0].id ||
                             user?.role_id === 8 ||
                             user?.role_id === 6)
