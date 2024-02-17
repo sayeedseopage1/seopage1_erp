@@ -34,6 +34,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const [isOpenExtendRequestModal, setIsOpenExtendRequestModal] = React.useState(false);
     const [isOpenResolveModal, setIsOpenResolveModal] = React.useState(false);
     const [isOpenReviewExtendRequestModal, setIsOpenReviewExtendRequestModal] = React.useState(false);
+    const [extendRequestData, setExtendRequestData] = React.useState({});
     //pagination start
     // Number of items to display per page
     const [itemsPerPage, setItemsPerPage] = React.useState(5);
@@ -105,7 +106,9 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                 setIsOpenReviewExtendRequestModal(true);
             },
             extendRequestClick: (row) => {
-                console.log("row", row);
+                setExtendRequestData({
+                    goal_id: row.id
+                })
                 setIsOpenExtendRequestModal(true);
             },
             deadlineExplainClick: (row) => {
@@ -181,10 +184,11 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                 {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
                 <ExtendRequestModal
                     projectDetails={projectDetails}
+                    extendRequestData={extendRequestData}
                     isOpen={isOpenExtendRequestModal}
                     onClose={handleClosExtendRequestModal}
                 />
-                < ReviewExtendRequestModal
+                <ReviewExtendRequestModal
                     projectDetails={projectDetails}
                     isOpen={isOpenReviewExtendRequestModal}
                     onClose={handleCloseExtendReviewModal}
