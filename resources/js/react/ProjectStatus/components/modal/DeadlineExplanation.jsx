@@ -44,6 +44,8 @@ const DeadlineExplanation = ({
         }
     };
 
+    console.log(projectDetails)
+
     return (
         <div style={styles.container}>
             <div>

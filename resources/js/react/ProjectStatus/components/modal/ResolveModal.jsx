@@ -10,8 +10,8 @@ const ResolveModal = ({
     pmGoalExtendReason,
     projectPmGoalId,
     projectDetails,
-    isModalThreeOpen,
-    closeModalThree,
+    isModalOpen,
+    closeModal,
 }) => {
     const [suggestionData, setSuggestionData] = useState("");
     const [commentData, setCommentData] = useState("");
@@ -54,8 +54,8 @@ const ResolveModal = ({
     return (
         <ReactModal
             style={customStyles}
-            isOpen={isModalThreeOpen}
-            onRequestClose={closeModalThree}
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
             contentLabel="Project Details"
         >
             <div
@@ -74,7 +74,7 @@ const ResolveModal = ({
                 </div>
 
                 <button
-                    onClick={closeModalThree}
+                    onClick={closeModal}
                     style={{
                         backgroundColor: "red",
                         padding: "2px 4px 2px 4px",

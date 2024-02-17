@@ -3,8 +3,9 @@ import ReactModal from "react-modal";
 import PMGoalsTable from "./PmGoalsTable";
 
 import RefreshButton from "../RefreshButton";
-import PmGoalsTableUpdate from "./PmGoalsTableUpdate";
 import { PmGoalsTableColumns } from "./PmGoalsTableColumn";
+import PmGoalsTable from "./PmGoalsTable";
+import ExtendRequestModal from "./ExtendRequestModal";
 
 const ProjectModal = ({
     refetchPmGoal,
@@ -36,12 +37,7 @@ const ProjectModal = ({
                         isLoading={isFetchingPmGoal}
                     />
                 </div>
-                {/* <PMGoalsTable
-                    projectDetails={projectDetails}
-                    pmGoal={pmGoal}
-                    isFetchingPmGoal={isFetchingPmGoal}
-                /> */}
-                  <PmGoalsTableUpdate
+                  <PmGoalsTable
                     projectDetails={projectDetails}
                     pmGoal={pmGoal}
                     tableName="pmGoalsTable"

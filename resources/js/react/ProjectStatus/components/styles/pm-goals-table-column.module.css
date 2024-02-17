@@ -1,4 +1,15 @@
 
+.idContainer{
+    width: 20px !important;
+}
+
+.actionContainer{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 290px;
+}
+
 
 .action{
     width: fit-content;
@@ -21,16 +32,27 @@
     white-space: normal;
 }
 
-.action.deny{
-    background: #fee6e6;
-    color:  #f22121;
-    border-color: #f99c9c;
+.action.deadlineExplained{
+    background: #f22121;
+    color:  #e6f8ef;
+    border-color: #f22121;
+    font-weight: 600;
+    padding: 8px 10px !important;
+    cursor: pointer;
 }
 
 .action.extend{
     color: #e6f8ef;
     background: #00b95d !important;
     border-color: #00b95d !important;
+    font-weight: 600;
+    padding: 8px 10px !important;
+    cursor: pointer;
+}
+.action.resolve{
+    color: #e6f8ef;
+    background: #ffa500 !important;
+    border-color: #ffa500 !important;
     font-weight: 600;
     padding: 8px 10px !important;
     cursor: pointer;

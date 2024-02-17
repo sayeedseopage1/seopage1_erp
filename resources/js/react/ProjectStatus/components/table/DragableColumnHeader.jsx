@@ -72,6 +72,9 @@ export const DragableColumnHeader = ({header, table, className='', ...props}) =>
         style={{ 
           opacity: isDragging ? 0.5 : 1, 
           background: isOver && (column.id !== "expend" || column.id !== 'action') ? '#f3f3f3' : '', 
+          minWidth: column.id === 'id' && '50px',
+          width:  column.id === 'id' && '50px',
+          maxWidth:  column.id === 'id' && '50px',
         }}
         className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
         {...props}

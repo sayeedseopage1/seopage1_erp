@@ -8,6 +8,14 @@ export const PmGoalsTableColumns = [
         id: "id",
         header: "#",
         accessorKey: "id",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <div className={`${styles.idContainer}`}> 
+                    {data?.id ?? "--"}
+                </div>
+            )
+        }
     },
     {
         id: "goal_start_date",
@@ -23,6 +31,14 @@ export const PmGoalsTableColumns = [
         id: "duration",
         header: "Duration",
         accessorKey: "duration",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span > 
+                    {`${data?.duration} Days` ?? "--"} 
+                </span>
+            )
+        }
     },
     {
         id: "description",
@@ -80,18 +96,69 @@ export const PmGoalsTableColumns = [
         id: "action",
         header: "Action",
         accessorKey: "action",
-        cell: ({ row }) => {
+        cell: ({ row , table}) => {
             const data = row?.original;
             const user = new User(window?.Laravel?.user)
-            console.log(user)
+            const handle = table.options.meta
             return (
-               <div className="d-flex">
-                <Switch>
-                    <Switch.Case condition={data?.status === "pending"}>
 
+               <div className={`${styles.actionContainer}`} >
+                    <Switch>
+                        <Switch.Case condition={user?.roleId === 4}>
+                            <Switch>
+                                    <Switch.Case condition={!data.reason}>
+                                            <Switch>
+                                                <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
+                                                    <div 
+                                                        onClick={() => handle.deadlineExplainClick(data)} className={`${styles.action} ${styles.deadlineExplained} f-12`}
+                                                    > 
+                                                        Deadline Explanation 
+                                                    </div>
+                                                </Switch.Case>
+                                            </Switch>
+                                    </Switch.Case>
+                                </Switch> 
+                        </Switch.Case>
+                        <Switch.Case condition={user?.roleId === 1 && data.reason}>
+                            <Switch>
+                                <Switch.Case condition={data.admin_comment && data.suggestion}>
+                                    <div  className={`${styles.action} f-12`}> Resolved </div>
+                                </Switch.Case>
+                                <Switch.Case condition={!data.admin_comment && !data.suggestion}>
+                                    <div onClick={() => handle.resolveExplainClick(data)} className={`${styles.action} ${styles.resolve} f-12`}> Resolve </div>
+                                </Switch.Case>
+                            </Switch>
+                        </Switch.Case>
+                    </Switch>
+                    <Switch>
+                            <Switch.Case condition={user.roleId === 4}>
+                                <div onClick={() => handle.extendRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
+                                    Extend Request
+                                </div>
+                                {/* <Dropdown.Item
+                                    className={styles.dropdownItem}
+                                    onClick={handleExtendRequestClick}
+                                >
+                                    Extend Request
+                                </Dropdown.Item> */}
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    data?.extended_request_status === 1 &&
+                                    (user.roleId === 1 || user.roleId === 8)
+                                }
+                            >
+                                <div onClick={() => handle.extendReviewRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
+                                Review Extend Time
+                                </div>
                     </Switch.Case>
-                </Switch>
-                <div className={`${styles.action} ${styles.extend} f-12`}> Extend Request </div>
+                    </Switch>
+                    <Switch>
+                        <Switch.Case condition={data?.extended_request_status !== 1 &&
+                                    (user.roleId === 1 || user.roleId === 8)}>
+                            <span>--</span>
+                        </Switch.Case>
+                    </Switch>
                </div>
             
             )
