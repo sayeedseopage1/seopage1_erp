@@ -59,7 +59,7 @@ class QualifiedSalesController extends AccountBaseController
                 'qualified_sales.*',
                 'converted_by.id as closed_by',
                 'converted_by.name as closed_by_name',
-                DB::raw('SUM(cash_points.points) as total_cash_points_by_user'),
+                // DB::raw('SUM(cash_points.points) as total_cash_points_by_user'),
                 'cash_points.user_id',
             ])
             ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
@@ -128,14 +128,17 @@ class QualifiedSalesController extends AccountBaseController
     }
     public function get_point_details($id)
     {
-        $qualified_sale= QualifiedSale::where('id',$id)->first();
-        $this->userPoints = CashPoint::select('cash_points.user_id', 'users.name', DB::raw('SUM(cash_points.points) as total_points'))
-        ->where('points','>',0)
-        ->where('project_id', $qualified_sale->project_id)
+        $qualified_sale = QualifiedSale::where('id', $id)->first();
+        $this->userPoints = CashPoint::select('cash_points.user_id','cash_points.project_id as ProjectId', 'users.name', DB::raw('SUM(cash_points.points) as total_points'))
         ->join('users', 'users.id', '=', 'cash_points.user_id')
-        ->groupBy('cash_points.user_id', 'users.name');
+        ->where('cash_points.points', '>', 0)
+        ->where('cash_points.project_id', $qualified_sale->project_id)
+       
+        ->groupBy('cash_points.user_id', 'users.name')
+        ->get();
+     //   dd($this->userPoints);
         //->get();
-        return response()->json($this->userPoints->get());
+        return response()->json($this->userPoints);
 
     //    / ->pluck('total_points', 'name');
     //    / dd($userPoints);
