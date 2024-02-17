@@ -199,15 +199,12 @@ class ProjectStatusController extends AccountBaseController
     public function storePMExtendRequest(Request $request){
         // dd($request->all());
         // \DB::beginTransaction();
-        $pmGoals = ProjectPmGoal::where('project_id',$request->project_id)->get();
-        $goal = '';
-        foreach($pmGoals as $pmGoal){
-            $goal = ProjectPmGoal::where('id', $pmGoal->id)->first();
-            $goal->is_client_communication = $request->is_client_communication;
-            $goal->extended_day = $request->extended_day;
-            $goal->extended_request_status = 1;
-            $goal->save();
-        }
+
+        $goal = ProjectPmGoal::where('id', $request->goal_id)->first();
+        $goal->is_client_communication = $request->is_client_communication;
+        $goal->extended_day = $request->extended_day;
+        $goal->extended_request_status = 1;
+        $goal->save();
 
         if ($request->hasFile('screenshot')) {
             $files = $request->file('screenshot');
@@ -217,7 +214,7 @@ class ProjectStatusController extends AccountBaseController
             foreach ($files as $file) {
                 $pmGoalFile = new ProjectPmGoalFile();
                 $pmGoalFile->goal_id = $goal->id;
-                $pmGoalFile->project_id = $request->project_id;
+                $pmGoalFile->project_id = $goal->project_id;
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 array_push($file_name, $filename);
                 $pmGoalFile->file_name = $filename;
@@ -226,13 +223,10 @@ class ProjectStatusController extends AccountBaseController
                 Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
             }
         }
-
-        // dd('ok');
-        
         return response()->json(['status'=>200]);
     }
     public function extendImage($id){
-        $projectFile = ProjectPmGoalFile::where('project_id',$id)->get();
+        $projectFile = ProjectPmGoalFile::where('id',$id)->get();
         return response()->json([
             'status'=>200,
             'data'=>$projectFile
@@ -244,28 +238,18 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.review_extend_request',$this->data);
     }
     public function acceptOrDenyExtendRequest(Request $request){
-        // \DB::beginTransaction();
-        // dd($request->all());
-        $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
-        $updateGoal = '';
         if($request->status==1){
-            foreach($pmGoalFinds as $item){
-                $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
-                $updateGoal->extended_goal_end_day = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
-                $updateGoal->is_any_negligence = $request->is_any_negligence;
-                $updateGoal->extended_request_status = 2;
-                $updateGoal->save();
-            }
+            $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
+            $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
+            $updateGoal->is_any_negligence = $request->is_any_negligence;
+            $updateGoal->extended_request_status = 2;
+            $updateGoal->save();
         }else{
-            foreach($pmGoalFinds as $item){
-                $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
-                $updateGoal->is_any_negligence = $request->is_any_negligence;
-                $updateGoal->extended_request_status = 3;
-                $updateGoal->save();
-            }
+            $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
+            $updateGoal->is_any_negligence = $request->is_any_negligence;
+            $updateGoal->extended_request_status = 3;
+            $updateGoal->save();
         }
-        
-        // dd($updateGoal->extended_goal_end_day);
         return response()->json(['status'=>200]);
     }
     public function calendarShow($id)
