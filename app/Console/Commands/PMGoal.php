@@ -201,6 +201,7 @@ class PMGoal extends Command
 
             }
 
+
             $goal_check = ProjectPmGoal::where('id',$goal->id)->first();
             $current_date = now();
             if($goal_check->extended_goal_end_day ==null){
@@ -215,6 +216,7 @@ class PMGoal extends Command
                     Notification::send($user, new PmGoalMissNotification($goal_check));
                 }
             }
+
             
         }
   

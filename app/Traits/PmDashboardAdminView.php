@@ -1485,6 +1485,7 @@ if (count($this->no_of_accepted_projects) > 0 ) {
       ->whereBetween('payments.paid_on', [$startMonth, $release_date])
   //    / ->groupBy('project_milestones.project_id')
       ->sum('project_milestones.cost');
+      
       $this->total_released_amount_this_cycle_get = Project::select('projects.*',
       'project_milestones.milestone_title as milestone_title',
       'project_milestones.created_at as milestone_creation_date',
