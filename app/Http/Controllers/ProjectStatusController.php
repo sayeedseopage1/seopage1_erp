@@ -197,7 +197,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.extend_request',$this->data);
     }
     public function storePMExtendRequest(Request $request){
-        // dd($request->all());
+        dd($request->all());
         // \DB::beginTransaction();
         $pmGoals = ProjectPmGoal::where('project_id',$request->project_id)->get();
         $goal = '';
