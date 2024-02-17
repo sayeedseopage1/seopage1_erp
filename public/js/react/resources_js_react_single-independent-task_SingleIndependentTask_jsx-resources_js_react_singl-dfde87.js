@@ -32,8 +32,11 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         isOpen: isOpen,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "position-relative",
+          // className="position-relative"
           style: {
+            position: "absolute",
+            top: "80px",
+            left: "-10px",
             padding: "75px 23px 18px 25px",
             height: "100vh",
             width: "100vw"
@@ -41,6 +44,9 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             className: "sp1_task_comment_modal",
             style: {
+              position: "absolute",
+              top: "80px",
+              left: "-10px",
               height: "100%",
               width: "100%",
               maxHeight: "100vh"
@@ -74,8 +80,11 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         isOpen: isOpen,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "position-relative",
+          // className="position-relative"
           style: {
+            position: "absolute",
+            top: "80px",
+            left: "-10px",
             padding: "79px 41px 21px 261px",
             height: "100vh",
             width: "100vw"
@@ -83,6 +92,9 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             className: "sp1_task_comment_modal",
             style: {
+              position: "absolute",
+              top: "80px",
+              left: "-10px",
               height: "100%",
               width: "100%",
               maxHeight: "100vh"
