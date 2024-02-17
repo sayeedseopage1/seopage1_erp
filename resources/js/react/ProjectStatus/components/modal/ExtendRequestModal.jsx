@@ -9,7 +9,7 @@ import CKEditorComponent from "../../../ckeditor";
 import FileUpload from "./FileUpload";
 import { useCreateExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
 
-const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
+const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData }) => {
     const [extendedDaysData, setExtendedDaysData] = useState("");
     const [reasonData, setReasonData] = useState("");
     const [selectedFiles, setSelectedFiles] = useState([]);
@@ -60,10 +60,9 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
 
         e.preventDefault();
         const fd = new FormData();
-
         fd.append("extended_day", extendedDaysData ?? "");
         fd.append("is_client_communication", reasonData ?? "");
-        fd.append("project_id", projectDetails?.project_id ?? "");
+        fd.append("goal_id", extendRequestData?.goal_id ?? "");
         Array.from(selectedFiles).forEach((file) => {
             fd.append("screenshot[]", file);
         });
@@ -91,6 +90,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
             toast.error("Please fillup all required fields");
         }
     };
+
+    console.log("projectDetails", extendRequestData);
 
     return (
         <ReactModal

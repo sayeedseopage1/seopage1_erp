@@ -6,6 +6,7 @@ import { IoClose } from "react-icons/io5";
 import CKEditorComponent from "../../../ckeditor";
 import { Flex } from "../table/ui";
 import { useCreateResolveSuggestionCommentMutation } from "../../../services/api/projectStatusApiSlice";
+import FractionalRating from "../FractionalRating";
 const ResolveModal = ({
     pmGoalExtendReason,
     projectPmGoalId,
@@ -145,6 +146,7 @@ const ResolveModal = ({
                                 </option>
                             ))}
                         </select>
+                        <FractionalRating/>
                     </Flex>
 
                     <div style={styles.reasonContainer}>

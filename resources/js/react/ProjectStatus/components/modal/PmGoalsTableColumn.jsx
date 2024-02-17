@@ -24,7 +24,7 @@ export const PmGoalsTableColumns = [
     },
     {
         id: "goal_end_date",
-        header: "Goal DeadLine",
+        header: "Goal Dead Line",
         accessorKey: "goal_end_date",
     },
     {
