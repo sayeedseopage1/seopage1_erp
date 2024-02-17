@@ -14,6 +14,7 @@ use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use DB;
 
 class ProjectStatusController extends AccountBaseController
 {
@@ -283,16 +284,42 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.index', $this->data);
 
     }
-    public function allProjectStatus(){
-        $project_pm_goal = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','projects.project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage')
+    public function allProjectStatus(Request $request){
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $limit = $request->limit ??  10;
+
+        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','projects.project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage')
             ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
             ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
             ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
-            ->groupBy('projects.id')
-            ->get();
+            ->groupBy('projects.id');
 
+            if ($startDate !== null && $endDate !== null) {
+                $pmGoalsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(project_pm_goals.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(project_pm_goals.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->search != '') {
+                $pmGoalsQuery->where(function ($query) {
+                    $query->where('project_pm_goals.project_id', 'like', '%' . request('search') . '%')
+                    ->orWhere('projects.project_name', 'like', '%' . request('search') . '%')
+                    ->orWhere('client.name', 'like', '%' . request('search') . '%')
+                    ->orWhere('pm.name', 'like', '%' . request('search') . '%');
+                });
+            }
+            if ($request->client_id != null) {
+                $pmGoalsQuery->where('project_pm_goals.client_id', $request->client_id);
+            }
+            if ($request->pm_id != null) {
+                $pmGoalsQuery->where('project_pm_goals.pm_id', $request->pm_id);
+            }
+            $pm_goals = $pmGoalsQuery
+            ->orderBy('project_pm_goals.id', 'desc')
+            ->paginate($limit);
             return response()->json([
-                'data'=>$project_pm_goal,
+                'data'=>$pm_goals,
                 'status'=>200
             ]);
     }

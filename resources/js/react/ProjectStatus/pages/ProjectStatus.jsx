@@ -46,8 +46,10 @@ const ProjectStatus = () => {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
     });
 
-    const projectStatus = projectStatusData?.data;
+    const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
+
+    console.log("projectStatus",projectStatus)
 
     let tableColumns = ProjectStatusTableColumns;
 

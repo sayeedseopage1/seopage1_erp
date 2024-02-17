@@ -133,6 +133,7 @@ const ProjectStatusTable = ({
         }
     })
 
+    console.log(data)
 
     
     return (
