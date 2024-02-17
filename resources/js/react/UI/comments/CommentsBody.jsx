@@ -29,6 +29,7 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import _ from "lodash";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
+
 import isCurrentUser from "./utils/isCurrentUser";
 import CommentsPlaceholder from "./utils/CommentsPlaceholder";
 import getTextContent, {
@@ -41,6 +42,7 @@ import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
 import Sendbox from "./components/sendbox/Sendbox";
 import axios from "axios";
+import { useCommentStore } from "./zustand/store";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -87,7 +89,7 @@ const CommentsBody = ({
     const comments_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchText, setSearchText] = useState("");
-    const [allComments, setAllComments] = useState([]);
+
     const [commentIndex, setCommentIndex] = useState(0);
     const [searchIndexes, setSearchIndexes] = useState([]);
     const [animation, setAnimation] = useState(false);
@@ -105,7 +107,7 @@ const CommentsBody = ({
         useState("");
     const [refetchType, setRefetchType] = useState("refetch");
     // =================================================================
-
+    const { allComments, setAllComments } = useCommentStore();
     // fetch this task from api
     useEffect(() => {
         axios
@@ -842,14 +844,6 @@ const CommentsBody = ({
                             setScroll={setScroll}
                             setIsLoading={setIsLoading}
                         />
-
-                        {/* customize start from there */}
-                        {/* <ChatInput
-                            onSubmit={onSubmit}
-                            taskId={taskId}
-                            setScroll={setScroll}
-                            setIsLoading={setIsLoading}
-                        /> */}
                     </footer>
                 ) : null}
 

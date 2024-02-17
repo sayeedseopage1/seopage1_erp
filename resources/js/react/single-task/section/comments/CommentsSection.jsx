@@ -27,22 +27,6 @@ const CommentSection = ({ task, isLoading }) => {
 
     const comments = _.orderBy(data, "id", "desc");
 
-    // console.log({comments})
-    // // if task notes fetch completed store data into redux store
-    // React.useEffect(() => {
-    //     if (task && task.id) {
-    //         getTaskDetails(`/${task?.id}/json?mode=task_comment`)
-    //             .unwrap()
-    //             .then((res) => {
-    //                 let r = _.orderBy([...res], "id", "desc");
-    //                 setComments(r);
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     }
-    // }, []);
-
     // on comment post
     const onCommentPost = (comment) => {
         const _comments = [...comments];
@@ -65,17 +49,6 @@ const CommentSection = ({ task, isLoading }) => {
                 ref={setModalToggleRef}
                 style={{ zIndex: modalIsOpen ? "99" : "" }}
             >
-                {/* <CommentModal
-                    isOpen={modalIsOpen}
-                    toggleRef={modalToggleRef}
-                    comments={comments}
-                    task={task}
-                    isLoading={isFetching}
-                    close={() => setModalIsOpen(false)}
-                    onCommentPost={onCommentPost}
-                    updateComments={updateComments}
-                /> */}
-
                 <CommentsContainer
                     isOpen={modalIsOpen}
                     toggleRef={modalToggleRef}

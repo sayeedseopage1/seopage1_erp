@@ -1,0 +1,33 @@
+<svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="21.831"
+                            height="14.845"
+                            viewBox="0 0 21.831 14.845"
+                        >
+                            <g transform="translate(-42)">
+                                <g
+                                    id="Group_3601"
+                                    data-name="Group 3601"
+                                    transform="translate(42)"
+                                >
+                                    <path
+                                        id="Path_1"
+                                        d="M17.924,7.735,14.665,4.474,7.59,11.551l-1.9,5.726,5.671-1.951,7.074-7.076-.512-.515Zm-11.11,8.4,1.047-3.345,2.266,2.266Z"
+                                        transform="translate(1.351 -2.431)"
+                                        fill="#6f6f6f"
+                                    />
+                                    <path
+                                        id="Path_2"
+                                        d="M18.572,6.285,15.2,2.906a.279.279,0,0,0-.4,0L13.456,4.251a.281.281,0,0,0,0,.4l3.378,3.378a.281.281,0,0,0,.393,0l1.345-1.346A.273.273,0,0,0,18.572,6.285Z"
+                                        transform="translate(3.175 -2.823)"
+                                        fill="#6f6f6f"
+                                    />
+                                    <path
+                                        id="Path_3"
+                                        d="M0,15.111H6.225l.552-1.52H0Z"
+                                        transform="translate(0 -0.267)"
+                                        fill="#6f6f6f"
+                                    />
+                                </g>
+                            </g>
+                        </svg>

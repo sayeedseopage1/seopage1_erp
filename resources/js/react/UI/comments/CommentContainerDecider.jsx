@@ -15,8 +15,11 @@ const CommentContainerDecider = ({
             return (
                 <Modal isOpen={isOpen}>
                     <div
-                        className="position-relative"
+                        // className="position-relative"
                         style={{
+                            position: "absolute",
+                            top: "80px",
+                            left: "-10px",
                             padding: "75px 23px 18px 25px",
                             height: "100vh",
                             width: "100vw",
@@ -25,6 +28,9 @@ const CommentContainerDecider = ({
                         <div
                             className="sp1_task_comment_modal"
                             style={{
+                                position: "absolute",
+                                top: "80px",
+                                left: "-10px",
                                 height: "100%",
                                 width: "100%",
                                 maxHeight: "100vh",
@@ -63,13 +69,15 @@ const CommentContainerDecider = ({
                     </div>
                 </Modal>
             );
-        }  
-        else if (fullScreenView && width > 991) {
+        } else if (fullScreenView && width > 991) {
             return (
                 <Modal isOpen={isOpen}>
                     <div
-                        className="position-relative"
+                        // className="position-relative"
                         style={{
+                            position: "absolute",
+                            top: "80px",
+                            left: "-10px",
                             padding: "79px 41px 21px 261px",
                             height: "100vh",
                             width: "100vw",
@@ -78,6 +86,9 @@ const CommentContainerDecider = ({
                         <div
                             className="sp1_task_comment_modal"
                             style={{
+                                position: "absolute",
+                                top: "80px",
+                                left: "-10px",
                                 height: "100%",
                                 width: "100%",
                                 maxHeight: "100vh",
@@ -97,12 +108,12 @@ const CommentContainerDecider = ({
                         className="position-relative"
                         style={{
                             paddingTop: "79px",
-                            paddingBottom: "18px"
+                            paddingBottom: "18px",
                         }}
                     >
                         <div
                             style={{
-                                margin:"auto"
+                                margin: "auto",
                             }}
                             className="sp1_task_comment_modal"
                         >
