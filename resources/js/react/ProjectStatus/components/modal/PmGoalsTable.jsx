@@ -22,7 +22,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const [data, setData] = React.useState(pmGoal || []);
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
-    const [projectPmGoalId, setProjectPmGoalId] = React.useState(1);
+    const [projectPmGoalId, setProjectPmGoalId] = React.useState(null);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -32,6 +32,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const [value, setValue] = useLocalStorage(tableName);
     const [ isOpenDeadlineExplainModal,setIsOpenDeadlineExplainModal] = React.useState(false);
     const [isOpenExtendRequestModal, setIsOpenExtendRequestModal] = React.useState(false);
+    const [isOpenResolveModal, setIsOpenResolveModal] = React.useState(false);
     const [isOpenReviewExtendRequestModal, setIsOpenReviewExtendRequestModal] = React.useState(false);
     //pagination start
     // Number of items to display per page
@@ -99,18 +100,23 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
         getSortedRowModel: getSortedRowModel(),
         paginateExpandedRows: false,
         meta: {
-            handleExtendReviewRequestClick: (row) => {
+            extendReviewRequestClick: (row) => {
                 console.log("row", row);
                 setIsOpenReviewExtendRequestModal(true);
             },
-            handleExtendRequestClick: (row) => {
+            extendRequestClick: (row) => {
                 console.log("row", row);
                 setIsOpenExtendRequestModal(true);
             },
-            handleDeadlineExplainClick: (row) => {
-                setProjectPmGoalId(row.pmId)
+            deadlineExplainClick: (row) => {
+                setProjectPmGoalId(row.id)
                 console.log("row", row);
                 setIsOpenDeadlineExplainModal(true);
+            },
+            resolveExplainClick: (row) => {
+                setPmGoalExtendReason(row.reason);
+                setProjectPmGoalId(row.id)
+                setIsOpenResolveModal(true);
             }
         }
     })
@@ -128,6 +134,12 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const handleCloseDeadlineExplainModal = () => {
         setIsOpenDeadlineExplainModal(false);
     }
+
+    const handleCloseResolveModal = () => {
+        setIsOpenResolveModal(false);
+    }
+
+    console.log(projectPmGoalId, "projectPmGoalId")
 
     return (
         <div className="sp1_tasks_table_wrapper">
@@ -177,12 +189,18 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     isOpen={isOpenReviewExtendRequestModal}
                     onClose={handleCloseExtendReviewModal}
                 />
-
                 <DeadlineExplainModal
                     projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
                     isModalTwoOpen={isOpenDeadlineExplainModal}
                     closeModalTwo={handleCloseDeadlineExplainModal}
+                />
+                <ResolveModal
+                    projectDetails={projectDetails}
+                    pmGoalExtendReason={pmGoalExtendReason}
+                    projectPmGoalId={projectPmGoalId}
+                    isModalOpen={isOpenResolveModal}
+                    closeModal={handleCloseResolveModal}
                 />
             <Toaster />
         </div>
@@ -191,11 +209,4 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
 
 export default PmGoalsTable;
 
-
-// Styles for table headers and cells
-const thTdStyle = {
-    textAlign: "center",
-
-    padding: "8px",
-};
 

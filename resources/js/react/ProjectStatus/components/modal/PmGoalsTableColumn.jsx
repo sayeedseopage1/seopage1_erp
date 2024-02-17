@@ -99,7 +99,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row , table}) => {
             const data = row?.original;
             const user = new User(window?.Laravel?.user)
-            console.log(data)
+            const handle = table.options.meta
             return (
 
                <div className={`${styles.actionContainer}`} >
@@ -110,7 +110,7 @@ export const PmGoalsTableColumns = [
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <div 
-                                                        onClick={() => table.options.meta.handleDeadlineExplainClick(data)} className={`${styles.action} ${styles.deadlineExplained} f-12`}
+                                                        onClick={() => handle.deadlineExplainClick(data)} className={`${styles.action} ${styles.deadlineExplained} f-12`}
                                                     > 
                                                         Deadline Explanation 
                                                     </div>
@@ -122,17 +122,17 @@ export const PmGoalsTableColumns = [
                         <Switch.Case condition={user?.roleId === 1 && data.reason}>
                             <Switch>
                                 <Switch.Case condition={data.admin_comment && data.suggestion}>
-                                    <div className={`${styles.action} f-12`}> Resolved </div>
+                                    <div  className={`${styles.action} f-12`}> Resolved </div>
                                 </Switch.Case>
                                 <Switch.Case condition={!data.admin_comment && !data.suggestion}>
-                                    <div className={`${styles.action} f-12`}> Resolve </div>
+                                    <div onClick={() => handle.resolveExplainClick(data)} className={`${styles.action} ${styles.resolve} f-12`}> Resolve </div>
                                 </Switch.Case>
                             </Switch>
                         </Switch.Case>
                     </Switch>
                     <Switch>
                             <Switch.Case condition={user.roleId === 4}>
-                                <div onClick={() => table.options.meta.handleExtendRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
+                                <div onClick={() => handle.extendRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
                                     Extend Request
                                 </div>
                                 {/* <Dropdown.Item
@@ -148,7 +148,7 @@ export const PmGoalsTableColumns = [
                                     (user.roleId === 1 || user.roleId === 8)
                                 }
                             >
-                                <div onClick={() => table.options.meta.handleExtendReviewRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
+                                <div onClick={() => handle.extendReviewRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
                                 Review Extend Time
                                 </div>
                     </Switch.Case>
