@@ -165,27 +165,28 @@ class ProjectStatusController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
     public function projectStatusResolve(Request $request){
-        // dd($request->all());
+        dd($request->all());
         // \DB::beginTransaction();
         $validator = Validator::make($request->all(), [
             'rating' => 'required',
-            'suggestion' => 'required',
-            'comment' => 'required',
+            'client_communication' => 'required',
+            'client_communication_rating' => 'required',
+            'negligence_project_managers' => 'required',
+            'negligence_project_managers_rating' => 'required',
 
-        ], [
-            'rating.required' => 'This field is required!',
-            'suggestion.required' => 'This field is required!',
-            'comment.required' => 'This field is required!',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
         $projectPG->rating = $request->rating;
-        $projectPG->suggestion = $request->suggestion;
-        $projectPG->admin_comment = $request->comment;
+        $projectPG->client_communication = $request->client_communication;
+        $projectPG->client_communication_rating = $request->client_communication_rating;
+        $projectPG->negligence_pm = $request->negligence_pm;
+        $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
         $projectPG->reason_status = 2;
         $projectPG->save();
+        
 
         // dd($projectPG)
 
@@ -276,7 +277,7 @@ class ProjectStatusController extends AccountBaseController
         $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','deals.actual_amount as project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage','currencies.currency_symbol')
             ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
             ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
-            ->leftJoin('currencies', 'projects.currency_id', '=', 'currencies.id')
+            ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
             ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
             ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
             ->groupBy('projects.id');
