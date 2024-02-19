@@ -1826,7 +1826,7 @@ class ProjectController extends AccountBaseController
 
                                             $point= new CashPoint();
                                             $point->user_id= $value;
-                                            $point->project_id= $find_project_id->id;
+                                           // $point->project_id= $find_project_id->id;
                                             $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> For achieving '.$goal->frequency.' Goal '.$goal->title;
                                             $point->gained_as = "Individual";
                                             $point->points= $distribute_amount;
@@ -1983,7 +1983,7 @@ class ProjectController extends AccountBaseController
 
                                             $point= new CashPoint();
                                             $point->user_id= $value;
-                                            $point->project_id= $find_project_id->id;
+                                           // $point->project_id= $find_project_id->id;
                                             $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> For achieving '.$goal->frequency.' Goal '.$goal->title;
                                             $point->gained_as = "Individual";
                                             $point->points= $distribute_amount;
