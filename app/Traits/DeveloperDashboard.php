@@ -13,6 +13,7 @@ use \Carbon\Carbon;
 use App\Helper\Reply;
 use Carbon\CarbonPeriod;
 use App\Models\TaskRevision;
+use App\Models\TaskType;
 
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -204,310 +205,135 @@ trait DeveloperDashboard
 
         //-----------------------------number of tasks approved in first attempt(in cycle) Client-----------------------//
 
-        $number_of_tasks_approved = DB::table('tasks')
-        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-        ->select('tasks.id')
-        ->where('tasks.board_column_id', '=', 4)
-        ->where('tasks.updated_at', '>=', $startDate)
-        ->where('tasks.updated_at', '<', $endDate)
-        ->where('task_approves.created_at', '>=', $startDate)
-        ->where('task_approves.created_at', '<', $endDate)
-        ->where('task_users.user_id', $devId)
-        ->get();
-        $first_attempt_approve_task = 0;
-        foreach ($number_of_tasks_approved as $task) {
-
-
-
-            $number_of_tasks = DB::table('task_submissions')
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.task_id', $task->id)
-                ->distinct('task_submissions.created_at')
-                ->count();
-            if ($number_of_tasks == 1) {
-
-
-                $first_attempt_approve_task++;
-            }
-        }
-
-
-
-
-        $number_of_tasks_approved = DB::table('tasks')
-        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-        ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-        ->select('tasks.id')
-        ->where('tasks.board_column_id', '=', 4)
-        ->where('tasks.updated_at', '>=', $startDate)
-        ->where('tasks.updated_at', '<', $endDate)
-        ->where('task_approves.created_at', '>=', $startDate)
-        ->where('task_approves.created_at', '<', $endDate)
-        ->where('task_types.page_type', '=', 'Primary Page Development')
-        ->where('task_users.user_id', $devId)
-        ->get();
-        $first_attempt_approve_task_primary_page = 0;
-        foreach ($number_of_tasks_approved as $task) {
-
-
-            $number_of_tasks = DB::table('task_submissions')
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.task_id', $task->id)
-                ->distinct('task_submissions.created_at')
-                ->count();
-            if ($number_of_tasks == 1) {
-
-                $first_attempt_approve_task_primary_page++;
-            }
-        }
-
-        $number_of_tasks_approved = DB::table('tasks')
-        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-        ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-        ->select('tasks.id')
-         ->where('tasks.board_column_id', '=', 4)
-        ->where('tasks.updated_at', '>=', $startDate)
-         ->where('tasks.updated_at', '<', $endDate)
-        ->where('task_approves.created_at', '>=', $startDate)
-        ->where('task_approves.created_at', '<', $endDate)
-        ->where('task_types.page_type', '=', 'Secondary Page Development')
-        ->where('task_users.user_id', $devId)
-        ->get();
-        $first_attempt_approve_task_secondary_page = 0;
-        foreach ($number_of_tasks_approved as $task) {
-
-
-            $number_of_tasks = DB::table('task_submissions')
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.task_id', $task->id)
-                ->distinct('task_submissions.created_at')
-                ->count();
-            if ($number_of_tasks == 1) {
-                $first_attempt_approve_task_secondary_page++;
-            }
-        }
-        $this->first_attempt_approve_task_in_this_month_client = DB::table('tasks')
-        ->select('tasks.id', 'tasks.heading', 'client.id as clientId', 'client.name as clientName', 'tasks.created_at as assign_date',
-            'task_submissions.created_at as submission_date', 'tasks.due_date', 'tasks.client_name as client_name', 'cl.id as cl_id', 'cl.name as cl_name',
-            'tasks.board_column_id', 'taskboard_columns.column_name as column_name', 'taskboard_columns.label_color'
-        )
-        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-        ->leftJoin('task_revisions', 'tasks.id', '=', 'task_revisions.task_id')
-        ->leftJoin('task_history', 'tasks.id', '=', 'task_history.task_id')
-        ->leftJoin('projects', 'projects.id', '=', 'tasks.project_id')
-        ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
-        ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
-        ->leftJoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-
-        ->where('tasks.updated_at', '>=', $startDate)
-        ->where('tasks.updated_at', '<', $endDate)
-        ->where('task_users.user_id', $devId)
-
-
-       // ->where('task_history.board_column_id', 6)
-       ->where('taskboard_columns.id',4)
-        ->groupBy('tasks.id')
-       // ->havingRaw('COUNT(DISTINCT task_history.board_column_id) = 1')
-        ->havingRaw('COUNT(DISTINCT task_revisions.id) = 0')
-        ->count();
-    //     $this->first_attempt_approve_task_in_this_month_client_data =  DB::table('tasks')
-    //     ->select('tasks.id', 'tasks.heading', 'client.id as clientId', 'client.name as clientName', 'tasks.created_at as assign_date',
-    //         'task_submissions.created_at as submission_date', 'tasks.due_date', 'tasks.client_name as client_name', 'cl.id as cl_id', 'cl.name as cl_name',
-    //         'tasks.board_column_id', 'taskboard_columns.column_name as column_name', 'taskboard_columns.label_color'
-    //     )
-    //     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-    //     ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-    //     ->leftJoin('task_revisions', 'tasks.id', '=', 'task_revisions.task_id')
-    //     ->leftJoin('task_history', 'tasks.id', '=', 'task_history.task_id')
-    //     ->leftJoin('projects', 'projects.id', '=', 'tasks.project_id')
-    //     ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
-    //     ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
-    //     ->leftJoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-
-    //     ->where('task_submissions.created_at', '>=', $startDate)
-    //     ->where('task_submissions.created_at', '<', $endDate)
-    //     ->where('task_users.user_id', $devId)
-
-
-    //    // ->where('task_history.board_column_id', 6)
-    //     ->where('taskboard_columns.id',4)
-    //     ->groupBy('tasks.id')
-    //    // ->havingRaw('COUNT(DISTINCT task_history.board_column_id) = 1')
-    //     ->havingRaw('COUNT(DISTINCT task_revisions.id) = 0')
-    //     ->get();
-    $number_of_tasks_approved = DB::table('tasks')
-    ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-    // ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-    ->select('tasks.id')
-    ->where('tasks.board_column_id', '=', 4)
-    ->where('tasks.updated_at', '>=', $startDate)
-    ->where('tasks.updated_at', '<', $endDate)
-    ->where('task_users.user_id', $devId)
-    ->get();
-
-$first_attempt_approve_task = 0;
-$task_id_store = [];
-foreach ($number_of_tasks_approved as $task) {
-    $number_of_tasks = DB::table('task_submissions')
-    ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-    ->where('task_submissions.task_id', $task->id)
-    ->distinct('task_submissions.created_at')
-    ->count();
-    if ($number_of_tasks == 1) {
-        $task_id_store[] = $task->id;
-        $first_attempt_approve_task++;
-    }
-}
-
-// /dd($task_id_store);
-
-$first_attempt_approve_task_data = [];
-
-foreach ($task_id_store as $task) {
-   //$task= Task::where('id',$task)->select('id')
-    $approve_task_data = DB::table('tasks')
+        $first_attempt_approve_task_data_client = DB::table('tasks')
         ->select(
             'tasks.id',
             'tasks.heading',
-            'client.id as clientId',
-            'client.name as clientName',
-            'tasks.created_at as assign_date',
-            'task_submissions.created_at as submission_date',
+            'tasks.client_name',
             'tasks.due_date',
-            'tasks.client_name as client_name',
-            'cl.id as cl_id',
+            'tasks.created_at as task_creation_date',
+            'tasks.updated_at as task_approval_date',
+            'client.name as clientName',
+            'client.id as clientId',
             'cl.name as cl_name',
-            'tasks.board_column_id',
-            'taskboard_columns.column_name as column_name',
-            'taskboard_columns.label_color'
+            'cl.id as cl_id',
+            DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+            'taskboard_columns.column_name',
+            'taskboard_columns.label_color as label_color'
         )
-        ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
         ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+        ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
         ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-        ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-        ->leftJoin('users as client', 'client.id', 'projects.client_id')
-        ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-        ->where('tasks.id', $task)
-        //->groupBy('tasks.id', $task)
-        ->first();
-
-    $first_attempt_approve_task_data[] = $approve_task_data;
-}
-
+        ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+        ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+        ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+        ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+        ->where('tasks.board_column_id', 4)
+        ->where('tasks.updated_at', '>=', $startDate)
+        ->where('tasks.updated_at', '<', $endDate)
+        ->where('task_users.user_id', $devId)
+        ->whereNotExists(function ($query) {
+            $query->select(DB::raw(1))
+                ->from('task_revisions')
+                ->whereRaw('task_revisions.task_id = tasks.id');
+        })
+        ->groupBy('tasks.id')
+        ->orderBy('tasks.updated_at', 'desc')
+        ->get(); 
+    
+       // dd($first_attempt_approve_task);
+       $first_attempt_approve_task_primary_page_client = 0;
+       foreach($first_attempt_approve_task_data_client as $item)
+       {
+        $type= TaskType::where('task_id',$item->id)->first();
+        if($type->page_type == 'Primary Page Development')
+        {
+            $first_attempt_approve_task_primary_page_client++;
+    
+        }
+    
+       }
+       $first_attempt_approve_task_secondary_page_client = 0;
+       foreach($first_attempt_approve_task_data_client as $item)
+       {
+        $type= TaskType::where('task_id',$item->id)->first();
+        if($type->page_type == 'Secondary Page Development')
+        {
+            $first_attempt_approve_task_secondary_page_client++;
+    
+        }
+    
+       }
 
 $this->first_attempt_approve_task_in_this_month_client_data
-= $first_attempt_approve_task_data;
+= $first_attempt_approve_task_data_client;
 //dd($this->first_attempt_approve_task_in_this_month_client_data);
 
 
       //  $this->first_attempt_approve_task_in_this_month_client = $first_attempt_approve_task;
        // dd($first_attempt_approve_task);
-        $this->first_attempt_approve_task_primary_page_in_this_month_client = $first_attempt_approve_task_primary_page;
-        $this->first_attempt_approve_task_secondary_page_in_this_month_client = $first_attempt_approve_task_secondary_page;
+        $this->first_attempt_approve_task_primary_page_in_this_month_client = $first_attempt_approve_task_primary_page_client;
+        $this->first_attempt_approve_task_secondary_page_in_this_month_client = $first_attempt_approve_task_secondary_page_client;
 
 
 
 
     //-----------------------------number of tasks approved in first attempt(in cycle) Lead Developer-----------------------//
 
-    $number_of_tasks_approved = DB::table('tasks')
+   
+    $first_attempt_approve_task = DB::table('tasks')
+    ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
+    'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+    'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
+    
+    )
     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-    ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-    ->select('tasks.id')
-    ->where('task_approves.created_at', '>=', $startDate)
-    ->where('task_approves.created_at', '<', $endDate)
+    ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+    ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+    ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+    ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+    ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+    ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+    ->where('task_history.board_column_id', 8)
+    ->where('task_history.created_at', '>=', $startDate)
+    ->where('task_history.created_at', '<', $endDate)
     ->where('task_users.user_id', $devId)
+    ->whereNotExists(function ($query) {
+        $query->select(DB::raw(1))
+            ->from('task_history as th')
+            ->whereRaw('th.task_id = tasks.id')
+            ->where('th.board_column_id', 1)
+            ->where('th.created_at', '<', DB::raw('task_history.created_at'));
+    })
+    ->groupBy('tasks.id')
+    ->orderBy('task_history.created_at','desc')
     ->get();
 
-    $first_attempt_approve_task = 0;
+   // dd($first_attempt_approve_task);
+   $first_attempt_approve_task_primary_page = 0;
+   foreach($first_attempt_approve_task as $item)
+   {
+    $type= TaskType::where('task_id',$item->id)->first();
+    if($type->page_type == 'Primary Page Development')
+    {
+        $first_attempt_approve_task_primary_page++;
 
-
-    foreach ($number_of_tasks_approved as $task) {
-        $min_approve_date = DB::table('task_approves')
-            ->select('task_approves.created_at')
-            ->where('task_approves.task_id', $task->id)
-            ->orderBy('task_approves.created_at', 'asc')
-            ->first();
-
-        $number_of_tasks = DB::table('task_submissions')
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-            ->where('task_submissions.task_id', $task->id)
-            ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-            ->distinct('task_submissions.created_at')
-            ->count();
-
-        if ($number_of_tasks == 1) {
-
-            $first_attempt_approve_task++;
-        }
     }
 
+   }
+   $first_attempt_approve_task_secondary_page = 0;
+   foreach($first_attempt_approve_task as $item)
+   {
+    $type= TaskType::where('task_id',$item->id)->first();
+    if($type->page_type == 'Secondary Page Development')
+    {
+        $first_attempt_approve_task_secondary_page++;
 
+    }
 
+   }
+   //dd($first_attempt_approve_task_primary_page,$first_attempt_approve_task_secondary_page);
 
-             //   $tasks = Task::has('submissions', '=', 1)->get();
-
-        $number_of_tasks_approved = DB::table('tasks')
-        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-        ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-        ->select('tasks.id')
-        ->where('task_approves.created_at', '>=', $startDate)
-        ->where('task_approves.created_at', '<', $endDate)
-        ->where('task_types.page_type', '=', 'Primary Page Development')
-        ->where('task_users.user_id', $devId)
-        ->get();
-        $first_attempt_approve_task_primary_page = 0;
-        foreach ($number_of_tasks_approved as $task) {
-            $min_approve_date = DB::table('task_approves')
-                ->select('task_approves.created_at')
-                ->where('task_approves.task_id', $task->id)
-                ->orderBy('task_approves.created_at', 'asc')
-                ->first();
-
-            $number_of_tasks = DB::table('task_submissions')
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-            ->where('task_submissions.task_id', $task->id)
-            ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-            ->distinct('task_submissions.created_at')
-            ->count();
-            if ($number_of_tasks ==1) {
-                $first_attempt_approve_task_primary_page++;
-            }
-        }
-
-        $number_of_tasks_approved = DB::table('tasks')
-        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-        ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-        ->select('tasks.id')
-        ->where('task_approves.created_at', '>=', $startDate)
-        ->where('task_approves.created_at', '<', $endDate)
-        ->where('task_types.page_type', '=', 'Secondary Page Development')
-        ->where('task_users.user_id', $devId)
-        ->get();
-        $first_attempt_approve_task_secondary_page = 0;
-        foreach ($number_of_tasks_approved as $task) {
-            $min_approve_date = DB::table('task_approves')
-            ->select('task_approves.created_at')
-            ->where('task_approves.task_id', $task->id)
-            ->orderBy('task_approves.created_at', 'asc')
-            ->first();
-
-            $number_of_tasks = DB::table('task_submissions')
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-            ->where('task_submissions.task_id', $task->id)
-            ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-            ->distinct('task_submissions.created_at')
-             ->count();
-            if ($number_of_tasks ==1) {
-                $first_attempt_approve_task_secondary_page++;
-            }
-        }
 
 
       $this->first_attempt_approve_task_in_this_month= $first_attempt_approve_task;
@@ -556,8 +382,6 @@ $this->first_attempt_approve_task_in_this_month_client_data
         } else {
             $this->average_submission_aproval_in_this_month = 0;
         }
-
-
 
         // --------------Average number of attempts needed for approval(in cycle) Client-----------------------------//
 
@@ -1549,281 +1373,134 @@ $this->first_attempt_approve_task_in_this_month_client_data
 
             //-----------------------------number of tasks approved in first attempt(in cycle) Client-----------------------//
 
-            $number_of_tasks_approved = DB::table('tasks')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-            ->select('tasks.id')
-            ->where('tasks.board_column_id', '=', 4)
-            ->where('tasks.updated_at', '>=', $startDate)
-            ->where('tasks.updated_at', '<', $endDate)
-            ->where('task_approves.created_at', '>=', $startDate)
-            ->where('task_approves.created_at', '<', $endDate)
-            ->where('task_users.user_id', $devId)
-            ->get();
-            $first_attempt_approve_task = 0;
-            foreach ($number_of_tasks_approved as $task) {
-
-
-
-                $number_of_tasks = DB::table('task_submissions')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                    ->where('task_submissions.task_id', $task->id)
-                    ->distinct('task_submissions.created_at')
-                    ->count();
-                if ($number_of_tasks == 1) {
-                    $first_attempt_approve_task++;
-                }
-            }
-
-
-            $number_of_tasks_approved = DB::table('tasks')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-            ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-            ->select('tasks.id')
-            ->where('tasks.board_column_id', '=', 4)
-            ->where('tasks.updated_at', '>=', $startDate)
-            ->where('tasks.updated_at', '<', $endDate)
-            ->where('task_approves.created_at', '>=', $startDate)
-            ->where('task_approves.created_at', '<', $endDate)
-            ->where('task_types.page_type', '=', 'Primary Page Development')
-            ->where('task_users.user_id', $devId)
-            ->get();
-            $first_attempt_approve_task_primary_page = 0;
-            foreach ($number_of_tasks_approved as $task) {
-
-
-                $number_of_tasks = DB::table('task_submissions')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                    ->where('task_submissions.task_id', $task->id)
-                    ->distinct('task_submissions.created_at')
-                    ->count();
-                if ($number_of_tasks == 1) {
-                    $first_attempt_approve_task_primary_page++;
-                }
-            }
-
-            $number_of_tasks_approved = DB::table('tasks')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-            ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-            ->select('tasks.id')
-             ->where('tasks.board_column_id', '=', 4)
-            ->where('tasks.updated_at', '>=', $startDate)
-             ->where('tasks.updated_at', '<', $endDate)
-            ->where('task_approves.created_at', '>=', $startDate)
-            ->where('task_approves.created_at', '<', $endDate)
-            ->where('task_types.page_type', '=', 'Secondary Page Development')
-            ->where('task_users.user_id', $devId)
-            ->get();
-            $first_attempt_approve_task_secondary_page = 0;
-            foreach ($number_of_tasks_approved as $task) {
-
-
-                $number_of_tasks = DB::table('task_submissions')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                    ->where('task_submissions.task_id', $task->id)
-                    ->distinct('task_submissions.created_at')
-                    ->count();
-                if ($number_of_tasks == 1) {
-                    $first_attempt_approve_task_secondary_page++;
-                }
-            }
-            $this->first_attempt_approve_task_in_this_month_client =  DB::table('tasks')
-            ->select('tasks.id', 'tasks.heading', 'client.id as clientId', 'client.name as clientName', 'tasks.created_at as assign_date',
-                'task_submissions.created_at as submission_date', 'tasks.due_date', 'tasks.client_name as client_name', 'cl.id as cl_id', 'cl.name as cl_name',
-                'tasks.board_column_id', 'taskboard_columns.column_name as column_name', 'taskboard_columns.label_color'
-            )
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-            ->leftJoin('task_revisions', 'tasks.id', '=', 'task_revisions.task_id')
-            ->leftJoin('task_history', 'tasks.id', '=', 'task_history.task_id')
-            ->leftJoin('projects', 'projects.id', '=', 'tasks.project_id')
-            ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
-            ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
-            ->leftJoin('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-
-            ->where('tasks.updated_at', '>=', $startDate)
-            ->where('tasks.updated_at', '<', $endDate)
-            ->where('task_users.user_id', $devId)
-
-
-           // ->where('task_history.board_column_id', 6)
-           ->where('taskboard_columns.id',4)
-            ->groupBy('tasks.id')
-           // ->havingRaw('COUNT(DISTINCT task_history.board_column_id) = 1')
-            ->havingRaw('COUNT(DISTINCT task_revisions.id) = 0')
-            ->count();
-
-     $number_of_tasks_approved = DB::table('tasks')
+          
+            $first_attempt_approve_task_data_client = DB::table('tasks')
+    ->select(
+        'tasks.id',
+        'tasks.heading',
+        'tasks.client_name',
+        'tasks.due_date',
+        'tasks.created_at as task_creation_date',
+        'tasks.updated_at as task_approval_date',
+        'client.name as clientName',
+        'client.id as clientId',
+        'cl.name as cl_name',
+        'cl.id as cl_id',
+        DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+        'taskboard_columns.column_name',
+        'taskboard_columns.label_color as label_color'
+    )
     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-    // ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-    ->select('tasks.id')
-    ->where('tasks.board_column_id', '=', 4)
+    ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+    ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+    ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+    ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+    ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+    ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+    ->where('tasks.board_column_id', 4)
     ->where('tasks.updated_at', '>=', $startDate)
     ->where('tasks.updated_at', '<', $endDate)
     ->where('task_users.user_id', $devId)
-    ->get();
-
-$first_attempt_approve_task = 0;
-$task_id_store = [];
-foreach ($number_of_tasks_approved as $task) {
-    $number_of_tasks = DB::table('task_submissions')
-    ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-    ->where('task_submissions.task_id', $task->id)
-    ->distinct('task_submissions.created_at')
-    ->count();
-    if ($number_of_tasks == 1) {
-        $task_id_store[] = $task->id;
-        $first_attempt_approve_task++;
-    }
-}
-
-// /dd($task_id_store);
-
-$first_attempt_approve_task_data = [];
-
-foreach ($task_id_store as $task) {
-   //$task= Task::where('id',$task)->select('id')
-    $approve_task_data = DB::table('tasks')
-        ->select(
-            'tasks.id',
-            'tasks.heading',
-            'client.id as clientId',
-            'client.name as clientName',
-            'tasks.created_at as assign_date',
-            'task_submissions.created_at as submission_date',
-            'tasks.due_date',
-            'tasks.client_name as client_name',
-            'cl.id as cl_id',
-            'cl.name as cl_name',
-            'tasks.board_column_id',
-            'taskboard_columns.column_name as column_name',
-            'taskboard_columns.label_color'
-        )
-        ->join('task_submissions', 'task_submissions.task_id', '=', 'tasks.id')
-        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
-        ->leftJoin('projects', 'projects.id', 'tasks.project_id')
-        ->leftJoin('users as client', 'client.id', 'projects.client_id')
-        ->leftJoin('users as cl', 'cl.id', 'tasks.client_id')
-        ->where('tasks.id', $task)
-        //->groupBy('tasks.id', $task)
-        ->first();
-
-    $first_attempt_approve_task_data[] = $approve_task_data;
-}
-
+    ->whereNotExists(function ($query) {
+        $query->select(DB::raw(1))
+            ->from('task_revisions')
+            ->whereRaw('task_revisions.task_id = tasks.id');
+    })
+    ->groupBy('tasks.id')
+    ->orderBy('tasks.updated_at', 'desc')
+    ->get(); 
+    
+       // dd($first_attempt_approve_task);
+       $first_attempt_approve_task_primary_page_client = 0;
+       foreach($first_attempt_approve_task_data_client as $item)
+       {
+        $type= TaskType::where('task_id',$item->id)->first();
+        if($type->page_type == 'Primary Page Development')
+        {
+            $first_attempt_approve_task_primary_page_client++;
+    
+        }
+    
+       }
+       $first_attempt_approve_task_secondary_page_client = 0;
+       foreach($first_attempt_approve_task_data_client as $item)
+       {
+        $type= TaskType::where('task_id',$item->id)->first();
+        if($type->page_type == 'Secondary Page Development')
+        {
+            $first_attempt_approve_task_secondary_page_client++;
+    
+        }
+    
+       }
 
 $this->first_attempt_approve_task_in_this_month_client_data
-= $first_attempt_approve_task_data;
+= $first_attempt_approve_task_data_client;
+//dd($this->first_attempt_approve_task_in_this_month_client_data);
 
 
-           // $this->first_attempt_approve_task_in_this_month_client = $first_attempt_approve_task;
-           // dd($first_attempt_approve_task);
-            $this->first_attempt_approve_task_primary_page_in_this_month_client = $first_attempt_approve_task_primary_page;
-            $this->first_attempt_approve_task_secondary_page_in_this_month_client = $first_attempt_approve_task_secondary_page;
+      //  $this->first_attempt_approve_task_in_this_month_client = $first_attempt_approve_task;
+       // dd($first_attempt_approve_task);
+        $this->first_attempt_approve_task_primary_page_in_this_month_client = $first_attempt_approve_task_primary_page_client;
+        $this->first_attempt_approve_task_secondary_page_in_this_month_client = $first_attempt_approve_task_secondary_page_client;
 
 
 
       //-----------------------------number of tasks approved in first attempt(in cycle) Lead Developer-----------------------//
 
-    $number_of_tasks_approved = DB::table('tasks')
+   
+    $first_attempt_approve_task = DB::table('tasks')
+    ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
+    'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+    'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
+    
+    )
     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-    ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-    ->select('tasks.id')
-    ->where('task_approves.created_at', '>=', $startDate)
-    ->where('task_approves.created_at', '<', $endDate)
+    ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+    ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+    ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+    ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+    ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+    ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+    ->where('task_history.board_column_id', 8)
+    ->where('task_history.created_at', '>=', $startDate)
+    ->where('task_history.created_at', '<', $endDate)
     ->where('task_users.user_id', $devId)
+    ->whereNotExists(function ($query) {
+        $query->select(DB::raw(1))
+            ->from('task_history as th')
+            ->whereRaw('th.task_id = tasks.id')
+            ->where('th.board_column_id', 1)
+            ->where('th.created_at', '<', DB::raw('task_history.created_at'));
+    })
+    ->groupBy('tasks.id')
+    ->orderBy('task_history.created_at','desc')
     ->get();
-
-    $first_attempt_approve_task = 0;
-
-
-    foreach ($number_of_tasks_approved as $task) {
-        $min_approve_date = DB::table('task_approves')
-            ->select('task_approves.created_at')
-            ->where('task_approves.task_id', $task->id)
-            ->orderBy('task_approves.created_at', 'asc')
-            ->first();
-
-        $number_of_tasks = DB::table('task_submissions')
-            ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-            ->where('task_submissions.task_id', $task->id)
-            ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-            ->distinct('task_submissions.created_at')
-            ->count();
-
-        if ($number_of_tasks == 1) {
-
-            $first_attempt_approve_task++;
-        }
-    }
     
     //dd($first_attempt_approve_task);
 
-
-  //  $this->first_attempt_approve_task_in_this_month_data = $first_attempt_approve_task_in_this_month_data;
-  // dd($this->first_attempt_approve_task_in_this_month_data);
-
-
-            $number_of_tasks_approved = DB::table('tasks')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-            ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-            ->select('tasks.id')
-            ->where('task_approves.created_at', '>=', $startDate)
-            ->where('task_approves.created_at', '<', $endDate)
-            ->where('task_types.page_type', '=', 'Primary Page Development')
-            ->where('task_users.user_id', $devId)
-            ->get();
-            $first_attempt_approve_task_primary_page = 0;
-            foreach ($number_of_tasks_approved as $task) {
-                $min_approve_date = DB::table('task_approves')
-                    ->select('task_approves.created_at')
-                    ->where('task_approves.task_id', $task->id)
-                    ->orderBy('task_approves.created_at', 'asc')
-                    ->first();
-
-                $number_of_tasks = DB::table('task_submissions')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.task_id', $task->id)
-                ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-                ->distinct('task_submissions.created_at')
-                ->count();
-                if ($number_of_tasks ==1) {
-                    $first_attempt_approve_task_primary_page++;
-                }
-            }
-
-            $number_of_tasks_approved = DB::table('tasks')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-            ->join('task_types', 'tasks.id', '=', 'task_types.task_id')
-            ->select('tasks.id')
-            ->where('task_approves.created_at', '>=', $startDate)
-            ->where('task_approves.created_at', '<', $endDate)
-            ->where('task_types.page_type', '=', 'Secondary Page Development')
-            ->where('task_users.user_id', $devId)
-            ->get();
-            $first_attempt_approve_task_secondary_page = 0;
-            foreach ($number_of_tasks_approved as $task) {
-                $min_approve_date = DB::table('task_approves')
-                ->select('task_approves.created_at')
-                ->where('task_approves.task_id', $task->id)
-                ->orderBy('task_approves.created_at', 'asc')
-                ->first();
-
-                $number_of_tasks = DB::table('task_submissions')
-                ->join('tasks', 'task_submissions.task_id', '=', 'tasks.id')
-                ->where('task_submissions.task_id', $task->id)
-                ->where('task_submissions.created_at', '<', $min_approve_date->created_at)
-                ->distinct('task_submissions.created_at')
-                 ->count();
-                if ($number_of_tasks ==1) {
-                    $first_attempt_approve_task_secondary_page++;
-                }
-            }
+    $first_attempt_approve_task_primary_page = 0;
+    foreach($first_attempt_approve_task as $item)
+    {
+     $type= TaskType::where('task_id',$item->id)->first();
+     if($type->page_type == 'Primary Page Development')
+     {
+         $first_attempt_approve_task_primary_page++;
+ 
+     }
+ 
+    }
+    $first_attempt_approve_task_secondary_page = 0;
+    foreach($first_attempt_approve_task as $item)
+    {
+     $type= TaskType::where('task_id',$item->id)->first();
+     if($type->page_type == 'Secondary Page Development')
+     {
+         $first_attempt_approve_task_secondary_page++;
+ 
+     }
+ 
+    }
             
           $this->first_attempt_approve_task_in_this_month= $first_attempt_approve_task;
           $this->first_attempt_approve_task_primary_page_in_this_month= $first_attempt_approve_task_primary_page;

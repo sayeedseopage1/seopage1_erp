@@ -62,13 +62,13 @@
             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt by Lead Developer</h5>
             <div class="d-flex flex-wrap">
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task{{$first_attempt_approve_task_in_this_month}}">
-                       {{$first_attempt_approve_task_in_this_month}}
+                    <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task{{count($first_attempt_approve_task_in_this_month)}}">
+                       {{count($first_attempt_approve_task_in_this_month)}}
                     </a>
                   
                 </p>
-                {{-- @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data')
-             --}}
+                @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data')
+            
 
               
               
@@ -82,27 +82,27 @@
 
 </div>
 <div class="row mt-3">
-<div class="col-md-4">
-    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-        <div class="d-block text-capitalize">
-            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt by Client</h5>
-            <div class="d-flex flex-wrap">
-                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task_client{{$first_attempt_approve_task_in_this_month_client}}">
-                        {{$first_attempt_approve_task_in_this_month_client}}
-                    </a>
+    <div class="col-md-4">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt by Client</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task_client{{count($first_attempt_approve_task_in_this_month_client_data)}}">
+                            {{count($first_attempt_approve_task_in_this_month_client_data)}}
+                        </a>
+                      
+                    </p>
+                    @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_client_data')
+          
                   
-                </p>
-                @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_client_data')
-      
-              
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
     </div>
-</div>
 <div class="col-md-4">
     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
         <div class="d-block text-capitalize">

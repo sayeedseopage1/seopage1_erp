@@ -1,12 +1,12 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="first_attempt_approve_task{{$first_attempt_approve_task_in_this_month}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="first_attempt_approve_task{{count($first_attempt_approve_task_in_this_month)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
-            <h4>Primary Pages: {{$number_of_tasks_received_primary_page}}</h4> 
-           <h4>Secondary Pages: {{$number_of_tasks_received_secondary_page}} </h4>  
-           <h4>Others:  {{$number_of_tasks_received - ($number_of_tasks_received_primary_page + $number_of_tasks_received_secondary_page)}}</h4>  
+          <div class="modal-title"><h4>Number of approved tasks on 1st attempt by Lead Developer: {{count($first_attempt_approve_task_in_this_month)}}</h4>
+            <h4>Number of approved tasks on 1st attempt by Lead Developer Primary Pages: {{$first_attempt_approve_task_primary_page_in_this_month}}</h4> 
+           <h4>Number of approved tasks on 1st attempt by Secondary Pages: {{$first_attempt_approve_task_secondary_page_in_this_month}} </h4>  
+           <h4>Number of approved tasks on 1st attempt by Lead Developer Others Pages:  {{count($first_attempt_approve_task_in_this_month) - ($first_attempt_approve_task_primary_page_in_this_month + $first_attempt_approve_task_secondary_page_in_this_month)}}</h4>  
              </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -20,19 +20,21 @@
                     <th scope="col">Assign Date</th>
                     <th scope="col">Task Name</th>
                     <th scope="col">Client Name</th>
-                    <th scope="col">Submission Date</th>
+                   
                     <th scope="col">Deadline</th>
                     <th scope="col">status</th>
+                    <th scope="col">Submission Date</th>
+                    <th scope="col">Approval Date</th>
                   
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach($first_attempt_approve_task_in_this_month_data as $row)
+                    @foreach($first_attempt_approve_task_in_this_month as $row)
                  
                     <tr>
                         <td>{{$loop->index+1}}</td>
                         <td>
-                            {{$row->assign_date}}
+                            {{$row->task_creation_date}}
                           
                         </td>
                         <td>
@@ -50,17 +52,21 @@
                             @endif
 
                         </td>
-                        <td>
-                            @if($row->board_column_id == 1 || $row->board_column_id == 2 || $row->board_column_id == 3)
-                            N\A 
-                            @else 
-                            {{$row->submission_date}}
-                        @endif
-                    </td>
+                       
                         <td>{{$row->due_date}}</td>
                         <td>
                           <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
                         </td>
+                        <td>
+                           
+                          {{$row->task_submission_date}}
+                    
+                       </td>
+                       <td>
+                           
+                        {{$row->task_approval_date}}
+                  
+                </td>
                       
                     </tr>
                     @endforeach
