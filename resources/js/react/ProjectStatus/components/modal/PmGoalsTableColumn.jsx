@@ -47,7 +47,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span > 
+                <span title={data?.description} className="multine-ellipsis"> 
                     {data?.description ?? "--"}
                 </span>
             )
@@ -60,7 +60,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span 
+                <span className="multine-ellipsis"
                 dangerouslySetInnerHTML={{ __html: data?.reason ?? "--",}}
             />
             )
@@ -73,7 +73,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span 
+                <span className="multine-ellipsis"
                 dangerouslySetInnerHTML={{ __html: data?.suggestion ?? "--",}}
             />
             )
@@ -86,7 +86,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span 
+                <span className="multine-ellipsis"
                 dangerouslySetInnerHTML={{ __html: data?.admin_comment ?? "--",}}
             />
             )
@@ -154,10 +154,10 @@ export const PmGoalsTableColumns = [
                     </Switch.Case>
                     </Switch>
                     <Switch>
-                        <Switch.Case condition={data?.extended_request_status !== 1 &&
+                        {/* <Switch.Case condition={data?.extended_request_status !== 1 &&
                                     (user.roleId === 1 || user.roleId === 8)}>
                             <span>--</span>
-                        </Switch.Case>
+                        </Switch.Case> */}
                     </Switch>
                </div>
             
