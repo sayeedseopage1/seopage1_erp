@@ -107,8 +107,7 @@ const CommentContainerDecider = ({
                     <div
                         className="position-relative"
                         style={{
-                            paddingTop: "79px",
-                            paddingBottom: "18px",
+                            paddingTop: "50px",
                         }}
                     >
                         <div

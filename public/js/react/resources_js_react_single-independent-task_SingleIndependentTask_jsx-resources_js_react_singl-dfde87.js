@@ -109,8 +109,7 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
           className: "position-relative",
           style: {
-            paddingTop: "79px",
-            paddingBottom: "18px"
+            paddingTop: "50px"
           },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             style: {
