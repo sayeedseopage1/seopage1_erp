@@ -8,11 +8,12 @@ export const PmGoalsTableColumns = [
         id: "id",
         header: "#",
         accessorKey: "id",
-        cell: ({ row }) => {
+        cell: ({ row, table ,column,cell }) => {
             const data = row?.original;
+            console.log("cell", cell?.row?.index)
             return (
                 <div className={`${styles.idContainer}`}> 
-                    {data?.id ?? "--"}
+                    {cell?.row?.index +1}
                 </div>
             )
         }

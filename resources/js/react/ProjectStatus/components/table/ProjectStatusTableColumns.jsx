@@ -1,6 +1,4 @@
 import Avatar from "../../../global/Avatar";
-import Person from "../Person";
-import ActionDropdown from "./ActionDropdown";
 import { CreatedBy } from "./ui";
 
 
@@ -9,6 +7,13 @@ export const ProjectStatusTableColumns = [
         id: "id",
         header: "#",
         accessorKey: "id",
+        cell: ({ row,cell }) => {
+            const data = row.original;
+            console.log("project Status", cell?.row?.index)
+            return (
+                <span>{cell?.row?.index + 1}</span>
+            );
+        }
     },
   {
       id: "clientName",
@@ -72,6 +77,14 @@ export const ProjectStatusTableColumns = [
       id: "project_budget",
       header: "Project Budget",
       accessorKey: "project_budget",
+      cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <span>
+                    {data?.project_budget} {data?.currency_symbol}
+                </span>
+            );
+      }
   },
   {
       id: "project_category",
