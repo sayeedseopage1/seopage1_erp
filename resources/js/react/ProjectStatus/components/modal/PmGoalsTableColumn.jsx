@@ -10,7 +10,6 @@ export const PmGoalsTableColumns = [
         accessorKey: "id",
         cell: ({ row, table ,column,cell }) => {
             const data = row?.original;
-            console.log("cell", cell?.row?.index)
             return (
                 <div className={`${styles.idContainer}`}> 
                     {cell?.row?.index +1}

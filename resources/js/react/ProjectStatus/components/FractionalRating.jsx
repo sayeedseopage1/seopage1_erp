@@ -1,10 +1,8 @@
 import React from 'react'
 import Rating from 'react-rating'
-
 import styles from "./FractionalRating.module.css"
 
-const FractionalRating = () => {
-  const [rating, setRating] = React.useState(0)
+const FractionalRating = ({value, onChange}) => {
   return (
     <Rating
       emptySymbol={
@@ -16,8 +14,8 @@ const FractionalRating = () => {
       fractions={4}
       stop={10}
       className={styles.rating}
-      onChange={setRating}
-      initialRating={rating}
+      onChange={onChange}
+      initialRating={value}
       style={{ color: 'gold' }}
     />
   )

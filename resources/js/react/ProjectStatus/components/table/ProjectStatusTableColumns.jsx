@@ -9,7 +9,6 @@ export const ProjectStatusTableColumns = [
         accessorKey: "id",
         cell: ({ row,cell }) => {
             const data = row.original;
-            console.log("project Status", cell?.row?.index)
             return (
                 <span>{cell?.row?.index + 1}</span>
             );
