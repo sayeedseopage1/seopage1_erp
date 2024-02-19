@@ -27,6 +27,8 @@ return new class extends Migration
             $table->dateTime('goal_end_date');
             $table->string('duration');
             $table->integer('rating')->nullable();
+            $table->integer('client_communication_rating')->nullable();
+            $table->integer('negligence_pm_rating')->nullable();
             $table->integer('admin_id')->nullable();
             $table->integer('added_by');
             $table->integer('updated_by')->nullable();
@@ -36,14 +38,15 @@ return new class extends Migration
             $table->integer('goal_status')->default(0);
             $table->longText('is_client_communication')->nullable();
             $table->longText('is_any_negligence')->nullable();
-            $table->longText('suggestion')->nullable();
+            $table->longText('client_communication')->nullable();
             $table->longText('description')->nullable();
-            $table->longText('admin_comment')->nullable();
+            $table->longText('negligence_pm')->nullable();
             $table->longText('reason')->nullable();
             $table->integer('reason_status')->default(0);
             $table->integer('extended_day')->nullable();
             $table->dateTime('extended_goal_end_day')->nullable();
             $table->integer('extended_request_status')->default(0);
+            $table->integer('mail_status')->default(0);
             $table->timestamps();
         });
     }
