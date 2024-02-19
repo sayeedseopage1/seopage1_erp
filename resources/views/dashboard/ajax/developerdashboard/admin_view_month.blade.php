@@ -98,9 +98,7 @@
                   
                 </div>
             </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
+           
         </div>
     </div>
 <div class="col-md-4">
@@ -493,9 +491,7 @@
                   
                 </div>
             </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
+           
         </div>
     </div>
 

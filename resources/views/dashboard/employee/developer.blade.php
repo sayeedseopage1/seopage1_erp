@@ -164,1301 +164,8 @@
         </div>
     </div>
     
-        {{-- <div class="card">
-            <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Developer (Today's Update)
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body bg-amt-grey">
-                    <div class="row my-2 text-center mx-auto">
-                        <div class="col-sm-12 pb-3">
-                            <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
-                                <div class="fc-toolbar-chunk">
-                                    <div class="fc-button-group">
-                                        <button date-mode="today" class="fc-prev-button fc-button fc-button-primary" type="button" aria-label="prev">
-                                            <span class="fc-icon fc-icon-chevron-left"></span>
-                                        </button>
-                                        <h2 class="fc-toolbar-title mx-3 todayDate"></h2>
-                                        <button class="fc-today-button fc-button fc-button-primary" type="button" disabled="">today</button>
-                                        <button date-mode="today" class="fc-next-button fc-button fc-button-primary" type="button" aria-label="next">
-                                            <span class="fc-icon fc-icon-chevron-right"></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="todayHtml">
-                        <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                            <div class="col-md-6">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="col-10 d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Today</h5>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayDeadLineTasks->count()}}</p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-2 d-block text-right">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Assigned To Me Today</h5>
-                                        <div class="d-flex">
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">{{$todayStartTasks->count()}}</p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Task Deadline Today (Assigned To Me)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>SL. No.</th>
-                                                <th>Task Name</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                                <th>Project Manager</th>
-                                                <th>Project Deadline</th>
-                                            </thead>
-                                            <tbody>
-                                                @php $index = 0 @endphp
-                                                @forelse($todayDeadLineTasks as $value)
-                                                <tr>
-                                                    <td>{{$index +1}}</td>
-                                                    <td><a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
-                                                    <td>{{$value->start_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} Hours</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                    <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-
-                                                </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                    {{$value->project->deadline}}
-                                                    @else
-                                                    --
-                                                    @endif
-                                                </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="8" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Task Deadline Today (Assigned To Me)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>SL. No.</th>
-                                                <th>Task Name</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                                <th>Project Manager</th>
-                                                <th>Project Deadline</th>
-                                            </thead>
-                                            <tbody>
-                                                @php $index = 0 @endphp
-                                                @forelse($todayStartTasks as $value)
-                                                <tr>
-                                                    <td>{{$index +1}}</td>
-                                                    <td><a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
-                                                    <td>{{$value->start_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} Hours</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                    <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
-                                                    @else
-                                                    --
-                                                    @endif
-                                                </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                    {{$value->project->deadline}}
-                                                        @else
-                                                        --
-                                                        @endif
-                                                </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="8" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Developer Monthly Cycle Update (21st - 20th)
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                <div class="card-body bg-amt-grey">
-                    <div class="row my-2 text-center mx-auto">
-                        <div class="col-sm-12 pb-3">
-                            <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
-                                <div class="fc-toolbar-chunk">
-                                    <div class="fc-button-group">
-                                        <button date-mode="month" class="fc-prev-button fc-button fc-button-primary" type="button" aria-label="prev">
-                                            <span class="fc-icon fc-icon-chevron-left"></span>
-                                        </button>
-                                        <h2 class="fc-toolbar-title mx-3 monthDate"></h2>
-                                        <button date-mode="month" class="fc-next-button fc-button fc-button-primary" type="button" aria-label="next">
-                                            <span class="fc-icon fc-icon-chevron-right"></span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="monthHtml">
-                        <h4>Total Tasks (Status wise)</h4>
-                        <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                            <div class="col-md-4">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">To Do</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$monthlyToDo->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Doing</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$monthlyDoing->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Overdue</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$monthlyOverdue->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Under Review</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$monthlyUnderReview->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="w-100 d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 text-darkest-grey">Reviews</h5>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 text-center">{{$monthlyPositiveRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Positive Review</span>
-                                                </p>
-                                            </a>
-                                            <div class="col-md-4 mx-auto">
-                                                <div class="text-center px-2 border border-danger rounded f-15 f-w-500">Avarage Rating<br>
-                                                    @php
-                                                        $totalRating = $monthlyTasks->sum('totalRating');
-                                                        //dd($totalRating, $monthlyTasks->count());
-                                                        $avgRating = 0;
-                                                        if($totalRating > 0) {
-                                                            $avgRating = round($totalRating / $monthlyTasks->count(), 2);
-                                                        }
-                                                    @endphp
-                                                    @if($avgRating <= 5 && $avgRating >= 4)
-                                                        <span class="text-success mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 4 && $avgRating >= 3)
-                                                        <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 3)
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @else
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-red d-grid text-center">{{$monthlyNegativeRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Negative Review</span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (To Do)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($monthlyToDo as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                        @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-
-                                                    </td>
-                                                    <td>
-                                                        <span class="text-primary">
-                                                            @if($value->project_id != null)
-
-                                                        {{$value->project->client->name}}
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-
-                                                    </span>
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (Doing)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($monthlyDoing as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                        @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (Overdue)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($monthlyOverdue as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                        @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (Under Review)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($monthlyUnderReview as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingThree">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Developer (General View)
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                <div class="card-body bg-amt-grey">
-                    <div class="row">
-                        <div class="align-items-center mx-auto h-100 pl-4 ml-5">
-                            <div class="col-auto">
-                                <label class="sr-only" for="inlineFormInputGroup"></label>
-                                <div class="input-group mb-2">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text"><i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
-                                    </div>
-                                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
-                               </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="generalHtml">
-                        <h4>Total Tasks (Status wise)</h4>
-                        <div class="row mb-3 mt-xl-0 mt-lg-4 mt-md-4 mt-4">
-                            <div class="col-md-3">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">To Do</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$yearlyToDo->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Doing</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$yearlyDoing->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Overdue</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$yearlyOverdue->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Under Review</h5>
-                                        <div class="d-flex">
-                                            <a href="#">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                    {{$yearlyUnderReview->count()}}
-                                                    <span class="f-12 font-weight-normal text-lightest"></span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="d-block">
-                                        <i class="fa fa-list text-lightest f-27"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (To Do)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($yearlyToDo as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (Doing)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($yearlyDoing as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (Overdue)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($yearlyOverdue as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-lg-6 mt-3">
-                                <div class="card bg-white border-0 b-shadow-4">
-                                    <div class="card-header bg-white border-0 text-capitalize d-flex justify-content-between p-20">
-                                        <h4 class="f-18 f-w-500 mb-0">Total Task Assigned On Developer (Under Review)
-                                            <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="From 01-03-2023 To 23-03-2023" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title=""><path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg>
-                                        </h4>
-                                    </div>
-                                    <div class="card-body p-0 h-200">
-                                        <table class="table">
-                                            <thead>
-                                                <th>Task ID</th>
-                                                <th>Task Name</th>
-                                                <th>Project</th>
-                                                <th>Client</th>
-                                                <th>Due Date</th>
-                                                <th>Estimated Time</th>
-                                                <th>Hours Logged</th>
-                                            </thead>
-                                            <tbody>
-                                                @forelse($yearlyUnderReview as $value)
-                                                <tr>
-                                                    <td>{{$value->id}}</td>
-                                                    <td>
-                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else
-                                                        --
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                    @if($value->project_id != null)
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else
-                                                        {{$value->client_name}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$value->due_date->format('Y-m-d')}}</td>
-                                                    <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
-                                                    <td>
-                                                        @php
-                                                        $timeLog = '--';
-
-                                                        if($value->timeLogged) {
-                                                            $totalMinutes = $value->timeLogged->sum('total_minutes');
-
-                                                            $breakMinutes = $value->breakMinutes();
-                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($totalMinutes % 60 > 0) {
-                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                            }
-                                                        }
-
-                                                        $subtasks = \App\Models\Subtask::where('task_id', $value->id)->get();
-                                                        $time = 0;
-
-                                                        foreach ($subtasks as $subtask) {
-                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                            $time += $task->timeLogged->sum('total_minutes');
-                                                        }
-
-                                                        if($subtasks == null) {
-                                                            echo $timeLog;
-                                                        } else {
-                                                            $timeL = intdiv(($time+$totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                            if ($time % 60 > 0) {
-                                                                $timeL .= ($time+$totalMinutes) % 60 . ' ' . __('app.mins');
-                                                            }
-                                                            echo $timeL;
-                                                        }
-                                                        @endphp
-                                                    </td>
-                                                </tr>
-                                                @empty
-                                                <tr>
-                                                    <td colspan="7" class="shadow-none">
-                                                        <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                    </td>
-                                                </tr>
-                                                @endforelse
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                    <div class="w-100 d-block text-capitalize">
-                                        <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Reviews</h5>
-                                        <div class="row">
-                                            <div class="col-md-4 mx-auto">
-                                                <div class="text-center px-2 border border-danger rounded f-15 f-w-500 line-height-30">Avarage Reviews<br>
-                                                    @php
-                                                        $totalRating = $yearlyTasks->sum('totalRating');
-                                                        $avgRating = 0;
-                                                        if($totalRating > 0) {
-                                                            $avgRating = round($totalRating / $yearlyTasks->count(), 2);
-                                                        }
-                                                    @endphp
-                                                    @if($avgRating <= 5 && $avgRating >= 4)
-                                                        <span class="text-success mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 4 && $avgRating >= 3)
-                                                        <span class="text-warning mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @elseif($avgRating <= 3)
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @else
-                                                        <span class="text-danger mt-1">{{$avgRating}} <i class="fa fa-star text-warning"></i></span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 text-center">{{$yearlyPositiveRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Positive Review</span>
-                                                </p>
-                                            </a>
-                                            <a href="">
-                                                <p class="mb-0 f-21 font-weight-bold text-red d-grid text-center">{{$yearlyNegativeRating}}
-                                                    <span class="f-12 font-weight-normal text-lightest">Negative Review</span>
-                                                </p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
-        <div id="generalHtml">
+       
+    <div id="generalHtml">  
         <div class="row">
             <div class="col-md-4">
                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
@@ -1481,9 +188,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1512,9 +217,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1536,9 +239,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
            
@@ -1563,9 +264,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1587,9 +286,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1606,9 +303,7 @@
                             @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_client')
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
           
@@ -1632,9 +327,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-3">
@@ -1654,9 +347,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-3">
@@ -1679,9 +370,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-3">
@@ -1704,9 +393,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
           
@@ -1734,9 +421,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1754,9 +439,7 @@
                             @include('dashboard.ajax.developerdashboard.modals.percentage_task_deadline_missed')
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1775,9 +458,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
           
@@ -1804,9 +485,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1830,9 +509,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-4">
@@ -1854,9 +531,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
            
@@ -1890,9 +565,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
             <div class="col-md-7">
@@ -1929,9 +602,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
            
@@ -1957,9 +628,7 @@
                           
                         </div>
                     </div>
-                    <div class="d-block">
-                        <i class="fa fa-list text-lightest f-27"></i>
-                    </div>
+                   
                 </div>
             </div>
 

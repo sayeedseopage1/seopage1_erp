@@ -20,9 +20,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -51,9 +49,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -74,9 +70,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -98,9 +92,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -122,9 +114,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -143,9 +133,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -169,9 +157,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-3">
@@ -191,9 +177,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-3">
@@ -216,9 +200,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-3">
@@ -241,9 +223,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -272,9 +252,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -292,9 +270,7 @@
                 @include('dashboard.ajax.developerdashboard.modals.percentage_task_deadline_missed')              
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -312,9 +288,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -341,9 +315,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -367,9 +339,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -391,9 +361,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -428,9 +396,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-7">
@@ -466,9 +432,7 @@
                   
                 </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
