@@ -73,6 +73,7 @@ const DeadlineExplainModal = ({
 
             <DeadlineExplanation
                 closeModalTwo={closeModalTwo}
+                isModalTwoOpen={isModalTwoOpen}
                 projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
             />

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 const DeadlineExplanation = ({
     closeModalTwo,
     projectPmGoalId,
+    isModalTwoOpen,
     projectDetails,
 }) => {
     const {
@@ -55,6 +56,13 @@ const DeadlineExplanation = ({
             setIsEditorEmpty(false);
         }
     }, [editorData]);
+
+    useEffect(() => {
+        if(!isModalTwoOpen){
+            setEditorData("");
+            setIsEditorEmpty(false);
+        }
+    }, [isModalTwoOpen]);
 
     return (
         <div style={styles.container}>

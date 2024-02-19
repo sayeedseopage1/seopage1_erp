@@ -50,6 +50,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
     };
 
     const handleSubmit = async (e) => {
+        e.preventDefault();
         const isEmpty = isStateAllHaveValue(extendReqestData);
 
         if (isEmpty) {
@@ -62,12 +63,6 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
             return;
         }
 
-
-        if (!isValid()) {
-            toast.error("Missing required field or invalid input");
-            return;
-        }
-        e.preventDefault();
         const fd = new FormData();
         fd.append("extended_day", extendReqestData.extended_day ?? "");
         fd.append("is_client_communication", extendReqestData?.is_client_communication ?? "");
@@ -82,8 +77,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
                 .getAttribute("content")
         );
 
-        if (isValid()) {
-            submitData(fd)
+   
+        submitData(fd)
                 .unwrap()
                 .then((res) => {
                     onClose();
@@ -94,10 +89,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
                     if (err?.status === 422) {
                         toast.error("Please fillup all required fields");
                     }
-                });
-        } else {
-            toast.error("Please fillup all required fields");
-        }
+        });
+       
     };
 
  
@@ -111,6 +104,23 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
             });
         }
     }, [extendReqestData, extendReqestDataValidation.isSubmitting]);
+
+
+    useEffect(() => {
+        if(!isOpen){
+            setExtendReqestData({
+                extended_day: "",
+                is_client_communication: "",
+            })
+            setExtendReqestDataValidation({
+                extended_day: false,
+                is_client_communication: false,
+                isSubmitting: false,
+            })
+        }
+
+
+    }, [isOpen]);
 
 
     return (

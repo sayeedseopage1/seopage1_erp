@@ -30,7 +30,15 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
     const imageData = data?.data;
 
     const handleResetForm = () => {
-        // setCommentData("");
+        setReviewExtendState({
+            extended_day: projectDetails?.extended_day,
+            comment: "",
+        });
+        setReviewExtendStateValidation({
+            extended_day: false,
+            comment: false,
+            isSubmitting: false,
+        });
     };
 
     const handleAccept = async (e) => {
@@ -71,6 +79,8 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 .getAttribute("content")
         );
 
+        console.log("fd", fd);
+
         submitData(fd)
             .unwrap()
             .then((res) => {
@@ -79,8 +89,11 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 handleResetForm();
             })
             .catch((err) => {
+                console.log("err", err);
                 if (err?.status === 422) {
                     toast.error("Please fill up all required fields");
+                } else {
+                    toast.error("Submission was not successful");
                 }
             });
     };
@@ -89,7 +102,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
         e.preventDefault();
         const fd = new FormData();
 
-        fd.append("extended_day", reviewExtendStateValidation.extendedDay ?? "");
+        fd.append("extended_day", reviewExtendStateValidation.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
         fd.append("project_id", projectDetails?.id ?? "");
         fd.append("status", "0");
@@ -132,15 +145,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
 
     useEffect(() => {
         if(!isOpen){
-            setReviewExtendState({
-                extended_day: projectDetails?.extended_day,
-                comment: "",
-            });
-            setReviewExtendStateValidation({
-                extended_day: false,
-                comment: false,
-                isSubmitting: false,
-            });
+            handleResetForm()
         }
     }, [isOpen]);
 
@@ -192,9 +197,9 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                         <div className="col-8">
                         <input 
                             className="p-1 rounded"
-                            value={reviewExtendState?.extended_day}
+                            defaultValue={reviewExtendState?.extended_day}
                             placeholder="Enter extended days"
-                            onChange={() => setReviewExtendState({
+                            onChange={(e) => setReviewExtendState({
                                 ...reviewExtendState,
                                 extended_day: e.target.value
                             })}
