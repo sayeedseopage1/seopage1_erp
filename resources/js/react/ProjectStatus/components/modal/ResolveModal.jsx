@@ -82,7 +82,6 @@ const ResolveModal = ({
         }
     }, [resolveModalData, resolveModalDataValidation.isSubmitting]);
 
-    console.log("resolveModalData", resolveModalData);
 
     return (
         <ReactModal

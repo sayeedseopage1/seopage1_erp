@@ -16,8 +16,10 @@ const DeadlineExplanation = ({
         goal_start_date,
         goal_end_date,
         description,
+        currency_symbol
     } = projectDetails;
     const [editorData, setEditorData] = React.useState("");
+    const [isEditorEmpty, setIsEditorEmpty] = React.useState(false);
     const [submitData, { isLoading }] =
         useCreateDeadlineExplanationReasonMutation();
     const handleEditorChange = (e, editor) => {
@@ -25,6 +27,10 @@ const DeadlineExplanation = ({
     };
 
     const handleSubmit = async () => {
+        if(editorData === "" || editorData === "<p><br></p>"){
+            setIsEditorEmpty(true);
+            return;
+        }
         try {
             const result = await submitData({
                 reason: editorData,
@@ -44,40 +50,50 @@ const DeadlineExplanation = ({
         }
     };
 
-    console.log(projectDetails)
+    useEffect(() => {
+        if(editorData !== "" && editorData !== "<p><br></p>"){
+            setIsEditorEmpty(false);
+        }
+    }, [editorData]);
 
     return (
         <div style={styles.container}>
-            <div>
-                <p>
-                    <strong>Project Name</strong> {project_name}
-                </p>
-                <p>
-                    <strong>Client:</strong> {clientName}
-                </p>
-                <p>
-                    <strong>Project Budget:</strong> ${project_budget}
-                </p>
-                <p>
-                    <strong>Project Category:</strong> {project_category}
-                </p>
-                <p>
-                    <strong>Start Date:</strong>{" "}
-                    {new Date(goal_start_date).toLocaleDateString()}
-                </p>
-                <p>
-                    <strong>Deadline:</strong>{" "}
-                    {new Date(goal_end_date).toLocaleDateString()}
-                </p>
-                <p>
-                    <strong>Description:</strong> {description}
-                </p>
+            <div className="w-100">
+
+                 <div className="my-2 row">
+                        <p className="col-4"><strong>Project Name:</strong>{" "}</p>
+                        <p className="col-8">{project_name}</p>
+                </div>
+                
+                 <div className="my-2 row">
+                        <p className="col-4"><strong>Client:</strong>{" "}</p>
+                        <p className="col-8">{clientName}</p>
+                </div>
+                 <div className="my-2 row">
+                        <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
+                        <p className="col-8">{currency_symbol}{project_budget}</p>
+                </div>
+                 <div className="my-2 row">
+                        <p className="col-4"><strong>Project Category:</strong>{" "}</p>
+                        <p className="col-8">{project_category}</p>
+                </div>
+                 <div className="my-2 row">
+                        <p className="col-4"><strong>Start Date:</strong>{" "}</p>
+                        <p className="col-8">{new Date(goal_start_date).toLocaleDateString()}</p>
+                </div>
+                 <div className="my-2 row">
+                        <p className="col-4"><strong>Deadline:</strong>{" "}</p>
+                        <p className="col-8"> {new Date(goal_end_date).toLocaleDateString()}</p>
+                </div>
+                 <div className="my-2 row">
+                        <p className="col-4"><strong>Description:</strong>{" "}</p>
+                        <p className="col-8"> {description}</p>
+                </div>
 
                 <div style={styles.reasonContainer}>
-                    <p>
+                    <p className="my-2">
                         <strong>Reason</strong>
                     </p>
-
                     <div
                         style={{
                             border: "1px solid #ccc",
@@ -93,6 +109,9 @@ const DeadlineExplanation = ({
                             <CKEditorComponent onChange={handleEditorChange} />
                         </div>
                     </div>
+                    {
+                        isEditorEmpty && <p className="text-danger my-1">Reason is required</p>
+                    }        
                 </div>
 
                 <Button

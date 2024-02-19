@@ -56,12 +56,14 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     return (
         <>
             <div style={containerStyle}>
-                <Flex justifyContent="left" gap="20px">
-                    <strong style={{ marginTop: "10px" }}>Screenshots:</strong>
+                <div className="my-2 row">
+                    
+                    <strong className="col-4 d-flex align-items-center">Screenshots:</strong>
                     <FileInputWithCustomIcon
                         handleFileChange={handleFileChange}
-                    />
-                </Flex>
+                        className="col-8"
+                    />    
+                </div>
                 <div style={previewContainerStyle}>
                     {selectedFiles.map((file, index) => (
                         <div key={index} style={previewItemStyle}>
@@ -166,8 +168,8 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
 };
 
 const containerStyle = {
-    textAlign: "center",
-    padding: "10px",
+    // textAlign: "center",
+    padding: "10px 0px",
 };
 
 const previewContainerStyle = {
