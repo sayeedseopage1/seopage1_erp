@@ -16,14 +16,12 @@ const ResolveModal = ({
     closeModal,
 }) => {
     const [resolveModalData, setResolveModalData] = useState({
-        rating: null,
         client_communication: "",
         client_communication_rating: null,
         negligence_pm: "",
         negligence_pm_rating: null,
     });
     const [resolveModalDataValidation, setResolveModalDataValidation] = useState({
-        rating: false,
         client_communication: false,
         client_communication_rating: false,
         negligence_pm: false,
@@ -82,7 +80,6 @@ const ResolveModal = ({
         }
     }, [resolveModalData, resolveModalDataValidation.isSubmitting]);
 
-    console.log("resolveModalData", resolveModalData);
 
     return (
         <ReactModal
@@ -169,7 +166,7 @@ const ResolveModal = ({
                             }}
                         /></p>
                     </div>
-                    <div className="my-2 row">
+                    {/* <div className="my-2 row">
                         <p className="col-4"><strong>Rating:</strong>{" "}</p>
                         <div className="col-8 flex-col">
                             <div className="d-flex justify-content-between align-items-center"><FractionalRating
@@ -183,7 +180,7 @@ const ResolveModal = ({
                         {resolveModalData?.rating  && <small>{resolveModalData?.rating} /10</small>}</div>
                             {resolveModalDataValidation.rating && <small className="text-danger my-1">Rating is required</small>}
                         </div>
-                    </div>
+                    </div> */}
                     <div style={styles.reasonContainer}>
                         <p>
                             <strong>Is client communication perfect here? </strong>

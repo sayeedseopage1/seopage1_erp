@@ -14,9 +14,10 @@ export const ProjectStatusTableColumns = [
             );
         }
     },
+
   {
       id: "clientName",
-      header: "Client",
+      header: "Client Name",
       accessorKey: "clientName",
       cell: ({ row }) => {
           const data = row.original;
@@ -34,6 +35,23 @@ export const ProjectStatusTableColumns = [
           );
       },
   },
+  {
+    id: "project_name",
+    header: "Project Name",
+    accessorKey: "project_name",
+    cell: ({ row, table  }) => {
+        const data = row.original;
+        return (
+            <p
+              onClick={() => table.options.meta.onClickHandler(data)}
+                role="button"
+                className="multiline-ellipsis text-hover-underline-color pr-2 text-primary"
+            >
+                {data?.project_name}
+            </p>
+        );
+    },
+},
   {
       id: "pmName",
       header: "Project Manager",
@@ -56,44 +74,60 @@ export const ProjectStatusTableColumns = [
       },
   },
   {
-      id: "project_name",
-      header: "Project Name",
-      accessorKey: "project_name",
-      cell: ({ row, table  }) => {
+    id: "project_budget",
+    header: "Project Budget",
+    accessorKey: "project_budget",
+    cell: ({ row }) => {
           const data = row.original;
           return (
-              <p
-                onClick={() => table.options.meta.onClickHandler(data)}
-                  role="button"
-                  className="multiline-ellipsis text-hover-underline-color pr-2 text-primary"
-              >
-                  {data?.project_name}
-              </p>
+              <span>
+                  {data?.project_budget} {data?.currency_symbol}
+              </span>
           );
-      },
-  },
+    }
+},
   {
-      id: "project_budget",
-      header: "Project Budget",
-      accessorKey: "project_budget",
-      cell: ({ row }) => {
-            const data = row.original;
-            return (
-                <span>
-                    {data?.project_budget} {data?.currency_symbol}
-                </span>
-            );
-      }
-  },
-  {
-      id: "project_category",
-      header: "Project Category",
-      accessorKey: "project_category",
-  },
+    id: "project_category",
+    header: "Project Category",
+    accessorKey: "project_category",
+},
   {
       id: "goal_start_date",
       header: "Start Date",
       accessorKey: "goal_start_date",
+  },
+  {
+      id: "percentage_of_goals_met",
+      header: "Percentage of Goals Met",
+    //   accessorKey: "percentage_of_goals_met",
+      cell: ({ row }) => {
+            return (
+                <span>--</span>
+            );
+        
+      }
+  },
+  {
+      id: "next_goal_date",
+      header: "Next Goal Date",
+    //   accessorKey: "next_goal_date",
+      cell: ({ row }) => {
+            return (
+                <span>--</span>
+            );
+        
+      }
+  },
+  {
+      id: "next_goal_details",
+      header: "Next Goal Details",
+    //   accessorKey: "next_goal_details",
+      cell: ({ row }) => {
+            return (
+                <button className="btn btn-success">View Deatils</button>
+            );
+        
+      }
   },
 
 //   {
