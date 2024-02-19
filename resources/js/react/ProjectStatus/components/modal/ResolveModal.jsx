@@ -14,29 +14,15 @@ const ResolveModal = ({
     isModalOpen,
     closeModal,
 }) => {
-    const [suggestionData, setSuggestionData] = useState("");
-    const [commentData, setCommentData] = useState("");
-    const [ratingValue, setRatingValue] = useState("1");
+    const [resolveModalData, setResolveModalData] = useState({});
     const [submitData, { isLoading }] =
         useCreateResolveSuggestionCommentMutation();
-
-    const handleSuggestionChange = (e, editor) => {
-        setSuggestionData(editor.getData());
-    };
-    const handleCommentChange = (e, editor) => {
-        setCommentData(editor.getData());
-    };
-    const handleRatingValueChange = (e) => {
-        setRatingValue(e.target.value);
-    };
 
     const handleSubmit = async () => {
         try {
             const result = await submitData({
                 project_pm_goal_id: projectPmGoalId,
-                rating: ratingValue,
-                suggestion: suggestionData,
-                comment: commentData,
+                ...resolveModalData
             }).unwrap();
 
             if (result?.status) {
@@ -51,6 +37,9 @@ const ResolveModal = ({
             setEditorData("");
         }
     };
+
+
+    console.log(resolveModalData)
 
     return (
         <ReactModal
@@ -79,7 +68,6 @@ const ResolveModal = ({
                     style={{
                         backgroundColor: "red",
                         padding: "2px 4px 2px 4px",
-
                         color: "white",
                     }}
                 >
@@ -88,7 +76,7 @@ const ResolveModal = ({
             </div>
 
             <section style={styles.container}>
-                <div>
+                <div className="w-100">
                     <p>
                         <strong>Project Name</strong>{" "}
                         {projectDetails.project_name}
@@ -130,28 +118,22 @@ const ResolveModal = ({
                             }}
                         />
 
-                        {console.log("pmGoalExtendReason", pmGoalExtendReason)}
+                       
                     </Flex>
 
                     <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <div htmlFor="itemsPerPage">Rating:</div>
-                        <select
-                            id="itemsPerPage"
-                            value={ratingValue}
-                            onChange={handleRatingValueChange}
-                        >
-                            {[1, 2, 3, 4, 5].map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                        <FractionalRating/>
+                        <strong htmlFor="itemsPerPage">Rating:</strong>
+                        <FractionalRating  
+                            value={resolveModalData?.rating}
+                            onChange={(value) => setResolveModalData({
+                                ...resolveModalData,
+                                rating: value
+                            })}
+                        />
                     </Flex>
-
                     <div style={styles.reasonContainer}>
                         <p>
-                            <strong>Suggestion:</strong>
+                            <strong>Is client communication perfect here? </strong>
                         </p>
                         <div
                             style={{
@@ -160,25 +142,57 @@ const ResolveModal = ({
                             }}
                         >
                             <CKEditorComponent
-                                onChange={handleSuggestionChange}
+                                onChange={(e, editor) => {
+                                    setResolveModalData({
+                                        ...resolveModalData,
+                                        client_communication: editor.getData(),
+                                    })
+                                }}
                             />
+                        </div>
+                        <div>
+                            <p><small>Client communication rating</small></p>
+                            <div>
+                             <FractionalRating 
+                                 value={resolveModalData.client_communication_rating}
+                                onChange={(value) => setResolveModalData({
+                                    ...resolveModalData,
+                                    client_communication_rating: value
+                                })}
+                             />
+                            </div>
                         </div>
                     </div>
                     <div style={styles.reasonContainer}>
                         <p>
-                            <strong>Comment:</strong>
+                            <strong>Is there any negligence from project managers side? </strong>
                         </p>
-
                         <div
                             style={{
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={handleCommentChange} />
+                            <CKEditorComponent onChange={(e, editor) => {
+                                setResolveModalData({
+                                    ...resolveModalData,
+                                    negligence_project_managers: editor.getData(),
+                                })
+                            }} />
+                        </div>
+                        <div>
+                            <p><small>Project managers rating</small></p>
+                            <div>
+                             <FractionalRating 
+                                value={resolveModalData.negligence_project_managers_rating}  
+                                onChange={(value) => setResolveModalData({
+                                    ...resolveModalData,
+                                    negligence_project_managers_rating: value
+                                })}
+                             />
+                            </div>
                         </div>
                     </div>
-
                     <Button
                         variant="success"
                         style={styles.button}
@@ -197,7 +211,6 @@ const customStyles = {
     overlay: {
         zIndex: 99999998,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-
         margin: "auto auto",
         padding: "20px",
     },
@@ -205,7 +218,6 @@ const customStyles = {
         zIndex: 99999999,
         maxWidth: "600px",
         maxHeight: "800px",
-
         margin: "auto auto",
         padding: "20px",
     },

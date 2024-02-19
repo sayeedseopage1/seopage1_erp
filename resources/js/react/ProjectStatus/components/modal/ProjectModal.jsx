@@ -1,11 +1,11 @@
 import React from "react";
 import ReactModal from "react-modal";
-import PMGoalsTable from "./PmGoalsTable";
+
 
 import RefreshButton from "../RefreshButton";
 import { PmGoalsTableColumns } from "./PmGoalsTableColumn";
 import PmGoalsTable from "./PmGoalsTable";
-import ExtendRequestModal from "./ExtendRequestModal";
+
 
 const ProjectModal = ({
     refetchPmGoal,
