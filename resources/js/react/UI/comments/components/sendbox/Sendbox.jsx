@@ -107,8 +107,6 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const { task } = useSelector((s) => s.subTask);
     const param = useParams();
 
-    console.log("task", task);
-
     const [isFetching, setIsFetching] = React.useState(false);
     // State to track overall upload progress
     const [overallProgress, setOverallProgress] = useState(0);
@@ -354,7 +352,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                                 </ProgressBar>
                                 {overallProgress == 100 && (
                                     <ServerMessage>
-                                        <div>Wait for server response</div>
+                                        <div>Waiting for server response</div>
                                         <div style={{ marginTop: "5px" }}>
                                             <Loader
                                                 title=""
