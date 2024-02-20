@@ -26,7 +26,7 @@ const PercentageofGoalsMetTable = ({parcenatgeOfGoalsMet,tableColumns, projectDe
   const [expanded, setExpanded] = React.useState({});
   const _parcenatgeOfGoalsMet = React.useMemo(()=> parcenatgeOfGoalsMet, [parcenatgeOfGoalsMet]);
 
-    React.useEffect(() => {
+  React.useEffect(() => {
         if(_.size(_parcenatgeOfGoalsMet) === _.size(data)){
           setSkipPageReset(true);
           _parcenatgeOfGoalsMet && setData(_parcenatgeOfGoalsMet)
@@ -84,7 +84,7 @@ const PercentageofGoalsMetTable = ({parcenatgeOfGoalsMet,tableColumns, projectDe
     getExpandedRowModel: getExpandedRowModel(),
     getSortedRowModel: getSortedRowModel(),
     paginateExpandedRows: false,
-})
+  })
 
 
 
@@ -127,7 +127,7 @@ const PercentageofGoalsMetTable = ({parcenatgeOfGoalsMet,tableColumns, projectDe
                 </table>
                 {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
             <Toaster />
-        </div>
+    </div>
   )
 }
 

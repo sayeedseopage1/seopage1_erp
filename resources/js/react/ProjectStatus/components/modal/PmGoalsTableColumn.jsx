@@ -67,18 +67,29 @@ export const PmGoalsTableColumns = [
         }
     },
     {
-        id: "suggestion",
-        header: "Suggestion",
-        accessorKey: "suggestion",
-        cell: ({ row }) => {
+        id: "goal_extension_history",
+        header: "Goal Extension History",
+        cell: ({ row, table }) => {
+            const handle = table.options.meta
             const data = row?.original;
             return (
-                <span className="multine-ellipsis"
-                dangerouslySetInnerHTML={{ __html: data?.suggestion ?? "--",}}
-            />
+                <button onClick={() => handle.goalExtensionHistoryClick(data)} className="btn btn-success">View Deatils</button>
             )
         }
     },
+    // {
+    //     id: "suggestion",
+    //     header: "Suggestion",
+    //     accessorKey: "suggestion",
+    //     cell: ({ row }) => {
+    //         const data = row?.original;
+    //         return (
+    //             <span className="multine-ellipsis"
+    //             dangerouslySetInnerHTML={{ __html: data?.suggestion ?? "--",}}
+    //         />
+    //         )
+    //     }
+    // },
     {
         id: "admin_comment",
         header: "Comment",
