@@ -9021,7 +9021,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
   var employees = [];
   if (taskCategory && taskCategory.id === 5) {
     employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
-      return Number(d.role_id) === 9;
+      return Number(d.role_id) === 9 && Number(d.id) !== Number(window.Laravel.user.id);
     });
   } else if (taskCategory && taskCategory.id === 7) {
     employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
@@ -11266,15 +11266,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
     var count = 0;
     var error = new Object();
     if (!title) {
-      error.title = 'The title field is required';
+      error.title = "The title field is required";
       count++;
     }
     if (!startDate) {
-      error.startDate = 'You have to select a start date';
+      error.startDate = "You have to select a start date";
       count++;
     }
     if (!dueDate) {
-      error.dueDate = 'You have to select a due date';
+      error.dueDate = "You have to select a due date";
       count++;
     }
     if (!taskCategory) {
@@ -11286,14 +11286,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
       count++;
     }
     if (assignedTo && assignedTo !== null && assignedTo !== void 0 && assignedTo.isOverloaded) {
-      react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 04 Submittable tasks."));
+      react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 04 Submittable tasks."));
       count++;
     }
     if (!pageType) {
       error.taskType = "You have to Select task type";
       count++;
     } else {
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('New Page Design')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("New Page Design")) {
         if (!pageTypePriority) {
           error.pageTypePriority = "You have to Select page type";
           count++;
@@ -11311,7 +11311,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           count++;
         }
       }
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('Others')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Others")) {
         if (!pageTypeOthers) {
           error.pageTypeOthers = "You have to select an option";
           count++;
@@ -11329,7 +11329,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           count++;
         }
       }
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('Cloning Existing Design')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Cloning Existing Design")) {
         if (!pageTypeName) {
           error.pageTypeName = "You have to select an option";
           count++;
@@ -11384,14 +11384,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
             fd.append("image_url", null);
             fd.append("subTaskID", null);
             fd.append("addedFiles", null);
-            fd.append('task_type', pageType !== null && pageType !== void 0 ? pageType : null);
-            fd.append('page_type', pageTypePriority);
-            fd.append('page_name', pageName);
-            fd.append('page_url', pageURL);
-            fd.append('task_type_other', pageTypeOthers);
-            fd.append('page_type_name', pageTypeName);
-            fd.append('number_of_pages', numberOfPage);
-            fd.append('existing_design_link', existingDesignLink);
+            fd.append("task_type", pageType !== null && pageType !== void 0 ? pageType : null);
+            fd.append("page_type", pageTypePriority);
+            fd.append("page_name", pageName);
+            fd.append("page_url", pageURL);
+            fd.append("task_type_other", pageTypeOthers);
+            fd.append("page_type_name", pageTypeName);
+            fd.append("number_of_pages", numberOfPage);
+            fd.append("existing_design_link", existingDesignLink);
             fd.append("_token", document.querySelector("meta[name='csrf-token']").getAttribute("content"));
             Array.from(files).forEach(function (file) {
               fd.append("file[]", file);
@@ -11446,7 +11446,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             primaryPageConfirmation = function primaryPageConfirmation() {
               if (!isDesignerTask && pageTypePriority === "Primary Page Development") {
                 Swal.fire({
-                  icon: 'info',
+                  icon: "info",
                   html: "<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>",
                   showCloseButton: true,
                   showCancelButton: true
@@ -11472,7 +11472,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               };
               alert = function alert() {
                 Swal.fire({
-                  icon: 'error',
+                  icon: "error",
                   html: "<p>In our new system, you should see a <span class=\"badge badge-info\">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p><strong>Are you sure this is a new task and not a revision to any other existing tasks?</strong></p> ",
                   // showCloseButton: true,
                   showConfirmButton: true,
@@ -11657,7 +11657,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-control height-35 f-14",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
               placeholderText: "Ex: ".concat(dayjs.dayjs().format("DD-MM-YYYY")),
-              minDate: dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ? startDate : dayjs.dayjs().toDate(),
+              minDate: dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), "day") ? startDate : dayjs.dayjs().toDate(),
               maxDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate).toDate(),
               date: dueDate,
               setDate: setDueDate,
@@ -11705,7 +11705,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           style: {
             color: "red"
           },
-          children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 4 Submittable tasks.")
+          children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 4 Submittable tasks.")
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
         className: "col-12 col-md-6",
@@ -11716,7 +11716,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-group position-relative my-3",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
               htmlFor: "",
-              children: [" Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
@@ -11736,7 +11736,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                   className: function className(_ref5) {
                     var active = _ref5.active;
-                    return "sp1-select-option ".concat(active ? 'active' : '');
+                    return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
                   children: function children(_ref6) {
@@ -11744,7 +11744,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
-                      }) : '']
+                      }) : ""]
                     });
                   }
                 }, i);
@@ -11771,7 +11771,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-group position-relative my-3",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
               htmlFor: "",
-              children: [" Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+              children: [" ", "Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
@@ -11791,7 +11791,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                   className: function className(_ref8) {
                     var active = _ref8.active;
-                    return "sp1-select-option ".concat(active ? 'active' : '');
+                    return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
                   children: function children(_ref9) {
@@ -11799,7 +11799,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
-                      }) : '']
+                      }) : ""]
                     });
                   }
                 }, i);
@@ -11821,7 +11821,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-group position-relative my-3",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
               htmlFor: "",
-              children: [" Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+              children: [" ", "Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
@@ -11841,7 +11841,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                   className: function className(_ref11) {
                     var active = _ref11.active;
-                    return "sp1-select-option ".concat(active ? 'active' : '');
+                    return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
                   children: function children(_ref12) {
@@ -11849,7 +11849,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
-                      }) : '']
+                      }) : ""]
                     });
                   }
                 }, i);
@@ -11873,7 +11873,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 className: "form-group position-relative my-3",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
                   htmlFor: "",
-                  children: [" Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+                  children: [" ", "Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                     children: "*"
                   }), " "]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
@@ -11893,7 +11893,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                       className: function className(_ref14) {
                         var active = _ref14.active;
-                        return "sp1-select-option ".concat(active ? 'active' : '');
+                        return "sp1-select-option ".concat(active ? "active" : "");
                       },
                       value: s,
                       children: function children(_ref15) {
@@ -11901,7 +11901,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                           children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                             className: "fa-solid fa-check ml-2"
-                          }) : '']
+                          }) : ""]
                         });
                       }
                     }, i);
@@ -11988,7 +11988,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
             htmlFor: "",
             className: "f-14 text-dark-gray",
-            children: ["Set Estimate Time", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+            children: ["Set Estimate Time ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
               className: "f-14",
               children: " * "
             })]
@@ -12024,7 +12024,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             style: {
               color: "#F73B12"
             },
-            children: ["Estimation time can't exceed ", estimation === null || estimation === void 0 ? void 0 : estimation.hours_left, " hours ", estimation === null || estimation === void 0 ? void 0 : estimation.minutes_left, " minutes"]
+            children: ["Estimation time can't exceed", " ", estimation === null || estimation === void 0 ? void 0 : estimation.hours_left, " hours", " ", estimation === null || estimation === void 0 ? void 0 : estimation.minutes_left, " minutes"]
           })]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
@@ -15765,54 +15765,55 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var projectManagerAcknowladgement = [{
   id: "CPRx01",
-  title: 'Client added some additional requirements which was not part of the actual job scope',
+  title: "Client added some additional requirements which was not part of the actual job scope",
   isDeniable: false,
   createDispute: true
 }, {
-  id: 'CPRx12',
-  title: 'I submitted the work without proper checking and overlooked the issues',
+  id: "CPRx12",
+  title: "I submitted the work without proper checking and overlooked the issues",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'CPRx03',
+  id: "CPRx03",
   title: "I couldn't understand clients expectation properly earlier",
   isDeniable: false
 }, {
-  id: 'CPRx04',
-  title: 'I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success',
+  id: "CPRx04",
+  title: "I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success",
   isDeniable: false
 }, {
-  id: 'CPRx05',
+  id: "CPRx05",
   title: "The client didn't change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
   isDeniable: false,
   createDispute: true
 }, {
-  id: 'CPRx06',
+  id: "CPRx06",
   title: "The client is asking for some minor changes which he couldn’t specify until he saw the completed work and we can’t charge him for these",
   isDeniable: false
 }, {
-  id: 'SPRx01',
+  id: "SPRx01",
   title: "Sales person discussed something in a verbal meeting with the client and then forgot to document it when assigning",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'SPRx02',
+  id: "SPRx02",
   title: "Sales person couldn't define requirement properly and I also failed to define it after I took over",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'SPRx03',
+  id: "SPRx03",
   title: "Sales overpromised: This task is not doable to this extent or in this way and I informed management about it on day 1",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'CPRx07',
+  id: "CPRx07",
   title: "The client has general revisions",
   isDeniable: false,
   createDispute: false,
-  type: 'GENERAL_REVISION'
+  type: "GENERAL_REVISION"
 }];
 var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision(_ref) {
+  var _task$category;
   var close = _ref.close,
     onBack = _ref.onBack,
     onSubmit = _ref.onSubmit,
@@ -15835,7 +15836,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
     _useState8 = _slicedToArray(_useState7, 2),
     commentError = _useState8[0],
     setCommentError = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState10 = _slicedToArray(_useState9, 2),
     additionalPaid = _useState10[0],
     setAdditionalPaid = _useState10[1];
@@ -15847,7 +15848,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
     _useState14 = _slicedToArray(_useState13, 2),
     additionalAmount = _useState14[0],
     setAdditionalAmount = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState16 = _slicedToArray(_useState15, 2),
     additionalError = _useState16[0],
     setAdditionalError = _useState16[1];
@@ -15856,21 +15857,21 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
   var handleChange = function handleChange(e, reason) {
     setReason(reason);
     setAdditionalAmount(0);
-    setAdditionalPaid('');
+    setAdditionalPaid("");
     setAdditionalInfo(null);
   };
 
   // on blur
   var handleBlurEvent = function handleBlurEvent() {
     Swal.fire({
-      icon: 'question',
-      title: 'Do you want to create a milestone?',
+      icon: "question",
+      title: "Do you want to create a milestone?",
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: "Yes",
       cancelButtonText: "No"
     }).then(function (res) {
       if (res.isConfirmed) {
-        window.open("/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId, "?tab=milestones"), '_blank');
+        window.open("/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId, "?tab=milestones"), "_blank");
       }
     });
   };
@@ -15878,7 +15879,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
   // additional payment
   var hasAdditionalPayment = function hasAdditionalPayment(isPay) {
     setAdditionalPaid(function () {
-      return isPay ? 'yes' : 'no';
+      return isPay ? "yes" : "no";
     });
   };
 
@@ -15893,24 +15894,24 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
     var errorCount = 0;
     if (comment === "") {
       errorCount++;
-      setCommentError('You have to explain the revision in details, so that lead developer can understand where they need to work.');
+      setCommentError("You have to explain the revision in details, so that lead developer can understand where they need to work.");
     }
     if (!reason) {
       errorCount++;
-      setReasonError('You have to select a reason from above options');
+      setReasonError("You have to select a reason from above options");
     }
-    if (reason && (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01') {
+    if (reason && (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01") {
       if (!additionalPaid) {
         errorCount++;
-        setAdditionalError('You have to select an option.');
+        setAdditionalError("You have to select an option.");
       }
-      if (additionalPaid === 'yes' && additionalAmount === 0) {
+      if (additionalPaid === "yes" && additionalAmount === 0) {
         errorCount++;
-        setAdditionalError('You have to provide amount');
+        setAdditionalError("You have to provide amount");
       }
-      if (additionalPaid === 'no' && !additionalInfo) {
+      if (additionalPaid === "no" && !additionalInfo) {
         errorCount++;
-        setAdditionalError('You have to select an option');
+        setAdditionalError("You have to select an option");
       }
     }
     return errorCount === 0;
@@ -15929,7 +15930,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       comment: comment,
       additional_amount: Number(additionalAmount),
       additional_status: additionalPaid,
-      additional_comment: (_additionalInfo$info = additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.info) !== null && _additionalInfo$info !== void 0 ? _additionalInfo$info : '',
+      additional_comment: (_additionalInfo$info = additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.info) !== null && _additionalInfo$info !== void 0 ? _additionalInfo$info : "",
       revision_type: (_reason$type = reason === null || reason === void 0 ? void 0 : reason.type) !== null && _reason$type !== void 0 ? _reason$type : null,
       dispute_create: (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01" ? true : (reason === null || reason === void 0 ? void 0 : reason.createDispute) || (additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.disputeCreate) || false
     };
@@ -15939,6 +15940,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       // console.log('Your forgot to fill up some required fields')
     }
   };
+  var isDesignerTask = _.includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
       className: "px-3",
@@ -15950,10 +15952,11 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
           children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             className: "f-16",
             children: "*"
-          }), " :"]
+          }), " ", ":"]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "px-3",
           children: _.map(projectManagerAcknowladgement, function (option) {
+            if (!isDesignerTask && option.id === "CPRx07") return null;
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "form-check d-flex align-items-start mb-2",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
@@ -15986,12 +15989,12 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
           className: "form-text text-danger",
           children: reasonError
         })]
-      }), (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "d-block font-weight-bold",
-          children: ["Is the client paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
+          children: ["Is the client paying additionally for these changes?", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             children: "*"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -16006,7 +16009,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
               value: "1",
               onChange: function onChange(e) {
                 hasAdditionalPayment(true);
-                setAdditionalError('');
+                setAdditionalError("");
               },
               style: {
                 width: "16px",
@@ -16028,7 +16031,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
               value: "0",
               onChange: function onChange(e) {
                 hasAdditionalPayment(false);
-                setAdditionalError('');
+                setAdditionalError("");
               },
               style: {
                 width: "16px",
@@ -16042,7 +16045,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
             })]
           })]
         })]
-      }), additionalPaid === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), additionalPaid === "yes" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
@@ -16069,7 +16072,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
             onBlur: handleBlurEvent
           })]
         })]
-      }), additionalPaid === 'no' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), additionalPaid === "no" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
@@ -17253,6 +17256,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var RevisionCreationModal = function RevisionCreationModal(_ref) {
+  var _task$category;
   var close = _ref.close,
     task = _ref.task,
     auth = _ref.auth;
@@ -17385,6 +17389,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
+  var isDesignerTask = _.includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
@@ -17417,6 +17422,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
             className: "px-3",
             children: revisionOptions.map(function (option) {
+              if (!isDesignerTask && option.id === "PLRx05") return null;
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                 className: "form-check d-flex align-items-start mb-2",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
@@ -18259,9 +18265,9 @@ var TaskAction = function TaskAction(_ref) {
   var handleAuthorizedByTopManagementStatus = function handleAuthorizedByTopManagementStatus() {
     var subAcknowledgement = task === null || task === void 0 ? void 0 : task.subAcknowledgement;
     Swal.fire({
-      title: '',
+      title: "",
       html: "<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>\"".concat(subAcknowledgement, "\"</strong>. And the management authorized it considering the circumstances.</p>"),
-      icon: 'info',
+      icon: "info",
       showCloseButton: true
     });
   };
@@ -18566,12 +18572,12 @@ var TimerControl = function TimerControl(_ref) {
                 setTimerId(res === null || res === void 0 ? void 0 : res.id);
                 dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_4__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
                 Toast.fire({
-                  icon: 'success',
+                  icon: "success",
                   title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
                 });
               } else {
                 Toast.fire({
-                  icon: 'warning',
+                  icon: "warning",
                   title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
                 });
               }
@@ -18632,7 +18638,7 @@ var TimerControl = function TimerControl(_ref) {
         timerId(null);
       } else {
         Toast.fire({
-          icon: 'warning',
+          icon: "warning",
           title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
       }

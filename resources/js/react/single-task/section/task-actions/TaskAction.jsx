@@ -30,7 +30,7 @@ import ReportControl from "./report/Report";
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const navigate = useNavigate();
-    const {isEnable} = useDailySubmission();
+    const { isEnable } = useDailySubmission();
     const [timerStart, setTimerStart] = React.useState(false);
 
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
@@ -81,18 +81,16 @@ const TaskAction = ({ task, status }) => {
             loggedUser,
         });
 
-
     const handleAuthorizedByTopManagementStatus = () => {
         const subAcknowledgement = task?.subAcknowledgement;
 
         Swal.fire({
-            title: '',
+            title: "",
             html: `<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>"${subAcknowledgement}"</strong>. And the management authorized it considering the circumstances.</p>`,
-            icon: 'info',
+            icon: "info",
             showCloseButton: true,
-        })
-    }
-
+        });
+    };
 
     return (
         <div
@@ -113,7 +111,7 @@ const TaskAction = ({ task, status }) => {
                 <MarkAsComplete task={task} auth={loggedUser} />
             ) : null}
 
-            {/* develop */}
+            {/* develope */}
             {approveButtonPermission({ task, status, loggedUser }) ? (
                 <ApproveTask task={task} status={status} auth={loggedUser} />
             ) : null}
@@ -141,18 +139,16 @@ const TaskAction = ({ task, status }) => {
             <div className="single_task_divider" />
 
             {/* right side button container */}
-            {
-                task?.approvalStatus ?
+            {task?.approvalStatus ? (
                 <div className="">
-                <Button
-                    variant="success"
-                    onClick={handleAuthorizedByTopManagementStatus}
-                >
-                    Authorized By Top Management
-                </Button>
-                </div> : null
-            }
-
+                    <Button
+                        variant="success"
+                        onClick={handleAuthorizedByTopManagementStatus}
+                    >
+                        Authorized By Top Management
+                    </Button>
+                </div>
+            ) : null}
 
             {/* Subtask creation guideline */}
             {_.includes([6], loggedUser?.getRoleId()) && (
@@ -165,7 +161,7 @@ const TaskAction = ({ task, status }) => {
             <Dropdown>
                 <Dropdown.Toggle icon={false}>
                     <div className="single_task_three_dot">
-                        {isFetching ?
+                        {isFetching ? (
                             <div
                                 className="spinner-border text-dark"
                                 role="status"
@@ -175,9 +171,10 @@ const TaskAction = ({ task, status }) => {
                                     border: "0.14em solid rgb(77, 77, 77)",
                                     borderRightColor: "transparent",
                                 }}
-                            />:
+                            />
+                        ) : (
                             <i className="fa-solid fa-ellipsis" />
-                        }
+                        )}
                     </div>
                 </Dropdown.Toggle>
                 <Dropdown.Menu
@@ -185,41 +182,47 @@ const TaskAction = ({ task, status }) => {
                     placement="bottom-end"
                 >
                     {/* {taskEditPermision({ task, status, auth: loggedUser }) && ( */}
-                        <Dropdown.Item
-                            onClick={(e) => {
-                                onModalEditButtonClick(e);
-                            }}
-                            disabled={!taskEditPermision({task,status, auth: loggedUser})}
-                            className="single_task_action_dd_item"
-                        >
-                            {isFetching ? (
-                                <div
-                                    className="spinner-border text-dark ml-2"
-                                    role="status"
-                                    style={{
-                                        width: "16px",
-                                        height: "16px",
-                                        border: "0.14em solid rgb(104, 104, 104)",
-                                        borderRightColor: "transparent",
-                                    }}
-                                />
-                            ) : (
-                                <i className="fa-regular fa-pen-to-square"></i>
-                            )}
-                            <span className="ml-1 mr-2">Edit</span>
-                        </Dropdown.Item>
+                    <Dropdown.Item
+                        onClick={(e) => {
+                            onModalEditButtonClick(e);
+                        }}
+                        disabled={
+                            !taskEditPermision({
+                                task,
+                                status,
+                                auth: loggedUser,
+                            })
+                        }
+                        className="single_task_action_dd_item"
+                    >
+                        {isFetching ? (
+                            <div
+                                className="spinner-border text-dark ml-2"
+                                role="status"
+                                style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "0.14em solid rgb(104, 104, 104)",
+                                    borderRightColor: "transparent",
+                                }}
+                            />
+                        ) : (
+                            <i className="fa-regular fa-pen-to-square"></i>
+                        )}
+                        <span className="ml-1 mr-2">Edit</span>
+                    </Dropdown.Item>
                     {/* )} */}
-
 
                     <Dropdown.Item
                         onClick={() => navigate("?modal=report")}
-                        disabled={!_.includes([6, 5, 9, 10], loggedUser?.getRoleId())}
+                        disabled={
+                            !_.includes([6, 5, 9, 10], loggedUser?.getRoleId())
+                        }
                         className="single_task_action_dd_item __report"
                     >
                         <i className="fa-solid fa-flag"></i>
                         <span className="d-inline ml-1">Report</span>
                     </Dropdown.Item>
-
 
                     <ReportControl task={task} />
                 </Dropdown.Menu>
@@ -229,5 +232,3 @@ const TaskAction = ({ task, status }) => {
 };
 
 export default TaskAction;
-
-

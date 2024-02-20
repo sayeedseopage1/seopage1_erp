@@ -3,15 +3,15 @@ import { apiSlice } from "./apiSlice";
 const singleTaskPageApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         // get task status
-       getTaskStatus: build.query({
+        getTaskStatus: build.query({
             query: (taskId) => `/account/tasks/get-task-status/${taskId}`,
-            providesTags: ["TASK_STATUS"]
-       }),
+            providesTags: ["TASK_STATUS"],
+        }),
 
         // get task details
         getTaskDetails: build.query({
             query: (query) => `/account/task${query}`,
-            providesTags: ["SUB_TASKS"]
+            providesTags: ["SUB_TASKS"],
         }),
 
         // create sub task
@@ -22,6 +22,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
+            invalidatesTags: ["TASK_STATUS", "SUB_TASKS"],
         }),
 
         // delete uploaded file
@@ -47,7 +48,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 formData: true,
             }),
 
-            invalidatesTags: ["SUB_TASKS"]
+            invalidatesTags: ["SUB_TASKS"],
         }),
 
         // create note
@@ -85,17 +86,17 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["TASK_COMMENTS", "TASK_COMMENTS_WIDGET"]
+            invalidatesTags: ["TASK_COMMENTS", "TASK_COMMENTS_WIDGET"],
         }),
 
         // edit comment
         editComment: build.mutation({
-            query: (comment)=>({
-              url: `/account/task/${comment.id}/json?mode=comment_edit`,
-              method: 'POST',
-              body: comment,
-              formData: true,
-            })
+            query: (comment) => ({
+                url: `/account/task/${comment.id}/json?mode=comment_edit`,
+                method: "POST",
+                body: comment,
+                formData: true,
+            }),
         }),
 
         //start time
@@ -111,7 +112,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ['TASK_STATUS', 'ENABLE_MARKASCOMPLETE']
+            invalidatesTags: ["TASK_STATUS", "ENABLE_MARKASCOMPLETE"],
         }),
 
         // subtask status
@@ -122,7 +123,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
          */
 
         getUserTrackTime: build.query({
-            query: (userId) => `/account/developer/tracked-time-today/${userId}`
+            query: (userId) =>
+                `/account/developer/tracked-time-today/${userId}`,
         }),
 
         /**
@@ -140,7 +142,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ['TASK_STATUS', 'ENABLE_MARKASCOMPLETE']
+            invalidatesTags: ["TASK_STATUS", "ENABLE_MARKASCOMPLETE"],
         }),
 
         /**
@@ -160,20 +162,17 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
-
-
 
         /**
-            * * Get developer's tasks
-            * @param id This is User ID
-        */
+         * * Get developer's tasks
+         * @param id This is User ID
+         */
 
         getDeveloperTasks: build.query({
-            query: (id) =>  `/account/tasks/get-developer-tasks/${id}`
+            query: (id) => `/account/tasks/get-developer-tasks/${id}`,
         }),
-
 
         /**
          *  * Approve task
@@ -191,7 +190,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
 
         /**
@@ -205,7 +204,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
             }),
 
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
 
         /**
@@ -213,9 +212,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
          * @param id  is TaskId
          */
         getSubmittedTask: build.query({
-            query: (id) => `/account/tasks/get-task-submissions/${id}`
+            query: (id) => `/account/tasks/get-task-submissions/${id}`,
         }),
-
 
         /**
          *  * revision by
@@ -233,9 +231,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
-
 
         /**
          *  * get Revision
@@ -243,7 +240,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
          */
 
         getRevisionDetails: build.query({
-            query: (id) => `/account/tasks/get-task-revision/${id}`
+            query: (id) => `/account/tasks/get-task-revision/${id}`,
         }),
 
         /**
@@ -262,14 +259,13 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
 
         // * accept by lead developer
 
-
         revisionAcceptOrDenyByLeadDeveloper: build.mutation({
-            query: ({fdata, params}) => ({
+            query: ({ fdata, params }) => ({
                 url: `/account/tasks/${params}`,
                 method: "POST",
                 body: {
@@ -280,10 +276,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
-
-
 
         /**
          *  * submit for client approval
@@ -300,7 +294,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
 
         /**
@@ -318,7 +312,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
 
         /**
@@ -336,9 +330,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ["TASK_STATUS"],
         }),
-
 
         /**
          * * Working Environment
@@ -372,25 +365,22 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
         }),
 
         // check sub task clock
         checkSubTaskTimer: build.query({
-            query: (taskId) => `/account/tasks/task-timer-check/${taskId}`
+            query: (taskId) => `/account/tasks/task-timer-check/${taskId}`,
         }),
         // check sub task state
         checkSubTaskState: build.query({
-            query: (taskId) => `/account/tasks/parent-task-subtasks/${taskId}`
+            query: (taskId) => `/account/tasks/parent-task-subtasks/${taskId}`,
         }),
 
-
-
-
         // TASK DISPUTE
-        getDisputes:build.query({
+        getDisputes: build.query({
             query: (query) => `/account/task-disputes${query}`,
-            providesTags: ['DISPUTES']
+            providesTags: ["DISPUTES"],
         }),
 
         // ASK DISPUTE QUESTION
@@ -405,7 +395,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ["DISPUTES"]
+            invalidatesTags: ["DISPUTES"],
         }),
 
         // ANSWER DISPUTE QUESTION
@@ -421,7 +411,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ["DISPUTES"]
+            invalidatesTags: ["DISPUTES"],
         }),
 
         // ANSWER DISPUTE QUESTION
@@ -437,7 +427,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ["DISPUTES"]
+            invalidatesTags: ["DISPUTES"],
         }),
         // ANSWER DISPUTE QUESTION
         disputeAnswerMakeAsRead: build.mutation({
@@ -452,19 +442,19 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
 
-            invalidatesTags: ["DISPUTES"]
+            invalidatesTags: ["DISPUTES"],
         }),
-
 
         // GET IN PROGRESS TASK STATUS
         getInProgressTaskStatus: build.query({
-            query: (query) => `/account/tasks/get-inprogress-tasks${query}`
+            query: (query) => `/account/tasks/get-inprogress-tasks${query}`,
         }),
 
         // GET DEVELOPER TIME TRACK
         developerCanCompleteTask: build.query({
-            query:(taskId) => `/account/developer/tracked-time-this-task/${taskId}`,
-            providesTags: ["ENABLE_MARKASCOMPLETE"]
+            query: (taskId) =>
+                `/account/developer/tracked-time-this-task/${taskId}`,
+            providesTags: ["ENABLE_MARKASCOMPLETE"],
         }),
 
         // developerInprogressTask: build.query({
@@ -475,41 +465,43 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         // CHECK IN-PROGRESS TASKS
         developerInProgressTask: build.query({
             query: (userId) => `/account/developer/in-progress-tasks/${userId}`,
-            providesTags: ["USER_IN_PROGRESS_TASKS"]
+            providesTags: ["USER_IN_PROGRESS_TASKS"],
         }),
 
         // CHECK EDITABLE TASK
         checkEditableTask: build.query({
-            query: (taskId) => `/account/developer/check-editable-task/${taskId}`,
+            query: (taskId) =>
+                `/account/developer/check-editable-task/${taskId}`,
         }),
 
         // CHECK EDITABLE SubTASK
         checkEditableSubTask: build.query({
-            query: (subTaskId) => `/account/developer/check-editable-subtask/${subTaskId}`,
+            query: (subTaskId) =>
+                `/account/developer/check-editable-subtask/${subTaskId}`,
         }),
 
         // CHECK RESTRICTED KEYS
         checkRestrictedWords: build.mutation({
             query: (projectId) => ({
-                url:  `/account/check-project-first-tasks/${projectId}`,
+                url: `/account/check-project-first-tasks/${projectId}`,
                 method: "GET",
-            })
+            }),
         }),
 
         // Independent task working environment check
-        getWorkingEnvironment : build.query({
-            query: (independent_task_id)=>`/account/working-environment/task/${independent_task_id}`,
+        getWorkingEnvironment: build.query({
+            query: (independent_task_id) =>
+                `/account/working-environment/task/${independent_task_id}`,
             // providesTags : ["SINGLE_INDEPENDENT_TASK_WORKING_ENVIRONMENT"]
         }),
 
         // check attendance
         checkWorkingReport: build.mutation({
-            query: () =>({
+            query: () => ({
                 url: `/account/check-in-status`,
                 method: "GET",
-            })
-        })
-
+            }),
+        }),
     }),
 });
 
