@@ -692,7 +692,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         >
                             <div className="form-group position-relative my-3">
                                 <label htmlFor="">
-                                    {" "}
                                     Page Type <sup>*</sup>{" "}
                                 </label>
                                 <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
@@ -705,10 +704,16 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     </div>
                                 </Listbox.Button>
                                 <Listbox.Options className="sp1-select-options">
-                                    {[
-                                        "Primary Page Development",
-                                        "Secondary Page Development",
-                                    ]?.map((s, i) => (
+                                    {(isDesignerTask
+                                        ? [
+                                              "Primary Page Design",
+                                              "Secondary Page Design",
+                                          ]
+                                        : [
+                                              "Primary Page Development",
+                                              "Secondary Page Development",
+                                          ]
+                                    )?.map((s, i) => (
                                         <Listbox.Option
                                             key={i}
                                             className={({ active }) =>
@@ -809,19 +814,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     <React.Fragment>
                         {pageType === "Cloning Existing Design" ? (
                             <>
-                                {/* <div className="col-12 col-md-6">
-                                        <Input
-                                            id="page_type_name"
-                                            label="Page type name"
-                                            type="text"
-                                            placeholder="Enter page type name..."
-                                            name="pageTypeName"
-                                            required={true}
-                                            value={pageTypeName}
-
-                                            onChange={(e) => handleChange(e, setPageTypeName)}
-                                        />
-                                    </div> */}
                                 <div className="col-12 col-md-6">
                                     <Listbox
                                         value={pageTypeName}
@@ -829,8 +821,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     >
                                         <div className="form-group position-relative my-3">
                                             <label htmlFor="">
-                                                {" "}
-                                                Page Type Name <sup>*</sup>{" "}
+                                                Page Type Name <sup>*</sup>
                                             </label>
                                             <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                                 <span className="singleline-ellipsis pr-3">
@@ -842,10 +833,16 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                 </div>
                                             </Listbox.Button>
                                             <Listbox.Options className="sp1-select-options">
-                                                {[
-                                                    "Primary Page Development",
-                                                    "Secondary Page Development",
-                                                ]?.map((s, i) => (
+                                                {(isDesignerTask
+                                                    ? [
+                                                          "Primary Page Design",
+                                                          "Secondary Page Design",
+                                                      ]
+                                                    : [
+                                                          "Primary Page Development",
+                                                          "Secondary Page Development",
+                                                      ]
+                                                )?.map((s, i) => (
                                                     <Listbox.Option
                                                         key={i}
                                                         className={({

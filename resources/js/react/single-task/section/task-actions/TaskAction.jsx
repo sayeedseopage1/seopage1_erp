@@ -151,8 +151,9 @@ const TaskAction = ({ task, status }) => {
             ) : null}
 
             {/* Subtask creation guideline */}
-            {_.includes([6], loggedUser?.getRoleId()) && (
-                <SubtaskCreationControl />
+            {(loggedUser.isHasRolePermission(6) ||
+                loggedUser.isHasRolePermission(13)) && (
+                <SubtaskCreationControl task={task} />
             )}
 
             {/*********** Report Control ***********/}
