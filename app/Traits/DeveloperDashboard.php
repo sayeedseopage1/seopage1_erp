@@ -839,6 +839,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
     ->where('tasks.updated_at', '>=', $startDate)
     ->where('tasks.updated_at', '<', $endDate)
     ->where('task_users.user_id', $devId)
+    ->groupBy('tasks.id')
     ->get();
       //---------------------------------Percentage of Revision Data----------------------------------------------------//
       $revision_task_id_store = [];
@@ -2092,6 +2093,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
         ->where('tasks.updated_at', '>=', $startDate)
         ->where('tasks.updated_at', '<', $endDate)
         ->where('task_users.user_id', $devId)
+        ->groupBy('tasks.id')
         ->get();
 
           //---------------------------------Percentage of Revision Data----------------------------------------------------//
