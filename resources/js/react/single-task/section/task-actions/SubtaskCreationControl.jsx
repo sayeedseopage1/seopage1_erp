@@ -3,18 +3,15 @@ import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import GuideLineText from "./subtask_creation_guide/GuideLineText";
 
-
-export default function SubtaskCreationControl({ className }) {
-  const [subtaskCreationModalIsOpen, setSubtaskCreationModalIsOpen] = useState(false);
-
-
-    // console.log(location);
+export default function SubtaskCreationControl({ task, className }) {
+    const [subtaskCreationModalIsOpen, setSubtaskCreationModalIsOpen] =
+        useState(false);
 
     const close = () => setSubtaskCreationModalIsOpen(false);
     const open = () => setSubtaskCreationModalIsOpen(true);
 
     return (
-        <div className={` ${className}`} >
+        <div className={` ${className}`}>
             <Button
                 variant="tertiary"
                 // onClick={toggle}
@@ -25,7 +22,10 @@ export default function SubtaskCreationControl({ className }) {
                 <span className="d-inline ml-1"> Subtask creation guide </span>
             </Button>
 
-            <Modal isOpen={subtaskCreationModalIsOpen} className="sp1_mark-as--modal ">
+            <Modal
+                isOpen={subtaskCreationModalIsOpen}
+                className="sp1_mark-as--modal "
+            >
                 <div className="sp1_single_task--modal-panerl-wrapper">
                     <div
                         className="sp1_mark-as--modal-panel"
@@ -33,7 +33,15 @@ export default function SubtaskCreationControl({ className }) {
                     >
                         {/* heading bar */}
                         <div className="sp1_mark-as--modal-heading">
-                            <h6 className="mb-0 ml-2" style={{fontStyle:'normal',fontWeight:'bold'}}>Subtask creation guide</h6>
+                            <h6
+                                className="mb-0 ml-2"
+                                style={{
+                                    fontStyle: "normal",
+                                    fontWeight: "bold",
+                                }}
+                            >
+                                Subtask creation guide
+                            </h6>
 
                             <Button aria-label="closeModal" onClick={close}>
                                 <i className="fa-solid fa-xmark" />
@@ -45,9 +53,14 @@ export default function SubtaskCreationControl({ className }) {
                             className="sp1_mark-as--modal-body px-3"
                             style={{ overflow: "visible" }}
                         >
-                            
-                            <div style={{maxHeight:'80vh',overflow:'auto',padding:'0 20px 0 0'}}>
-                                <GuideLineText />
+                            <div
+                                style={{
+                                    maxHeight: "80vh",
+                                    overflow: "auto",
+                                    padding: "0 20px 0 0",
+                                }}
+                            >
+                                <GuideLineText task={task} />
                             </div>
 
                             <div className="mt-3 d-flex align-items-center">

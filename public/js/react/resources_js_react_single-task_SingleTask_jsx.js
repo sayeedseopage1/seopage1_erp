@@ -9021,7 +9021,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
   var employees = [];
   if (taskCategory && taskCategory.id === 5) {
     employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
-      return Number(d.role_id) === 9;
+      return Number(d.role_id) === 9 && Number(d.id) !== Number(window.Laravel.user.id);
     });
   } else if (taskCategory && taskCategory.id === 7) {
     employees = lodash__WEBPACK_IMPORTED_MODULE_1___default().filter(data, function (d) {
@@ -11266,15 +11266,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
     var count = 0;
     var error = new Object();
     if (!title) {
-      error.title = 'The title field is required';
+      error.title = "The title field is required";
       count++;
     }
     if (!startDate) {
-      error.startDate = 'You have to select a start date';
+      error.startDate = "You have to select a start date";
       count++;
     }
     if (!dueDate) {
-      error.dueDate = 'You have to select a due date';
+      error.dueDate = "You have to select a due date";
       count++;
     }
     if (!taskCategory) {
@@ -11286,14 +11286,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
       count++;
     }
     if (assignedTo && assignedTo !== null && assignedTo !== void 0 && assignedTo.isOverloaded) {
-      react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 04 Submittable tasks."));
+      react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 04 Submittable tasks."));
       count++;
     }
     if (!pageType) {
       error.taskType = "You have to Select task type";
       count++;
     } else {
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('New Page Design')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("New Page Design")) {
         if (!pageTypePriority) {
           error.pageTypePriority = "You have to Select page type";
           count++;
@@ -11311,7 +11311,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           count++;
         }
       }
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('Others')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Others")) {
         if (!pageTypeOthers) {
           error.pageTypeOthers = "You have to select an option";
           count++;
@@ -11329,7 +11329,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           count++;
         }
       }
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('Cloning Existing Design')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Cloning Existing Design")) {
         if (!pageTypeName) {
           error.pageTypeName = "You have to select an option";
           count++;
@@ -11384,14 +11384,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
             fd.append("image_url", null);
             fd.append("subTaskID", null);
             fd.append("addedFiles", null);
-            fd.append('task_type', pageType !== null && pageType !== void 0 ? pageType : null);
-            fd.append('page_type', pageTypePriority);
-            fd.append('page_name', pageName);
-            fd.append('page_url', pageURL);
-            fd.append('task_type_other', pageTypeOthers);
-            fd.append('page_type_name', pageTypeName);
-            fd.append('number_of_pages', numberOfPage);
-            fd.append('existing_design_link', existingDesignLink);
+            fd.append("task_type", pageType !== null && pageType !== void 0 ? pageType : null);
+            fd.append("page_type", pageTypePriority);
+            fd.append("page_name", pageName);
+            fd.append("page_url", pageURL);
+            fd.append("task_type_other", pageTypeOthers);
+            fd.append("page_type_name", pageTypeName);
+            fd.append("number_of_pages", numberOfPage);
+            fd.append("existing_design_link", existingDesignLink);
             fd.append("_token", document.querySelector("meta[name='csrf-token']").getAttribute("content"));
             Array.from(files).forEach(function (file) {
               fd.append("file[]", file);
@@ -11446,7 +11446,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             primaryPageConfirmation = function primaryPageConfirmation() {
               if (!isDesignerTask && pageTypePriority === "Primary Page Development") {
                 Swal.fire({
-                  icon: 'info',
+                  icon: "info",
                   html: "<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>",
                   showCloseButton: true,
                   showCancelButton: true
@@ -11472,7 +11472,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               };
               alert = function alert() {
                 Swal.fire({
-                  icon: 'error',
+                  icon: "error",
                   html: "<p>In our new system, you should see a <span class=\"badge badge-info\">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p><strong>Are you sure this is a new task and not a revision to any other existing tasks?</strong></p> ",
                   // showCloseButton: true,
                   showConfirmButton: true,
@@ -11657,7 +11657,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-control height-35 f-14",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
               placeholderText: "Ex: ".concat(dayjs.dayjs().format("DD-MM-YYYY")),
-              minDate: dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), 'day') ? startDate : dayjs.dayjs().toDate(),
+              minDate: dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), "day") ? startDate : dayjs.dayjs().toDate(),
               maxDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate).toDate(),
               date: dueDate,
               setDate: setDueDate,
@@ -11705,7 +11705,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           style: {
             color: "red"
           },
-          children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 4 Submittable tasks.")
+          children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 4 Submittable tasks.")
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
         className: "col-12 col-md-6",
@@ -11716,7 +11716,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-group position-relative my-3",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
               htmlFor: "",
-              children: [" Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
@@ -11736,7 +11736,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                   className: function className(_ref5) {
                     var active = _ref5.active;
-                    return "sp1-select-option ".concat(active ? 'active' : '');
+                    return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
                   children: function children(_ref6) {
@@ -11744,7 +11744,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
-                      }) : '']
+                      }) : ""]
                     });
                   }
                 }, i);
@@ -11771,7 +11771,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-group position-relative my-3",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
               htmlFor: "",
-              children: [" Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+              children: ["Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
@@ -11787,11 +11787,11 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Options, {
               className: "sp1-select-options",
-              children: (_ref7 = ["Primary Page Development", "Secondary Page Development"]) === null || _ref7 === void 0 ? void 0 : _ref7.map(function (s, i) {
+              children: (_ref7 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref7 === void 0 ? void 0 : _ref7.map(function (s, i) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                   className: function className(_ref8) {
                     var active = _ref8.active;
-                    return "sp1-select-option ".concat(active ? 'active' : '');
+                    return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
                   children: function children(_ref9) {
@@ -11799,7 +11799,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
-                      }) : '']
+                      }) : ""]
                     });
                   }
                 }, i);
@@ -11821,7 +11821,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-group position-relative my-3",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
               htmlFor: "",
-              children: [" Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+              children: [" ", "Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                 children: "*"
               }), " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
@@ -11841,7 +11841,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                   className: function className(_ref11) {
                     var active = _ref11.active;
-                    return "sp1-select-option ".concat(active ? 'active' : '');
+                    return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
                   children: function children(_ref12) {
@@ -11849,7 +11849,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
-                      }) : '']
+                      }) : ""]
                     });
                   }
                 }, i);
@@ -11873,9 +11873,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 className: "form-group position-relative my-3",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
                   htmlFor: "",
-                  children: [" Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+                  children: ["Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
                     children: "*"
-                  }), " "]
+                  })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Button, {
                   className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
@@ -11889,11 +11889,11 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Options, {
                   className: "sp1-select-options",
-                  children: (_ref13 = ["Primary Page Development", "Secondary Page Development"]) === null || _ref13 === void 0 ? void 0 : _ref13.map(function (s, i) {
+                  children: (_ref13 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref13 === void 0 ? void 0 : _ref13.map(function (s, i) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_21__.Listbox.Option, {
                       className: function className(_ref14) {
                         var active = _ref14.active;
-                        return "sp1-select-option ".concat(active ? 'active' : '');
+                        return "sp1-select-option ".concat(active ? "active" : "");
                       },
                       value: s,
                       children: function children(_ref15) {
@@ -11901,7 +11901,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
                           children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
                             className: "fa-solid fa-check ml-2"
-                          }) : '']
+                          }) : ""]
                         });
                       }
                     }, i);
@@ -11988,7 +11988,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("label", {
             htmlFor: "",
             className: "f-14 text-dark-gray",
-            children: ["Set Estimate Time", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
+            children: ["Set Estimate Time ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("sup", {
               className: "f-14",
               children: " * "
             })]
@@ -12024,7 +12024,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             style: {
               color: "#F73B12"
             },
-            children: ["Estimation time can't exceed ", estimation === null || estimation === void 0 ? void 0 : estimation.hours_left, " hours ", estimation === null || estimation === void 0 ? void 0 : estimation.minutes_left, " minutes"]
+            children: ["Estimation time can't exceed", " ", estimation === null || estimation === void 0 ? void 0 : estimation.hours_left, " hours", " ", estimation === null || estimation === void 0 ? void 0 : estimation.minutes_left, " minutes"]
           })]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
@@ -15765,54 +15765,55 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var projectManagerAcknowladgement = [{
   id: "CPRx01",
-  title: 'Client added some additional requirements which was not part of the actual job scope',
+  title: "Client added some additional requirements which was not part of the actual job scope",
   isDeniable: false,
   createDispute: true
 }, {
-  id: 'CPRx12',
-  title: 'I submitted the work without proper checking and overlooked the issues',
+  id: "CPRx12",
+  title: "I submitted the work without proper checking and overlooked the issues",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'CPRx03',
+  id: "CPRx03",
   title: "I couldn't understand clients expectation properly earlier",
   isDeniable: false
 }, {
-  id: 'CPRx04',
-  title: 'I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success',
+  id: "CPRx04",
+  title: "I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success",
   isDeniable: false
 }, {
-  id: 'CPRx05',
+  id: "CPRx05",
   title: "The client didn't change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
   isDeniable: false,
   createDispute: true
 }, {
-  id: 'CPRx06',
+  id: "CPRx06",
   title: "The client is asking for some minor changes which he couldn’t specify until he saw the completed work and we can’t charge him for these",
   isDeniable: false
 }, {
-  id: 'SPRx01',
+  id: "SPRx01",
   title: "Sales person discussed something in a verbal meeting with the client and then forgot to document it when assigning",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'SPRx02',
+  id: "SPRx02",
   title: "Sales person couldn't define requirement properly and I also failed to define it after I took over",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'SPRx03',
+  id: "SPRx03",
   title: "Sales overpromised: This task is not doable to this extent or in this way and I informed management about it on day 1",
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'CPRx07',
+  id: "CPRx07",
   title: "The client has general revisions",
   isDeniable: false,
   createDispute: false,
-  type: 'GENERAL_REVISION'
+  type: "GENERAL_REVISION"
 }];
 var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision(_ref) {
+  var _task$category;
   var close = _ref.close,
     onBack = _ref.onBack,
     onSubmit = _ref.onSubmit,
@@ -15835,7 +15836,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
     _useState8 = _slicedToArray(_useState7, 2),
     commentError = _useState8[0],
     setCommentError = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState10 = _slicedToArray(_useState9, 2),
     additionalPaid = _useState10[0],
     setAdditionalPaid = _useState10[1];
@@ -15847,7 +15848,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
     _useState14 = _slicedToArray(_useState13, 2),
     additionalAmount = _useState14[0],
     setAdditionalAmount = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState16 = _slicedToArray(_useState15, 2),
     additionalError = _useState16[0],
     setAdditionalError = _useState16[1];
@@ -15856,21 +15857,21 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
   var handleChange = function handleChange(e, reason) {
     setReason(reason);
     setAdditionalAmount(0);
-    setAdditionalPaid('');
+    setAdditionalPaid("");
     setAdditionalInfo(null);
   };
 
   // on blur
   var handleBlurEvent = function handleBlurEvent() {
     Swal.fire({
-      icon: 'question',
-      title: 'Do you want to create a milestone?',
+      icon: "question",
+      title: "Do you want to create a milestone?",
       showCancelButton: true,
-      confirmButtonText: 'Yes',
+      confirmButtonText: "Yes",
       cancelButtonText: "No"
     }).then(function (res) {
       if (res.isConfirmed) {
-        window.open("/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId, "?tab=milestones"), '_blank');
+        window.open("/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId, "?tab=milestones"), "_blank");
       }
     });
   };
@@ -15878,7 +15879,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
   // additional payment
   var hasAdditionalPayment = function hasAdditionalPayment(isPay) {
     setAdditionalPaid(function () {
-      return isPay ? 'yes' : 'no';
+      return isPay ? "yes" : "no";
     });
   };
 
@@ -15893,24 +15894,24 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
     var errorCount = 0;
     if (comment === "") {
       errorCount++;
-      setCommentError('You have to explain the revision in details, so that lead developer can understand where they need to work.');
+      setCommentError("You have to explain the revision in details, so that lead developer can understand where they need to work.");
     }
     if (!reason) {
       errorCount++;
-      setReasonError('You have to select a reason from above options');
+      setReasonError("You have to select a reason from above options");
     }
-    if (reason && (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01') {
+    if (reason && (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01") {
       if (!additionalPaid) {
         errorCount++;
-        setAdditionalError('You have to select an option.');
+        setAdditionalError("You have to select an option.");
       }
-      if (additionalPaid === 'yes' && additionalAmount === 0) {
+      if (additionalPaid === "yes" && additionalAmount === 0) {
         errorCount++;
-        setAdditionalError('You have to provide amount');
+        setAdditionalError("You have to provide amount");
       }
-      if (additionalPaid === 'no' && !additionalInfo) {
+      if (additionalPaid === "no" && !additionalInfo) {
         errorCount++;
-        setAdditionalError('You have to select an option');
+        setAdditionalError("You have to select an option");
       }
     }
     return errorCount === 0;
@@ -15929,7 +15930,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       comment: comment,
       additional_amount: Number(additionalAmount),
       additional_status: additionalPaid,
-      additional_comment: (_additionalInfo$info = additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.info) !== null && _additionalInfo$info !== void 0 ? _additionalInfo$info : '',
+      additional_comment: (_additionalInfo$info = additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.info) !== null && _additionalInfo$info !== void 0 ? _additionalInfo$info : "",
       revision_type: (_reason$type = reason === null || reason === void 0 ? void 0 : reason.type) !== null && _reason$type !== void 0 ? _reason$type : null,
       dispute_create: (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01" ? true : (reason === null || reason === void 0 ? void 0 : reason.createDispute) || (additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.disputeCreate) || false
     };
@@ -15939,6 +15940,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       // console.log('Your forgot to fill up some required fields')
     }
   };
+  var isDesignerTask = _.includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
       className: "px-3",
@@ -15950,10 +15952,11 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
           children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             className: "f-16",
             children: "*"
-          }), " :"]
+          }), " ", ":"]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "px-3",
           children: _.map(projectManagerAcknowladgement, function (option) {
+            if (!isDesignerTask && option.id === "CPRx07") return null;
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "form-check d-flex align-items-start mb-2",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
@@ -15986,12 +15989,12 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
           className: "form-text text-danger",
           children: reasonError
         })]
-      }), (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "d-block font-weight-bold",
-          children: ["Is the client paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
+          children: ["Is the client paying additionally for these changes?", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             children: "*"
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -16006,7 +16009,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
               value: "1",
               onChange: function onChange(e) {
                 hasAdditionalPayment(true);
-                setAdditionalError('');
+                setAdditionalError("");
               },
               style: {
                 width: "16px",
@@ -16028,7 +16031,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
               value: "0",
               onChange: function onChange(e) {
                 hasAdditionalPayment(false);
-                setAdditionalError('');
+                setAdditionalError("");
               },
               style: {
                 width: "16px",
@@ -16042,7 +16045,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
             })]
           })]
         })]
-      }), additionalPaid === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), additionalPaid === "yes" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
@@ -16069,7 +16072,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
             onBlur: handleBlurEvent
           })]
         })]
-      }), additionalPaid === 'no' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      }), additionalPaid === "no" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
@@ -17253,6 +17256,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var RevisionCreationModal = function RevisionCreationModal(_ref) {
+  var _task$category;
   var close = _ref.close,
     task = _ref.task,
     auth = _ref.auth;
@@ -17385,6 +17389,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
       return _ref2.apply(this, arguments);
     };
   }();
+  var isDesignerTask = _.includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
@@ -17417,6 +17422,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
             className: "px-3",
             children: revisionOptions.map(function (option) {
+              if (!isDesignerTask && option.id === "PLRx05") return null;
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                 className: "form-check d-flex align-items-start mb-2",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
@@ -18067,14 +18073,12 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 function SubtaskCreationControl(_ref) {
-  var className = _ref.className;
+  var task = _ref.task,
+    className = _ref.className;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     subtaskCreationModalIsOpen = _useState2[0],
     setSubtaskCreationModalIsOpen = _useState2[1];
-
-  // console.log(location);
-
   var close = function close() {
     return setSubtaskCreationModalIsOpen(false);
   };
@@ -18109,8 +18113,8 @@ function SubtaskCreationControl(_ref) {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h6", {
               className: "mb-0 ml-2",
               style: {
-                fontStyle: 'normal',
-                fontWeight: 'bold'
+                fontStyle: "normal",
+                fontWeight: "bold"
               },
               children: "Subtask creation guide"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -18127,11 +18131,13 @@ function SubtaskCreationControl(_ref) {
             },
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               style: {
-                maxHeight: '80vh',
-                overflow: 'auto',
-                padding: '0 20px 0 0'
+                maxHeight: "80vh",
+                overflow: "auto",
+                padding: "0 20px 0 0"
               },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_subtask_creation_guide_GuideLineText__WEBPACK_IMPORTED_MODULE_3__["default"], {})
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_subtask_creation_guide_GuideLineText__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                task: task
+              })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "mt-3 d-flex align-items-center",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -18259,9 +18265,9 @@ var TaskAction = function TaskAction(_ref) {
   var handleAuthorizedByTopManagementStatus = function handleAuthorizedByTopManagementStatus() {
     var subAcknowledgement = task === null || task === void 0 ? void 0 : task.subAcknowledgement;
     Swal.fire({
-      title: '',
+      title: "",
       html: "<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>\"".concat(subAcknowledgement, "\"</strong>. And the management authorized it considering the circumstances.</p>"),
-      icon: 'info',
+      icon: "info",
       showCloseButton: true
     });
   };
@@ -18314,7 +18320,9 @@ var TaskAction = function TaskAction(_ref) {
         onClick: handleAuthorizedByTopManagementStatus,
         children: "Authorized By Top Management"
       })
-    }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([6], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_SubtaskCreationControl__WEBPACK_IMPORTED_MODULE_12__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_16__["default"], {
+    }) : null, (loggedUser.isHasRolePermission(6) || loggedUser.isHasRolePermission(13)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_SubtaskCreationControl__WEBPACK_IMPORTED_MODULE_12__["default"], {
+      task: task
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_16__["default"], {
       task: task
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_5__["default"], {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_5__["default"].Toggle, {
@@ -18566,12 +18574,12 @@ var TimerControl = function TimerControl(_ref) {
                 setTimerId(res === null || res === void 0 ? void 0 : res.id);
                 dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_4__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
                 Toast.fire({
-                  icon: 'success',
+                  icon: "success",
                   title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
                 });
               } else {
                 Toast.fire({
-                  icon: 'warning',
+                  icon: "warning",
                   title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
                 });
               }
@@ -18632,7 +18640,7 @@ var TimerControl = function TimerControl(_ref) {
         timerId(null);
       } else {
         Toast.fire({
-          icon: 'warning',
+          icon: "warning",
           title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
       }
@@ -19738,11 +19746,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
-function GuideLineText() {
-  var html = "<html><head><meta content=\"text/html; charset=UTF-8\" http-equiv=\"content-type\"><style type=\"text/css\">ol{margin:0;padding:0}table td,table th{padding:0}.c4{color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:\"Arial\";font-style:normal}.c0{padding-top:0pt;padding-bottom:0pt;line-height:1.15;orphans:2;widows:2;text-align:left}.c5{background-color:#ffffff;max-width:468pt;padding:72pt 72pt 72pt 72pt}.c2{height:11pt}.c3{font-style:italic}.c1{font-weight:700}.title{padding-top:0pt;color:#000000;font-size:26pt;padding-bottom:3pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}.subtitle{padding-top:0pt;color:#666666;font-size:15pt;padding-bottom:16pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}li{color:#000000;font-size:11pt;font-family:\"Arial\"}p{margin:0;color:#000000;font-size:11pt;font-family:\"Arial\"}h1{padding-top:20pt;color:#000000;font-size:20pt;padding-bottom:6pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h2{padding-top:18pt;color:#000000;font-size:16pt;padding-bottom:6pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h3{padding-top:16pt;color:#434343;font-size:14pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h4{padding-top:14pt;color:#666666;font-size:12pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h5{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h6{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;font-style:italic;orphans:2;widows:2;text-align:left}</style></head><body class=\"c5 doc-content\"><p class=\"c0\"><span>Other than all the old fields, we have introduced the task type and page type fields in the new subtask creation form. Here is a guide for you so you know when to choose which one: <br><br></span><span class=\"c1\">1. New page design:</span><span>&nbsp;When you are going to need any new pages developed (except for cloning for example duplicating a service page to create 20 more service pages and cases like this), you should select this one. It has 2 subdivisions in the next field: <br><br></span><span class=\"c1\">A. Primary page development:</span><span class=\"c4\">&nbsp;All the pages on the website that are money pages (can generate money or revenue), require significant effort to be developed and clients usually remain very picky about them and don&rsquo;t want to compromise anything in those pages are what we are calling primary pages. Primary pages will have these elements mandatorily: <br> &nbsp; &nbsp; They have to be money pages like home, product, service, collection etc. </span></p><p class=\"c0\"><span class=\"c4\">&nbsp; &nbsp; &nbsp;*Most of the traffic will be on these pages <br> &nbsp; &nbsp; They have not less than 6 sections and every section has to be well designed<br> &nbsp; &nbsp; Homepage should be always counted as a primary page. <br> &nbsp; &nbsp; The developers will have to put significant effort to build them</span></p><p class=\"c0\"><span>&nbsp; &nbsp; &nbsp;*The clients will be serious/picky about these pages and won&#39;t accept unless they are perfect. <br><br></span><span class=\"c1\">Rough numbers of primary page on a website:</span><span>&nbsp;Not more than 3 (Except for very rare cases)<br><br></span><span class=\"c1\">Example:</span><span>&nbsp;Home, product page and collection pages for woocommerce/shopify; home, service category and service page for service websites; Home, property buy/sale listing pages for a real estate broker site and like this. <br><br><br>B. </span><span class=\"c1\">Secondary page development:</span><span class=\"c4\">&nbsp;All the relatively less important pages on the site should go to secondary pages. The characteristics include: <br> &nbsp;*They don&rsquo;t generate money necessarily, they are needed for customers&#39; trust, information and other things. For example, about us, shipping policy, FAQ, return policy etc. <br> &nbsp;*They have less than 6 sections, for example contact us. <br> &nbsp;*Require less efforts from the developers to develop them.<br> &nbsp;*In many cases, developers can directly use the template with minimum customization. For example, cart, checkout pages on ecommerce sites. </span></p><p class=\"c0\"><span>&nbsp; *The clients will be less serious about them as these pages are not super sensitive. <br><br><br>2. </span><span class=\"c1\">Cloning existing design: <br></span><span class=\"c4\">Any cloning/duplication job that needs to be done in bulk should go under this. Example include: <br><br>A. Creating 20 service pages from 1 service page just by changing the content and the picture. <br>B. Creating/uploading 300 products after the product page will be developed initially. </span></p><p class=\"c0\"><span class=\"c4\">C. Creating 70 location pages from 1 page template finalized initially. <br><br>These tasks can be assigned to junior most persons in the team as these are identical to data entry works. <br><br></span></p><p class=\"c0\"><span>3. </span><span class=\"c1\">Others: </span><span><br>Under others, there are some other work types which you can select depending on your needs. <br><br>Choosing any task as the primary task will require authorization from team lead/management and the task will be assigned to the developers after the authorization part will be done. Declare any page as a primary page carefully as we are going to set up a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. So declaring any page as a primary page when it will take almost no effort to create can give the respective developer an unfair edge over the rest of him team members. <br><br></span><span class=\"c1\">P.S. </span><span class=\"c1 c3\">Other than these, we have added a new field named page url in the subtask creation form. So from now, you have to define the urls where the developers will work when assigning a task. It&rsquo;s important that the developers don&#39;t choose urls/permalinks randomly and you declare them beforehand and they use them mandatorily. <br><br></span><span class=\"c1\">Naming Criteria<br></span><span class=\"c4\">Make sure the subtask names are self explanatory so you or anyone else from the management knows what the subtask was about from its name. <br><br>For example, if the task name is &ldquo;Homepage&rdquo;, and if you have to break it into parts for obvious reasons, the subtask names should be as below: <br>Homepage mockup design (XD)</span></p><p class=\"c0\"><span class=\"c4\">Creating a custom slider for the homepage</span></p><p class=\"c0\"><span class=\"c4\">Converting XD to wordpress for the homepage</span></p><p class=\"c0 c2\"><span class=\"c4\"></span></p><p class=\"c0 c2\"><span><br><br><br></span></p></body></html>";
+function GuideLineText(_ref) {
+  var _task$category;
+  var task = _ref.task;
+  var leadDeveloperText = "<html><head><meta content=\"text/html; charset=UTF-8\" http-equiv=\"content-type\"><style type=\"text/css\">ol{margin:0;padding:0}table td,table th{padding:0}.c4{color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:\"Arial\";font-style:normal}.c0{padding-top:0pt;padding-bottom:0pt;line-height:1.15;orphans:2;widows:2;text-align:left}.c5{background-color:#ffffff;max-width:468pt;padding:72pt 72pt 72pt 72pt}.c2{height:11pt}.c3{font-style:italic}.c1{font-weight:700}.title{padding-top:0pt;color:#000000;font-size:26pt;padding-bottom:3pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}.subtitle{padding-top:0pt;color:#666666;font-size:15pt;padding-bottom:16pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}li{color:#000000;font-size:11pt;font-family:\"Arial\"}p{margin:0;color:#000000;font-size:11pt;font-family:\"Arial\"}h1{padding-top:20pt;color:#000000;font-size:20pt;padding-bottom:6pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h2{padding-top:18pt;color:#000000;font-size:16pt;padding-bottom:6pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h3{padding-top:16pt;color:#434343;font-size:14pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h4{padding-top:14pt;color:#666666;font-size:12pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h5{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h6{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;font-style:italic;orphans:2;widows:2;text-align:left}</style></head><body class=\"c5 doc-content\"><p class=\"c0\"><span>Other than all the old fields, we have introduced the task type and page type fields in the new subtask creation form. Here is a guide for you so you know when to choose which one: <br><br></span><span class=\"c1\">1. New page design:</span><span>&nbsp;When you are going to need any new pages developed (except for cloning for example duplicating a service page to create 20 more service pages and cases like this), you should select this one. It has 2 subdivisions in the next field: <br><br></span><span class=\"c1\">A. Primary page development:</span><span class=\"c4\">&nbsp;All the pages on the website that are money pages (can generate money or revenue), require significant effort to be developed and clients usually remain very picky about them and don&rsquo;t want to compromise anything in those pages are what we are calling primary pages. Primary pages will have these elements mandatorily: <br> &nbsp; &nbsp; They have to be money pages like home, product, service, collection etc. </span></p><p class=\"c0\"><span class=\"c4\">&nbsp; &nbsp; &nbsp;*Most of the traffic will be on these pages <br> &nbsp; &nbsp; They have not less than 6 sections and every section has to be well designed<br> &nbsp; &nbsp; Homepage should be always counted as a primary page. <br> &nbsp; &nbsp; The developers will have to put significant effort to build them</span></p><p class=\"c0\"><span>&nbsp; &nbsp; &nbsp;*The clients will be serious/picky about these pages and won&#39;t accept unless they are perfect. <br><br></span><span class=\"c1\">Rough numbers of primary page on a website:</span><span>&nbsp;Not more than 3 (Except for very rare cases)<br><br></span><span class=\"c1\">Example:</span><span>&nbsp;Home, product page and collection pages for woocommerce/shopify; home, service category and service page for service websites; Home, property buy/sale listing pages for a real estate broker site and like this. <br><br><br>B. </span><span class=\"c1\">Secondary page development:</span><span class=\"c4\">&nbsp;All the relatively less important pages on the site should go to secondary pages. The characteristics include: <br> &nbsp;*They don&rsquo;t generate money necessarily, they are needed for customers&#39; trust, information and other things. For example, about us, shipping policy, FAQ, return policy etc. <br> &nbsp;*They have less than 6 sections, for example contact us. <br> &nbsp;*Require less efforts from the developers to develop them.<br> &nbsp;*In many cases, developers can directly use the template with minimum customization. For example, cart, checkout pages on ecommerce sites. </span></p><p class=\"c0\"><span>&nbsp; *The clients will be less serious about them as these pages are not super sensitive. <br><br><br>2. </span><span class=\"c1\">Cloning existing design: <br></span><span class=\"c4\">Any cloning/duplication job that needs to be done in bulk should go under this. Example include: <br><br>A. Creating 20 service pages from 1 service page just by changing the content and the picture. <br>B. Creating/uploading 300 products after the product page will be developed initially. </span></p><p class=\"c0\"><span class=\"c4\">C. Creating 70 location pages from 1 page template finalized initially. <br><br>These tasks can be assigned to junior most persons in the team as these are identical to data entry works. <br><br></span></p><p class=\"c0\"><span>3. </span><span class=\"c1\">Others: </span><span><br>Under others, there are some other work types which you can select depending on your needs. <br><br>Choosing any task as the primary task will require authorization from team lead/management and the task will be assigned to the developers after the authorization part will be done. Declare any page as a primary page carefully as we are going to set up a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. So declaring any page as a primary page when it will take almost no effort to create can give the respective developer an unfair edge over the rest of him team members. <br><br></span><span class=\"c1\">P.S. </span><span class=\"c1 c3\">Other than these, we have added a new field named page url in the subtask creation form. So from now, you have to define the urls where the developers will work when assigning a task. It&rsquo;s important that the developers don&#39;t choose urls/permalinks randomly and you declare them beforehand and they use them mandatorily. <br><br></span><span class=\"c1\">Naming Criteria<br></span><span class=\"c4\">Make sure the subtask names are self explanatory so you or anyone else from the management knows what the subtask was about from its name. <br><br>For example, if the task name is &ldquo;Homepage&rdquo;, and if you have to break it into parts for obvious reasons, the subtask names should be as below: <br>Homepage mockup design (XD)</span></p><p class=\"c0\"><span class=\"c4\">Creating a custom slider for the homepage</span></p><p class=\"c0\"><span class=\"c4\">Converting XD to wordpress for the homepage</span></p><p class=\"c0 c2\"><span class=\"c4\"></span></p><p class=\"c0 c2\"><span><br><br><br></span></p></body></html>";
+  var leadDesignerText = "<html><head><meta content=\"text/html; charset=UTF-8\" http-equiv=\"content-type\"><style type=\"text/css\">ol{margin:0;padding:0}table td,table th{padding:0}.c1{color:#000000;font-weight:400;text-decoration:none;vertical-align:baseline;font-size:11pt;font-family:\"Arial\";font-style:normal}.c3{padding-top:0pt;padding-bottom:0pt;line-height:1.0;orphans:2;widows:2;text-align:left}.c5{background-color:#ffffff;max-width:468pt;padding:72pt 72pt 72pt 72pt}.c4{height:11pt}.c0{font-weight:700}.c2{font-style:italic}.title{padding-top:0pt;color:#000000;font-size:26pt;padding-bottom:3pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}.subtitle{padding-top:0pt;color:#666666;font-size:15pt;padding-bottom:16pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}li{color:#000000;font-size:11pt;font-family:\"Arial\"}p{margin:0;color:#000000;font-size:11pt;font-family:\"Arial\"}h1{padding-top:20pt;color:#000000;font-size:20pt;padding-bottom:6pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h2{padding-top:18pt;color:#000000;font-size:16pt;padding-bottom:6pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h3{padding-top:16pt;color:#434343;font-size:14pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h4{padding-top:14pt;color:#666666;font-size:12pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h5{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;orphans:2;widows:2;text-align:left}h6{padding-top:12pt;color:#666666;font-size:11pt;padding-bottom:4pt;font-family:\"Arial\";line-height:1.15;page-break-after:avoid;font-style:italic;orphans:2;widows:2;text-align:left}</style></head><body class=\"c5 doc-content\"><p class=\"c3\"><span> Other than all the old fields, we have introduced the task type and page type fields in the new subtask creation form. Here is a guide for you so you know when to choose which one:<br><br></span><span class=\"c0\">1. New Page Design:</span><span>&nbsp;When you are going to need any new pages designed (except for cloning for example, duplicating a service page to create 20 more service pages and cases like this), you should select this one. It has 2 subdivisions in the next field:<br><br></span><span class=\"c0\">A. Primary Page Design:</span><span class=\"c1\">&nbsp;All the pages on the website that are money pages (can generate money or revenue), require significant effort to be designed and clients usually remain very picky about them and don&rsquo;t want to compromise anything in those pages are what we are calling primary pages. You can consider a page as a &ldquo;Primary Page Design&rdquo; based on the following criteria: </span></p><p class=\"c3 c4\"><span class=\"c1\"></span></p><p class=\"c3\"><span>* The homepage should consistently be counted as the primary page. In the absence of specific requirements regarding the homepage, the initial page that the designer is tasked with designing will be considered the </span><span class=\"c0\">&quot;Primary Page Design&quot;</span><span>. This applies to other significant money pages such as the product page, services page, collection page, etc.</span><span class=\"c0\"><br></span><span><br></span><span class=\"c0\">Rough numbers of the primary pages on a website:</span><span>&nbsp;Not more than 3 (Except for very rare cases)<br><br></span><span class=\"c0\">Example:</span><span>&nbsp;Home, product page and collection pages for woocommerce/shopify; home, service category and service page for service websites; Home, property buy/sale listing pages for a real estate broker site and like this.<br><br><br>B.&nbsp;</span><span class=\"c0\">Secondary Page Design:</span><span>&nbsp;Anything except the primary page design should be counted as the &ldquo;</span><span class=\"c0\">Secondary Page Design</span><span>&rdquo;<br><br><br>2.&nbsp;</span><span class=\"c0\">Cloning existing design:<br></span><span class=\"c1\">Any cloning/duplication job that needs to be done in bulk should go under this. Examples include:<br><br>A. Designing 20 service pages from 1 service page just by changing the content and the picture.<br>B. Designing 300 products after the product page will be designed initially.</span></p><p class=\"c3\"><span class=\"c1\">C. Designing 70 location pages from 1 page template finalized initially.<br><br>These tasks can be assigned to most junior persons in the team as these are identical to data entry work.<br><br></span></p><p class=\"c3\"><span>3.&nbsp;</span><span class=\"c0\">Others:</span><span><br>Under others, there are some other work types that you can select depending on your needs.<br><br>Choosing any task as the primary task will require authorization from the team lead/management and the task will be assigned to the designers after the authorization part will be done. Declare any page as a primary page carefully as we are going to set up a point system for the designers where designers will get more points for the primary pages when compared to the secondary pages. So declaring any page as a primary page when it will take almost no effort to create can give the respective designer an unfair edge over the rest of his team members.<br><br></span><span class=\"c0\">P.S.&nbsp;</span><span class=\"c0 c2\">Other than these, we have added a new field named page url in the subtask creation form. So from now, you have to define the urls where the developers will work when assigning a task. It&rsquo;s important that the designers don&#39;t choose urls/permalinks randomly and you declare them beforehand and they use them mandatorily.<br><br></span><span class=\"c0\">Naming Criteria<br></span><span class=\"c1\">Make sure the subtask names are self explanatory so you or anyone else from the management knows what the subtask was about from its name.<br><br>For example, if the task name is &ldquo;Homepage&rdquo;, and if you have to break it into parts for obvious reasons, the subtask names should be as below:<br>Homepage mockup design (XD)</span></p><p class=\"c3\"><span class=\"c1\">Creating a custom slider for the homepage</span></p><p class=\"c3\"><span class=\"c1\">Converting XD to WordPress for the homepage</span></p></body></html>";
+  var isDesignerTask = _.includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
+  console.log({
+    isDesignerTask: isDesignerTask,
+    task: task
+  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
     dangerouslySetInnerHTML: {
-      __html: html
+      __html: isDesignerTask ? leadDesignerText : leadDeveloperText
     }
   });
 }
