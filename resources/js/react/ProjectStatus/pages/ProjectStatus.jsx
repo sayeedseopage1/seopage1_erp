@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+
 
 
 import {
@@ -13,6 +13,7 @@ import Filterbar from "../components/Filter-bar/Filterbar";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
+import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetModal";
 
 const ProjectStatus = () => {
     const [search,setSearch] = React.useState('');
@@ -48,8 +49,8 @@ const ProjectStatus = () => {
 
     const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
+    const parcenatgeOfGoalsMet = pmGoalData?.data
 
-    console.log("projectStatus",projectStatus)
 
     let tableColumns = ProjectStatusTableColumns;
 
@@ -57,6 +58,7 @@ const ProjectStatus = () => {
         setPagination(paginate);
     };
     const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
+    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
     const [selectedProjectName, setSelectedProjectName] = React.useState("");
     const closeModalOne = () => {
         setIsModalOneOpen(false);
@@ -101,6 +103,17 @@ const ProjectStatus = () => {
         setSelectedProjectName(data.project_name);
     }
 
+    const handlePercentOfGoalMet = (data) => {
+        setProjectId(data.project_id);
+        setIsOpenPercentageofGoalsMetModal(true);
+        setSelectedProjectName(data.project_name);
+        setProjectDetails(data);
+        console.log("data",data)
+    }
+
+    const handleClosePercentageofGoalsMetModal = () => {
+        setIsOpenPercentageofGoalsMetModal(false);
+    }
 
 
     return (
@@ -132,6 +145,7 @@ const ProjectStatus = () => {
                         tableColumns={tableColumns}
                         refetch={refetch}
                         handlePmGoalModal={handlePmGoalModal}
+                        handlePercentOfGoalMet={handlePercentOfGoalMet}
                     />
                 </div>
             </div>
@@ -143,6 +157,13 @@ const ProjectStatus = () => {
                 closeModal={closeModalOne}
                 selectedProjectName={selectedProjectName}
                 projectDetails={projectDetails}
+            />
+            <PercentageofGoalsMetModal
+                projectDetails={projectDetails}
+                isOpen={isOpenPercentageofGoalsMetModal}
+                isLoading={isFetchingPmGoal}
+                parcenatgeOfGoalsMet={parcenatgeOfGoalsMet}
+                closeModal={handleClosePercentageofGoalsMetModal}
             />
         </React.Fragment>
     );

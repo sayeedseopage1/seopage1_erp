@@ -17,6 +17,7 @@ import { DragableColumnHeader } from "../table/DragableColumnHeader";
 import EmptyTable from "../../../global/EmptyTable";
 import ExtendRequestModal from "./ExtendRequestModal";
 import ReviewExtendRequestModal from "./ReviewExtendModal";
+import PercentageofGoalsMetModal from "./PercentageofGoalsMetModal";
 
 const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName }) => {
     const [data, setData] = React.useState(pmGoal || []);
@@ -34,6 +35,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const [isOpenExtendRequestModal, setIsOpenExtendRequestModal] = React.useState(false);
     const [isOpenResolveModal, setIsOpenResolveModal] = React.useState(false);
     const [isOpenReviewExtendRequestModal, setIsOpenReviewExtendRequestModal] = React.useState(false);
+    
     const [extendRequestData, setExtendRequestData] = React.useState({});
     //pagination start
     // Number of items to display per page
@@ -142,7 +144,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
         setIsOpenResolveModal(false);
     }
 
-    console.log(projectPmGoalId, "projectPmGoalId")
+
 
     return (
         <div className="sp1_tasks_table_wrapper">
@@ -189,6 +191,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     onClose={handleClosExtendRequestModal}
                 />
                 <ReviewExtendRequestModal
+                     projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
                     isOpen={isOpenReviewExtendRequestModal}
                     onClose={handleCloseExtendReviewModal}
@@ -206,6 +209,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     isModalOpen={isOpenResolveModal}
                     closeModal={handleCloseResolveModal}
                 />
+                
             <Toaster />
         </div>
     );

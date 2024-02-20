@@ -41,9 +41,10 @@ export const ProjectStatusTableColumns = [
     accessorKey: "project_name",
     cell: ({ row, table  }) => {
         const data = row.original;
+        const handler = table.options.meta
         return (
             <p
-              onClick={() => table.options.meta.onClickHandler(data)}
+              onClick={() => handler.onClickHandler(data)}
                 role="button"
                 className="multiline-ellipsis text-hover-underline-color pr-2 text-primary"
             >
@@ -100,9 +101,11 @@ export const ProjectStatusTableColumns = [
       id: "percentage_of_goals_met",
       header: "Percentage of Goals Met",
     //   accessorKey: "percentage_of_goals_met",
-      cell: ({ row }) => {
+      cell: ({ row, table }) => {
+            const data = row.original;
+            const handler = table.options.meta
             return (
-                <span>--</span>
+                <span onClick={() => handler.onPercentOfGoalMet(data)}>--</span>
             );
         
       }

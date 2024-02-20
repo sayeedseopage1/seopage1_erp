@@ -30,7 +30,8 @@ const ProjectStatusTable = ({
     hideColumns,
     tableColumns,
     tableData,
-    handlePmGoalModal
+    handlePmGoalModal,
+    handlePercentOfGoalMet
 }) => {
     const [data, setData] = React.useState(tableData || []);
     const [expanded, setExpanded] = React.useState({});
@@ -129,11 +130,14 @@ const ProjectStatusTable = ({
                  */
             onClickHandler: (rowData) => {
                 handlePmGoalModal(rowData);
-            }
+            },
+            onPercentOfGoalMet: (rowData) => {
+                handlePercentOfGoalMet(rowData);
+            },
         }
     })
 
-    console.log(data)
+  
 
     
     return (
