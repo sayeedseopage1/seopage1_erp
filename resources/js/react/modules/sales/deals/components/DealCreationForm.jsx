@@ -25,7 +25,6 @@ import Button from "../../../../global/Button";
 import Select from "../../../../global/Select";
 import CKEditor from "../../../../ckeditor/index";
 import { useDealCreateMutation } from "../../../../services/api/dealApiSlice";
-import { useClientListQuery } from "../../../../services/api/clientApiSlice";
 
 const DealCreationForm = ({ isOpen, close }) => {
     return (
@@ -97,6 +96,31 @@ const DealCreationFormControl = ({ close }) => {
     // input field change
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        // setShowBar(true);
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+        // if (clients) {
+        //     const filteredClients = clients?.filter((client) =>
+        //         client.user_name?.toLowerCase().includes(value?.toLowerCase())
+        //     );
+
+        //     console.log("inside clients", clients);
+
+        //     if (filteredClients.length === 0 && value.trim() !== "") {
+        //         setClientStatus("new client");
+        //     } else {
+        //         setClientStatus("existing client");
+        //     }
+
+        //     setSuggestions(filteredClients);
+        // }
+    };
+
+    const handleInputChangeUsername = (e) => {
+        const { name, value } = e.target;
         setShowBar(true);
         setFormData((prevData) => ({
             ...prevData,
@@ -148,8 +172,7 @@ const DealCreationFormControl = ({ close }) => {
 
     // rich editor field change
 
-    const handleEditorDataChange = (event) => {
-        const { name, value } = event.target;
+    const handleEditorDataChange = (value, name) => {
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
@@ -257,7 +280,7 @@ const DealCreationFormControl = ({ close }) => {
                                     type="text"
                                     name="client_username"
                                     value={formData.client_username}
-                                    onChange={handleInputChange}
+                                    onChange={handleInputChangeUsername}
                                     placeholder="Enter client username"
                                 />
                                 {suggestions.length > 0 && showBar && (
@@ -336,7 +359,7 @@ const DealCreationFormControl = ({ close }) => {
                                     type="text"
                                     name="client_name"
                                     value={formData.client_name}
-                                    onChange={handleInputChange}
+                                    onChange={handleInputChangeUsername}
                                     placeholder="Enter client name"
                                 />
                                 {clientStatus ? (
@@ -538,7 +561,6 @@ const DealCreationFormControl = ({ close }) => {
                         <div className="col-12">
                             <InputGroup>
                                 <Label>
-                                    {" "}
                                     Project Description <sup>*</sup> :{" "}
                                 </Label>
                                 <div className="sp1_st_write_comment_editor pr-0">
@@ -546,7 +568,7 @@ const DealCreationFormControl = ({ close }) => {
                                         data={formData.description}
                                         onChange={(e, editor) =>
                                             handleEditorDataChange(
-                                                editor,
+                                                editor.getData(),
                                                 "description"
                                             )
                                         }
@@ -573,7 +595,7 @@ const DealCreationFormControl = ({ close }) => {
                                         data={formData.comments}
                                         onChange={(e, editor) =>
                                             handleEditorDataChange(
-                                                editor,
+                                                editor.getData(),
                                                 "comments"
                                             )
                                         }
