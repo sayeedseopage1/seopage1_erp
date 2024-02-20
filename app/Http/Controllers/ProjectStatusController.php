@@ -10,6 +10,8 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Helper\Reply;
+use App\Models\Deal;
+use App\Models\PmGoalHistory;
 use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
 use Illuminate\Support\Facades\Validator;
@@ -165,14 +167,14 @@ class ProjectStatusController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
     public function projectStatusResolve(Request $request){
-        dd($request->all());
+        // dd($request->all());
         // \DB::beginTransaction();
         $validator = Validator::make($request->all(), [
             'rating' => 'required',
             'client_communication' => 'required',
             'client_communication_rating' => 'required',
-            'negligence_project_managers' => 'required',
-            'negligence_project_managers_rating' => 'required',
+            'negligence_pm' => 'required',
+            'negligence_pm_rating' => 'required',
 
         ]);
         if ($validator->fails()) {
@@ -186,9 +188,27 @@ class ProjectStatusController extends AccountBaseController
         $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
         $projectPG->reason_status = 2;
         $projectPG->save();
-        
 
-        // dd($projectPG)
+        $project = Project::where('id',$projectPG->project_id)->first();
+        $deal = Deal::where('id',$project->deal_id)->first();
+        $goalHistory = new PmGoalHistory();
+        $goalHistory->goal_id = $projectPG->id;
+        $goalHistory->project_id = $project->id;
+        $goalHistory->client_id = $projectPG->client_id;
+        $goalHistory->pm_id = $projectPG->pm_id;
+        $goalHistory->project_budget = $deal->actual_amount;
+        $goalHistory->currency_id = $deal->original_currency_id;
+        $goalHistory->project_category = $projectPG->project_category;
+        $goalHistory->start_date = $projectPG->goal_start_date;
+        $goalHistory->deadline = $projectPG->goal_end_date;
+        $goalHistory->description = $projectPG->description;
+        $goalHistory->reason = $projectPG->reason;
+        $goalHistory->rating = $request->rating;
+        $goalHistory->client_communication = $request->client_communication;
+        $goalHistory->client_communication_rating = $request->client_communication_rating;
+        $goalHistory->negligence_pm = $request->negligence_pm;;
+        $goalHistory->negligence_pm_rating = $request->negligence_pm_rating;
+        $goalHistory->save();
 
         return response()->json(['status'=>200]);
     }
@@ -309,5 +329,19 @@ class ProjectStatusController extends AccountBaseController
                 'data'=>$pm_goals,
                 'status'=>200
             ]);
+    }
+    public function resolvedHistory(){
+        $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
+                ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')
+                ->leftJoin('projects','pm_goal_histories.project_id','projects.id')
+                ->leftJoin('users as client','pm_goal_histories.client_id','client.id')
+                ->leftJoin('users as pm','pm_goal_histories.pm_id','pm.id')
+                ->leftJoin('currencies','pm_goal_histories.currency_id','currencies.id')
+                ->get();
+
+                return response()->json([
+                    'data' => $data,
+                    'status' => 200
+                ]);
     }
 }
