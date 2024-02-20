@@ -227,6 +227,7 @@ class ProjectStatusController extends AccountBaseController
         $goal->extended_request_status = 1;
         $goal->save();
 
+        
         if ($request->hasFile('screenshot')) {
             $files = $request->file('screenshot');
             $destinationPath = storage_path('app/public/');
@@ -247,7 +248,8 @@ class ProjectStatusController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
     public function extendImage($id){
-        $projectFile = ProjectPmGoalFile::where('id',$id)->get();
+        $projectFile = ProjectPmGoalFile::where('goal_id',$id)->get();
+        
         return response()->json([
             'status'=>200,
             'data'=>$projectFile

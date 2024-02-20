@@ -8,12 +8,14 @@ import { Flex } from "../table/ui";
 import { useCreateResolveSuggestionCommentMutation } from "../../../services/api/projectStatusApiSlice";
 import FractionalRating from "../FractionalRating";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
+import { formatAPIErrors } from "../../../utils/formatAPIErrors";
 const ResolveModal = ({
     pmGoalExtendReason,
     projectPmGoalId,
     projectDetails,
     isModalOpen,
     closeModal,
+    refetchPmGoal
 }) => {
     const [resolveModalData, setResolveModalData] = useState({
         client_communication: "",
@@ -49,23 +51,36 @@ const ResolveModal = ({
             });
             return;
         }
+
         try {
+            // here rating is hardcoded for now, it will be removed once PM confirms
             const result = await submitData({
                 project_pm_goal_id: projectPmGoalId,
-                ...resolveModalData
+                ...resolveModalData,
+                rating: 5,
             }).unwrap();
             if (result?.status) {
                 closeModal();
                 toast.success("Submission was successful");
+                refetchPmGoal();
             } else {
                 toast.error("Submission was not successful");
             }
         } catch (error) {
-            toast.error("Error submitting data");
+            if(error?.status === 422){
+                const errors = formatAPIErrors(error?.data?.errors);
+                errors.forEach(error => {
+                    toast.error(error);
+                });
+            } else {
+                console.log("error", error);
+                toast.error("Error submitting data");
+            }
         } finally {
             setEditorData("");
         }
     };
+
 
     useEffect(() => {
         if(resolveModalDataValidation.isSubmitting){

@@ -2,6 +2,8 @@ import ReactModal from "react-modal";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { useState } from "react";
 import Button from "../../../global/Button";
+import style from  "../styles/imageViewer.module.css"
+
 
 const ImageViewer = ({ imageData }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -49,6 +51,7 @@ const ImageViewer = ({ imageData }) => {
                         <div key={index} style={previewItemStyle}>
                             <img
                                 style={previewImageStyle}
+                                className={style.previewItemStyleOnHover}
                                 src={`https://seopage1storage.s3.ap-southeast-1.amazonaws.com/${file.file_name}`}
                                 alt={`Preview ${index}`}
                                 onClick={() => handleImageClick(index)}
@@ -81,6 +84,7 @@ const ImageViewer = ({ imageData }) => {
                     <div style={modalContainer}>
                         <Button
                             onClick={handlePreviousImage}
+                            disabled={selectedImage === 0 || imageData?.length === 0}
                             aria-label="Previous Image"
                         >
                             <AiOutlineArrowLeft />
@@ -104,6 +108,7 @@ const ImageViewer = ({ imageData }) => {
                                         maxWidth: isZoomed ? "none" : "100%",
                                         height: "700px",
                                         width: "800px",
+                                        borderRadius: "5px",
                                     }}
                                     onClick={toggleZoom}
                                 />
@@ -123,6 +128,7 @@ const ImageViewer = ({ imageData }) => {
 
                         <Button
                             onClick={handleNextImage}
+                            disabled={selectedImage === imageData?.length - 1 || imageData?.length === 0}
                             aria-label="Next Image"
                         >
                             <AiOutlineArrowRight />
@@ -136,26 +142,28 @@ const ImageViewer = ({ imageData }) => {
 
 const containerStyle = {
     textAlign: "center",
-    padding: "10px",
+    paddingBottom: "10px",
 };
 
 const previewContainerStyle = {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "start",
     flexWrap: "wrap",
     marginTop: "20px",
 };
 
 const previewItemStyle = {
-    margin: "0 5px 5px 0",
+    margin: "0 10px 10px 0",
 };
 
 const previewImageStyle = {
-    width: "50px",
-    height: "50px",
+    width: "80px",
+    height: "80px",
     objectFit: "cover",
     borderRadius: "5px",
     cursor: "pointer",
+    transition: "transform 0.2s",
+    border: "1px solid #e5e5e5",
 };
 
 const modalContainer = {

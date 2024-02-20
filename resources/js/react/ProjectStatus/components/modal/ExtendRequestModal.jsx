@@ -10,11 +10,11 @@ import FileUpload from "./FileUpload";
 import { useCreateExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
 
-const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData }) => {
+const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoalId }) => {
     const [extendReqestData, setExtendReqestData] = useState({
         extended_day: "",
         is_client_communication: "",
-        goal_id: extendRequestData?.goal_id,
+        goal_id: extendRequestGoalId,
     });
     const [extendReqestDataValidation, setExtendReqestDataValidation] = useState({
         extended_day: false,
@@ -22,32 +22,25 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
         isSubmitting: false,
     });
     const [selectedFiles, setSelectedFiles] = useState([]);
-    const [formError, setFormError] = React.useState(null);
     const [submitData, { isLoading }] = useCreateExtendRequestMutation();
 
  
-
+    console.log("extendRequestData", extendReqestData);
   
 
-    // check validation
-    const isValid = () => {
-        let err = new Object();
-        let errCount = 0;
-
-        if (extendedDaysData === "") {
-            (err.extendedDaysData = "This field is required!"), errCount++;
-        }
-
-        if (reasonData === "") {
-            (err.reasonData = "This field is required!"), errCount++;
-        }
-        // if (selectedFiles === "") {
-        //     (err.selectedFiles = "This field is required!"), errCount++;
-        // }
-
-        setFormError(err);
-        return !errCount;
-    };
+    const handleResetForm = () => {
+        setExtendReqestData({
+            extended_day: "",
+            is_client_communication: "",
+            goal_id: extendRequestGoalId,
+        });
+        setSelectedFiles([]);
+        setExtendReqestDataValidation({
+            extended_day: false,
+            is_client_communication: false,
+            isSubmitting: false,
+        });
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,7 +59,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
         const fd = new FormData();
         fd.append("extended_day", extendReqestData.extended_day ?? "");
         fd.append("is_client_communication", extendReqestData?.is_client_communication ?? "");
-        fd.append("goal_id", extendReqestData?.goal_id ?? "");
+        fd.append("goal_id", extendReqestData?.goal_id  ?? extendRequestGoalId);
         Array.from(selectedFiles).forEach((file) => {
             fd.append("screenshot[]", file);
         });
@@ -108,19 +101,16 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
 
     useEffect(() => {
         if(!isOpen){
-            setExtendReqestData({
-                extended_day: "",
-                is_client_communication: "",
-            })
-            setExtendReqestDataValidation({
-                extended_day: false,
-                is_client_communication: false,
-                isSubmitting: false,
-            })
+            handleResetForm();
         }
-
-
     }, [isOpen]);
+
+    useEffect(() => {
+        setExtendReqestData({
+            ...extendReqestData,
+            goal_id: extendRequestGoalId
+        });
+    }, [extendRequestGoalId]);
 
 
     return (
@@ -182,7 +172,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose,extendRequestData 
                             <input
                                 placeholder="Enter the extended days"
                                 value={extendReqestData.extended_day}
-                                error={formError?.extendedDaysData}
+                                
                                 required={true}
                                 onChange={(e) => setExtendReqestData({
                                     ...extendReqestData,

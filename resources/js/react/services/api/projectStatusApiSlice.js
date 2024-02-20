@@ -61,8 +61,8 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             ],
         }),
         getProjectExtendImages: build.query({
-            query: (project_id) =>
-                `/account/project-extend-image/${project_id}`,
+            query: (goal_id) =>
+                `/account/project-extend-image/${goal_id}`,
             providesTags: "GET_PROJECT_EXTEND_IMAGE",
         }),
         createReviewExtendRequest: build.mutation({

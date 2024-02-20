@@ -39,6 +39,7 @@ const ProjectModal = ({
                 </div>
                   <PmGoalsTable
                     projectDetails={projectDetails}
+                    refetchPmGoal={refetchPmGoal}
                     pmGoal={pmGoal}
                     tableName="pmGoalsTable"
                     isLoading={isFetchingPmGoal}
