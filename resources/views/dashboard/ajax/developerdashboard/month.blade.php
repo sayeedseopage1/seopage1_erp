@@ -102,7 +102,7 @@
             <div class="d-flex flex-wrap">
 
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
+                    <a href="#" data-toggle="modal" data-target="#avg_task_approval_lead_developer{{count($avg_no_of_submission_needed_for_app_by_lead_dev)}}">
                      
 
                         {{round($average_submission_aproval_in_this_month,2)}}
@@ -110,6 +110,8 @@
                     </a>
                    
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_lead_developer')
+
 
               
             </div>

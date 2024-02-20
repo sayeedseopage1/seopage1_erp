@@ -399,7 +399,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
 
 
 
-            $avg_no_of_submission_needed_for_app_by_lead_dev = DB::table('tasks')
+            $this->avg_no_of_submission_needed_for_app_by_lead_dev = DB::table('tasks')
             ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
             'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
             'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
@@ -412,14 +412,41 @@ $this->first_attempt_approve_task_in_this_month_client_data
             ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
             ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
             ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
-            ->where('task_history.board_column_id', 8)
-            ->where('task_history.created_at', '>=', $startDate)
-            ->where('task_history.created_at', '<', $endDate)
+            ->where('task_submissions.submission_no', 1)
+            ->where('task_submissions.created_at', '>=', $startDate)
+            ->where('task_submissions.created_at', '<', $endDate)
             ->where('task_users.user_id', $devId)
             
             ->groupBy('tasks.id')
-            ->orderBy('task_history.created_at','desc')
+            ->orderBy('task_submissions.created_at','desc')
             ->get();
+           // DB::raw('(SELECT COUNT(*) FROM task_revisions WHERE task_revisions.task_id = tasks.id AND task_revisions.created_at <= task_history.created_at) AS revision_count')
+            
+          
+
+           $this->no_of_tasks_revision_given_by_lead_dev = DB::table('tasks')
+              ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
+              'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+              'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
+              
+              )
+              ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+              ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+              ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+              ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+              ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+              ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+              ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+              ->where('task_submissions.submission_no', 1)
+              ->where('task_submissions.created_at', '>=', $startDate)
+              ->where('task_submissions.created_at', '<', $endDate)
+              ->where('task_users.user_id', $devId)
+              ->where('task_history.board_column_id', 1)
+              
+              ->groupBy('tasks.id')
+              ->orderBy('task_submissions.created_at','desc')
+              ->count();
+ 
 
 
         // --------------Average number of attempts needed for approval(in cycle) Client-----------------------------//
@@ -1600,11 +1627,11 @@ $this->first_attempt_approve_task_in_this_month_client_data
                 $this->average_submission_aproval_in_this_month = 0;
             }
 
-            //---------------- Avg number og attempts needed for approval by lead developer table view------------------------------// 
+            //---------------- Avg number of attempts needed for approval by lead developer table view------------------------------// 
 
 
 
-            $avg_no_of_submission_needed_for_app_by_lead_dev = DB::table('tasks')
+            $this->avg_no_of_submission_needed_for_app_by_lead_dev = DB::table('tasks')
             ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
             'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
             'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
@@ -1617,15 +1644,39 @@ $this->first_attempt_approve_task_in_this_month_client_data
             ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
             ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
             ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
-            ->where('task_history.board_column_id', 8)
-            ->where('task_history.created_at', '>=', $startDate)
-            ->where('task_history.created_at', '<', $endDate)
+            ->where('task_submissions.submission_no', 1)
+            ->where('task_submissions.created_at', '>=', $startDate)
+            ->where('task_submissions.created_at', '<', $endDate)
             ->where('task_users.user_id', $devId)
             
             ->groupBy('tasks.id')
-            ->orderBy('task_history.created_at','desc')
+            ->orderBy('task_submissions.created_at','desc')
             ->get();
-           // dd($avg_no_of_submission_needed_for_app_by_lead_dev);
+              $this->no_of_tasks_revision_given_by_lead_dev = DB::table('tasks')
+              ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
+              'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+              'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
+              
+              )
+              ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+              ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+              ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+              ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+              ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+              ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+              ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+              ->where('task_submissions.submission_no', 1)
+              ->where('task_submissions.created_at', '>=', $startDate)
+              ->where('task_submissions.created_at', '<', $endDate)
+              ->where('task_users.user_id', $devId)
+              ->where('task_history.board_column_id', 1)
+              
+              ->groupBy('tasks.id')
+              ->orderBy('task_submissions.created_at','desc')
+              ->count();
+    
+            
+          // dd($this->avg_no_of_submission_needed_for_app_by_lead_dev);
 
 
             // --------------Average number of attempts needed for approval(in cycle) Client-----------------------------//
