@@ -351,22 +351,32 @@ $this->first_attempt_approve_task_in_this_month_client_data
 
         $number_of_tasks_approved = DB::table('tasks')
         ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-        ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
+        ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
         ->select('tasks.id')
-        ->where('task_approves.created_at', '>=', $startDate)
-        ->where('task_approves.created_at', '<', $endDate)
+        ->where('task_history.created_at', '>=', $startDate)
+        ->where('task_history.created_at', '<', $endDate)
+        ->where('task_history.board_column_id',8)
         ->where('task_users.user_id', $devId)
+        ->groupBy('tasks.id')
         ->get();
+      //  dd($number_of_tasks_approved);
+       
         $first_attempt_approve_task = 0;
         $count_submission_per_approval = 0;
         $total_approval = 0;
         foreach ($number_of_tasks_approved as $task) {
 
-            $min_approve_date= DB::table('task_approves')
-             ->select('task_approves.created_at')
-             ->where('task_approves.task_id',$task->id)
-             ->orderBy('task_approves.created_at', 'asc')
+            $min_approve_date= DB::table('task_history')
+             ->select('task_history.created_at')
+             ->where('task_history.task_id',$task->id)
+             ->where('task_history.board_column_id',8)
+             ->orderBy('task_history.created_at', 'asc')
              ->first();
+            //  if($min_approve_date == null)
+            //  {
+            //     dd($task->id);
+            //  }
+           
 
             $number_of_tasks = DB::table('task_submissions')
             ->select('task_submissions.submission_no')
@@ -375,6 +385,8 @@ $this->first_attempt_approve_task_in_this_month_client_data
             ->distinct('task_submissions.created_at')
             ->orderBy('task_submissions.id', 'DESC')
             ->first();
+           
+            //dd($number_of_tasks);
             $max_submission = $number_of_tasks->submission_no;
             $count_submission_per_approval = $count_submission_per_approval + $max_submission;
             $total_approval++;
@@ -1520,43 +1532,53 @@ $this->first_attempt_approve_task_in_this_month_client_data
             // --------------Average number of attempts needed for approval(in cycle) lead developer-----------------------------//
 
             $number_of_tasks_approved = DB::table('tasks')
-            ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->join('task_approves', 'tasks.id', '=', 'task_approves.task_id')
-            ->select('tasks.id')
-            ->where('task_approves.created_at', '>=', $startDate)
-            ->where('task_approves.created_at', '<', $endDate)
-            ->where('task_users.user_id', $devId)
-            ->get();
-            $first_attempt_approve_task = 0;
-            $count_submission_per_approval = 0;
-            $total_approval = 0;
-            foreach ($number_of_tasks_approved as $task) {
+        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+        ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+        ->select('tasks.id')
+        ->where('task_history.created_at', '>=', $startDate)
+        ->where('task_history.created_at', '<', $endDate)
+        ->where('task_history.board_column_id',8)
+        ->where('task_users.user_id', $devId)
+        ->groupBy('tasks.id')
+        ->get();
+      //  dd($number_of_tasks_approved);
+       
+        $first_attempt_approve_task = 0;
+        $count_submission_per_approval = 0;
+        $total_approval = 0;
+        foreach ($number_of_tasks_approved as $task) {
 
-                $min_approve_date= DB::table('task_approves')
-                 ->select('task_approves.created_at')
-                 ->where('task_approves.task_id',$task->id)
-                 ->orderBy('task_approves.created_at', 'asc')
-                 ->first();
+            $min_approve_date= DB::table('task_history')
+             ->select('task_history.created_at')
+             ->where('task_history.task_id',$task->id)
+             ->where('task_history.board_column_id',8)
+             ->orderBy('task_history.created_at', 'asc')
+             ->first();
+            //  if($min_approve_date == null)
+            //  {
+            //     dd($task->id);
+            //  }
+           
 
-                $number_of_tasks = DB::table('task_submissions')
-                ->select('task_submissions.submission_no')
-                ->where('task_submissions.task_id', $task->id)
-                ->where('task_submissions.created_at','<', $min_approve_date->created_at)
-                ->distinct('task_submissions.created_at')
-                ->orderBy('task_submissions.id', 'DESC')
-                ->first();
-                $max_submission = $number_of_tasks->submission_no;
-                $count_submission_per_approval = $count_submission_per_approval + $max_submission;
-                $total_approval++;
-            }
-            if ($total_approval > 0) {
-                $this->average_submission_aproval_in_this_month = ($count_submission_per_approval / $total_approval) +1;
-            } else {
-                $this->average_submission_aproval_in_this_month = 0;
-            }
-
-
-
+            $number_of_tasks = DB::table('task_submissions')
+            ->select('task_submissions.submission_no')
+            ->where('task_submissions.task_id', $task->id)
+            ->where('task_submissions.created_at','<', $min_approve_date->created_at)
+            ->distinct('task_submissions.created_at')
+            ->orderBy('task_submissions.id', 'DESC')
+            ->first();
+           
+            //dd($number_of_tasks);
+            $max_submission = $number_of_tasks->submission_no;
+            $count_submission_per_approval = $count_submission_per_approval + $max_submission;
+            $total_approval++;
+        }
+        if ($total_approval > 0) {
+            $this->average_submission_aproval_in_this_month = ($count_submission_per_approval / $total_approval) +1;
+        } else {
+            $this->average_submission_aproval_in_this_month = 0;
+        }
+        
             // --------------Average number of attempts needed for approval(in cycle) Client-----------------------------//
 
             $number_of_tasks_approved = DB::table('tasks')

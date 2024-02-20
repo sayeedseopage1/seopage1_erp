@@ -606,7 +606,6 @@
             </x-table>
         </x-cards.data>
     </div>
-    <!-- CARD BODY START -->
 
 </div>
 <script>
