@@ -23,9 +23,6 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
     });
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [submitData, { isLoading }] = useCreateExtendRequestMutation();
-
- 
-    console.log("extendRequestData", extendReqestData);
   
 
     const handleResetForm = () => {
@@ -117,6 +114,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
         <ReactModal
             style={customStyles}
             isOpen={isOpen}
+            ariaHideApp={false}
             onRequestClose={onClose}
         >
             <div

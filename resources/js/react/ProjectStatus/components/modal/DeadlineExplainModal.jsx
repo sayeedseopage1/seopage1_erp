@@ -34,8 +34,9 @@ const DeadlineExplainModal = ({
         <ReactModal
             style={customStyles}
             isOpen={isModalTwoOpen}
+            ariaHideApp={false}
             onRequestClose={closeModalTwo}
-            contentLabel="Project Details"
+            contentLabel="Deadline Explanation"
         >
             <div
                 style={{

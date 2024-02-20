@@ -12,7 +12,14 @@ import ImageViewer from "./ImageViewer";
 import RefreshButton from "../RefreshButton";
 import { toast } from "react-toastify";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
-const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGoalId,refetchPmGoal, reviewExtendRequestData }) => {
+const ReviewExtendRequestModal = ({ 
+    projectDetails, 
+    isOpen, 
+    onClose, 
+    projectPmGoalId, 
+    refetchPmGoal, 
+    reviewExtendRequestData 
+}) => {
     const [reviewExtendState, setReviewExtendState] = useState({
         extended_day: reviewExtendRequestData?.extended_day,
         comment: "",
@@ -48,7 +55,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
 
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(reviewExtendState);
-
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
                 ...validation,
@@ -56,7 +62,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
             });
             return;
         }
-
 
         const fd = new FormData();
         fd.append("extended_day", reviewExtendState.extended_day ?? "");
@@ -69,8 +74,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-
-        
         submitData(fd)
             .unwrap()
             .then((res) => {
@@ -80,7 +83,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 handleResetForm();
             })
             .catch((err) => {
-                console.log("err", err);
                 if (err?.status === 422) {
                     toast.error("Please fill up all required fields");
                 } else {
@@ -92,7 +94,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
     const handleReject = async (e) => {
         e.preventDefault();
         const fd = new FormData();
-
         fd.append("extended_day", reviewExtendStateValidation.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
         fd.append("project_id", reviewExtendState?.id ?? "");
@@ -147,7 +148,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
         
     }, [reviewExtendRequestData]);
 
-    console.log("reviewExtendState", reviewExtendState)
 
     return (
         <ReactModal

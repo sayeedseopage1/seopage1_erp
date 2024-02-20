@@ -100,8 +100,9 @@ const ResolveModal = ({
         <ReactModal
             style={customStyles}
             isOpen={isModalOpen}
+            ariaHideApp={false}
             onRequestClose={closeModal}
-            contentLabel="Project Details"
+            contentLabel="Resolve"
         >
             <div
                 style={{

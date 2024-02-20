@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactModal from "react-modal";
 
 
@@ -15,11 +15,19 @@ const ProjectModal = ({
     isOpen,
     closeModal,
 }) => {
+
+    useEffect(() => {
+        // Clean up when component unmounts
+        return () => {
+            ReactModal.setAppElement(null);
+        };
+    }, []);
     return (
         <>
             <ReactModal
                 style={customStyles}
                 isOpen={isOpen}
+                ariaHideApp={false}
                 onRequestClose={closeModal}
                 contentLabel="Project Details"
             >

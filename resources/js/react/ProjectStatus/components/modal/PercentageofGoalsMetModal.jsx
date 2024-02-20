@@ -9,8 +9,9 @@ const PercentageofGoalsMetModal = ({isOpen, closeModal,projectDetails, parcenatg
     <ReactModal
       style={customStyles}
       isOpen={isOpen}
+      ariaHideApp={false}
       onRequestClose={closeModal}
-      contentLabel="Project Details"
+      contentLabel="Percentage of Goals Met"
     >
                 <div
                   className='d-flex justify-content-between mb-3'
