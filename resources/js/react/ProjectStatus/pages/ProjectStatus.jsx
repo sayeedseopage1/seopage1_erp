@@ -54,9 +54,7 @@ const ProjectStatus = () => {
 
     let tableColumns = ProjectStatusTableColumns;
 
-    const onPageChange = (paginate) => {
-        setPagination(paginate);
-    };
+
     const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
     const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
     const [selectedProjectName, setSelectedProjectName] = React.useState("");
@@ -68,24 +66,7 @@ const ProjectStatus = () => {
     // On filter
     const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
-        const queryString = new URLSearchParams(queryObject).toString();
         setFilter(queryObject);
-        if(filter?.start_date && filter?.end_date){
-            await getTasks(`?${queryString}`)
-            .unwrap()
-            .then(res => {
-                let _data = res?.tasks
-                if(auth.getRoleId() === 4){
-                    _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
-                }else if(auth.getRoleId() === 1 || auth.getRoleId() === 4 || auth.getRoleId() === 8){
-                    _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
-                }
-
-                const data = _.orderBy(_data, 'due_date', 'desc');
-                dispatch(storeTasks({tasks: data}))
-            })
-            .catch(err => console.log(err))
-        }
     }
     
 

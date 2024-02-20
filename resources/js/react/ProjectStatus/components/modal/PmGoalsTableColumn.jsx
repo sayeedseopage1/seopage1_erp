@@ -121,10 +121,10 @@ export const PmGoalsTableColumns = [
                         </Switch.Case>
                         <Switch.Case condition={user?.roleId === 1 && data.reason}>
                             <Switch>
-                                <Switch.Case condition={data.admin_comment && data.suggestion}>
-                                    <div  className={`${styles.action} f-12`}> Resolved </div>
+                                <Switch.Case condition={data.reason_status == 2}>
+                                    <div  className={`${styles.action} ${styles.resolved}f-12`}> Resolved </div>
                                 </Switch.Case>
-                                <Switch.Case condition={!data.admin_comment && !data.suggestion}>
+                                <Switch.Case condition={data.reason_status === 0}>
                                     <div onClick={() => handle.resolveExplainClick(data)} className={`${styles.action} ${styles.resolve} f-12`}> Resolve </div>
                                 </Switch.Case>
                             </Switch>

@@ -12,10 +12,11 @@ import ImageViewer from "./ImageViewer";
 import RefreshButton from "../RefreshButton";
 import { toast } from "react-toastify";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
-const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGoalId }) => {
+const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGoalId,refetchPmGoal, reviewExtendRequestData }) => {
     const [reviewExtendState, setReviewExtendState] = useState({
-        extended_day: projectDetails?.extended_day,
+        extended_day: reviewExtendRequestData?.extended_day,
         comment: "",
+        goal_id: reviewExtendRequestData?.id,
     });
     const [reviewExtendStateValidation, setReviewExtendStateValidation] = useState({
         extended_day: false,
@@ -23,7 +24,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
         isSubmitting: false,
     })
     const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
-        projectDetails?.id
+        reviewExtendRequestData?.id
     );
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 
@@ -31,7 +32,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
 
     const handleResetForm = () => {
         setReviewExtendState({
-            extended_day: projectDetails?.extended_day,
+            extended_day: null,
             comment: "",
         });
         setReviewExtendStateValidation({
@@ -43,20 +44,10 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
 
     const handleAccept = async (e) => {
         e.preventDefault();
-
-        const isEmpty = isStateAllHaveValue({
-            project_id: projectDetails?.id,
-            ...reviewExtendState
-        });
-
-
+        const isEmpty = isStateAllHaveValue(reviewExtendState);
 
         if (isEmpty) {
-            const validation = markEmptyFieldsValidation({
-                    project_pm_goal_id: projectPmGoalId,
-                    ...reviewExtendState
-            });
-
+            const validation = markEmptyFieldsValidation(reviewExtendState);
 
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
@@ -70,7 +61,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
         const fd = new FormData();
         fd.append("extended_day", reviewExtendState.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
-        fd.append("project_id", projectDetails?.id ?? "");
+        fd.append("goal_id", reviewExtendState.goal_id ?? "");
         fd.append("status", "1");
         fd.append(
             "_token",
@@ -79,12 +70,12 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 .getAttribute("content")
         );
 
-        console.log("fd", fd);
-
+        
         submitData(fd)
             .unwrap()
             .then((res) => {
                 onClose();
+                refetchPmGoal();
                 toast.success("Submission was successful");
                 handleResetForm();
             })
@@ -104,7 +95,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
 
         fd.append("extended_day", reviewExtendStateValidation.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
-        fd.append("project_id", projectDetails?.id ?? "");
+        fd.append("project_id", reviewExtendState?.id ?? "");
         fd.append("status", "0");
         fd.append(
             "_token",
@@ -131,10 +122,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
 
     useEffect(() => {
         if(reviewExtendStateValidation.isSubmitting){
-            const validation = markEmptyFieldsValidation({
-                project_pm_goal_id: projectPmGoalId,
-                ...reviewExtendState
-            });
+            const validation = markEmptyFieldsValidation(reviewExtendState);
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
                 ...validation
@@ -149,6 +137,17 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
         }
     }, [isOpen]);
 
+
+    useEffect(() => {
+            setReviewExtendState({
+                extended_day: reviewExtendRequestData?.extended_day,
+                comment: "",
+                goal_id: reviewExtendRequestData?.id,
+            });
+        
+    }, [reviewExtendRequestData]);
+
+    console.log("reviewExtendState", reviewExtendState)
 
     return (
         <ReactModal
@@ -197,7 +196,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                         <div className="col-8">
                         <input 
                             className="p-1 rounded"
-                            defaultValue={reviewExtendState?.extended_day}
+                            defaultValue={reviewExtendState?.extended_day }
                             placeholder="Enter extended days"
                             onChange={(e) => setReviewExtendState({
                                 ...reviewExtendState,
