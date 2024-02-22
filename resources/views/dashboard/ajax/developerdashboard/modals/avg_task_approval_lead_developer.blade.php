@@ -25,6 +25,7 @@
                   <th scope="col">status</th>
                   <th scope="col">First Submission Date</th>
                   <th scope="col">Last Approval Date</th>
+                  <th scope="col">Revision Count</th>
                 
                 </tr>
               </thead>
@@ -67,6 +68,11 @@
                       {{$row->task_approval_date}}
                 
               </td>
+              <td>
+                         
+                {{$row->revision_count}}
+          
+        </td>
                     
                   </tr>
                   @endforeach

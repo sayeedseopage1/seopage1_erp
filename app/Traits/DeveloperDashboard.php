@@ -17,6 +17,7 @@ use App\Models\TaskType;
 
 use Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\TaskHistory;
 
 trait DeveloperDashboard
 {
@@ -420,6 +421,10 @@ $this->first_attempt_approve_task_in_this_month_client_data
             ->groupBy('tasks.id')
             ->orderBy('task_submissions.created_at','desc')
             ->get();
+            foreach($this->avg_no_of_submission_needed_for_app_by_lead_dev as $revision)
+            {
+                $revision->revision_count= TaskHistory::where('task_id',$revision->id)->where('board_column_id',1)->whereDate('created_at','<=',$revision->task_approval_date)->count();
+            }
            // DB::raw('(SELECT COUNT(*) FROM task_revisions WHERE task_revisions.task_id = tasks.id AND task_revisions.created_at <= task_history.created_at) AS revision_count')
             
           
@@ -852,7 +857,8 @@ $this->first_attempt_approve_task_in_this_month_client_data
             'cl.name as cl_name',
             'tasks.board_column_id',
             'taskboard_columns.column_name as column_name',
-            'taskboard_columns.label_color'
+            'taskboard_columns.label_color', 
+            'tasks.updated_at as task_complete_date'
         )
     ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
     ->join('task_submissions', 'tasks.id','=', 'task_submissions.task_id')
@@ -866,6 +872,10 @@ $this->first_attempt_approve_task_in_this_month_client_data
     ->where('task_users.user_id', $devId)
     ->groupBy('tasks.id')
     ->get();
+    foreach($this->average_number_of_tasks_approved_client_data as $revision)
+    {
+        $revision->revision_count= TaskHistory::where('task_id',$revision->id)->where('board_column_id',1)->whereDate('created_at','<=',$revision->task_complete_date)->count();
+    }
 
     $this->no_of_tasks_revision_given_by_client = DB::table('tasks')
         ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
@@ -894,10 +904,12 @@ $this->first_attempt_approve_task_in_this_month_client_data
       $revision_task_id_store = [];
       $total_task_assigned = DB::table('tasks')
           ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+          ->leftJoin('task_revisions','task_revisions.task_id','tasks.id')
           ->select('tasks.id')
-          ->where('tasks.created_at', '>=', $startDate)
-          ->where('tasks.created_at', '<', $endDate)
+          ->where('task_revisions.created_at', '>=', $startDate)
+          ->where('task_revisions.created_at', '<', $endDate)
           ->where('task_users.user_id', $devId)
+          ->groupBy('tasks.id')
           ->get();
 
       $assign_task_count_for_revision=0;
@@ -1702,6 +1714,10 @@ $this->first_attempt_approve_task_in_this_month_client_data
             ->groupBy('tasks.id')
             ->orderBy('task_submissions.created_at','desc')
             ->get();
+            foreach($this->avg_no_of_submission_needed_for_app_by_lead_dev as $revision)
+            {
+                $revision->revision_count= TaskHistory::where('task_id',$revision->id)->where('board_column_id',1)->whereDate('created_at','<=',$revision->task_approval_date)->count();
+            }
               $this->no_of_tasks_revision_given_by_lead_dev = DB::table('tasks')
               ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
               'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
@@ -2102,6 +2118,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
                     'tasks.board_column_id',
                     'taskboard_columns.column_name as column_name',
                     'taskboard_columns.label_color'
+                   
                 )
             ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
             ->join('task_submissions', 'tasks.id','=', 'task_submissions.task_id')
@@ -2130,7 +2147,8 @@ $this->first_attempt_approve_task_in_this_month_client_data
                 'cl.name as cl_name',
                 'tasks.board_column_id',
                 'taskboard_columns.column_name as column_name',
-                'taskboard_columns.label_color'
+                'taskboard_columns.label_color', 
+                'tasks.updated_at as task_complete_date',
             )
         ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
         ->join('task_submissions', 'tasks.id','=', 'task_submissions.task_id')
@@ -2144,16 +2162,22 @@ $this->first_attempt_approve_task_in_this_month_client_data
         ->where('task_users.user_id', $devId)
         ->groupBy('tasks.id')
         ->get();
+        foreach($this->average_number_of_tasks_approved_client_data as $revision)
+            {
+                $revision->revision_count= TaskHistory::where('task_id',$revision->id)->where('board_column_id',1)->whereDate('created_at','<=',$revision->task_complete_date)->count();
+            }
 
           //---------------------------------Percentage of Revision Data----------------------------------------------------//
           $revision_task_id_store = [];
           $total_task_assigned = DB::table('tasks')
-              ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
-              ->select('tasks.id')
-              ->where('tasks.created_at', '>=', $startDate)
-              ->where('tasks.created_at', '<', $endDate)
-              ->where('task_users.user_id', $devId)
-              ->get();
+          ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+          ->leftJoin('task_revisions','task_revisions.task_id','tasks.id')
+          ->select('tasks.id')
+          ->where('task_revisions.created_at', '>=', $startDate)
+          ->where('task_revisions.created_at', '<', $endDate)
+          ->where('task_users.user_id', $devId)
+          ->groupBy('tasks.id')
+          ->get();
   
           $assign_task_count_for_revision=0;
           $number_of_total_revision_for_this_month=0;
@@ -2242,6 +2266,12 @@ $this->first_attempt_approve_task_in_this_month_client_data
 
 
           $this->revision_task_data = $revision_task_data;
+
+          //---------------------------Percentage of tasks with revision sayeed code --------------------------// 
+        //   $total_tasks_with_revisions = DB::table('tasks')
+        //   ->Join('task_history','task_history.task_id','tasks.id')
+
+
 
            //-----------Percentage of tasks where deadline was missed table-----------------//
            $deadline_missed_task_id=[];

@@ -23,6 +23,7 @@
                     <th scope="col">Submission Date</th>
                     <th scope="col">Deadline</th>
                     <th scope="col">status</th>
+                    <th scope="col">Revision Count</th>
                   
                   </tr>
                 </thead>
@@ -54,6 +55,9 @@
                         <td>{{$row->due_date}}</td>
                         <td>
                           <span style="color: {{$row->label_color}}"> {{$row->column_name}}</span>
+                        </td>
+                        <td>
+                          <span> {{$row->revision_count}}</span>
                         </td>
                       
                     </tr>
