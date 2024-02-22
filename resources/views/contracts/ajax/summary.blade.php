@@ -249,10 +249,15 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
         </h3>
         <span class="mt-5 d-flex justify-content-start">
             @php
-        $award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->where('status',1)->first();
+            $award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->where('status',1)->first();
+            $pending_award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->first();
             @endphp
             @if($award_time_request == null)
-            <button class="btn btn-success award_time_incress">Request for time extension</button>
+                <button class="btn btn-success award_time_incress">Request for time extension</button>
+            @else
+                @if($pending_award_time_request->status == 0)
+                <button class="btn btn-success">Pending</button>
+                @endif
             @endif
 
         </span>
