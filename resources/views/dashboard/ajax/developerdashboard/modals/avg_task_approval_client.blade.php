@@ -3,11 +3,11 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title"><h4>Received Tasks: {{$number_of_tasks_received}}</h4>
-            <h4>Primary Pages: {{$number_of_tasks_received_primary_page}}</h4> 
-           <h4>Secondary Pages: {{$number_of_tasks_received_secondary_page}} </h4>  
-           <h4>Others:  {{$number_of_tasks_received - ($number_of_tasks_received_primary_page + $number_of_tasks_received_secondary_page)}}</h4>  
-             </div>
+          <div class="modal-title"><h4>Submitted Tasks: {{$submit_number_of_tasks_in_this_month}}</h4>
+           
+            <h4>Tasks where there was Revisions given by Client: {{$no_of_tasks_revision_given_by_lead_dev}} </h4>  
+          
+              </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

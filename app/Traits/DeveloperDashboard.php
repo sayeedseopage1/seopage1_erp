@@ -490,6 +490,31 @@ $this->first_attempt_approve_task_in_this_month_client_data
         }
         // dd($this->average_submission_aproval_in_this_month_client);
 
+        $this->no_of_tasks_revision_given_by_client = DB::table('tasks')
+        ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
+        'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+        'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
+        
+        )
+        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+        ->join('task_revisions', 'tasks.id', '=', 'task_revisions.task_id')
+        ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+        ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+        ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+        ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+        ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+        ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+        
+        ->where('task_submissions.created_at', '>=', $startDate)
+        ->where('task_submissions.created_at', '<', $endDate)
+        ->where('task_users.user_id', $devId)
+        ->where('task_revisions.revision_status', 'Client Revision')
+        
+        ->groupBy('tasks.id')
+        ->orderBy('task_submissions.created_at','desc')
+        ->count();
+
+
 
         //---------------------------------Percentage of Revision----------------------------------------------------//
 
@@ -841,6 +866,30 @@ $this->first_attempt_approve_task_in_this_month_client_data
     ->where('task_users.user_id', $devId)
     ->groupBy('tasks.id')
     ->get();
+
+    $this->no_of_tasks_revision_given_by_client = DB::table('tasks')
+        ->select('tasks.id','tasks.heading','tasks.client_name','tasks.due_date','tasks.created_at as task_creation_date','task_history.created_at as task_approval_date',
+        'client.name as clientName','client.id as clientId','cl.name as cl_name','cl.id as cl_id',  DB::raw('MIN(task_submissions.created_at) as task_submission_date'),
+        'taskboard_columns.column_name','taskboard_columns.label_color as label_color'
+        
+        )
+        ->join('task_users', 'tasks.id', '=', 'task_users.task_id')
+        ->join('task_revisions', 'tasks.id', '=', 'task_revisions.task_id')
+        ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+        ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+        ->leftJoin('task_submissions', 'tasks.id', '=', 'task_submissions.task_id')
+        ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+        ->leftJoin('users as cl', 'cl.id', '=', 'tasks.client_id')
+        ->join('task_history', 'tasks.id', '=', 'task_history.task_id')
+        
+        ->where('task_submissions.created_at', '>=', $startDate)
+        ->where('task_submissions.created_at', '<', $endDate)
+        ->where('task_users.user_id', $devId)
+        ->where('task_revisions.revision_status', 'Client Revision')
+        
+        ->groupBy('tasks.id')
+        ->orderBy('task_submissions.created_at','desc')
+        ->count();
       //---------------------------------Percentage of Revision Data----------------------------------------------------//
       $revision_task_id_store = [];
       $total_task_assigned = DB::table('tasks')
