@@ -2670,6 +2670,14 @@ class TaskController extends AccountBaseController
                  abort(403);
             }
         }
+        if(Auth::user()->role_id == 6)
+        {
+            $task_check= Task::where('id',$id)->first();
+            if($task_check->added_by != Auth::id())
+            {
+                abort(403);
+            }
+        }
         $viewTaskFilePermission = user()->permission('view_task_files');
         $viewSubTaskPermission = user()->permission('view_sub_tasks');
         $this->viewTaskCommentPermission = user()->permission('view_task_comments');
