@@ -163,7 +163,9 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         [users]
     );
 
-    console.log("suggestion data", suggestions);
+    // console.log("suggestion data", suggestions);
+
+    console.log("editor state", renderToHtml(editorState));
 
     // handle on mention
     const handleMention = (...arg) => {
