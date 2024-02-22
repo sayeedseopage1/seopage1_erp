@@ -20,9 +20,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -51,9 +49,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -62,21 +58,19 @@
             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt by Lead Developer</h5>
             <div class="d-flex flex-wrap">
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task{{$first_attempt_approve_task_in_this_month}}">
-                       {{$first_attempt_approve_task_in_this_month}}
+                    <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task{{count($first_attempt_approve_task_in_this_month)}}">
+                       {{count($first_attempt_approve_task_in_this_month)}}
                     </a>
                   
                 </p>
-                {{-- @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data')
-             --}}
+                @include('dashboard.ajax.developerdashboard.modals.first_attempt_approve_task_data')
+            
 
               
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -88,8 +82,8 @@
             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of approved tasks on 1st attempt by Client</h5>
             <div class="d-flex flex-wrap">
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task_client{{$first_attempt_approve_task_in_this_month_client}}">
-                        {{$first_attempt_approve_task_in_this_month_client}}
+                    <a href="#" data-toggle="modal" data-target="#first_attempt_approve_task_client{{count($first_attempt_approve_task_in_this_month_client_data)}}">
+                        {{count($first_attempt_approve_task_in_this_month_client_data)}}
                     </a>
                   
                 </p>
@@ -98,9 +92,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -110,7 +102,7 @@
             <div class="d-flex flex-wrap">
 
                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                    <a href="#" data-toggle="modal" data-target="#">
+                    <a href="#" data-toggle="modal" data-target="#avg_task_approval_lead_developer{{count($avg_no_of_submission_needed_for_app_by_lead_dev)}}">
                      
 
                         {{round($average_submission_aproval_in_this_month,2)}}
@@ -118,13 +110,13 @@
                     </a>
                    
                 </p>
+                @include('dashboard.ajax.developerdashboard.modals.avg_task_approval_lead_developer')
+
 
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -143,9 +135,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -169,9 +159,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-3">
@@ -191,9 +179,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-3">
@@ -216,9 +202,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-3">
@@ -241,9 +225,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -272,9 +254,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -292,9 +272,7 @@
                 @include('dashboard.ajax.developerdashboard.modals.percentage_task_deadline_missed')              
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -312,9 +290,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -341,9 +317,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -367,9 +341,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-4">
@@ -391,9 +363,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -428,9 +398,7 @@
               
             </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 <div class="col-md-7">
@@ -466,9 +434,7 @@
                   
                 </div>
         </div>
-        <div class="d-block">
-            <i class="fa fa-list text-lightest f-27"></i>
-        </div>
+        
     </div>
 </div>
 
@@ -642,7 +608,6 @@
             </x-table>
         </x-cards.data>
     </div>
-    <!-- CARD BODY START -->
 
 </div>
 <script>

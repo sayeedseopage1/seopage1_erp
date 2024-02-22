@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from "styled-components"; 
 // container
 export const TableContainer = styled.div`
     width: 100%;

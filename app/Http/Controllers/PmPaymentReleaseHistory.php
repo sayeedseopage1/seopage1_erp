@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use DateTime;
+use Auth;
 
 class PmPaymentReleaseHistory extends AccountBaseController
 {
@@ -167,6 +168,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
         $assignEndDate = $endDate->addDay();
        
         $pmId = $request->pmID;
+        
         if($request->startDate == null)
         {
             $startDate = Carbon::now()->startofMonth();
@@ -183,6 +185,11 @@ class PmPaymentReleaseHistory extends AccountBaseController
         {
            
             $pmId = 209;
+        }
+        if(Auth::user()->role_id == 4)
+        {
+            $pmId= Auth::id();
+
         }
       // dd($startDate, $assignEndDate,$pmId );
        

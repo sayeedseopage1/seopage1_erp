@@ -7,7 +7,7 @@ import {
     useLazyGetTaskDetailsQuery,
     useLazyGetUserTrackTimeQuery,
     useStartTimerApiMutation,
-    useStopTimerApiMutation
+    useStopTimerApiMutation,
 } from "../../../services/api/SingleTaskPageApi";
 import { setTaskStatus } from "../../../services/features/subTaskSlice";
 import { CompareDate } from "../../../utils/dateController";
@@ -16,9 +16,6 @@ import Button from "../../components/Button";
 import { workingReportError } from "../helper/timer-start-working-report-error-toaster";
 import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
 import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
-
-
-
 
 // component
 const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
@@ -32,11 +29,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const navigate = useNavigate();
 
-
     const timerStatus = task?.ranningTimer?.status;
-    const taskRunning = useMemo(() => timerStatus, [timerStatus])
-
-
+    const taskRunning = useMemo(() => timerStatus, [timerStatus]);
 
     // check timer is already running
     useEffect(() => {
@@ -111,14 +105,13 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
             const workReport = await checkWorkReport().unwrap();
 
             // if submit all required report start timer
-            if(
-                workReport&&
+            if (
+                workReport &&
                 workReport.data &&
                 workReport.data.check_in_check_out.check_in_status &&
                 workReport.data.daily_task_report.daily_submission_status &&
                 workReport.data.hours_log_report.hours_log_report_status
-            ){
-
+            ) {
                 // request for start time
                 await startTimerApi({
                     task_id: task?.id,
@@ -128,17 +121,17 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 })
                     .unwrap()
                     .then((res) => {
-                          if (res?.status === "success" || res?.status === 200) {
+                        if (res?.status === "success" || res?.status === 200) {
                             setTimerStart(true);
                             setTimerId(res?.id);
                             dispatch(setTaskStatus(res?.task_status));
                             Toast.fire({
-                                icon: 'success',
+                                icon: "success",
                                 title: _.startCase(res?.message),
                             });
                         } else {
                             Toast.fire({
-                                icon: 'warning',
+                                icon: "warning",
                                 title: _.startCase(res?.message),
                             });
                         }
@@ -146,21 +139,17 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     .catch((err) => {
                         console.log(err);
                     });
-
-            }else{
+            } else {
                 workingReportError();
             }
-
-
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
 
         return;
-
     };
 
-    const isDesignerTask = _.includes([5, 7], task?.category?.id); 
+    const isDesignerTask = _.includes([5, 7], task?.category?.id);
 
     // start timer function
     const startTimer = (e) => {
@@ -174,10 +163,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 if (res.is_first_task && !isDesignerTask) {
                     setIsOpenConfirmationModal(true);
                 } else startTimerControl();
-            })
+            });
     };
-
-
 
     /*********** End of Start Timer control ***************/
 
@@ -197,15 +184,14 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     timerId(null);
                 } else {
                     Toast.fire({
-                        icon: 'warning',
+                        icon: "warning",
                         title: _.startCase(res?.message),
                     });
                 }
             });
     };
-    const [getUserTrackTime, {
-        isFetching: trackTimerFetcing
-    }] = useLazyGetUserTrackTimeQuery();
+    const [getUserTrackTime, { isFetching: trackTimerFetcing }] =
+        useLazyGetUserTrackTimeQuery();
 
     // handle stop timer
     const handleStopTimer = () => {
@@ -235,7 +221,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
         // })
         // .catch(err => console.log(err))
-    }
+    };
 
     // control loading states...
     useEffect(() => {
@@ -290,48 +276,44 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                         timerStopStatusIsLoading={timerStopStatusIsLoading}
                     /> */}
 
-                    {
-                        trackTimerFetcing ?
-                        (
-                            <Button className="cursor-processing">
-                                <div
-                                    className="spinner-border text-white"
-                                    role="status"
-                                    style={{ width: "18px", height: "18px" }}
-                                />
-                                Processing...
-                            </Button>
-                        ):
-
-                        !timerStopStatusIsLoading ? (
-                            <Button
-                                variant="tertiary"
-                                onClick={handleStopTimer}
-                                className="d-flex align-items-center btn-outline-dark text-dark"
-                            >
-                                <i className="fa-solid fa-pause" />
-                                <span className="d-inline ml-1">Stop Timer</span>
-                            </Button>
-                        ) : (
-                            <Button className="cursor-processing">
-                                <div
-                                    className="spinner-border text-white"
-                                    role="status"
-                                    style={{ width: "18px", height: "18px" }}
-                                />
-                                Stopping...
-                            </Button>
-                        )
-                    }
+                    {trackTimerFetcing ? (
+                        <Button className="cursor-processing">
+                            <div
+                                className="spinner-border text-white"
+                                role="status"
+                                style={{ width: "18px", height: "18px" }}
+                            />
+                            Processing...
+                        </Button>
+                    ) : !timerStopStatusIsLoading ? (
+                        <Button
+                            variant="tertiary"
+                            onClick={handleStopTimer}
+                            className="d-flex align-items-center btn-outline-dark text-dark"
+                        >
+                            <i className="fa-solid fa-pause" />
+                            <span className="d-inline ml-1">Stop Timer</span>
+                        </Button>
+                    ) : (
+                        <Button className="cursor-processing">
+                            <div
+                                className="spinner-border text-white"
+                                role="status"
+                                style={{ width: "18px", height: "18px" }}
+                            />
+                            Stopping...
+                        </Button>
+                    )}
                 </React.Fragment>
             )}
 
-
             {/* LessTrackTimerModal */}
-            <LessTrackTimerModal stopTimer={stopTimer} startTimer={startTimerControl} />
-
+            <LessTrackTimerModal
+                stopTimer={stopTimer}
+                startTimer={startTimerControl}
+            />
         </React.Fragment>
     );
 };
 
-export default TimerControl
+export default TimerControl;

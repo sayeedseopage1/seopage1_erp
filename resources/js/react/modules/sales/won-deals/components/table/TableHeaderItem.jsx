@@ -56,7 +56,7 @@ const TableHeaderItem = ({ header, table }) => {
     });
 
     //
-    React.useEffect(() => {
+    React.useEffect(() => { 
         preview(getEmptyImage(), { captureDraggingState: true });
     }, []);
 
