@@ -44,7 +44,7 @@ const MarkAsComplete = ({task, auth}) => {
         const url = new URLSearchParams(location.search);
 
         if (url.get('modal')==='complete-task') {
-            if (auth.getRoleId() === 6) {
+            if (auth.isHasRolePermission(6) || auth.isHasRolePermission(13)) {
                 checkSubTaskState(task?.id)
                 .unwrap()
                 .then(res => {
