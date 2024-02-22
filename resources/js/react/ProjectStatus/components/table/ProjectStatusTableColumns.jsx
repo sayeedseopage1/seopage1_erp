@@ -100,7 +100,6 @@ export const ProjectStatusTableColumns = [
   {
       id: "percentage_of_goals_met",
       header: "Percentage of Goals Met",
-    //   accessorKey: "percentage_of_goals_met",
       cell: ({ row, table }) => {
             const data = row.original;
             const handler = table.options.meta
@@ -113,7 +112,6 @@ export const ProjectStatusTableColumns = [
   {
       id: "next_goal_date",
       header: "Next Goal Date",
-    //   accessorKey: "next_goal_date",
       cell: ({ row }) => {
             return (
                 <span>--</span>
@@ -124,10 +122,9 @@ export const ProjectStatusTableColumns = [
   {
       id: "next_goal_details",
       header: "Next Goal Details",
-    //   accessorKey: "next_goal_details",
       cell: ({ row }) => {
             return (
-                <button className="btn btn-success">View Deatils</button>
+                <button className="btn btn-success">View Details</button>
             );
         
       }

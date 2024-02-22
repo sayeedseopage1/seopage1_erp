@@ -3,7 +3,6 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { useState } from "react";
 import Button from "../../../global/Button";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { Flex } from "../table/ui";
 import style from  "../styles/imageViewer.module.css"
 
 
@@ -12,17 +11,21 @@ import FileInputWithCustomIcon from "./CustomInput";
 const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isZoomed, setIsZoomed] = useState(false);
 
+    // add files to selectedFiles
     const handleFileChange = (e) => {
         const uploadedFiles = e.target.files;
         setSelectedFiles((prev) => [...prev, ...uploadedFiles]);
     };
 
+    // open modal and set selected image
     const handleImageClick = (index) => {
         setSelectedImage(index);
         setModalIsOpen(true);
     };
 
+    // navigate to next image
     const handleNextImage = () => {
         setSelectedImage((prevIndex) =>
             prevIndex === selectedFiles?.length - 1
@@ -31,6 +34,7 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
         );
     };
 
+    // navigate to previous image
     const handlePreviousImage = () => {
         setSelectedImage((prevIndex) =>
             prevIndex === 0
@@ -39,20 +43,20 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
                   selectedFiles?.length
         );
     };
-
+    // close modal
     const handleModalClose = () => {
         setSelectedImage(null);
         setModalIsOpen(false);
     };
 
+    // delete image from selectedFiles
     const handleDeleteImage = (index) => {
         setSelectedFiles((prevFiles) =>
             prevFiles.filter((_, i) => i !== index)
         );
     };
 
-    const [isZoomed, setIsZoomed] = useState(false);
-
+    // toggle zoom
     const toggleZoom = () => {
         setIsZoomed(!isZoomed);
     };
@@ -61,7 +65,6 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
         <>
             <div style={containerStyle}>
                 <div className="my-2 row">
-                    
                     <strong className="col-4 d-flex">Screenshots:</strong>
                     <div className="col-8">
                         <FileInputWithCustomIcon
@@ -96,7 +99,7 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
                       
                 </div>
                
-
+                {/* Modal for View Upldoad Image */}
                 <ReactModal
                     isOpen={modalIsOpen}
                     onRequestClose={handleModalClose}
@@ -176,6 +179,8 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     );
 };
 
+
+// Styles
 const containerStyle = {
     // textAlign: "center",
     padding: "10px 0px",

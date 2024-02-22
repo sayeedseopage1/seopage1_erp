@@ -27,6 +27,7 @@ const DeadlineExplanation = ({
         setEditorData(editor.getData());
     };
 
+    // Submit data
     const handleSubmit = async () => {
         if(editorData === "" || editorData === "<p><br></p>"){
             setIsEditorEmpty(true);
@@ -51,12 +52,14 @@ const DeadlineExplanation = ({
         }
     };
 
+    // Check if editor is empty
     useEffect(() => {
         if(editorData !== "" && editorData !== "<p><br></p>"){
             setIsEditorEmpty(false);
         }
     }, [editorData]);
 
+    // Reset editor data when modal is closed
     useEffect(() => {
         if(!isModalTwoOpen){
             setEditorData("");
@@ -67,12 +70,10 @@ const DeadlineExplanation = ({
     return (
         <div style={styles.container}>
             <div className="w-100">
-
                  <div className="my-2 row">
                         <p className="col-4"><strong>Project Name:</strong>{" "}</p>
                         <p className="col-8">{project_name}</p>
                 </div>
-                
                  <div className="my-2 row">
                         <p className="col-4"><strong>Client:</strong>{" "}</p>
                         <p className="col-8">{clientName}</p>
@@ -97,7 +98,6 @@ const DeadlineExplanation = ({
                         <p className="col-4"><strong>Description:</strong>{" "}</p>
                         <p className="col-8"> {description}</p>
                 </div>
-
                 <div style={styles.reasonContainer}>
                     <p className="my-2">
                         <strong>Reason</strong>

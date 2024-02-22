@@ -4,7 +4,7 @@ import PercentageofGoalsMetTable from './PercentageofGoalsMetTable';
 import ReactModal from 'react-modal';
 import { PercentageofGMTableColumn } from './PercentageofGoalsMetTableColumn';
 
-const PercentageofGoalsMetModal = ({isOpen, closeModal,projectDetails, parcenatgeOfGoalsMet,tableName, isLoading}) => {
+const PercentageofGoalsMetModal = ({isOpen, closeModal,projectDetails, percentageOfGoalsMet,tableName, isLoading}) => {
   return (
     <ReactModal
       style={customStyles}
@@ -24,9 +24,9 @@ const PercentageofGoalsMetModal = ({isOpen, closeModal,projectDetails, parcenatg
           <PercentageofGoalsMetTable
             projectDetails={projectDetails}
             closeModal={closeModal}     
-            tableName="percentageofGoalsMetTable"   
+            tableName="percentageGoalsMetTable"   
             tableColumns={PercentageofGMTableColumn}
-            parcenatgeOfGoalsMet={parcenatgeOfGoalsMet}
+            percentageOfGoalsMet={percentageOfGoalsMet}
             isLoading={isLoading}
           />
     </ReactModal>

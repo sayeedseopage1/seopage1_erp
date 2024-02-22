@@ -4,7 +4,7 @@ import GoalExtensionHistoryTable from './GoalExtensionHistoryTable'
 import { GoalExtensionHistoryTableColumn } from './GoalExtensionHistoryTableColumn'
 import { GoalExtentionHistoryTableData } from '../../constant'
 import RefreshButton from '../RefreshButton'
-import _ from 'lodash'
+
 
 const GoalExtensionHistoryModal = ({
   projectDetails,
@@ -14,17 +14,13 @@ const GoalExtensionHistoryModal = ({
   refetchPmGoal,
   isLoading,
 }) => {
+  // Filter table header by user role
   const tableHeaderFilterByUser = GoalExtensionHistoryTableColumn.filter(item => {
     if (window?.Laravel?.user.role_id !== 1) {
         return item.accessorKey !== 'client_communication_rating' && item.accessorKey !== 'negligence_pm_rating';
     }
-    return true; // Include all columns if user role ID is 1
+    return true;
   });
-
-
-
-  console.log('tableHeaderFilterByUser', tableHeaderFilterByUser)
-
 
   return (
     <ReactModal
@@ -34,15 +30,16 @@ const GoalExtensionHistoryModal = ({
       onRequestClose={closeModal}
       contentLabel="Goal Extension History"
     >
-              <div
-                className='d-flex justify-content-between mb-3'
-              >
-                  <div style={{ fontSize: "25px" }}>Goal Extension History</div>
-                  <RefreshButton
-                    onClick={refetchPmGoal}
-                    isLoading={isLoading}
-                  />
-              </div>
+        <div
+          className='d-flex justify-content-between mb-3'
+        >
+          <div style={{ fontSize: "25px" }}>Goal Extension History</div>
+            <RefreshButton
+              onClick={refetchPmGoal}
+              isLoading={isLoading}
+            />
+        </div>
+        {/* Goal Extention History Table */}
         <GoalExtensionHistoryTable
           projectDetails={projectDetails}
           closeModal={closeModal}     

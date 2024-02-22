@@ -3,16 +3,15 @@ import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { Flex } from "../table/ui";
 import CKEditorComponent from "../../../ckeditor";
-
 import FileUpload from "./FileUpload";
 import { useCreateExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
 
 const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoalId }) => {
+    const [selectedFiles, setSelectedFiles] = useState([]);
     const [extendReqestData, setExtendReqestData] = useState({
-        extended_day: "",
+        extended_day: null,
         is_client_communication: "",
         goal_id: extendRequestGoalId,
     });
@@ -21,10 +20,9 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
         is_client_communication: false,
         isSubmitting: false,
     });
-    const [selectedFiles, setSelectedFiles] = useState([]);
     const [submitData, { isLoading }] = useCreateExtendRequestMutation();
   
-
+    // Reset form
     const handleResetForm = () => {
         setExtendReqestData({
             extended_day: "",
@@ -39,10 +37,12 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
         });
     }
 
+    // Submit data
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const isEmpty = isStateAllHaveValue(extendReqestData);
 
+        // Check if fields are empty using state validation
+        const isEmpty = isStateAllHaveValue(extendReqestData);
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(extendReqestData);
             setExtendReqestDataValidation({
@@ -52,7 +52,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
             });
             return;
         }
-
+        // append data to form data
         const fd = new FormData();
         fd.append("extended_day", extendReqestData.extended_day ?? "");
         fd.append("is_client_communication", extendReqestData?.is_client_communication ?? "");
@@ -66,8 +66,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-
-   
+            
         submitData(fd)
                 .unwrap()
                 .then((res) => {
@@ -84,7 +83,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
     };
 
  
-
+    // Check if fields are empty
     useEffect(() => {
         if(extendReqestDataValidation.isSubmitting){
             const validation = markEmptyFieldsValidation(extendReqestData);
@@ -95,13 +94,14 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
         }
     }, [extendReqestData, extendReqestDataValidation.isSubmitting]);
 
-
+    // Reset form when modal is closed
     useEffect(() => {
         if(!isOpen){
             handleResetForm();
         }
     }, [isOpen]);
 
+    // Set goal id
     useEffect(() => {
         setExtendReqestData({
             ...extendReqestData,
@@ -118,10 +118,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
             onRequestClose={onClose}
         >
             <div
+                className="d-flex justify-content-between align-items-center"
                 style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
                     marginBottom: "15px",
                 }}
             >
@@ -134,14 +132,11 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                 </div>
                 <button
                     onClick={onClose}
+                    className="d-flex justify-content-center align-items-center rounded-circle"
                     style={{
                         backgroundColor: "gray",
                         padding: "2px 4px 2px 4px",
                         color: "white",
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
                         width: "24px",
                         height: "24px",
                     }}
@@ -150,6 +145,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                 </button>
             </div>
 
+            {/* Extend Request Modal Data */}
             <section style={styles.container}>
                 <div className="w-100">
                     <div className="my-2 row">
@@ -170,8 +166,9 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                             <input
                                 placeholder="Enter the extended days"
                                 value={extendReqestData.extended_day}
-                                
+                                type="number"
                                 required={true}
+                                min={1}
                                 onChange={(e) => setExtendReqestData({
                                     ...extendReqestData,
                                     extended_day: e.target.value
@@ -182,6 +179,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                         </div>
                     </div>
 
+                    {/* Upload Multiple Image or single image */}
                     <FileUpload
                         selectedFiles={selectedFiles}
                         setSelectedFiles={setSelectedFiles}
@@ -192,7 +190,6 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                         <p>
                             <strong>Reason:</strong>
                         </p>
-
                         <div
                             style={{
                                 border: "1px solid #ccc",
@@ -223,6 +220,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
     );
 };
 
+// Modal styles
 const customStyles = {
     overlay: {
         zIndex: 99999998,
@@ -242,6 +240,7 @@ const customStyles = {
     },
 };
 
+// Styles
 const styles = {
     container: {
         display: "flex",

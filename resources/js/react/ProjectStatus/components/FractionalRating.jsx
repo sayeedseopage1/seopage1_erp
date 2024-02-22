@@ -2,6 +2,14 @@ import React from 'react'
 import Rating from 'react-rating'
 import styles from "./FractionalRating.module.css"
 
+
+/**
+ * FractionalRating component
+ * 
+ * @param {value} props - value of rating
+ * @param {onChange} props - function to change the value of rating 
+ * @returns  FractionalRating component
+ */
 const FractionalRating = ({value, onChange}) => {
   return (
     <Rating

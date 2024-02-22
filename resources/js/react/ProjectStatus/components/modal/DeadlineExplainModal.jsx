@@ -1,28 +1,8 @@
 import React from "react";
 import ReactModal from "react-modal";
-
 import { IoClose } from "react-icons/io5";
-
 import DeadlineExplanation from "./DeadlineExplanation";
-import { Flex } from "../table/ui";
 
-const customStyles = {
-    overlay: {
-        zIndex: 99999998,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-
-        margin: "auto auto",
-        padding: "20px",
-    },
-    content: {
-        zIndex: 99999999,
-        maxWidth: "600px",
-        maxHeight: "550px",
-
-        margin: "auto auto",
-        padding: "20px",
-    },
-};
 
 const DeadlineExplainModal = ({
     projectPmGoalId,
@@ -39,10 +19,8 @@ const DeadlineExplainModal = ({
             contentLabel="Deadline Explanation"
         >
             <div
+                className="d-flex justify-content-between align-items-center"
                 style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
                     marginBottom: "15px",
                 }}
             >
@@ -53,17 +31,13 @@ const DeadlineExplainModal = ({
                 >
                     Deadline Explanation
                 </div>
-
                 <button
                     onClick={closeModalTwo}
+                    className="d-flex justify-content-center align-items-center rounded-circle"
                     style={{
                         backgroundColor: "gray",
                         padding: "2px 4px 2px 4px",
                         color: "white",
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
                         width: "24px",
                         height: "24px",
                     }}
@@ -71,7 +45,7 @@ const DeadlineExplainModal = ({
                     <IoClose />
                 </button>
             </div>
-
+            {/* Deadline Explanation Modal */}
             <DeadlineExplanation
                 closeModalTwo={closeModalTwo}
                 isModalTwoOpen={isModalTwoOpen}
@@ -83,3 +57,19 @@ const DeadlineExplainModal = ({
 };
 
 export default DeadlineExplainModal;
+
+const customStyles = {
+    overlay: {
+        zIndex: 99999998,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        margin: "auto auto",
+        padding: "20px",
+    },
+    content: {
+        zIndex: 99999999,
+        maxWidth: "600px",
+        maxHeight: "550px",
+        margin: "auto auto",
+        padding: "20px",
+    },
+};

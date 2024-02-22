@@ -7,12 +7,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 290px;
+    max-width: 400px;
 }
 
 
 .action{
-    width: fit-content;
+    /* width: fit-content; */
     background: #e6f8ef;
     color:  #00b95d;
     padding: 0.25rem 0.85rem;
@@ -32,22 +32,16 @@
     white-space: normal;
 }
 
-.action.deadlineExplained{
-    background: #f22121;
-    color:  #e6f8ef;
-    border-color: #f22121;
-    font-weight: 600;
-    padding: 8px 10px !important;
-    cursor: pointer;
+.deadlineExplained{
+    width: 180px !important;
 }
 
-.action.extend{
-    color: #e6f8ef;
-    background: #00b95d !important;
-    border-color: #00b95d !important;
-    font-weight: 600;
-    padding: 8px 10px !important;
-    cursor: pointer;
+.extend{
+    width: 145px !important;
+}
+
+.extendReview{
+    width: 175px !important;
 }
 .action.resolve{
     color: #e6f8ef;
@@ -56,12 +50,24 @@
     font-weight: 600;
     padding: 8px 10px !important;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 125px !important;
 }
-.action.resolveed{
+.action.resolved{
     font-weight: 600;
     padding: 8px 10px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px !important;
 }
 .action.extend:hover{
+    background: #00af58 !important;
+    border-color: #00af58 !important;
+}
+.action.extendReview:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;
 }

@@ -13,6 +13,8 @@ import { useLocalStorage } from "react-use";
 import GoalExtensionHistoryTableLoader from "../loader/GoalExtensionHistoryTableLoader";
 import React from "react";
 import Toaster from "../../../global/Toaster";
+import GoalExtensionHistoryTablePagination from "./GoalExtensionHistoryTablePagination";
+import _ from "lodash";
 
 const GoalExtensionHistoryTable = ({
   projectDetails,
@@ -69,69 +71,84 @@ const GoalExtensionHistoryTable = ({
         }
     }, [])
 
-  const table = useReactTable({
-    data,
-    columns,
-    state: {
-        sorting,
-        expanded,
-        columnOrder,
-        pagination,
-        tableName,
-    },
-    autoResetPageIndex: !skipPageReset,
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
-    onExpandedChange: setExpanded,
-    getSubRows: row => row.subtasks,
-    onColumnOrderChange: setColumnOrder,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    paginateExpandedRows: false,
-  })
+    // table instance
+    const table = useReactTable({
+      data,
+      columns,
+      state: {
+          sorting,
+          expanded,
+          columnOrder,
+          pagination,
+          tableName,
+      },
+      autoResetPageIndex: !skipPageReset,
+      onPaginationChange: setPagination,
+      onSortingChange: setSorting,
+      onExpandedChange: setExpanded,
+      getSubRows: row => row.subtasks,
+      onColumnOrderChange: setColumnOrder,
+      getCoreRowModel: getCoreRowModel(),
+      getPaginationRowModel: getPaginationRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      getExpandedRowModel: getExpandedRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+      paginateExpandedRows: false,
+    })
   return (
-    <div className="sp1_tasks_table_wrapper">
-            <table className='sp1_tasks_table'>
-                    <thead className="sp1_tasks_thead">
-                            {table.getHeaderGroups().map(headerGroup => (
-                            <tr key={headerGroup.id} className='sp1_tasks_tr'>
-                                {headerGroup.headers.map(header => {
-                                return <DragableColumnHeader key={header.id} header={header} table={table} />
-                                })}
-                            </tr>
-                            ))}
-                    </thead>
-                    <tbody className='sp1_tasks_tbody'>
-                            {!isLoading && table.getRowModel().rows.map(row => {
-                            return (
-                                <tr
-                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
-                                    key={row.id}
-                                >
-                                {row.getVisibleCells().map(cell => {
-                                    return (
-                                    <td key={cell.id} className='px-2 sp1_tasks_td'>
-                                         
-                                        { flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                            )
-                                        }
-                                    </td>
-                                    )
-                                })}
-                                </tr>
-                            )
-                            })}
-                            {isLoading && <GoalExtensionHistoryTableLoader tableCol={tableColumns} prevItemLength={data?.length} />}
-                    </tbody>
-                </table>
-                {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
-            <Toaster />
-    </div>
+    <React.Fragment>
+      <div className="sp1_tasks_table_wrapper">
+          <table className='sp1_tasks_table'>
+            <thead className="sp1_tasks_thead">
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id} className='sp1_tasks_tr'>
+                    {headerGroup.headers.map(header => {
+                      return <DragableColumnHeader key={header.id} header={header} table={table} />
+                    })}
+                </tr>
+              ))}
+            </thead>
+            <tbody className='sp1_tasks_tbody'>
+              {!isLoading && table.getRowModel().rows.map(row => {
+              return (
+                                  <tr
+                                  className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
+                                      key={row.id}
+                                  >
+                                  {row.getVisibleCells().map(cell => {
+                                      return (
+                                      <td key={cell.id} className='px-2 sp1_tasks_td'>
+                                          
+                                          { flexRender(
+                                              cell.column.columnDef.cell,
+                                              cell.getContext()
+                                              )
+                                          }
+                                      </td>
+                                      )
+                                  })}
+                                  </tr>
+                              )
+                              })}
+              {isLoading && <GoalExtensionHistoryTableLoader tableCol={tableColumns} prevItemLength={data?.length} />}
+            </tbody>
+          </table>
+          {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
+          <Toaster />
+      </div>
+      <GoalExtensionHistoryTablePagination
+        currentPage = {pageIndex + 1}
+        perpageRow= {pageSize}
+        onPageSize = {(size) => table?.setPageSize(size)}
+        onPaginate = {(page) => table?.setPageIndex(page - 1)}
+        totalEntry= {_.size(data)}
+        onNext = {() => table.getCanNextPage() && table.nextPage()}
+        disableNext = {!table?.getCanNextPage()}
+        onPrevious = {() => table?.getCanPreviousPage() && table?.previousPage()}
+        disablePrevious = {!table?.getCanPreviousPage()}
+        totalPages = {table?.getPageCount()}
+      />
+    </React.Fragment>
   )
 }
 

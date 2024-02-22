@@ -1,3 +1,4 @@
+// dummy data for project status
 export const GoalExtentionHistoryTableData = [
   {
     id: 1,

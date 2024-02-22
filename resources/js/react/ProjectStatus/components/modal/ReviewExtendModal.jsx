@@ -198,6 +198,8 @@ const ReviewExtendRequestModal = ({
                             className="p-1 rounded"
                             defaultValue={reviewExtendState?.extended_day }
                             placeholder="Enter extended days"
+                            type="number"
+                            min={1}
                             onChange={(e) => setReviewExtendState({
                                 ...reviewExtendState,
                                 extended_day: e.target.value

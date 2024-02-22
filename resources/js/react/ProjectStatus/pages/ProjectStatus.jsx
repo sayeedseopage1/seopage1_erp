@@ -1,7 +1,5 @@
 import * as React from "react";
 
-
-
 import {
     useGetPmGoalQuery,
     useGetProjectStatusQuery,
@@ -49,7 +47,7 @@ const ProjectStatus = () => {
 
     const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
-    const parcenatgeOfGoalsMet = pmGoalData?.data
+    const percentageOfGoalsMet = pmGoalData?.data
 
 
     let tableColumns = ProjectStatusTableColumns;
@@ -77,6 +75,7 @@ const ProjectStatus = () => {
         refetch();
     }
 
+    // handle pm goal modal
     const handlePmGoalModal = (data) => {
         setProjectDetails(data);
         setProjectId(data.project_id);
@@ -84,6 +83,7 @@ const ProjectStatus = () => {
         setSelectedProjectName(data.project_name);
     }
 
+    // handle percent of goal met  modal
     const handlePercentOfGoalMet = (data) => {
         setProjectId(data.project_id);
         setIsOpenPercentageofGoalsMetModal(true);
@@ -92,6 +92,7 @@ const ProjectStatus = () => {
         console.log("data",data)
     }
 
+    // handle close percentage of goal met modal
     const handleClosePercentageofGoalsMetModal = () => {
         setIsOpenPercentageofGoalsMetModal(false);
     }
@@ -116,7 +117,7 @@ const ProjectStatus = () => {
                         </div>
                     </div>
 
-                   {/* Prjusct Status Main Table */}
+                   {/* Project Status Main Table */}
                     <ProjectStatusTable
                         isLoading={isFetching}
                         filter={filter}
@@ -130,6 +131,7 @@ const ProjectStatus = () => {
                     />
                 </div>
             </div>
+            {/* Project Status Modal */}
             <ProjectModal
                 refetchPmGoal={refetchPmGoal}
                 isFetchingPmGoal={isFetchingPmGoal}
@@ -139,11 +141,12 @@ const ProjectStatus = () => {
                 selectedProjectName={selectedProjectName}
                 projectDetails={projectDetails}
             />
+            {/* Percent of Goals Met Modal */}
             <PercentageofGoalsMetModal
                 projectDetails={projectDetails}
                 isOpen={isOpenPercentageofGoalsMetModal}
                 isLoading={isFetchingPmGoal}
-                parcenatgeOfGoalsMet={parcenatgeOfGoalsMet}
+                percentageOfGoalsMet={percentageOfGoalsMet}
                 closeModal={handleClosePercentageofGoalsMetModal}
             />
         </React.Fragment>
