@@ -57,12 +57,10 @@ const RevisionCreationModal = ({ close, task, auth }) => {
 
         return errorCount === 0;
     };
-   
 
     // handle submission
     const handleSubmission = async (e) => {
         e.preventDefault();
-
 
         const data = {
             task_id: task?.id,
@@ -78,7 +76,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
         if (validate()) {
             await createRevision(data)
                 .unwrap()
-                .then((res) => { 
+                .then((res) => {
                     const Toast = Swal.mixin({
                         toast: true,
                         position: "top-end",
@@ -87,7 +85,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                         timerProgressBar: true,
                     });
 
-                    if(res?.error){
+                    if (res?.error) {
                         Toast.fire({
                             icon: "error",
                             html: res?.message,
@@ -119,6 +117,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
         }
     };
 
+    const isDesignerTask = _.includes([5, 7], task?.category?.id);
+
     return (
         <React.Fragment>
             <div
@@ -142,34 +142,40 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                             <sup className="f-16">*</sup> :
                         </label>
                         <div className="px-3">
-                            {revisionOptions.map((option) => (
-                                <div
-                                    key={option.id}
-                                    className="form-check d-flex align-items-start mb-2"
-                                >
-                                    <input
-                                        className="form-check-input mr-2"
-                                        type="radio"
-                                        name="exampleRadios"
-                                        id={option.id}
-                                        required={true}
-                                        onChange={() => handleChange(option)}
-                                        value={option.revision}
-                                        style={{
-                                            width: "16px",
-                                            height: "16px",
-                                            marginTop: "3px",
-                                        }}
-                                    />
-                                    <label
-                                        className="form-check-label"
-                                        htmlFor={option.id}
-                                        style={{ marginBottom: "3px" }}
+                            {revisionOptions.map((option) => {
+                                if (!isDesignerTask && option.id === "PLRx05")
+                                    return null;
+                                return (
+                                    <div
+                                        key={option.id}
+                                        className="form-check d-flex align-items-start mb-2"
                                     >
-                                        {option.revision}
-                                    </label>
-                                </div>
-                            ))}
+                                        <input
+                                            className="form-check-input mr-2"
+                                            type="radio"
+                                            name="exampleRadios"
+                                            id={option.id}
+                                            required={true}
+                                            onChange={() =>
+                                                handleChange(option)
+                                            }
+                                            value={option.revision}
+                                            style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                marginTop: "3px",
+                                            }}
+                                        />
+                                        <label
+                                            className="form-check-label"
+                                            htmlFor={option.id}
+                                            style={{ marginBottom: "3px" }}
+                                        >
+                                            {option.revision}
+                                        </label>
+                                    </div>
+                                );
+                            })}
                         </div>
                         {reasonError && (
                             <small

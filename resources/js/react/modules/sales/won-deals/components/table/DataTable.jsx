@@ -178,7 +178,10 @@ const DataTable = ({
                     </Flex>
 
                     <Flex>
-                        <span>Showing {data?.from} to {data?.to} of {data?.total} entries</span>
+                        <span>
+                            Showing {data?.from} to {data?.to} of {data?.total}{" "}
+                            entries
+                        </span>
 
                         <ReactPaginate
                             breakLabel="..."

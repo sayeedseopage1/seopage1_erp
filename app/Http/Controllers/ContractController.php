@@ -1173,7 +1173,13 @@ class ContractController extends AccountBaseController
             $deal->cms_id = $item[0] ?? null;
             $deal->cms_name = $item[1] ?? null;
             $deal->deal_category = $request->deal_category;
-            $deal->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $deal->deadline = $deadline;
+            }else{
+                $deal->deadline = $request->deadline;
+            }
             $deal->estimated_hour_task = $request->estimated_hour_task;
             $deal->hourly_rate = $request->hourly_rate;
             $deal->hubstaff_tracking = $request->hubstaff_tracking;
@@ -1200,7 +1206,13 @@ class ContractController extends AccountBaseController
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
 
-            $project->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $project->deadline = $deadline;
+            }else{
+                $project->deadline = $request->deadline;
+            }
 
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
@@ -1705,7 +1717,13 @@ class ContractController extends AccountBaseController
                     $value = $value  . $link . ' <br> ';
                 }
             }
-            $deal->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $deal->deadline = $deadline;
+            }else{
+                $deal->deadline = $request->deadline;
+            }
             $deal->estimated_hour_task = $request->estimated_hour_task;
             $deal->hourly_rate = $request->hourly_rate;
             $deal->hubstaff_tracking = $request->hubstaff_tracking;
@@ -1735,7 +1753,13 @@ class ContractController extends AccountBaseController
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
 
-            $project->deadline = $request->deadline;
+            if ($deal->project_type == 'hourly') {
+                $today = \Carbon\Carbon::now();
+                $deadline = $today->addYear(); 
+                $project->deadline = $deadline;
+            }else{
+                $project->deadline = $request->deadline;
+            }
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
             $project->project_budget = (($request->amount) + ($request->upsell_amount)) / $currency->exchange_rate;
@@ -2553,7 +2577,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
-       // dd($request);
+        // DB::beginTransaction();
         $data = new AwardTimeIncress();
         $data->request_from = Auth::id();
         $data->deal_id = $request->id;
@@ -2569,7 +2593,6 @@ class ContractController extends AccountBaseController
 
            $helper->ProjectAcceptTimeExtensionAuthorization($project);
            //need pending action
-
             return response()->json([
                 'status' => 'success'
             ]);
@@ -2987,7 +3010,9 @@ public function getAllContracts(Request $request){
         $dealsQuery->where(function ($query) {
             $query->where('deals.project_name', 'like', '%' . request('search') . '%')
                 ->orWhere('deals.deal_id', 'like', '%' . request('search') . '%')
-                ->orWhere('users.name', 'like', '%' . request('search') . '%');
+                ->orWhere('added_by.name', 'like', '%' . request('search') . '%')
+                ->orWhere('pm.name', 'like', '%' . request('search') . '%')
+                ->orWhere('client.name', 'like', '%' . request('search') . '%');
         });
     }
     if ($request->pm_id != null) {
@@ -3005,11 +3030,11 @@ public function getAllContracts(Request $request){
     
     if (Auth::user()->role_id == 4) {
         $dealsQuery->where('pm_id',Auth::id());
-    }else {
+    }
     $deals = $dealsQuery
         ->orderBy('deals.id', 'desc')
         ->paginate($limit);
-    }
+    
 
     /**AMOUNT CHECK ITS UPSELL OR NOT START */
     foreach ($deals as $itemDeal){
@@ -3088,9 +3113,12 @@ public function getAllContracts(Request $request){
         $itemDeal->action = $action;
     }
     /**AMOUNT CHECK ITS UPSELL OR NOT END */
-
+    /**COUNT OF AWARD TIME REQUEST DATA START */
+    $total_request = AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
+    /**COUNT OF AWARD TIME REQUEST DATA END */
     return response()->json([
         'data' => $deals,
+        'total_request' =>$total_request,
         'status'=> 200,
     ]);
 }

@@ -1,6 +1,7 @@
 import * as React from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Autolinker from "autolinker";
 
 // editor
 import {
@@ -38,11 +39,18 @@ const ServiceProvider = ({ children }) => {
         return { MentionSuggestions };
     }, []);
 
+    //same name input issue was fixed by updating the state of the input
+    //and not updating when selection or adding files inside existing selected files
+    const [inputKey, setInputKey] = React.useState(Date.now());
+
     // handle upload image
     // user upload button click
     const handleUploadImage = (e) => {
-        const uploadedFiles = e.target.files;
-        setFiles((prev) => [...prev, ...uploadedFiles]);
+        const newFiles = Array.from(e.target.files);
+        if (newFiles.length > 0) {
+            setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+            setInputKey(Date.now());
+        }
     };
 
     // remove image form list
@@ -150,16 +158,14 @@ const ServiceProvider = ({ children }) => {
 
     // render control
     const renderToHtml = (editorState) => {
-
         // hash config
         const hashConfig = {
             trigger: "#",
             separator: " ",
         };
 
-        // styled mention 
-        const customEntityTransform = (entity, text) => { 
-            // console.log(entity.data.mention.id);
+        // styled mention
+        const customEntityTransform = (entity, text) => {
             if (entity.type === "mention") {
                 return `<a href='/account/employees/${entity?.data?.mention?.id}' class="comment-mention" style="font-family:cursive;color:#0f79dd;">${text}</a>`;
             }
@@ -167,31 +173,39 @@ const ServiceProvider = ({ children }) => {
 
         const plainText = editorState.getCurrentContent().getPlainText();
 
-        if(!plainText) return '';
+        if (!plainText) return "";
 
         // get row data
         const rowData = convertToRaw(editorState.getCurrentContent());
-         
+
         // markup
         const markup = draftToHtml(
             rowData,
             hashConfig,
             true,
             customEntityTransform
-        ); 
+        );
 
-        return replaceEmojiWithHighQualityEmoji(markup);
+        // convert to link
+
+        const text = replaceEmojiWithHighQualityEmoji(markup);
+
+        const linkedText = Autolinker.link(text, {
+            newWindow: false,
+        });
+
+        return linkedText;
     };
 
     // on files paste
     const handlePastedFiles = (files) => {
-        setFiles(prev => ([...prev, ...files]))
-    }
+        setFiles((prev) => [...prev, ...files]);
+    };
 
     // clear files
     const clearFiles = () => {
-        setFiles([])
-    }
+        setFiles([]);
+    };
 
     return (
         <EditorContext.Provider
@@ -209,7 +223,8 @@ const ServiceProvider = ({ children }) => {
                 mentionFilter,
                 handlePastedFiles,
                 Toolbar,
-                clearFiles
+                clearFiles,
+                inputKey,
             }}
         >
             {children}

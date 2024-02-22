@@ -29,6 +29,7 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import _ from "lodash";
 import Swal from "sweetalert2";
 import dayjs from "dayjs";
+
 import isCurrentUser from "./utils/isCurrentUser";
 import CommentsPlaceholder from "./utils/CommentsPlaceholder";
 import getTextContent, {
@@ -41,6 +42,7 @@ import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
 import Sendbox from "./components/sendbox/Sendbox";
 import axios from "axios";
+import { useCommentStore } from "./zustand/store";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -80,6 +82,7 @@ const CommentsBody = ({
     showSearchBtn = true,
     onSubmit = async () => null,
 }) => {
+    const { allComments, setAllComments } = useCommentStore();
     const param = useParams();
     const [deleteComments, { isLoading: deleteLoading }] =
         useDeleteCommentsMutation();
@@ -87,7 +90,7 @@ const CommentsBody = ({
     const comments_ref = useRef(null);
     const [showSearchBar, setShowSearchBar] = useState(false);
     const [searchText, setSearchText] = useState("");
-    const [allComments, setAllComments] = useState([]);
+
     const [commentIndex, setCommentIndex] = useState(0);
     const [searchIndexes, setSearchIndexes] = useState([]);
     const [animation, setAnimation] = useState(false);
@@ -105,7 +108,6 @@ const CommentsBody = ({
         useState("");
     const [refetchType, setRefetchType] = useState("refetch");
     // =================================================================
-
     // fetch this task from api
     useEffect(() => {
         axios
@@ -138,7 +140,6 @@ const CommentsBody = ({
             </ContextMenuItem>
             <ContextMenuItem
                 onSelect={() => {
-                    // console.log('clicked select');
                     hnadleSelectComment();
                 }}
             >
@@ -168,30 +169,27 @@ const CommentsBody = ({
         </>
     );
 
-    // search result filtering
     useEffect(() => {
         // console.log("searchText :", searchText);
         if (searchText) {
-            setAllComments(() => {
-                const filteredComments = [...comments].filter((comment) => {
-                    return (
-                        !comment?.is_deleted &&
-                        htmlToString(comment?.comment)
-                            .toLowerCase()
-                            .includes(searchText.toLowerCase())
-                    );
-                    // const textContent = getTextContent(comment.comment).toLowerCase();
-                    // console.log(textContent);
-                    // return true;
-                });
-                setSearchIndexes(
-                    filteredComments.map((comment) => {
-                        return comment?.id;
-                    })
+            const filteredComments = [...comments].filter((comment) => {
+                return (
+                    !comment?.is_deleted &&
+                    htmlToString(comment?.comment)
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase())
                 );
-                setCommentIndex(0);
-                return filteredComments;
+                // const textContent = getTextContent(comment.comment).toLowerCase();
+                // console.log(textContent);
+                // return true;
             });
+            setSearchIndexes(
+                filteredComments.map((comment) => {
+                    return comment?.id;
+                })
+            );
+            setCommentIndex(0);
+            setAllComments(filteredComments);
         } else {
             // setScroll((prev) => !prev);
             setSearchIndexes([]);
@@ -457,7 +455,35 @@ const CommentsBody = ({
         });
     };
 
-    // console.log({allComments});
+    const handleSearchTextChange = (e) => {
+        setSearchText(e.target.value);
+
+        if (searchText) {
+            const filteredComments = [...comments].filter(
+                (comment) =>
+                    !comment?.is_deleted &&
+                    htmlToString(comment?.comment)
+                        .toLowerCase()
+                        .includes(searchText.toLowerCase())
+            );
+
+            setSearchIndexes(filteredComments.map((comment) => comment?.id));
+            setCommentIndex(0);
+            setAllComments(filteredComments);
+        } else {
+            setSearchIndexes([]);
+            setCommentIndex(0);
+
+            // Check if allComments is an array before calling map
+            if (Array.isArray(allComments)) {
+                setAllComments(allComments);
+            } else {
+                // Handle the case where allComments is not an array
+                console.error("allComments is not an array");
+            }
+        }
+    };
+
     return (
         <CommentContext.Provider
             value={{
@@ -595,7 +621,7 @@ const CommentsBody = ({
                         >
                             <input
                                 value={searchText}
-                                onChange={(e) => setSearchText(e.target.value)}
+                                onChange={handleSearchTextChange}
                                 placeholder="Search..."
                                 className={`${style.commentsBody_header_searchBar}`}
                                 type="text"
@@ -842,14 +868,6 @@ const CommentsBody = ({
                             setScroll={setScroll}
                             setIsLoading={setIsLoading}
                         />
-
-                        {/* customize start from there */}
-                        {/* <ChatInput
-                            onSubmit={onSubmit}
-                            taskId={taskId}
-                            setScroll={setScroll}
-                            setIsLoading={setIsLoading}
-                        /> */}
                     </footer>
                 ) : null}
 
