@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { 
+import {
   TableHead,
-  TableRow, 
+  TableRow,
 } from './ui'
-import TableHeaderItem from './TableHeaderItem';
+import TableHeaderItem from './TableHeaderItem'; 
 
 
 
