@@ -109,6 +109,7 @@ const DealCreationFormControl = ({close}) => {
         })
 
         // if project type hourly no need amount
+        
         if(
             _error.hasOwnProperty('amount') && 
             formData.hasOwnProperty('project_type') && 

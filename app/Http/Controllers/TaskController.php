@@ -1209,9 +1209,9 @@ class TaskController extends AccountBaseController
                 // ->where('task_id', $task_revision->id);
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
- 
-
-            if($generalRevisionCount > 1){
+               
+            // dd($gene/ralRevisionCount) ;
+            if($generalRevisionCount == 1){
                 return response()->json([
                     'error' => true,
                     'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum time'
@@ -1233,7 +1233,7 @@ class TaskController extends AccountBaseController
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
 
-        // if has permission
+        // if has - permission 
         if($this->hasPermission(13)){
             $task_revision->revision_status = 'Lead Designer Revision';
             $task_revision->lead_comment = $request->comment;
@@ -3177,9 +3177,9 @@ class TaskController extends AccountBaseController
                 // ->where('task_id', $task_revision->id);
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
- 
+                  
 
-            if($generalRevisionCount > 2){
+            if( $generalRevisionCount == 2){
                 return response()->json([
                     'error' => true,
                     'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum times.'
@@ -7304,5 +7304,6 @@ class TaskController extends AccountBaseController
             'status'=>200
         ]);
     }
+    
 
 }

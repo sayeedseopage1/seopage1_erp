@@ -1,249 +1,212 @@
 import React from "react";
 import _ from "lodash";
+import {
+    useReactTable, getCoreRowModel,
+    getPaginationRowModel,
+    getFilteredRowModel,
+    getExpandedRowModel,
+    getSortedRowModel,
+    flexRender
+  } from '@tanstack/react-table';
 import Toaster from "../../../global/Toaster";
-import PaginationPmGoalTable from "./PaginationPmGoalTable";
 import DeadlineExplainModal from "./DeadlineExplainModal";
-import { useAuth } from "../../../hooks/useAuth";
 import ResolveModal from "./ResolveModal";
-import { TableItem, TableRow } from "../table/ui";
-import { Placeholder } from "../../../global/Placeholder";
+import { useLocalStorage } from "react-use";
+import PmGolasTableLoader from "../loader/PmGolasTableLoader";
+import { DragableColumnHeader } from "../table/DragableColumnHeader";
+import EmptyTable from "../../../global/EmptyTable";
+import ExtendRequestModal from "./ExtendRequestModal";
+import ReviewExtendRequestModal from "./ReviewExtendModal";
 
-const PMGoalsTable = ({ projectDetails, isFetchingPmGoal, pmGoal }) => {
-    const auth = useAuth();
-    const [projectPmGoalId, setProjectPmGoalId] = React.useState(1);
+const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName }) => {
+    const [data, setData] = React.useState(pmGoal || []);
+    const [sorting, setSorting] = React.useState([]);
+    const [expanded, setExpanded] = React.useState({});
+    const [projectPmGoalId, setProjectPmGoalId] = React.useState(null);
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
     const [pmGoalExtendReason, setPmGoalExtendReason] = React.useState("");
+    const [skipPageReset, setSkipPageReset] = React.useState(false);
+    const [value, setValue] = useLocalStorage(tableName);
+    const [ isOpenDeadlineExplainModal,setIsOpenDeadlineExplainModal] = React.useState(false);
+    const [isOpenExtendRequestModal, setIsOpenExtendRequestModal] = React.useState(false);
+    const [isOpenResolveModal, setIsOpenResolveModal] = React.useState(false);
+    const [isOpenReviewExtendRequestModal, setIsOpenReviewExtendRequestModal] = React.useState(false);
     //pagination start
     // Number of items to display per page
     const [itemsPerPage, setItemsPerPage] = React.useState(5);
 
-    // Calculate the total number of pages
-    const pageCount = Math.ceil(pmGoal.length / itemsPerPage);
+    const _pmGolas = React.useMemo(()=> pmGoal, [pmGoal]);
 
-    // State to keep track of the current page
-    const [currentPage, setCurrentPage] = React.useState(0);
+    React.useEffect(() => {
+        if(_.size(_pmGolas) === _.size(data)){
+          setSkipPageReset(true);
+          _pmGolas && setData(_pmGolas)
+        }else{
+            _pmGolas && setData(_pmGolas);
+        }
+      }, [_pmGolas])
 
-    // Function to handle page change
-    const handlePageClick = (data) => {
-        const selectedPage = data.selected;
-        setCurrentPage(selectedPage);
+    // clear skipPageReset
+    React.useEffect(() => {
+        if(skipPageReset){
+        setSkipPageReset(false);
+        }
+    }, [data])
+
+    // default columns
+    const defaultColumns = React.useMemo(() => [...PmGoalsTableColumns])
+
+    // columns
+    const [columns, setColumns] = React.useState([...defaultColumns]);  
+
+
+    const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id'));
+
+
+    const pagination = React.useMemo(() => ({pageIndex, pageSize}), [pageIndex, pageSize]);
+
+
+    // columns orders
+    React.useEffect(() => {
+        if(value?.columnOrders){
+        setColumnOrder(value.columnOrders);
+        }
+    }, [])
+
+     
+    const table = useReactTable({
+        data,
+        columns,
+        state: {
+            sorting,
+            expanded,
+            columnOrder,
+            pagination,
+            tableName,
+        },
+        autoResetPageIndex: !skipPageReset,
+        onPaginationChange: setPagination,
+        onSortingChange: setSorting,
+        onExpandedChange: setExpanded,
+        getSubRows: row => row.subtasks,
+        onColumnOrderChange: setColumnOrder,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
+        getExpandedRowModel: getExpandedRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        paginateExpandedRows: false,
+        meta: {
+            extendReviewRequestClick: (row) => {
+                console.log("row", row);
+                setIsOpenReviewExtendRequestModal(true);
+            },
+            extendRequestClick: (row) => {
+                console.log("row", row);
+                setIsOpenExtendRequestModal(true);
+            },
+            deadlineExplainClick: (row) => {
+                setProjectPmGoalId(row.id)
+                console.log("row", row);
+                setIsOpenDeadlineExplainModal(true);
+            },
+            resolveExplainClick: (row) => {
+                setPmGoalExtendReason(row.reason);
+                setProjectPmGoalId(row.id)
+                setIsOpenResolveModal(true);
+            }
+        }
+    })
+
+
+    const handleCloseExtendReviewModal = () => {
+        setIsOpenReviewExtendRequestModal(false);
     };
 
-    // Function to handle items per page change
-    const handleItemsPerPageChange = (e) => {
-        const selectedItemsPerPage = parseInt(e.target.value, 10);
-        setItemsPerPage(selectedItemsPerPage);
-        setCurrentPage(0); // Reset to the first page when changing items per page
-    };
-    //pagination end
 
-    //deadline explanation modal
-    const [isModalTwoOpen, setIsModalTwoOpen] = React.useState(false);
-
-    const closeModalTwo = () => {
-        setIsModalTwoOpen(false);
+    const handleClosExtendRequestModal = () => {
+        setIsOpenExtendRequestModal(false);
     };
 
-    //resolve modal
+    const handleCloseDeadlineExplainModal = () => {
+        setIsOpenDeadlineExplainModal(false);
+    }
 
-    const [isModalThreeOpen, setIsModalThreeOpen] = React.useState(false);
+    const handleCloseResolveModal = () => {
+        setIsOpenResolveModal(false);
+    }
 
-    const closeModalThree = () => {
-        setIsModalThreeOpen(false);
-    };
+    console.log(projectPmGoalId, "projectPmGoalId")
 
-    // Calculate the starting and ending indices for the current page
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
     return (
-        <div>
-            <table style={tableStyle}>
-                <thead>
-                    <tr>
-                        <th style={thStyle}>#</th>
-                        <th style={thStyle}>Goal Start Date</th>
-                        <th style={thStyle}>Goal DeadLine</th>
-                        <th style={thStyle}>Duration</th>
-                        <th style={thStyle}>Description</th>
-                        <th style={thStyle}>Reason</th>
-                        <th style={thStyle}>Suggestion</th>
-                        <th style={thStyle}>Comment</th>
-                        <th style={thStyle}>Action</th>
-                    </tr>
-                </thead>
-                {!isFetchingPmGoal && (
-                    <tbody>
-                        {pmGoal.slice(startIndex, endIndex).map((goal) => (
-                            <tr key={goal.id}>
-                                <td style={thTdStyle}>{goal.id}</td>
-                                <td style={thTdStyle}>
-                                    {goal.goal_start_date}
-                                </td>
-                                <td style={thTdStyle}>{goal.goal_end_date}</td>
-                                <td style={thTdStyle}>{goal.duration} Days</td>
-                                <td style={thTdStyle}>
-                                    {goal.description ? goal.description : "--"}
-                                </td>
-                                <td
-                                    style={thTdStyle}
-                                    dangerouslySetInnerHTML={{
-                                        __html: goal.reason
-                                            ? goal.reason
-                                            : "--",
-                                    }}
-                                />
-
-                                <td
-                                    style={thTdStyle}
-                                    dangerouslySetInnerHTML={{
-                                        __html: goal.suggestion
-                                            ? goal.suggestion
-                                            : "--",
-                                    }}
-                                />
-
-                                <td
-                                    style={thTdStyle}
-                                    dangerouslySetInnerHTML={{
-                                        __html: goal.admin_comment
-                                            ? goal.admin_comment
-                                            : "--",
-                                    }}
-                                />
-                                <td style={thTdStyle}>
-                                    {(() => {
-                                        if (auth.roleId === 4) {
-                                            if (!goal.reason) {
-                                                if (
-                                                    new Date(
-                                                        goal.goal_end_date
-                                                    ) < new Date()
-                                                ) {
-                                                    return (
-                                                        <button
-                                                            style={{
-                                                                color: "blue",
-                                                                padding: "3px",
-                                                            }}
-                                                            onClick={() => {
-                                                                setProjectPmGoalId(
-                                                                    goal.id
-                                                                );
-                                                                setIsModalTwoOpen(
-                                                                    true
-                                                                );
-                                                            }}
-                                                        >
-                                                            Deadline Explanation
-                                                        </button>
-                                                    );
-                                                } else {
-                                                    return "N/A";
-                                                }
-                                            }
-                                        } else if (
-                                            auth.roleId === 1 &&
-                                            goal.reason
-                                        ) {
-                                            if (
-                                                goal.admin_comment &&
-                                                goal.suggestion
-                                            ) {
-                                                return (
-                                                    <button
-                                                        style={{
-                                                            padding: "3px",
-                                                        }}
-                                                    >
-                                                        Resolved
-                                                    </button>
-                                                );
-                                            }
-                                            return (
-                                                <button
-                                                    style={{
-                                                        color: "blue",
-                                                        padding: "3px",
-                                                    }}
-                                                    onClick={() => {
-                                                        setIsModalThreeOpen(
-                                                            true
-                                                        );
-                                                        setProjectPmGoalId(
-                                                            goal.id
-                                                        );
-                                                        setPmGoalExtendReason(
-                                                            goal.reason
-                                                        );
-                                                    }}
-                                                >
-                                                    Resolve
-                                                </button>
-                                            );
-                                        }
-
-                                        return "--"; // Default case
-                                    })()}
-                                </td>
+        <div className="sp1_tasks_table_wrapper">
+            <table className='sp1_tasks_table'>
+                    <thead className="sp1_tasks_thead">
+                            {table.getHeaderGroups().map(headerGroup => (
+                            <tr key={headerGroup.id} className='sp1_tasks_tr'>
+                                {headerGroup.headers.map(header => {
+                                return <DragableColumnHeader key={header.id} header={header} table={table} />
+                                })}
                             </tr>
-                        ))}
-                    </tbody>
-                )}
-                {isFetchingPmGoal &&
-                    _.times(itemsPerPage, (item) => (
-                        <TableRow key={item}>
-                            {_.times(9, (col) => (
-                                <TableItem key={col} className="py-3">
-                                    <Placeholder />
-                                </TableItem>
                             ))}
-                        </TableRow>
-                    ))}
-            </table>
-
-            <PaginationPmGoalTable
-                isFetchingPmGoal={isFetchingPmGoal}
-                pageCount={pageCount}
-                handlePageClick={handlePageClick}
-                handleItemsPerPageChange={handleItemsPerPageChange}
-                itemsPerPage={itemsPerPage}
-            />
-            <DeadlineExplainModal
-                projectPmGoalId={projectPmGoalId}
-                projectDetails={projectDetails}
-                isModalTwoOpen={isModalTwoOpen}
-                closeModalTwo={closeModalTwo}
-            />
-
-            <ResolveModal
-                pmGoalExtendReason={pmGoalExtendReason}
-                projectPmGoalId={projectPmGoalId}
-                projectDetails={projectDetails}
-                isModalThreeOpen={isModalThreeOpen}
-                closeModalThree={closeModalThree}
-            />
-
+                    </thead>
+                    <tbody className='sp1_tasks_tbody'>
+                            {!isLoading && table.getRowModel().rows.map(row => {
+                            return (
+                                <tr
+                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
+                                    key={row.id}
+                                >
+                                {row.getVisibleCells().map(cell => {
+                                    return (
+                                    <td key={cell.id} className='px-2 sp1_tasks_td'>
+                                         
+                                        { flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                            )
+                                        }
+                                    </td>
+                                    )
+                                })}
+                                </tr>
+                            )
+                            })}
+                            {isLoading && <PmGolasTableLoader prevItemLength={data?.length} />}
+                    </tbody>
+                </table>
+                {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
+                <ExtendRequestModal
+                    projectDetails={projectDetails}
+                    isOpen={isOpenExtendRequestModal}
+                    onClose={handleClosExtendRequestModal}
+                />
+                < ReviewExtendRequestModal
+                    projectDetails={projectDetails}
+                    isOpen={isOpenReviewExtendRequestModal}
+                    onClose={handleCloseExtendReviewModal}
+                />
+                <DeadlineExplainModal
+                    projectPmGoalId={projectPmGoalId}
+                    projectDetails={projectDetails}
+                    isModalTwoOpen={isOpenDeadlineExplainModal}
+                    closeModalTwo={handleCloseDeadlineExplainModal}
+                />
+                <ResolveModal
+                    projectDetails={projectDetails}
+                    pmGoalExtendReason={pmGoalExtendReason}
+                    projectPmGoalId={projectPmGoalId}
+                    isModalOpen={isOpenResolveModal}
+                    closeModal={handleCloseResolveModal}
+                />
             <Toaster />
         </div>
     );
 };
 
-export default PMGoalsTable;
+export default PmGoalsTable;
 
-// Table styles
-const tableStyle = {
-    borderCollapse: "collapse",
-    width: "100%",
-};
 
-// Styles for table headers and cells
-const thTdStyle = {
-    textAlign: "center",
-
-    padding: "8px",
-};
-
-// Style for table headers with background color
-const thStyle = {
-    ...thTdStyle,
-    backgroundColor: "#f2f2f2",
-};

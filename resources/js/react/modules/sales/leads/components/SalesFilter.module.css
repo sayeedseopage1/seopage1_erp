@@ -9,7 +9,16 @@
 }
 
 .dropdownToggle {
-  width: 250px;
+  width: 110px;
+  border: 1px solid #ddd;
+  height: 36px;
+  border-radius: 6px;
+  background-color: transparent;
+  text-align: left;
+  padding-inline: 10px;
+}
+.dropdownToggleConvertStatus{
+  width: 210px;
   border: 1px solid #ddd;
   height: 36px;
   border-radius: 6px;

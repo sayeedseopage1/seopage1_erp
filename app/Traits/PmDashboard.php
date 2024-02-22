@@ -1356,15 +1356,6 @@ trait PmDashboard
             /*----------------------End today data-------------------------*/
 
 
-
-
-
-
-
-
-
-
-
             /*-----------------------Month data--------------------------*/
             $today = Carbon::today()->format('d');
             if ($today > 15) {
@@ -1467,48 +1458,61 @@ trait PmDashboard
             ->get();
             $this->total_released_amount_previous_cycle = Project::select('projects.*')
 
-            ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
-            ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-            ->leftJoin('payments','payments.invoice_id','invoices.id')
-            ->where('projects.pm_id', Auth::id())
-           // ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
-           ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
-            ->whereBetween('payments.paid_on', [$startMonth, $release_date])
-        //    / ->groupBy('project_milestones.project_id')
-            ->sum('project_milestones.cost');
-            $this->total_released_amount_previous_cycle_get = Project::select('projects.*',
-            'project_milestones.milestone_title as milestone_title',
-            'project_milestones.created_at as milestone_creation_date',
-            'payments.paid_on as milestone_released_date',
-            'project_milestones.cost as milestone_cost',
-            'project_milestones.status as milestone_status'
-            )
+      ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
+      ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+      ->leftJoin('payments','payments.invoice_id','invoices.id')
+      
+     // ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+     ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-            ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
-            ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-            ->leftJoin('payments','payments.invoice_id','invoices.id')
-           
-           // ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
-        //    ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
-        //     ->whereBetween('payments.paid_on', [$startMonth, $release_date])
-        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
-
-            $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
-               ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
-               ->where('projects.pm_id', Auth::id())
-               ;
-                           
-        })
-      ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-               $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
-                ->where('project_milestones.created_at', '<', $startMonth)
-                ->where('projects.pm_id', Auth::id())
-                ;
-
+        $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+           ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+           ->where('projects.pm_id', Auth::id())
+           ;
+                       
     })
-            ->orderBy('payments.paid_on','desc')
+  ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+           $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+            ->where('project_milestones.created_at', '<', $startMonth)
+            ->where('projects.pm_id', Auth::id())
+            ;
+  
+  })
+  //    / ->groupBy('project_milestones.project_id')
+      ->sum('project_milestones.cost');
+      $this->total_released_amount_previous_cycle_get = Project::select('projects.*',
+      'project_milestones.milestone_title as milestone_title',
+      'project_milestones.created_at as milestone_creation_date',
+      'payments.paid_on as milestone_released_date',
+      'project_milestones.cost as milestone_cost',
+      'project_milestones.status as milestone_status'
+      )
 
-            ->get();
+      ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
+      ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+      ->leftJoin('payments','payments.invoice_id','invoices.id')
+    
+     // ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+  //    ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
+  //     ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+  ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+      $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+         ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+         ->where('projects.pm_id', Auth::id())
+         ;
+                     
+  })
+->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+         $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+          ->where('project_milestones.created_at', '<', $startMonth)
+          ->where('projects.pm_id', Auth::id())
+          ;
+
+})
+      ->orderBy('payments.paid_on','desc')
+
+      ->get();
             $this->no_of_finished_projects_this_cycle= Project::select('projects.*',
             'pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
             'project_members.created_at as project_accept_date')

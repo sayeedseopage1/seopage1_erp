@@ -1,17 +1,24 @@
-import * as React from 'react';
+import * as React from "react";
 import { Listbox } from "@headlessui/react";
 import styles from "./SalesFilter.module.css";
 import Avatar from "../../../../global/Avatar";
-import {filter, lowerCase, includes} from 'lodash'; 
+import { filter, lowerCase, includes } from "lodash";
 
 export default function LeadSource({ value, onChange, data }) {
     const [query, setQuery] = React.useState("");
 
-    
-    const filteredData = data ? query ? filter(data, item => includes(lowerCase(item), lowerCase(query))) : data : [];
+    const filteredData = data
+        ? query
+            ? filter(data, (item) =>
+                  includes(lowerCase(item), lowerCase(query))
+              )
+            : data
+        : [];
     return (
         <div className={styles.toggleWrapper}>
-            <span><strong>Lead Source:</strong> </span>
+            <span>
+                <strong>Lead Source:</strong>{" "}
+            </span>
 
             <Listbox
                 as="div"
@@ -25,11 +32,11 @@ export default function LeadSource({ value, onChange, data }) {
                 <Listbox.Options className={styles.dropdownMenu}>
                     <div className={styles.searchBox}>
                         <i className="fa-solid fa-search" />
-                        <input 
-                            type="text" 
-                            placeholder="Search..." 
-                            value={query} 
-                            onChange={e=> setQuery(e.target.value)}
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
                         />
                     </div>
                     <div className={styles.options}>
@@ -38,7 +45,7 @@ export default function LeadSource({ value, onChange, data }) {
                                 `${styles.dropdownItem} ${
                                     active && styles.dropdownItemActive
                                 } ${selected && styles.dropdownItemSelected}`
-                            } 
+                            }
                             value=""
                         >
                             Select All
@@ -48,11 +55,13 @@ export default function LeadSource({ value, onChange, data }) {
                                 className={({ active, selected }) =>
                                     `${styles.dropdownItem} ${
                                         active && styles.dropdownItemActive
-                                    } ${selected && styles.dropdownItemSelected}`
+                                    } ${
+                                        selected && styles.dropdownItemSelected
+                                    }`
                                 }
                                 key={index}
                                 value={item}
-                            > 
+                            >
                                 {item}
                             </Listbox.Option>
                         ))}

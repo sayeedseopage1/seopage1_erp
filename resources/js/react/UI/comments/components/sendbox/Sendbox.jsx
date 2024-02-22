@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Swal from "sweetalert2";
 // editor
 import "draft-js/dist/Draft.css";
 import Editor from "@draft-js-plugins/editor";
@@ -36,6 +36,9 @@ import {
     ToolbarContainer,
     AnchorLinkButton,
     MentionComment,
+    ProgressBarContainer,
+    ProgressBar,
+    ServerMessage,
 } from "./ui";
 import ServiceProvider, { useEditor } from "./service";
 import HandleFileIcon from "../../utils/HandleFileIcon";
@@ -46,9 +49,16 @@ import { usePostCommentMutation } from "../../../../services/api/commentsApiSlic
 import { useAuth } from "../../../../hooks/useAuth";
 import { useCommentContext } from "../../CommentsBody";
 import MentionedComment from "./MentiondComment";
-import { toast } from 'react-toastify'
-import { getFormDataObj } from "../../utils/getFormDataObj";
-// service provider
+import { toast } from "react-toastify";
+
+//mitul import
+import { useCommentStore } from "../../zustand/store";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import EditIcon from "../../_Data/editor.svg";
+import InputIcon from "../../_Data/input.svg";
+import UploadIcon from "../../_Data/upload.svg";
 
 const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const [editorState, setEditorState] = React.useState(() =>
@@ -75,6 +85,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         handlePastedFiles,
         renderToHtml,
         Toolbar,
+        inputKey,
     } = useEditor();
 
     const {
@@ -87,8 +98,28 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
     const auth = useAuth();
 
-    const [postComment, { isLoading: commentPostingStatus }] =
-        usePostCommentMutation();
+    // const [postComment, { isLoading: commentPostingStatus }] =
+    //     usePostCommentMutation();
+
+    //mitul
+
+    const { setCommentState } = useCommentStore();
+    const { task } = useSelector((s) => s.subTask);
+    const param = useParams();
+
+    const [isFetching, setIsFetching] = React.useState(false);
+    // State to track overall upload progress
+    const [overallProgress, setOverallProgress] = useState(0);
+
+    // Axios instance with onUploadProgress callback
+    const axiosInstance = axios.create();
+
+    // Function to reset overall progress
+    const resetProgress = () => {
+        setOverallProgress(0);
+    };
+
+    //mitul
 
     React.useEffect(() => {
         if (usersData?.length > 0) {
@@ -102,6 +133,8 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         setIsMentionBoxOpen(_open);
     }, []);
 
+    //mitul
+    //mention people
     const onSearchChange = React.useCallback(
         ({ value }) => {
             let data =
@@ -110,18 +143,27 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                         user?.name
                             ?.toLowerCase()
                             ?.includes(value?.toLowerCase()) &&
-                        user?.role_id !== null
+                        user?.role_id !== null &&
+                        (user?.role_id === 1 ||
+                            user?.id === task?.added_by ||
+                            (user?.id === task?.project_manager_id &&
+                                task.subtask_id === null) ||
+                            user?.id === task?.users?.[0].id ||
+                            user?.role_id === 8 ||
+                            user?.role_id === 6)
                 ) || [];
             setSuggestions(data);
         },
         [users]
     );
 
+    //mitul
+
     // handle on mention
     const handleMention = (...arg) => {
         const user = arg[0];
         // console.log(arg);
-        setMentionedUser(prev=>[...prev,user.id]);
+        setMentionedUser((prev) => [...prev, user.id]);
         // here mention api goes to...
     };
 
@@ -130,10 +172,13 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     // },[mentionedUser])
 
     // handle post comment
+
+    const comment = renderToHtml(editorState) ?? "";
+
     const handlePostComment = async () => {
+        setIsFetching(true);
+        resetProgress();
         setRefetchType("");
-        const comment = renderToHtml(editorState) ?? "";
- 
 
         if (!comment && !files?.length > 0) {
             // Swal.fire({
@@ -165,23 +210,42 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         formData.append("added_by", auth?.getId() ?? "");
         formData.append("last_updated_by", auth?.getId() ?? "");
         formData.append("mention_id", mentionedComment?.id || null);
-        [...mentionedUser].forEach((user)=>{
-            formData.append("mention_user_id",user);
-        })
+        [...mentionedUser].forEach((user) => {
+            formData.append("mention_user_id", user);
+        });
         if (files.length) {
             Array.from(files).forEach((file) => {
                 formData.append(`file[]`, file);
             });
         }
 
-        // console.log(getFormDataObj(formData));
-        // return;
-
         try {
-            await postComment({ taskId, data: formData });
-            await onSubmit(formData);
+            const response = await axiosInstance.post(
+                `/account/task/${taskId}/json?mode=comment_store`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    onUploadProgress: (progressEvent) => {
+                        const progress = Math.round(
+                            (progressEvent.loaded / progressEvent.total) * 100
+                        );
+                        setOverallProgress(progress);
+                    },
+                }
+            );
 
-            /// clear all state
+            if (response.status === 200) {
+                setCommentState();
+                setRefetchType("");
+                setIsFetching(false);
+                resetProgress();
+                clearFiles();
+                setEditorState(() => EditorState.createEmpty());
+                setMentionedComment(null);
+            }
+
             clearFiles();
             setEditorState(() => EditorState.createEmpty());
             setMentionedComment(null);
@@ -192,6 +256,12 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                 showConfirmButton: true,
                 confirmButtonColor: "red",
             });
+        } finally {
+            setIsFetching(false);
+            resetProgress();
+            clearFiles();
+            setEditorState(() => EditorState.createEmpty());
+            setMentionedComment(null);
         }
     };
 
@@ -205,10 +275,10 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     // handle key down
     const handleKeyDown = (e) => {
         e.preventDefault();
-        if(e.keyCode === 13){
+        if (e.keyCode === 13) {
             handlePostComment();
         }
-    }
+    };
 
     const isExpended = files?.length > 0 || expend;
 
@@ -217,29 +287,88 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             <EditorWrapperWithImageAndToolbar>
                 {mentionedComment && <MentionedComment />}
 
+                {/* mitul progressbar add */}
+
                 {files?.length > 0 ? (
                     <FilesContainer>
                         {files?.map((file, index) => (
                             <FileItem key={index}>
-                                <RemoveFile
-                                    onClick={() => handleRemoveImage(index)}
-                                >
-                                    <i className="fa-solid fa-xmark" />
-                                </RemoveFile>
-                                <HandleFileIcon file={file} />
+                                {/* not clickble when loading */}
+                                {isFetching ? (
+                                    <div
+                                        style={{
+                                            pointerEvents: "none",
+                                            opacity: 0.5,
+                                        }}
+                                    >
+                                        <RemoveFile
+                                            onClick={() =>
+                                                handleRemoveImage(index)
+                                            }
+                                        >
+                                            <i className="fa-solid fa-xmark" />
+                                        </RemoveFile>
+                                        <HandleFileIcon file={file} />
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <RemoveFile
+                                            onClick={() =>
+                                                handleRemoveImage(index)
+                                            }
+                                        >
+                                            <i className="fa-solid fa-xmark" />
+                                        </RemoveFile>
+                                        <HandleFileIcon file={file} />
+                                    </div>
+                                )}
                             </FileItem>
                         ))}
 
                         <FileItemInput>
                             <input
+                                key={inputKey} // Use the dynamic key for the input
                                 type="file"
                                 multiple
                                 onChange={handleUploadImage}
                             />
                             <i className="fa-regular fa-square-plus" />
                         </FileItemInput>
+
+                        {/* progress bar show */}
+                        {isFetching && (
+                            <ProgressBarContainer>
+                                <ProgressBar
+                                    style={{
+                                        width: `${overallProgress}%`,
+                                        textAlign: "center",
+                                        color: "white",
+                                    }}
+                                >
+                                    {overallProgress == 100
+                                        ? 99
+                                        : overallProgress}
+                                    %
+                                </ProgressBar>
+                                {overallProgress == 100 && (
+                                    <ServerMessage>
+                                        <div>Waiting for server response</div>
+                                        <div style={{ marginTop: "5px" }}>
+                                            <Loader
+                                                title=""
+                                                borderRightColor="white"
+                                                width="10px"
+                                                height="10px"
+                                                border="2px solid #3c3d3e"
+                                            />
+                                        </div>
+                                    </ServerMessage>
+                                )}
+                            </ProgressBarContainer>
+                        )}
                     </FilesContainer>
                 ) : null}
+                {/* mitul progressbar add */}
 
                 {/* toolbar container */}
                 {expend ? (
@@ -250,7 +379,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                                     <BoldButton {...externalProps} />
                                     <ItalicButton {...externalProps} />
                                     <UnderlineButton {...externalProps} />
-                                    <CodeButton {...externalProps} /> 
+                                    <CodeButton {...externalProps} />
                                     <BlockquoteButton {...externalProps} />
                                     <AnchorLinkButton
                                         onClick={() =>
@@ -299,6 +428,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                     </EditorWrapper>
 
                     <ExpendEditor onClick={() => setExpend(!expend)}>
+                        {/* <img src={EditIcon} /> */}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="21.831"
@@ -338,7 +468,14 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
             <RightButtonGroup isExpended={isExpended}>
                 <FileUploadButton>
-                    <input type="file" multiple onChange={handleUploadImage} onKeyDown={handleKeyDown} />
+                    <input
+                        key={inputKey}
+                        type="file"
+                        multiple
+                        onChange={handleUploadImage}
+                        onKeyDown={handleKeyDown}
+                    />
+                    {/* <img src={InputIcon} width={40} /> */}
                     <svg
                         width="20"
                         height="22"
@@ -362,10 +499,13 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                 </FileUploadButton>
 
                 <SendButton
-                    disabled={commentPostingStatus}
+                    disabled={
+                        isFetching ||
+                        (comment.length === 0 && files.length === 0)
+                    }
                     onClick={handlePostComment}
                 >
-                    {commentPostingStatus ? (
+                    {isFetching ? (
                         <Loader
                             title=""
                             borderRightColor="white"
@@ -374,6 +514,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                             border="2px solid #3c3d3e"
                         />
                     ) : (
+                        // <img src={UploadIcon} width={40} />
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="23.351"

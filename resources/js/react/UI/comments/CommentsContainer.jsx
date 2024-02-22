@@ -3,14 +3,13 @@ import { useWindowSize } from "react-use";
 import CustomModal from "./components/CustomModal";
 import Modal from "./components/Modal";
 import CommentsBody from "./CommentsBody";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import commentDemoData from "./_Data/commentDemoData";
 import { useParams } from "react-router-dom";
 import { useGetCommentsQuery } from "../../services/api/commentsApiSlice";
 import CommentContainerDecider from "./CommentContainerDecider";
 import _ from "lodash";
-
-// const demoComments = commentDemoData(20);
+import { useCommentStore } from "./zustand/store";
 
 const CommentsContainer = ({
     toggleRef = null,
@@ -26,6 +25,7 @@ const CommentsContainer = ({
     showFullScreenBtn = true,
     height = "89vh",
 }) => {
+    const { commentState } = useCommentStore();
     // ---------------------------------------------------------
     const param = useParams();
 
@@ -36,6 +36,12 @@ const CommentsContainer = ({
     const { data, isFetching, isLoading, refetch } = useGetCommentsQuery(
         param?.taskId
     );
+
+    // useEffect hook to call refetch when commentState changes
+    useEffect(() => {
+        refetch();
+    }, [commentState]);
+
     return (
         <CommentContainerDecider
             fullScreenView={fullScreenView}

@@ -1,0 +1,65 @@
+
+.idContainer{
+    width: 20px !important;
+}
+
+.actionContainer{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 290px;
+}
+
+
+.action{
+    width: fit-content;
+    background: #e6f8ef;
+    color:  #00b95d;
+    padding: 0.25rem 0.85rem;
+    font-size: 12px;
+    line-height: 1.6;
+    letter-spacing: 0.52px;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid #80dcae;
+    -webkit-box-orient: vertical;
+    transition: all 0.3s ease;
+    display: -webkit-box;
+    text-decoration: none;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.action.deadlineExplained{
+    background: #f22121;
+    color:  #e6f8ef;
+    border-color: #f22121;
+    font-weight: 600;
+    padding: 8px 10px !important;
+    cursor: pointer;
+}
+
+.action.extend{
+    color: #e6f8ef;
+    background: #00b95d !important;
+    border-color: #00b95d !important;
+    font-weight: 600;
+    padding: 8px 10px !important;
+    cursor: pointer;
+}
+.action.resolve{
+    color: #e6f8ef;
+    background: #ffa500 !important;
+    border-color: #ffa500 !important;
+    font-weight: 600;
+    padding: 8px 10px !important;
+    cursor: pointer;
+}
+.action.extend:hover{
+    background: #00af58 !important;
+    border-color: #00af58 !important;
+}
+
+
