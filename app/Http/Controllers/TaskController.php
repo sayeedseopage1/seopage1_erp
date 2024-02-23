@@ -2670,7 +2670,7 @@ class TaskController extends AccountBaseController
                  abort(403);
             }
         }
-        if(Auth::user()->role_id == 6)
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13)
         {
             $task_check= Task::where('id',$id)->first();
             $task_user_check= TaskUser::where('user_id',Auth::id())->where('task_id',$id)->first();
