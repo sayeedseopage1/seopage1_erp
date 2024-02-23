@@ -2439,9 +2439,18 @@ class ProjectController extends AccountBaseController
                 ));
                 $this->view = 'projects.ajax.members';
                 break;
-            case 'milestones':
-                $this->view = 'projects.ajax.milestones';
-                break;
+               
+                    case 'milestones':
+                        if(Auth::user()->role_id != 6)
+                        {
+                        $this->view = 'projects.ajax.milestones';
+                    }else {
+                        abort(403);
+                    }
+                        break;
+
+               
+           
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
                 break;
