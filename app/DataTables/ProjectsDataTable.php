@@ -206,6 +206,11 @@ class ProjectsDataTable extends BaseDataTable
             {
                 $project_value = $deal->actual_amount+ $deal->upsell_actual_amount . $currency->currency_symbol . ('<span class="badge badge-success">Upsold Amount ('.$deal->upsell_actual_amount.$currency->currency_symbol.')</span>');
             }
+            if(Auth::user()->role_id == 6)
+            {
+                $project_value = 'N/A';
+
+            }
 
 
             return $project_value;

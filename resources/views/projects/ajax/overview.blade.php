@@ -1295,6 +1295,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
         </div>
         @endif
+        @if(Auth::user()->role_id != 6)
         <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
@@ -1307,34 +1308,34 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                             $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
                              ?>
-          <table class="table table-responsive table-bordered table-striped">
-       <thead class="thead-dark">
-         <tr>
-           <th scope="col">#</th>
-           <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
-           <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
-           <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
-            <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
-         </tr>
-       </thead>
-       <tbody>
-         @foreach($milestones as $milestone)
-         <tr>
-           <th class="pl-20">{{$loop->index+1}}</th>
-           <td>{{$milestone->milestone_title}}</td>
-           <td>{{$milestone->milestone_type}}</td>
-           <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
-           <td>@if($milestone->summary != null)
-             {!!$milestone->summary!!}
-           @else
-           --
-           @endif
-          </td>
-         </tr>
-         @endforeach
+                                        <table class="table table-responsive table-bordered table-striped">
+                                            <thead class="thead-dark">
+                                        <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
+                                        <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
+                                        <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
+                                            <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($milestones as $milestone)
+                                        <tr>
+                                        <th class="pl-20">{{$loop->index+1}}</th>
+                                        <td>{{$milestone->milestone_title}}</td>
+                                        <td>{{$milestone->milestone_type}}</td>
+                                        <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
+                                        <td>@if($milestone->summary != null)
+                                            {!!$milestone->summary!!}
+                                        @else
+                                        --
+                                        @endif
+                                        </td>
+                                        </tr>
+                                        @endforeach
 
-       </tbody>
-     </table>
+                                    </tbody>
+                                                    </table>
 
 
 
@@ -1345,6 +1346,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
+        @endif
         <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
