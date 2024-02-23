@@ -1209,9 +1209,16 @@ class TaskController extends AccountBaseController
                  ->where('task_id', $request->task_id)
               //  ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
+                $generalRevisionCountByPm = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
+                ->where('projects.pm_id', Auth::id())
+              
+                 ->where('task_id', $request->task_id)
+                 ->where('revision_status', 'Client Has Revision')
+              //  ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->count();
                
             // dd($gene/ralRevisionCount) ;
-            if($generalRevisionCount >= 1){
+            if($generalRevisionCount >= 1 || $generalRevisionCountByPm >= 1){
                 return response()->json([
                     'error' => true,
                     'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum time'
