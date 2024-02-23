@@ -1222,7 +1222,7 @@ class TaskController extends AccountBaseController
             {
                 return response()->json([
                     'error' => true,
-                    'message' => 'You have already submitted tasks to client once so you cannot add <span class="badge badge-danger">General Revision</span>'
+                    'message' => 'You have already submitted task to client once so you cannot add <span class="badge badge-danger">General Revision</span>'
                 ]);
 
             }
