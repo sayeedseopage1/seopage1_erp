@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    max-width: 400px;
+    max-width: 450px;
 }
 
 
@@ -33,36 +33,36 @@
 }
 
 .deadlineExplained{
-    width: 180px !important;
+    width: 175px !important;
+    padding: 6px 12px !important;
 }
 
 .extend{
-    width: 145px !important;
+    width: 230px !important;
 }
 
 .extendReview{
-    width: 175px !important;
+    width: 120px !important;
 }
-.action.resolve{
-    color: #e6f8ef;
-    background: #ffa500 !important;
-    border-color: #ffa500 !important;
-    font-weight: 600;
-    padding: 8px 10px !important;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 125px !important;
+
+
+.authorize{
+    padding: 6px 12px !important;
+    width: 185px !important;
+    color: #e6f8ef !important;
+    background-color: #1492d2 !important;
+    border-color: #1492d2 !important;
+    font: Inter;
 }
-.action.resolved{
-    font-weight: 600;
-    padding: 8px 10px !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 85px !important;
+
+
+.resolved{
+    border-color: #1492d2 ;
+    color: #1492d2 ;
+    padding: 6px 12px !important;
+    cursor: not-allowed !important;
 }
+
 .action.extend:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;

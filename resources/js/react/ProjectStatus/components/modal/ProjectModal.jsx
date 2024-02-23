@@ -32,14 +32,9 @@ const ProjectModal = ({
                 contentLabel="Project Details"
             >
                 <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: "20px",
-                    }}
+                    className="d-flex justify-content-between align-items-center mb-3"
                 >
-                    <div style={{ fontSize: "25px" }}> Goal Details</div>
-
+                    <h6 style={{ fontSize: "25px" }}> Goal Details</h6>
                     <RefreshButton
                         onClick={refetchPmGoal}
                         isLoading={isFetchingPmGoal}

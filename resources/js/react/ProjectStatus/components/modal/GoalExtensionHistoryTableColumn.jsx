@@ -20,8 +20,21 @@ export const GoalExtensionHistoryTableColumn = [
   },
   {
       id: "goal_end_date",
-      header: "Goal Dead Line",
+      header: "Prev. Goal Deadline",
       accessorKey: "goal_end_date",
+  },
+  {
+      id: "new_goal_deadline",
+      header: "New Goal Deadline",
+      accessorKey: "new_goal_deadline",
+      cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span > 
+                {data?.goal_end_date ?? "--"} 
+            </span>
+        )
+    }
   },
   {
       id: "duration",
@@ -76,54 +89,70 @@ export const GoalExtensionHistoryTableColumn = [
     }
   },
   {
-    id: "client_communication",
-    header: "Client Communication",
-    accessorKey: "client_communication",
+    id: "extension_requested_on",
+    header: "Extension Requested On",
+    accessorKey: "extension_requested_on",
     cell: ({ row }) => {
         const data = row?.original;
         return (
             <span className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.client_communication ?? "--",}}
+            dangerouslySetInnerHTML={{ __html: data?.extension_requested_on ?? "--",}}
         />
         )
     }
   },
   {
+    id: "extension_requested_for",
+    header: "Extension Requested For",
+    accessorKey: "extension_requested_for",
+    cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span className="multine-ellipsis"
+            dangerouslySetInnerHTML={{ __html: data?.extension_requested_for ?? "--",}}
+        />
+        )
+    }
+  },
+  {
+    id: "extension_req_authorized_on",
+    header: "Extension Req. Authorized On",
+    accessorKey: "extension_req_authorized_on",
+    cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span className="multine-ellipsis"
+            dangerouslySetInnerHTML={{ __html: data?.extension_req_authorized_on ?? "--",}}
+        />
+        )
+    }
+  },
+  {
+    id: "extension_req_authorized_by",
+    header: "Extension Req. Authorized By",
+    accessorKey: "extension_req_authorized_by",
+    cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span className="multine-ellipsis"
+            dangerouslySetInnerHTML={{ __html: data?.extension_req_authorized_by ?? "--",}}
+        />
+        )
+    }
+  },
+  {
+    id: "extension_req_authorized_for",
+    header: "Extension Req. Authorized For",
+    accessorKey: "extension_req_authorized_for",
+    cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span className="multine-ellipsis"
+            dangerouslySetInnerHTML={{ __html: data?.extension_req_authorized_for ?? "--",}}
+        />
+        )
+    }
+  },
 
-      id: "client_communication_rating",
-      header: "Client Communication Rating",
-      accessorKey: "client_communication_rating",
-      cell: ({ row }) => {
-          const data = row?.original;
-          return (
-            <span className="multine-ellipsis">{data.client_communication_rating}</span>
-          )
-      }
-  },
-  {
-    id: "negligence_pm",
-    header: "Negligence From Project Manager",
-    accessorKey: "negligence_pm",
-    cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <span className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.negligence_pm ?? "--",}}
-        />
-        )
-    }
-  },
-  {
-    id: "negligence_pm_rating",
-    // conditionally render the header based on the user role
-    header: "Negligence From Project Manager Rating",
-    accessorKey: "negligence_pm_rating",
-    cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
-        )
-    }
-  },
  
 ];

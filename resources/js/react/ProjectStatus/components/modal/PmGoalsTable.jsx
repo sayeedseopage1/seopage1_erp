@@ -227,6 +227,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                 <DeadlineExplainModal
                     projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
+                    refetchPmGoal={refetchPmGoal}
                     isModalTwoOpen={isOpenDeadlineExplainModal}
                     closeModalTwo={handleCloseDeadlineExplainModal}
                 />

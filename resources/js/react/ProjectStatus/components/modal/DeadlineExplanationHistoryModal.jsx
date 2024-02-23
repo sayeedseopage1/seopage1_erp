@@ -29,9 +29,9 @@ const DeadlineExplanationHistoryModal = ({
       contentLabel="Deadline Explanation History"
     >
       <div
-        className='d-flex justify-content-between mb-3'
+        className='d-flex justify-content-between align-items-center mb-3'
       >
-        <div style={{ fontSize: "25px" }}>Deadline Explanation History </div>
+        <h6 style={{ fontSize: "25px" }}>Deadline Explanation History </h6>
         <RefreshButton
         onClick={refetchPmGoal}
         isLoading={isLoading}

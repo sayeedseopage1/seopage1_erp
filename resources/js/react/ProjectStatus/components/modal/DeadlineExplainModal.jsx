@@ -9,6 +9,7 @@ const DeadlineExplainModal = ({
     projectDetails,
     isModalTwoOpen,
     closeModalTwo,
+    refetchPmGoal
 }) => {
     return (
         <ReactModal
@@ -19,18 +20,15 @@ const DeadlineExplainModal = ({
             contentLabel="Deadline Explanation"
         >
             <div
-                className="d-flex justify-content-between align-items-center"
-                style={{
-                    marginBottom: "15px",
-                }}
+                className="d-flex justify-content-between align-items-center mb-3"
             >
-                <div
+                <h6
                     style={{
                         fontSize: "25px",
                     }}
                 >
                     Deadline Explanation
-                </div>
+                </h6>
                 <button
                     onClick={closeModalTwo}
                     className="d-flex justify-content-center align-items-center rounded-circle"
@@ -51,6 +49,7 @@ const DeadlineExplainModal = ({
                 isModalTwoOpen={isModalTwoOpen}
                 projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
+                refetchPmGoal={refetchPmGoal}
             />
         </ReactModal>
     );
@@ -68,7 +67,7 @@ const customStyles = {
     content: {
         zIndex: 99999999,
         maxWidth: "600px",
-        maxHeight: "550px",
+        maxHeight: "fit-content",
         margin: "auto auto",
         padding: "20px",
     },

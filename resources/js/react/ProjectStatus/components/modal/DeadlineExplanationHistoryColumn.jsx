@@ -115,9 +115,41 @@ export const DeadlineEHColumn = [
   },
   {
     id: "negligence_pm_rating",
-    // conditionally render the header based on the user role
     header: "Negligence From Project Manager Rating",
     accessorKey: "negligence_pm_rating",
+    cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
+        )
+    }
+  },
+  {
+    id: "authorization_status",
+    header: "Authorization Status",
+    accessorKey: "authorization_status",
+    cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
+        )
+    }
+  },
+  {
+    id: "authorized_on",
+    header: "Authorized On",
+    accessorKey: "authorized_on",
+    cell: ({ row }) => {
+        const data = row?.original;
+        return (
+            <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
+        )
+    }
+  },
+  {
+    id: "authorized_by",
+    header: "Authorized By",
+    accessorKey: "authorized_by",
     cell: ({ row }) => {
         const data = row?.original;
         return (

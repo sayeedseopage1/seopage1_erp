@@ -14,13 +14,7 @@ const GoalExtensionHistoryModal = ({
   refetchPmGoal,
   isLoading,
 }) => {
-  // Filter table header by user role
-  const tableHeaderFilterByUser = GoalExtensionHistoryTableColumn.filter(item => {
-    if (window?.Laravel?.user.role_id !== 1) {
-        return item.accessorKey !== 'client_communication_rating' && item.accessorKey !== 'negligence_pm_rating';
-    }
-    return true;
-  });
+
 
   return (
     <ReactModal
@@ -31,9 +25,9 @@ const GoalExtensionHistoryModal = ({
       contentLabel="Goal Extension History"
     >
         <div
-          className='d-flex justify-content-between mb-3'
+          className='d-flex justify-content-between align-items-center mb-3'
         >
-          <div style={{ fontSize: "25px" }}>Goal Extension History</div>
+          <h6 style={{ fontSize: "25px" }}>Goal Extension History</h6>
             <RefreshButton
               onClick={refetchPmGoal}
               isLoading={isLoading}
@@ -44,7 +38,7 @@ const GoalExtensionHistoryModal = ({
           projectDetails={projectDetails}
           closeModal={closeModal}     
           tableName="goalExtensionHistoryTable"   
-          tableColumns={tableHeaderFilterByUser}
+          tableColumns={GoalExtensionHistoryTableColumn}
           goalExtensionHistoryData={GoalExtentionHistoryTableData}
           isLoading={isLoading}
         />

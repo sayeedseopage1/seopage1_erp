@@ -118,18 +118,15 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
             onRequestClose={onClose}
         >
             <div
-                className="d-flex justify-content-between align-items-center"
-                style={{
-                    marginBottom: "15px",
-                }}
+                className="d-flex justify-content-between align-items-center mb-3"
             >
-                <div
+                <h6
                     style={{
                         fontSize: "25px",
                     }}
                 >
                     Extend Request
-                </div>
+                </h6>
                 <button
                     onClick={onClose}
                     className="d-flex justify-content-center align-items-center rounded-circle"

@@ -92,9 +92,9 @@ export const PmGoalsTableColumns = [
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 
-                                                        onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger f-12 ${styles?.deadlineExplained}`}
+                                                        onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.deadlineExplained}`}
                                                     > 
-                                                        Deadline Explanation 
+                                                        Explain Why Expired 
                                                     </button>
                                                 </Switch.Case>
                                             </Switch>
@@ -104,10 +104,15 @@ export const PmGoalsTableColumns = [
                         <Switch.Case condition={user?.roleId === 1 && data.reason}>
                             <Switch>
                                 <Switch.Case condition={data.reason_status == 2}>
-                                    <div  className={`${styles.action} ${styles.resolved} f-12`}> Resolved  </div>
+                                    <button  className={`btn ${styles?.resolved}`}> Resolved  </button>
                                 </Switch.Case>
-                                <Switch.Case condition={data.reason_status === 0}>
-                                    <div onClick={() => handle.resolveExplainClick(data)} className={`${styles.action} ${styles.resolve} f-12`}> Resolve </div>
+                                <Switch.Case condition={data.reason_status === 1}>
+                                    <button 
+                                        onClick={() => handle.resolveExplainClick(data)} 
+                                        className={`btn btn-warning ${styles?.authorize}`}
+                                    > 
+                                    Authorize Explanation 
+                                    </button>
                                 </Switch.Case>
                             </Switch>
                         </Switch.Case>
@@ -115,7 +120,7 @@ export const PmGoalsTableColumns = [
                     <Switch>
                             <Switch.Case condition={user.roleId === 4}>
                                 <button onClick={() => handle.extendRequestClick(data)} className={`btn btn-success ${styles?.extend}`}>
-                                    Extend Request
+                                    Request Deadline Extension
                                 </button>
                             </Switch.Case>
                             <Switch.Case
@@ -125,7 +130,7 @@ export const PmGoalsTableColumns = [
                                 }
                             >
                                 <button onClick={() => handle.extendReviewRequestClick(data)} className={`btn btn-success ${styles?.extendReview}`}>
-                                Review Extend Time
+                                    Extend Time
                                 </button>
                             </Switch.Case>
                     </Switch>

@@ -105,20 +105,15 @@ const ResolveModal = ({
             contentLabel="Resolve"
         >
             <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "15px",
-                }}
+                className="d-flex justify-content-between align-items-center mb-3"
             >
-                <div
+                <h6
                     style={{
                         fontSize: "25px",
                     }}
                 >
                     Resolve
-                </div>
+                </h6>
 
                 <button
                     onClick={closeModal}

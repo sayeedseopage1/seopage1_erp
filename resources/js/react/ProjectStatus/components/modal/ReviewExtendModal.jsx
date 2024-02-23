@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
-toast;
 import { Flex } from "../table/ui";
+import { IoClose } from "react-icons/io5";
 import CKEditorComponent from "../../../ckeditor";
 import {
     useCreateReviewExtendRequestMutation,
@@ -156,21 +156,29 @@ const ReviewExtendRequestModal = ({
             onRequestClose={onClose}
         >
             <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "20px",
-                }}
+                className="d-flex justify-content-between align-items-center mb-3"
             >
-                <div
+                <h6
                     style={{
                         fontSize: "25px",
                     }}
                 >
                     Review Extend Time
-                </div>
-
-                <RefreshButton onClick={refetch} isLoading={isFetching} />
+                </h6>
+                <button
+                    onClick={onClose}
+                    className="d-flex justify-content-center align-items-center rounded-circle"
+                    style={{
+                        backgroundColor: "gray",
+                        padding: "2px 4px 2px 4px",
+                        color: "white",
+                        width: "24px",
+                        height: "24px",
+                    }}
+                >
+                    <IoClose />
+                </button>    
+                {/* <RefreshButton onClick={refetch} isLoading={isFetching} /> */}
             </div>
 
             <section style={styles.container}>

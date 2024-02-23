@@ -14,9 +14,9 @@ const PercentageofGoalsMetModal = ({isOpen, closeModal,projectDetails, percentag
       contentLabel="Percentage of Goals Met"
     >
                 <div
-                  className='d-flex justify-content-between mb-3'
+                  className='d-flex justify-content-between align-items-center mb-3'
                 >
-                    <div style={{ fontSize: "25px" }}>Percentage of Goals Met</div>
+                    <h6 style={{ fontSize: "25px" }}>Percentage of Goals Met</h6>
 
                     <RefreshButton
                     />

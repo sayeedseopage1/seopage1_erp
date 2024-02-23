@@ -8,6 +8,7 @@ const DeadlineExplanation = ({
     projectPmGoalId,
     isModalTwoOpen,
     projectDetails,
+    refetchPmGoal,
 }) => {
     const {
         project_name,
@@ -41,11 +42,13 @@ const DeadlineExplanation = ({
 
             if (result?.status) {
                 closeModalTwo();
+                refetchPmGoal();
                 toast.success("Submission was successful");
             } else {
                 toast.error("Submission was not successful");
             }
         } catch (error) {
+            console.log("Error submitting data", error);
             toast.error("Error submitting data");
         } finally {
             setEditorData("");
