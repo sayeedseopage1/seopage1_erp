@@ -1211,7 +1211,7 @@ class TaskController extends AccountBaseController
                 ->count();
                
             // dd($gene/ralRevisionCount) ;
-            if($generalRevisionCount >= 2){
+            if($generalRevisionCount >= 1){
                 return response()->json([
                     'error' => true,
                     'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum time'
