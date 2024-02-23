@@ -2670,27 +2670,7 @@ class TaskController extends AccountBaseController
                  abort(403);
             }
         }
-        if( Auth::user()->role_id == 13)
-        {
-            $task_check= Task::where('id',$id)->first();
-            $task_user_check= TaskUser::where('user_id',Auth::id())->where('task_id',$id)->first();
-            dd($task_check->added_by, $task_user_check->user_id, Auth::id(), $task_user_check->user_id != Auth::id());
-            if($task_check->added_by != Auth::id() || $task_user_check->user_id != Auth::id())
-            {
-                abort(403);
-            }
-        }
-        if(Auth::user()->role_id == 6)
-        {
-            $task_check= Task::where('id',$id)->first();
-            $task_user_check= TaskUser::where('user_id',Auth::id())->where('task_id',$id)->first();
-         //   dd($task_check->added_by, $task_user_check->user_id);
-            if($task_check->added_by != Auth::id() || $task_user_check->user_id != Auth::id())
-            {
-                abort(403);
-            }
-
-        }
+      
         $viewTaskFilePermission = user()->permission('view_task_files');
         $viewSubTaskPermission = user()->permission('view_sub_tasks');
         $this->viewTaskCommentPermission = user()->permission('view_task_comments');
