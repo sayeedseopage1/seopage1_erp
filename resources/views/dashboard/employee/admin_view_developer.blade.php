@@ -1467,6 +1467,7 @@
             </div>
         </div> --}}
         <div id="generalHtml">
+            <div>
  <div class="row">
             <div class="col-md-4">
                 <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
@@ -2081,6 +2082,7 @@
             <!-- CARD BODY START -->
         
        </div>
+    </div>
 </div>
        
         
