@@ -2674,6 +2674,7 @@ class TaskController extends AccountBaseController
         {
             $task_check= Task::where('id',$id)->first();
             $task_user_check= TaskUser::where('user_id',Auth::id())->where('task_id',$id)->first();
+            dd($task_check->added_by, $task_user_check->user_id);
             if($task_check->added_by != Auth::id() || $task_user_check->user_id != Auth::id())
             {
                 abort(403);
