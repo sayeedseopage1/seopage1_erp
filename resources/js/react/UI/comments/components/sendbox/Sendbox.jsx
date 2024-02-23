@@ -144,6 +144,11 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                             ?.toLowerCase()
                             ?.includes(value?.toLowerCase()) &&
                         user?.role_id !== null &&
+                        user?.name !== "Riadus Salehin" &&
+                        user?.name !== "Md. Abu Sayeed" &&
+                        user?.name !== "Mehedi Hasan Hridoy" &&
+                        user?.name !== "Hasan Hafizul Islam" &&
+                        user?.name !== "Moniruzzaman" &&
                         (user?.role_id === 1 ||
                             user?.id === task?.added_by ||
                             (user?.id === task?.project_manager_id &&
@@ -157,7 +162,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         [users]
     );
 
-    //mitul
+    console.log("suggestion data", suggestions);
 
     // handle on mention
     const handleMention = (...arg) => {
