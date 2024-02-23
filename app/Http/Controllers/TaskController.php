@@ -1200,18 +1200,18 @@ class TaskController extends AccountBaseController
 
         if($revision_type == 'GENERAL_REVISION'){
             
-            $startDate = now()->startOfMonth();  //* Start of the current month
-            $endDate = now()->endOfMonth();      //* End of the current month
+          //  $startDate = now()->startOfMonth();  //* Start of the current month
+          //  $endDate = now()->endOfMonth();      //* End of the current month
 
             $generalRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
                 ->where('projects.pm_id', Auth::id())
                 ->where('revision_type', 'GENERAL_REVISION')
-                // ->where('task_id', $task_revision->id);
-                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                 ->where('task_id', $request->task_id)
+              //  ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                
             // dd($gene/ralRevisionCount) ;
-            if($generalRevisionCount >= 1){
+            if($generalRevisionCount >= 2){
                 return response()->json([
                     'error' => true,
                     'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum time'
@@ -2680,14 +2680,7 @@ class TaskController extends AccountBaseController
             ->join('users', 'task_replies.user_id', '=', 'users.id')
             ->select('task_replies.*', 'users.name', 'users.image', 'users.updated_at')
             ->get();
-        //        dd($this->replys);
-
-        //         $this->details = EmployeeDetails::where('add');
-        //         dd($details);
-
-
-
-
+ 
         $this->task = Task::with([
             'boardColumn', 'project', 'users', 'label', 'approvedTimeLogs', 'approvedTimeLogs.user', 'approvedTimeLogs.activeBreak', 'comments', 'comments.user', 'subtasks.files', 'userActiveTimer',
             'files' => function ($q) use ($viewTaskFilePermission) {
@@ -3175,8 +3168,8 @@ class TaskController extends AccountBaseController
             $generalRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
                 ->where('projects.pm_id', Auth::id())
                 ->where('revision_type', 'GENERAL_REVISION')
-                // ->where('task_id', $task_revision->id);
-                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                 ->where('task_id', $request->task_id)
+                // ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                   
 
