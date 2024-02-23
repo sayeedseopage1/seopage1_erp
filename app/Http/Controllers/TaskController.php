@@ -1218,11 +1218,21 @@ class TaskController extends AccountBaseController
                 ->count();
                
             // dd($gene/ralRevisionCount) ;
-            if($generalRevisionCount >= 1 || $generalRevisionCountByPm >= 1){
+            if($generalRevisionCountByPm >= 1)
+            {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'You have already submitted tasks to client once so you cannot add <span class="badge badge-danger">General Revision</span>'
+                ]);
+
+            }
+            if($generalRevisionCount >= 1  ){
                 return response()->json([
                     'error' => true,
                     'message' => 'You have already attempted <span class="badge badge-danger">General Revision</span> maximum time'
                 ]);
+
+                
             }
          }
 
