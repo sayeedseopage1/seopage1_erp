@@ -4350,6 +4350,7 @@ class TaskController extends AccountBaseController
             if ($totalMinutes % 60 > 0) {
                 $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
             }
+            
 
             $task->parent_task_time_log = $timeLog;
             $task->task_category = $task->category;

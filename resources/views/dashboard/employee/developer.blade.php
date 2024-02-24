@@ -163,8 +163,16 @@
                 id="datatableRange2" placeholder="@lang('placeholders.dateRange')">
         </div>
     </div>
-    
-       
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <div class="bg-white p-20 rounded b-shadow-4 mb-4 mb-md-0 mb-lg-0 pb-">
+                <p class="text-danger" style="font-family: 'Times New Roman', Times, serif; font-size: 25px;">
+                    <marquee>These data are not dynamic fully, please ignore them. We are currently working on it.</marquee>
+                </p>
+            </div>
+        </div>
+    </div>
+           
     <div id="generalHtml">
      <div>  
         <div class="row">
