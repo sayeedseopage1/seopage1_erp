@@ -11522,7 +11522,16 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   }
                 });
               } else {
-                submit();
+                Swal.fire({
+                  icon: "info",
+                  html: "<p>Primary Page Design: All the pages on the website that are money pages (can generate money or revenue), require significant effort to be designed and clients usually remain very picky about them and don\u2019t want to compromise anything in those pages are what we are calling primary pages. You can consider a page as a \u201CPrimary Page Design\u201D based on the following criteria:</p> <p>* The homepage should consistently be counted as the primary page. In the absence of specific requirements regarding the homepage, the initial page that the designer is tasked with designing will be considered the \"Primary Page Design\". This applies to other significant money pages such as the product page, services page, collection page, etc.</p> <p> Rough numbers of the primary pages on a website: Not more than 3 (Except for very rare cases)</p> <p> When you will select primary page, it will be sent to management for authorization. </p>",
+                  showCloseButton: true,
+                  showCancelButton: true
+                }).then(function (res) {
+                  if (res.isConfirmed) {
+                    submit();
+                  }
+                });
               }
             }; // check violation words
             _context2.next = 34;
