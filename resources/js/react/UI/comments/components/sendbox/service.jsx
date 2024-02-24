@@ -192,6 +192,19 @@ const ServiceProvider = ({ children }) => {
 
         const linkedText = Autolinker.link(text, {
             newWindow: false,
+
+            urls: {
+                schemeMatches: true,
+                wwwMatches: true,
+                tldMatches: true,
+            },
+
+            replaceFn: function (match) {
+                if (match.getType() === "url") {
+                    var url = match.getUrl();
+                    return '<a href="' + url + '">' + url + "</a>";
+                }
+            },
         });
 
         return linkedText;

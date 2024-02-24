@@ -2439,9 +2439,18 @@ class ProjectController extends AccountBaseController
                 ));
                 $this->view = 'projects.ajax.members';
                 break;
-            case 'milestones':
-                $this->view = 'projects.ajax.milestones';
-                break;
+               
+                    case 'milestones':
+                        if(Auth::user()->role_id != 6)
+                        {
+                        $this->view = 'projects.ajax.milestones';
+                    }else {
+                        abort(403);
+                    }
+                        break;
+
+               
+           
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
                 break;
@@ -6364,9 +6373,11 @@ public function updatePmBasicSEO(Request $request){
     }
     public function pDERequest(ProjectDeadlineExtensionDataTable $datatable){
         $this->pageTitle = 'Project Deadline Extension Requests';
+        $this->project_managers = User::where('role_id',4)->get();
         return $datatable->render('projects.ajax.project_deadline_extension',$this->data);
     }
     public function storeProjectDeadline(Request $request){
+        // dd($request->all());
         $validator = $request->validate([
             'new_deadline' => 'required',
             'extension' => 'required',
@@ -6377,15 +6388,24 @@ public function updatePmBasicSEO(Request $request){
             'description.required' => 'This filed is required!',
         ]);
         
+        $oldDeadline = Carbon::parse($request->old_deadline);
+        $newDeadline = Carbon::parse($request->new_deadline);
+        $dayDifference = $newDeadline->diffInDays($oldDeadline);
+
         $pd_ext = new ProjectDeadlineExtension();
         $pd_ext->project_id = $request->project_id;
         $pd_ext->milestone_id = $request->milestone_id == '--' ? null : $request->milestone_id;
-        $pd_ext->deliverable_id = $request->deliverable_id == '--' ? null : $request->deliverable_id;
         $pd_ext->old_deadline = $request->old_deadline;
         $pd_ext->new_deadline = $request->new_deadline;
+        $pd_ext->deadline_requested_pm = $request->new_deadline;
+        $pd_ext->deadline_requested_for = $dayDifference;
         $pd_ext->extension = $request->extension;
         $pd_ext->description = $request->description;
         $pd_ext->save();
+
+        $project_F = Project::where('id',$request->project_id)->first();
+        $project_F->deadline_auth_status = 1;
+        $project_F->save();
         
         return response()->json([
             'status'=>200
@@ -6398,15 +6418,20 @@ public function updatePmBasicSEO(Request $request){
     }
 
     public function storeAuthorization(Request $request){
-        // dd($request->all());
         $validator = $request->validate([
             'new_deadline' => 'required',
         ], [
             'new_deadline.required' => 'This filed is required!',
         ]);
+        $oldDeadline = Carbon::parse($request->old_deadline);
+        $newDeadline = Carbon::parse($request->new_deadline);
+        $dayDifference = $newDeadline->diffInDays($oldDeadline);
+        
 
         $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
         $pde->new_deadline = $request->new_deadline;
+        $pde->deadline_extend_admin = $request->new_deadline;
+        $pde->deadline_extended_for = $dayDifference;
         $pde->admin_comment = $request->admin_comment;
         $pde->approved_on = Carbon::now();
         $pde->approved_by = Auth::user()->id;
@@ -6414,7 +6439,9 @@ public function updatePmBasicSEO(Request $request){
         $pde->save();
 
         $project = Project::where('id',$request->project_id)->first();
+        $project->old_deadline = $pde->old_deadline;
         $project->deadline = $pde->new_deadline;
+        $project->deadline_auth_status = 2;
         $project->save();
 
         return response()->json([

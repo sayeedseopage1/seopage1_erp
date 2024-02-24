@@ -393,7 +393,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                     Project Id <sup>*</sup> :{" "}
                                 </Label>
                                 <Input
-                                    type="text"
+                                    type="number"
                                     name="project_id"
                                     value={formData.project_id}
                                     onChange={handleInputChange}
@@ -691,7 +691,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <Input
-                                                    type="text"
+                                                    type="number"
                                                     name="bid_value"
                                                     value={formData.bid_value}
                                                     onChange={handleInputChange}
@@ -708,7 +708,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                             </div>
                                             <div className="col-md-6">
                                                 <Input
-                                                    type="text"
+                                                    type="number"
                                                     name="bid_value2"
                                                     value={formData.bid_value2}
                                                     onChange={handleInputChange}
@@ -765,7 +765,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <Input
-                                            type="text"
+                                            type="number"
                                             name="bidding_minutes"
                                             value={formData.bidding_minutes}
                                             onChange={handleInputChange}
@@ -782,7 +782,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                     </div>
                                     <div className="col-md-6">
                                         <Input
-                                            type="text"
+                                            type="number"
                                             name="bidding_seconds"
                                             value={formData.bidding_seconds}
                                             onChange={handleInputChange}

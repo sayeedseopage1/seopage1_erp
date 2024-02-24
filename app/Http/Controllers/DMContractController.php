@@ -252,7 +252,7 @@ class DMContractController extends AccountBaseController
              $validated = $request->validate([
                  'project_name' => 'required',
                  'deadline' => 'required',
-                 'amount' => 'required',
+                 'amount' => 'required|numeric',
                  'message_link' => 'required',
                  'description2' => 'required',
                  'description3' => 'required',
@@ -939,7 +939,7 @@ class DMContractController extends AccountBaseController
             $validated = $request->validate([
                 'project_name' => 'required',
                 'deadline' => 'required',
-                'amount' => 'required',
+                'amount' => 'required|numeric',
                 'message_link' => 'required',
                 'description2' => 'required',
                 'description3' => 'required',

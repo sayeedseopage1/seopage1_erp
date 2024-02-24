@@ -144,10 +144,11 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                             ?.toLowerCase()
                             ?.includes(value?.toLowerCase()) &&
                         user?.role_id !== null &&
-                        user?.name !== "Riadus Salehin" &&
-                        user?.name !== "Md. Abu Sayeed" &&
-                        user?.name !== "Mehedi Hasan Hridoy" &&
-                        user?.name !== "Hasan Hafizul Islam" &&
+                        user?.employee_detail.department_id !== 8 &&
+                        user?.employee_detail.department_id !== 2 &&
+                        // user?.name !== "Md. Abu Sayeed" &&
+                        // user?.name !== "Mehedi Hasan Hridoy" &&
+                        // user?.name !== "Hasan Hafizul Islam" &&
                         user?.name !== "Moniruzzaman" &&
                         (user?.role_id === 1 ||
                             user?.id === task?.added_by ||
@@ -162,7 +163,9 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
         [users]
     );
 
-    console.log("suggestion data", suggestions);
+    // console.log("suggestion data", suggestions);
+
+    console.log("editor state", renderToHtml(editorState));
 
     // handle on mention
     const handleMention = (...arg) => {

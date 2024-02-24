@@ -6,7 +6,7 @@ import CKEditorComponent from "../../../../../ckeditor";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { useDealConversionMutation } from "../../../../../services/api/leadApiSlice";
-
+const validator = require("validator");
 const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
     const [messageLinks, setMessageLinks] = React.useState([
         { value: "", id: "abc" },
@@ -19,7 +19,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
         comments: "",
     });
 
-    const [error, setError] = React.useState(null);
+    const [error, setError] = React.useState({});
 
     const onClose = (e) => {
         e.preventDefault();
@@ -81,19 +81,42 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
         e.preventDefault();
         e.stopPropagation();
 
+        const messageLinksErrors = {};
+        _.forEach(messageLinks, (m) => {
+            if (!m.value || !validator.isURL(m.value)) {
+                messageLinksErrors[m.id] =
+                    "Valid URL is required for Profile Link";
+            }
+        });
+
+        if (!_.isEmpty(messageLinksErrors)) {
+            setError((err) => ({ ...err, message_links: messageLinksErrors }));
+            return;
+        }
+
         const data = {
             ...formData,
             id: row.original.id,
-            message_link: messageLinks.map(link => link.value),
+            message_link: messageLinks.map((link) => link.value),
         };
 
         try {
-            const res = await dealConversion(data);
-            if (res.data.status === 400) {
-                setError(res.data.errors);
+            if (
+                !formData.profile_link ||
+                !validator.isURL(formData.profile_link)
+            ) {
+                setError((prev) => ({
+                    ...prev,
+                    profile_link: ["Valid URL is required for Profile Link"],
+                }));
             } else {
-                toast.success("Deal Convert successfully");
-                window.location.href = `/account/deals/${res.data.deal_id}`;
+                const res = await dealConversion(data);
+                if (res.data.status === 400) {
+                    setError(res.data.errors);
+                } else {
+                    toast.success("Deal Convert successfully");
+                    window.location.href = `/account/deals/${res.data.deal_id}`;
+                }
             }
         } catch (error) {
             console.log(error);
@@ -179,36 +202,51 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                     Client Message Thread Link <sup>*</sup>
                                 </Label>
                                 {messageLinks.map((link, index) => (
-                                    <Flex
-                                        alignItems="center"
-                                        gap="10px"
-                                        key={index}
-                                        className="mb-3"
-                                    >
-                                        <Input
-                                            type="text"
-                                            placeholder="Add link here..."
-                                            value={link.value}
-                                            onChange={(e) =>
-                                                handleMessageLinkChange(e, link)
-                                            }
-                                            name="message_link"
-                                        />
-
-                                        {messageLinks.length > 1 && (
-                                            <RemoveButton
-                                                onClick={(e) =>
-                                                    removeInputField(e, link.id)
+                                    <React.Fragment key={index}>
+                                        <Flex
+                                            alignItems="center"
+                                            gap="10px"
+                                            className="mb-3"
+                                        >
+                                            <Input
+                                                type="text"
+                                                placeholder="Add link here..."
+                                                value={link.value}
+                                                onChange={(e) =>
+                                                    handleMessageLinkChange(
+                                                        e,
+                                                        link
+                                                    )
                                                 }
-                                                aria-label="removeMessageLinkField"
-                                            >
-                                                <i className="fa-regular fa-trash-can" />
-                                            </RemoveButton>
-                                        )}
-                                    </Flex>
+                                                name="message_link"
+                                            />
+
+                                            {messageLinks.length > 1 && (
+                                                <RemoveButton
+                                                    onClick={(e) =>
+                                                        removeInputField(
+                                                            e,
+                                                            link.id
+                                                        )
+                                                    }
+                                                    aria-label="removeMessageLinkField"
+                                                >
+                                                    <i className="fa-regular fa-trash-can" />
+                                                </RemoveButton>
+                                            )}
+                                        </Flex>
+                                        {!_.isEmpty(error?.message_links) ? (
+                                            <ErrorText>
+                                                {error?.message_links[link.id]}
+                                            </ErrorText>
+                                        ) : null}
+                                    </React.Fragment>
                                 ))}
 
-                                <button onClick={addNewLink} className="px-2 btn btn-primary">
+                                <button
+                                    onClick={addNewLink}
+                                    className="px-2 btn btn-primary"
+                                >
                                     + Add Another
                                 </button>
                             </InputGroup>
@@ -221,7 +259,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                     <CKEditorComponent
                                         data={formData.comments}
                                         onChange={handleEditorDataChange}
-                                   />
+                                    />
                                 </EditorContainer>
 
                                 {error?.comments ? (
@@ -235,8 +273,11 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
 
                         <Flex justifyContent="flex-end">
                             <CloseButton onClick={onClose}>Close</CloseButton>
-                            <ConvertButton disabled={isLoading} onClick={handleSubmit}>
-                              {isLoading ? 'Processing...' : 'Convert'}
+                            <ConvertButton
+                                disabled={isLoading}
+                                onClick={handleSubmit}
+                            >
+                                {isLoading ? "Processing..." : "Convert"}
                             </ConvertButton>
                         </Flex>
                     </Dialog.Panel>
