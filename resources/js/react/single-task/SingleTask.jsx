@@ -33,6 +33,8 @@ import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
 import { convertTime } from "../utils/converTime";
 
+import axios from "axios";
+import { useGetTaskForTotalTimeQuery } from "../services/api/tasksApiSlice";
 const SingleTaskPage = () => {
     const { task: Task } = useSelector((s) => s.subTask);
     const { throwError } = useErrorHandler();
@@ -46,8 +48,82 @@ const SingleTaskPage = () => {
 
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
+    const [taskForTimeLog, setTaskForTimeLog] = React.useState({});
+    const [totalTime, setTotalTime] = React.useState("");
+    const taskId = task?.id;
 
-    // console.log("Task in task page", Task);
+    const { data: taskForTime } = useGetTaskForTotalTimeQuery(taskId);
+
+    useEffect(() => {
+        setTaskForTimeLog(taskForTime);
+    }, [taskForTime]);
+
+    const calculateTotalTime = (task) => {
+        if (task) {
+            console.log("task in function", task);
+            let totalTimeInMinutes = 0;
+            const parentTimeArray = task?.parent_task_time_log?.split(" ");
+            const subTimeArray = task?.sub_task_time_log?.split(" ");
+
+            // console.log("parent time array", parentTimeArray);
+            // console.log("sub time array", subTimeArray);
+
+            console.log("length", task?.subtask.length);
+            if (task?.subtask.length === 0) {
+                if (parentTimeArray && parentTimeArray.length >= 1) {
+                    totalTimeInMinutes += parseInt(parentTimeArray[0]) * 60;
+                    totalTimeInMinutes += parseInt(
+                        parentTimeArray[2] === ""
+                            ? 0
+                            : parseInt(parentTimeArray[2])
+                    );
+
+                    // console.log("ttim in lenfth 0", totalTimeInMinutes);
+                }
+            } else {
+                if (
+                    parentTimeArray &&
+                    parentTimeArray.length >= 1 &&
+                    subTimeArray &&
+                    subTimeArray.length >= 1
+                ) {
+                    totalTimeInMinutes += parseInt(parentTimeArray[0]) * 60;
+                    totalTimeInMinutes += parseInt(
+                        parentTimeArray[2] === ""
+                            ? 0
+                            : parseInt(parentTimeArray[2])
+                    );
+
+                    totalTimeInMinutes += parseInt(subTimeArray[0]) * 60;
+                    if (subTimeArray[0]) {
+                        totalTimeInMinutes += parseInt(
+                            subTimeArray[2] === ""
+                                ? 0
+                                : parseInt(subTimeArray[2])
+                        );
+                    }
+                }
+            }
+
+            // console.log("total time in minutes", totalTimeInMinutes);
+            const hours = Math.floor(totalTimeInMinutes / 60);
+            const minutes = totalTimeInMinutes % 60;
+
+            // console.log("parent time array", parentTimeArray);
+            // console.log("sub time array", subTimeArray);
+
+            setTotalTime(`${hours} hrs ${minutes} mins`);
+        }
+    };
+
+    useEffect(() => {
+        if (taskForTimeLog) {
+            calculateTotalTime(taskForTimeLog.task);
+        }
+    }, [taskForTimeLog]);
+
+    // console.log(totalTime);
+
     useEffect(() => {
         (() => {
             if (data) {
@@ -964,9 +1040,7 @@ const SingleTaskPage = () => {
                             <div className="d-flex align-items-center mb-2">
                                 <div className="">Total Hours Logged: </div>
                                 <div className="d-flex align-items-center font-weight-bold pl-2">
-                                    {(task.isSubtask
-                                        ? task?.parentTaskTimeLog
-                                        : task?.totalTimeLog) || "--"}
+                                    {totalTime ? totalTime : "0 hrs 0 mins"}
                                 </div>
                             </div>
                         </div>
