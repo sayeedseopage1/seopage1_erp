@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     ErrorText,
     Input,
@@ -19,6 +19,9 @@ import axios from "axios";
 import Button from "../../../../global/Button";
 import { useStoreDmLeadMutation } from "../../../../services/api/dmLeadsApiSlice";
 import { toast } from "react-toastify";
+import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../../utils/stateValidation";
+import validator from "validator";
+import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
 
 // initial form data
 const initialData = {
@@ -29,7 +32,7 @@ const initialData = {
     bid_value: "",
     bid_value2: "",
     value: "",
-    project_type: "",
+    project_type: "fixed",
     original_currency_id: "",
     description: "",
     cover_letter: "",
@@ -47,9 +50,42 @@ const initialData = {
     // amount: "",
 };
 
-const UpWorkModal = ({ close, source }) => {
+const UpWorkModal = ({ close, source, setSource, setStep }) => {
     const [formData, setFormData] = React.useState(initialData);
+    const [upworkInputData, setUpworkInputData] = React.useState({
+        client_name: "",
+        country: "",
+        project_link: "",
+        deadline: "",
+        bid_value: "",
+        bid_value2: "",
+        value: "",
+        project_type: "fixed",
+        original_currency_id: "",
+        description: "",
+        cover_letter: "",
+        total_spent: "",
+        original_currency_id: "",
+    })
+    const [upworkInputValidation, setUpworkInputValidation] = React.useState({
+        client_name: false,
+        country: false,
+        project_link: false,
+        isProjectLinkValid: false,
+        deadline: false,
+        bid_value: false,
+        bid_value2: false,
+        value: false,
+        project_type: false,
+        original_currency_id: false,
+        description: false,
+        cover_letter: false,
+        total_spent: false,
+        original_currency_id: false,
+        isSubmitting: false
+    });
     const [error, setError] = React.useState(initialData);
+    const [validationErrors, setValidationErrors] = React.useState([]);
     const [currency, setCurrency] = React.useState(null);
     const [clientCountry, setClientCountry] = React.useState(null);
     const [type, setType] = React.useState("fixed");
@@ -72,11 +108,32 @@ const UpWorkModal = ({ close, source }) => {
             ...state,
             [e.target.name]: e.target.value,
         }));
+        setUpworkInputData((state) => ({
+            ...state,
+            [e.target.name]: e.target.value,
+        }));
     };
+
+    const handleOnkeypress = e => {
+        const keyCode = e.keyCode || e.which;
+        if (
+            (keyCode < 48 || keyCode > 57) && // 0-9
+            keyCode !== 8 && // Backspace
+            keyCode !== 37 && // Left arrow
+            keyCode !== 39 // Right arrow
+        ) {
+            e.preventDefault();
+        }
+    }
+
 
     // rich editor field change
     const handleEditorDataChange = (editor, key) => {
         setFormData((state) => ({
+            ...state,
+            [key]: editor.getData(),
+        }));
+        setUpworkInputData((state) => ({
             ...state,
             [key]: editor.getData(),
         }));
@@ -99,121 +156,150 @@ const UpWorkModal = ({ close, source }) => {
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const isValid = () => {
-            const _error = {};
-
-            for (const key in formData) {
-                // console.log("inside loop");
-                if (key === "explanation" || key === "bidpage_screenshot") {
-                    continue;
-                } else {
-                    // console.log({ key, value: formData[key] });
-                    // custom client side error message
-                    if (key === "client_name") {
-                        if (!formData[key]) {
-                            _error[key] = "Please enter the project name!";
-                        }
-                    } else if (key === "project_id") {
-                        if (!formData[key]) {
-                            _error[key] = "Please enter the project id!";
-                        }
-                    } else if (key === "project_link") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter correct project link (Freelancer.com) with https!";
-                        }
-                        // else if (!validator.isURL(formData[key])) {
-                        //     _error[key] = "Invalid URL";
-                        // }
-                    } else if (key === "deadline") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please select project deadline from Upwork.com!";
-                        }
-                    } else if (key === "bid_value") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter maximum project budget!";
-                        }
-                    } else if (key === "bid_value2") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter minimum project budget!";
-                        }
-                    } else if (key === "value") {
-                        if (!formData[key]) {
-                            _error[key] = "Please enter bid value!";
-                        }
-                    } else if (key === "bidding_minutes") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter bidding delayed time (minutes)!";
-                        }
-                    } else if (key === "bidding_seconds") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter bidding delayed time (seconds)!";
-                        }
-                    } else if (key === "description") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Copy the project description from Freelancer.com and paste it here!";
-                        }
-                    } else if (key === "cover_letter") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!";
-                        }
-                    } else if (key === "insight_screenshot") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter project insight page screenshot link (Freelancer.com) with https!";
-                        }
-                        // else if (!validator.isURL(formData[key])) {
-                        //     _error[key] = "Invalid URL";
-                        // }
-                    } else if (key === "projectpage_screenshot") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter project page screenshot link (Freelancer.com) with https!";
-                        }
-                        // else if (!validator.isURL(formData[key])) {
-                        //     _error[key] = "Invalid URL";
-                        // }
-                    } else if (key === "original_currency_id") {
-                        if (!formData[key]) {
-                            _error[key] = "Please select correct currency!";
-                        }
-                    } else if (key === "country") {
-                        if (!formData[key]) {
-                            _error[key] = "Please select client country!";
-                        }
-                    } else if (key === "total_spent") {
-                        if (!formData[key]) {
-                            _error[key] = "Please enter total spent!";
-                        }
-                    }
-                }
-            }
-
-            // if project type hourly no need amount
-            if (formData["project_type"] === "hourly") {
-                delete _error["deadline"];
-            }
-
-            setError(_error);
-            return Object.keys(_error)?.length === 0;
-        };
-        // console.log(formData,error);
-
-        if (!isValid()) {
-            toast.error("Please provide all required data!");
-            return null;
+        if(upworkInputData.project_type === "hourly") delete upworkInputData.deadline;
+        const isEmpty = isStateAllHaveValue(upworkInputData);
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation(upworkInputData);
+            setUpworkInputValidation({
+                ...upworkInputValidation,
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
         }
 
+
+        const isProjectURLValid = validator.isURL(upworkInputData.project_link, {
+            protocols: ['http','https','ftp'],
+        });
+
+
+        if(!isProjectURLValid){
+            setUpworkInputValidation({
+                ...upworkInputValidation,
+                isProjectLinkValid: true,
+                isSubmitting: true,
+            });
+            return;
+        }
+
+
+
+        // const isValid = () => {
+        //     const _error = {};
+
+        //     for (const key in formData) {
+        //         // console.log("inside loop");
+        //         if (key === "explanation" || key === "bidpage_screenshot") {
+        //             continue;
+        //         } else {
+        //             // console.log({ key, value: formData[key] });
+        //             // custom client side error message
+        //             if (key === "client_name") {
+        //                 if (!formData[key]) {
+        //                     _error[key] = "Please enter the project name!";
+        //                 }
+        //             } else if (key === "project_id") {
+        //                 if (!formData[key]) {
+        //                     _error[key] = "Please enter the project id!";
+        //                 }
+        //             } else if (key === "project_link") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         `Please enter correct project link (${source}) with https!`;
+        //                 }
+        //                 // else if (!validator.isURL(formData[key])) {
+        //                 //     _error[key] = "Invalid URL";
+        //                 // }
+        //             } else if (key === "deadline") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         "Please select project deadline from Upwork.com!";
+        //                 }
+        //             } else if (key === "bid_value") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         "Please enter maximum project budget!";
+        //                 }
+        //             } else if (key === "bid_value2") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         "Please enter minimum project budget!";
+        //                 }
+        //             } else if (key === "value") {
+        //                 if (!formData[key]) {
+        //                     _error[key] = "Please enter bid value!";
+        //                 }
+        //             } else if (key === "bidding_minutes") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         "Please enter bidding delayed time (minutes)!";
+        //                 }
+        //             } else if (key === "bidding_seconds") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         "Please enter bidding delayed time (seconds)!";
+        //                 }
+        //             } else if (key === "description") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         `Copy the project description from ${source} and paste it here!`;
+        //                 }
+        //             } else if (key === "cover_letter") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         "Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!";
+        //                 }
+        //             } else if (key === "insight_screenshot") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         `Please enter project insight page screenshot link (${source}) with https!`;
+        //                 }
+        //                 // else if (!validator.isURL(formData[key])) {
+        //                 //     _error[key] = "Invalid URL";
+        //                 // }
+        //             } else if (key === "projectpage_screenshot") {
+        //                 if (!formData[key]) {
+        //                     _error[key] =
+        //                         `Please enter project page screenshot link (${source}) with https!`;
+        //                 }
+        //                 // else if (!validator.isURL(formData[key])) {
+        //                 //     _error[key] = "Invalid URL";
+        //                 // }
+        //             } else if (key === "original_currency_id") {
+        //                 if (!formData[key]) {
+        //                     _error[key] = "Please select correct currency!";
+        //                 }
+        //             } else if (key === "country") {
+        //                 if (!formData[key]) {
+        //                     _error[key] = "Please select client country!";
+        //                 }
+        //             } else if (key === "total_spent") {
+        //                 if (!formData[key]) {
+        //                     _error[key] = "Please enter total spent!";
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        //     // if project type hourly no need amount
+        //     if (formData["project_type"] === "hourly") {
+        //         delete _error["deadline"];
+        //     }
+
+        //     setError(_error);
+        //     return Object.keys(_error)?.length === 0;
+        // };
+        // // console.log(formData,error);
+
+        // if (!isValid()) {
+        //     toast.error("Please provide all required data!");
+        //     return null;
+        // }
+
         try {
-            const res = await storeDmLead({...formData,lead_source:source}).unwrap();
+            const res = await storeDmLead({...upworkInputData,lead_source:source}).unwrap();
+            
             // console.log(res);
             if (res?.status === 400) {
                 const _serverError = {};
@@ -227,16 +313,43 @@ const UpWorkModal = ({ close, source }) => {
                 setError(_serverError);
             } else {
                 toast.success("Lead Created Successfully");
+                setStep({
+                    stepCount: 1,
+                    stepName: "Lead Source",
+                })
+                setSource("");
                 handleClose();
             }
         } catch (error) {
-            console.log({ error });
+            if(error?.status === 422){
+                const errors = formatAPIErrors(error?.data?.errors);  
+                setValidationErrors(errors);
+                if(errors.includes("The project id has already been taken.")){
+                    setUpworkInputValidation({
+                        ...upworkInputValidation,
+                        isProjectIdUnique: true,
+                    });
+                } else if(errors.includes("The project link format is invalid.")){
+                    console.log("inside");
+                    setUpworkInputValidation({
+                        ...upworkInputValidation,
+                        isProjectLinkValid: true,
+                    });
+                }
+                errors.forEach(error => {
+                    toast.error(error);
+                });
+            } else {
+                toast.error("Something went wrong");
+            }
+           
         }
     };
 
     // handle close form
     const handleClose = () => {
         setFormData({ ...initialData });
+        setUpworkInputData({});
         setCurrency(null);
         setClientCountry(null);
         setDeadline(null);
@@ -248,12 +361,17 @@ const UpWorkModal = ({ close, source }) => {
     const handleCurrencySelection = (value) => {
         setCurrency(value);
         setFormData((state) => ({ ...state, original_currency_id: value.id }));
+        setUpworkInputData((state) => ({ ...state, original_currency_id: value.id }));
     };
 
     // handle clientCountrySelection
     const handleClientCountrySelection = (value) => {
         setClientCountry(value);
         setFormData((state) => ({
+            ...state,
+            country: value.nicename,
+        }));
+        setUpworkInputData((state) => ({
             ...state,
             country: value.nicename,
         }));
@@ -279,8 +397,37 @@ const UpWorkModal = ({ close, source }) => {
                 ...prev,
                 deadline: dayjs(deadline).format(),
             }));
+            setUpworkInputData((prev) => ({
+                ...prev,
+                deadline: dayjs(deadline).format(),
+            }));
         }
     }, [deadline]);
+
+
+        // Check if fields are empty
+    useEffect(() => {
+            if(upworkInputValidation.isSubmitting){
+                const validation = markEmptyFieldsValidation(upworkInputData);
+                console.log(!validator.isURL(upworkInputData.project_link));
+                setUpworkInputValidation({
+                    ...upworkInputValidation,
+                    ...validation,
+                    project_link:false,
+                    isProjectIdUnique: false,
+                    isProjectLinkValid: !validator.isURL(upworkInputData.project_link) ,
+                });
+
+                if(validationErrors?.length ){
+                    setUpworkInputValidation({
+                        ...upworkInputValidation,
+                        isProjectLinkValid: validationErrors.includes("The project link format is invalid."),
+                    });
+                }
+
+            }
+    }, [upworkInputData, upworkInputValidation.isSubmitting, upworkInputValidation.isProjectLinkValid, validationErrors]);
+
 
     return (
         <div>
@@ -306,11 +453,10 @@ const UpWorkModal = ({ close, source }) => {
                                 onChange={handleInputChange}
                                 placeholder="Type project name from Upwork.com"
                             />
-                            {error?.client_name ? (
-                                <ErrorText> {error?.client_name} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                            
+                            {
+                                upworkInputValidation.client_name && <ErrorText>Please enter the project name!</ErrorText>
+                            }
                         </InputGroup>
                     </div>
 
@@ -360,11 +506,10 @@ const UpWorkModal = ({ close, source }) => {
                                     </Select.Options>
                                 </Select>
                             </SelectionMenuWrapper>
-                            {error?.country ? (
-                                <ErrorText> {error?.country} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                            
+                            {
+                                upworkInputValidation.country && <ErrorText>Please select client country!</ErrorText>
+                            }
                         </InputGroup>
                     </div>
 
@@ -404,11 +549,13 @@ const UpWorkModal = ({ close, source }) => {
                                 onChange={handleInputChange}
                                 placeholder="Copy the project URL from the browser and paste it here."
                             />
-                            {error?.project_link ? (
-                                <ErrorText> {error?.project_link} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                           
+                            {
+                                upworkInputValidation.project_link && <ErrorText>Please enter correct project link (Upwork.com) with http or https!</ErrorText>
+                            }
+                            {
+                                upworkInputValidation.isProjectLinkValid && <ErrorText>Invalid URL! Please add http or https also</ErrorText>
+                            }
                         </InputGroup>
                     </div>
                        {/* Project Type */}
@@ -500,14 +647,10 @@ const UpWorkModal = ({ close, source }) => {
                                     </Select.Options>
                                 </Select>
                             </SelectionMenuWrapper>
-                            {error?.original_currency_id ? (
-                                <ErrorText>
-                                    {" "}
-                                    {error?.original_currency_id}{" "}
-                                </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                           
+                            {
+                                upworkInputValidation.original_currency_id && <ErrorText>Please select correct currency!</ErrorText>
+                            }
                         </InputGroup>
                     </div>
 
@@ -521,15 +664,16 @@ const UpWorkModal = ({ close, source }) => {
                             <Input
                                 type="number"
                                 name="total_spent"
-                                value={formData.total_spent}
+                                min={0}
+                                onKeyPress={handleOnkeypress}
+                                defaultValue={formData.total_spent}
                                 onChange={handleInputChange}
                                 placeholder="Enter Total Spent"
                             />
-                            {error?.total_spent ? (
-                                <ErrorText> {error?.total_spent} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                           
+                            {
+                                upworkInputValidation.total_spent && <ErrorText>Please enter total spent!</ErrorText>
+                            }
                         </InputGroup>
                     </div>
 
@@ -545,37 +689,33 @@ const UpWorkModal = ({ close, source }) => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <Input
-                                                type="text"
+                                                type="number"
+                                                min={0}
+                                                onKeyPress={handleOnkeypress}
                                                 name="bid_value"
                                                 value={formData.bid_value}
                                                 onChange={handleInputChange}
                                                 placeholder="Minimum"
                                             />
-                                            {error?.bid_value ? (
-                                                <ErrorText>
-                                                    {" "}
-                                                    {error?.bid_value}{" "}
-                                                </ErrorText>
-                                            ) : (
-                                                <></>
-                                            )}
+                                           
+                                            {
+                                                upworkInputValidation.bid_value && <ErrorText>Please enter maximum project budget!</ErrorText>
+                                            }
                                         </div>
                                         <div className="col-md-6">
                                             <Input
-                                                type="text"
+                                                type="number"
+                                                min={0}
+                                                onKeyPress={handleOnkeypress}
                                                 name="bid_value2"
                                                 value={formData.bid_value2}
                                                 onChange={handleInputChange}
                                                 placeholder="Maximum"
                                             />
-                                            {error?.bid_value2 ? (
-                                                <ErrorText>
-                                                    {" "}
-                                                    {error?.bid_value2}{" "}
-                                                </ErrorText>
-                                            ) : (
-                                                <></>
-                                            )}
+                                           
+                                            {
+                                                upworkInputValidation.bid_value2 && <ErrorText>Please enter minimum project budget!</ErrorText>
+                                            }
                                         </div>
                                     </div>
                                 </InputGroup>
@@ -607,14 +747,10 @@ const UpWorkModal = ({ close, source }) => {
                                         }}
                                         placeholderText="dd-mm-yyyy"
                                     />
-                                    {error?.deadline ? (
-                                        <ErrorText>
-                                            {" "}
-                                            {error?.deadline}{" "}
-                                        </ErrorText>
-                                    ) : (
-                                        <></>
-                                    )}
+                                   
+                                    {
+                                        upworkInputValidation.deadline && <ErrorText>Please select project deadline from Upwork.com!</ErrorText>
+                                    }
                                 </InputGroup>
                             </div>
 
@@ -628,37 +764,34 @@ const UpWorkModal = ({ close, source }) => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <Input
-                                                type="text"
+                                                type="number"
                                                 name="bid_value"
+                                                min={0}
+                                                pattern="[0-9]*"
                                                 value={formData.bid_value}
+                                                onKeyPress={handleOnkeypress}
                                                 onChange={handleInputChange}
                                                 placeholder="Minimum"
                                             />
-                                            {error?.bid_value ? (
-                                                <ErrorText>
-                                                    {" "}
-                                                    {error?.bid_value}{" "}
-                                                </ErrorText>
-                                            ) : (
-                                                <></>
-                                            )}
+                                          
+                                            {
+                                                upworkInputValidation.bid_value && <ErrorText>Please enter maximum project budget!</ErrorText>
+                                            }
                                         </div>
                                         <div className="col-md-6">
                                             <Input
                                                 type="text"
                                                 name="bid_value2"
+                                                onKeyPress={handleOnkeypress}
                                                 value={formData.bid_value2}
+                                                min={0}
                                                 onChange={handleInputChange}
                                                 placeholder="Maximum"
                                             />
-                                            {error?.bid_value2 ? (
-                                                <ErrorText>
-                                                    {" "}
-                                                    {error?.bid_value2}{" "}
-                                                </ErrorText>
-                                            ) : (
-                                                <></>
-                                            )}
+                                           
+                                            {
+                                                upworkInputValidation.bid_value2 && <ErrorText>Please enter minimum project budget!</ErrorText>
+                                            }
                                         </div>
                                     </div>
                                 </InputGroup>
@@ -680,15 +813,15 @@ const UpWorkModal = ({ close, source }) => {
                             <Input
                                 type="number"
                                 name="value"
+                                onKeyPress={handleOnkeypress}
                                 value={formData.value}
+                                min={0}
                                 onChange={handleInputChange}
                                 placeholder="Enter Bid value"
                             />
-                            {error?.value ? (
-                                <ErrorText> {error?.value} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                            {
+                                upworkInputValidation.value && <ErrorText>Please enter bid value!</ErrorText>
+                            }
                         </InputGroup>
                     </div>
 
@@ -712,11 +845,10 @@ const UpWorkModal = ({ close, source }) => {
                                     }
                                 />
                             </div>
-                            {error?.description ? (
-                                <ErrorText> {error?.description} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                            
+                            {
+                                upworkInputValidation.description && <ErrorText>Copy the project description from Upwork.com and paste it here!</ErrorText>
+                            }
                         </InputGroup>
                     </div>
 
@@ -739,11 +871,10 @@ const UpWorkModal = ({ close, source }) => {
                                 />
                             </div>
 
-                            {error?.cover_letter ? (
-                                <ErrorText> {error?.cover_letter} </ErrorText>
-                            ) : (
-                                <></>
-                            )}
+                       
+                            {
+                                upworkInputValidation.cover_letter && <ErrorText>Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!</ErrorText>
+                            }
                         </InputGroup>
                     </div>
 
