@@ -43,11 +43,13 @@ $projectArchived = $project->trashed();
                     <!-- <li>
                         <x-tab :href="route('projects.show', $project->id)" :text="__('Project Details')" class="overview" />
                     </li> -->
+                    @if(Auth::user()->role_id != 6)
                     @if ($viewProjectMilestonePermission == 'all' || $viewProjectMilestonePermission == 'added' || ($viewProjectMilestonePermission == 'owned' && user()->id == $project->client_id))
                         <li>
                             <x-tab :href="route('projects.show', $project->id).'?tab=milestones'"
                             :text="__('modules.projects.milestones')" class="milestones" />
                         </li>
+                    @endif
                     @endif
                     @if (in_array('tasks', user_modules()) && ($viewTasksPermission == 'all' || ($viewTasksPermission == 'added' && user()->id == $project->added_by) || ($viewTasksPermission == 'owned' && user()->id == $project->client_id)))
                         <li>

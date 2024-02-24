@@ -27,9 +27,6 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
     {
         return (new EloquentDataTable($query))
             ->addIndexColumn()
-            ->addColumn('check', function ($row) {
-                return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
-            })
             ->editColumn('action', function ($row) {    
                 $action = '<div class="task_view">
     
@@ -52,6 +49,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                 return $action;
             })
             ->editColumn('clientName', function ($row) {
+                if($row->clientImage != null){
                 return '<div class="media align-items-center">
                         <a href="' . route('clients.show', [$row->clientId]) . '">
                         <img src="' . $row->clientImage . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($row->clientName) . '" title="' . ucfirst($row->clientName) . '"></a>
@@ -59,11 +57,22 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                         <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('clients.show', [$row->clientId]) . '">' . ucfirst($row->clientName) . '</a></h5>
                         </div>
                     </div>';
+                }else{
+                    return '<div class="media align-items-center">
+                    <a href="'.route('clients.show', [$row->clientId]).'">
+                        <img src="'. asset('user-uploads/avatar/avatar_blank.png') .'" class="mr-3 taskEmployeeImg rounded-circle">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="'.route('clients.show', [$row->clientId]) .'">'.$row->clientName.'</a></h5>
+                    </div>
+                </div>';
+                }
             })
             ->editColumn('project_name', function ($row) {
-                return '<a class="project-status-inner-view" data-id="'.$row->projectId.'" href="javascript:;">' . $row->project_name . '</a>';
+                return '<a class="project-status-inner-view" data-id="'.$row->projectId.'" href="'.route('projects.show',[$row->projectId]).'">' . $row->project_name . '</a>';
             })
             ->editColumn('pmName', function ($row) {
+                if($row->pmImage != null){
                 return '<div class="media align-items-center">
                         <a href="' . route('employees.show', [$row->pmId]) . '">
                         <img src="' . $row->pmImage . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($row->pmName) . '" title="' . ucfirst($row->pmName) . '"></a>
@@ -71,6 +80,16 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                         <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->pmId]) . '">' . ucfirst($row->pmName) . '</a></h5>
                         </div>
                     </div>';
+                }else{
+                    return '<div class="media align-items-center">
+                    <a href="'.route('employees.show', [$row->pmId]).'">
+                        <img src="'. asset('user-uploads/avatar/avatar_blank.png') .'" class="mr-3 taskEmployeeImg rounded-circle">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="'.route('employees.show', [$row->pmId]) .'">'.$row->pmName.'</a></h5>
+                    </div>
+                </div>';
+                }
             })
             ->editColumn('milestone_status', function ($row) {
                 $p_milestone = ProjectMilestone::where('project_id', $row->project_id)->count();
@@ -79,12 +98,12 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             })
             ->editColumn('parent_task_status', function ($row) {
                 $task = Task::where('project_id', $row->project_id)->where('subtask_id', null)->count();
-                $task_complete = Task::where('project_id', $row->project_id)->where('subtask_id', null)->where('status','complete')->count();
+                $task_complete = Task::where('project_id', $row->project_id)->where('subtask_id', null)->where('board_column_id',4)->count();
                 return $task_complete.' / '.$task;
             })
             ->editColumn('sub_task_status', function ($row) {
-                $task = Task::where('project_id', $row->project_id)->where('subtask_id', '!=null')->count();
-                $task_complete = Task::where('project_id', $row->project_id)->where('subtask_id', '!=null')->where('status','complete')->count();
+                $task = Task::where('project_id', $row->project_id)->where('subtask_id', '!=',null)->count();
+                $task_complete = Task::where('project_id', $row->project_id)->where('subtask_id', '!=',null)->where('board_column_id',4)->count();
                 return $task_complete.' / '.$task;
             })
             ->editColumn('old_deadline', function ($row) {
@@ -93,21 +112,45 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             ->editColumn('new_deadline', function ($row) {
                 return $row->new_deadline;
             })
+            ->editColumn('deadline_requested', function ($row) {
+                return $row->deadline_requested_pm;
+            })
+            ->editColumn('deadline_extend_admin', function ($row) {
+            if($row->deadline_extend_admin !=null){
+                return $row->deadline_extend_admin;
+            }else{
+                return 'Awaiting Approval';
+            }
+            })
             ->editColumn('deadline_extended', function ($row) {
-                $oldDeadline = Carbon::createFromFormat('Y-m-d', $row->old_deadline);
-                $newDeadline = Carbon::createFromFormat('Y-m-d', $row->new_deadline);
-                $dayDifference = $newDeadline->diffInDays($oldDeadline);
-                return $dayDifference;
+                return $row->deadline_requested_for;
+            })
+            ->editColumn('reason', function ($row) {
+                if($row->extension =='Client Ordered New Things'){
+                    return 'New Milestone Added';
+                }else{
+                    return $row->extension;
+                }
+            })
+            ->editColumn('deadline_extended_for', function ($row) {
+                if($row->deadline_extended_for !=null){
+                return $row->deadline_extended_for .' Days';
+                }else{
+                    return 'Awaiting Approval';
+                }
             })
             ->editColumn('requested_on', function ($row) {
-                $requestOn = Carbon::parse($row->created_at)->format('Y-m-d');
-                return $requestOn;
+                return Carbon::parse($row->created_at)->format('Y-m-d h:i:s A');;
             })
             ->editColumn('approved_on', function ($row) {
-                return $row->approved_on ?? '--';
+                if ($row->approved_on !=null){
+                return Carbon::parse($row->approved_on)->format('Y-m-d h:i:s A') ?? 'Awaiting Approval';
+                }else{
+                    return 'Awaiting Approval';
+                }
             })
             ->editColumn('approved_by', function ($row) {
-                if ($row->approved_on !=null){
+                if ($row->approved_by !=null){
                 $user = User::where('id', $row->approved_by)->first();
                 return '<div class="media align-items-center">
                         <a href="' . route('employees.show', [$user->id]) . '">
@@ -117,7 +160,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                         </div>
                     </div>';
                 }else{
-                return '--';
+                return 'Awaiting Approval';
                 }
             })
             ->addIndexColumn()
@@ -125,7 +168,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['check','action' ,'clientName','project_name','pmName','milestone_status','old_deadline','new_deadline','deadline_extended','requested_on','approved_on','approved_by']);
+            ->rawColumns(['action' ,'clientName','project_name','pmName','milestone_status','old_deadline','new_deadline','deadline_requested','deadline_extended','reason','requested_on','approved_on','approved_by']);
     }
     /**
      * @param Project $model
@@ -133,11 +176,23 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
      */
     public function query(ProjectDeadlineExtension $model)
     {
+        $request = $this->request();
         $model = $model
             ->select('project_deadline_extensions.*','projects.id as projectId','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage')
             ->leftJoin('projects', 'project_deadline_extensions.project_id', '=', 'projects.id')
             ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
             ->leftJoin('users as client', 'projects.client_id', '=', 'client.id');
+
+            if (!is_null($request->PmId) && $request->PmId != 'all') {
+                $model->where('projects.pm_id', $request->PmId);
+            }
+
+            if ($request->startDate && $request->endDate) {
+                $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
+                $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
+                $model->whereBetween(DB::raw('DATE(project_deadline_extensions.`created_at`)'), [$startDate, $endDate]);
+            }
+            $model->orderBy('project_deadline_extensions.id','desc');
 
         return $model;
     }
@@ -184,12 +239,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
     protected function getColumns()
     {
         return [
-            'check' => [
-                'title' => '<input type="checkbox" name="select_all_table" id="select-all-table" onclick="selectAllTable(this)">',
-                'exportable' => false,
-                'orderable' => false,
-                'searchable' => false
-            ],
+            
             '#' => ['data' => 'DT_RowIndex', 'orderable' => false, 'searchable' => false, 'visible' => false],
             __('clientName') => ['data' => 'clientName', 'name' => 'clientName', 'title' => __('Client')],
             __('project_name') => ['data' => 'project_name', 'name' => 'project_name', 'title' => __('Project Name')],
@@ -199,7 +249,11 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             __('sub_task_status') => ['data' => 'sub_task_status', 'name' => 'sub_task_status', 'title' => __('Sub Task Status')],
             __('old_deadline') => ['data' => 'old_deadline', 'name' => 'old_deadline', 'title' => __('Previous Deadline')],
             __('new_deadline') => ['data' => 'new_deadline', 'name' => 'new_deadline', 'title' => __('New Deadline')],
-            __('deadline_extended') => ['data' => 'deadline_extended', 'name' => 'deadline_extended', 'title' => __('Deadline Extended')],
+            __('deadline_requested') => ['data' => 'deadline_requested', 'name' => 'deadline_requested', 'title' => __('Deadline Requested')],
+            __('deadline_extend_admin') => ['data' => 'deadline_extend_admin', 'name' => 'deadline_extend_admin', 'title' => __('Deadline Extended')],
+            __('deadline_extended') => ['data' => 'deadline_extended', 'name' => 'deadline_extended', 'title' => __('Deadline Requested For')],
+            __('reason') => ['data' => 'reason', 'name' => 'reason', 'title' => __('Reason')],
+            __('deadline_extended_for') => ['data' => 'deadline_extended_for', 'name' => 'deadline_extended_for', 'title' => __('Deadline Extended For')],
             __('requested_on') => ['data' => 'requested_on', 'name' => 'requested_on', 'title' => __('Requested On')],
             __('approved_on') => ['data' => 'approved_on', 'name' => 'approved_on', 'title' => __('Approved On')],
             __('approved_by') => ['data' => 'approved_by', 'name' => 'approved_by', 'title' => __('Approved By')],

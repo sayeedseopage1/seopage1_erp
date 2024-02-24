@@ -77,10 +77,6 @@ class ProjectsDataTable extends BaseDataTable
                     if(Auth::user()->role_id == 4){
                         $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-extension" href="javascript:;"><i class="fa fa-plus mr-2"></i>' . __('Extend Deadline') . '</a>';
                     }
-                    if(Auth::user()->role_id == 1)
-                    {
-                        $action .= '<a target="_blank" href="' . route('pde-request') . '" class="dropdown-item"><i class="fa fa-check mr-2"></i>' . __('Project Deadline Extension Requests') . '</a>';
-                    }
                     $pm_project= PMProject::where('project_id',$row->id)->first();
                     if(Auth::user()->role_id == 4 && $pm_project->delayed_status == 0)
                     {
@@ -205,6 +201,11 @@ class ProjectsDataTable extends BaseDataTable
             }else
             {
                 $project_value = $deal->actual_amount+ $deal->upsell_actual_amount . $currency->currency_symbol . ('<span class="badge badge-success">Upsold Amount ('.$deal->upsell_actual_amount.$currency->currency_symbol.')</span>');
+            }
+            if(Auth::user()->role_id == 6)
+            {
+                $project_value = 'N/A';
+
             }
 
 
