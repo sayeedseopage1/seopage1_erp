@@ -302,12 +302,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     })
                     .catch((err) => {
                         if (err?.status === 422) {
-                            Swal.fire({
-                                position: "center",
-                                icon: "error",
-                                title: "Please fill up all required fields",
-                                showConfirmButton: true,
-                            });
+                            toast.warn(
+                                `Estimate hours cannot exceed from project allocation hours !`
+                            );
                         }
                     });
             }
@@ -434,7 +431,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     }, [pageType]);
 
     return (
-        <React.Fragment>
+        <form onSubmit={handleSubmit}>
             <div className="sp1-subtask-form --form row">
                 <div className="col-12 col-md-6">
                     <Input
@@ -625,64 +622,128 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                 </div> */}
 
                 {/* Page Type  */}
-                <div className="col-12 col-md-6">
-                    <Listbox value={pageType} onChange={setPageType}>
-                        <div className="form-group position-relative my-3">
-                            <label htmlFor="">
-                                {" "}
-                                Task Type <sup>*</sup>{" "}
-                            </label>
-                            <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                <span className="singleline-ellipsis pr-3">
-                                    {pageType ?? "--"}
-                                </span>
 
-                                <div className="__icon">
-                                    <i className="fa-solid fa-sort"></i>
-                                </div>
-                            </Listbox.Button>
-                            <Listbox.Options className="sp1-select-options">
-                                {[
-                                    "New Page Design",
-                                    "Cloning Existing Design",
-                                    "Others",
-                                ]?.map((s, i) => (
-                                    <Listbox.Option
-                                        key={i}
-                                        className={({ active }) =>
-                                            `sp1-select-option ${
-                                                active ? "active" : ""
-                                            }`
-                                        }
-                                        value={s}
-                                    >
-                                        {({ selected }) => (
-                                            <>
-                                                {s}
+                {/* {console.log("roleId", auth?.isHasRolePermission(13))} */}
 
-                                                {selected ? (
-                                                    <i className="fa-solid fa-check ml-2" />
-                                                ) : (
-                                                    ""
-                                                )}
-                                            </>
-                                        )}
-                                    </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                        </div>
-                    </Listbox>
+                {auth?.isHasRolePermission(13) ? (
+                    <div className="col-12 col-md-6">
+                        <Listbox value={pageType} onChange={setPageType}>
+                            <div className="form-group position-relative my-3">
+                                <label htmlFor="">
+                                    {" "}
+                                    Task Type <sup>*</sup>{" "}
+                                </label>
+                                <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                    <span className="singleline-ellipsis pr-3">
+                                        {pageType ?? "--"}
+                                    </span>
 
-                    {required_error?.pageType?.[0] && (
-                        <div style={{ color: "red" }}>
-                            {required_error?.pageType?.[0]}
-                        </div>
-                    )}
+                                    <div className="__icon">
+                                        <i className="fa-solid fa-sort"></i>
+                                    </div>
+                                </Listbox.Button>
+                                <Listbox.Options className="sp1-select-options">
+                                    {[
+                                        "New Page Design",
+                                        "Cloning Existing Design",
+                                        // "Others",
+                                    ]?.map((s, i) => (
+                                        <Listbox.Option
+                                            key={i}
+                                            className={({ active }) =>
+                                                `sp1-select-option ${
+                                                    active ? "active" : ""
+                                                }`
+                                            }
+                                            value={s}
+                                        >
+                                            {({ selected }) => (
+                                                <>
+                                                    {s}
 
-                    {err?.taskType && (
-                        <div style={{ color: "red" }}>{err?.taskType}</div>
-                    )}
-                </div>
+                                                    {selected ? (
+                                                        <i className="fa-solid fa-check ml-2" />
+                                                    ) : (
+                                                        ""
+                                                    )}
+                                                </>
+                                            )}
+                                        </Listbox.Option>
+                                    ))}
+                                </Listbox.Options>
+                            </div>
+                        </Listbox>
+
+                        {required_error?.pageType?.[0] && (
+                            <div style={{ color: "red" }}>
+                                {required_error?.pageType?.[0]}
+                            </div>
+                        )}
+
+                        {err?.taskType && (
+                            <div style={{ color: "red" }}>{err?.taskType}</div>
+                        )}
+                    </div>
+                ) : (
+                    <div className="col-12 col-md-6">
+                        <Listbox value={pageType} onChange={setPageType}>
+                            <div className="form-group position-relative my-3">
+                                <label htmlFor="">
+                                    {" "}
+                                    Task Type <sup>*</sup>{" "}
+                                </label>
+                                <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                    <span className="singleline-ellipsis pr-3">
+                                        {pageType ?? "--"}
+                                    </span>
+
+                                    <div className="__icon">
+                                        <i className="fa-solid fa-sort"></i>
+                                    </div>
+                                </Listbox.Button>
+                                <Listbox.Options className="sp1-select-options">
+                                    {[
+                                        "New Page Design",
+                                        "Cloning Existing Design",
+                                        "Others",
+                                    ]?.map((s, i) => (
+                                        <Listbox.Option
+                                            key={i}
+                                            className={({ active }) =>
+                                                `sp1-select-option ${
+                                                    active ? "active" : ""
+                                                }`
+                                            }
+                                            value={s}
+                                        >
+                                            {({ selected }) => (
+                                                <>
+                                                    {s}
+
+                                                    {selected ? (
+                                                        <i className="fa-solid fa-check ml-2" />
+                                                    ) : (
+                                                        ""
+                                                    )}
+                                                </>
+                                            )}
+                                        </Listbox.Option>
+                                    ))}
+                                </Listbox.Options>
+                            </div>
+                        </Listbox>
+
+                        {required_error?.pageType?.[0] && (
+                            <div style={{ color: "red" }}>
+                                {required_error?.pageType?.[0]}
+                            </div>
+                        )}
+
+                        {err?.taskType && (
+                            <div style={{ color: "red" }}>{err?.taskType}</div>
+                        )}
+                    </div>
+                )}
 
                 {pageType === "New Page Design" ? (
                     <div className="col-12 col-md-6">
@@ -1047,7 +1108,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         </Button>
 
                         {!isLoading && !checking ? (
-                            <Button onClick={handleSubmit}>
+                            <Button type="submit">
                                 <i className="fa-regular fa-paper-plane"></i>
                                 Create
                             </Button>
@@ -1067,7 +1128,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     </div>
                 </div>
             </div>
-        </React.Fragment>
+        </form>
     );
 };
 
