@@ -90,6 +90,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
         });
 
         if (!_.isEmpty(messageLinksErrors)) {
+            toast.error("Invalid URL for Client Message Thread  Link");
             setError((err) => ({ ...err, message_links: messageLinksErrors }));
             return;
         }
@@ -235,11 +236,11 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                                 </RemoveButton>
                                             )}
                                         </Flex>
-                                        {!_.isEmpty(error?.message_links) ? (
+                                        {/* {!_.isEmpty(error?.message_links) ? (
                                             <ErrorText>
                                                 {error?.message_links[link.id]}
                                             </ErrorText>
-                                        ) : null}
+                                        ) : null} */}
                                     </React.Fragment>
                                 ))}
 
