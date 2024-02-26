@@ -2,7 +2,7 @@
 @push('datatable-styles')
     @include('sections.datatable_css')
 @endpush
-{{-- @section('filter-section')
+@section('filter-section')
     <x-filters.filter-box>
         <div class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.clientName')</p>
@@ -20,25 +20,22 @@
                 </select>
             </div>
         </div>
-
-        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
-            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.status')</p>
+        <div class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center ml-1">Project Manager</p>
             <div class="select-status">
-                <select class="form-control select-picker" name="status" id="status" data-live-search="true" data-size="8">
-                    <option selected value="in progress">@lang('In Progress')</option>
-                     <option {{ request('status') == 'all' ? 'selected' : '' }} value="all">@lang('app.all')</option>
-                    <option {{ request('status') == 'overdue' ? 'selected' : '' }} value="overdue">@lang('app.overdue')
-                    </option>
-                    <?php $p_status= App\Models\ProjectStatusSetting::where('status_name','!=','not started')->get() ?>
-                    @foreach ($p_status as $status)
-
-                        <option value="{{$status->status_name}}">{{ ucfirst($status->status_name) }}</option>
+                <select class="form-control select-picker" name="client_id" id="client_id" data-live-search="true"
+                    data-size="8">
+                    @if (!in_array('client', user_roles()))
+                        <option value="all">@lang('app.all')</option>
+                    @endif
+                    @foreach ($project_managers as $pm)
+                        <option
+                            data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $pm->image_url }}' ></div> {{ ucfirst($pm->name) }}"
+                            value="{{ $pm->id }}">{{ ucfirst($pm->name) }}</option>
                     @endforeach
                 </select>
             </div>
         </div>
-
-        <!-- SEARCH BY TASK START -->
         <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
             <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
                 <div class="input-group bg-grey rounded">
@@ -52,7 +49,17 @@
                 </div>
             </form>
         </div>
-        <!-- SEARCH BY TASK END -->
+        <div class="align-items-center border-right-grey px-0 py-1">
+            <div class="col-auto">
+                <label class="sr-only" for="inlineFormInputGroup"></label>
+                <div class="border input-group rounded">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">  <i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
+                    </div>
+                    <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
+               </div>
+            </div>
+        </div>
 
         <!-- RESET START -->
         <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
@@ -63,7 +70,7 @@
         <!-- RESET END -->
 
     </x-filters.filter-box>
-@endsection --}}
+@endsection
 
 @section('content')
     <!-- CONTENT WRAPPER START -->
@@ -78,6 +85,48 @@
 
 @push('scripts')
     @include('sections.datatable_js')
+    <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+    <script type="text/javascript">
+        @php
+            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(12)->addDays(20);
+            $today = \Carbon\Carbon::now()->format('d');
+            if ($today > 20) {
+                $endDate = \Carbon\Carbon::now()->startOfMonth()->addMonth(1)->addDays(19);
+            } else {
+                $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(19);
+            }
+        @endphp
+        $(function() {
+            var format = '{{ global_setting()->moment_format }}';
+            var startDate = "{{ $startDate->format(global_setting()->date_format) }}";
+            var endDate = "{{ $endDate->format(global_setting()->date_format) }}";
+            var picker = $('#datatableRange2');
+            var start = moment(startDate, format);
+            var end = moment(endDate, format);
+
+            function cb(start, end) {
+                $('#datatableRange2').val(moment(start).subtract(1, 'year').format('{{ global_setting()->moment_date_format }}') +
+                    ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+                $('#reset-filters').removeClass('d-none');
+            }
+
+            $('#datatableRange2').daterangepicker({
+                locale: daterangeLocale,
+                linkedCalendars: false,
+                startDate: start,
+                endDate: end,
+                ranges: daterangeConfig,
+                opens: 'left',
+                parentEl: '.dashboard-header',
+            }, cb);
+
+
+
+            $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
+                showTable();
+            });
+        });
+    </script>
     <script>
         $( document ).ready(function() {
             $('#project-status-table').on('preXhr.dt', function(e, settings, data) {
