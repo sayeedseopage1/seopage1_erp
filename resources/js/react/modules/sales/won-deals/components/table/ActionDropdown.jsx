@@ -46,6 +46,8 @@ const ActionDropdown = ({ ...rest }) => {
         window.location.href = url;
     };
 
+    console.log(rest?.row?.original.authorization_status === 0 && rest?.row?.original.id )
+
     return (
         <React.Fragment>
             <Dropdown>
@@ -80,17 +82,31 @@ const ActionDropdown = ({ ...rest }) => {
                         </Dropdown.Item>
                     )}
 
-                    {/* delete lead */}
-                    {(auth.getRoleId() === 1 || auth.getRoleId() === 4) &&
-                        rest?.row?.original?.status?.toLowerCase() !==
+                    {/* Authorization Need */}
+                    {(rest?.row?.original.authorization_status === 0 && auth.getRoleId() === 8) &&
                             "pending" && (
+                            <Dropdown.Item
+                                onClick={() =>
+                                    handleRedirection(
+                                        `/deals/request/authorization/${rest?.row?.original?.id}`
+                                    )
+                                }
+                                className={`${styles.dropdownItem} bg-warning` }
+                            >
+                                <i className="fa-regular fa-user" />
+                                Authorization Need
+                            </Dropdown.Item>
+                        )}
+                    {/* delete lead */}
+                    {(auth.getRoleId() === 1 || auth.getRoleId() === 4 || auth.getRoleId() === 8) &&
+                        rest?.row?.original.authorization_status === 1 && (
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(
                                         `/account/contracts/${rest?.row?.original?.id}`
                                     )
                                 }
-                                className={styles.dropdownItem}
+                                className={`${styles.dropdownItem} bg-success`}
                             >
                                 <i className="fa-regular fa-user" />
                                 Authorization Details
