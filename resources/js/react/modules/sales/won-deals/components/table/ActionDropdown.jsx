@@ -43,7 +43,7 @@ const ActionDropdown = ({ ...rest }) => {
 
     // handle redirection
     const handleRedirection = (url) => {
-        window.location.href = url;
+        window.open(url, "_blank");
     };
 
     console.log(rest?.row?.original.authorization_status === 0 && rest?.row?.original.id )
@@ -67,6 +67,18 @@ const ActionDropdown = ({ ...rest }) => {
                         <i className="fa-regular fa-file" />
                         Client Form
                     </Dropdown.Item> */}
+                    {/* View Won Deal */}
+                    <Dropdown.Item
+                        onClick={() =>
+                            handleRedirection(
+                                `/account/contracts/${rest?.row?.original?.id}`
+                            )
+                        }
+                        className={styles.dropdownItem}
+                    >
+                       <i className="fa-regular fa-eye" />
+                        View Won Deal
+                    </Dropdown.Item>
 
                     {_.includes([1, 7], auth.getRoleId()) && (
                         <Dropdown.Item
