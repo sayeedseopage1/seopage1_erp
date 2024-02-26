@@ -6,7 +6,7 @@ import { useUsers } from '../../hooks/useUsers';
 import { User } from '../../utils/user-details';
 import Loader from './Loader';
 
-const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 9, 10], disabled=false}) => {
+const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 9, 10], disabled=false, sidebarIsOpen}) => {
     const [query, setQuery] = useState('');
     const { users, usersIsFetching } = useUsers();
     let _users;
@@ -22,10 +22,10 @@ const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 
     const name = _.size(state?.name) > 16 ? `${state?.name?.slice(0, 16)}...` : state?.name
 
     return (
-        <div className='sp1_task_filter_item d-flex'>
+        <div className={`sp1_task_filter_item d-flex ${sidebarIsOpen && "flex-column w-100"}`}>
                 <span className='mr-2 f-13 d-flex flex-nowrap'>{title} :</span>
                 <Dropdown>
-                    <Dropdown.Toggle disabled={disabled} className={`sp1_filter_toggle ${selectionBoxClassName ?? ''}`}>
+                    <Dropdown.Toggle disabled={disabled} className={`sp1_filter_toggle ${selectionBoxClassName ?? ''} ${sidebarIsOpen && "py-2"}`} >
                         <span
                             data-toggle={name ? 'tooltip' : ''}
                             title={state?.name ?? ''}

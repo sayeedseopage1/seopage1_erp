@@ -340,6 +340,7 @@ export default function CashPointsFilter ({
                             state={client}
                             setState={setClient}
                             roleIds={null}
+                            
                         />
                         </FilterItem>
                         <FilterItem className='hide'>
@@ -347,7 +348,7 @@ export default function CashPointsFilter ({
                                 value={type}
                                 onChange={setType}
                                 data={[
-                                    { id: "bonus", title: "Bonus" },
+                                    { id: "Bonus", title: "Bonus" },
                                     { id: "Regular", title: "Regular" },
                                 ]}
                              />
@@ -444,6 +445,26 @@ export default function CashPointsFilter ({
                                     />
                                 </FilterItem>
 
+                                <FilterItem className='w-100 border-right-0'>
+                                    <UserFilter
+                                    title="Client"
+                                    state={client}
+                                    setState={setClient}
+                                    sidebarIsOpen={sidebarIsOpen}
+                                    roleIds={null}
+                                />
+                                </FilterItem>
+                                <FilterItem className='w-100 border-right-0'>
+                                    <TypeFilter
+                                        value={type}
+                                        onChange={setType}
+                                        sidebarIsOpen={sidebarIsOpen}
+                                        data={[
+                                            { id: "Bonus", title: "Bonus" },
+                                            { id: "Regular", title: "Regular" },
+                                        ]}
+                                    />
+                                </FilterItem>
                                 {/* <FilterItem className='w-100 border-right-0'>
                                     <ProjectFilterOptions
                                         selected={project}
