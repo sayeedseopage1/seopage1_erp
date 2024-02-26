@@ -109,8 +109,8 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             ->editColumn('old_deadline', function ($row) {
                 return $row->old_deadline;
             })
-            ->editColumn('new_deadline', function ($row) {
-                return $row->new_deadline;
+            ->editColumn('requested_on', function ($row) {
+                return Carbon::parse($row->created_at)->format('Y-m-d h:i:s A');;
             })
             ->editColumn('deadline_requested', function ($row) {
                 return $row->deadline_requested_pm;
@@ -139,9 +139,6 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                     return 'Awaiting Approval';
                 }
             })
-            ->editColumn('requested_on', function ($row) {
-                return Carbon::parse($row->created_at)->format('Y-m-d h:i:s A');;
-            })
             ->editColumn('approved_on', function ($row) {
                 if ($row->approved_on !=null){
                 return Carbon::parse($row->approved_on)->format('Y-m-d h:i:s A') ?? 'Awaiting Approval';
@@ -168,7 +165,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['action' ,'clientName','project_name','pmName','milestone_status','old_deadline','new_deadline','deadline_requested','deadline_extended','reason','requested_on','approved_on','approved_by']);
+            ->rawColumns(['action' ,'clientName','project_name','pmName','milestone_status','old_deadline','deadline_requested','deadline_extended','reason','requested_on','approved_on','approved_by']);
     }
     /**
      * @param Project $model
@@ -248,13 +245,12 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             __('parent_task_status') => ['data' => 'parent_task_status', 'name' => 'parent_task_status', 'title' => __('Parent Task Status')],
             __('sub_task_status') => ['data' => 'sub_task_status', 'name' => 'sub_task_status', 'title' => __('Sub Task Status')],
             __('old_deadline') => ['data' => 'old_deadline', 'name' => 'old_deadline', 'title' => __('Previous Deadline')],
-            __('new_deadline') => ['data' => 'new_deadline', 'name' => 'new_deadline', 'title' => __('New Deadline')],
-            __('deadline_requested') => ['data' => 'deadline_requested', 'name' => 'deadline_requested', 'title' => __('Deadline Requested')],
-            __('deadline_extend_admin') => ['data' => 'deadline_extend_admin', 'name' => 'deadline_extend_admin', 'title' => __('Deadline Extended')],
-            __('deadline_extended') => ['data' => 'deadline_extended', 'name' => 'deadline_extended', 'title' => __('Deadline Requested For')],
-            __('reason') => ['data' => 'reason', 'name' => 'reason', 'title' => __('Reason')],
-            __('deadline_extended_for') => ['data' => 'deadline_extended_for', 'name' => 'deadline_extended_for', 'title' => __('Deadline Extended For')],
             __('requested_on') => ['data' => 'requested_on', 'name' => 'requested_on', 'title' => __('Requested On')],
+            __('deadline_requested') => ['data' => 'deadline_requested', 'name' => 'deadline_requested', 'title' => __('Deadline Requested')],
+             __('deadline_extended') => ['data' => 'deadline_extended', 'name' => 'deadline_extended', 'title' => __('Deadline Requested For')],
+            __('deadline_extend_admin') => ['data' => 'deadline_extend_admin', 'name' => 'deadline_extend_admin', 'title' => __('Deadline Extended')],
+            __('deadline_extended_for') => ['data' => 'deadline_extended_for', 'name' => 'deadline_extended_for', 'title' => __('Deadline Extended For')],
+            __('reason') => ['data' => 'reason', 'name' => 'reason', 'title' => __('Reason')],
             __('approved_on') => ['data' => 'approved_on', 'name' => 'approved_on', 'title' => __('Approved On')],
             __('approved_by') => ['data' => 'approved_by', 'name' => 'approved_by', 'title' => __('Approved By')],
             Column::computed('action', __('app.action'))
