@@ -115,7 +115,9 @@ class PointsController extends AccountBaseController
 
     public function get_point_table_data(Request $request)
     {
-        $data = CashPoint::select('*');
+        $data = CashPoint::select('*')
+        ->leftJoin('projects','cash_points.project_id','projects.id')
+        ;
 
         // if ($request->department_id != '') {
         //     $user = Seopage1Team::where('department_id', $request->department_id)->get();
@@ -157,6 +159,7 @@ class PointsController extends AccountBaseController
         if ($request->end_date != '') {
             $data = $data->where(\DB::raw('DATE(created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
         }
+
         if(Auth::user()->role_id == 1)
         {
             $data = $data->orderBy('id', 'desc')->where('points','!=',0)->orderBy('id', 'desc')->get();
@@ -165,6 +168,9 @@ class PointsController extends AccountBaseController
             $data = $data->where('user_id',Auth::id())->where('points','!=',0)->orderBy('id', 'desc')->get();
 
         } 
+        if ($request->client_id != '') {
+            $data = $data->where('projects.client_id', $request->client_id);
+        }
         //dd($data);
         return response()->json($data);
     }
