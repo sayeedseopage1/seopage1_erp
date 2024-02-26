@@ -12,6 +12,8 @@ import { useUsers } from '../../hooks/useUsers';
 import { usePointTableDataMutation } from '../../services/api/PointTableDataApiSlice';
 import Button from '../../Insights/ui/Button';
 import ProjectFilterOptions from './ProjectFilterOptions';
+import PersonFilter from './PersonFilter';
+import UserFilter from './UserFilter';
 
 export default function CashPointsFilter ({
     setData,
@@ -24,6 +26,7 @@ export default function CashPointsFilter ({
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [shiftEmployee,setShiftEmployee] = React.useState([]);
+    const [client, setClient] = React.useState(null);
 
     const [dept,setDept] = React.useState(null);
     const [selectedShift, setSelectedShift] = React.useState(null);
@@ -169,6 +172,7 @@ export default function CashPointsFilter ({
                     user_id: selectedEmployee?.id,
                     start_date: startDate,
                     end_date: endDate,
+                    client_id: client?.id,
                     project_id: null
                 })
             }else{
@@ -196,6 +200,7 @@ export default function CashPointsFilter ({
                 user_id: selectedEmployee?.id,
                 start_date: startDate,
                 end_date: endDate,
+                client_id: client?.id,
                 project_id: null
             })
       } else if(selectedEmployee) {
@@ -205,7 +210,29 @@ export default function CashPointsFilter ({
                 end_date: endDate,
             })
       }
-    }, [endDate, startDate]);
+    }, [endDate, startDate, ]);
+
+    React.useEffect(() => {
+        const user = window?.Laravel?.user;
+      if(Number(user?.role_id) === 1) {
+            if(!dept || !selectedEmployee || !selectedShift) return;
+            pointTableData({
+                department_id: dept?.id,
+                team_id: selectedShift?.id,
+                user_id: selectedEmployee?.id,
+                start_date: startDate,
+                end_date: endDate,
+                client_id: client?.id,
+                project_id: null
+            })
+      } else if(selectedEmployee) {
+            pointTableData({
+                user_id: user?.id,
+                start_date: startDate,
+                end_date: endDate,
+            })
+      }
+    }, [client]);
 
 
 
@@ -236,7 +263,7 @@ export default function CashPointsFilter ({
                     onApply={() => {}}
                 />
             </FilterItem>
-
+          
 
             {
                 Number(window?.Laravel?.user?.role_id) === 1 ? (
@@ -277,6 +304,14 @@ export default function CashPointsFilter ({
                                 loading = {employeeLoading || usersIsFetching}
                                 onSelect={() => {}}
                             />
+                        </FilterItem>
+                        <FilterItem className='hide'>
+                            <UserFilter
+                            title="Client"
+                            state={client}
+                            setState={setClient}
+                            roleIds={null}
+                        />
                         </FilterItem>
 
                         {/* <FilterItem className='hide'>
