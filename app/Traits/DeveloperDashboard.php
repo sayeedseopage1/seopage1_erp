@@ -247,7 +247,7 @@ trait DeveloperDashboard
        foreach($first_attempt_approve_task_data_client as $item)
        {
         $type= TaskType::where('task_id',$item->id)->first();
-        if($type->page_type == 'Primary Page Development')
+        if($type != null && $type->page_type == 'Primary Page Development')
         {
             $first_attempt_approve_task_primary_page_client++;
     
@@ -258,7 +258,7 @@ trait DeveloperDashboard
        foreach($first_attempt_approve_task_data_client as $item)
        {
         $type= TaskType::where('task_id',$item->id)->first();
-        if($type->page_type == 'Secondary Page Development')
+        if($type != null && $type->page_type == 'Secondary Page Development')
         {
             $first_attempt_approve_task_secondary_page_client++;
     
@@ -1543,7 +1543,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
        foreach($first_attempt_approve_task_data_client as $item)
        {
         $type= TaskType::where('task_id',$item->id)->first();
-        if($type->page_type == 'Primary Page Development')
+        if($type != null && $type->page_type == 'Primary Page Development')
         {
             $first_attempt_approve_task_primary_page_client++;
     
@@ -1554,7 +1554,7 @@ $this->first_attempt_approve_task_in_this_month_client_data
        foreach($first_attempt_approve_task_data_client as $item)
        {
         $type= TaskType::where('task_id',$item->id)->first();
-        if($type->page_type == 'Secondary Page Development')
+        if($type != null && $type->page_type == 'Secondary Page Development')
         {
             $first_attempt_approve_task_secondary_page_client++;
     
