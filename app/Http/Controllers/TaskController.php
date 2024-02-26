@@ -2689,7 +2689,7 @@ class TaskController extends AccountBaseController
         }
       
         $viewTaskFilePermission = user()->permission('view_task_files');
-        $viewSubTaskPermission = user()->permission('view_sub_tasks');
+       // $viewSubTaskPermission = user()->permission('view_sub_tasks');
         $this->viewTaskCommentPermission = user()->permission('view_task_comments');
         $this->viewTaskNotePermission = user()->permission('view_task_notes');
         $this->viewUnassignedTasksPermission = user()->permission('view_unassigned_tasks');
@@ -2705,11 +2705,11 @@ class TaskController extends AccountBaseController
                     $q->where('added_by', user()->id);
                 }
             },
-            'subtasks' => function ($q) use ($viewSubTaskPermission) {
-                if ($viewSubTaskPermission == 'added') {
-                    $q->where('added_by', user()->id);
-                }
-            }
+            // 'subtasks' => function ($q) use ($viewSubTaskPermission) {
+            //     if ($viewSubTaskPermission == 'added') {
+            //         $q->where('added_by', user()->id);
+            //     }
+            // }
         ])
             ->withCount('subtasks', 'files', 'comments', 'activeTimerAll')
             ->findOrFail($id)->withCustomFields();
