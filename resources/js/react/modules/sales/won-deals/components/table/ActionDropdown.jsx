@@ -95,7 +95,7 @@ const ActionDropdown = ({ ...rest }) => {
                     )}
 
                     {/* Authorization Need */}
-                    {(rest?.row?.original.authorization_status === 0  && auth.getRoleId() === 8) &&
+                    {(rest?.row?.original.authorization_status === 2  && auth.getRoleId() === 8) &&
                             (
                             <Dropdown.Item
                                 onClick={() =>
