@@ -15,7 +15,7 @@ export default function TypeFilter({ value, onChange, data ,sidebarIsOpen}) {
             : data
         : [];
     return (
-        <div className={styles.toggleWrapper `${sidebarIsOpen && "w-100"}`}>
+        <div className={`${styles.toggleWrapper} ${sidebarIsOpen && "w-100"}`}>
             <span>Type: </span>
 
             <Listbox
