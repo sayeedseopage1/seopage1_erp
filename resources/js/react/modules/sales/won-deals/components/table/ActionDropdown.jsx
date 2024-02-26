@@ -95,8 +95,8 @@ const ActionDropdown = ({ ...rest }) => {
                     )}
 
                     {/* Authorization Need */}
-                    {(rest?.row?.original.authorization_status === 0 && auth.getRoleId() === 8) &&
-                            "pending" && (
+                    {(rest?.row?.original.authorization_status === 0  && auth.getRoleId() === 8) &&
+                            (
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(
@@ -111,7 +111,7 @@ const ActionDropdown = ({ ...rest }) => {
                         )}
                     {/* delete lead */}
                     {(auth.getRoleId() === 1 || auth.getRoleId() === 4 || auth.getRoleId() === 8) &&
-                        rest?.row?.original.authorization_status === 1 && (
+                        rest?.row?.original.authorization_status === 1 && rest?.row?.original.status === ( "pending" || "Accepted" ) && (
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(
