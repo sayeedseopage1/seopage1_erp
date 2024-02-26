@@ -348,7 +348,7 @@ export default function CashPointsFilter ({
                                 onChange={setType}
                                 data={[
                                     { id: "bonus", title: "Bonus" },
-                                    { id: "fixed", title: "Fixed" },
+                                    { id: "regular", title: "Regular" },
                                 ]}
                              />
                         </FilterItem>
