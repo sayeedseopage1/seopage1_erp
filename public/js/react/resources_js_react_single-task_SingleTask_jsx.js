@@ -14009,7 +14009,7 @@ var Genarel = function Genarel(_ref) {
             index: index + 1,
             date: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format("MMM DD, YYYY"),
             time: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format("hh:mm a"),
-            text: revision === null || revision === void 0 ? void 0 : revision.comment
+            revision: revision
           }, revision.id);
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {

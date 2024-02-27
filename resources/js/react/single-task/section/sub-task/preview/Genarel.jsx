@@ -421,7 +421,7 @@ const Genarel = ({ task, isFetching }) => {
                                 time={dayjs(revision.createdAt).format(
                                     "hh:mm a"
                                 )}
-                                text={revision?.comment}
+                                revision={revision}
                             />
                         ))}
                     </Accordion>
