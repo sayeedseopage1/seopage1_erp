@@ -170,11 +170,11 @@ class PointsController extends AccountBaseController
            // dd($request->bonus_type);
            if($request->bonus_type == 'Bonus')
            {
-            $data = $data->whereIn('bonus_type', ['Authorization Bonus','Bonus']);
+            $data = $data->where('bonus_type','Bonus');
 
            }elseif($request->bonus_type == 'Regular')
            {
-            $data = $data->whereIn('bonus_type', ['Regular',null]);
+            $data = $data->where('bonus_type', '!=','Bonus');
 
            }
             
