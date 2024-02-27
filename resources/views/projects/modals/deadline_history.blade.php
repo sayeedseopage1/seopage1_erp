@@ -9,7 +9,7 @@
           </button>
         </div>
         @php
-            $project_deadline_extension = App\Models\ProjectDeadlineExtension::where('project_id',$project->id)->get();
+            $project_deadline_extension = App\Models\ProjectDeadlineExtension::where('project_id',$project->id)->orderBy('id','desc')->get();
         @endphp
         <div class="modal-body">
             <table id="deadline_history_table" class="display" style="width:100%">
@@ -21,6 +21,7 @@
                     <th scope="col">Reason</th>
                     <th scope="col">Request Status</th>
                     <th scope="col">Approved On</th>
+                    <th scope="col">Approved By</th>
                     <th scope="col">Extended Deadline</th>
                   </tr>
                 </thead>
@@ -43,6 +44,16 @@
                                 {{\Carbon\Carbon::parse($row->approved_on)->format('Y-m-d h:i:s A')}}
                             @else
                             <p>Not Approved Yet</p>
+                            @endif
+                        </td>
+                        <td>
+                            @if ($row->approved_by != null)
+                            @php
+                                $user = App\Models\User::where('id',$row->approved_by)->first();
+                            @endphp
+                            <a href="{{route('employees.show',$user->id)}}">{{$user->name}}</a>
+                            @else
+                            <p>Awaiting Approval</p>
                             @endif
                         </td>
                         <td>
