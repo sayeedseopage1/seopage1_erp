@@ -167,7 +167,17 @@ class PointsController extends AccountBaseController
             
         }
         if ($request->bonus_type != '') {
-            $data = $data->where('bonus_type', $request->bonus_type);
+           // dd($request->bonus_type);
+           if($request->bonus_type == 'Bonus')
+           {
+            $data = $data->where('cash_points.project_id',null);
+
+           }else
+           {
+            $data = $data->where('cash_points.project_id', '!=',null);
+
+           }
+            
         }
 
         if(Auth::user()->role_id == 1)
