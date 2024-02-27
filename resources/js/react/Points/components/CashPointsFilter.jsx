@@ -350,6 +350,7 @@ export default function CashPointsFilter ({
                                 data={[
                                     { id: "Bonus", title: "Bonus" },
                                     { id: "Regular", title: "Regular" },
+                                    { id: "Authorization Bonus", title: "Authorization Bonus" },
                                 ]}
                              />
                         </FilterItem>
