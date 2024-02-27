@@ -6372,6 +6372,7 @@ public function updatePmBasicSEO(Request $request){
         return view('projects.modals.project_deadline_extension_modal', $this->data);
     }
     public function pDERequest(ProjectDeadlineExtensionDataTable $datatable){
+        $this->clients = User::allClients();
         $this->pageTitle = 'Project Deadline Extension Requests';
         $this->project_managers = User::where('role_id',4)->get();
         return $datatable->render('projects.ajax.project_deadline_extension',$this->data);
