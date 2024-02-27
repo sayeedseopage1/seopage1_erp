@@ -9,7 +9,7 @@
           </button>
         </div>
         @php
-            $project_deadline_extension = App\MOdels\ProjectDeadlineExtension::where('project_id',$project->id)->get();
+            $project_deadline_extension = App\Models\ProjectDeadlineExtension::where('project_id',$project->id)->get();
         @endphp
         <div class="modal-body">
             <table id="deadline_history_table" class="display" style="width:100%">
