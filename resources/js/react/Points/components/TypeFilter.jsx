@@ -9,13 +9,13 @@ export default function TypeFilter({ value, onChange, data ,sidebarIsOpen, disab
     const filteredData = data
         ? query
             ? filter(data, (item) =>
-                  includes(lowerCase(item.name), lowerCase(query))
+                  includes(lowerCase(item.title), lowerCase(query))
               )
             : data
         : [];
 
     return (
-        <div className={`sp1_task_filter_item d-flex ${sidebarIsOpen && "flex-column"}`}>
+        <div className={`sp1_task_filter_item d-flex ${sidebarIsOpen && "flex-column w-100"}`}>
             <span className='mr-2 f-13 d-flex flex-nowrap'>Type: </span>
             <Dropdown>
                 <Dropdown.Toggle disabled={disabled} className={`sp1_filter_toggle ${selectionBoxClassName ?? ''} ${sidebarIsOpen && "py-2"} `}>
