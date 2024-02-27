@@ -252,9 +252,12 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <div class="p-end-date">
                         <h5 class="text-lightest f-14 font-weight-normal">@lang('modules.projects.deadline')</h5>
                         <p class="f-15 mb-0">
-                            {{ !is_null($project->deadline) ? $project->deadline->format(global_setting()->date_format) : '--' }}
+                            <a href="#" data-toggle="modal" data-target="#d_History{{$project->id}}">
+                                {{ !is_null($project->deadline) ? $project->deadline->format(global_setting()->date_format) : '--' }}
+                            </a>
                         </p>
                     </div>
+                    @include('projects.modals.deadline_history')
                     <!-- PROGRESS END DATE END -->
                 </x-cards.data>
             </div>

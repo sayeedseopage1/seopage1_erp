@@ -110,7 +110,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                 return $row->old_deadline;
             })
             ->editColumn('requested_on', function ($row) {
-                return Carbon::parse($row->created_at)->format('Y-m-d h:i:s A');;
+                return Carbon::parse($row->created_at)->format('Y-m-d h:i:s A');
             })
             ->editColumn('deadline_requested', function ($row) {
                 return $row->deadline_requested_pm;
