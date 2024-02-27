@@ -50,6 +50,7 @@ class IncentiveController extends AccountBaseController
         } else {
             $userID = $request->user_id;
         }
+      //  dd($start_date,$end_date);
 
         $user_shift = Seopage1Team::where([
             ['id', '!=', 1],
@@ -246,6 +247,13 @@ class IncentiveController extends AccountBaseController
 
         $data['point_value'] = $incentive_setting->point_of_value;
         $data['percentage_of_share'] = $total_percentage_share_incentive_of_this_user ?? 0;
+        $find_user_incentive = UserIncentive::where('month',$start_date)->where('user_id',$request->user_id)->first();
+        if($find_user_incentive != null)
+        {
+            $data['point_achieve_by_your_shift'] = $find_user_incentive->shift_achieved_points;
+            $data['percentage_of_share'] = $find_user_incentive->contribution;
+        }
+       
 
         return response()->json($data);
     }
