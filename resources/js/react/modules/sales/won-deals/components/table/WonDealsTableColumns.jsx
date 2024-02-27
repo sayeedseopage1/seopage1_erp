@@ -124,6 +124,7 @@ export const WonDealsTableColumns = [
         accessorKey: "deal_creation_date",
         cell: ({ row }) => {
             const data = row.original;
+            console.log("data in won deal table", data);
             const date = data?.deal_creation_date ? (
                 dayjs(data?.deal_creation_date).format(`DD-MM-YYYY hh:mm:ss A`)
             ) : (
@@ -215,4 +216,3 @@ export const WonDealsTableColumns = [
         cell: (props) => <ActionDropdown {...props} />,
     },
 ];
-
