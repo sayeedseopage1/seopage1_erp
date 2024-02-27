@@ -14,6 +14,7 @@ import Button from '../../Insights/ui/Button';
 
 import UserFilter from './UserFilter';
 import TypeFilter from './TypeFilter';
+import { useAuth } from '../../hooks/useAuth';
 
 export default function CashPointsFilter ({
     setData,
@@ -22,7 +23,7 @@ export default function CashPointsFilter ({
     const { departments, shift, employees } = useSelector(s => s.pointPageFilterOption);
     const { getUserById, usersObject, usersIsFetching } = useUsers();
     const dispatch = useDispatch();
-
+    const auth = useAuth();
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [shiftEmployee,setShiftEmployee] = React.useState([]);
@@ -368,10 +369,34 @@ export default function CashPointsFilter ({
 
 
                     </>
-                ) :
-                <FilterItem className='border-right-0'>
-                    Showing Data for: <span className='font-weight-bold'>{window?.Laravel?.user?.name}</span>
-                </FilterItem>
+                ) : 
+                <>
+                    <FilterItem className='border-right-0'>
+                        Showing Data for: <span className='font-weight-bold'>{window?.Laravel?.user?.name}</span>
+                    </FilterItem> 
+                    {_.includes([7, 8], auth.getRoleId()) && (
+                    <> 
+                    <FilterItem className='hide'>
+                        <UserFilter
+                        title="Client"
+                        state={client}
+                        setState={setClient}
+                        roleIds={null}/>
+                    </FilterItem>
+                    <FilterItem className='hide'>
+                            <TypeFilter
+                                value={type}
+                                onChange={setType}
+                                data={[
+                                    { id: "Bonus", title: "Bonus" },
+                                    { id: "Regular", title: "Regular" },
+                                    { id: "Authorization", title: "Authorization"}
+                                ]}
+                             />
+                    </FilterItem>
+                    </>
+                    )}
+                </>
             }
 
 
@@ -477,6 +502,31 @@ export default function CashPointsFilter ({
                                     />
                                 </FilterItem> */}
                             </div>
+                        </aside>
+                    )
+                }
+                {
+                    _.includes([7, 8], auth.getRoleId()) && sidebarIsOpen && (
+                        <aside className='sp1__pp_filter_sidebar'>
+                            <FilterItem className='hide'>
+                                <UserFilter
+                                    title="Client"
+                                    state={client}
+                                    setState={setClient}
+                                    roleIds={null}/>
+                                </FilterItem>
+                            <FilterItem className='hide'>
+                                <TypeFilter
+                                    value={type}
+                                    onChange={setType}
+                                    data={[
+                                        { id: "Bonus", title: "Bonus" },
+                                        { id: "Regular", title: "Regular" },
+                                        { id: "Authorization", title: "Authorization"}
+                                    ]}
+                                />
+                            </FilterItem>
+                            
                         </aside>
                     )
                 }
