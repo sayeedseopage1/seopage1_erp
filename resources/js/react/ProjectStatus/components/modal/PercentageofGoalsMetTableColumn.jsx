@@ -58,9 +58,13 @@ export const PercentageofGMTableColumn = [
       cell: ({ row }) => {
           const data = row?.original;
           return (
-              <span > 
-                  {data?.status ?? "--"} 
-              </span>
+            <div className="d-flex align-items-center" > 
+                <i class="fa fa-circle mr-1 f-10" style={{
+                color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
+                }}></i>  
+
+                {data?.status === 0 ? "In progress" : "Completed" } 
+            </div>
           )
       }
   },

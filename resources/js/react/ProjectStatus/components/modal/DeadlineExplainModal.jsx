@@ -19,12 +19,14 @@ const DeadlineExplainModal = ({
             onRequestClose={closeModalTwo}
             contentLabel="Deadline Explanation"
         >
+
             <div
                 className="d-flex justify-content-between align-items-center mb-3"
             >
                 <h6
                     style={{
                         fontSize: "25px",
+                        marginBottom: "0",
                     }}
                 >
                     Deadline Explanation

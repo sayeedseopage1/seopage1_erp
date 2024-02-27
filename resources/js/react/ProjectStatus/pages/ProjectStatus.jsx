@@ -98,6 +98,8 @@ const ProjectStatus = () => {
     }
 
 
+    console.log(percentageOfGoalsMet)
+
     return (
 
         <React.Fragment>

@@ -105,7 +105,7 @@ export const ProjectStatusTableColumns = [
         cell: ({ row, table }) => {
             const data = row.original;
             const handler = table.options.meta
-            const percentage = data.goal_progress;
+            const percentage = 50;
             return (
                 <div className="progress" style={{
                     height: "15px",

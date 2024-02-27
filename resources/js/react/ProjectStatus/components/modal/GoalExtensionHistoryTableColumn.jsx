@@ -1,3 +1,6 @@
+import Avatar from "../../../global/Avatar";
+import { CreatedBy } from "../table/ui";
+
 export const GoalExtensionHistoryTableColumn = [
   {
       id: "id",
@@ -69,9 +72,13 @@ export const GoalExtensionHistoryTableColumn = [
       cell: ({ row }) => {
           const data = row?.original;
           return (
-              <span > 
-                  {data?.status ?? "--"} 
-              </span>
+            <div className="d-flex align-items-center" > 
+                <i class="fa fa-circle mr-1 f-10" style={{
+                    color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
+                }}></i>  
+
+                {data?.status ?? "--"} 
+            </div>
           )
       }
   },
@@ -82,7 +89,7 @@ export const GoalExtensionHistoryTableColumn = [
     cell: ({ row }) => {
         const data = row?.original;
         return (
-            <span className="multine-ellipsis"
+            <span title={data?.reason} className="multine-ellipsis"
             dangerouslySetInnerHTML={{ __html: data?.reason ?? "--",}}
         />
         )
@@ -134,9 +141,16 @@ export const GoalExtensionHistoryTableColumn = [
     cell: ({ row }) => {
         const data = row?.original;
         return (
-            <span className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.extension_req_authorized_by ?? "--",}}
-        />
+            <CreatedBy
+                href={`/account/clients/${data.pmName}`}
+            >
+                <Avatar
+                        type="circle"
+                        name={data?.pmName}
+                        src={data?.clientImage ? `/user-uploads/avatar/${data?.clientImage}` : null}
+                />
+                <span>{data?.pmName}</span>
+            </CreatedBy> 
         )
     }
   },

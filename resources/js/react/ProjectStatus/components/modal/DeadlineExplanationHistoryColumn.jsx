@@ -1,3 +1,6 @@
+import Avatar from "../../../global/Avatar";
+import { CreatedBy } from "../table/ui";
+
 export const DeadlineEHColumn = [
   {
       id: "id",
@@ -56,9 +59,13 @@ export const DeadlineEHColumn = [
       cell: ({ row }) => {
           const data = row?.original;
           return (
-              <span > 
+            <div className="d-flex align-items-center" > 
+                  <i class="fa fa-circle mr-1 f-10" style={{
+                        color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
+                  }}></i>  
+
                   {data?.status ?? "--"} 
-              </span>
+            </div>
           )
       }
   },
@@ -131,7 +138,15 @@ export const DeadlineEHColumn = [
     cell: ({ row }) => {
         const data = row?.original;
         return (
-            <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
+            <div style={{
+                width: "fit-content",
+                padding: "0px 10px",
+                borderRadius: "20px",
+                color: "white",
+                backgroundColor: data?.authorization_status === "Pending" ? "#FFB800" : "#3F9C35",
+              }}> 
+                  {data?.authorization_status ?? "--"} 
+              </div>
         )
     }
   },
@@ -142,7 +157,17 @@ export const DeadlineEHColumn = [
     cell: ({ row }) => {
         const data = row?.original;
         return (
-            <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
+            <CreatedBy
+            href={`/account/clients/${data.pmName}`}
+            >
+                <Avatar
+                        type="circle"
+                        name={data?.pmName}
+                        src={data?.clientImage ? `/user-uploads/avatar/${data?.clientImage}` : null}
+                />
+                <span>{data?.pmName}</span>
+            </CreatedBy> 
+           
         )
     }
   },
@@ -153,7 +178,17 @@ export const DeadlineEHColumn = [
     cell: ({ row }) => {
         const data = row?.original;
         return (
-            <span className="multine-ellipsis">{data.negligence_pm_rating}</span>
+            <CreatedBy
+                href={`/account/clients/${data.pmName}`}
+            >
+                <Avatar
+                        type="circle"
+                        name={data?.pmName}
+                        src={data?.clientImage ? `/user-uploads/avatar/${data?.clientImage}` : null}
+                />
+                <span>{data?.pmName}</span>
+            </CreatedBy> 
+            
         )
     }
   },

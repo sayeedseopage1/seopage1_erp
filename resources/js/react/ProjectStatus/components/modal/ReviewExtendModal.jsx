@@ -52,7 +52,6 @@ const ReviewExtendRequestModal = ({
     const handleAccept = async (e) => {
         e.preventDefault();
         const isEmpty = isStateAllHaveValue(reviewExtendState);
-
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(reviewExtendState);
             setReviewExtendStateValidation({
@@ -62,7 +61,6 @@ const ReviewExtendRequestModal = ({
             });
             return;
         }
-
         const fd = new FormData();
         fd.append("extended_day", reviewExtendState.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
@@ -94,9 +92,9 @@ const ReviewExtendRequestModal = ({
     const handleReject = async (e) => {
         e.preventDefault();
         const fd = new FormData();
-        fd.append("extended_day", reviewExtendStateValidation.extended_day ?? "");
+        fd.append("extended_day", reviewExtendState.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
-        fd.append("project_id", reviewExtendState?.id ?? "");
+        fd.append("goal_id", reviewExtendState.goal_id ?? "");
         fd.append("status", "0");
         fd.append(
             "_token",
@@ -148,6 +146,7 @@ const ReviewExtendRequestModal = ({
         
     }, [reviewExtendRequestData]);
 
+    
 
     return (
         <ReactModal
@@ -204,7 +203,7 @@ const ReviewExtendRequestModal = ({
                         <div className="col-8">
                         <input 
                             className="p-1 rounded"
-                            defaultValue={reviewExtendState?.extended_day }
+                            defaultValue={reviewExtendState?.extended_day}
                             placeholder="Enter extended days"
                             type="number"
                             min={1}
@@ -272,14 +271,13 @@ const customStyles = {
     overlay: {
         zIndex: 99999998,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-
         margin: "auto auto",
         padding: "20px",
     },
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        height: "650px",
+        height: "fit-content",
         maxHeight: "100vh",
 
         margin: "auto auto",

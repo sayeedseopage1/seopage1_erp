@@ -55,8 +55,26 @@ export const PmGoalsTableColumns = [
         }
     },
     {
+        id: "goal_status",
+        header: "Goal Status",
+        accessorKey: "goal_status",
+        cell: ({ row }) => {
+            const data = row?.goal_status;
+            return (
+                <div className="d-flex align-items-center" > 
+                    <i class="fa fa-circle mr-1 f-10" style={{
+                        color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
+                    }}></i>  
+
+                    {data?.status === 0 ? "In progress" : "Completed" } 
+                </div>
+            )
+        }
+    },
+    {
         id: "goal_extension_history",
         header: "Goal Extension History",
+        accessorKey: "goal_extension_history",
         cell: ({ row, table }) => {
             const handle = table.options.meta
             const data = row?.original;
@@ -67,18 +85,20 @@ export const PmGoalsTableColumns = [
     },
     {
         id: "deadline_explanation_history",
-        header: "Deadline Explanation History",
+        header: "Goal Expired History",
+        accessorKey: "deadline_explanation_history",
         cell: ({ row, table }) => {
             const handle = table.options.meta
             const data = row?.original;
             return (
-                <span onClick={() => handle.deadlineExplanationHistoryClick(data)} >5</span>
+                <span role="button" onClick={() => handle.deadlineExplanationHistoryClick(data)} >5</span>
             )
         }
     },
     {
         id: "action",
         header: "Action",
+        accessorKey: "action",
         cell: ({ row , table}) => {
             const data = row?.original;
             const user = new User(window?.Laravel?.user)
@@ -111,7 +131,7 @@ export const PmGoalsTableColumns = [
                                         onClick={() => handle.resolveExplainClick(data)} 
                                         className={`btn btn-warning ${styles?.authorize}`}
                                     > 
-                                    Authorize Explanation 
+                                         Authorize Explanation 
                                     </button>
                                 </Switch.Case>
                             </Switch>

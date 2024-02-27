@@ -10,12 +10,12 @@ import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/s
 
 const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoalId }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
-    const [extendReqestData, setExtendReqestData] = useState({
+    const [extendRequestData, setExtendRequestData] = useState({
         extended_day: null,
         is_client_communication: "",
         goal_id: extendRequestGoalId,
     });
-    const [extendReqestDataValidation, setExtendReqestDataValidation] = useState({
+    const [extendRequestDataValidation, setExtendRequestDataValidation] = useState({
         extended_day: false,
         is_client_communication: false,
         isSubmitting: false,
@@ -24,13 +24,13 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
   
     // Reset form
     const handleResetForm = () => {
-        setExtendReqestData({
+        setExtendRequestData({
             extended_day: "",
             is_client_communication: "",
             goal_id: extendRequestGoalId,
         });
         setSelectedFiles([]);
-        setExtendReqestDataValidation({
+        setExtendRequestDataValidation({
             extended_day: false,
             is_client_communication: false,
             isSubmitting: false,
@@ -42,11 +42,11 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
         e.preventDefault();
 
         // Check if fields are empty using state validation
-        const isEmpty = isStateAllHaveValue(extendReqestData);
+        const isEmpty = isStateAllHaveValue(extendRequestData);
         if (isEmpty) {
-            const validation = markEmptyFieldsValidation(extendReqestData);
-            setExtendReqestDataValidation({
-                ...extendReqestDataValidation,
+            const validation = markEmptyFieldsValidation(extendRequestData);
+            setExtendRequestDataValidation({
+                ...extendRequestDataValidation,
                 ...validation,
                 isSubmitting: true,
             });
@@ -54,9 +54,9 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
         }
         // append data to form data
         const fd = new FormData();
-        fd.append("extended_day", extendReqestData.extended_day ?? "");
-        fd.append("is_client_communication", extendReqestData?.is_client_communication ?? "");
-        fd.append("goal_id", extendReqestData?.goal_id  ?? extendRequestGoalId);
+        fd.append("extended_day", extendRequestData.extended_day ?? "");
+        fd.append("is_client_communication", extendRequestData?.is_client_communication ?? "");
+        fd.append("goal_id", extendRequestData?.goal_id  ?? extendRequestGoalId);
         Array.from(selectedFiles).forEach((file) => {
             fd.append("screenshot[]", file);
         });
@@ -85,14 +85,14 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
  
     // Check if fields are empty
     useEffect(() => {
-        if(extendReqestDataValidation.isSubmitting){
-            const validation = markEmptyFieldsValidation(extendReqestData);
-            setExtendReqestDataValidation({
-                ...extendReqestDataValidation,
+        if(extendRequestDataValidation.isSubmitting){
+            const validation = markEmptyFieldsValidation(extendRequestData);
+            setExtendRequestDataValidation({
+                ...extendRequestDataValidation,
                 ...validation,
             });
         }
-    }, [extendReqestData, extendReqestDataValidation.isSubmitting]);
+    }, [extendRequestData, extendRequestDataValidation.isSubmitting]);
 
     // Reset form when modal is closed
     useEffect(() => {
@@ -103,8 +103,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
 
     // Set goal id
     useEffect(() => {
-        setExtendReqestData({
-            ...extendReqestData,
+        setExtendRequestData({
+            ...extendRequestData,
             goal_id: extendRequestGoalId
         });
     }, [extendRequestGoalId]);
@@ -162,17 +162,17 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                         <div className="col-8">
                             <input
                                 placeholder="Enter the extended days"
-                                value={extendReqestData.extended_day}
+                                value={extendRequestData.extended_day}
                                 type="number"
                                 required={true}
                                 min={1}
-                                onChange={(e) => setExtendReqestData({
-                                    ...extendReqestData,
+                                onChange={(e) => setExtendRequestData({
+                                    ...extendRequestData,
                                     extended_day: e.target.value
                                 })}
                                 style={{ padding: "5px", borderRadius: "5px" }}
                             />
-                            {extendReqestDataValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
+                            {extendRequestDataValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
                         </div>
                     </div>
 
@@ -193,13 +193,13 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={(e, editor) => setExtendReqestData({
-                                ...extendReqestData,
+                            <CKEditorComponent onChange={(e, editor) => setExtendRequestData({
+                                ...extendRequestData,
                                 is_client_communication: editor.getData()
                             })} />
                         </div>
                         {
-                            extendReqestDataValidation.is_client_communication && <p className="text-danger my-1">Reason is required</p>
+                            extendRequestDataValidation.is_client_communication && <p className="text-danger my-1">Reason is required</p>
                         }
                     </div>
 
@@ -222,16 +222,14 @@ const customStyles = {
     overlay: {
         zIndex: 99999998,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-
         margin: "auto auto",
         padding: "20px",
     },
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        height: "550px",
+        height: "fit-content",
         maxHeight: "100vh",
-
         margin: "auto auto",
         padding: "20px",
     },

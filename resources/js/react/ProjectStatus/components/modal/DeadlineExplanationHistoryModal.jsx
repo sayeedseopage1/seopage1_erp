@@ -3,6 +3,7 @@ import RefreshButton from "../RefreshButton"
 import DeadlineExplanationHistoryTable from "./DeadlineExplanationHistoryTable"
 import { DeadlineEHColumn } from "./DeadlineExplanationHistoryColumn"
 import { GoalExtentionHistoryTableData } from "../../constant"
+import { IoClose } from "react-icons/io5"
 
 const DeadlineExplanationHistoryModal = ({
   isOpen,
@@ -31,11 +32,31 @@ const DeadlineExplanationHistoryModal = ({
       <div
         className='d-flex justify-content-between align-items-center mb-3'
       >
-        <h6 style={{ fontSize: "25px" }}>Deadline Explanation History </h6>
-        <RefreshButton
-        onClick={refetchPmGoal}
-        isLoading={isLoading}
-        />
+        <h6 style={{ fontSize: "25px" }}>Goal Expired History</h6>
+        <div className="d-flex align-items-center" style={{
+          gap: "10px"
+        }}>
+          <RefreshButton
+          onClick={refetchPmGoal}
+          isLoading={isLoading}
+          />
+           <button
+                    onClick={closeModal}
+                    style={{
+                        backgroundColor: "gray",
+                        padding: "2px 4px 2px 4px",
+                        color: "white",
+                        borderRadius: "50%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "24px",
+                        height: "24px",
+                    }}
+                >
+                    <IoClose />
+                </button>
+        </div>
       </div>
       {/* 
        GoalExtentionHistoryTableData is a constant that is not defined in this file. it's dummy data.

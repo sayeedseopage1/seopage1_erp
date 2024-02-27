@@ -3,8 +3,16 @@ import RefreshButton from '../RefreshButton';
 import PercentageofGoalsMetTable from './PercentageofGoalsMetTable';
 import ReactModal from 'react-modal';
 import { PercentageofGMTableColumn } from './PercentageofGoalsMetTableColumn';
+import { IoClose } from 'react-icons/io5';
 
-const PercentageofGoalsMetModal = ({isOpen, closeModal,projectDetails, percentageOfGoalsMet,tableName, isLoading}) => {
+const PercentageofGoalsMetModal = ({
+  isOpen, 
+  closeModal,
+  projectDetails, 
+  percentageOfGoalsMet,
+  tableName, 
+  isLoading, 
+  refetchPmGoal}) => {
   return (
     <ReactModal
       style={customStyles}
@@ -13,14 +21,36 @@ const PercentageofGoalsMetModal = ({isOpen, closeModal,projectDetails, percentag
       onRequestClose={closeModal}
       contentLabel="Percentage of Goals Met"
     >
-                <div
-                  className='d-flex justify-content-between align-items-center mb-3'
-                >
-                    <h6 style={{ fontSize: "25px" }}>Percentage of Goals Met</h6>
-
-                    <RefreshButton
-                    />
-                </div>
+      
+          <div
+            className='d-flex justify-content-between align-items-center mb-3'
+           >
+            <h6 style={{ fontSize: "25px" }}>Percentage of Goals Met</h6>
+              <div 
+                className='d-flex align-items-center' 
+                style={{gap: '10px'}}>
+                <RefreshButton
+                  onClick={refetchPmGoal}
+                  isLoading={isLoading}
+                />
+                <button
+                        onClick={closeModal}
+                        style={{
+                            backgroundColor: "gray",
+                            padding: "2px 4px 2px 4px",
+                            color: "white",
+                            borderRadius: "50%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: "24px",
+                            height: "24px",
+                        }}
+                      >
+                        <IoClose />
+                </button>
+              </div>
+          </div>
           <PercentageofGoalsMetTable
             projectDetails={projectDetails}
             closeModal={closeModal}     

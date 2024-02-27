@@ -12,6 +12,9 @@ export const GoalExtentionHistoryTableData = [
     client_communication_rating: 4,
     negligence_pm: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     negligence_pm_rating: 3,
+    pmName: "Belayat Hossain",
+    pmId: 2439,
+    authorization_status: "Approved",
   },
   {
     id: 2,
@@ -25,6 +28,9 @@ export const GoalExtentionHistoryTableData = [
     client_communication_rating: 5,
     negligence_pm: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     negligence_pm_rating: 2,
+    pmName: "Belayat Hossain",
+    pmId: 2439,
+    authorization_status: "Approved",
   },
   {
     id: 3,
@@ -38,6 +44,9 @@ export const GoalExtentionHistoryTableData = [
     client_communication_rating: 3,
     negligence_pm: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     negligence_pm_rating: 4,
+    pmName: "Belayat Hossain",
+    pmId: 2439,
+    authorization_status: "Pending",
   },
   {
     id: 4,
@@ -51,6 +60,9 @@ export const GoalExtentionHistoryTableData = [
     client_communication_rating: 4,
     negligence_pm: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     negligence_pm_rating: 3,
+    pmName: "Belayat Hossain",
+    pmId: 2439,
+    authorization_status: "Pending",
   },
   {
     id: 5,
@@ -64,6 +76,9 @@ export const GoalExtentionHistoryTableData = [
     client_communication_rating: 5,
     negligence_pm: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     negligence_pm_rating: 2,
+    pmName: "Belayat Hossain",
+    pmId: 2439,
+    authorization_status: "Approved",
   },
   {
     id: 6,
@@ -77,6 +92,9 @@ export const GoalExtentionHistoryTableData = [
     client_communication_rating: 3,
     negligence_pm: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     negligence_pm_rating: 4,
+    pmName: "Belayat Hossain",
+    pmId: 2439,
+    authorization_status: "Approved",
   },
   {
     id: 7,
@@ -90,6 +108,10 @@ export const GoalExtentionHistoryTableData = [
     client_communication_rating: 4,
     negligence_pm: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     negligence_pm_rating: 5,
+    pmName: "Belayat Hossain",
+    pmId: 2439,
+    authorization_status: "Approved",
   },
+
 ];
 

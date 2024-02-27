@@ -4,6 +4,7 @@ import GoalExtensionHistoryTable from './GoalExtensionHistoryTable'
 import { GoalExtensionHistoryTableColumn } from './GoalExtensionHistoryTableColumn'
 import { GoalExtentionHistoryTableData } from '../../constant'
 import RefreshButton from '../RefreshButton'
+import { IoClose } from 'react-icons/io5'
 
 
 const GoalExtensionHistoryModal = ({
@@ -27,11 +28,31 @@ const GoalExtensionHistoryModal = ({
         <div
           className='d-flex justify-content-between align-items-center mb-3'
         >
-          <h6 style={{ fontSize: "25px" }}>Goal Extension History</h6>
+          <h5 style={{ fontSize: "20px" , marginBottom: "0"}}>Goal Extension History</h5>
+          <div className='d-flex align-items-center' style={{
+            gap: "10px"
+          }}>
             <RefreshButton
               onClick={refetchPmGoal}
               isLoading={isLoading}
             />
+             <button
+                    onClick={closeModal}
+                    style={{
+                        backgroundColor: "gray",
+                        padding: "2px 4px 2px 4px",
+                        color: "white",
+                        borderRadius: "50%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "24px",
+                        height: "24px",
+                    }}
+                >
+                    <IoClose />
+                </button>
+          </div>
         </div>
         {/* Goal Extention History Table */}
         <GoalExtensionHistoryTable
