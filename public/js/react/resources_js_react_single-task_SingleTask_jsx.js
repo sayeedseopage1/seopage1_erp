@@ -3158,22 +3158,22 @@ var RevisionText = function RevisionText(_ref) {
   var getComment = function getComment(key) {
     switch (key) {
       case "PLR":
-        return revision.pmComment;
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
       case "SPR":
-        return revision.pmComment;
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
       case "CPR":
-        return revision.pmComment;
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
       case "LDR":
-        return revision.leadComment;
+        return revision === null || revision === void 0 ? void 0 : revision.leadComment;
       default:
-        return revision.pmComment || revision.leadComment;
+        return (revision === null || revision === void 0 ? void 0 : revision.pmComment) || (revision === null || revision === void 0 ? void 0 : revision.leadComment);
     }
   };
-  var text = getComment(revision.disputeBetween);
+  var text = getComment(revision === null || revision === void 0 ? void 0 : revision.disputeBetween);
   var isLong = (text === null || text === void 0 ? void 0 : text.length) > 800;
   var showText = isLong ? (text === null || text === void 0 ? void 0 : text.slice(0, 800)) + "..." : text;
-  var date = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision.createdAt).format("MMM DD, YYYY");
-  var time = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision.createdAt).format("hh:mm A");
+  var date = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("MMM DD, YYYY");
+  var time = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("hh:mm A");
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "sp1_task_card--sub-card",
     style: {
@@ -3185,14 +3185,14 @@ var RevisionText = function RevisionText(_ref) {
         children: index < 10 ? "0".concat(index) : index
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("strong", {
-          children: ["Date: ", " "]
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+          children: "Date: "
         }), date]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
           children: "Time"
-        }), ":", " ", time]
+        }), ": ", time]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "px-3",
@@ -13693,6 +13693,7 @@ var Genarel = function Genarel(_ref) {
   var task = _ref.task,
     isFetching = _ref.isFetching;
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
+  console.log("task revision", task === null || task === void 0 ? void 0 : task.revisions);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "row",
     children: [isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_loader_GenarelLoader__WEBPACK_IMPORTED_MODULE_5__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
@@ -13705,7 +13706,7 @@ var Genarel = function Genarel(_ref) {
           },
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("h6", {
             className: "",
-            children: ["Task: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
+            children: ["Task:", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
               target: "__blank",
               href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
               className: "text-primary font-weight-normal",
@@ -13726,9 +13727,9 @@ var Genarel = function Genarel(_ref) {
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-head",
-              children: "Project : "
+              children: ["Project :", " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-value",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
@@ -13836,9 +13837,9 @@ var Genarel = function Genarel(_ref) {
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-head",
-              children: "Priority : "
+              children: ["Priority :", " "]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-value",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
@@ -13936,7 +13937,7 @@ var Genarel = function Genarel(_ref) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "px-4 py-3",
               style: {
-                background: '#F3F5F9'
+                background: "#F3F5F9"
               },
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h6", {
                 className: "mb-2",
@@ -13984,7 +13985,7 @@ var Genarel = function Genarel(_ref) {
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Password"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData5 = task.workEnvData) === null || _task$workEnvData5 === void 0 ? void 0 : _task$workEnvData5.password]
+                    }), ":", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData5 = task.workEnvData) === null || _task$workEnvData5 === void 0 ? void 0 : _task$workEnvData5.password]
                   })
                 })]
               })]
@@ -14006,8 +14007,8 @@ var Genarel = function Genarel(_ref) {
         children: _.map(task === null || task === void 0 ? void 0 : task.revisions, function (revision, index) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_RevisionText__WEBPACK_IMPORTED_MODULE_4__["default"], {
             index: index + 1,
-            date: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format('MMM DD, YYYY'),
-            time: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format('hh:mm a'),
+            date: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format("MMM DD, YYYY"),
+            time: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format("hh:mm a"),
             text: revision === null || revision === void 0 ? void 0 : revision.comment
           }, revision.id);
         })
@@ -14031,7 +14032,7 @@ var Genarel = function Genarel(_ref) {
                 deleteAble: false,
                 downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_url,
                 previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_url,
-                fileType: _.includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon) ? 'images' : 'others',
+                fileType: _.includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon) ? "images" : "others",
                 classname: "comment_file",
                 ext: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon
               }, attachment === null || attachment === void 0 ? void 0 : attachment.task_file_id) : null;

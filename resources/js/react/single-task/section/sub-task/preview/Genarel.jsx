@@ -9,40 +9,58 @@ import dayjs from "dayjs";
 import PMGuideline from "../../../components/PMGuideline";
 import FileUploader from "../../../../file-upload/FileUploader";
 
-const Genarel = ({task, isFetching}) => {
+const Genarel = ({ task, isFetching }) => {
     const loggedUser = new User(window?.Laravel?.user);
+
+    console.log("task revision", task?.revisions);
 
     return (
         <div className="row">
-            {isFetching ? <GenarelLoader /> :
+            {isFetching ? (
+                <GenarelLoader />
+            ) : (
                 <React.Fragment>
                     <div className="col-12 col-xl-6 pb-3 pb-xl-0">
-                        <div className="d-flex flex-column" style={{ gap: "10px" }}>
+                        <div
+                            className="d-flex flex-column"
+                            style={{ gap: "10px" }}
+                        >
                             <h6 className="">
-                                Task: <a target="__blank" href={`/account/tasks/${task?.id}`} className="text-primary font-weight-normal">
+                                Task:{" "}
+                                <a
+                                    target="__blank"
+                                    href={`/account/tasks/${task?.id}`}
+                                    className="text-primary font-weight-normal"
+                                >
                                     {task?.getSubtaskTitle()}
                                 </a>
                             </h6>
-                            {
-                                task?.isSubtask && (
-                                    <div className="sp1_st-list-item">
-                                        <div className="sp1_st-list-item-head">
-                                            Parent Task :
-                                        </div>
-                                        <div className="sp1_st-list-item-value">
-                                            <a href={`/account/tasks/${task?.parentTaskId}`} className="text-dark text-hover-underline">
-                                                {task?.parentTaskTitle}
-                                            </a>
-                                        </div>
+                            {task?.isSubtask && (
+                                <div className="sp1_st-list-item">
+                                    <div className="sp1_st-list-item-head">
+                                        Parent Task :
                                     </div>
-                                )
-                            }
+                                    <div className="sp1_st-list-item-value">
+                                        <a
+                                            href={`/account/tasks/${task?.parentTaskId}`}
+                                            className="text-dark text-hover-underline"
+                                        >
+                                            {task?.parentTaskTitle}
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="sp1_st-list-item">
-                                <div className="sp1_st-list-item-head">Project : </div>
+                                <div className="sp1_st-list-item-head">
+                                    Project :{" "}
+                                </div>
                                 <div className="sp1_st-list-item-value">
                                     <span className="dot-color bg-danger mr-2" />
-                                    <a href={`/account/projects/${task?.projectId}`} className="text-dark text-hover-underline">
+                                    <a
+                                        href={`/account/projects/${task?.projectId}`}
+                                        className="text-dark text-hover-underline"
+                                    >
                                         {task?.projectName}
                                     </a>
                                 </div>
@@ -64,7 +82,12 @@ const Genarel = ({task, isFetching}) => {
                                     Assigned To :{" "}
                                 </div>
                                 <div className="sp1_st-list-item-value">
-                                    <div style={{ width: "32px", height: "32px" }}>
+                                    <div
+                                        style={{
+                                            width: "32px",
+                                            height: "32px",
+                                        }}
+                                    >
                                         <img
                                             src={task?.assigneeTo?.getAvatar()}
                                             alt={task?.assigneeTo?.getName()}
@@ -77,8 +100,15 @@ const Genarel = ({task, isFetching}) => {
                                         <span
                                             className={`d-block f-14 font-weight-bold`}
                                         >
-                                            <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a>
-                                            {Number(task?.assigneeTo?.getId()) ===
+                                            <a
+                                                href={task?.assigneeTo?.getUserLink()}
+                                                className="text-dark hover-underline"
+                                            >
+                                                {task?.assigneeTo?.getName()}
+                                            </a>
+                                            {Number(
+                                                task?.assigneeTo?.getId()
+                                            ) ===
                                                 Number(loggedUser?.getId()) && (
                                                 <sup
                                                     className="rounded-pill bg-dark text-white px-1"
@@ -103,7 +133,12 @@ const Genarel = ({task, isFetching}) => {
                                     Assigned by:{" "}
                                 </div>
                                 <div className="sp1_st-list-item-value">
-                                    <div style={{ width: "32px", height: "32px" }}>
+                                    <div
+                                        style={{
+                                            width: "32px",
+                                            height: "32px",
+                                        }}
+                                    >
                                         <img
                                             src={task?.assigneeBy?.getAvatar()}
                                             alt={task?.assigneeBy?.getName()}
@@ -122,7 +157,9 @@ const Genarel = ({task, isFetching}) => {
                                             >
                                                 {task?.assigneeBy?.getName()}
                                             </a>
-                                            {Number(task?.assigneeBy?.getId()) ===
+                                            {Number(
+                                                task?.assigneeBy?.getId()
+                                            ) ===
                                                 Number(loggedUser?.getId()) && (
                                                 <sup
                                                     className="rounded-pill bg-dark text-white px-1"
@@ -143,11 +180,15 @@ const Genarel = ({task, isFetching}) => {
                             {/* PRIORITY */}
 
                             <div className="sp1_st-list-item">
-                                <div className="sp1_st-list-item-head">Priority : </div>
+                                <div className="sp1_st-list-item-head">
+                                    Priority :{" "}
+                                </div>
                                 <div className="sp1_st-list-item-value">
                                     <span
                                         className="dot-color mr-2"
-                                        style={{ background: "rgba(252, 189, 1, 1)" }}
+                                        style={{
+                                            background: "rgba(252, 189, 1, 1)",
+                                        }}
                                     />
                                     {task?.priority}
                                 </div>
@@ -165,7 +206,7 @@ const Genarel = ({task, isFetching}) => {
                         </div>
                     </div>
                 </React.Fragment>
-            }
+            )}
 
             <div
                 className="col-12 col-xl-6 d-flex flex-column py-3 px-3"
@@ -181,7 +222,9 @@ const Genarel = ({task, isFetching}) => {
                         className="dot-color mr-2"
                         style={{ background: task?.boardColumn?.labelColor }}
                     />
-                    <span className="font-weight-bold">{task?.boardColumn.columnName}</span>
+                    <span className="font-weight-bold">
+                        {task?.boardColumn.columnName}
+                    </span>
                 </div>
 
                 <div className="row">
@@ -213,7 +256,7 @@ const Genarel = ({task, isFetching}) => {
 
                 <div className="row">
                     <div className="col-6 col-sm-5 col-md-3 col-xl-6">
-                    Total Hours Logged{" "}
+                        Total Hours Logged{" "}
                     </div>
                     <div className="col-6 col-sm-7 col-md-9 col-xl-6">
                         : {task?.parentTaskTimeLog || "--"}
@@ -250,50 +293,116 @@ const Genarel = ({task, isFetching}) => {
 
             <div className="col-12 border-top py-4 mt-4">
                 <Accordion expendable={false} title="General Guidelines">
+                    {isFetching ? (
+                        <ArticleLoader />
+                    ) : (
+                        <>
+                            {task?.hasProjectManagerGuideline && (
+                                <div className="mb-3">
+                                    <PMGuideline
+                                        guideline={task?.PMTaskGuideline}
+                                    />
+                                </div>
+                            )}
 
-                    {
-                        isFetching ?
-                        <ArticleLoader /> :  <>
-                        {task?.hasProjectManagerGuideline && <div className="mb-3"><PMGuideline guideline={task?.PMTaskGuideline} /></div> }
-
-                            {!_.isEmpty(task?.workEnvData)  && (
+                            {!_.isEmpty(task?.workEnvData) && (
                                 <div className="sp1_task_card--sub-card">
-                                    <div className="px-4 py-3" style={{background: '#F3F5F9'}}>
-                                        <h6 className="mb-2">Working Environment</h6>
-                                        <hr/>
+                                    <div
+                                        className="px-4 py-3"
+                                        style={{ background: "#F3F5F9" }}
+                                    >
+                                        <h6 className="mb-2">
+                                            Working Environment
+                                        </h6>
+                                        <hr />
                                         <div className="row">
                                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.site_url}>View on new tab</a></span>
+                                                <span>
+                                                    <strong>
+                                                        Working/Staging Site's
+                                                        URL
+                                                    </strong>
+                                                    : <br />{" "}
+                                                    <a
+                                                        target="__blank"
+                                                        href={
+                                                            task?.workEnvData
+                                                                ?.site_url
+                                                        }
+                                                    >
+                                                        View on new tab
+                                                    </a>
+                                                </span>
                                             </div>
 
                                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Frontend Password</strong>: <br/> {task?.workEnvData?.frontend_password}</span>
+                                                <span>
+                                                    <strong>
+                                                        Frontend Password
+                                                    </strong>
+                                                    : <br />{" "}
+                                                    {
+                                                        task?.workEnvData
+                                                            ?.frontend_password
+                                                    }
+                                                </span>
                                             </div>
 
                                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.login_url}>View on new tab</a> </span>
+                                                <span>
+                                                    <strong>
+                                                        Working/Staging Site's
+                                                        Login URL
+                                                    </strong>
+                                                    : <br />{" "}
+                                                    <a
+                                                        target="__blank"
+                                                        href={
+                                                            task?.workEnvData
+                                                                ?.login_url
+                                                        }
+                                                    >
+                                                        View on new tab
+                                                    </a>{" "}
+                                                </span>
                                             </div>
 
                                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {task?.workEnvData?.email}</span>
+                                                <span>
+                                                    <strong>
+                                                        Working/Staging Site's
+                                                        Username/Email
+                                                    </strong>
+                                                    : <br />{" "}
+                                                    {task?.workEnvData?.email}
+                                                </span>
                                             </div>
                                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Password</strong>: <br/> {task?.workEnvData?.password}</span>
+                                                <span>
+                                                    <strong>Password</strong>:{" "}
+                                                    <br />{" "}
+                                                    {
+                                                        task?.workEnvData
+                                                            ?.password
+                                                    }
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            ) }
+                            )}
 
-                            <Guideline text={task?.guidelines} task={task} workEnv={task?.workEnvData} editorContainerClass="modal-guideline-editor-text" />
+                            <Guideline
+                                text={task?.guidelines}
+                                task={task}
+                                workEnv={task?.workEnvData}
+                                editorContainerClass="modal-guideline-editor-text"
+                            />
                         </>
-                    }
-
-
-
+                    )}
                 </Accordion>
 
-                {_.size(task?.revisions) > 0 &&
+                {_.size(task?.revisions) > 0 && (
                     <Accordion
                         title={_.last(task?.revisions)?.revisionStatus}
                         headingClass="d-flex align-items-center justify-content-between"
@@ -302,45 +411,70 @@ const Genarel = ({task, isFetching}) => {
                             color: "#fff",
                         }}
                     >
-
                         {_.map(task?.revisions, (revision, index) => (
-                                <RevisionText
-                                    key={revision.id}
-                                    index={index + 1}
-                                    date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
-                                    time={dayjs(revision.createdAt).format('hh:mm a')}
-                                    text={revision?.comment}
-                                />
-                            ))
-                        }
-
+                            <RevisionText
+                                key={revision.id}
+                                index={index + 1}
+                                date={dayjs(revision.createdAt).format(
+                                    "MMM DD, YYYY"
+                                )}
+                                time={dayjs(revision.createdAt).format(
+                                    "hh:mm a"
+                                )}
+                                text={revision?.comment}
+                            />
+                        ))}
                     </Accordion>
-                }
+                )}
 
                 <Accordion expendable={false} title="Task Descriptions">
-                    <Guideline text={task?.description} task={task} type="TASK_DESCRIPTION"/>
-                    { _.size(task?.attachments) > 0 ?
-                            <div className="mt-3">
-                                <h4 className="mb-2">Task Attachments: </h4>
-                                <FileUploader>
-                                    {_.map(task?.attachments, attachment => (
-                                        attachment?.task_file_name ?
+                    <Guideline
+                        text={task?.description}
+                        task={task}
+                        type="TASK_DESCRIPTION"
+                    />
+                    {_.size(task?.attachments) > 0 ? (
+                        <div className="mt-3">
+                            <h4 className="mb-2">Task Attachments: </h4>
+                            <FileUploader>
+                                {_.map(task?.attachments, (attachment) =>
+                                    attachment?.task_file_name ? (
                                         <FileUploader.Preview
                                             key={attachment?.task_file_id}
-                                            fileName={attachment?.task_file_name}
+                                            fileName={
+                                                attachment?.task_file_name
+                                            }
                                             downloadAble={true}
                                             deleteAble={false}
-                                            downloadUrl={attachment?.task_file_url}
-                                            previewUrl={attachment?.task_file_url}
-                                            fileType={_.includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment?.task_file_icon)? 'images' : 'others'}
+                                            downloadUrl={
+                                                attachment?.task_file_url
+                                            }
+                                            previewUrl={
+                                                attachment?.task_file_url
+                                            }
+                                            fileType={
+                                                _.includes(
+                                                    [
+                                                        "png",
+                                                        "jpeg",
+                                                        "jpg",
+                                                        "svg",
+                                                        "webp",
+                                                        "gif",
+                                                    ],
+                                                    attachment?.task_file_icon
+                                                )
+                                                    ? "images"
+                                                    : "others"
+                                            }
                                             classname="comment_file"
                                             ext={attachment?.task_file_icon}
-                                        /> : null
-                                    ))}
-                                </FileUploader>
-                            </div>
-                        : null
-                    }
+                                        />
+                                    ) : null
+                                )}
+                            </FileUploader>
+                        </div>
+                    ) : null}
                 </Accordion>
             </div>
         </div>
