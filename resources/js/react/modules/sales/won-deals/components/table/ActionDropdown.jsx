@@ -80,7 +80,7 @@ const ActionDropdown = ({ ...rest }) => {
                         View Won Deal
                     </Dropdown.Item>
 
-                    {_.includes([1, 7], auth.getRoleId()) && (
+                    {_.includes([1, 7, 8], auth.getRoleId()) && (
                         <Dropdown.Item
                             onClick={() =>
                                 handleRedirection(
