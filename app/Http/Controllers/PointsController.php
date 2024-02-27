@@ -168,7 +168,16 @@ class PointsController extends AccountBaseController
         }
         if ($request->bonus_type != '') {
            // dd($request->bonus_type);
-            $data = $data->where('bonus_type', $request->bonus_type);
+           if($request->bonus_type == 'Bonus')
+           {
+            $data = $data->whereIn('bonus_type', ['Authorization Bonus','Bonus']);
+
+           }elseif($request->bonus_type == 'Regular')
+           {
+            $data = $data->whereIn('bonus_type', ['Regular',null]);
+
+           }
+            
         }
 
         if(Auth::user()->role_id == 1)
