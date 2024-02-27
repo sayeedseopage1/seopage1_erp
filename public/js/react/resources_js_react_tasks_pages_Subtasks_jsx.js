@@ -704,7 +704,7 @@ var Subtasks = function Subtasks() {
     _React$useState2 = _slicedToArray(_React$useState, 2),
     filter = _React$useState2[0],
     setFilter = _React$useState2[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     search = _React$useState4[0],
     setSearch = _React$useState4[1];
@@ -748,12 +748,16 @@ var Subtasks = function Subtasks() {
                 _data = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res.tasks, function (d) {
                   return Number(d.added_by) === auth.getId();
                 });
+              } else if (auth.getRoleId() === 9) {
+                _data = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res.tasks, function (d) {
+                  return Number(d.added_by) === auth.getId();
+                });
               } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
                 _data = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res.tasks, function (d) {
                   return Number(d.assigned_to_id) === auth.getId();
                 });
               }
-              var data = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(_data, 'due_date', 'desc');
+              var data = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(_data, "due_date", "desc");
               dispatch((0,_services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_6__.storeSubTasks)({
                 subtasks: data
               }));
@@ -798,8 +802,8 @@ var Subtasks = function Subtasks() {
 
   // fetch table data
   var fetchTasksTypeData = function fetchTasksTypeData() {
-    searchParams.set('modal', 'primary_task_authorization');
-    searchParams.set('show', 'pending');
+    searchParams.set("modal", "primary_task_authorization");
+    searchParams.set("show", "pending");
     setSearchParams(searchParams);
   };
   var isProjectManager = auth.getRoleId() === 4 ? true : false;
@@ -832,11 +836,11 @@ var Subtasks = function Subtasks() {
               children: isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_global_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], {
                 title: "Loading...",
                 borderRightColor: "white"
-              }) : 'Refresh'
+              }) : "Refresh"
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
             style: {
-              maxWidth: '300px'
+              maxWidth: "300px"
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_Searchbox__WEBPACK_IMPORTED_MODULE_11__["default"], {
               value: search,
@@ -845,7 +849,7 @@ var Subtasks = function Subtasks() {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
             className: "ml-2",
             style: {
-              marginTop: '2px'
+              marginTop: "2px"
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_table_TableFilter__WEBPACK_IMPORTED_MODULE_15__["default"], {
               tableName: "subTaskTable",
