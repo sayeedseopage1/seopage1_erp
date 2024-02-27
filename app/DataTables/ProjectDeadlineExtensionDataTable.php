@@ -36,9 +36,10 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                             <i class="icon-options-vertical icons"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-                        if($row->status == 0){
+                        if($row->status == 1){
                             $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-auth" href="javascript:;"><i class="fa fa-plus mr-2"></i>' . __('Take Action') . '</a>';
-                        }else{
+                        }
+                        if($row->status == 2){
                             $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-view" href="javascript:;"><i class="fa fa-eye mr-2"></i>' . __('View Details') . '</a>';
                         }
 
@@ -146,6 +147,17 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                     return 'Awaiting Approval';
                 }
             })
+            ->editColumn('status', function ($row) {
+                if ($row->status ==1){
+                    return '<span class="badge badge-primary p-1">Pending</span>';
+                }
+                if($row->status ==2){
+                    return '<span class="badge badge-success p-1">Approved</span>';
+                }
+                if($row->status ==3){
+                    return '<span class="badge badge-danger p-1">Denied</span>';
+                }
+            })
             ->editColumn('approved_by', function ($row) {
                 if ($row->approved_by !=null){
                 $user = User::where('id', $row->approved_by)->first();
@@ -165,7 +177,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['action' ,'clientName','project_name','pmName','milestone_status','old_deadline','deadline_requested','deadline_extended','reason','requested_on','approved_on','approved_by']);
+            ->rawColumns(['action' ,'clientName','project_name','pmName','milestone_status','old_deadline','deadline_requested','deadline_extended','reason','requested_on','approved_on','approved_by','status']);
     }
     /**
      * @param Project $model
@@ -270,6 +282,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             __('reason') => ['data' => 'reason', 'name' => 'reason', 'title' => __('Reason')],
             __('approved_on') => ['data' => 'approved_on', 'name' => 'approved_on', 'title' => __('Approved On')],
             __('approved_by') => ['data' => 'approved_by', 'name' => 'approved_by', 'title' => __('Approved By')],
+            __('status') => ['data' => 'status', 'name' => 'status', 'title' => __('Approval Status')],
             Column::computed('action', __('app.action'))
             ->exportable(false)
             ->printable(false)

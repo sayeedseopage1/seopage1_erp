@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="new_deadline">New Deadline <span class="text-danger">*</span></label>
-                <input type="date" class="form-control height-35 f-14" id="new_deadline" name="new_deadline" value="{{$pde->new_deadline}}">
+                <input type="date" class="form-control height-35 f-14" id="new_deadline" name="new_deadline" value="{{$pde->new_deadline}}" readonly>
                 <span id="new_deadline_error" class="text-danger"></span>
             </div>
         </div>

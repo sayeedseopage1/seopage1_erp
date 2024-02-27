@@ -46,20 +46,22 @@
                 </div>
             </div>
         </div>
-        <button type="button" id="authorizeBtn" class="btn btn-primary">Authorize</button>
+        <button type="button" id="acceptBtn" class="btn btn-primary" value="accept">Accept</button>
+        <button type="button" id="denyBtn" class="btn btn-danger" value="deny">Deny</button>
     </form>
 </div>
 <div class="modal-footer">
     <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.close')</x-forms.button-cancel>
 </div>
 <script>
-    $('#authorizeBtn').click(function(e){
+    $('#acceptBtn').click(function(e){
         e.preventDefault();
-        $('#authorizeBtn').attr("disabled", true);
-        $('#authorizeBtn').html("Processing...");
+        $('#acceptBtn').attr("disabled", true);
+        $('#acceptBtn').html("Processing...");
         var admin_comment = CKEDITOR.instances.admin_comment.getData();
         var data= {
             '_token': "{{ csrf_token() }}",
+            'type': $('#acceptBtn').val(),
             'new_deadline': document.getElementById("new_deadline").value,
             'admin_comment': admin_comment,
             'pde_id': {{$pde->id}},
@@ -78,8 +80,8 @@
             success: function (response) {
                 toastr.success('Authorized Successfully');
                 window.location.reload();
-                $('#authorizeBtn').attr("disabled", false);
-                $('#authorizeBtn').html("Authorize");
+                $('#acceptBtn').attr("disabled", false);
+                $('#acceptBtn').html("Authorize");
             },
             error: function(error) {
                 if(error.responseJSON.errors.new_deadline){
@@ -87,8 +89,48 @@
                 }else{
                     $('#new_deadline_error').text('');
                 }
-                $('#authorizeBtn').attr("disabled", false);
-                $('#authorizeBtn').html("Authorize");
+                $('#acceptBtn').attr("disabled", false);
+                $('#acceptBtn').html("Authorize");
+            }
+        });
+    });
+    $('#denyBtn').click(function(e){
+        e.preventDefault();
+        $('#denyBtn').attr("disabled", true);
+        $('#denyBtn').html("Processing...");
+        var admin_comment = CKEDITOR.instances.admin_comment.getData();
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'type': $('#denyBtn').val(),
+            'new_deadline': document.getElementById("new_deadline").value,
+            'admin_comment': admin_comment,
+            'pde_id': {{$pde->id}},
+            'project_id': {{$pde->project_id}},
+        }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route('store-pde-authorization')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                toastr.success('Deny Successfully');
+                window.location.reload();
+                $('#denyBtn').attr("disabled", false);
+                $('#denyBtn').html("Authorize");
+            },
+            error: function(error) {
+                if(error.responseJSON.errors.new_deadline){
+                    $('#new_deadline_error').text(error.responseJSON.errors.new_deadline);
+                }else{
+                    $('#new_deadline_error').text('');
+                }
+                $('#denyBtn').attr("disabled", false);
+                $('#denyBtn').html("Authorize");
             }
         });
     });
