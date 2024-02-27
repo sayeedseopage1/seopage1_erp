@@ -165,8 +165,6 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 
     // console.log("suggestion data", suggestions);
 
-    console.log("editor state", renderToHtml(editorState));
-
     // handle on mention
     const handleMention = (...arg) => {
         const user = arg[0];
