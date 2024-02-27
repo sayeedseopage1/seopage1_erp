@@ -170,11 +170,11 @@ class PointsController extends AccountBaseController
            // dd($request->bonus_type);
            if($request->bonus_type == 'Bonus')
            {
-            $data = $data->where('cash_points.bonus_type','Bonus');
+            $data = $data->where('cash_points.project_id',null);
 
            }else
            {
-            $data = $data->where('cash_points.bonus_type', '!=','Bonus');
+            $data = $data->where('cash_points.bonus_type', '!=',null);
 
            }
             
