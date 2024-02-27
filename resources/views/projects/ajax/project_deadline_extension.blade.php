@@ -23,7 +23,7 @@
         <div class="select-box {{ !in_array('client', user_roles()) ? 'd-flex' : 'd-none' }} py-2  pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center ml-1">Project Manager</p>
             <div class="select-status">
-                <select class="form-control select-picker" name="client_id" id="client_id" data-live-search="true"
+                <select class="form-control select-picker" name="pm_id" id="pm_id" data-live-search="true"
                     data-size="8">
                     @if (!in_array('client', user_roles()))
                         <option value="all">@lang('app.all')</option>
@@ -76,7 +76,6 @@
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
-            {{-- <h2>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores exercitationem tenetur harum soluta nulla facere perspiciatis minima, temporibus fugit modi quisquam! Dignissimos quidem suscipit sunt tempora possimus consectetur, accusantium officia?</h2> --}}
                 {!! $dataTable->table(['class' => 'table table-hover border-0 w-100']) !!}
         </div>
     </div>
@@ -86,15 +85,11 @@
 @push('scripts')
     @include('sections.datatable_js')
     <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
+
     <script type="text/javascript">
         @php
-            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(12)->addDays(20);
-            $today = \Carbon\Carbon::now()->format('d');
-            if ($today > 20) {
-                $endDate = \Carbon\Carbon::now()->startOfMonth()->addMonth(1)->addDays(19);
-            } else {
-                $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(19);
-            }
+            $endDate = \Carbon\Carbon::now()->endOfMonth();
+            $startDate = \Carbon\Carbon::now()->subMonths(5)->startOfMonth();
         @endphp
         $(function() {
             var format = '{{ global_setting()->moment_format }}';
@@ -128,40 +123,80 @@
         });
     </script>
     <script>
-        $( document ).ready(function() {
-            $('#project-status-table').on('preXhr.dt', function(e, settings, data) {
+        var deadLineStartDate = '';
+        var deadLineEndDate = '';
+        $('#project-deadline-extension-table').on('preXhr.dt', function(e, settings, data) {
+
+            var clientID = $('#client_id').val();
+            var pmID = $('#pm_id').val();
             var searchText = $('#search-text-field').val();
+
+            @if (request('deadLineStartDate') && request('deadLineEndDate'))
+                deadLineStartDate = '{{ request("deadLineStartDate") }}';
+                deadLineEndDate = '{{ request("deadLineEndDate") }}'
+            @endif
+            
+            data['deadLineStartDate'] = deadLineStartDate;
+            data['deadLineEndDate'] = deadLineEndDate;
+            data['client_id'] = clientID;
+            data['pm_id'] = pmID;
             data['searchText'] = searchText;
+
+            var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+            var startDate = $('#datatableRange').val();
+
+            if (startDate == '') {
+                data['startDate'] = null;
+                data['endDate'] = null;
+            } else {
+                data['startDate'] = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+                data['endDate'] = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+            }
+
+            @if (!is_null(request('start')) && !is_null(request('end')))
+                data['startDate'] = '{{ request('start') }}';
+                data['endDate'] = '{{ request('end') }}';
+            @endif
         });
 
         const showTable = () => {
             window.LaravelDataTables["project-deadline-extension-table"].draw();
         }
 
-        $('#search-text-field, #month, #year').on('change keyup',
-            function() {
-                if ($('#month').val() != "") {
-                    $('#reset-filters').removeClass('d-none');
-                    showTable();
-                } else if ($('#year').val() != "") {
-                    $('#reset-filters').removeClass('d-none');
-                    showTable();
-                } else if ($('#search-text-field').val() != "") {
-                    $('#reset-filters').removeClass('d-none');
-                    showTable();
-                } else {
-                    $('#reset-filters').addClass('d-none');
-                    showTable();
-                }
-            });
+
+
+        $('#client_id,#search-text-field, #pm_id').on('change keyup', function() {
+           if ($('#pm_id').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else if ($('#client_id').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else if ($('#search-text-field').val() != "") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else {
+                $('#reset-filters').addClass('d-none');
+                showTable();
+            }
+        });
 
         $('#reset-filters').click(function() {
             $('#filter-form')[0].reset();
+            $('.filter-box #status').val('not finished');
             $('.filter-box .select-picker').selectpicker("refresh");
             $('#reset-filters').addClass('d-none');
             showTable();
         });
-    });
+
+        $('#reset-filters-2').click(function() {
+            $('#filter-form')[0].reset();
+            $('.filter-box #status').val('not finished');
+            $('.filter-box .select-picker').selectpicker("refresh");
+            $('#reset-filters').addClass('d-none');
+            showTable();
+        });
+
     </script>
 
     <script>

@@ -180,14 +180,31 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
             ->leftJoin('users as client', 'projects.client_id', '=', 'client.id');
 
-            if (!is_null($request->PmId) && $request->PmId != 'all') {
-                $model->where('projects.pm_id', $request->PmId);
+            if (!is_null($request->pm_id) && $request->pm_id != 'all') {
+                $model->where('projects.pm_id', $request->pm_id);
             }
-
-            if ($request->startDate && $request->endDate) {
+            if (!is_null($request->client_id) && $request->client_id != 'all') {
+                $model->where('projects.client_id', $request->client_id);
+            }
+            if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
                 $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
+            }
+    
+            if ($request->endDate !== null && $request->endDate != 'null' && $request->endDate != '') {
                 $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
-                $model->whereBetween(DB::raw('DATE(project_deadline_extensions.`created_at`)'), [$startDate, $endDate]);
+            }
+            if ($startDate !== null && $endDate !== null) {
+                $model->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(project_deadline_extensions.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(project_deadline_extensions.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($this->request()->searchText != '') {
+                $model = $model->where(function ($query) {
+                    $query->where('projects.project_name', 'like', '%' . request('searchText') . '%')
+                        ->orWhere('client.name', 'like', '%' . request('searchText') . '%')
+                        ->orWhere('pm.name', 'like', '%' . request('searchText') . '%');
+                });
             }
             $model->orderBy('project_deadline_extensions.id','desc');
 
