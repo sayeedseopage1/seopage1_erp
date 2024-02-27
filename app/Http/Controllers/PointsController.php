@@ -172,7 +172,7 @@ class PointsController extends AccountBaseController
            {
             $data = $data->where('bonus_type','Bonus');
 
-           }elseif($request->bonus_type == 'Regular')
+           }else
            {
             $data = $data->where('bonus_type', '!=','Bonus');
 
