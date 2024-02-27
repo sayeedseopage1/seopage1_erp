@@ -4,7 +4,7 @@ import styles from "./PersonFilter.module.css";
 import { filter, lowerCase, includes } from "lodash";
 import { GoTriangleDown } from "react-icons/go"; 
 
-export default function TypeFilter({ value, onChange, data }) {
+export default function TypeFilter({ value, onChange, data ,sidebarIsOpen}) {
     const [query, setQuery] = React.useState("");
 
     const filteredData = data
@@ -15,7 +15,7 @@ export default function TypeFilter({ value, onChange, data }) {
             : data
         : [];
     return (
-        <div className={styles.toggleWrapper}>
+        <div className={`${styles.toggleWrapper} ${sidebarIsOpen && "w-100"}`}>
             <span>Type: </span>
 
             <Listbox
