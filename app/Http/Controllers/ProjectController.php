@@ -2232,10 +2232,10 @@ class ProjectController extends AccountBaseController
                 $project_update->save();
 
 
-                $helper = new HelperPendingActionController();
+                // $helper = new HelperPendingActionController();
 
 
-                $helper->ProjectChallengeAuthorization($project);
+                // $helper->ProjectChallengeAuthorization($project);
 
             // pending action
 
