@@ -2,16 +2,30 @@ import * as React from "react";
 import Dropdown from './Dropdown';
 import Search from './Searchbox';
 import { filter, lowerCase, includes } from "lodash";
+import { useAuth } from "../../hooks/useAuth";
+import _ from "lodash";
 
 export default function TypeFilter({ value, onChange, data ,sidebarIsOpen, disabled, selectionBoxClassName}) {
+    const auth = useAuth();
     const [query, setQuery] = React.useState("");
 
-    const filteredData = data
+    
+    /**
+     * Filters data based on user role.
+     * If the user role ID is 7, filters out items with ID "Authorization".
+     * @param {Array} data - The array to be filtered.
+     * @returns {Array} - The filtered array.
+     */
+    const filterByUserRole = _.filter(data, item => {
+        return auth.getRoleId() !== 7 || item.id !== "Authorization";
+    });
+
+    const filteredData = filterByUserRole
         ? query
-            ? filter(data, (item) =>
+            ? filter(filterByUserRole, (item) =>
                   includes(lowerCase(item.title), lowerCase(query))
               )
-            : data
+            : filterByUserRole
         : [];
 
     return (
