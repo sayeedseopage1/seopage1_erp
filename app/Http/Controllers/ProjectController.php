@@ -961,7 +961,7 @@ class ProjectController extends AccountBaseController
                     $point = new CashPoint();
                     $point->user_id = $lead->added_by;
                     $point->project_id = $find_project_id->id;
-                    $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the bid Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                    $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the bid Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                     $point->gained_as = "Individual";
                     $point->points = ($project_budget * $kpi->the_bidder) / 100;
 
@@ -981,7 +981,7 @@ class ProjectController extends AccountBaseController
                 $point = new CashPoint();
                 $point->user_id = $deal_qualified->updated_by;
                 $point->project_id = $find_project_id->id;
-                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                 $point->gained_as = "Individual";
                 $point->points = ($project_budget * $kpi->qualify) / 100;
 
@@ -1004,7 +1004,7 @@ class ProjectController extends AccountBaseController
                 $point = new CashPoint();
                 $point->user_id = $deal_short_code->updated_by;
                 $point->project_id = $find_project_id->id;
-                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                 $point->gained_as = "Individual";
                 $point->points = ($project_budget * $kpi->requirements_defined) / 100;
 
@@ -1027,7 +1027,7 @@ class ProjectController extends AccountBaseController
                 $point = new CashPoint();
                 $point->user_id = $deal_proposal->updated_by;
                 $point->project_id = $find_project_id->id;
-                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the proposal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the proposal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                 $point->gained_as = "Individual";
                 $point->points = ($project_budget * $kpi->proposal_made) / 100;
 
@@ -1049,7 +1049,7 @@ class ProjectController extends AccountBaseController
                 $point = new CashPoint();
                 $point->user_id = $deal_negotiation_started->updated_by;
                 $point->project_id = $find_project_id->id;
-                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                 $point->gained_as = "Individual";
                 $point->points = ($project_budget * $kpi->negotiation_started) / 100;
 
@@ -1073,7 +1073,7 @@ class ProjectController extends AccountBaseController
                     $point = new CashPoint();
                     $point->user_id = $deal_milestone_breakdown->updated_by;
                     $point->project_id = $find_project_id->id;
-                    $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                    $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                     $point->gained_as = "Individual";
                     $point->points = ($project_budget * $kpi->milestone_breakdown) / 100;
 
@@ -1095,7 +1095,7 @@ class ProjectController extends AccountBaseController
                 $point = new CashPoint();
                 $point->user_id = $deal_id->added_by;
                 $point->project_id = $find_project_id->id;
-                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> closed the deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> closed the deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                 $point->gained_as = "Individual";
                 $point->points = ($project_budget * $kpi->closed_deal) / 100;
 
@@ -1114,7 +1114,7 @@ class ProjectController extends AccountBaseController
                 $point = new CashPoint();
                 $point->user_id = $deal_id_contact->added_by;
                 $point->project_id = $find_project_id->id;
-                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accpeted By PM(' . $kpi->accepted_by_pm . '%))';
+                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> submitted the contact form for the project manager Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a> (Accepted By PM(' . $kpi->accepted_by_pm . '%))';
                 $point->gained_as = "Individual";
                 $point->points = ($project_budget * $kpi->contact_form) / 100;
 
@@ -1140,7 +1140,7 @@ class ProjectController extends AccountBaseController
                 $point->activity= '<a style="color:blue" href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name .
                     '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'
                     .$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'.
-                    $find_project_id->client_name->name .'</a> (Accpeted By PM(' . $kpi->authorized_by_leader . '%))';
+                    $find_project_id->client_name->name .'</a> (Accepted By PM(' . $kpi->authorized_by_leader . '%))';
 
                 $point->gained_as = "Individual";
                 $point->points= $earned_point;
@@ -1164,7 +1164,7 @@ class ProjectController extends AccountBaseController
                 //     $point= new CashPoint();
                 //     $point->user_id= $user_name->id;
                 //     $point->project_id= $find_project_id->id;
-                //     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for authorizing deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accpeted By PM('.$kpi->accepted_by_pm.'%))';
+                //     $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name . '</a> for authorizing deal Project : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'.$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'. $find_project_id->client_name->name. '</a> (Accepted By PM('.$kpi->accepted_by_pm.'%))';
                 //     $point->gained_as = "Individual";
                 //     $point->points= $earned_point;
 
@@ -2232,10 +2232,10 @@ class ProjectController extends AccountBaseController
                 $project_update->save();
 
 
-                $helper = new HelperPendingActionController();
+                // $helper = new HelperPendingActionController();
 
 
-                $helper->ProjectChallengeAuthorization($project);
+                // $helper->ProjectChallengeAuthorization($project);
 
             // pending action
 
@@ -6372,6 +6372,7 @@ public function updatePmBasicSEO(Request $request){
         return view('projects.modals.project_deadline_extension_modal', $this->data);
     }
     public function pDERequest(ProjectDeadlineExtensionDataTable $datatable){
+        $this->clients = User::allClients();
         $this->pageTitle = 'Project Deadline Extension Requests';
         $this->project_managers = User::where('role_id',4)->get();
         return $datatable->render('projects.ajax.project_deadline_extension',$this->data);

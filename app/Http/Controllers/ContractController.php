@@ -2498,28 +2498,28 @@ class ContractController extends AccountBaseController
         $project = Project::where('deal_id', $request->id)->first();
 
         $authorization_bonus_check = Cashpoint::where('project_id', $project->id)->where('user_id', $user_name->id)->where('type', 'Authorization Bonus')->first();
-        if ($authorization_bonus_check == null) {
-            $point = new CashPoint();
+        // if ($authorization_bonus_check == null) {
+        //     $point = new CashPoint();
 
-            $point->user_id = $user_name->id;
-            $point->project_id = $project->id;
-            $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name .
-                '</a> authorized the deal : <a style="color:blue" href="' . route('projects.show', $project->id) . '">'
-                . $project->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $project->client_id) . '">' .
+        //     $point->user_id = $user_name->id;
+        //     $point->project_id = $project->id;
+        //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name .
+        //         '</a> authorized the deal : <a style="color:blue" href="' . route('projects.show', $project->id) . '">'
+        //         . $project->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $project->client_id) . '">' .
 
-                $project->client_name->name;
+        //         $project->client_name->name;
 
-            $point->gained_as = "Individual";
-            $point->points = $earned_point;
+        //     $point->gained_as = "Individual";
+        //     $point->points = $earned_point;
 
-            if ($cash_points_team_lead != null) {
-                $point->total_points_earn = $cash_points_team_lead->total_points_earn + $earned_point;
-            } else {
-                $point->total_points_earn = $earned_point;
-            }
+        //     if ($cash_points_team_lead != null) {
+        //         $point->total_points_earn = $cash_points_team_lead->total_points_earn + $earned_point;
+        //     } else {
+        //         $point->total_points_earn = $earned_point;
+        //     }
 
-            $point->save();
-        }
+        //     $point->save();
+        // }
 
         //update authoziation action
         if ($this->user->role_id == 4) {
