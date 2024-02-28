@@ -2994,10 +2994,12 @@ public function getAllContracts(Request $request){
         'pm.name as pm_name',
         'pm.image as pm_avatar',
         'client.image as client_avatar',
+        'p_m_projects.created_at as closing_date',
         )
     ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
     ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
+    ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
     ->where('deals.dept_status','WD');
 
     if ($startDate !== null && $endDate !== null) {
@@ -3135,10 +3137,12 @@ public function exportContracts(Request $request){
         'pm.name as pm_name',
         'pm.image as pm_avatar',
         'client.image as client_avatar',
+        'p_m_projects.created_at as closing_date',
         )
     ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
     ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
+    ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
     ->where('deals.dept_status','WD');
 
     if ($startDate !== null && $endDate !== null) {

@@ -156,6 +156,7 @@ export const RightButtonGroup = styled.div`
 
 export const EditorWrapperWithImageAndToolbar = styled.div`
     width: 100%;
+    max-width: 80%;
 `;
 
 export const FilesContainer = styled.div`

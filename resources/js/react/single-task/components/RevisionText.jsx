@@ -94,34 +94,34 @@ const RevisionText = ({ index, revision }) => {
     const getComment = (key) => {
         switch (key) {
             case "PLR":
-                return revision.pmComment;
+                return revision?.pmComment;
             case "SPR":
-                return revision.pmComment;
+                return revision?.pmComment;
             case "CPR":
-                return revision.pmComment;
+                return revision?.pmComment;
             case "LDR":
-                return revision.leadComment;
+                return revision?.leadComment;
             default:
-                return revision.pmComment || revision.leadComment;
+                return revision?.pmComment || revision?.leadComment;
         }
     };
-    const text = getComment(revision.disputeBetween);
+    const text = getComment(revision?.disputeBetween);
     let isLong = text?.length > 800;
     const showText = isLong ? text?.slice(0, 800) + "..." : text;
 
-    const date = dayjs(revision.createdAt).format("MMM DD, YYYY");
-    const time = dayjs(revision.createdAt).format("hh:mm A");
+    const date = dayjs(revision?.createdAt).format("MMM DD, YYYY");
+    const time = dayjs(revision?.createdAt).format("hh:mm A");
 
     return (
         <div className="sp1_task_card--sub-card" style={{ minHeight: "110px" }}>
             <div className="sp1_tc_sc-inx">
-                <h2>{index < 10 ? `0${index}`: index}</h2>
+                <h2>{index < 10 ? `0${index}` : index}</h2>
                 <span className="d-block">
-                    <strong>Date: {" "}</strong>
+                    <strong>Date: </strong>
                     {date}
                 </span>
                 <span className="d-block">
-                    <strong>Time</strong>:{" "}{time}
+                    <strong>Time</strong>: {time}
                 </span>
             </div>
             <div className="px-3">

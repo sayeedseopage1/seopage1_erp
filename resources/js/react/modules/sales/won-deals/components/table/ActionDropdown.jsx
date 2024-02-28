@@ -46,7 +46,7 @@ const ActionDropdown = ({ ...rest }) => {
         window.open(url, "_blank");
     };
 
-    console.log(rest?.row?.original.authorization_status === 0 && rest?.row?.original.id )
+    // console.log(rest?.row?.original.authorization_status === 0 && rest?.row?.original.id )
 
     return (
         <React.Fragment>
@@ -76,7 +76,7 @@ const ActionDropdown = ({ ...rest }) => {
                         }
                         className={styles.dropdownItem}
                     >
-                       <i className="fa-regular fa-eye" />
+                        <i className="fa-regular fa-eye" />
                         View Won Deal
                     </Dropdown.Item>
 
@@ -95,23 +95,28 @@ const ActionDropdown = ({ ...rest }) => {
                     )}
 
                     {/* Authorization Need */}
-                    {(rest?.row?.original.authorization_status === 2  && auth.getRoleId() === 8) &&
-                            (
+                    {rest?.row?.original.authorization_status === 2 &&
+                        auth.getRoleId() === 8 && (
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(
                                         `/deals/request/authorization/${rest?.row?.original?.id}`
                                     )
                                 }
-                                className={`${styles.dropdownItem} bg-warning` }
+                                className={`${styles.dropdownItem} bg-warning`}
                             >
                                 <i className="fa-regular fa-user" />
                                 Authorization Need
                             </Dropdown.Item>
                         )}
                     {/* delete lead */}
-                    {(auth.getRoleId() === 1 || auth.getRoleId() === 4 || auth.getRoleId() === 8) &&
-                        rest?.row?.original.authorization_status === 1 && rest?.row?.original.status ===  "pending" || rest?.row?.original.status === "Accepted"  && (
+                    {(auth.getRoleId() === 1 ||
+                        auth.getRoleId() === 4 ||
+                        auth.getRoleId() === 8) &&
+                        rest?.row?.original.authorization_status === 1 &&
+                        rest?.row?.original.status ===
+                            ("pending" || "Accepted") && (
+
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(
