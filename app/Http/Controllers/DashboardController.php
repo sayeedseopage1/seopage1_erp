@@ -573,7 +573,18 @@ class DashboardController extends AccountBaseController
         if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
             $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
             $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-       dd($user,$userClockIn);
+        //    / dd($user,$userClockIn);
+        if($user == null && $userClockIn == null)
+        {
+            $user = Auth::id();
+            $userDailyTaskSubmission= true;
+            $minimum_log_hours = 0;
+            $incomplete_hours= 0;
+            $userTotalMin = 0;
+            $userClockIn = Carbon::now();
+
+        }
+
 
             // dd($userClockIn);
             $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
