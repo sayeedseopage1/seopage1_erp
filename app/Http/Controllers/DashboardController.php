@@ -569,6 +569,7 @@ class DashboardController extends AccountBaseController
     //    / dd()
         $user_id = Auth::user()->id;
         $today = Carbon::now();
+        $logStatus = true;
 
         if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10)
         
