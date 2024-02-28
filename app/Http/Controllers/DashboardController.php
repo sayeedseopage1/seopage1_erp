@@ -679,7 +679,7 @@ if($userTotalMin < 420){
                 'daily_task_report' => [
                     'daily_submission_status' => $userDailyTaskSubmission,
                     'data' => [
-                        'checking_date'=> $userClockIn->created_at,
+                        'checking_date'=> $userClockInCheck,
                     ],
                 ],
                 'hours_log_report' => [
