@@ -581,7 +581,7 @@ class DashboardController extends AccountBaseController
             $minimum_log_hours = 0;
             $incomplete_hours= 0;
             $userTotalMin = 0;
-            $userClockIn = Carbon::now();
+            
 
         }
 
