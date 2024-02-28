@@ -39,7 +39,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                         if($row->status == 1){
                             $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-auth" href="javascript:;"><i class="fa fa-plus mr-2"></i>' . __('Take Action') . '</a>';
                         }
-                        if($row->status == 2){
+                        if($row->status == 2 || $row->status == 3){
                             $action .= '<a data-project-id="' . $row->id . '" class="dropdown-item project-deadline-view" href="javascript:;"><i class="fa fa-eye mr-2"></i>' . __('View Details') . '</a>';
                         }
 
@@ -73,24 +73,11 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                 return '<a class="project-status-inner-view" data-id="'.$row->projectId.'" href="'.route('projects.show',[$row->projectId]).'">' . $row->project_name . '</a>';
             })
             ->editColumn('pmName', function ($row) {
-                if($row->pmImage != null){
-                return '<div class="media align-items-center">
-                        <a href="' . route('employees.show', [$row->pmId]) . '">
-                        <img src="' . $row->pmImage . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($row->pmName) . '" title="' . ucfirst($row->pmName) . '"></a>
-                        <div class="media-body">
-                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->pmId]) . '">' . ucfirst($row->pmName) . '</a></h5>
-                        </div>
-                    </div>';
-                }else{
-                    return '<div class="media align-items-center">
-                    <a href="'.route('employees.show', [$row->pmId]).'">
-                        <img src="'. asset('user-uploads/avatar/avatar_blank.png') .'" class="mr-3 taskEmployeeImg rounded-circle">
-                    </a>
+            return '<div class="media align-items-center">
                     <div class="media-body">
-                        <h5 class="mb-0 f-13 text-darkest-grey"><a href="'.route('employees.show', [$row->pmId]) .'">'.$row->pmName.'</a></h5>
+                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->pmId]) . '">' . ucfirst($row->pmName) . '</a></h5>
                     </div>
                 </div>';
-                }
             })
             ->editColumn('milestone_status', function ($row) {
                 $p_milestone = ProjectMilestone::where('project_id', $row->project_id)->count();
@@ -120,7 +107,11 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             if($row->deadline_extend_admin !=null){
                 return $row->deadline_extend_admin;
             }else{
-                return 'Awaiting Approval';
+                if($row->status==3){
+                    return 'Request Denied';
+                }else{
+                    return 'Awaiting Approval';
+                }
             }
             })
             ->editColumn('deadline_extended', function ($row) {
@@ -137,7 +128,11 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                 if($row->deadline_extended_for !=null){
                 return $row->deadline_extended_for .' Days';
                 }else{
-                    return 'Awaiting Approval';
+                    if($row->status==3){
+                        return 'Request Denied';
+                    }else{
+                        return 'Awaiting Approval';
+                    }
                 }
             })
             ->editColumn('approved_on', function ($row) {
@@ -162,14 +157,12 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
                 if ($row->approved_by !=null){
                 $user = User::where('id', $row->approved_by)->first();
                 return '<div class="media align-items-center">
-                        <a href="' . route('employees.show', [$user->id]) . '">
-                        <img src="' . $user->image . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
                         <div class="media-body">
                         <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$user->id]) . '">' . ucfirst($user->name) . '</a></h5>
                         </div>
                     </div>';
                 }else{
-                return 'Awaiting Approval';
+                    return 'Awaiting Approval';
                 }
             })
             ->addIndexColumn()
@@ -280,8 +273,8 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             __('deadline_extend_admin') => ['data' => 'deadline_extend_admin', 'name' => 'deadline_extend_admin', 'title' => __('Deadline Extended')],
             __('deadline_extended_for') => ['data' => 'deadline_extended_for', 'name' => 'deadline_extended_for', 'title' => __('Deadline Extended For')],
             __('reason') => ['data' => 'reason', 'name' => 'reason', 'title' => __('Reason')],
-            __('approved_on') => ['data' => 'approved_on', 'name' => 'approved_on', 'title' => __('Approved On')],
-            __('approved_by') => ['data' => 'approved_by', 'name' => 'approved_by', 'title' => __('Approved By')],
+            __('approved_on') => ['data' => 'approved_on', 'name' => 'approved_on', 'title' => __('Authorized On')],
+            __('approved_by') => ['data' => 'approved_by', 'name' => 'approved_by', 'title' => __('Authorized By')],
             __('status') => ['data' => 'status', 'name' => 'status', 'title' => __('Approval Status')],
             Column::computed('action', __('app.action'))
             ->exportable(false)

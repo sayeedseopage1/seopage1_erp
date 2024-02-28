@@ -5,7 +5,7 @@
     $approved_by = App\Models\User::where('id',$pde->approved_by)->first();
 @endphp
 <div class="modal-header">
-    <h5 class="modal-title" id="modelHeading">Project Deadline Authorization View</h5>
+    <h5 class="modal-title" id="modelHeading">Deadline Extension Request Authorization Details</h5>
     <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span
             aria-hidden="true">×</span></button>
 </div>
@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="new_deadline">New Deadline <span class="text-danger">*</span></label>
-                <input type="date" class="form-control height-35 f-14" id="new_deadline" name="new_deadline" value="{{$pde->new_deadline}}" readonly>
+                <input type="text" class="form-control height-35 f-14" id="new_deadline" name="new_deadline" value="{{$pde->new_deadline}}" readonly>
                 <span id="new_deadline_error" class="text-danger"></span>
             </div>
         </div>
@@ -36,7 +36,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label class="f-18">Comment on Authorization from <span class="text-warning">{{Auth::user()->name}}</span></label>
+                <label class="f-18">Comment on Authorization from <span class="text-warning">{{$approved_by->name}}</span></label>
                 <p>{!! $pde->admin_comment !!}</p>
             </div>
         </div>
@@ -44,7 +44,11 @@
     <div class="row">
         <div class="col-md-12">
             <div class="form-group">
-                <label class="f-18">This request was accepted and authorized by <span class="text-warning">{{$approved_by->name}}</span> on DateTime ({{Carbon\Carbon::parse($pde->approved_on)->format('M d, Y \a\t h:i a')}})</label>
+                @if ($pde->status ==3)
+                <label class="f-18">This request was rejected and authorized by <span class="text-warning">{{$approved_by->name}}</span> on {{Carbon\Carbon::parse($pde->approved_on)->format('M d, Y \a\t h:i a')}}</label>
+                @else
+                <label class="f-18">This request was accepted and authorized by <span class="text-warning">{{$approved_by->name}}</span> on {{Carbon\Carbon::parse($pde->approved_on)->format('M d, Y \a\t h:i a')}}</label>
+                @endif
             </div>
         </div>
     </div>
