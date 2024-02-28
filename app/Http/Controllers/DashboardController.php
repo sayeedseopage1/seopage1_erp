@@ -570,7 +570,9 @@ class DashboardController extends AccountBaseController
         $user_id = Auth::user()->id;
         $today = Carbon::now();
 
-        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
+        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10)
+        
+        {
             $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
             $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
         //    / dd($user,$userClockIn);
@@ -650,20 +652,20 @@ if($userTotalMin < 420){
 }
 }
 
-
-}else{
-$logStatus = true;
-$userDailyTaskSubmission = true;
-}
-
-
-$incomplete_hours = $minimum_log_hours - $userTotalMin;
             
         }
 
 
             // dd($userClockIn);
            
+
+    }else{
+        $logStatus = true;
+        $userDailyTaskSubmission = true;
+    }
+
+
+        $incomplete_hours = $minimum_log_hours - $userTotalMin;
         // $userDailyTaskSubmission = true;
         return response()->json([
             'data' => [
