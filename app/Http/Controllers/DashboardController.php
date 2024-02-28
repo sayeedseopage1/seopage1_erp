@@ -569,6 +569,7 @@ class DashboardController extends AccountBaseController
     //    / dd()
         $user_id = Auth::user()->id;
         $today = Carbon::now();
+        $user_check= User::where('id',Auth::id())->first();
 
         if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
             $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
@@ -576,43 +577,47 @@ class DashboardController extends AccountBaseController
         //    / dd($user,$userClockIn);
 
             // dd($userClockIn);
-            $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
-                            ->whereDate('created_at', $userClockIn->created_at)
-                            ->orderBy('created_at', 'desc')
-                            ->groupBy('task_id')
-                            ->get('task_id');
-
-
-
-
-            // dd($userGetTasks);
-            $userTaskCount = $userGetTasks->count();
-
-            $user_check= User::where('id',Auth::id())->first();
-            $userDailyTaskSubmission = true;
-                if ($userTaskCount > 0 ) {
-                    $report = DailySubmission::where('user_id', $userClockIn->user_id)
-                                            -> whereDate('report_date',$userClockIn->created_at)
-                                            -> get();
-
-
-                    // dd($report->count(), $userTaskCount);
-                    if($report->count() === $userTaskCount){
-                        $userDailyTaskSubmission = true;
-                    }else {
-                        $userDailyTaskSubmission = false;
-                    }
-
-
-                }else{
-                    // dd('2');
-                    $userDailyTaskSubmission = true;
-
-                }
+           
                 if($user_check->created_at <= Carbon::now()->yesterday())
                 {
                     $userDailyTaskSubmission = true;
 
+                }else 
+                {
+                    $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+                    ->whereDate('created_at', $userClockIn->created_at)
+                    ->orderBy('created_at', 'desc')
+                    ->groupBy('task_id')
+                    ->get('task_id');
+
+
+
+
+    // dd($userGetTasks);
+    $userTaskCount = $userGetTasks->count();
+
+  
+    $userDailyTaskSubmission = true;
+        if ($userTaskCount > 0 ) {
+            $report = DailySubmission::where('user_id', $userClockIn->user_id)
+                                    -> whereDate('report_date',$userClockIn->created_at)
+                                    -> get();
+
+
+            // dd($report->count(), $userTaskCount);
+            if($report->count() === $userTaskCount){
+                $userDailyTaskSubmission = true;
+            }else {
+                $userDailyTaskSubmission = false;
+            }
+
+
+        }else{
+            // dd('2');
+            $userDailyTaskSubmission = true;
+
+        }
+                    
                 }
                 
 
@@ -625,39 +630,44 @@ class DashboardController extends AccountBaseController
         $logStatus = true;
 
         // dd($userTotalMin);
+        if($user_check->created_at <= Carbon::now()->yesterday())
+        {
+            $logStatus = true;
+            $userDailyTaskSubmission = true;
+    
+        }else 
+        {
+            if($userDeveloperHoursTrack){
+                $logStatus = true;
+            }else{
+    
+                if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+                    $minimum_log_hours = 270;
+                    if($userTotalMin < 270){
+                        $logStatus = false;
+                    }else{
+                        $logStatus = true;
+                    }
+                } else {
+                    $minimum_log_hours = 420;
+                    if($userTotalMin < 420){
+                        $logStatus = false;
+                    }else $logStatus = true;
+                }
+            }
+    
+    
+        }else{
+            $logStatus = true;
+            $userDailyTaskSubmission = true;
+        }
+
+        }
 
         $minimum_log_hours = 0;
 
-        if($userDeveloperHoursTrack){
-            $logStatus = true;
-        }else{
-
-            if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
-                $minimum_log_hours = 270;
-                if($userTotalMin < 270){
-                    $logStatus = false;
-                }else{
-                    $logStatus = true;
-                }
-            } else {
-                $minimum_log_hours = 420;
-                if($userTotalMin < 420){
-                    $logStatus = false;
-                }else $logStatus = true;
-            }
-        }
-
-
-    }else{
-        $logStatus = true;
-        $userDailyTaskSubmission = true;
-    }
-    if($user_check->created_at <= Carbon::now()->yesterday())
-    {
-        $logStatus = true;
-        $userDailyTaskSubmission = true;
-
-    }
+       
+   
 
 
         $incomplete_hours = $minimum_log_hours - $userTotalMin;
