@@ -570,79 +570,106 @@ class DashboardController extends AccountBaseController
         $user_id = Auth::user()->id;
         $today = Carbon::now();
 
-        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
+        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10)
+    {
             $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
             $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-        //    / dd($user,$userClockIn);
-
-            // dd($userClockIn);
-            $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
-                            ->whereDate('created_at', $userClockIn->created_at)
-                            ->orderBy('created_at', 'desc')
-                            ->groupBy('task_id')
-                            ->get('task_id');
-
-
-
-
-            // dd($userGetTasks);
-            $userTaskCount = $userGetTasks->count();
-
-
-            $userDailyTaskSubmission = true;
-                if ($userTaskCount > 0) {
-                    $report = DailySubmission::where('user_id', $userClockIn->user_id)
-                                            -> whereDate('report_date',$userClockIn->created_at)
-                                            -> get();
-
-
-                    // dd($report->count(), $userTaskCount);
-                    if($report->count() === $userTaskCount){
-                        $userDailyTaskSubmission = true;
-                    }else {
-                        $userDailyTaskSubmission = false;
-                    }
-
-
-                }else{
-                    // dd('2');
-                    $userDailyTaskSubmission = true;
-
-                }
-
-
-
-
-        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
-        $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
-        $createdAt = Carbon::parse($userClockIn->created_at);
-        $logStatus = true;
-
-        // dd($userTotalMin);
-
-        $minimum_log_hours = 0;
-
-        if($userDeveloperHoursTrack){
+            $new_user= User::where('id',Auth::id())->first();
+            // if($new_user->created_at >= Carbon::now()->yesterday())
+            // {
+            //     dd("true");
+            // }else 
+            // {
+            //     dd("false");
+            // }
+          // dd($user == null || $userClockIn == null || $new_user->created_at >= Carbon::now()->yesterday() == true);
+       
+         if($user == null || $userClockIn == null || $new_user->created_at >= Carbon::now()->yesterday() == true)
+         {
             $logStatus = true;
-        }else{
+            $userDailyTaskSubmission = true;
+            $userTotalMin= 0;
+            $minimum_log_hours= 0;
+            $userClockInCheck=  Carbon::now();
+            $incomplete_hours= 0;
 
-            if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
-                $minimum_log_hours = 270;
-                if($userTotalMin < 270){
-                    $logStatus = false;
-                }else{
-                    $logStatus = true;
-                }
-            } else {
-                $minimum_log_hours = 420;
-                if($userTotalMin < 420){
-                    $logStatus = false;
-                }else $logStatus = true;
-            }
-        }
+         }else 
+         {
+            // /dd($user,$userClockIn);
+            
+            $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+            ->whereDate('created_at', $userClockIn->created_at)
+            ->orderBy('created_at', 'desc')
+            ->groupBy('task_id')
+            ->get('task_id');
+
+
+
+
+// dd($userGetTasks);
+$userTaskCount = $userGetTasks->count();
+
+
+$userDailyTaskSubmission = true;
+if ($userTaskCount > 0) {
+    $report = DailySubmission::where('user_id', $userClockIn->user_id)
+                            -> whereDate('report_date',$userClockIn->created_at)
+                            -> get();
+
+
+    // dd($report->count(), $userTaskCount);
+    if($report->count() === $userTaskCount){
+        $userDailyTaskSubmission = true;
+    }else {
+        $userDailyTaskSubmission = false;
+    }
 
 
     }else{
+        // dd('2');
+        $userDailyTaskSubmission = true;
+
+    }
+
+
+
+
+                        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
+                        $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
+                        $createdAt = Carbon::parse($userClockIn->created_at);
+                        $logStatus = true;
+
+                        // dd($userTotalMin);
+
+                        $minimum_log_hours = 0;
+
+                        if($userDeveloperHoursTrack){
+                        $logStatus = true;
+                        }else{
+
+                        if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+                        $minimum_log_hours = 270;
+                        if($userTotalMin < 270){
+                            $logStatus = false;
+                        }else{
+                            $logStatus = true;
+                        }
+                        } else {
+                        $minimum_log_hours = 420;
+                        if($userTotalMin < 420){
+                            $logStatus = false;
+                        }else $logStatus = true;
+                        }
+                        }
+
+
+                        
+                    }
+            
+         }
+
+            // dd($userClockIn);
+           else{
         $logStatus = true;
         $userDailyTaskSubmission = true;
     }
@@ -659,13 +686,13 @@ class DashboardController extends AccountBaseController
                 'daily_task_report' => [
                     'daily_submission_status' => $userDailyTaskSubmission,
                     'data' => [
-                        'checking_date'=> $userClockIn->created_at,
+                        'checking_date'=> $userClockInCheck,
                     ],
                 ],
                 'hours_log_report' => [
                     'hours_log_report_status' => $logStatus,
                     'data' => [
-                        'checking_date'=> $userClockIn->created_at,
+                        'checking_date'=> $userClockInCheck,
                         'complete_hours'=> $userTotalMin,
                         'target_minimum_log_hours'=> $minimum_log_hours,
                         'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
