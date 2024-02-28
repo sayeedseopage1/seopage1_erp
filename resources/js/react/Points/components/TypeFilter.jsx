@@ -29,17 +29,17 @@ export default function TypeFilter({ value, onChange, data ,sidebarIsOpen, disab
         : [];
 
     return (
-        <div className={`sp1_task_filter_item d-flex ${sidebarIsOpen && "flex-column w-100"}`}>
+        <div className={`sp1_task_filter_item d-flex  ${sidebarIsOpen ? "flex-column w-100" : "align-items-center"}`}>
             <span className='mr-2 f-13 d-flex flex-nowrap'>Type: </span>
             <Dropdown>
                 <Dropdown.Toggle disabled={disabled} className={`sp1_filter_toggle ${selectionBoxClassName ?? ''} ${sidebarIsOpen && "py-2"} `}>
-                        <span
-                            data-toggle={name ? 'tooltip' : ''}
-                            title={value?.title ?? ''}
-                        >
+                    <span
+                        data-toggle={name ? 'tooltip' : ''}
+                        title={value?.title ?? ''}
+                    >
                             <strong>{value?.title ?? 'All'}</strong>
-                        </span>
-                    </Dropdown.Toggle>
+                    </span>
+                </Dropdown.Toggle>
             
                 <Dropdown.Menu >
                         <div>

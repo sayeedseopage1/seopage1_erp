@@ -17,13 +17,22 @@ $project->members->pluck('user_id')->toArray(); @endphp
 }
 
 </style>
+@php
+    $pdExtension = App\Models\ProjectDeadlineExtension::where('project_id',$project->id)->first();
+@endphp
 <div class="d-lg-flex">
     <div class="project-leftxx w-100 py-0 py-lg-5 py-md-0" id="project-left">
         @if(Auth::user()->role_id == 4)
             <div style="margin-bottom: -40px;">
+                @if ($pdExtension !=null && $pdExtension->status ==1)
+                <button type="button" class="btn btn-warning"> 
+                    Pending
+                </button>
+                @else
                 <button type="button" class="btn btn-success project-deadline-extension" data-project-id="{{$project->id}}"> 
                     Extend Deadline
                 </button>
+                @endif
             </div>
         @endif
         @if(Auth::user()->role_id == 1)
