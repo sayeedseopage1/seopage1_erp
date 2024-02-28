@@ -588,9 +588,9 @@ class DashboardController extends AccountBaseController
             // dd($userGetTasks);
             $userTaskCount = $userGetTasks->count();
 
-
+            $user_check= User::where('id',Auth::id())->first();
             $userDailyTaskSubmission = true;
-                if ($userTaskCount > 0) {
+                if ($userTaskCount > 0 ) {
                     $report = DailySubmission::where('user_id', $userClockIn->user_id)
                                             -> whereDate('report_date',$userClockIn->created_at)
                                             -> get();
@@ -609,6 +609,12 @@ class DashboardController extends AccountBaseController
                     $userDailyTaskSubmission = true;
 
                 }
+                if($user_check->created_at <= Carbon::now()->yesterday())
+                {
+                    $userDailyTaskSubmission = true;
+
+                }
+                
 
 
 
@@ -645,6 +651,12 @@ class DashboardController extends AccountBaseController
     }else{
         $logStatus = true;
         $userDailyTaskSubmission = true;
+    }
+    if($user_check->created_at <= Carbon::now()->yesterday())
+    {
+        $logStatus = true;
+        $userDailyTaskSubmission = true;
+
     }
 
 
