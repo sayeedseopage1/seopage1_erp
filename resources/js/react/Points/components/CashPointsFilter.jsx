@@ -20,16 +20,15 @@ export default function CashPointsFilter ({
     setData,
     setIsDataFetching
 }) {
+    const auth = useAuth();
     const { departments, shift, employees } = useSelector(s => s.pointPageFilterOption);
     const { getUserById, usersObject, usersIsFetching } = useUsers();
     const dispatch = useDispatch();
-    const auth = useAuth();
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
     const [shiftEmployee,setShiftEmployee] = React.useState([]);
     const [client, setClient] = React.useState(null);
     const [type, setType] = React.useState(null);
-
     const [dept,setDept] = React.useState(null);
     const [selectedShift, setSelectedShift] = React.useState(null);
     const [selectedEmployee, setSelectedEmployee] = React.useState(null);
@@ -177,7 +176,7 @@ export default function CashPointsFilter ({
                     start_date: startDate,
                     end_date: endDate,
                     bonus_type: type?.id ?? null,
-                    client_id: client?.id,
+                    client_id: client?.id || null,
                     project_id: null
                 })
             }else{
@@ -206,7 +205,7 @@ export default function CashPointsFilter ({
                 start_date: startDate,
                 end_date: endDate,
                 bonus_type: type?.id ?? null,
-                client_id: client?.id,
+                client_id: client?.id || null,
                 project_id: null
             })
       } else if(selectedEmployee) {
@@ -218,50 +217,100 @@ export default function CashPointsFilter ({
       }
     }, [endDate, startDate, ]);
 
+    // client filter for role 7 and 8 not for role 1
     React.useEffect(() => {
         const user = window?.Laravel?.user;
-      if(Number(user?.role_id) === 1) {
-            if(!dept || !selectedEmployee || !selectedShift) return;
-            pointTableData({
-                department_id: dept?.id,
-                team_id: selectedShift?.id,
-                user_id: selectedEmployee?.id,
-                start_date: startDate,
-                end_date: endDate,
-                client_id: client?.id,
-                bonus_type: type?.id ?? null,
-                project_id: null
-            })
-      } else if(selectedEmployee) {
-            pointTableData({
-                user_id: user?.id,
-                start_date: startDate,
-                end_date: endDate,
-            })
-      }
+        if( !_.includes([7,8], auth.getRoleId()))  {
+            if(Number(user?.role_id) === 1) {
+                    if(!dept || !selectedEmployee || !selectedShift) return;
+                    pointTableData({
+                        department_id: dept?.id,
+                        team_id: selectedShift?.id,
+                        user_id: selectedEmployee?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                        client_id: client?.id ?? null,
+                        bonus_type: type?.id ?? null,
+                        project_id: null
+                    })
+            } else if(selectedEmployee) {
+                    pointTableData({
+                        user_id: user?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                    })
+            }
+        }
     }, [_client]);
 
+    // client filter for role 7 and 8 not for role 1
     React.useEffect(() => {
         const user = window?.Laravel?.user;
-      if(Number(user?.role_id) === 1) {
-            if(!dept || !selectedEmployee || !selectedShift) return;
-            pointTableData({
-                department_id: dept?.id,
-                team_id: selectedShift?.id,
-                user_id: selectedEmployee?.id,
-                start_date: startDate,
-                end_date: endDate,
-                bonus_type: type?.id ?? null,
-                client_id: client?.id,
-                project_id: null
-            })
-      } else if(selectedEmployee) {
-            pointTableData({
-                user_id: user?.id,
-                start_date: startDate,
-                end_date: endDate,
-            })
-      }
+        if( !_.includes([1], auth.getRoleId()))  {
+            if(_.includes([7, 8], auth.getRoleId())) {
+                    pointTableData({
+                        user_id: user?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                        client_id: client?.id ?? null,
+                        bonus_type: type?.id ?? null,
+                    })
+            } else if(selectedEmployee) {
+                    pointTableData({
+                        user_id: user?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                    })
+            }
+        }
+    }, [_client]);
+
+    // bonus type filter for role 1 not for role 7 and 8
+    React.useEffect(() => {
+        const user = window?.Laravel?.user;
+        if( !_.includes([7,8], auth.getRoleId()))  {
+            if(Number(user?.role_id) === 1) {
+                    if(!dept || !selectedEmployee || !selectedShift) return;
+                    pointTableData({
+                        department_id: dept?.id,
+                        team_id: selectedShift?.id,
+                        user_id: selectedEmployee?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                        bonus_type: type?.id ?? null,
+                        client_id: client?.id ?? null,
+                        project_id: null
+                    })
+            } else if(selectedEmployee) {
+                    pointTableData({
+                        user_id: user?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                    })
+            }
+        }
+    }, [_bonusType]);
+
+    // filter for role 7 and 8 not for role 1
+    React.useEffect(() => {
+        const user = window?.Laravel?.user;
+        if( !_.includes([1], auth.getRoleId()))  {
+            if(_.includes([7, 8], auth.getRoleId())) {
+                    pointTableData({
+                        user_id: user?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                        bonus_type: type?.id ?? null,
+                        client_id: client?.id ?? null,
+                    })
+            } else if(selectedEmployee) {
+                    pointTableData({
+                        user_id: user?.id,
+                        start_date: startDate,
+                        end_date: endDate,
+                    })
+            }
+        }
     }, [_bonusType]);
 
 
@@ -280,6 +329,9 @@ export default function CashPointsFilter ({
             setData(tableData);
         }
     }, [tableData, dataFetchingStateIsLoading])
+
+
+   
 
 
     return (
@@ -351,7 +403,7 @@ export default function CashPointsFilter ({
                                 data={[
                                     { id: "Bonus", title: "Bonus" },
                                     { id: "Regular", title: "Regular" },
-                                    { id: "Authorization Bonus", title: "Authorization" },
+                                    { id: "Authorization", title: "Authorization" },
                                 ]}
                              />
                         </FilterItem>
@@ -470,7 +522,6 @@ export default function CashPointsFilter ({
                                         sidebarItem= {true}
                                     />
                                 </FilterItem>
-
                                 <FilterItem className='w-100 border-right-0'>
                                     <UserFilter
                                     title="Client"
@@ -488,48 +539,71 @@ export default function CashPointsFilter ({
                                         data={[
                                             { id: "Bonus", title: "Bonus" },
                                             { id: "Regular", title: "Regular" },
+                                            { id: "Authorization", title: "Authorization"}
                                         ]}
                                     />
                                 </FilterItem>
-                                {/* <FilterItem className='w-100 border-right-0'>
-                                    <ProjectFilterOptions
-                                        selected={project}
-                                        data={projects || []}
-                                        loading={projectsIsFetching}
-                                        onSelect={handleProjectFilter}
-                                        sidebarItem={true}
-                                    />
-                                </FilterItem> */}
                             </div>
                         </aside>
                     )
                 }
-                {
-                    _.includes([7, 8], auth.getRoleId()) && sidebarIsOpen && (
-                        <aside className='sp1__pp_filter_sidebar'>
-                            <FilterItem className='hide'>
-                                <UserFilter
+            </div>
+           }
+
+            {/* sidebar */}
+           {
+              _.includes([7, 8], auth.getRoleId()) &&
+                <div className='sp1__pp_filter_sidebar_container'>
+                    <div
+                        className='sp1__pp_filter_sidebar_toggle'
+                        onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+                    >
+                        <i className="fa-solid fa-filter"></i>
+                        <span>Filters</span>
+                    </div>
+
+                    {
+                        _.includes([7, 8], auth.getRoleId()) && sidebarIsOpen && (
+                            <aside className='sp1__pp_filter_sidebar'>
+                            <div className='sp1__pp_filter_sidebar_header'>
+                                <span>Filters</span>
+
+                                <Button
+                                    aria-label="Close"
+                                    variant='tertiary'
+                                    onClick={() => setSidebarIsOpen(false)}
+                                >
+                                    <i className="fa-solid fa-xmark"></i>
+                                </Button>
+                            </div>
+
+                            <div className="sp1__pp_filter_sidebar_items">
+                                <FilterItem className='w-100 border-right-0'>
+                                    <UserFilter
                                     title="Client"
                                     state={client}
                                     setState={setClient}
-                                    roleIds={null}/>
-                                </FilterItem>
-                            <FilterItem className='hide'>
-                                <TypeFilter
-                                    value={type}
-                                    onChange={setType}
-                                    data={[
-                                        { id: "Bonus", title: "Bonus" },
-                                        { id: "Regular", title: "Regular" },
-                                        { id: "Authorization", title: "Authorization"}
-                                    ]}
+                                    sidebarIsOpen={sidebarIsOpen}
+                                    roleIds={null}
                                 />
-                            </FilterItem>
-                            
+                                </FilterItem>
+                                <FilterItem className='w-100 border-right-0'>
+                                    <TypeFilter
+                                        value={type}
+                                        onChange={setType}
+                                        sidebarIsOpen={sidebarIsOpen}
+                                        data={[
+                                            { id: "Bonus", title: "Bonus" },
+                                            { id: "Regular", title: "Regular" },
+                                            { id: "Authorization", title: "Authorization"}
+                                        ]}
+                                    />
+                                </FilterItem>
+                            </div>
                         </aside>
-                    )
-                }
-            </div>
+                        )
+                    }
+                </div>
            }
 
 
