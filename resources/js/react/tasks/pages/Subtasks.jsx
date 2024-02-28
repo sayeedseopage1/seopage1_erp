@@ -60,7 +60,7 @@ const Subtasks = () => {
                             res.tasks,
                             (d) => Number(d.added_by) === auth.getId()
                         );
-                    } else if (auth.getRoleId() === 9) {
+                    } else if (auth.isHasRolePermission(13)) {
                         _data = _.filter(
                             res.tasks,
                             (d) => Number(d.added_by) === auth.getId()
