@@ -81,7 +81,7 @@ import { User } from "../../utils/user-details";
 const RevisionText = ({ index, revision }) => {
     const [expend, setExpend] = React.useState(false);
     const ref = React.useRef();
-
+    console.log("revision", revision);
     const toggleModal = (e) => {
         e.preventDefault();
         setExpend(!expend);
