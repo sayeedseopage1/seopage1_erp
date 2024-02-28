@@ -573,7 +573,7 @@ class DashboardController extends AccountBaseController
         if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
             $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
             $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-        //    / dd($user,$userClockIn);
+       dd($user,$userClockIn);
 
             // dd($userClockIn);
             $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
