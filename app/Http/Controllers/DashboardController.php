@@ -576,7 +576,7 @@ class DashboardController extends AccountBaseController
         //    / dd($user,$userClockIn);
         if($user == null && $userClockIn == null)
         {
-            $user = Auth::id();
+            $user = User::where('id',Auth::id())->first();
             $userDailyTaskSubmission= true;
             $minimum_log_hours = 0;
             $incomplete_hours= 0;
