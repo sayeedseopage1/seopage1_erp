@@ -109,6 +109,7 @@ const ReviewExtendRequestModal = ({
                 onClose();
                 toast.success("Rejection was successful");
                 handleResetForm();
+                refetchPmGoal();
             })
             .catch((err) => {
                 if (err?.status === 422) {

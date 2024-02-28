@@ -79,7 +79,7 @@ export const PmGoalsTableColumns = [
             const handle = table.options.meta
             const data = row?.original;
             return (
-                <span onClick={() => handle.goalExtensionHistoryClick(data)}>6</span>
+                <span role="button" onClick={() => handle.goalExtensionHistoryClick(data)}>6</span>
             )
         }
     },

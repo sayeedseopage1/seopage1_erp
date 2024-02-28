@@ -180,7 +180,7 @@ const ProjectStatusTable = ({
                                 </tr>
                             )
                             })}
-                            {isLoading && <ProjectStatusTableLoader />}
+                            {isLoading && <ProjectStatusTableLoader prevItemLength={tableData?.length} />}
                     </tbody>
                 </table>
                 {/* Empty table View */}

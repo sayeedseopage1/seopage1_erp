@@ -38,31 +38,26 @@ const FilterSidebar = ({
 
 
         <div className='p-3 d-flex flex-column' style={{gap: '10px'}}>
-            <DateTypeFilter state={dateType} setState={setDateType} />
-
+            {/* <DateTypeFilter state={dateType} setState={setDateType} /> */}
             <UserFilter
                 title="Client"
                 state={client}
                 setState={setClient}
+                sidebarOpen={true}
                 roleIds={null}
             />
-
-
             <UserFilter
                 title="Project Manager"
                 state={pm}
+                sidebarOpen={true}
                 setState={setPm}
                 roleIds={[4]}
             />
-
-<SearchBox
-                        value={search}
-                        onChange={setSearch}
-                        className="tasks_search_bar"
-                    />
-         
-
-            
+            <SearchBox
+                value={search}
+                onChange={setSearch}
+                className="tasks_search_bar"
+            />
         </div>
     </div>
   )

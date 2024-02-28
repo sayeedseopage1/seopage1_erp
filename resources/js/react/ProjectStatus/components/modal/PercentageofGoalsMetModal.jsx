@@ -13,6 +13,9 @@ const PercentageofGoalsMetModal = ({
   tableName, 
   isLoading, 
   refetchPmGoal}) => {
+
+
+    // Todo add Details of the project
   return (
     <ReactModal
       style={customStyles}
@@ -25,7 +28,7 @@ const PercentageofGoalsMetModal = ({
           <div
             className='d-flex justify-content-between align-items-center mb-3'
            >
-            <h6 style={{ fontSize: "25px" }}>Percentage of Goals Met</h6>
+            <h5 style={{ fontSize: "20px" }}>Percentage of Goals Met</h5>
               <div 
                 className='d-flex align-items-center' 
                 style={{gap: '10px'}}>

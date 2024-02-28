@@ -29,6 +29,7 @@ const ProjectStatus = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
+    // get project status fetch
     const { data:projectStatusData, isFetching, refetch } = useGetProjectStatusQuery(
         queryString({
             page: pageIndex + 1,
@@ -37,6 +38,7 @@ const ProjectStatus = () => {
         }),
         { refetchOnMountOrArgChange: true }
     );
+    // get pm goal fetch
     const {
         data: pmGoalData,
         isFetching: isFetchingPmGoal,
@@ -45,11 +47,12 @@ const ProjectStatus = () => {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
     });
 
+    // Data from the API
     const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
     const percentageOfGoalsMet = pmGoalData?.data
 
-
+    // Table columns
     let tableColumns = ProjectStatusTableColumns;
 
 
@@ -81,15 +84,14 @@ const ProjectStatus = () => {
         setProjectId(data.project_id);
         setIsModalOneOpen(true);
         setSelectedProjectName(data.project_name);
+        refetchPmGoal()
     }
 
     // handle percent of goal met  modal
     const handlePercentOfGoalMet = (data) => {
         setProjectId(data.project_id);
-        setIsOpenPercentageofGoalsMetModal(true);
         setSelectedProjectName(data.project_name);
         setProjectDetails(data);
-        console.log("data",data)
     }
 
     // handle close percentage of goal met modal
@@ -146,6 +148,7 @@ const ProjectStatus = () => {
             {/* Percent of Goals Met Modal */}
             <PercentageofGoalsMetModal
                 projectDetails={projectDetails}
+                refetchPmGoal={refetchPmGoal}
                 isOpen={isOpenPercentageofGoalsMetModal}
                 isLoading={isFetchingPmGoal}
                 percentageOfGoalsMet={percentageOfGoalsMet}
