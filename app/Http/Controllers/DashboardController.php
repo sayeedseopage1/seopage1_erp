@@ -583,7 +583,7 @@ class DashboardController extends AccountBaseController
             $minimum_log_hours = 0;
             $incomplete_hours= 0;
             $userTotalMin = 0;
-            $userClockIn->created_at= Carbon::now();
+          //  $userClockIn->created_at= Carbon::now();
             
 
         }else 
@@ -683,7 +683,7 @@ if($userTotalMin < 420){
                 'hours_log_report' => [
                     'hours_log_report_status' => $logStatus,
                     'data' => [
-                        'checking_date'=> $userClockIn->created_at,
+                        'checking_date'=> $userClockIn->created_at ? :Carbon::now(),
                         'complete_hours'=> $userTotalMin,
                         'target_minimum_log_hours'=> $minimum_log_hours,
                         'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
