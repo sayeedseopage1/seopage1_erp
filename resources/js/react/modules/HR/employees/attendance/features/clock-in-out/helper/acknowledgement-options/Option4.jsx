@@ -14,8 +14,9 @@ import { useAuth } from "../../../../../../../../hooks/useAuth";
 import ProjectList from "./ProjectList";
 import UserList from "./UserList";
 import TaskList from "./TaskList";
+import { message } from "laravel-mix/src/Log";
+
 const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
-  
     const [data, setData] = React.useState({
         comment: "",
         responsible_person: "",
@@ -23,16 +24,15 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         durations: "",
         reason_for_less_tracked_hours_a_day_task: "I couldn't log hours.",
         related_to_any_project: "",
-        task_id: task?.id,
+        task_id: "",
         responsible: "",
         client: "",
     });
-    
-    const [task, setTask] = React.useState(null);
+
     const [durationStart, setDurationStart] = React.useState("08:00 AM");
     const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
     const [person, setPerson] = React.useState({});
-    const [project, setProject] = React.useState({});
+    const [task, setTask] = React.useState({});
     const [error, setError] = React.useState(null);
     const [isEnableEmployeeSelectionList, setIsEnableEmployeeSelectionList] =
         React.useState(false);
@@ -40,13 +40,10 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [sType, setSType] = React.useState(""); // submission type
     const auth = useAuth();
 
-    console.log("data", data);
-    console.log("task", task);
     // editor data change
     const handleEditorChange = (e, editor) => {
         const editorData = editor.getData();
-        
-        setData({ ...data, comment: editorData , task_id:task.id  });
+        setData({ ...data, comment: editorData });
     };
 
     // handle form on change event
@@ -71,7 +68,6 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             .timepicker("setTime", durationStart)
             .on("changeTime.timepicker", function (e) {
                 setDurationStart(e.target.value);
-                setData({ ...data});
             });
 
         // end time
@@ -80,7 +76,6 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             .timepicker("setTime", durationEnd)
             .on("changeTime.timepicker", function (e) {
                 setDurationEnd(e.target.value);
-                setData({ ...data, task: task });
                 // console.log(e.timeStamp)
             });
     }, [checked]);
@@ -125,7 +120,10 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
             errCount++;
         }
 
-        if (data.related_to_any_project.toLowerCase() === "yes" && !task) {
+        if (
+            data.related_to_any_project.toLowerCase() === "yes" &&
+            !data.task_id
+        ) {
             err.task = "You have to pick an option.";
             errCount++;
         }
@@ -135,24 +133,35 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     };
 
     // handle submission
+    // handle submission
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
-        const fd = {
-            ...data,
-            durations: JSON.stringify([
-                { id: "de2sew", start: durationStart, end: durationEnd },
-            ]),
-            
-        };
 
-        setSType(submissionType);
-        if (isValid()) {
-            onSubmit(fd, submissionType, onBack);
-        } else {
+        try {
+            const fd = {
+                ...data,
+                durations: JSON.stringify([
+                    { id: "de2sew", start: durationStart, end: durationEnd },
+                ]),
+            };
+
+            setSType(submissionType);
+
+            if (isValid()) {
+                onSubmit(fd, submissionType, onBack);
+            } else {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Please complete all required fields.",
+                    showConfirmButton: true,
+                });
+            }
+        } catch (error) {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please complete all required fields.",
+                title: "Internal Server Error.",
                 showConfirmButton: true,
             });
         }
@@ -178,7 +187,21 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                     <Switch.Case condition={checked}>
                         {/* comment field */}
                         <div className="mt-3 pl-3">
-                           
+                            <Label color="#777" className="font-weight-bold">
+                                Write your comments here<sup>*</sup>
+                            </Label>
+                            <div className="ck-editor-holder stop-timer-options">
+                                <CKEditorComponent
+                                    data={data.comment}
+                                    onChange={handleEditorChange}
+                                />
+                            </div>
+                            <Switch.Case condition={error?.comment}>
+                                <div className="f-14" style={{ color: "red" }}>
+                                    {error?.comment}
+                                </div>
+                            </Switch.Case>
+
                             {/* responsible person */}
                             <div className="mt-3">
                                 <Label
@@ -272,6 +295,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     </div>
                                 </Switch.Case>
                             </div>
+
                             {/* person selection */}
                             <Switch.Case
                                 condition={isEnableEmployeeSelectionList}
@@ -298,6 +322,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     </div>
                                 </Switch.Case>
                             </Switch.Case>
+
                             {/* outside erp project */}
                             <Switch.Case condition={isOutsideOfErp}>
                                 <FormGroup className="mt-3">
@@ -322,6 +347,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     </div>
                                 </Switch.Case>
                             </Switch.Case>
+
                             {/* outside erp project */}
                             <Switch.Case condition={!isOutsideOfErp}>
                                 <FormGroup className="mt-3">
@@ -384,39 +410,26 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                 >
                                     <FormGroup className="mt-3">
                                         <Label>
-                                            Select the task <sup>*</sup>
+                                            Select the Task <sup>*</sup>
                                         </Label>
                                         <TaskList
                                             task={task}
-                                            onSelect={setTask}
+                                            onSelect={(d) => {
+                                                setTask(d);
+                                                setData({
+                                                    ...data,
+                                                    task_id: d.id,
+                                                });
+                                            }}
                                         />
-                                        <Switch.Case condition={error?.task}>
-                                            <div style={{ color: "red" }}>
-                                                {error?.task}
-                                            </div>
-                                        </Switch.Case>
                                     </FormGroup>
+                                    <Switch.Case condition={error?.task}>
+                                        <div style={{ color: "red" }}>
+                                            {error?.task}
+                                        </div>
+                                    </Switch.Case>
                                 </Switch.Case>
                             </Switch.Case>
-
-                            
-                            <Label color="#777" className="font-weight-bold">
-                                Write your comments here<sup>*</sup>
-                            </Label>
-                            <div className="ck-editor-holder stop-timer-options">
-                                <CKEditorComponent
-                                    data={data.comment}
-                                    onChange={handleEditorChange}
-                                />
-                            </div>
-                            <Switch.Case condition={error?.comment}>
-                                <div className="f-14" style={{ color: "red" }}>
-                                    {error?.comment}
-                                </div>
-                            </Switch.Case>
-
-
-                           
 
                             {/* approximate time */}
                             {/* time selection */}
@@ -452,6 +465,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     </div>
                                 </div>
                             </FormGroup>
+
                             {/* footer section */}
                             <div className="mt-3 w-100 d-flex align-items-center">
                                 {/* back button */}

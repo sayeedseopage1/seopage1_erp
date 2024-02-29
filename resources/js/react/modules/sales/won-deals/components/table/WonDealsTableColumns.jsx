@@ -119,13 +119,14 @@ export const WonDealsTableColumns = [
         },
     },
     {
-        id: "deal_creation_date",
+        id: "closing_date",
         header: "Closing Date",
-        accessorKey: "deal_creation_date",
+        accessorKey: "closing_date",
         cell: ({ row }) => {
             const data = row.original;
-            const date = data?.deal_creation_date ? (
-                dayjs(data?.deal_creation_date).format(`DD-MM-YYYY hh:mm:ss A`)
+            console.log("data in won deal table", data);
+            const date = data?.closing_date ? (
+                dayjs(data?.closing_date).format(`DD-MM-YYYY hh:mm:ss A`)
             ) : (
                 <EmptySpace> -- </EmptySpace>
             );
@@ -215,4 +216,3 @@ export const WonDealsTableColumns = [
         cell: (props) => <ActionDropdown {...props} />,
     },
 ];
-
