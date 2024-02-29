@@ -181,15 +181,15 @@ class SubTaskController extends AccountBaseController
         }
         
     }
-        $this->addPermission = user()->permission('add_sub_tasks');
+       // $this->addPermission = user()->permission('add_sub_tasks');
         $task = Task::findOrFail($request->task_id);
         $taskUsers = $task->users->pluck('id')->toArray();
 
-        abort_403(!($this->addPermission == 'all'
-            || ($this->addPermission == 'added' && $task->added_by == user()->id)
-            || ($this->addPermission == 'owned' && in_array(user()->id, $taskUsers))
-            || ($this->addPermission == 'added' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
-        ));
+        // abort_403(!($this->addPermission == 'all'
+        //     || ($this->addPermission == 'added' && $task->added_by == user()->id)
+        //     || ($this->addPermission == 'owned' && in_array(user()->id, $taskUsers))
+        //     || ($this->addPermission == 'added' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
+        // ));
 
         $subTask = new SubTask();
         $subTask->title = $request->title;

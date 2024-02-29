@@ -20,7 +20,10 @@ import { Listbox } from "@headlessui/react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { setWorkingEnvironmentStatus, storeSubTasks } from "../../../services/features/subTaskSlice";
+import {
+    setWorkingEnvironmentStatus,
+    storeSubTasks,
+} from "../../../services/features/subTaskSlice";
 import { checkIsURL } from "../../../utils/check-is-url";
 import { CompareDate } from "../../../utils/dateController";
 import { SingleTask } from "../../../utils/single-task";
@@ -31,7 +34,11 @@ import { useRefetchTaskDetails } from "../../SingleIndependentTask";
 
 const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     const refetchTask = useRefetchTaskDetails();
-    const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
+    const {
+        task: taskDetails,
+        subTask,
+        isWorkingEnvironmentSubmit,
+    } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
 
@@ -49,7 +56,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
     // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
-    
+
     const [files, setFiles] = React.useState([]);
 
     const [pageType, setPageType] = React.useState("");
@@ -58,7 +65,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     const [pageURL, setPageURL] = React.useState("");
     const [numberOfPage, setNumberOfPage] = React.useState(0);
     const [existingDesignLink, setExistingDesignLink] = React.useState("");
-    const [pageTypePriority, setPageTypePriority ] = React.useState("");
+    const [pageTypePriority, setPageTypePriority] = React.useState("");
     const [pageTypeName, setPageTypeName] = React.useState("");
 
     const [err, setErr] = useState(null);
@@ -66,11 +73,11 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
 
-
     // const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
     // const {  } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=estimation_time`);
-    const [ getTaskDetails, {data: estimation, isFetching}] = useLazyGetTaskDetailsQuery();
+    const [getTaskDetails, { data: estimation, isFetching }] =
+        useLazyGetTaskDetailsQuery();
 
     const [showForm, setShowForm] = React.useState(false);
 
@@ -79,13 +86,11 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
     const navigate = useNavigate();
 
-
     // const [
     //     checkRestrictedWords,
     //     {isLoading: checking}
     // ] = useCheckRestrictedWordsMutation();
     const checking = false;
-    
 
     // handle change
     React.useEffect(() => {
@@ -94,7 +99,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
     React.useEffect(() => {
         getTaskDetails(`/${task?.id}/json?mode=estimation_time`).unwrap();
-    }, [])
+    }, []);
 
     // handle onchange
     const handleChange = (e, setState) => {
@@ -103,113 +108,116 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
         setState(value);
     };
 
-
     const isValid = () => {
         let count = 0;
         const error = new Object();
 
-        if(!title){
-            error.title = 'The title field is required';
+        if (!title) {
+            error.title = "The title field is required";
             count++;
         }
 
-        if(!startDate){
-            error.startDate = 'You have to select a start date';
+        if (!startDate) {
+            error.startDate = "You have to select a start date";
             count++;
         }
 
-        if(!dueDate){
-            error.dueDate = 'You have to select a due date';
+        if (!dueDate) {
+            error.dueDate = "You have to select a due date";
             count++;
         }
 
-
-        if(!taskCategory){
+        if (!taskCategory) {
             error.taskCategory = "You have to select task category";
             count++;
         }
 
-        if(!assignedTo){
+        if (!assignedTo) {
             error.assignedTo = "You have to select an user";
             count++;
         }
 
-        if(assignedTo && assignedTo?.isOverloaded){
-            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 04 Submittable tasks.`)
+        if (assignedTo && assignedTo?.isOverloaded) {
+            toast.warn(
+                `You cannot assign this task to ${assignedTo?.name}  because ${
+                    assignedTo?.gender === "male" ? "He " : "She "
+                } has more than 04 Submittable tasks.`
+            );
             count++;
         }
 
-
-        if(!pageType){
+        if (!pageType) {
             error.taskType = "You have to Select task type";
             count++;
-        }else{
-            if(_.toLower(pageType) === _.toLower('New Page Design')){
-                if(!pageTypePriority){
+        } else {
+            if (_.toLower(pageType) === _.toLower("New Page Design")) {
+                if (!pageTypePriority) {
                     error.pageTypePriority = "You have to Select page type";
                     count++;
                 }
 
-                if(!pageName){
-                    error.pageName= "You have to Select page name";
+                if (!pageName) {
+                    error.pageName = "You have to Select page name";
                     count++;
                 }
 
-                if(!pageURL){
-                    error.pageUrl= "You have to provide page URL";
+                if (!pageURL) {
+                    error.pageUrl = "You have to provide page URL";
                     count++;
-                }else if(!checkIsURL(pageURL)){
-                    error.pageUrl= "You have to provide a valid page URL";
+                } else if (!checkIsURL(pageURL)) {
+                    error.pageUrl = "You have to provide a valid page URL";
                     toast.warn("You have to provide a valid page URL");
                     count++;
                 }
             }
 
-
-            if(_.toLower(pageType) === _.toLower('Others')){
-                if(!pageTypeOthers){
-                    error.pageTypeOthers = "You have to select an option"
+            if (_.toLower(pageType) === _.toLower("Others")) {
+                if (!pageTypeOthers) {
+                    error.pageTypeOthers = "You have to select an option";
                     count++;
                 }
 
-                if(!pageName){
-                    error.pageName= "You have to Select page name";
+                if (!pageName) {
+                    error.pageName = "You have to Select page name";
                     count++;
                 }
 
-                if(!pageURL){
-                    error.pageUrl= "You have to provide page URL";
+                if (!pageURL) {
+                    error.pageUrl = "You have to provide page URL";
                     count++;
-                }else if(!checkIsURL(pageURL)){
-                    error.pageUrl= "You have to provide a valid page URL";
+                } else if (!checkIsURL(pageURL)) {
+                    error.pageUrl = "You have to provide a valid page URL";
                     toast.warn("You have to provide a valid page URL");
                     count++;
                 }
             }
 
-            if(_.toLower(pageType) === _.toLower('Cloning Existing Design')){
-                if(!pageTypeName){
-                    error.pageTypeName = "You have to select an option"
+            if (_.toLower(pageType) === _.toLower("Cloning Existing Design")) {
+                if (!pageTypeName) {
+                    error.pageTypeName = "You have to select an option";
                     count++;
                 }
 
-                if(!numberOfPage){
-                    error.numberOfPage= "The minimum required number is 1"
+                if (!numberOfPage) {
+                    error.numberOfPage = "The minimum required number is 1";
                     count++;
                 }
 
-                if(!existingDesignLink){
-                    error.existingDesignLink= "You have to provide Exiting Design Link";
+                if (!existingDesignLink) {
+                    error.existingDesignLink =
+                        "You have to provide Exiting Design Link";
                     count++;
-                }else if(!checkIsURL(existingDesignLink)){
-                    error.existingDesignLink= "You have to provide a valid Exiting Design Link";
-                    toast.warn("You have to provide a valid Exiting Design Link");
+                } else if (!checkIsURL(existingDesignLink)) {
+                    error.existingDesignLink =
+                        "You have to provide a valid Exiting Design Link";
+                    toast.warn(
+                        "You have to provide a valid Exiting Design Link"
+                    );
                     count++;
                 }
             }
 
-
-            if(!description){
+            if (!description) {
                 error.description = "The description field is required";
                 count++;
             }
@@ -217,9 +225,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
         setErr(error);
         return !count;
-    }
-
-
+    };
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -244,14 +250,14 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
         fd.append("image_url", null);
         fd.append("subTaskID", null);
         fd.append("addedFiles", null);
-        fd.append('task_type', pageType ?? null);
-        fd.append('page_type', pageTypePriority);
-        fd.append('page_name', pageName);
-        fd.append('page_url', pageURL);
-        fd.append('task_type_other', pageTypeOthers);
-        fd.append('page_type_name', pageTypeName);
-        fd.append('number_of_pages', numberOfPage);
-        fd.append('existing_design_link', existingDesignLink);
+        fd.append("task_type", pageType ?? null);
+        fd.append("page_type", pageTypePriority);
+        fd.append("page_name", pageName);
+        fd.append("page_url", pageURL);
+        fd.append("task_type_other", pageTypeOthers);
+        fd.append("page_type_name", pageTypeName);
+        fd.append("number_of_pages", numberOfPage);
+        fd.append("existing_design_link", existingDesignLink);
         fd.append(
             "_token",
             document
@@ -264,14 +270,17 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
         // const submit = async () => {
 
-            if(isValid()){
-                await createSubtask(fd)
+        if (isValid()) {
+            await createSubtask(fd)
                 .unwrap()
                 .then((res) => {
                     if (res?.status === "success") {
                         let _subtask = [
                             ...subTask,
-                            { id: res?.sub_task?.id, title: res?.sub_task?.title },
+                            {
+                                id: res?.sub_task?.id,
+                                title: res?.sub_task?.title,
+                            },
                         ];
                         dispatch(storeSubTasks(_subtask));
                         close();
@@ -295,7 +304,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                         });
                     }
                 });
-            }
+        }
     };
 
     React.useEffect(() => {
@@ -313,17 +322,16 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     };
 
     const estimateError = (err) => {
-        const text = _.head(err?.errors?.hours)
-        return text
+        const text = _.head(err?.errors?.hours);
+        return text;
     };
 
     useEffect(() => {
         // const showEnv = _.size(task?.subtask) === 0 ? true : false;
-        if(auth.getRoleId() === 6){
+        if (auth.getRoleId() === 6) {
             dispatch(setWorkingEnvironmentStatus(!isFirstSubtask));
         }
-    }, [isFirstSubtask])
-
+    }, [isFirstSubtask]);
 
     // useEffect(()=>{
     //   console.log({isFirstSubtask,isWorkingEnvironmentSubmit});
@@ -333,13 +341,14 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     //   console.log({isWorkingEnvironmentSubmit,isFirstSubtask,task});
     // },[isWorkingEnvironmentSubmit,isFirstSubtask,task])
 
-
     return (
         <>
             <div className="sp1-subtask-form --modal-panel">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <h6>
-                        { !isWorkingEnvironmentSubmit ? "Working Environment" : "Create Sub Task"}
+                        {!isWorkingEnvironmentSubmit
+                            ? "Working Environment"
+                            : "Create Sub Task"}
                     </h6>
                     <Button
                         aria-label="close-modal"
@@ -352,22 +361,23 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body sp1_subtask_form">
                     {/* working environment form */}
-                    {!isWorkingEnvironmentSubmit &&
+                    {!isWorkingEnvironmentSubmit && (
                         <WorkingEnvironmentForm
                             task={task}
-                            onSubmit={() =>{
-                                refetchTask()
+                            onSubmit={() => {
+                                refetchTask();
                             }}
                             close={close}
-                        /> }
+                        />
+                    )}
                     {/* end working environment form */}
 
-                    {isWorkingEnvironmentSubmit &&
+                    {isWorkingEnvironmentSubmit && (
                         <LeadConfirmationModal
                             isOpen={!showForm}
                             onConfirm={() => setShowForm(true)}
                         />
-                    }
+                    )}
                     {showForm && (
                         <div className="sp1-subtask-form --form row">
                             <div className="col-12 col-md-6">
@@ -379,11 +389,12 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                     name="title"
                                     required={true}
                                     value={title}
-                                    error={err?.title || required_error?.title?.[0]}
+                                    error={
+                                        err?.title || required_error?.title?.[0]
+                                    }
                                     onChange={(e) => handleChange(e, setTitle)}
                                 />
                             </div>
-
 
                             {/* Milestone */}
                             {/* <div className="col-12 col-md-6">
@@ -418,7 +429,6 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 </div>
                             </div>
 
-
                             {/* Project */}
                             {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
@@ -446,10 +456,14 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                             placeholderText={`Ex: ${dayjs
                                                 .dayjs()
                                                 .format("DD-MM-YYYY")}`}
-                                            minDate={dayjs.dayjs(task?.startDate).toDate()}
+                                            minDate={dayjs
+                                                .dayjs(task?.startDate)
+                                                .toDate()}
                                             maxDate={
                                                 dueDate ||
-                                                dayjs.dayjs(task?.dueDate).toDate()
+                                                dayjs
+                                                    .dayjs(task?.dueDate)
+                                                    .toDate()
                                             }
                                             date={startDate}
                                             setDate={setStateDate}
@@ -466,7 +480,6 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                             {err?.startDate}
                                         </div>
                                     )}
-
                                 </div>
                             </div>
 
@@ -481,9 +494,14 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                                 .dayjs()
                                                 .format("DD-MM-YYYY")}`}
                                             minDate={
-                                                startDate || dayjs.dayjs(task?.startDate).toDate()
+                                                startDate ||
+                                                dayjs
+                                                    .dayjs(task?.startDate)
+                                                    .toDate()
                                             }
-                                            maxDate={dayjs.dayjs(task?.dueDate).toDate()}
+                                            maxDate={dayjs
+                                                .dayjs(task?.dueDate)
+                                                .toDate()}
                                             date={dueDate}
                                             setDate={setDueDate}
                                         />
@@ -527,9 +545,17 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                     </div>
                                 )}
 
-                                {assignedTo?.isOverloaded && <div style={{ color: "red" }}>
-                                        {`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 10 Submittable tasks.`}
-                                    </div>}
+                                {assignedTo?.isOverloaded && (
+                                    <div style={{ color: "red" }}>
+                                        {`You cannot assign this task to ${
+                                            assignedTo?.name
+                                        }  because ${
+                                            assignedTo?.gender === "male"
+                                                ? "He "
+                                                : "She "
+                                        } has more than 10 Submittable tasks.`}
+                                    </div>
+                                )}
                             </div>
                             {/*
                     <div className="col-6">
@@ -542,30 +568,50 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
                             {/* Page Type  */}
                             <div className="col-12 col-md-6">
-                                <Listbox value={pageType} onChange={setPageType}>
+                                <Listbox
+                                    value={pageType}
+                                    onChange={setPageType}
+                                >
                                     <div className="form-group position-relative my-3">
-                                        <label htmlFor=""> Task Type <sup>*</sup> </label>
-                                            <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                        <label htmlFor="">
+                                            {" "}
+                                            Task Type <sup>*</sup>{" "}
+                                        </label>
+                                        <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                             <span className="singleline-ellipsis pr-3">
                                                 {pageType ?? "--"}
                                             </span>
 
-                                            <div className='__icon'>
+                                            <div className="__icon">
                                                 <i className="fa-solid fa-sort"></i>
                                             </div>
                                         </Listbox.Button>
-                                        <Listbox.Options  className="sp1-select-options">
-                                            {["New Page Design", "Cloning Existing Design", "Others"]?.map((s, i) => (
+                                        <Listbox.Options className="sp1-select-options">
+                                            {[
+                                                "New Page Design",
+                                                "Cloning Existing Design",
+                                                "Others",
+                                            ]?.map((s, i) => (
                                                 <Listbox.Option
                                                     key={i}
-                                                    className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                    className={({ active }) =>
+                                                        `sp1-select-option ${
+                                                            active
+                                                                ? "active"
+                                                                : ""
+                                                        }`
+                                                    }
                                                     value={s}
                                                 >
-                                                    {({selected}) => (
+                                                    {({ selected }) => (
                                                         <>
-                                                          {s}
+                                                            {s}
 
-                                                          {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                            {selected ? (
+                                                                <i className="fa-solid fa-check ml-2" />
+                                                            ) : (
+                                                                ""
+                                                            )}
                                                         </>
                                                     )}
                                                 </Listbox.Option>
@@ -575,12 +621,10 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 </Listbox>
 
                                 {required_error?.pageType?.[0] && (
-                                        <div style={{ color: "red" }}>
-                                            {required_error?.pageType?.[0]}
-                                        </div>
-                                    )}
-
-
+                                    <div style={{ color: "red" }}>
+                                        {required_error?.pageType?.[0]}
+                                    </div>
+                                )}
 
                                 {err?.taskType && (
                                     <div style={{ color: "red" }}>
@@ -589,112 +633,140 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 )}
                             </div>
 
-                            {
-                                pageType === "New Page Design"?
+                            {pageType === "New Page Design" ? (
                                 <div className="col-12 col-md-6">
-                                    <Listbox value={pageTypePriority} onChange={setPageTypePriority}>
+                                    <Listbox
+                                        value={pageTypePriority}
+                                        onChange={setPageTypePriority}
+                                    >
                                         <div className="form-group position-relative my-3">
-                                            <label htmlFor=""> Page Type <sup>*</sup> </label>
-                                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                            <label htmlFor="">
+                                                {" "}
+                                                Page Type <sup>*</sup>{" "}
+                                            </label>
+                                            <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                                 <span className="singleline-ellipsis pr-3">
                                                     {pageTypePriority ?? "--"}
                                                 </span>
 
-                                                <div className='__icon'>
+                                                <div className="__icon">
                                                     <i className="fa-solid fa-sort"></i>
                                                 </div>
                                             </Listbox.Button>
-                                            <Listbox.Options  className="sp1-select-options">
+                                            <Listbox.Options className="sp1-select-options">
                                                 {[
                                                     "Primary Page Development",
                                                     "Secondary Page Development",
                                                 ]?.map((s, i) => (
                                                     <Listbox.Option
                                                         key={i}
-                                                        className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                        className={({
+                                                            active,
+                                                        }) =>
+                                                            `sp1-select-option ${
+                                                                active
+                                                                    ? "active"
+                                                                    : ""
+                                                            }`
+                                                        }
                                                         value={s}
                                                     >
-                                                        {({selected}) => (
+                                                        {({ selected }) => (
                                                             <>
-                                                            {s}
+                                                                {s}
 
-                                                            {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                                {selected ? (
+                                                                    <i className="fa-solid fa-check ml-2" />
+                                                                ) : (
+                                                                    ""
+                                                                )}
                                                             </>
                                                         )}
-
                                                     </Listbox.Option>
                                                 ))}
                                             </Listbox.Options>
                                         </div>
                                     </Listbox>
 
-
-                                {err?.pageTypePriority && (
-                                    <div style={{ color: "red" }}>
-                                        {err?.pageTypePriority}
-                                    </div>
-                                )}
-                                </div> : null
-                            }
+                                    {err?.pageTypePriority && (
+                                        <div style={{ color: "red" }}>
+                                            {err?.pageTypePriority}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : null}
 
                             {/* Others */}
-                            {
-                                pageType === "Others"?
+                            {pageType === "Others" ? (
                                 <div className="col-12 col-md-6">
-                                    <Listbox value={pageTypeOthers} onChange={setPageTypeOthers}>
+                                    <Listbox
+                                        value={pageTypeOthers}
+                                        onChange={setPageTypeOthers}
+                                    >
                                         <div className="form-group position-relative my-3">
-                                            <label htmlFor=""> Others <sup>*</sup> </label>
-                                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                            <label htmlFor="">
+                                                {" "}
+                                                Others <sup>*</sup>{" "}
+                                            </label>
+                                            <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                                 <span className="singleline-ellipsis pr-3">
                                                     {pageTypeOthers ?? "--"}
                                                 </span>
 
-                                                <div className='__icon'>
+                                                <div className="__icon">
                                                     <i className="fa-solid fa-sort"></i>
                                                 </div>
                                             </Listbox.Button>
-                                            <Listbox.Options  className="sp1-select-options">
+                                            <Listbox.Options className="sp1-select-options">
                                                 {[
                                                     "Page Design Change",
                                                     "Speed Optimization",
                                                     "Fixing Issues/Bugs",
-                                                    "Responsiveness Issue Fixing/Making Something Responsive"
+                                                    "Responsiveness Issue Fixing/Making Something Responsive",
                                                 ]?.map((s, i) => (
                                                     <Listbox.Option
                                                         key={i}
-                                                        className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                        className={({
+                                                            active,
+                                                        }) =>
+                                                            `sp1-select-option ${
+                                                                active
+                                                                    ? "active"
+                                                                    : ""
+                                                            }`
+                                                        }
                                                         value={s}
                                                     >
-                                                        {({selected}) => (
+                                                        {({ selected }) => (
                                                             <>
-                                                            {s}
+                                                                {s}
 
-                                                            {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                                {selected ? (
+                                                                    <i className="fa-solid fa-check ml-2" />
+                                                                ) : (
+                                                                    ""
+                                                                )}
                                                             </>
                                                         )}
-
                                                     </Listbox.Option>
                                                 ))}
                                             </Listbox.Options>
                                         </div>
                                     </Listbox>
-
 
                                     {err?.pageTypeOthers && (
                                         <div style={{ color: "red" }}>
                                             {err?.pageTypeOthers}
                                         </div>
                                     )}
-                                </div> : null
-                            }
+                                </div>
+                            ) : null}
 
-                           {
-                             pageType ?
+                            {pageType ? (
                                 <React.Fragment>
-                                    {
-                                        pageType === "Cloning Existing Design" ?
-                                            <>
-                                                {/* <div className="col-12 col-md-6">
+                                    {pageType === "Cloning Existing Design" ? (
+                                        <>
+                                            {/* <div className="col-12 col-md-6">
                                                     <Input
                                                         id="page_type_name"
                                                         label="Page type name"
@@ -707,85 +779,115 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                                         onChange={(e) => handleChange(e, setPageTypeName)}
                                                     />
                                                 </div> */}
-                                                <div className="col-12 col-md-6">
-                                                    <Listbox value={pageTypeName} onChange={setPageTypeName}>
-                                                        <div className="form-group position-relative my-3">
-                                                            <label htmlFor=""> Page Type Name <sup>*</sup> </label>
-                                                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                                                <span className="singleline-ellipsis pr-3">
-                                                                    {pageTypeName ?? "--"}
-                                                                </span>
+                                            <div className="col-12 col-md-6">
+                                                <Listbox
+                                                    value={pageTypeName}
+                                                    onChange={setPageTypeName}
+                                                >
+                                                    <div className="form-group position-relative my-3">
+                                                        <label htmlFor="">
+                                                            {" "}
+                                                            Page Type Name{" "}
+                                                            <sup>*</sup>{" "}
+                                                        </label>
+                                                        <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                                            <span className="singleline-ellipsis pr-3">
+                                                                {pageTypeName ??
+                                                                    "--"}
+                                                            </span>
 
-                                                                <div className='__icon'>
-                                                                    <i className="fa-solid fa-sort"></i>
-                                                                </div>
-                                                            </Listbox.Button>
-                                                            <Listbox.Options  className="sp1-select-options">
-                                                                {[
-                                                                    "Primary Page Development",
-                                                                    "Secondary Page Development",
-                                                                ]?.map((s, i) => (
-                                                                    <Listbox.Option
-                                                                        key={i}
-                                                                        className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
-                                                                        value={s}
-                                                                    >
-                                                                        {({selected}) => (
-                                                                            <>
+                                                            <div className="__icon">
+                                                                <i className="fa-solid fa-sort"></i>
+                                                            </div>
+                                                        </Listbox.Button>
+                                                        <Listbox.Options className="sp1-select-options">
+                                                            {[
+                                                                "Primary Page Development",
+                                                                "Secondary Page Development",
+                                                            ]?.map((s, i) => (
+                                                                <Listbox.Option
+                                                                    key={i}
+                                                                    className={({
+                                                                        active,
+                                                                    }) =>
+                                                                        `sp1-select-option ${
+                                                                            active
+                                                                                ? "active"
+                                                                                : ""
+                                                                        }`
+                                                                    }
+                                                                    value={s}
+                                                                >
+                                                                    {({
+                                                                        selected,
+                                                                    }) => (
+                                                                        <>
                                                                             {s}
 
-                                                                            {selected ? <i className="fa-solid fa-check ml-2" />: ''}
-                                                                            </>
-                                                                        )}
+                                                                            {selected ? (
+                                                                                <i className="fa-solid fa-check ml-2" />
+                                                                            ) : (
+                                                                                ""
+                                                                            )}
+                                                                        </>
+                                                                    )}
+                                                                </Listbox.Option>
+                                                            ))}
+                                                        </Listbox.Options>
+                                                    </div>
+                                                </Listbox>
+                                                {err?.pageTypeName ||
+                                                    required_error
+                                                        ?.page_type?.[0]}
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="page_name"
+                                                    label="Page Name"
+                                                    type="text"
+                                                    placeholder="Enter page name"
+                                                    name="page name"
+                                                    required={true}
+                                                    value={pageName}
+                                                    error={err?.pageName}
+                                                    onChange={(e) =>
+                                                        handleChange(
+                                                            e,
+                                                            setPageName
+                                                        )
+                                                    }
+                                                />
+                                            </div>
 
-                                                                    </Listbox.Option>
-                                                                ))}
-                                                            </Listbox.Options>
-                                                        </div>
-                                                    </Listbox>
-                                                    {err?.pageTypeName || required_error?.page_type?.[0]}
-                                                </div>
-                                            </>
+                                            <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="page_url"
+                                                    label="Page URL"
+                                                    type="text"
+                                                    placeholder="Enter page url"
+                                                    name="page url"
+                                                    required={true}
+                                                    value={pageURL}
+                                                    error={
+                                                        err?.pageUrl ||
+                                                        required_error
+                                                            ?.page_url?.[0]
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleChange(
+                                                            e,
+                                                            setPageURL
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        </>
+                                    )}
 
-                                            :
-                                            <>
-
-                                                <div className="col-12 col-md-6">
-                                                    <Input
-                                                        id="page_name"
-                                                        label="Page Name"
-                                                        type="text"
-                                                        placeholder="Enter page name"
-                                                        name="page name"
-                                                        required={true}
-                                                        value={pageName}
-                                                        error={err?.pageName}
-                                                        onChange={(e) => handleChange(e, setPageName)}
-                                                    />
-                                                </div>
-
-
-                                                <div className="col-12 col-md-6">
-                                                    <Input
-                                                        id="page_url"
-                                                        label="Page URL"
-                                                        type="text"
-                                                        placeholder="Enter page url"
-                                                        name="page url"
-                                                        required={true}
-                                                        value={pageURL}
-                                                        error={err?.pageUrl || required_error?.page_url?.[0]}
-                                                        onChange={(e) => handleChange(e, setPageURL)}
-                                                    />
-                                                </div>
-                                            </>
-                                    }
-
-
-
-
-                                    {
-                                        pageType=== "Cloning Existing Design"?
+                                    {pageType === "Cloning Existing Design" ? (
                                         <>
                                             <div className="col-12 col-md-6">
                                                 <Input
@@ -797,7 +899,12 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                                     required={true}
                                                     value={numberOfPage}
                                                     error={err?.numberOfPage}
-                                                    onChange={(e) => handleChange(e, setNumberOfPage)}
+                                                    onChange={(e) =>
+                                                        handleChange(
+                                                            e,
+                                                            setNumberOfPage
+                                                        )
+                                                    }
                                                 />
                                             </div>
 
@@ -810,18 +917,22 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                                     name="exiting_project_url"
                                                     required={true}
                                                     value={existingDesignLink}
-                                                    error={err?.existingDesignLink}
-                                                    onChange={(e) => handleChange(e, setExistingDesignLink)}
+                                                    error={
+                                                        err?.existingDesignLink
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleChange(
+                                                            e,
+                                                            setExistingDesignLink
+                                                        )
+                                                    }
                                                 />
                                             </div>
-                                        </> : null
-                                    }
+                                        </>
+                                    ) : null}
                                 </React.Fragment>
-                             :null
-                           }
+                            ) : null}
                             {/*  */}
-
-
 
                             <div className="col-12 col-md-6">
                                 <PrioritySelection
@@ -829,7 +940,6 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                     setSelected={setPriority}
                                 />
                             </div>
-
 
                             {/* Set Estimate Time */}
                             {/* <div className="col-12 col-md-6">
@@ -875,9 +985,6 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 </div>
                             </div> */}
 
-
-
-
                             <div className="col-12">
                                 <div className="form-group my-3">
                                     <label htmlFor=""> Description </label>
@@ -890,8 +997,22 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                         />
                                     </div>
 
-                                    {required_error?.description?.[0] && <span className="text-danger"><small> {required_error?.description?.[0]} </small></span>}
-                                    {err?.description && <span className="text-danger"><small> {err?.description} </small></span>}
+                                    {required_error?.description?.[0] && (
+                                        <span className="text-danger">
+                                            <small>
+                                                {" "}
+                                                {
+                                                    required_error
+                                                        ?.description?.[0]
+                                                }{" "}
+                                            </small>
+                                        </span>
+                                    )}
+                                    {err?.description && (
+                                        <span className="text-danger">
+                                            <small> {err?.description} </small>
+                                        </span>
+                                    )}
                                 </div>
                             </div>
 
@@ -902,8 +1023,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 />
                             </div>
 
-
-                           {/* {err?.violationWord ? <div className="alert alert-danger mt-2 w-100 text-center" dangerouslySetInnerHTML={{__html: err?.violationWord}} />: null} */}
+                            {/* {err?.violationWord ? <div className="alert alert-danger mt-2 w-100 text-center" dangerouslySetInnerHTML={{__html: err?.violationWord}} />: null} */}
 
                             <div className="col-12 mt-3 pb-3">
                                 <div className="d-flex align-items-center justify-content-end">

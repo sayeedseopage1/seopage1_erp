@@ -53,6 +53,7 @@ use App\Models\PMAssign;
 use App\Models\SalesCount;
 use App\Models\Project;
 use Toastr;
+use Auth;
 
 
 
@@ -499,6 +500,10 @@ class EmployeeController extends AccountBaseController
      */
     public function show($id)
     {
+        if(Auth::user()->role_id != 1)
+        {
+            abort(403);
+        }
         $this->employee = User::with(['employeeDetail.designation', 'employeeDetail.department', 'employeeDetail.reportingTo', 'country', 'emergencyContacts', 'reportingTeam' => function($query) {
             $query->join('users', 'users.id', '=', 'employee_details.user_id');
             $query->where('users.status', '=', 'active');

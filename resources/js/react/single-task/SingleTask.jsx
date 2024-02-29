@@ -33,6 +33,8 @@ import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
 import { convertTime } from "../utils/converTime";
 
+import axios from "axios";
+import { useGetTaskForTotalTimeQuery } from "../services/api/tasksApiSlice";
 const SingleTaskPage = () => {
     const { task: Task } = useSelector((s) => s.subTask);
     const { throwError } = useErrorHandler();
@@ -46,7 +48,81 @@ const SingleTaskPage = () => {
 
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
-  
+    const [taskForTimeLog, setTaskForTimeLog] = React.useState({});
+    const [totalTime, setTotalTime] = React.useState("");
+    const taskId = task?.id;
+
+    const { data: taskForTime } = useGetTaskForTotalTimeQuery(taskId);
+
+    useEffect(() => {
+        setTaskForTimeLog(taskForTime);
+    }, [taskForTime]);
+
+    const calculateTotalTime = (task) => {
+        if (task) {
+            console.log("task in function", task);
+            let totalTimeInMinutes = 0;
+            const parentTimeArray = task?.parent_task_time_log?.split(" ");
+            const subTimeArray = task?.sub_task_time_log?.split(" ");
+
+            // console.log("parent time array", parentTimeArray);
+            // console.log("sub time array", subTimeArray);
+
+            console.log("length", task?.subtask.length);
+            if (task?.subtask.length === 0) {
+                if (parentTimeArray && parentTimeArray.length >= 1) {
+                    totalTimeInMinutes += parseInt(parentTimeArray[0]) * 60;
+                    totalTimeInMinutes += parseInt(
+                        parentTimeArray[2] === ""
+                            ? 0
+                            : parseInt(parentTimeArray[2])
+                    );
+
+                    // console.log("ttim in lenfth 0", totalTimeInMinutes);
+                }
+            } else {
+                if (
+                    parentTimeArray &&
+                    parentTimeArray.length >= 1 &&
+                    subTimeArray &&
+                    subTimeArray.length >= 1
+                ) {
+                    totalTimeInMinutes += parseInt(parentTimeArray[0]) * 60;
+                    totalTimeInMinutes += parseInt(
+                        parentTimeArray[2] === ""
+                            ? 0
+                            : parseInt(parentTimeArray[2])
+                    );
+
+                    totalTimeInMinutes += parseInt(subTimeArray[0]) * 60;
+                    if (subTimeArray[0]) {
+                        totalTimeInMinutes += parseInt(
+                            subTimeArray[2] === ""
+                                ? 0
+                                : parseInt(subTimeArray[2])
+                        );
+                    }
+                }
+            }
+
+            // console.log("total time in minutes", totalTimeInMinutes);
+            const hours = Math.floor(totalTimeInMinutes / 60);
+            const minutes = totalTimeInMinutes % 60;
+
+            // console.log("parent time array", parentTimeArray);
+            // console.log("sub time array", subTimeArray);
+
+            setTotalTime(`${hours} hrs ${minutes} mins`);
+        }
+    };
+
+    useEffect(() => {
+        if (taskForTimeLog) {
+            calculateTotalTime(taskForTimeLog.task);
+        }
+    }, [taskForTimeLog]);
+
+    // console.log(totalTime);
 
     useEffect(() => {
         (() => {
@@ -79,7 +155,7 @@ const SingleTaskPage = () => {
 
     // console.log({ task });
 
-    if (!task) return null;     
+    if (!task) return null;
 
     return (
         <div className="position-relative">
@@ -139,7 +215,11 @@ const SingleTaskPage = () => {
                                             </div>
                                         )}
                                         <Switch>
-                                            <Switch.Case condition={loggedUser.getRoleId() !== 5}>
+                                            <Switch.Case
+                                                condition={
+                                                    loggedUser.getRoleId() !== 5
+                                                }
+                                            >
                                                 <div className="sp1_st-list-item">
                                                     <div className="sp1_st-list-item-head">
                                                         Project :{" "}
@@ -395,26 +475,51 @@ const SingleTaskPage = () => {
                                                     </div>
                                                 </div>
 
-
-
                                                 <Switch>
-                                                    <Switch.Case condition={ task?.taskTypeDetails.taskType === 'New Page Design'}>
+                                                    <Switch.Case
+                                                        condition={
+                                                            task
+                                                                ?.taskTypeDetails
+                                                                .taskType ===
+                                                            "New Page Design"
+                                                        }
+                                                    >
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
                                                                 Page Type:{" "}
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                <span className="d-block">{task?.pageType ?? "--"}</span>
-                                                                <Switch.Case condition={task?.taskTypeDetails.status === 2}>
+                                                                <span className="d-block">
+                                                                    {task?.pageType ??
+                                                                        "--"}
+                                                                </span>
+                                                                <Switch.Case
+                                                                    condition={
+                                                                        task
+                                                                            ?.taskTypeDetails
+                                                                            .status ===
+                                                                        2
+                                                                    }
+                                                                >
                                                                     <Popover>
                                                                         <Popover.Button>
-                                                                            <span className="badge badge-warning"> Primary page request denied </span>
+                                                                            <span className="badge badge-warning">
+                                                                                {" "}
+                                                                                Primary
+                                                                                page
+                                                                                request
+                                                                                denied{" "}
+                                                                            </span>
                                                                         </Popover.Button>
-                                                                        <Popover.Panel >
+                                                                        <Popover.Panel>
                                                                             <div className="single_task_revision_popover_panel">
                                                                                 <div
                                                                                     className="sp1_ck_content"
-                                                                                    dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
+                                                                                    dangerouslySetInnerHTML={{
+                                                                                        __html: task
+                                                                                            ?.taskTypeDetails
+                                                                                            .comment,
+                                                                                    }}
                                                                                 />
                                                                             </div>
                                                                         </Popover.Panel>
@@ -428,7 +533,8 @@ const SingleTaskPage = () => {
                                                                 Page Name:{" "}
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                {task?.pageName ?? "--"}
+                                                                {task?.pageName ??
+                                                                    "--"}
                                                             </div>
                                                         </div>
 
@@ -438,34 +544,68 @@ const SingleTaskPage = () => {
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 {task?.pageUrl ? (
-                                                                    <a href={task?.pageUrl}>
+                                                                    <a
+                                                                        href={
+                                                                            task?.pageUrl
+                                                                        }
+                                                                    >
                                                                         ( view )
                                                                     </a>
                                                                 ) : (
-                                                                    <span>--</span>
+                                                                    <span>
+                                                                        --
+                                                                    </span>
                                                                 )}
                                                             </div>
                                                         </div>
                                                     </Switch.Case>
 
-
-                                                    <Switch.Case condition={ task?.taskTypeDetails.taskType === 'Cloning Existing Design'}>
+                                                    <Switch.Case
+                                                        condition={
+                                                            task
+                                                                ?.taskTypeDetails
+                                                                .taskType ===
+                                                            "Cloning Existing Design"
+                                                        }
+                                                    >
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
                                                                 Page Type:{" "}
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                <span>{task?.taskTypeDetails?.taskTypeName ?? "--"}</span>
-                                                                <Switch.Case condition={task?.taskTypeDetails.status === 2}>
+                                                                <span>
+                                                                    {task
+                                                                        ?.taskTypeDetails
+                                                                        ?.taskTypeName ??
+                                                                        "--"}
+                                                                </span>
+                                                                <Switch.Case
+                                                                    condition={
+                                                                        task
+                                                                            ?.taskTypeDetails
+                                                                            .status ===
+                                                                        2
+                                                                    }
+                                                                >
                                                                     <Popover>
                                                                         <Popover.Button>
-                                                                            <span className="badge badge-warning"> Primary page request denied </span>
+                                                                            <span className="badge badge-warning">
+                                                                                {" "}
+                                                                                Primary
+                                                                                page
+                                                                                request
+                                                                                denied{" "}
+                                                                            </span>
                                                                         </Popover.Button>
-                                                                        <Popover.Panel >
+                                                                        <Popover.Panel>
                                                                             <div className="single_task_revision_popover_panel">
                                                                                 <div
                                                                                     className="sp1_ck_content"
-                                                                                    dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
+                                                                                    dangerouslySetInnerHTML={{
+                                                                                        __html: task
+                                                                                            ?.taskTypeDetails
+                                                                                            .comment,
+                                                                                    }}
                                                                                 />
                                                                             </div>
                                                                         </Popover.Panel>
@@ -479,43 +619,71 @@ const SingleTaskPage = () => {
                                                                 Number of Pages:{" "}
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                {task?.taskTypeDetails?.numberOfPages ?? "--"}
+                                                                {task
+                                                                    ?.taskTypeDetails
+                                                                    ?.numberOfPages ??
+                                                                    "--"}
                                                             </div>
                                                         </div>
 
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
-                                                                Existing Design Link:{" "}
+                                                                Existing Design
+                                                                Link:{" "}
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                {task?.taskTypeDetails?.existingDesignLink ?
-                                                                    <a href={task?.taskTypeDetails?.existingDesignLink}>
-                                                                        {task?.taskTypeDetails?.existingDesignLink}
-                                                                    </a>:
+                                                                {task
+                                                                    ?.taskTypeDetails
+                                                                    ?.existingDesignLink ? (
+                                                                    <a
+                                                                        href={
+                                                                            task
+                                                                                ?.taskTypeDetails
+                                                                                ?.existingDesignLink
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            task
+                                                                                ?.taskTypeDetails
+                                                                                ?.existingDesignLink
+                                                                        }
+                                                                    </a>
+                                                                ) : (
                                                                     "--"
-                                                                }
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </Switch.Case>
 
-
-                                                    <Switch.Case condition={task?.taskTypeDetails?.taskType === 'Others'}>
+                                                    <Switch.Case
+                                                        condition={
+                                                            task
+                                                                ?.taskTypeDetails
+                                                                ?.taskType ===
+                                                            "Others"
+                                                        }
+                                                    >
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
-                                                               Other Task Type:
+                                                                Other Task Type:
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                            {task?.taskTypeDetails?.taskTypeOther ?? '--'}
+                                                                {task
+                                                                    ?.taskTypeDetails
+                                                                    ?.taskTypeOther ??
+                                                                    "--"}
                                                             </div>
                                                         </div>
-
 
                                                         <div className="sp1_st-list-item">
                                                             <div className="sp1_st-list-item-head">
                                                                 Page Name:
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                {task?.taskTypeDetails?.pageName ?? '--'}
+                                                                {task
+                                                                    ?.taskTypeDetails
+                                                                    ?.pageName ??
+                                                                    "--"}
                                                             </div>
                                                         </div>
                                                         <div className="sp1_st-list-item">
@@ -523,16 +691,28 @@ const SingleTaskPage = () => {
                                                                 Page URL:
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
-                                                                {task?.taskTypeDetails?.pageUrl ?
-                                                                    <a href={task?.taskTypeDetails?.pageUrl}>
-                                                                        {task?.taskTypeDetails?.pageUrl}
-                                                                    </a>:
+                                                                {task
+                                                                    ?.taskTypeDetails
+                                                                    ?.pageUrl ? (
+                                                                    <a
+                                                                        href={
+                                                                            task
+                                                                                ?.taskTypeDetails
+                                                                                ?.pageUrl
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            task
+                                                                                ?.taskTypeDetails
+                                                                                ?.pageUrl
+                                                                        }
+                                                                    </a>
+                                                                ) : (
                                                                     "--"
-                                                                }
+                                                                )}
                                                             </div>
                                                         </div>
                                                     </Switch.Case>
-
                                                 </Switch>
                                             </>
                                         )}
@@ -705,29 +885,65 @@ const SingleTaskPage = () => {
                                         expendable={false}
                                         title="Task Descriptions"
                                     >
-                                        <Guideline text={task?.description} task={task} type="TASK_DESCRIPTION" />
-                                        { _.size(task?.attachments) > 0 ?
+                                        <Guideline
+                                            text={task?.description}
+                                            task={task}
+                                            type="TASK_DESCRIPTION"
+                                        />
+                                        {_.size(task?.attachments) > 0 ? (
                                             <div className="mt-3">
-                                                <h4 className="mb-2">Task Attachments: </h4>
+                                                <h4 className="mb-2">
+                                                    Task Attachments:{" "}
+                                                </h4>
                                                 <FileUploader>
-                                                    {_.map(task?.attachments, attachment => (
-                                                        attachment?.task_file_name ?
-                                                        <FileUploader.Preview
-                                                            key={attachment?.task_file_id}
-                                                            fileName={attachment?.task_file_name}
-                                                            downloadAble={true}
-                                                            deleteAble={false}
-                                                            downloadUrl={attachment?.task_file_url}
-                                                            previewUrl={attachment?.task_file_url}
-                                                            fileType={_.includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment?.task_file_icon)? 'images' : 'others'}
-                                                            classname="comment_file"
-                                                            ext={attachment?.task_file_icon}
-                                                        /> : null
-                                                    ))}
+                                                    {_.map(
+                                                        task?.attachments,
+                                                        (attachment) =>
+                                                            attachment?.task_file_name ? (
+                                                                <FileUploader.Preview
+                                                                    key={
+                                                                        attachment?.task_file_id
+                                                                    }
+                                                                    fileName={
+                                                                        attachment?.task_file_name
+                                                                    }
+                                                                    downloadAble={
+                                                                        true
+                                                                    }
+                                                                    deleteAble={
+                                                                        false
+                                                                    }
+                                                                    downloadUrl={
+                                                                        attachment?.task_file_url
+                                                                    }
+                                                                    previewUrl={
+                                                                        attachment?.task_file_url
+                                                                    }
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            [
+                                                                                "png",
+                                                                                "jpeg",
+                                                                                "jpg",
+                                                                                "svg",
+                                                                                "webp",
+                                                                                "gif",
+                                                                            ],
+                                                                            attachment?.task_file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={
+                                                                        attachment?.task_file_icon
+                                                                    }
+                                                                />
+                                                            ) : null
+                                                    )}
                                                 </FileUploader>
                                             </div>
-                                        : null
-                                        }
+                                        ) : null}
                                     </Accordion>
                                 </div>
                             </div>
@@ -824,9 +1040,7 @@ const SingleTaskPage = () => {
                             <div className="d-flex align-items-center mb-2">
                                 <div className="">Total Hours Logged: </div>
                                 <div className="d-flex align-items-center font-weight-bold pl-2">
-                                    {(task.isSubtask
-                                        ? task?.parentTaskTimeLog
-                                        : task?.totalTimeLog) || "--"}
+                                    {totalTime ? totalTime : "0 hrs 0 mins"}
                                 </div>
                             </div>
                         </div>

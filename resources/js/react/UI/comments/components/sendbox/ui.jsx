@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 // styled components
 export const SendboxWrapper = styled.div`
     width: 100%;
     display: flex;
     align-items: flex-end;
-    gap: 1rem; 
+    gap: 1rem;
 `;
 
 export const EditorContainer = styled.div`
@@ -109,7 +109,7 @@ export const FileUploadButton = styled.button`
         width: 100%;
         height: 100%;
         opacity: 0;
-      cursor: pointer;
+        cursor: pointer;
     }
 
     & > svg {
@@ -156,6 +156,7 @@ export const RightButtonGroup = styled.div`
 
 export const EditorWrapperWithImageAndToolbar = styled.div`
     width: 100%;
+    max-width: 80%;
 `;
 
 export const FilesContainer = styled.div`
@@ -168,9 +169,8 @@ export const FilesContainer = styled.div`
     border-radius: 10px 10px 0 0;
 `;
 
- 
 export const FileItem = styled.div`
-    width: 69px; 
+    width: 69px;
     height: 72px;
     background-color: #fff;
     border-radius: 4px;
@@ -196,51 +196,70 @@ export const FileItemInput = styled(FileItem)`
         height: 100%;
         opacity: 0;
         z-index: 2;
-      cursor: pointer;
+        cursor: pointer;
     }
 
-    &:hover{
-      cursor: pointer;
-      background-color: #f8f8f8;
+    &:hover {
+        cursor: pointer;
+        background-color: #f8f8f8;
     }
 `;
-
 
 export const RemoveFile = styled.button`
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background-color: white;
-  box-shadow: 0 0 3px rgb(0 0 0 / 10%);
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 0 3px rgb(0 0 0 / 10%);
 `;
 
-
-export const ToolbarContainer = styled.div`
-  
-`;
-
+export const ToolbarContainer = styled.div``;
 
 export const AnchorLinkButton = styled.button`
-  font-size: 24px;
-  border: 0;
-  padding-top: 5px;
-  vertical-align: bottom;
-  width: 36px;
-  height: 32px;
-  border-radius: 4px;
-  cursor: pointer; 
-  color: #777; 
-    background-color: transparent; 
+    font-size: 24px;
+    border: 0;
+    padding-top: 5px;
+    vertical-align: bottom;
+    width: 36px;
+    height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #777;
+    background-color: transparent;
 
-  &:hover{
-    color: #f75f19;
-  }
+    &:hover {
+        color: #f75f19;
+    }
 `;
-
-
 
 // mention Comment
 export const MentionComment = styled.div``;
+
+export const ProgressBarContainer = styled.div`
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin: 10px 0;
+`;
+
+export const ProgressBar = styled.div`
+    height: 25px;
+    background-color: #4caf50;
+    width: 0;
+    padding: 4px;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+    text-align: "center";
+`;
+
+export const ServerMessage = styled.div`
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    background-color: #daedf8;
+    padding-top: 10px;
+`;

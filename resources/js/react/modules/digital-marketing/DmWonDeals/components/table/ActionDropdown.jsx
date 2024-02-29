@@ -56,7 +56,7 @@ const ActionDropdown = ({ ...rest }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu placement="bottom-end">
-                    <Dropdown.Item
+                    {/* <Dropdown.Item
                         onClick={ () => handleRedirection(
                             `/account/deal-url/${rest?.row?.original?.id}`
                         )}
@@ -64,7 +64,7 @@ const ActionDropdown = ({ ...rest }) => {
                     >
                         <i className="fa-regular fa-file" />
                         Client Form
-                    </Dropdown.Item>
+                    </Dropdown.Item> */}
 
                     {_.includes([1, 7], auth.getRoleId()) && (
                         <Dropdown.Item

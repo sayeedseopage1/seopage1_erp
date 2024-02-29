@@ -115,7 +115,9 @@ class PointsController extends AccountBaseController
 
     public function get_point_table_data(Request $request)
     {
-        $data = CashPoint::select('*');
+        $data = CashPoint::select('cash_points.*')
+       
+        ;
 
         // if ($request->department_id != '') {
         //     $user = Seopage1Team::where('department_id', $request->department_id)->get();
@@ -141,30 +143,58 @@ class PointsController extends AccountBaseController
                 }
             //}
 
-            $data = $data->whereIn('user_id', $user_list);
+            $data = $data->whereIn('cash_points.user_id', $user_list);
         }
         if ($request->project_id != '') {
-            $data = $data->where('project_id', $request->project_id);
+            $data = $data->where('cash_points.project_id', $request->project_id);
         }
         if ($request->user_id != '') {
-            $data = $data->where('user_id', $request->user_id);
+            $data = $data->where('cash_points.user_id', $request->user_id);
            
         }
         if ($request->start_date != '') {
-            $data = $data->where(\DB::raw('DATE(created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
+            $data = $data->where(\DB::raw('DATE(cash_points.created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
         }
 
         if ($request->end_date != '') {
-            $data = $data->where(\DB::raw('DATE(created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
+            $data = $data->where(\DB::raw('DATE(cash_points.created_at)'), '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
         }
+        if ($request->client_id != '') {
+            $project= Project::where('client_id',$request->client_id)->first();
+           
+            $data = $data->where('cash_points.project_id', $project->id);
+            
+            
+        }
+        if ($request->bonus_type != '') {
+           // dd($request->bonus_type);
+           if($request->bonus_type == 'Bonus')
+           {
+            $data = $data->where('cash_points.project_id',null);
+
+           }
+          else
+           {
+            $data = $data->where('cash_points.project_id', '!=',null);
+
+           }
+           if ($request->bonus_type == 'Authorization Bonus') {
+            $data = $data->where('cash_points.bonus_type', 'Authorization Bonus')->where('cash_points.bonus_type','!=',null);
+        
+        }
+          
+            
+        }
+
         if(Auth::user()->role_id == 1)
         {
-            $data = $data->orderBy('id', 'desc')->where('points','!=',0)->orderBy('id', 'desc')->get();
+            $data = $data->orderBy('cash_points.id', 'desc')->where('cash_points.points','!=',0)->orderBy('cash_points.id', 'desc')->get();
         }elseif(Auth::user()->role_id == 8 ||Auth::user()->role_id == 7 )
         {
-            $data = $data->where('user_id',Auth::id())->where('points','!=',0)->orderBy('id', 'desc')->get();
+            $data = $data->where('cash_points.user_id',Auth::id())->where('cash_points.points','!=',0)->orderBy('cash_points.id', 'desc')->get();
 
         } 
+       
         //dd($data);
         return response()->json($data);
     }

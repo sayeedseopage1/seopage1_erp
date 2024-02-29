@@ -17,13 +17,22 @@ $project->members->pluck('user_id')->toArray(); @endphp
 }
 
 </style>
+@php
+    $pdExtension = App\Models\ProjectDeadlineExtension::where('project_id',$project->id)->first();
+@endphp
 <div class="d-lg-flex">
     <div class="project-leftxx w-100 py-0 py-lg-5 py-md-0" id="project-left">
         @if(Auth::user()->role_id == 4)
             <div style="margin-bottom: -40px;">
+                @if ($pdExtension !=null && $pdExtension->status ==1)
+                <button type="button" class="btn btn-warning"> 
+                    Pending
+                </button>
+                @else
                 <button type="button" class="btn btn-success project-deadline-extension" data-project-id="{{$project->id}}"> 
                     Extend Deadline
                 </button>
+                @endif
             </div>
         @endif
         @if(Auth::user()->role_id == 1)
@@ -252,9 +261,12 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <div class="p-end-date">
                         <h5 class="text-lightest f-14 font-weight-normal">@lang('modules.projects.deadline')</h5>
                         <p class="f-15 mb-0">
-                            {{ !is_null($project->deadline) ? $project->deadline->format(global_setting()->date_format) : '--' }}
+                            <a href="#" data-toggle="modal" data-target="#d_History{{$project->id}}">
+                                {{ !is_null($project->deadline) ? $project->deadline->format(global_setting()->date_format) : '--' }}
+                            </a>
                         </p>
                     </div>
+                    @include('projects.modals.deadline_history')
                     <!-- PROGRESS END DATE END -->
                 </x-cards.data>
             </div>
@@ -1295,6 +1307,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
         </div>
         @endif
+        @if(Auth::user()->role_id != 6)
         <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
@@ -1307,34 +1320,34 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                             $milestones= App\Models\ProjectMilestone::where('project_id',$project->id)->get();
                              ?>
-          <table class="table table-responsive table-bordered table-striped">
-       <thead class="thead-dark">
-         <tr>
-           <th scope="col">#</th>
-           <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
-           <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
-           <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
-            <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
-         </tr>
-       </thead>
-       <tbody>
-         @foreach($milestones as $milestone)
-         <tr>
-           <th class="pl-20">{{$loop->index+1}}</th>
-           <td>{{$milestone->milestone_title}}</td>
-           <td>{{$milestone->milestone_type}}</td>
-           <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
-           <td>@if($milestone->summary != null)
-             {!!$milestone->summary!!}
-           @else
-           --
-           @endif
-          </td>
-         </tr>
-         @endforeach
+                                        <table class="table table-responsive table-bordered table-striped">
+                                            <thead class="thead-dark">
+                                        <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col" class="col-3 col-sm-2">Milestone Name</th>
+                                        <th scope="col" class="col-3 col-sm-2">Milestone Type</th>
+                                        <th scope="col" class="col-3 col-sm-2">Milestone Cost</th>
+                                            <th scope="col" class="col-6 col-md-8">Milestone Summary</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($milestones as $milestone)
+                                        <tr>
+                                        <th class="pl-20">{{$loop->index+1}}</th>
+                                        <td>{{$milestone->milestone_title}}</td>
+                                        <td>{{$milestone->milestone_type}}</td>
+                                        <td>{{$milestone->actual_cost}}{{$milestone->original_currency->currency_symbol}}</td>
+                                        <td>@if($milestone->summary != null)
+                                            {!!$milestone->summary!!}
+                                        @else
+                                        --
+                                        @endif
+                                        </td>
+                                        </tr>
+                                        @endforeach
 
-       </tbody>
-     </table>
+                                    </tbody>
+                                                    </table>
 
 
 
@@ -1345,6 +1358,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
+        @endif
         <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">

@@ -116,7 +116,6 @@ const AssigneeRevisionToDev = ({
         onBack();
     };
 
-
     return (
         <React.Fragment>
             <form action="">
@@ -254,14 +253,14 @@ export default AssigneeRevisionToDev;
 const NextAndContinueButton = ({ onClick, isLoading }) => {
     if (!isLoading) {
         return (
-            <Button className="ml-auto" onClick={onClick}>
+            <Button className="m-auto" onClick={onClick}>
                 {" "}
                 Continue
             </Button>
         );
     } else {
         return (
-            <Button className="cursor-processing ml-auto">
+            <Button className="cursor-processing m-auto">
                 <div
                     className="spinner-border text-white mr-2"
                     role="status"
@@ -323,7 +322,12 @@ const SubtaskSelectionMenu = ({ task, subTasks, setSubtasks }) => {
                             >
                                 {({ selected }) => (
                                     <React.Fragment>
-                                        <div>{s.title} <span className="badge badge-success">{s.assigned_to_name}</span></div>
+                                        <div>
+                                            {s.title}{" "}
+                                            <span className="badge badge-success">
+                                                {s.assigned_to_name}
+                                            </span>
+                                        </div>
                                         {selected && (
                                             <div>
                                                 <i className="fa-solid fa-check"></i>

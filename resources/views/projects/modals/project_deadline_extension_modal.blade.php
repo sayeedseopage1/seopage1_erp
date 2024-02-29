@@ -77,8 +77,12 @@
                     <label class="form-check-label ml-2 mt-1" for="extension3">Couldn't Complete On Time</label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="extension" id="extension4" value="Others">
-                    <label class="form-check-label ml-2 mt-1" for="extension4">Others</label>
+                    <input class="form-check-input" type="radio" name="extension" id="extension4" value="Upsale/Cross sale">
+                    <label class="form-check-label ml-2 mt-1" for="extension4">Upsale/Cross sale</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="extension" id="extension5" value="Others">
+                    <label class="form-check-label ml-2 mt-1" for="extension5">Others</label>
                 </div>
                 <span id="extension_error" class="text-danger"></span>
             </div>

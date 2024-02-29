@@ -9,8 +9,6 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import _ from "lodash";
 
-
-
 const ActionDropdown = ({ ...rest }) => {
     const auth = useAuth();
 
@@ -45,8 +43,10 @@ const ActionDropdown = ({ ...rest }) => {
 
     // handle redirection
     const handleRedirection = (url) => {
-        window.location.href = url;
+        window.open(url, "_blank");
     };
+
+    // console.log(rest?.row?.original.authorization_status === 0 && rest?.row?.original.id )
 
     return (
         <React.Fragment>
@@ -56,19 +56,37 @@ const ActionDropdown = ({ ...rest }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu placement="bottom-end">
-                    <Dropdown.Item
-                        onClick={ () => handleRedirection(
-                            `/account/deal-url/${rest?.row?.original?.id}`
-                        )}
+                    {/* <Dropdown.Item
+                        onClick={() =>
+                            handleRedirection(
+                                `/account/deal-url/${rest?.row?.original?.id}`
+                            )
+                        }
                         className={styles.dropdownItem}
                     >
                         <i className="fa-regular fa-file" />
                         Client Form
+                    </Dropdown.Item> */}
+                    {/* View Won Deal */}
+                    <Dropdown.Item
+                        onClick={() =>
+                            handleRedirection(
+                                `/account/contracts/${rest?.row?.original?.id}`
+                            )
+                        }
+                        className={styles.dropdownItem}
+                    >
+                        <i className="fa-regular fa-eye" />
+                        View Won Deal
                     </Dropdown.Item>
 
-                    {_.includes([1, 7], auth.getRoleId()) && (
+                    {_.includes([1, 7, 8], auth.getRoleId()) && (
                         <Dropdown.Item
-                            onClick={() => handleRedirection(`/deals/details/edit/${rest?.row?.original?.id}`)}
+                            onClick={() =>
+                                handleRedirection(
+                                    `/deals/details/edit/${rest?.row?.original?.id}`
+                                )
+                            }
                             className={styles.dropdownItem}
                         >
                             <i className="fa-regular fa-pen-to-square" />
@@ -76,16 +94,41 @@ const ActionDropdown = ({ ...rest }) => {
                         </Dropdown.Item>
                     )}
 
+                    {/* Authorization Need */}
+                    {rest?.row?.original.authorization_status === 2 &&
+                        auth.getRoleId() === 8 && (
+                            <Dropdown.Item
+                                onClick={() =>
+                                    handleRedirection(
+                                        `/deals/request/authorization/${rest?.row?.original?.id}`
+                                    )
+                                }
+                                className={`${styles.dropdownItem} bg-warning`}
+                            >
+                                <i className="fa-regular fa-user" />
+                                Authorization Need
+                            </Dropdown.Item>
+                        )}
                     {/* delete lead */}
-                    {auth.getRoleId() === 1 && rest?.row?.original?.status?.toLowerCase() !== 'pending' && (
-                        <Dropdown.Item
-                            onClick={() => handleRedirection(`/account/contracts/${rest?.row?.original?.id}`)}
-                            className={styles.dropdownItem}
-                        >
-                            <i className="fa-regular fa-user" />
-                            Authorization Details
-                        </Dropdown.Item>
-                    )}
+                    {(auth.getRoleId() === 1 ||
+                        auth.getRoleId() === 4 ||
+                        auth.getRoleId() === 8) &&
+                        rest?.row?.original.authorization_status === 1 &&
+                        rest?.row?.original.status ===
+                            ("pending" || "Accepted") && (
+
+                            <Dropdown.Item
+                                onClick={() =>
+                                    handleRedirection(
+                                        `/account/contracts/${rest?.row?.original?.id}`
+                                    )
+                                }
+                                className={`${styles.dropdownItem} bg-success`}
+                            >
+                                <i className="fa-regular fa-user" />
+                                Authorization Details
+                            </Dropdown.Item>
+                        )}
                 </Dropdown.Menu>
             </Dropdown>
         </React.Fragment>

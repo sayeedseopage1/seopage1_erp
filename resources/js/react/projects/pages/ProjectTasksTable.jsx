@@ -45,7 +45,8 @@ const ProjectTasks = () => {
         React.useState(false);
     const [showProjectGuidelineForm, setShowProjectGuidelineForm] =
         React.useState(false);
-    const [showProjectGuidelineEditForm, setShowProjectGuidelineEditForm] = React.useState(null);
+    const [showProjectGuidelineEditForm, setShowProjectGuidelineEditForm] =
+        React.useState(null);
     const [hasPMGuideline, setHasPMGuideline] = React.useState(false);
     const [getAllSubtask, { isFetching: subtaskFetching }] =
         useLazyGetAllSubtaskQuery();
@@ -61,7 +62,11 @@ const ProjectTasks = () => {
 
     const projectId = params?.projectId;
     const auth = new User(window?.Laravel?.user);
-    const [columnVisibility, setColumnVisibility] = React.useState(new Object(projectTaskTableDefaultVisibleColumns(auth, tableType.toLowerCase())));
+    const [columnVisibility, setColumnVisibility] = React.useState(
+        new Object(
+            projectTaskTableDefaultVisibleColumns(auth, tableType.toLowerCase())
+        )
+    );
 
     // handle table filter
     const onFilter = (query) => {
@@ -118,42 +123,50 @@ const ProjectTasks = () => {
         if (deliverable) {
             const guideline = await getProjectGuidelineStaus(projectId);
             if (guideline) {
-                const projectGuidelineStatus = await isTaskGuidelineAuthorized(projectId);
-               if(projectGuidelineStatus){
-                if(projectGuidelineStatus.is_allow){
-                    setShowTaskCreationForm(true)
-                }else{
-                    toast.warn(projectGuidelineStatus.message, {
-                        position: 'bottom-right',
-                    });
+                const projectGuidelineStatus = await isTaskGuidelineAuthorized(
+                    projectId
+                );
+                if (projectGuidelineStatus) {
+                    if (projectGuidelineStatus.is_allow) {
+                        setShowTaskCreationForm(true);
+                    } else {
+                        toast.warn(projectGuidelineStatus.message, {
+                            position: "bottom-right",
+                        });
 
-                    setShowProjectGuidelineEditForm({...projectGuidelineStatus, open: true});
+                        setShowProjectGuidelineEditForm({
+                            ...projectGuidelineStatus,
+                            open: true,
+                        });
+                    }
                 }
-               }
             } else setShowProjectGuidelineForm(true);
         }
     };
 
     const isFetching = subtaskFetching || taskFetching;
 
-    let _SubTasksTableColumns =  SubTasksTableColumns;
+    let _SubTasksTableColumns = SubTasksTableColumns;
 
-    if(auth.getRoleId() !== 6) {
-        _SubTasksTableColumns = _.filter(_SubTasksTableColumns, col => col.id !== 'action');
+    if (auth.getRoleId() !== 6) {
+        _SubTasksTableColumns = _.filter(
+            _SubTasksTableColumns,
+            (col) => col.id !== "action"
+        );
     }
 
     const singleTask = _.head(tasks);
 
-
     // handle refresh button
     const handleRefresh = () => {
         onFilter(filter);
-    }
+    };
 
     return (
         <React.Fragment>
             {/* task creation form */}
             <TaskCreationForm
+                handleRefresh={handleRefresh}
                 isOpen={showTaskCreationForm}
                 close={() => setShowTaskCreationForm(false)}
                 projectName={singleTask?.project_name}
@@ -170,7 +183,7 @@ const ProjectTasks = () => {
                 close={() => setShowProjectGuidelineForm(false)}
             />
 
-            {showProjectGuidelineEditForm?.open &&
+            {showProjectGuidelineEditForm?.open && (
                 <EditProjectManagerGuideline
                     projectId={params.projectId}
                     isOpen={showProjectGuidelineEditForm?.open ?? false}
@@ -178,7 +191,7 @@ const ProjectTasks = () => {
                     openTaskForm={() => setShowTaskCreationForm(true)}
                     close={() => setShowProjectGuidelineEditForm(null)}
                 />
-            }
+            )}
 
             {/* end task creation form */}
             <div className="sp1_tlr_container">
@@ -235,7 +248,9 @@ const ProjectTasks = () => {
                                     </SubmitButton>
                                 )}
 
-                            <TaskAuthorization filter={{type:'project', projectId }}/>
+                            <TaskAuthorization
+                                filter={{ type: "project", projectId }}
+                            />
                         </div>
 
                         <div className="sp1_table_tab">
@@ -262,59 +277,69 @@ const ProjectTasks = () => {
                             {/* refresh button */}
                             <div>
                                 <RefreshButton onClick={handleRefresh}>
-                                    {isFetching ? 
-                                        <Loader title="" /> :
+                                    {isFetching ? (
+                                        <Loader title="" />
+                                    ) : (
                                         <i className="fa-solid fa-arrows-rotate"></i>
-                                    }
+                                    )}
                                 </RefreshButton>
                             </div>
                             {/* column setting button */}
                             <div>
                                 <TableColumnSetting
-                                    tableName={tableType.toLowerCase() === "tasks" ? "projectTasksTable": "projectSubTasksTable"}
-                                    columns = {tableType.toLowerCase() === "tasks" ? ProjectTableColumns : _SubTasksTableColumns}
+                                    tableName={
+                                        tableType.toLowerCase() === "tasks"
+                                            ? "projectTasksTable"
+                                            : "projectSubTasksTable"
+                                    }
+                                    columns={
+                                        tableType.toLowerCase() === "tasks"
+                                            ? ProjectTableColumns
+                                            : _SubTasksTableColumns
+                                    }
                                     columnVisibility={columnVisibility}
                                     setColumnVisibility={setColumnVisibility}
                                 />
                             </div>
-
                         </div>
                     </div>
                     {/* table nav bar */}
-                    {
-                        auth?.getRoleId() === 1 &&
+                    {auth?.getRoleId() === 1 && (
                         <div className="d-flex w-100 align-items-center justify-content-center flex-wrap">
-                        <div
-                            className="d-flex align-items-center justify-content-center border p-2"
-                            style={{ gap: "10px", width: "fit-content" }}
-                        >
-                            <span>
-                                <span style={{ color: "#5c5e60" }}>
-                                    Project Manager:
+                            <div
+                                className="d-flex align-items-center justify-content-center border p-2"
+                                style={{ gap: "10px", width: "fit-content" }}
+                            >
+                                <span>
+                                    <span style={{ color: "#5c5e60" }}>
+                                        Project Manager:
+                                    </span>
+                                    <a
+                                        href={`/account/employee/${singleTask?.project_manager_id}`}
+                                        className="text-success hover-underline"
+                                    >
+                                        <strong>
+                                            {singleTask?.pm_id_name}
+                                        </strong>
+                                    </a>
+                                    ,
                                 </span>
-                                <a
-                                    href={`/account/employee/${singleTask?.project_manager_id}`}
-                                    className="text-success hover-underline"
-                                >
-                                    <strong>{singleTask?.pm_id_name}</strong>
-                                </a>
-                                ,
-                            </span>
-                            <span>
-                                <span style={{ color: "#5c5e60" }}>
-
-                                    Client:
+                                <span>
+                                    <span style={{ color: "#5c5e60" }}>
+                                        Client:
+                                    </span>
+                                    <a
+                                        href={`/account/clients/${singleTask?.client_id}`}
+                                        className="text-success hover-underline"
+                                    >
+                                        <strong>
+                                            {singleTask?.client_name}
+                                        </strong>
+                                    </a>
                                 </span>
-                                <a
-                                    href={`/account/clients/${singleTask?.client_id}`}
-                                    className="text-success hover-underline"
-                                >
-                                    <strong>{singleTask?.client_name}</strong>
-                                </a>
-                            </span>
+                            </div>
                         </div>
-                    </div>
-                    }
+                    )}
 
                     <div className="mt-3">
                         {tableType.toLowerCase() === "tasks" ? (

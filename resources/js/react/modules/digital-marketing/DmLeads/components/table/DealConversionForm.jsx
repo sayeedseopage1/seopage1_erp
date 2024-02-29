@@ -1,17 +1,19 @@
 import { Dialog } from "@headlessui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./DealConversionForm.module.css";
 import { ErrorText, Input, InputGroup, Label } from "../ui/form";
 import CKEditorComponent from "../../../../../ckeditor";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import { useDmDealConversionMutation } from "../../../../../services/api/dmLeadsApiSlice";
+import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../../../utils/stateValidation";
+import validator from "validator";
+import { formatAPIErrors } from "../../../../../utils/formatAPIErrors";
 
 const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
     const [messageLinks, setMessageLinks] = React.useState([
         { value: "", id: "abc" },
     ]);
-
     const [formData, setFormData] = React.useState({
         status: "Contact Made",
         client_username: "",
@@ -19,6 +21,13 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
         comments: "",
     });
 
+    const [formDataValidation, setFormDataValidation] = React.useState({
+        client_username: false,
+        profile_link: false,
+        isProfileLinkValid: false,
+        comments: false,
+        isSubmitting: false,
+    });
     const [error, setError] = React.useState(null);
 
     const onClose = (e) => {
@@ -46,13 +55,14 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
         e.preventDefault();
         e.stopPropagation();
         const uniqueId = Math.random().toString(6).slice(2);
-        setMessageLinks((prev) => [...prev, { value: "", id: uniqueId }]);
-    };
 
+        setMessageLinks((prev) => [...prev, { value: "", id: uniqueId}]);
+    };
     // remove
     const removeInputField = (e, id) => {
         e.preventDefault();
         e.stopPropagation();
+
         let data = messageLinks.filter((d) => d.id !== id);
         setMessageLinks(data);
     };
@@ -69,7 +79,6 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
             ...link,
             value: e.target.value,
         };
-
         const data = messageLinks.map((d) => (d.id !== link.id ? d : _link));
         setMessageLinks(data);
     };
@@ -80,6 +89,47 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         e.stopPropagation();
+        const isEmpty = isStateAllHaveValue(formData);
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation(formData);
+            setFormDataValidation({
+                ...formDataValidation,
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
+
+        const isProfileLinkValid = validator.isURL(formData.profile_link, {
+            protocols: ['http','https','ftp'],
+        });
+
+        if(!isProfileLinkValid){
+            setFormDataValidation({
+                ...formDataValidation,
+                isProfileLinkValid: true,
+            });
+            return;
+        }
+
+
+        const messageLinksErrors = {};
+        _.forEach(messageLinks, (m) => {
+            if (!m.value || !validator.isURL(m.value)) {
+                messageLinksErrors[m.id] =
+                    "Valid URL is required for Client Message Thread Link";
+            }
+        });
+
+        console.log(messageLinksErrors);
+        if (!_.isEmpty(messageLinksErrors)) {
+            setError((err) => ({ ...err, message_links: messageLinksErrors }));
+            return;
+        }
+
+        console.log("form data", formData);
+
+        
 
         const data = {
             ...formData,
@@ -96,9 +146,47 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                 window.location.href = `/account/deals/${res.data.deal_id}`;
             }
         } catch (error) {
+            if (error.data) {
+                setError(error.data.errors);
+            }
+            if(error?.status === 422){
+                const errors = formatAPIErrors(error?.data?.errors); 
+                if(errors.includes("The project link format is invalid.")){
+                    setFormDataValidation({
+                        ...formDataValidation,
+                        isProfileLinkValid: true,
+                    });
+                }
+                errors.forEach(error => {
+                    toast.error(error);
+                });
+            } else {
+                toast.error("Something went wrong");
+            }
             console.log(error);
         }
     };
+
+
+
+
+    React.useEffect(() => {
+        if(formDataValidation.isSubmitting){
+            const validation = markEmptyFieldsValidation(formData);
+            setFormDataValidation({
+                ...formDataValidation,
+                ...validation,
+                profile_link:false,
+                isProfileLinkValid: !validator.isURL(formData.profile_link, {
+                    protocols: ['http','https','ftp']
+                }),
+            });
+         
+        }
+    }, [formData, formDataValidation.isSubmitting, formDataValidation.isProfileLinkValid, ]); 
+
+
+
 
     return (
         <React.Fragment>
@@ -153,6 +241,9 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                         {error?.client_username[0]}{" "}
                                     </ErrorText>
                                 ) : null}
+                                {
+                                    formDataValidation.client_username && <ErrorText>Client Username is required</ErrorText>
+                                }
                             </InputGroup>
 
                             <InputGroup>
@@ -167,19 +258,22 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                     onChange={handleOnChange}
                                 />
 
-                                {error?.profile_link ? (
-                                    <ErrorText>
-                                        {" "}
-                                        {error?.profile_link[0]}{" "}
-                                    </ErrorText>
-                                ) : null}
+                                
+                                {
+                                    formDataValidation.profile_link && <ErrorText>Client Profile Link is required! Please add also http</ErrorText>
+                                }
+                                {
+                                    formDataValidation.isProfileLinkValid && <ErrorText>Client Profile Link is not valid! Please add also http</ErrorText>
+                                }
                             </InputGroup>
+
 
                             <InputGroup>
                                 <Label>
                                     Client Message Thread Link <sup>*</sup>
                                 </Label>
                                 {messageLinks.map((link, index) => (
+                                    <>
                                     <Flex
                                         alignItems="center"
                                         gap="10px"
@@ -195,7 +289,7 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                             }
                                             name="message_link"
                                         />
-
+                                    
                                         {messageLinks.length > 1 && (
                                             <RemoveButton
                                                 onClick={(e) =>
@@ -207,6 +301,12 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                             </RemoveButton>
                                         )}
                                     </Flex>
+                                    {!_.isEmpty(error?.message_links) ? (
+                                            <ErrorText>
+                                                {error?.message_links[link.id]}
+                                            </ErrorText>
+                                        ) : null}
+                                     </>
                                 ))}
 
                                 <button onClick={addNewLink} className="px-2 btn btn-primary">
@@ -231,6 +331,9 @@ const DealConversionForm = ({ row, isOpen, close, ...rest }) => {
                                         {error?.comments[0]}{" "}
                                     </ErrorText>
                                 ) : null}
+                                {
+                                    formDataValidation.comments && <ErrorText>Comment is required</ErrorText>
+                                }
                             </InputGroup>
                         </form>
 
@@ -252,6 +355,7 @@ export default DealConversionForm;
 export const Flex = styled.div`
     display: flex;
     align-items: ${(props) => props.alignItems ?? "center"};
+    flex-direction: ${(props) => props.flexDirection ?? "row"};
     justify-content: ${(props) => props.justifyContent ?? "center"};
     gap: ${(props) => props.gap ?? "10px"};
 `;

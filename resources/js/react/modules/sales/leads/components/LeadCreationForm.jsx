@@ -31,6 +31,8 @@ import {
 import axios from "axios";
 import ReactDatePicker from "react-datepicker";
 import dayjs from "dayjs";
+import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../../utils/stateValidation";
+
 
 const LeadCreationForm = ({ isOpen, close }) => {
     return (
@@ -93,7 +95,7 @@ const initialError = {
     insight_screenshot: "",
     bidpage_screenshot: "",
     projectpage_screenshot: "",
-
+    isSubmitting: false,
     original_currency_id: "",
     country: "",
 
@@ -107,6 +109,51 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const [formData, setFormData] = React.useState(
         presetInitialData ?? initialData
     );
+    const [validationErrors, setValidationErrors] = React.useState([]);
+    const [leadInputData, setLeadInputData] = React.useState({
+        client_name: "",
+        project_id: "",
+        project_link: "",
+        project_type: "fixed",
+        deadline: "",
+        bid_value: "",
+        bid_value2: "",
+        value: "",
+        bidding_minutes: "",
+        bidding_seconds: "",
+        description: "",
+        cover_letter: "", 
+        explanation: "",
+        insight_screenshot: "",
+        bidpage_screenshot: "",
+        projectpage_screenshot: "",
+        original_currency_id: "",
+        country: "",
+    });
+    const [leadInputDataValidation, setLeadInputDataValidation] = React.useState({
+        client_name: false,
+        project_id: false,
+        project_link: false,
+        isProjectIdUnique: false,
+        isProjectLinkValid: false,
+        project_type: false,
+        deadline: false,
+        bid_value: false,
+        bid_value2: false,
+        value: false,
+        bidding_minutes: false,
+        bidding_seconds: false,
+        description: false,
+        cover_letter: false,
+        insight_screenshot: false,
+        isIninsightScreenshotLinkValid: false,
+        isBidpageScreenshotLinkValid: false,
+        projectpage_screenshot: false,
+        isProjectpageScreenshotLinkValid: false,
+        original_currency_id: false,
+        country: false,
+        isSubmitting: false,
+    });
     const [error, setError] = React.useState(initialError);
     const [currency, setCurrency] = React.useState(null);
     const [clientCountry, setClientCountry] = React.useState(null);
@@ -131,12 +178,34 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
             ...state,
             [e.target.name]: e.target.value,
         }));
+        setLeadInputData((state) => ({
+            ...state,
+            [e.target.name]: e.target.value,
+        }));
     };
+
+
+    const handleOnkeypress = e => {
+        const keyCode = e.keyCode || e.which;
+        if (
+            (keyCode < 48 || keyCode > 57) && // 0-9
+            keyCode !== 8 && // Backspace
+            keyCode !== 37 && // Left arrow
+            keyCode !== 39 // Right arrow
+        ) {
+            e.preventDefault();
+        }
+    }
+
 
     // rich editor field change
 
     const handleEditorDataChange = (editor, key) => {
         setFormData((state) => ({
+            ...state,
+            [key]: editor.getData(),
+        }));
+        setLeadInputData((state) => ({
             ...state,
             [key]: editor.getData(),
         }));
@@ -156,152 +225,208 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
         formData.project_type = "fixed";
     }, []);
 
+
+    const isValid = () => {
+        const _error = {};
+
+        for (const key in formData) {
+            // console.log("inside loop");
+            if (key === "explanation" || key === "bidpage_screenshot") {
+                continue;
+            } else {
+                // console.log({ key, value: formData[key] });
+                // custom client side error message
+                if (key === "client_name") {
+                    if (!formData[key]) {
+                        _error[key] = "Please enter the project name!";
+                    }
+                } else if (key === "project_id") {
+                    if (!formData[key]) {
+                        _error[key] = "Please enter the project id!";
+                    }
+                } else if (key === "project_link") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Invalid URL, Please enter correct project link (Freelancer.com)";
+                    }
+                } else if (key === "deadline") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Please select project deadline from Freelancer.com!";
+                    }
+                } else if (key === "bid_value") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Please enter maximum project budget!";
+                    }
+                } else if (key === "bid_value2") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Please enter minimum project budget!";
+                    }
+                } else if (key === "value") {
+                    if (!formData[key]) {
+                        _error[key] = "Please enter bid value!";
+                    }
+                } else if (key === "bidding_minutes") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Please enter bidding delayed time (minutes)!";
+                    }
+                } else if (key === "bidding_seconds") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Please enter bidding delayed time (seconds)!";
+                    }
+                } else if (key === "description") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Copy the project description from Freelancer.com and paste it here!";
+                    }
+                } else if (key === "cover_letter") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!";
+                    }
+                } else if (key === "insight_screenshot") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Invalid Url, Please enter project insight page screenshot link (Freelancer.com) ";
+                    }
+                    // else if (!validator.isURL(formData[key])) {
+                    //     _error[key] = "Invalid URL";
+                    // }
+                } else if (key === "projectpage_screenshot") {
+                    if (!formData[key]) {
+                        _error[key] =
+                            "Invalid Url, Please enter project page screenshot link (Freelancer.com) ";
+                    }
+                    // else if (!validator.isURL(formData[key])) {
+                    //     _error[key] = "Invalid URL";
+                    // }
+                } else if (key === "original_currency_id") {
+                    if (!formData[key]) {
+                        _error[key] = "Please select correct currency!";
+                    }
+                } else if (key === "country") {
+                    if (!formData[key]) {
+                        _error[key] = "Please select client country!";
+                    }
+                }
+            }
+        }
+
+        // if project type hourly no need amount
+        if (formData["project_type"] === "hourly") {
+            delete _error["deadline"];
+        }
+
+        if (
+            !formData.project_link ||
+            !validator.isURL(formData.project_link)
+        ) {
+            _error.project_link =
+                "Invalid Url, Please enter a correct project link (Freelancer.com)";
+        } else if (
+            !formData.insight_screenshot ||
+            !validator.isURL(formData.insight_screenshot)
+        ) {
+            _error.insight_screenshot =
+                "Invalid Url, Please enter a correct screenshot link";
+        } else if (
+            formData.bidpage_screenshot &&
+            !validator.isURL(formData.bidpage_screenshot)
+        ) {
+            _error.bidpage_screenshot = "Invalid Url, Please enter a correct screenshot link";
+        } else if (
+            !formData.projectpage_screenshot ||
+            !validator.isURL(formData.projectpage_screenshot)
+        ) {
+            _error.projectpage_screenshot =
+                "Invalid Url, Please enter a correct screenshot link";
+        } 
+
+        setError(_error);
+        return Object.keys(_error)?.length === 0;
+    };
+
+
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const isValid = () => {
-            const _error = {};
+       
+        if(leadInputData.project_type === "hourly") delete leadInputData.deadline;
+        if(!leadInputData.explanation) delete leadInputData.explanation;
+        if(!leadInputData.bidpage_screenshot) delete leadInputData.bidpage_screenshot;
+        console.log({ leadInputData });
+        const isEmpty = isStateAllHaveValue(leadInputData);
+        console.log({ isEmpty });
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation(leadInputData);
+            setLeadInputDataValidation({
+                ...leadInputDataValidation,
+                ...validation,
+                isProjectIdUnique: false,
+                isSubmitting: true,
+            });
 
-            for (const key in formData) {
-                // console.log("inside loop");
-                if (key === "explanation" || key === "bidpage_screenshot") {
-                    continue;
-                } else {
-                    // console.log({ key, value: formData[key] });
-                    // custom client side error message
-                    if (key === "client_name") {
-                        if (!formData[key]) {
-                            _error[key] = "Please enter the project name!";
-                        }
-                    } else if (key === "project_id") {
-                        if (!formData[key]) {
-                            _error[key] = "Please enter the project id!";
-                        }
-                    } else if (key === "project_link") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Invalid URL, Please enter correct project link (Freelancer.com)";
-                        }
-                    } else if (key === "deadline") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please select project deadline from Freelancer.com!";
-                        }
-                    } else if (key === "bid_value") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter maximum project budget!";
-                        }
-                    } else if (key === "bid_value2") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter minimum project budget!";
-                        }
-                    } else if (key === "value") {
-                        if (!formData[key]) {
-                            _error[key] = "Please enter bid value!";
-                        }
-                    } else if (key === "bidding_minutes") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter bidding delayed time (minutes)!";
-                        }
-                    } else if (key === "bidding_seconds") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Please enter bidding delayed time (seconds)!";
-                        }
-                    } else if (key === "description") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Copy the project description from Freelancer.com and paste it here!";
-                        }
-                    } else if (key === "cover_letter") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!";
-                        }
-                    } else if (key === "insight_screenshot") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Invalid Url, Please enter project insight page screenshot link (Freelancer.com) ";
-                        }
-                        // else if (!validator.isURL(formData[key])) {
-                        //     _error[key] = "Invalid URL";
-                        // }
-                    } else if (key === "projectpage_screenshot") {
-                        if (!formData[key]) {
-                            _error[key] =
-                                "Invalid Url, Please enter project page screenshot link (Freelancer.com) ";
-                        }
-                        // else if (!validator.isURL(formData[key])) {
-                        //     _error[key] = "Invalid URL";
-                        // }
-                    } else if (key === "original_currency_id") {
-                        if (!formData[key]) {
-                            _error[key] = "Please select correct currency!";
-                        }
-                    } else if (key === "country") {
-                        if (!formData[key]) {
-                            _error[key] = "Please select client country!";
-                        }
-                    }
-                }
-            }
-
-            // if project type hourly no need amount
-            if (formData["project_type"] === "hourly") {
-                delete _error["deadline"];
-            }
-
-            if (
-                !formData.project_link ||
-                !validator.isURL(formData.project_link)
-            ) {
-                _error.project_link =
-                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
-            } else if (
-                !formData.insight_screenshot ||
-                !validator.isURL(formData.insight_screenshot)
-            ) {
-                _error.insight_screenshot =
-                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
-            } else if (
-                !formData.projectpage_screenshot ||
-                !validator.isURL(formData.projectpage_screenshot)
-            ) {
-                _error.projectpage_screenshot =
-                    "Invalid Url, Please enter a correct project link (Freelancer.com)";
-            }
-
-            setError(_error);
-            return Object.keys(_error)?.length === 0;
-        };
-
-        if (!isValid()) {
-            toast.error("Please provide all required data!");
-            return null;
+            return;
         }
 
+        console.log({ leadInputData });
+
+        const isProjectLinkValid = validator.isURL(leadInputData.project_link, {
+            protocols: ['http','https','ftp'],
+        });
+
+        if(!isProjectLinkValid){
+            setLeadInputDataValidation({
+                ...leadInputDataValidation,
+                isProjectLinkValid: true,
+            });
+            return;
+        }
+
+        console.log({ leadInputData });
+
+
+
         try {
-            const _error = { ...initialError };
-
+            
             const res = await leadCreate(formData).unwrap();
-            if (res.status === 400) {
-                // Validation for "project_id"
-                if (res.message.customMessages["project_id.required"]) {
-                    _error.project_id =
-                        res.message.customMessages["project_id.required"];
-                }
 
-                setError(_error);
-            } else {
-                toast.success("Lead Created Successfully");
-                handleClose();
-            }
+                if(res?.status === 400){
+                        setLeadInputDataValidation({
+                            ...leadInputDataValidation,
+                            isProjectIdUnique: true,
+                        });
+                } else {
+                    toast.success("Lead Created Successfully");
+                    handleClose();
+                }
         } catch (error) {
-            console.log({ error });
+            if(error?.status === 400){
+                const errors = error?.message?.customMessages?.project_id === "The project id has already been taken!" ? ["The project id has already been taken."] : error?.message?.customMessages;
+                setValidationErrors(errors);
+                if(errors.includes("The project id has already been taken.")){
+                    setLeadInputDataValidation({
+                        ...leadInputDataValidation,
+                        isProjectIdUnique: true,
+                    });
+                } else if(errors.includes("The project link format is invalid.")){
+                    setLeadInputDataValidation({
+                        ...leadInputDataValidation,
+                        isProjectLinkValid: true,
+                    });
+                }
+                errors.forEach(error => {
+                    toast.error(error);
+                });
+            } else {
+                toast.error("Something went wrong");
+            }
+            
         }
     };
 
@@ -319,12 +444,17 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
     const handleCurrencySelection = (value) => {
         setCurrency(value);
         setFormData((state) => ({ ...state, original_currency_id: value.id }));
+        setLeadInputData((state) => ({ ...state, original_currency_id: value.id }));
     };
 
     // handle clientCountrySelection
     const handleClientCountrySelection = (value) => {
         setClientCountry(value);
         setFormData((state) => ({
+            ...state,
+            country: value.nicename,
+        }));
+        setLeadInputData((state) => ({
             ...state,
             country: value.nicename,
         }));
@@ -350,8 +480,50 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                 ...prev,
                 deadline: dayjs(deadline).format(),
             }));
+            setLeadInputData((prev) => ({
+                ...prev,
+                deadline: dayjs(deadline).format(),
+            }));
         }
     }, [deadline]);
+
+    React.useEffect (() => {
+         if(error?.isSubmitting){
+            console.log("error", error);
+            isValid();
+         }
+    }, [formData]);
+
+    React.useEffect(() => {
+        if(leadInputDataValidation.isSubmitting){
+            if(!leadInputData.explanation) delete leadInputData.explanation;
+            if(!leadInputData.bidpage_screenshot) delete leadInputData.bidpage_screenshot;
+            const validation = markEmptyFieldsValidation(leadInputData);
+            setLeadInputDataValidation({
+                ...leadInputDataValidation,
+                ...validation,
+                project_link:false,
+                isProjectIdUnique: false,
+                isProjectLinkValid: !validator.isURL(leadInputData.project_link),
+                isBidpageScreenshotLinkValid: leadInputData.bidpage_screenshot && !validator.isURL(leadInputData.bidpage_screenshot),
+                isProjectpageScreenshotLinkValid: leadInputData.projectpage_screenshot && !validator.isURL(leadInputData.projectpage_screenshot),
+                isIninsightScreenshotLinkValid: leadInputData.insight_screenshot && !validator.isURL(leadInputData.insight_screenshot),
+            });
+            if(validationErrors?.length){
+                setLeadInputDataValidation({
+                    ...leadInputDataValidation,
+                    isProjectIdUnique: validationErrors?.includes("The project id has already been taken."),
+                    isProjectLinkValid: validationErrors?.includes("The project link format is invalid."),
+                    isBidpageScreenshotLinkValid: validationErrors?.includes("The bidpage screenshot format is invalid."),
+                    isProjectpageScreenshotLinkValid: validationErrors?.includes("The projectpage screenshot format is invalid."),
+                    isIninsightScreenshotLinkValid: validationErrors?.includes("The insight screenshot format is invalid."),
+                });
+            }
+        }
+    }, [leadInputData, leadInputDataValidation.isSubmitting, leadInputDataValidation.isProjectLinkValid, validationErrors]);
+
+
+
 
     return (
         <Card>
@@ -382,6 +554,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.client_name && <ErrorText> Project Name is required </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -393,7 +568,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                     Project Id <sup>*</sup> :{" "}
                                 </Label>
                                 <Input
-                                    type="text"
+                                    min={0}
+                                    onKeyPress={handleOnkeypress}
                                     name="project_id"
                                     value={formData.project_id}
                                     onChange={handleInputChange}
@@ -404,6 +580,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.project_id && <ErrorText> Project Id is required </ErrorText>
+                                }
+                                {
+                                    leadInputDataValidation.isProjectIdUnique && <ErrorText> The project id has already been taken. </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -429,6 +611,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.project_link && <ErrorText> Project Link is required </ErrorText>
+                                }
+                                {
+                                    leadInputDataValidation.isProjectLinkValid && <ErrorText> The project link format is invalid. </ErrorText>
+                                }
                             </InputGroup>
                         </div>
                         {/* Project Type */}
@@ -539,6 +727,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.original_currency_id && <ErrorText> Currency is required </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -593,6 +784,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.country && <ErrorText> Client Country is required </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -608,7 +802,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <Input
-                                                    type="text"
+                                                    min={0}
+                                                    onKeyPress={handleOnkeypress}
+                                                    type="number"
                                                     name="bid_value"
                                                     value={formData.bid_value}
                                                     onChange={handleInputChange}
@@ -622,10 +818,15 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
+                                                {
+                                                    leadInputDataValidation.bid_value && <ErrorText> Minimum bid value is required </ErrorText>
+                                                }
                                             </div>
                                             <div className="col-md-6">
                                                 <Input
-                                                    type="text"
+                                                    min={0}
+                                                    onKeyPress={handleOnkeypress}
+                                                    type="number"
                                                     name="bid_value2"
                                                     value={formData.bid_value2}
                                                     onChange={handleInputChange}
@@ -639,6 +840,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
+                                                {
+                                                    leadInputDataValidation.bid_value2 && <ErrorText> Maximum bid value is required </ErrorText>
+                                                }
                                             </div>
                                         </div>
                                     </InputGroup>
@@ -678,6 +882,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         ) : (
                                             <></>
                                         )}
+                                        {
+                                            leadInputDataValidation.deadline && <ErrorText> Project Deadline is required </ErrorText>
+                                        }
                                     </InputGroup>
                                 </div>
 
@@ -691,7 +898,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <Input
-                                                    type="text"
+                                                    min={0}
+                                                    onKeyPress={handleOnkeypress}
+                                                    type="number"
                                                     name="bid_value"
                                                     value={formData.bid_value}
                                                     onChange={handleInputChange}
@@ -705,10 +914,15 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
+                                                {
+                                                    leadInputDataValidation.bid_value && <ErrorText> Minimum bid value is required </ErrorText>
+                                                }
                                             </div>
                                             <div className="col-md-6">
                                                 <Input
-                                                    type="text"
+                                                    min={0}
+                                                    onKeyPress={handleOnkeypress}
+                                                    type="number"
                                                     name="bid_value2"
                                                     value={formData.bid_value2}
                                                     onChange={handleInputChange}
@@ -722,6 +936,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                                 ) : (
                                                     <></>
                                                 )}
+                                                {
+                                                    leadInputDataValidation.bid_value2 && <ErrorText> Maximum bid value is required </ErrorText>
+                                                }
                                             </div>
                                         </div>
                                     </InputGroup>
@@ -741,6 +958,8 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                     Bid value <sup>*</sup> :{" "}
                                 </Label>
                                 <Input
+                                    min={0}
+                                    onKeyPress={handleOnkeypress}
                                     type="number"
                                     name="value"
                                     value={formData.value}
@@ -752,6 +971,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.value && <ErrorText> Bid value is required </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -765,7 +987,10 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 <div className="row">
                                     <div className="col-md-6">
                                         <Input
-                                            type="text"
+                                            min={0}
+                                            max={59}
+                                            onKeyPress={handleOnkeypress}
+                                            type="number"
                                             name="bidding_minutes"
                                             value={formData.bidding_minutes}
                                             onChange={handleInputChange}
@@ -779,10 +1004,16 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         ) : (
                                             <></>
                                         )}
+                                        {
+                                            leadInputDataValidation.bidding_minutes && <ErrorText> Bidding Delay Time (minutes) is required </ErrorText>
+                                        }
                                     </div>
                                     <div className="col-md-6">
                                         <Input
-                                            type="text"
+                                            min={0}
+                                            max={59}
+                                            onKeyPress={handleOnkeypress}
+                                            type="number"
                                             name="bidding_seconds"
                                             value={formData.bidding_seconds}
                                             onChange={handleInputChange}
@@ -796,6 +1027,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                         ) : (
                                             <></>
                                         )}
+                                        {
+                                            leadInputDataValidation.bidding_seconds && <ErrorText> Bidding Delay Time (seconds) is required </ErrorText>
+                                        }
                                     </div>
                                 </div>
                             </InputGroup>
@@ -827,6 +1061,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.description && <ErrorText> Project Description is required </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -857,6 +1094,9 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.cover_letter && <ErrorText> Cover Letter is required </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -883,6 +1123,7 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                              
                             </InputGroup>
                         </div>
 
@@ -911,6 +1152,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.insight_screenshot && <ErrorText> Bid Insights Page (Screenshot) is required </ErrorText>
+                                }
+                                {
+                                    leadInputDataValidation.isIninsightScreenshotLinkValid && <ErrorText> The insight screenshot format is invalid. </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -933,6 +1180,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.bidpage_screenshot && <ErrorText> Bid Page (Screenshot) is required </ErrorText>
+                                }
+                                {
+                                    leadInputDataValidation.isBidpageScreenshotLinkValid && <ErrorText> The bidpage screenshot format is invalid. </ErrorText>
+                                }
                             </InputGroup>
                         </div>
 
@@ -960,6 +1213,12 @@ const LeadCreationFormControl = ({ close, presetInitialData = null }) => {
                                 ) : (
                                     <></>
                                 )}
+                                {
+                                    leadInputDataValidation.projectpage_screenshot && <ErrorText> Project Page (Screenshot) is required </ErrorText>
+                                }
+                                {
+                                    leadInputDataValidation.isProjectpageScreenshotLinkValid && <ErrorText> The projectpage screenshot format is invalid.  </ErrorText>
+                                }
                             </InputGroup>
                         </div>
                     </div>
