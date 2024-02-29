@@ -14,8 +14,8 @@ import EmptyTable from "../../../global/EmptyTable";
 import { useLocalStorage } from "react-use";
 import Toaster from "../../../global/Toaster";
 
-const PercentageofGoalsMetTable = ({parcenatgeOfGoalsMet,tableColumns, projectDetails,closeModal, tableName, isLoading}) => {
-  const [data, setData] = React.useState(parcenatgeOfGoalsMet || []);
+const PercentageofGoalsMetTable = ({percentageOfGoalsMet,tableColumns, projectDetails,closeModal, tableName, isLoading}) => {
+  const [data, setData] = React.useState(percentageOfGoalsMet || []);
   const [value, setValue] = useLocalStorage(tableName);
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: 0,
@@ -24,16 +24,16 @@ const PercentageofGoalsMetTable = ({parcenatgeOfGoalsMet,tableColumns, projectDe
   const [skipPageReset, setSkipPageReset] = React.useState(false);
   const [sorting, setSorting] = React.useState([]);
   const [expanded, setExpanded] = React.useState({});
-  const _parcenatgeOfGoalsMet = React.useMemo(()=> parcenatgeOfGoalsMet, [parcenatgeOfGoalsMet]);
+  const _percentageOfGoalsMet = React.useMemo(()=> percentageOfGoalsMet, [percentageOfGoalsMet]);
 
-    React.useEffect(() => {
-        if(_.size(_parcenatgeOfGoalsMet) === _.size(data)){
+  React.useEffect(() => {
+        if(_.size(_percentageOfGoalsMet) === _.size(data)){
           setSkipPageReset(true);
-          _parcenatgeOfGoalsMet && setData(_parcenatgeOfGoalsMet)
+          _percentageOfGoalsMet && setData(_percentageOfGoalsMet)
         }else{
-            _parcenatgeOfGoalsMet && setData(_parcenatgeOfGoalsMet);
+            _percentageOfGoalsMet && setData(_percentageOfGoalsMet);
         }
-      }, [_parcenatgeOfGoalsMet])
+      }, [_percentageOfGoalsMet])
 
     // clear skipPageReset
     React.useEffect(() => {
@@ -84,8 +84,9 @@ const PercentageofGoalsMetTable = ({parcenatgeOfGoalsMet,tableColumns, projectDe
     getExpandedRowModel: getExpandedRowModel(),
     getSortedRowModel: getSortedRowModel(),
     paginateExpandedRows: false,
-})
+  })
 
+  
 
 
   return (
@@ -127,7 +128,7 @@ const PercentageofGoalsMetTable = ({parcenatgeOfGoalsMet,tableColumns, projectDe
                 </table>
                 {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
             <Toaster />
-        </div>
+    </div>
   )
 }
 

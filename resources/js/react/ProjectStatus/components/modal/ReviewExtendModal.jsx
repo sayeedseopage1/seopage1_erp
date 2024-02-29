@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
-toast;
 import { Flex } from "../table/ui";
+import { IoClose } from "react-icons/io5";
 import CKEditorComponent from "../../../ckeditor";
 import {
     useCreateReviewExtendRequestMutation,
@@ -12,7 +12,14 @@ import ImageViewer from "./ImageViewer";
 import RefreshButton from "../RefreshButton";
 import { toast } from "react-toastify";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
-const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGoalId,refetchPmGoal, reviewExtendRequestData }) => {
+const ReviewExtendRequestModal = ({ 
+    projectDetails, 
+    isOpen, 
+    onClose, 
+    projectPmGoalId, 
+    refetchPmGoal, 
+    reviewExtendRequestData 
+}) => {
     const [reviewExtendState, setReviewExtendState] = useState({
         extended_day: reviewExtendRequestData?.extended_day,
         comment: "",
@@ -45,10 +52,8 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
     const handleAccept = async (e) => {
         e.preventDefault();
         const isEmpty = isStateAllHaveValue(reviewExtendState);
-
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(reviewExtendState);
-
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
                 ...validation,
@@ -56,8 +61,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
             });
             return;
         }
-
-
         const fd = new FormData();
         fd.append("extended_day", reviewExtendState.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
@@ -69,8 +72,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-
-        
         submitData(fd)
             .unwrap()
             .then((res) => {
@@ -80,7 +81,6 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 handleResetForm();
             })
             .catch((err) => {
-                console.log("err", err);
                 if (err?.status === 422) {
                     toast.error("Please fill up all required fields");
                 } else {
@@ -92,10 +92,9 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
     const handleReject = async (e) => {
         e.preventDefault();
         const fd = new FormData();
-
-        fd.append("extended_day", reviewExtendStateValidation.extended_day ?? "");
+        fd.append("extended_day", reviewExtendState.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
-        fd.append("project_id", reviewExtendState?.id ?? "");
+        fd.append("goal_id", reviewExtendState.goal_id ?? "");
         fd.append("status", "0");
         fd.append(
             "_token",
@@ -110,6 +109,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                 onClose();
                 toast.success("Rejection was successful");
                 handleResetForm();
+                refetchPmGoal();
             })
             .catch((err) => {
                 if (err?.status === 422) {
@@ -147,7 +147,7 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
         
     }, [reviewExtendRequestData]);
 
-    console.log("reviewExtendState", reviewExtendState)
+    
 
     return (
         <ReactModal
@@ -156,21 +156,29 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
             onRequestClose={onClose}
         >
             <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "20px",
-                }}
+                className="d-flex justify-content-between align-items-center mb-3"
             >
-                <div
+                <h6
                     style={{
                         fontSize: "25px",
                     }}
                 >
                     Review Extend Time
-                </div>
-
-                <RefreshButton onClick={refetch} isLoading={isFetching} />
+                </h6>
+                <button
+                    onClick={onClose}
+                    className="d-flex justify-content-center align-items-center rounded-circle"
+                    style={{
+                        backgroundColor: "gray",
+                        padding: "2px 4px 2px 4px",
+                        color: "white",
+                        width: "24px",
+                        height: "24px",
+                    }}
+                >
+                    <IoClose />
+                </button>    
+                {/* <RefreshButton onClick={refetch} isLoading={isFetching} /> */}
             </div>
 
             <section style={styles.container}>
@@ -196,8 +204,10 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGo
                         <div className="col-8">
                         <input 
                             className="p-1 rounded"
-                            defaultValue={reviewExtendState?.extended_day }
+                            defaultValue={reviewExtendState?.extended_day}
                             placeholder="Enter extended days"
+                            type="number"
+                            min={1}
                             onChange={(e) => setReviewExtendState({
                                 ...reviewExtendState,
                                 extended_day: e.target.value
@@ -262,14 +272,13 @@ const customStyles = {
     overlay: {
         zIndex: 99999998,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-
         margin: "auto auto",
         padding: "20px",
     },
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        height: "650px",
+        height: "fit-content",
         maxHeight: "100vh",
 
         margin: "auto auto",

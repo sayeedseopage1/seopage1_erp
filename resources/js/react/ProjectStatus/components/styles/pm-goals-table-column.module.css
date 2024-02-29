@@ -7,12 +7,12 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    width: 290px;
+    max-width: 450px;
 }
 
 
 .action{
-    width: fit-content;
+    /* width: fit-content; */
     background: #e6f8ef;
     color:  #00b95d;
     padding: 0.25rem 0.85rem;
@@ -32,36 +32,42 @@
     white-space: normal;
 }
 
-.action.deadlineExplained{
-    background: #f22121;
-    color:  #e6f8ef;
-    border-color: #f22121;
-    font-weight: 600;
-    padding: 8px 10px !important;
-    cursor: pointer;
+.deadlineExplained{
+    width: 175px !important;
+    padding: 6px 12px !important;
 }
 
-.action.extend{
-    color: #e6f8ef;
-    background: #00b95d !important;
-    border-color: #00b95d !important;
-    font-weight: 600;
-    padding: 8px 10px !important;
-    cursor: pointer;
+.extend{
+    width: 230px !important;
 }
-.action.resolve{
-    color: #e6f8ef;
-    background: #ffa500 !important;
-    border-color: #ffa500 !important;
-    font-weight: 600;
-    padding: 8px 10px !important;
-    cursor: pointer;
+
+.extendReview{
+    width: 120px !important;
 }
-.action.resolveed{
-    font-weight: 600;
-    padding: 8px 10px !important;
+
+
+.authorize{
+    padding: 6px 12px !important;
+    width: 185px !important;
+    color: #e6f8ef !important;
+    background-color: #1492d2 !important;
+    border-color: #1492d2 !important;
+    font: Inter;
 }
+
+
+.resolved{
+    border-color: #1492d2 ;
+    color: #1492d2 ;
+    padding: 6px 12px !important;
+    cursor: not-allowed !important;
+}
+
 .action.extend:hover{
+    background: #00af58 !important;
+    border-color: #00af58 !important;
+}
+.action.extendReview:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;
 }

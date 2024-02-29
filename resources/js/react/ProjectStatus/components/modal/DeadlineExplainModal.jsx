@@ -1,68 +1,43 @@
 import React from "react";
 import ReactModal from "react-modal";
-
 import { IoClose } from "react-icons/io5";
-
 import DeadlineExplanation from "./DeadlineExplanation";
-import { Flex } from "../table/ui";
 
-const customStyles = {
-    overlay: {
-        zIndex: 99999998,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-
-        margin: "auto auto",
-        padding: "20px",
-    },
-    content: {
-        zIndex: 99999999,
-        maxWidth: "600px",
-        maxHeight: "550px",
-
-        margin: "auto auto",
-        padding: "20px",
-    },
-};
 
 const DeadlineExplainModal = ({
     projectPmGoalId,
     projectDetails,
     isModalTwoOpen,
     closeModalTwo,
+    refetchPmGoal
 }) => {
     return (
         <ReactModal
             style={customStyles}
             isOpen={isModalTwoOpen}
+            ariaHideApp={false}
             onRequestClose={closeModalTwo}
-            contentLabel="Project Details"
+            contentLabel="Deadline Explanation"
         >
+
             <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "15px",
-                }}
+                className="d-flex justify-content-between align-items-center mb-3"
             >
-                <div
+                <h6
                     style={{
                         fontSize: "25px",
+                        marginBottom: "0",
                     }}
                 >
                     Deadline Explanation
-                </div>
-
+                </h6>
                 <button
                     onClick={closeModalTwo}
+                    className="d-flex justify-content-center align-items-center rounded-circle"
                     style={{
                         backgroundColor: "gray",
                         padding: "2px 4px 2px 4px",
                         color: "white",
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
                         width: "24px",
                         height: "24px",
                     }}
@@ -70,15 +45,32 @@ const DeadlineExplainModal = ({
                     <IoClose />
                 </button>
             </div>
-
+            {/* Deadline Explanation Modal */}
             <DeadlineExplanation
                 closeModalTwo={closeModalTwo}
                 isModalTwoOpen={isModalTwoOpen}
                 projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
+                refetchPmGoal={refetchPmGoal}
             />
         </ReactModal>
     );
 };
 
 export default DeadlineExplainModal;
+
+const customStyles = {
+    overlay: {
+        zIndex: 99999998,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        margin: "auto auto",
+        padding: "20px",
+    },
+    content: {
+        zIndex: 99999999,
+        maxWidth: "600px",
+        maxHeight: "fit-content",
+        margin: "auto auto",
+        padding: "20px",
+    },
+};

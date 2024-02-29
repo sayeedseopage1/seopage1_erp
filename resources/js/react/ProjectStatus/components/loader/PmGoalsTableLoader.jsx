@@ -1,6 +1,6 @@
 import { Placeholder } from "../../../global/Placeholder";
 
-export default function PmGolasTableLoader({prevItemLength = 7}){
+export default function PmGoalsTableLoader({prevItemLength = 7}){
     const updateItemLength = prevItemLength === 0 ? 7 : prevItemLength;
   return(
       _.times(updateItemLength , item => (

@@ -1,7 +1,5 @@
 import * as React from "react";
 
-
-
 import {
     useGetPmGoalQuery,
     useGetProjectStatusQuery,
@@ -24,6 +22,9 @@ const ProjectStatus = () => {
         pageIndex: 0,
         pageSize: 10,
     });
+    const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
+    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
+    const [selectedProjectName, setSelectedProjectName] = React.useState("");
 
     // make query string
     const queryString = (object) => {
@@ -31,6 +32,7 @@ const ProjectStatus = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
+    // get project status fetch
     const { data:projectStatusData, isFetching, refetch } = useGetProjectStatusQuery(
         queryString({
             page: pageIndex + 1,
@@ -39,6 +41,7 @@ const ProjectStatus = () => {
         }),
         { refetchOnMountOrArgChange: true }
     );
+    // get pm goal fetch
     const {
         data: pmGoalData,
         isFetching: isFetchingPmGoal,
@@ -47,17 +50,15 @@ const ProjectStatus = () => {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
     });
 
+    // Data from the API
     const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
-    const parcenatgeOfGoalsMet = pmGoalData?.data
+    const percentageOfGoalsMet = pmGoalData?.data
 
-
+    // Table columns
     let tableColumns = ProjectStatusTableColumns;
 
 
-    const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
-    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
-    const [selectedProjectName, setSelectedProjectName] = React.useState("");
     const closeModalOne = () => {
         setIsModalOneOpen(false);
         setSelectedProjectName("");
@@ -77,25 +78,30 @@ const ProjectStatus = () => {
         refetch();
     }
 
+    // handle pm goal modal
     const handlePmGoalModal = (data) => {
         setProjectDetails(data);
         setProjectId(data.project_id);
         setIsModalOneOpen(true);
         setSelectedProjectName(data.project_name);
+        refetchPmGoal()
     }
 
+    // handle percent of goal met  modal
     const handlePercentOfGoalMet = (data) => {
         setProjectId(data.project_id);
-        setIsOpenPercentageofGoalsMetModal(true);
         setSelectedProjectName(data.project_name);
         setProjectDetails(data);
-        console.log("data",data)
+        setIsOpenPercentageofGoalsMetModal(true)
     }
 
+    // handle close percentage of goal met modal
     const handleClosePercentageofGoalsMetModal = () => {
         setIsOpenPercentageofGoalsMetModal(false);
     }
 
+
+    
 
     return (
 
@@ -116,7 +122,7 @@ const ProjectStatus = () => {
                         </div>
                     </div>
 
-                   {/* Prjusct Status Main Table */}
+                   {/* Project Status Main Table */}
                     <ProjectStatusTable
                         isLoading={isFetching}
                         filter={filter}
@@ -130,6 +136,7 @@ const ProjectStatus = () => {
                     />
                 </div>
             </div>
+            {/* Project Status Modal */}
             <ProjectModal
                 refetchPmGoal={refetchPmGoal}
                 isFetchingPmGoal={isFetchingPmGoal}
@@ -139,11 +146,13 @@ const ProjectStatus = () => {
                 selectedProjectName={selectedProjectName}
                 projectDetails={projectDetails}
             />
+            {/* Percent of Goals Met Modal */}
             <PercentageofGoalsMetModal
                 projectDetails={projectDetails}
+                refetchPmGoal={refetchPmGoal}
                 isOpen={isOpenPercentageofGoalsMetModal}
                 isLoading={isFetchingPmGoal}
-                parcenatgeOfGoalsMet={parcenatgeOfGoalsMet}
+                percentageOfGoalsMet={percentageOfGoalsMet}
                 closeModal={handleClosePercentageofGoalsMetModal}
             />
         </React.Fragment>

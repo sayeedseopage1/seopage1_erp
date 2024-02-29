@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactModal from "react-modal";
 
 
 import RefreshButton from "../RefreshButton";
 import { PmGoalsTableColumns } from "./PmGoalsTableColumn";
 import PmGoalsTable from "./PmGoalsTable";
+import { IoClose } from "react-icons/io5";
 
 
 const ProjectModal = ({
@@ -15,27 +16,49 @@ const ProjectModal = ({
     isOpen,
     closeModal,
 }) => {
+
+    useEffect(() => {
+        // Clean up when component unmounts
+        return () => {
+            ReactModal.setAppElement(null);
+        };
+    }, []);
     return (
         <>
             <ReactModal
-                style={customStyles}
+                style={customStyles}k
                 isOpen={isOpen}
+                ariaHideApp={false}
                 onRequestClose={closeModal}
                 contentLabel="Project Details"
             >
                 <div
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        marginBottom: "20px",
-                    }}
+                    className="d-flex justify-content-between align-items-center mb-3"
                 >
-                    <div style={{ fontSize: "25px" }}> Goal Details</div>
+                    <h5 className="mb-0" style={{ fontSize: "20px" }}>Goal Details</h5>
+                    <div className="d-flex align-items-center" style={{
+                        gap: "10px"
+                    }}>
+                        <RefreshButton
+                            onClick={refetchPmGoal}
+                            isLoading={isFetchingPmGoal}
+                        />
+                        <button
+                            onClick={closeModal}
+                            className="d-flex justify-content-center align-items-center rounded-circle"
+                            style={{
+                                backgroundColor: "gray",
+                                padding: "2px 4px 2px 4px",
+                                color: "white",
+                                width: "24px",
+                                height: "24px",
+                            }}
+                        >
+                            <IoClose />
+                        </button>
+                    </div>
+                    
 
-                    <RefreshButton
-                        onClick={refetchPmGoal}
-                        isLoading={isFetchingPmGoal}
-                    />
                 </div>
                   <PmGoalsTable
                     projectDetails={projectDetails}

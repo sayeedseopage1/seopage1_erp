@@ -3,63 +3,60 @@ import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { Flex } from "../table/ui";
 import CKEditorComponent from "../../../ckeditor";
-
 import FileUpload from "./FileUpload";
 import { useCreateExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
 
 const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoalId }) => {
-    const [extendReqestData, setExtendReqestData] = useState({
-        extended_day: "",
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [extendRequestData, setExtendRequestData] = useState({
+        extended_day: null,
         is_client_communication: "",
         goal_id: extendRequestGoalId,
     });
-    const [extendReqestDataValidation, setExtendReqestDataValidation] = useState({
+    const [extendRequestDataValidation, setExtendRequestDataValidation] = useState({
         extended_day: false,
         is_client_communication: false,
         isSubmitting: false,
     });
-    const [selectedFiles, setSelectedFiles] = useState([]);
     const [submitData, { isLoading }] = useCreateExtendRequestMutation();
-
- 
-    console.log("extendRequestData", extendReqestData);
   
-
+    // Reset form
     const handleResetForm = () => {
-        setExtendReqestData({
+        setExtendRequestData({
             extended_day: "",
             is_client_communication: "",
             goal_id: extendRequestGoalId,
         });
         setSelectedFiles([]);
-        setExtendReqestDataValidation({
+        setExtendRequestDataValidation({
             extended_day: false,
             is_client_communication: false,
             isSubmitting: false,
         });
     }
 
+    // Submit data
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const isEmpty = isStateAllHaveValue(extendReqestData);
 
+        // Check if fields are empty using state validation
+        const isEmpty = isStateAllHaveValue(extendRequestData);
         if (isEmpty) {
-            const validation = markEmptyFieldsValidation(extendReqestData);
-            setExtendReqestDataValidation({
-                ...extendReqestDataValidation,
+            const validation = markEmptyFieldsValidation(extendRequestData);
+            setExtendRequestDataValidation({
+                ...extendRequestDataValidation,
                 ...validation,
                 isSubmitting: true,
             });
             return;
         }
-
+        // append data to form data
         const fd = new FormData();
-        fd.append("extended_day", extendReqestData.extended_day ?? "");
-        fd.append("is_client_communication", extendReqestData?.is_client_communication ?? "");
-        fd.append("goal_id", extendReqestData?.goal_id  ?? extendRequestGoalId);
+        fd.append("extended_day", extendRequestData.extended_day ?? "");
+        fd.append("is_client_communication", extendRequestData?.is_client_communication ?? "");
+        fd.append("goal_id", extendRequestData?.goal_id  ?? extendRequestGoalId);
         Array.from(selectedFiles).forEach((file) => {
             fd.append("screenshot[]", file);
         });
@@ -69,8 +66,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
-
-   
+            
         submitData(fd)
                 .unwrap()
                 .then((res) => {
@@ -87,27 +83,28 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
     };
 
  
-
+    // Check if fields are empty
     useEffect(() => {
-        if(extendReqestDataValidation.isSubmitting){
-            const validation = markEmptyFieldsValidation(extendReqestData);
-            setExtendReqestDataValidation({
-                ...extendReqestDataValidation,
+        if(extendRequestDataValidation.isSubmitting){
+            const validation = markEmptyFieldsValidation(extendRequestData);
+            setExtendRequestDataValidation({
+                ...extendRequestDataValidation,
                 ...validation,
             });
         }
-    }, [extendReqestData, extendReqestDataValidation.isSubmitting]);
+    }, [extendRequestData, extendRequestDataValidation.isSubmitting]);
 
-
+    // Reset form when modal is closed
     useEffect(() => {
         if(!isOpen){
             handleResetForm();
         }
     }, [isOpen]);
 
+    // Set goal id
     useEffect(() => {
-        setExtendReqestData({
-            ...extendReqestData,
+        setExtendRequestData({
+            ...extendRequestData,
             goal_id: extendRequestGoalId
         });
     }, [extendRequestGoalId]);
@@ -117,33 +114,26 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
         <ReactModal
             style={customStyles}
             isOpen={isOpen}
+            ariaHideApp={false}
             onRequestClose={onClose}
         >
             <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "15px",
-                }}
+                className="d-flex justify-content-between align-items-center mb-3"
             >
-                <div
+                <h6
                     style={{
                         fontSize: "25px",
                     }}
                 >
                     Extend Request
-                </div>
+                </h6>
                 <button
                     onClick={onClose}
+                    className="d-flex justify-content-center align-items-center rounded-circle"
                     style={{
                         backgroundColor: "gray",
                         padding: "2px 4px 2px 4px",
                         color: "white",
-                        borderRadius: "50%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
                         width: "24px",
                         height: "24px",
                     }}
@@ -152,6 +142,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                 </button>
             </div>
 
+            {/* Extend Request Modal Data */}
             <section style={styles.container}>
                 <div className="w-100">
                     <div className="my-2 row">
@@ -171,19 +162,21 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                         <div className="col-8">
                             <input
                                 placeholder="Enter the extended days"
-                                value={extendReqestData.extended_day}
-                                
+                                value={extendRequestData.extended_day}
+                                type="number"
                                 required={true}
-                                onChange={(e) => setExtendReqestData({
-                                    ...extendReqestData,
+                                min={1}
+                                onChange={(e) => setExtendRequestData({
+                                    ...extendRequestData,
                                     extended_day: e.target.value
                                 })}
                                 style={{ padding: "5px", borderRadius: "5px" }}
                             />
-                            {extendReqestDataValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
+                            {extendRequestDataValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
                         </div>
                     </div>
 
+                    {/* Upload Multiple Image or single image */}
                     <FileUpload
                         selectedFiles={selectedFiles}
                         setSelectedFiles={setSelectedFiles}
@@ -194,20 +187,19 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                         <p>
                             <strong>Reason:</strong>
                         </p>
-
                         <div
                             style={{
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={(e, editor) => setExtendReqestData({
-                                ...extendReqestData,
+                            <CKEditorComponent onChange={(e, editor) => setExtendRequestData({
+                                ...extendRequestData,
                                 is_client_communication: editor.getData()
                             })} />
                         </div>
                         {
-                            extendReqestDataValidation.is_client_communication && <p className="text-danger my-1">Reason is required</p>
+                            extendRequestDataValidation.is_client_communication && <p className="text-danger my-1">Reason is required</p>
                         }
                     </div>
 
@@ -225,25 +217,25 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
     );
 };
 
+// Modal styles
 const customStyles = {
     overlay: {
         zIndex: 99999998,
         backgroundColor: "rgba(0, 0, 0, 0.5)",
-
         margin: "auto auto",
         padding: "20px",
     },
     content: {
         zIndex: 99999999,
         maxWidth: "550px",
-        height: "550px",
+        height: "fit-content",
         maxHeight: "100vh",
-
         margin: "auto auto",
         padding: "20px",
     },
 };
 
+// Styles
 const styles = {
     container: {
         display: "flex",
