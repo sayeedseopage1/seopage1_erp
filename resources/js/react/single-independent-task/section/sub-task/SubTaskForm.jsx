@@ -328,7 +328,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
     useEffect(() => {
         // const showEnv = _.size(task?.subtask) === 0 ? true : false;
-        if (auth.getRoleId() === 6) {
+        if (auth.getRoleId() === 6 || auth.isHasRolePermission(13)) {
             dispatch(setWorkingEnvironmentStatus(!isFirstSubtask));
         }
     }, [isFirstSubtask]);

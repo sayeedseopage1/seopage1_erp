@@ -56,6 +56,10 @@ const DenyAndContinue = ({ onSubmit, isSubmitting, onBack, task }) => {
                             taskType === "design" ? "designer" : "developer"
                         } is interpreting his original instruction now was not possible to understand from what his writing`,
                     },
+                    {
+                        id: "deny3",
+                        title: `Project Manager changed instruction directly to me due to which I had to work on new instruction, bypassing lead developer's instruction`,
+                    },
                 ];
             default:
                 [];

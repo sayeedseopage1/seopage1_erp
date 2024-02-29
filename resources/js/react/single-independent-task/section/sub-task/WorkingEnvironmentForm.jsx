@@ -97,7 +97,7 @@ const WorkingEnvironmentForm = ({ task, onSubmit, close }) => {
                             "Working environment store successfully",
                             "You can create subtask now",
                             "success"
-                        ).then(({isConfirmed})=>{
+                        ).then(({ isConfirmed }) => {
                             onSubmit();
                         });
                     });
