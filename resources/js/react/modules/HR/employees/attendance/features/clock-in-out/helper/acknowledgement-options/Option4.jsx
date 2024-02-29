@@ -514,7 +514,6 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     Submit and add more
                                 </Button>
                             </div>
-                            <div>{fd?.durations}</div>
                         </div>
                     </Switch.Case>
                 </Switch>
