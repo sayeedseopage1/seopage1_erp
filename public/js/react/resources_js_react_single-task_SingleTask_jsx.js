@@ -12485,10 +12485,10 @@ var SubTaskSection = function SubTaskSection(_ref) {
           case 0:
             if (status !== null && status !== void 0 && status.id && Number(status.id) === 1) {
               sweetalert2_react_content__WEBPACK_IMPORTED_MODULE_18___default()((sweetalert2__WEBPACK_IMPORTED_MODULE_17___default())).fire({
-                icon: 'error',
-                title: 'You cannot create any sub task under this parent task now because the parent task is under revision.',
+                icon: "error",
+                title: "You cannot create any sub task under this parent task now because the parent task is under revision.",
                 customClass: {
-                  confirmButton: 'btn btn-primary px-4'
+                  confirmButton: "btn btn-primary px-4"
                 }
               });
             } else {
@@ -16809,6 +16809,9 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
         }, {
           id: "deny2",
           title: "The way the lead ".concat(taskType === "design" ? "designer" : "developer", " is interpreting his original instruction now was not possible to understand from what his writing")
+        }, {
+          id: "deny3",
+          title: "Project Manager changed instruction directly to me due to which I had to work on new instruction, bypassing lead developer's instruction"
         }];
       default:
         [];

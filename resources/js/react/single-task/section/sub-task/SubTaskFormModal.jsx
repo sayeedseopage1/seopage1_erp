@@ -58,8 +58,8 @@ export default function SubTaskFormController({
     const dispatch = useDispatch(); // dispatch
     const auth = useAuth(); // logged user
     const task = new SingleTask(taskDetails); // task instance;
-    const isDesignerTask = _.includes([5, 7], task?.category?.id); 
- 
+    const isDesignerTask = _.includes([5, 7], task?.category?.id);
+
     // environment status
     React.useEffect(() => {
         const showEnv =
@@ -95,24 +95,34 @@ export default function SubTaskFormController({
 
             {/* task creation guideline */}
             <VisibleItem
-                isVisible={!isDesignerTask && !visibleEnvironmentForm && visibleInformationModal}
+                isVisible={
+                    !isDesignerTask &&
+                    !visibleEnvironmentForm &&
+                    visibleInformationModal
+                }
             >
                 <LeadConfirmationModal
                     isOpen={true}
                     onConfirm={() => setVisibleInformationModal(false)}
-                    close = {close}
+                    close={close}
                 />
             </VisibleItem>
 
             {/* task creation form */}
             <VisibleItem
-                isVisible={isDesignerTask || (!visibleEnvironmentForm && !visibleInformationModal)}
+                isVisible={
+                    isDesignerTask ||
+                    (!visibleEnvironmentForm && !visibleInformationModal)
+                }
             >
                 <WithContainer
                     close={close}
                     visibleEnvironmentForm={visibleEnvironmentForm}
                 >
-                    <SubTaskForm close={close} isDesignerTask={isDesignerTask} />
+                    <SubTaskForm
+                        close={close}
+                        isDesignerTask={isDesignerTask}
+                    />
                 </WithContainer>
             </VisibleItem>
         </React.Fragment>
