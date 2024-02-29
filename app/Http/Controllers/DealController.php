@@ -909,7 +909,7 @@ class DealController extends AccountBaseController
                         ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
                         ->orWhere('deal_stages.client_username', 'like', '%' . request('search') . '%')
                         ->orWhere('deal_stages.client_name', 'like', '%' . request('search') . '%')
-                      //  ->orWhere('added_by.name', 'like', '%' . request('search') . '%');
+                        ->orWhere('added_by.name', 'like', '%' . request('search') . '%');
                       ;
                 });
             }
@@ -1029,7 +1029,9 @@ class DealController extends AccountBaseController
                         ->orWhere('deal_stages.short_code', 'like', '%' . request('search') . '%')
                         ->orWhere('leads.project_link', 'like', '%' . request('search') . '%')
                         ->orWhere('deal_stages.client_username', 'like', '%' . request('search') . '%')
-                        ->orWhere('deal_stages.client_name', 'like', '%' . request('search') . '%');
+                        ->orWhere('deal_stages.client_name', 'like', '%' . request('search') . '%')
+                        ->orWhere('added_by.name', 'like', '%' . request('search') . '%')
+                        ;
                 });
             }
             if ($request->client_username != null) {

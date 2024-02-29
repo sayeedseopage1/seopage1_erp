@@ -55,6 +55,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         })();
     }, []);
 
+    console.log("task", task);
     //   fetch submitted rtk api
     const fetchData = (url, cb) => {
         getTaskDetails(`/${task?.id}/json?mode=${url}`)
@@ -208,7 +209,9 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
             </div>
 
             <div
-                className={`tab-content ${isCommentShow?"p-0":"p-3"} sp1-subtask-modal-tab-content`}
+                className={`tab-content ${
+                    isCommentShow ? "p-0" : "p-3"
+                } sp1-subtask-modal-tab-content`}
                 id="v-pills-tabContent"
             >
                 <div

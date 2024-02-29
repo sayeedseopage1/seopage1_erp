@@ -23,9 +23,9 @@ const AssginedToSelection = ({selected, onSelect, taskCategory}) => {
 
     let employees = [] ; 
     if(taskCategory && taskCategory.id === 5){
-        employees = _.filter(users, user => filterUser(user, 13) || filterUser(user, 9))
+        employees = _.filter(users, user => filterUser(user, 13))
     }else if(taskCategory && taskCategory.id === 7){
-        employees = _.filter(users, user => filterUser(user, 13) || filterUser(user, 10))
+        employees = _.filter(users, user => filterUser(user, 13) )
     }else{
         employees = _.filter(users, user => filterUser(user, 6) || Number(user?.id) === auth.getId() )
     }

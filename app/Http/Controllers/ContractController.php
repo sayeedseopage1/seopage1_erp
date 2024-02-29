@@ -2498,28 +2498,28 @@ class ContractController extends AccountBaseController
         $project = Project::where('deal_id', $request->id)->first();
 
         $authorization_bonus_check = Cashpoint::where('project_id', $project->id)->where('user_id', $user_name->id)->where('type', 'Authorization Bonus')->first();
-        if ($authorization_bonus_check == null) {
-            $point = new CashPoint();
+        // if ($authorization_bonus_check == null) {
+        //     $point = new CashPoint();
 
-            $point->user_id = $user_name->id;
-            $point->project_id = $project->id;
-            $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name .
-                '</a> authorized the deal : <a style="color:blue" href="' . route('projects.show', $project->id) . '">'
-                . $project->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $project->client_id) . '">' .
+        //     $point->user_id = $user_name->id;
+        //     $point->project_id = $project->id;
+        //     $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name .
+        //         '</a> authorized the deal : <a style="color:blue" href="' . route('projects.show', $project->id) . '">'
+        //         . $project->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $project->client_id) . '">' .
 
-                $project->client_name->name;
+        //         $project->client_name->name;
 
-            $point->gained_as = "Individual";
-            $point->points = $earned_point;
+        //     $point->gained_as = "Individual";
+        //     $point->points = $earned_point;
 
-            if ($cash_points_team_lead != null) {
-                $point->total_points_earn = $cash_points_team_lead->total_points_earn + $earned_point;
-            } else {
-                $point->total_points_earn = $earned_point;
-            }
+        //     if ($cash_points_team_lead != null) {
+        //         $point->total_points_earn = $cash_points_team_lead->total_points_earn + $earned_point;
+        //     } else {
+        //         $point->total_points_earn = $earned_point;
+        //     }
 
-            $point->save();
-        }
+        //     $point->save();
+        // }
 
         //update authoziation action
         if ($this->user->role_id == 4) {
@@ -2577,7 +2577,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
-       // dd($request);
+        // DB::beginTransaction();
         $data = new AwardTimeIncress();
         $data->request_from = Auth::id();
         $data->deal_id = $request->id;
@@ -2593,7 +2593,6 @@ class ContractController extends AccountBaseController
 
            $helper->ProjectAcceptTimeExtensionAuthorization($project);
            //need pending action
-
             return response()->json([
                 'status' => 'success'
             ]);
@@ -2995,10 +2994,12 @@ public function getAllContracts(Request $request){
         'pm.name as pm_name',
         'pm.image as pm_avatar',
         'client.image as client_avatar',
+        'p_m_projects.created_at as closing_date',
         )
     ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
     ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
+    ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
     ->where('deals.dept_status','WD');
 
     if ($startDate !== null && $endDate !== null) {
@@ -3011,7 +3012,9 @@ public function getAllContracts(Request $request){
         $dealsQuery->where(function ($query) {
             $query->where('deals.project_name', 'like', '%' . request('search') . '%')
                 ->orWhere('deals.deal_id', 'like', '%' . request('search') . '%')
-                ->orWhere('users.name', 'like', '%' . request('search') . '%');
+                ->orWhere('added_by.name', 'like', '%' . request('search') . '%')
+                ->orWhere('pm.name', 'like', '%' . request('search') . '%')
+                ->orWhere('client.name', 'like', '%' . request('search') . '%');
         });
     }
     if ($request->pm_id != null) {
@@ -3029,11 +3032,11 @@ public function getAllContracts(Request $request){
     
     if (Auth::user()->role_id == 4) {
         $dealsQuery->where('pm_id',Auth::id());
-    }else {
+    }
     $deals = $dealsQuery
         ->orderBy('deals.id', 'desc')
         ->paginate($limit);
-    }
+    
 
     /**AMOUNT CHECK ITS UPSELL OR NOT START */
     foreach ($deals as $itemDeal){
@@ -3112,9 +3115,12 @@ public function getAllContracts(Request $request){
         $itemDeal->action = $action;
     }
     /**AMOUNT CHECK ITS UPSELL OR NOT END */
-
+    /**COUNT OF AWARD TIME REQUEST DATA START */
+    $total_request = AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
+    /**COUNT OF AWARD TIME REQUEST DATA END */
     return response()->json([
         'data' => $deals,
+        'total_request' =>$total_request,
         'status'=> 200,
     ]);
 }
@@ -3131,10 +3137,12 @@ public function exportContracts(Request $request){
         'pm.name as pm_name',
         'pm.image as pm_avatar',
         'client.image as client_avatar',
+        'p_m_projects.created_at as closing_date',
         )
     ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
     ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
+    ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
     ->where('deals.dept_status','WD');
 
     if ($startDate !== null && $endDate !== null) {

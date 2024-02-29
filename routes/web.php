@@ -1510,6 +1510,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
 
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
+    
     Route::resource('client-review', ClientReviewController::class);
     Route::resource('task-report-issues', IssuedTaskReportController::class);
     Route::get('get-task-report',[IssuedTaskReportController::class,'getTaskReport']);

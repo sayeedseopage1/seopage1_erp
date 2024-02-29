@@ -32,8 +32,11 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         isOpen: isOpen,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "position-relative",
+          // className="position-relative"
           style: {
+            position: "absolute",
+            top: "80px",
+            left: "-10px",
             padding: "75px 23px 18px 25px",
             height: "100vh",
             width: "100vw"
@@ -41,6 +44,9 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             className: "sp1_task_comment_modal",
             style: {
+              position: "absolute",
+              top: "80px",
+              left: "-10px",
               height: "100%",
               width: "100%",
               maxHeight: "100vh"
@@ -74,8 +80,11 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         isOpen: isOpen,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          className: "position-relative",
+          // className="position-relative"
           style: {
+            position: "absolute",
+            top: "80px",
+            left: "-10px",
             padding: "79px 41px 21px 261px",
             height: "100vh",
             width: "100vw"
@@ -83,6 +92,9 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             className: "sp1_task_comment_modal",
             style: {
+              position: "absolute",
+              top: "80px",
+              left: "-10px",
               height: "100%",
               width: "100%",
               maxHeight: "100vh"
@@ -97,8 +109,7 @@ var CommentContainerDecider = function CommentContainerDecider(_ref) {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
           className: "position-relative",
           style: {
-            paddingTop: "79px",
-            paddingBottom: "18px"
+            paddingTop: "50px"
           },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
             style: {
@@ -154,17 +165,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useWindowSize.js");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useWindowSize.js");
 /* harmony import */ var _components_CustomModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/CustomModal */ "./resources/js/react/UI/comments/components/CustomModal.jsx");
 /* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Modal */ "./resources/js/react/UI/comments/components/Modal.jsx");
 /* harmony import */ var _CommentsBody__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
 /* harmony import */ var _Data_commentDemoData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./_Data/commentDemoData */ "./resources/js/react/UI/comments/_Data/commentDemoData.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
 /* harmony import */ var _CommentContainerDecider__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./CommentContainerDecider */ "./resources/js/react/UI/comments/CommentContainerDecider.jsx");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _zustand_store__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./zustand/store */ "./resources/js/react/UI/comments/zustand/store.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -183,7 +195,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-// const demoComments = commentDemoData(20);
 
 var CommentsContainer = function CommentsContainer(_ref) {
   var _ref$toggleRef = _ref.toggleRef,
@@ -204,12 +215,14 @@ var CommentsContainer = function CommentsContainer(_ref) {
     showFullScreenBtn = _ref$showFullScreenBt === void 0 ? true : _ref$showFullScreenBt,
     _ref$height = _ref.height,
     height = _ref$height === void 0 ? "89vh" : _ref$height;
+  var _useCommentStore = (0,_zustand_store__WEBPACK_IMPORTED_MODULE_8__.useCommentStore)(),
+    commentState = _useCommentStore.commentState;
   // ---------------------------------------------------------
-  var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useParams)();
+  var param = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useParams)();
 
   // ---------------------------------------------------------
 
-  var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_10__["default"])(),
+  var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_11__["default"])(),
     width = _useWindowSize.width;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
@@ -220,12 +233,17 @@ var CommentsContainer = function CommentsContainer(_ref) {
     isFetching = _useGetCommentsQuery.isFetching,
     isLoading = _useGetCommentsQuery.isLoading,
     refetch = _useGetCommentsQuery.refetch;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_CommentContainerDecider__WEBPACK_IMPORTED_MODULE_6__["default"], {
+
+  // useEffect hook to call refetch when commentState changes
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    refetch();
+  }, [commentState]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_CommentContainerDecider__WEBPACK_IMPORTED_MODULE_6__["default"], {
     fullScreenView: fullScreenView,
     isOpen: isOpen,
     toggleRef: toggleRef,
     width: width,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_CommentsBody__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_CommentsBody__WEBPACK_IMPORTED_MODULE_3__["default"], {
       fullScreenView: fullScreenView,
       setFullScreenView: setFullScreenView,
       isOpen: isOpen,
@@ -11355,15 +11373,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
     var count = 0;
     var error = new Object();
     if (!title) {
-      error.title = 'The title field is required';
+      error.title = "The title field is required";
       count++;
     }
     if (!startDate) {
-      error.startDate = 'You have to select a start date';
+      error.startDate = "You have to select a start date";
       count++;
     }
     if (!dueDate) {
-      error.dueDate = 'You have to select a due date';
+      error.dueDate = "You have to select a due date";
       count++;
     }
     if (!taskCategory) {
@@ -11375,14 +11393,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
       count++;
     }
     if (assignedTo && assignedTo !== null && assignedTo !== void 0 && assignedTo.isOverloaded) {
-      react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 04 Submittable tasks."));
+      react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 04 Submittable tasks."));
       count++;
     }
     if (!pageType) {
       error.taskType = "You have to Select task type";
       count++;
     } else {
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('New Page Design')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("New Page Design")) {
         if (!pageTypePriority) {
           error.pageTypePriority = "You have to Select page type";
           count++;
@@ -11400,7 +11418,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           count++;
         }
       }
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('Others')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Others")) {
         if (!pageTypeOthers) {
           error.pageTypeOthers = "You have to select an option";
           count++;
@@ -11418,7 +11436,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           count++;
         }
       }
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower('Cloning Existing Design')) {
+      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Cloning Existing Design")) {
         if (!pageTypeName) {
           error.pageTypeName = "You have to select an option";
           count++;
@@ -11472,14 +11490,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
             fd.append("image_url", null);
             fd.append("subTaskID", null);
             fd.append("addedFiles", null);
-            fd.append('task_type', pageType !== null && pageType !== void 0 ? pageType : null);
-            fd.append('page_type', pageTypePriority);
-            fd.append('page_name', pageName);
-            fd.append('page_url', pageURL);
-            fd.append('task_type_other', pageTypeOthers);
-            fd.append('page_type_name', pageTypeName);
-            fd.append('number_of_pages', numberOfPage);
-            fd.append('existing_design_link', existingDesignLink);
+            fd.append("task_type", pageType !== null && pageType !== void 0 ? pageType : null);
+            fd.append("page_type", pageTypePriority);
+            fd.append("page_name", pageName);
+            fd.append("page_url", pageURL);
+            fd.append("task_type_other", pageTypeOthers);
+            fd.append("page_type_name", pageTypeName);
+            fd.append("number_of_pages", numberOfPage);
+            fd.append("existing_design_link", existingDesignLink);
             fd.append("_token", document.querySelector("meta[name='csrf-token']").getAttribute("content"));
             Array.from(files).forEach(function (file) {
               fd.append("file[]", file);
@@ -11707,7 +11725,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               style: {
                 color: "red"
               },
-              children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 10 Submittable tasks.")
+              children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 10 Submittable tasks.")
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
             className: "col-12 col-md-6",
@@ -11718,7 +11736,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 className: "form-group position-relative my-3",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("label", {
                   htmlFor: "",
-                  children: [" Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
+                  children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
                     children: "*"
                   }), " "]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Button, {
@@ -11738,7 +11756,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Option, {
                       className: function className(_ref4) {
                         var active = _ref4.active;
-                        return "sp1-select-option ".concat(active ? 'active' : '');
+                        return "sp1-select-option ".concat(active ? "active" : "");
                       },
                       value: s,
                       children: function children(_ref5) {
@@ -11746,7 +11764,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.Fragment, {
                           children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("i", {
                             className: "fa-solid fa-check ml-2"
-                          }) : '']
+                          }) : ""]
                         });
                       }
                     }, i);
@@ -11773,7 +11791,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 className: "form-group position-relative my-3",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("label", {
                   htmlFor: "",
-                  children: [" Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
+                  children: [" ", "Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
                     children: "*"
                   }), " "]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Button, {
@@ -11793,7 +11811,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Option, {
                       className: function className(_ref7) {
                         var active = _ref7.active;
-                        return "sp1-select-option ".concat(active ? 'active' : '');
+                        return "sp1-select-option ".concat(active ? "active" : "");
                       },
                       value: s,
                       children: function children(_ref8) {
@@ -11801,7 +11819,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.Fragment, {
                           children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("i", {
                             className: "fa-solid fa-check ml-2"
-                          }) : '']
+                          }) : ""]
                         });
                       }
                     }, i);
@@ -11823,7 +11841,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 className: "form-group position-relative my-3",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("label", {
                   htmlFor: "",
-                  children: [" Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
+                  children: [" ", "Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
                     children: "*"
                   }), " "]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Button, {
@@ -11843,7 +11861,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Option, {
                       className: function className(_ref10) {
                         var active = _ref10.active;
-                        return "sp1-select-option ".concat(active ? 'active' : '');
+                        return "sp1-select-option ".concat(active ? "active" : "");
                       },
                       value: s,
                       children: function children(_ref11) {
@@ -11851,7 +11869,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.Fragment, {
                           children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("i", {
                             className: "fa-solid fa-check ml-2"
-                          }) : '']
+                          }) : ""]
                         });
                       }
                     }, i);
@@ -11875,7 +11893,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     className: "form-group position-relative my-3",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("label", {
                       htmlFor: "",
-                      children: [" Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
+                      children: [" ", "Page Type Name", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("sup", {
                         children: "*"
                       }), " "]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Button, {
@@ -11895,7 +11913,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_23__.Listbox.Option, {
                           className: function className(_ref13) {
                             var active = _ref13.active;
-                            return "sp1-select-option ".concat(active ? 'active' : '');
+                            return "sp1-select-option ".concat(active ? "active" : "");
                           },
                           value: s,
                           children: function children(_ref14) {
@@ -11903,7 +11921,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.Fragment, {
                               children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("i", {
                                 className: "fa-solid fa-check ml-2"
-                              }) : '']
+                              }) : ""]
                             });
                           }
                         }, i);

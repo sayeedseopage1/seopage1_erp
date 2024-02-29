@@ -4,8 +4,8 @@ import {
     CreatedBy, EmptySpace
 } from "./ui";
 import Avatar from "../../../../../global/Avatar";
+import ActionDropdown from "./ActionDropdown";
  
-
 export const WonDealsTableColumns = [
     {
         id: "short_code",
@@ -188,6 +188,7 @@ export const WonDealsTableColumns = [
     {
         id: "action",
         header: "Action",
-        cell: ({row}) => <div dangerouslySetInnerHTML={{__html: row.original?.action}}></div>
+        // cell: ({row}) => <div dangerouslySetInnerHTML={{__html: row.original?.action}}></div>
+        cell: (props) => <ActionDropdown {...props} />,
     },
 ];

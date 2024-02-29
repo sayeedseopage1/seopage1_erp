@@ -1,14 +1,11 @@
-import React, {useState} from 'react'
-import Button from '../../../components/Button';
-import CKEditorComponent from '../../../../ckeditor';
-import SubmitButton from '../../../components/SubmitButton';
-import { User } from '../../../../utils/user-details';
-import _ from 'lodash';
+import React, { useState } from "react";
+import Button from "../../../components/Button";
+import CKEditorComponent from "../../../../ckeditor";
+import SubmitButton from "../../../components/SubmitButton";
+import { User } from "../../../../utils/user-details";
+import _ from "lodash";
 
-
-
-
-const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
+const DenyAndContinue = ({ onSubmit, isSubmitting, onBack, task }) => {
     const auth = new User(window?.Laravel?.user);
     const [reason, setReason] = useState("");
     const [reasonError, setReasonError] = useState("");
@@ -16,9 +13,11 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
     const [commentError, setCommentError] = useState("");
     const [err, setErr] = useState(null);
 
-    console.log({denyandcontinue: task})
+    console.log({ denyandcontinue: task });
 
-    const taskType = _.includes([5, 7], task?.category?.id) ? 'design' : 'development';
+    const taskType = _.includes([5, 7], task?.category?.id)
+        ? "design"
+        : "development";
 
     const handleEditorDataChange = (e, editor) => {
         const data = editor.getData();
@@ -30,61 +29,76 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
         setReason(e.target.value);
     };
 
-            
     const denyOptions = (type) => {
-        switch(type){
-            case 'lead_dev': 
-                return ([
-                    {id: 'deny1', title: 'The project manager added new things in the instruction which was not part of the original instruction'},
-                    {id: 'deny2', title: 'The way the project manager is interpreting his original instruction now was not possible to understand from what his writing'}
-                ])
-            case 'dev':
-                return([
-                    {id: 'deny1', title: `The lead ${taskType === 'design' ? 'designer' : 'developer'} added new things in the instruction which was not part of the original instruction`},
-                    {id: 'deny2', title: 'The way the lead developer is interpreting his original instruction now was not possible to understand from what his writing'}
-                ])
-            default: []
+        switch (type) {
+            case "lead_dev":
+                return [
+                    {
+                        id: "deny1",
+                        title: "The project manager added new things in the instruction which was not part of the original instruction",
+                    },
+                    {
+                        id: "deny2",
+                        title: "The way the project manager is interpreting his original instruction now was not possible to understand from what his writing",
+                    },
+                ];
+            case "dev":
+                return [
+                    {
+                        id: "deny1",
+                        title: `The lead ${
+                            taskType === "design" ? "designer" : "developer"
+                        } added new things in the instruction which was not part of the original instruction`,
+                    },
+                    {
+                        id: "deny2",
+                        title: `The way the lead ${
+                            taskType === "design" ? "designer" : "developer"
+                        } is interpreting his original instruction now was not possible to understand from what his writing`,
+                    },
+                ];
+            default:
+                [];
         }
-    }
+    };
 
-
-
-     // validation
-     const validate = () => {
+    // validation
+    const validate = () => {
         let errorCount = 0;
-        
-        if(comment === ""){
-             errorCount++;
-             setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')     
-        }
- 
-        if(reason === ''){
-             errorCount++;
-             setReasonError('You have to select a reason from above options')
-        }
- 
-        return errorCount === 0; 
-     }
 
+        if (comment === "") {
+            errorCount++;
+            setCommentError(
+                "You have to explain the revision in details, so that lead developer/developer can understand where they need to work."
+            );
+        }
 
-    const handleOnSubmit = e => {
+        if (reason === "") {
+            errorCount++;
+            setReasonError("You have to select a reason from above options");
+        }
+
+        return errorCount === 0;
+    };
+
+    const handleOnSubmit = (e) => {
         e.preventDefault();
-        if(validate()){
+        if (validate()) {
             onSubmit({
                 comment,
-                denyReason: reason
+                denyReason: reason,
             });
-        }else{
-            setErr("You have to Explain Why Did You Deny!")
+        } else {
+            setErr("You have to Explain Why Did You Deny!");
         }
-    }
+    };
 
-
-
-
-    const options = (auth?.isHasRolePermission(13) || auth?.isHasRolePermission(6)) ? denyOptions('lead_dev') : denyOptions('dev');
+    const options =
+        auth?.isHasRolePermission(13) || auth?.isHasRolePermission(6)
+            ? denyOptions("lead_dev")
+            : denyOptions("dev");
     return (
-        <React.Fragment>  
+        <React.Fragment>
             <form action="">
                 {/* reason for deny */}
                 <div className="form-group">
@@ -92,14 +106,17 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
                         Select reason for deny<sup className="f-16">*</sup> :
                     </label>
                     <div className="px-3">
-                        {options.map(option => (
-                            <div key={option.id} className="form-check d-flex align-items-start mb-2">
+                        {options.map((option) => (
+                            <div
+                                key={option.id}
+                                className="form-check d-flex align-items-start mb-2"
+                            >
                                 <input
                                     className="form-check-input mr-2"
                                     type="radio"
                                     name="exampleRadios"
                                     id={option.id}
-                                    required= {true}
+                                    required={true}
                                     onChange={handleChange}
                                     value={option.title}
                                     style={{
@@ -107,7 +124,6 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
                                         height: "16px",
                                         marginTop: "3px",
                                     }}
-                                    
                                 />
                                 <label
                                     className="form-check-label"
@@ -119,61 +135,73 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
                             </div>
                         ))}
                     </div>
-                    {reasonError && <small id="emailHelp" className="form-text text-danger">{reasonError}</small>}
+                    {reasonError && (
+                        <small id="emailHelp" className="form-text text-danger">
+                            {reasonError}
+                        </small>
+                    )}
                 </div>
-
 
                 {/* rich editor  */}
                 <div className="form-group">
                     <label htmlFor="" className="font-weight-bold">
-                        Please Explain Why Did You Deny? <sup className="f-16 text-red">*</sup>
+                        Please Explain Why Did You Deny?{" "}
+                        <sup className="f-16 text-red">*</sup>
                     </label>
                     <div className="ck-editor-holder">
                         <CKEditorComponent onChange={handleEditorDataChange} />
                     </div>
-                    {commentError && <small id="emailHelp" className="form-text text-danger">
-                        {commentError}
-                    </small>} 
+                    {commentError && (
+                        <small id="emailHelp" className="form-text text-danger">
+                            {commentError}
+                        </small>
+                    )}
                 </div>
 
                 <div className="mt-3 d-flex align-items-center">
-                        <Button onClick={onBack} variant="tertiary" className="ml-auto mr-2">
-                            Back
-                        </Button>
+                    <Button
+                        onClick={onBack}
+                        variant="tertiary"
+                        className="ml-auto mr-2"
+                    >
+                        Back
+                    </Button>
 
-                        {!isSubmitting ? (
+                    {!isSubmitting ? (
+                        <React.Fragment>
                             <React.Fragment>
-                                <React.Fragment>
                                 {_.includes([4, 6], auth?.getRoleId()) ? (
-                                    <Button onClick={handleOnSubmit}>Next</Button>
-                                ): 
+                                    <Button onClick={handleOnSubmit}>
+                                        Next
+                                    </Button>
+                                ) : (
                                     <SubmitButton
-                                        title="Submit" 
+                                        title="Submit"
                                         isLoading={isSubmitting}
                                         onClick={handleOnSubmit}
                                     />
-                                }
+                                )}
                             </React.Fragment>
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                <Button className="cursor-processing">
-                                    <div
-                                        className="spinner-border text-white"
-                                        role="status"
-                                        style={{
-                                            width: "18px",
-                                            height: "18px",
-                                        }}
-                                    />{" "}
-                                    Processing...
-                                </Button>
-                            </React.Fragment>
-                        )}
-                    </div>
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                            <Button className="cursor-processing">
+                                <div
+                                    className="spinner-border text-white"
+                                    role="status"
+                                    style={{
+                                        width: "18px",
+                                        height: "18px",
+                                    }}
+                                />{" "}
+                                Processing...
+                            </Button>
+                        </React.Fragment>
+                    )}
+                </div>
             </form>
         </React.Fragment>
     );
-}
+};
 
-export default DenyAndContinue
+export default DenyAndContinue;

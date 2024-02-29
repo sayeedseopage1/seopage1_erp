@@ -157,6 +157,7 @@
 @php
 $addProjectPermission = user()->permission('add_projects');
 $manageProjectTemplatePermission = user()->permission('manage_project_template');
+$authorization_count = App\Models\Project::where('deadline_auth_status',1)->count();
 @endphp
 
 @section('content')
@@ -185,6 +186,9 @@ $manageProjectTemplatePermission = user()->permission('manage_project_template')
                     <x-forms.link-secondary :link="route('projects.import')" class="mr-3 float-left mb-2 mb-lg-0 mb-md-0" icon="file-upload">
                         @lang('app.importExcel')
                     </x-forms.link-secondary>
+                @endif
+                @if (Auth::user()->role_id == 1)
+                <a target="_blank" href="{{route('pde-request')}}" class="btn btn-secondary ml-3" style="padding: 6px;">Project Deadline Extension Requests <span class="text-warning">( {{$authorization_count}} )</span></a>
                 @endif
 
             </div>

@@ -7,7 +7,7 @@ import {
     useGetTaskDetailsQuery,
 } from "../../../services/api/SingleTaskPageApi";
 import Loader from "../../components/Loader";
-import { Placeholder } from '../../../global/Placeholder'
+import { Placeholder } from "../../../global/Placeholder";
 
 const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
     const [query, setQuery] = React.useState("");
@@ -16,16 +16,21 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
     const { data, isFetching } = useGetTaskDetailsQuery(
         `/${params?.taskId}/json?mode=employees`
     );
- 
+
     let employees = [];
-    if(taskCategory && taskCategory.id === 5){
-        employees = _.filter(data, d => Number(d.role_id) === 9)
-    }else if(taskCategory && taskCategory.id === 7){
-        employees = _.filter(data, d => Number(d.role_id) === 10)
-    }else{
-        employees = _.filter(data, d => Number(d.role_id) === 5)
+    if (taskCategory && taskCategory.id === 5) {
+        employees = _.filter(
+            data,
+            (d) =>
+                Number(d.role_id) === 9 &&
+                Number(d.id) !== Number(window.Laravel.user.id)
+        );
+    } else if (taskCategory && taskCategory.id === 7) {
+        employees = _.filter(data, (d) => Number(d.role_id) === 10);
+    } else {
+        employees = _.filter(data, (d) => Number(d.role_id) === 5);
     }
- 
+
     const filteredData =
         query === ""
             ? employees
@@ -76,17 +81,18 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
 export default AssginedToSelection;
 
 const Option = ({ employee }) => {
-    const { data, isLoading } = useDeveloperInProgressTaskQuery(
-        employee?.id,
-        { skip: !employee?.id }
-    );
-  
-    if(isLoading){
-        return <div className="sp1-select-option mb-2">
-            <div className="d-flex align-items-center px-3"> 
-                <Placeholder />
+    const { data, isLoading } = useDeveloperInProgressTaskQuery(employee?.id, {
+        skip: !employee?.id,
+    });
+
+    if (isLoading) {
+        return (
+            <div className="sp1-select-option mb-2">
+                <div className="d-flex align-items-center px-3">
+                    <Placeholder />
+                </div>
             </div>
-        </div>
+        );
     }
 
     return (
@@ -132,8 +138,11 @@ const Option = ({ employee }) => {
                         }`}
                     >
                         <span className="mr-2">{employee?.name}</span>
-                        {data?.status === 400 ? <span className="badge badge-danger">Overloaded</span> : 
-                        employee?.developer_status === 1 ? (
+                        {data?.status === 400 ? (
+                            <span className="badge badge-danger">
+                                Overloaded
+                            </span>
+                        ) : employee?.developer_status === 1 ? (
                             <span className="badge badge-warning">
                                 Working...
                             </span>
@@ -142,8 +151,6 @@ const Option = ({ employee }) => {
                                 Open to Work
                             </span>
                         )}
-
-
                     </span>
                     {selected ? (
                         <span className="ml-auto">
