@@ -327,6 +327,20 @@ class ProjectStatusController extends AccountBaseController
             $pm_goals = $pmGoalsQuery
             ->orderBy('project_pm_goals.id', 'desc')
             ->paginate($limit);
+
+            foreach($pm_goals as $pmGoal){
+                $goal = ProjectPmGoal::where('project_id',$pmGoal->project_id)->first();
+                $goal_count = ProjectPmGoal::where('project_id',$pmGoal->project_id)->count();
+                if($goal->description == null){
+                    $next_goal_date = $goal->goal_end_date;
+                    $currentDate = Carbon::now();
+                    $upcoming_goal_day = $currentDate->diffInDays($next_goal_date);
+                    $pmGoal->next_goal_date = $next_goal_date;
+                    $pmGoal->upcoming_goal_day = $upcoming_goal_day;
+                    $pmGoal->total_goal = $goal_count;
+                }
+            }
+
             return response()->json([
                 'data'=>$pm_goals,
                 'status'=>200
