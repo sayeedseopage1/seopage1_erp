@@ -22,6 +22,9 @@ const ProjectStatus = () => {
         pageIndex: 0,
         pageSize: 10,
     });
+    const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
+    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
+    const [selectedProjectName, setSelectedProjectName] = React.useState("");
 
     // make query string
     const queryString = (object) => {
@@ -56,9 +59,6 @@ const ProjectStatus = () => {
     let tableColumns = ProjectStatusTableColumns;
 
 
-    const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
-    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
-    const [selectedProjectName, setSelectedProjectName] = React.useState("");
     const closeModalOne = () => {
         setIsModalOneOpen(false);
         setSelectedProjectName("");
@@ -92,6 +92,7 @@ const ProjectStatus = () => {
         setProjectId(data.project_id);
         setSelectedProjectName(data.project_name);
         setProjectDetails(data);
+        setIsOpenPercentageofGoalsMetModal(true)
     }
 
     // handle close percentage of goal met modal
@@ -100,7 +101,7 @@ const ProjectStatus = () => {
     }
 
 
-    console.log(percentageOfGoalsMet)
+    
 
     return (
 

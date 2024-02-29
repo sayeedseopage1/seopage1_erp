@@ -1,0 +1,16 @@
+.goalMeat{
+  background-color: #28a745 !important;
+}
+.goalMeat:hover{
+  background-color: #28a745 !important;
+
+}
+.goalMeat td{
+  color: white !important;
+}
+.goalMeat:hover td{
+  background-color: #28a745 !important;
+  border-bottom: 1px solid #28a745;
+  border-top: 1px solid #28a745;
+  color: white !important;
+}

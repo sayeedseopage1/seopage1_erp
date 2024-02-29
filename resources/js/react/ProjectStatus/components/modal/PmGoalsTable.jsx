@@ -19,6 +19,7 @@ import ReviewExtendRequestModal from "./ReviewExtendModal";
 import GoalExtensionHistoryModal from "./GoalExtensionHistoryModal";
 import DeadlineExplanationHistoryModal from "./DeadlineExplanationHistoryModal";
 import PmGoalsTableLoader from "../loader/PmGoalsTableLoader";
+import style from "../styles/pmgoaltable.module.css"
 
 const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName, refetchPmGoal }) => {
     const [data, setData] = React.useState(pmGoal || []);
@@ -172,6 +173,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     return (
         <div className="sp1_tasks_table_wrapper">
             <table className='sp1_tasks_table'>
+                    {/* Table Head */}
                     <thead className="sp1_tasks_thead">
                             {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id} className='sp1_tasks_tr'>
@@ -181,25 +183,30 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                             </tr>
                             ))}
                     </thead>
+                    {/* Table body */}
                     <tbody className='sp1_tasks_tbody'>
                             {!isLoading && table.getRowModel().rows.map(row => {
                             return (
+                                // <tr
+                                // className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''} ${row.original?.goal_status === 0 ? style.goalMeat : ''}`}
+                                //     key={row.id}
+                                // >
                                 <tr
-                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
+                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''} `}
                                     key={row.id}
                                 >
-                                {row.getVisibleCells().map(cell => {
-                                    return (
-                                    <td key={cell.id} className='px-2 sp1_tasks_td'>
-                                         
-                                        { flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                            )
-                                        }
-                                    </td>
-                                    )
-                                })}
+                                    {row.getVisibleCells().map(cell => {
+                                        return (
+                                        <td key={cell.id} className='px-2 sp1_tasks_td'>
+                                            
+                                            { flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext()
+                                                )
+                                            }
+                                        </td>
+                                        )
+                                    })}
                                 </tr>
                             )
                             })}
@@ -255,8 +262,6 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     isLoading={isLoading}
                     closeModal={handleCloseDeadlineExHistoryModal}
                 />
-
-                
             <Toaster />
         </div>
     );

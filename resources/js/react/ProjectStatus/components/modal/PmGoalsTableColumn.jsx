@@ -63,7 +63,7 @@ export const PmGoalsTableColumns = [
             return (
                 <div className="d-flex align-items-center" > 
                     <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
+                        color: data?.status === "In progress" ? "#3F9C35" : "#00b5ff",
                     }}></i>  
 
                     {data?.status === 0 ? "In progress" : "Completed" } 
