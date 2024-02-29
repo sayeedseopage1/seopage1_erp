@@ -60,6 +60,7 @@ class QualifiedSalesController extends AccountBaseController
                 'converted_by.id as closed_by',
                 'converted_by.name as closed_by_name',
                 // DB::raw('SUM(cash_points.points) as total_cash_points_by_user'),
+                DB::raw('(SELECT SUM(cash_points.points) FROM cash_points WHERE cash_points.project_id = qualified_sales.project_id AND cash_points.user_id = '.Auth::id().') as total_points'),
                 'cash_points.user_id',
             ])
             ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')

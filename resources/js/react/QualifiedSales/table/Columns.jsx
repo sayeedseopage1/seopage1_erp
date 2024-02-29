@@ -394,7 +394,7 @@ const Point = ({ row, isAuthorized }) => {
     } else {
         return (
             <span style={{ color: "#00AA00", fontWeight: "bold" }}>
-                {Number(row?.total_cash_points_by_user).toFixed(2)}
+                {Number(row?.total_points).toFixed(2)}
             </span>
         );
     }
