@@ -48,7 +48,6 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             search: _search,
             client_id: _client?.id,
             pm_id: _pm?.id,
-            status: _status?.id,
         };
 
         onFilter(filter);

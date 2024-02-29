@@ -3,22 +3,29 @@ import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 import { useState } from "react";
 import Button from "../../../global/Button";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { Flex } from "../table/ui";
+import style from  "../styles/imageViewer.module.css"
+
+
+
 import FileInputWithCustomIcon from "./CustomInput";
 const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [isZoomed, setIsZoomed] = useState(false);
 
+    // add files to selectedFiles
     const handleFileChange = (e) => {
         const uploadedFiles = e.target.files;
         setSelectedFiles((prev) => [...prev, ...uploadedFiles]);
     };
 
+    // open modal and set selected image
     const handleImageClick = (index) => {
         setSelectedImage(index);
         setModalIsOpen(true);
     };
 
+    // navigate to next image
     const handleNextImage = () => {
         setSelectedImage((prevIndex) =>
             prevIndex === selectedFiles?.length - 1
@@ -27,6 +34,7 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
         );
     };
 
+    // navigate to previous image
     const handlePreviousImage = () => {
         setSelectedImage((prevIndex) =>
             prevIndex === 0
@@ -35,20 +43,20 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
                   selectedFiles?.length
         );
     };
-
+    // close modal
     const handleModalClose = () => {
         setSelectedImage(null);
         setModalIsOpen(false);
     };
 
+    // delete image from selectedFiles
     const handleDeleteImage = (index) => {
         setSelectedFiles((prevFiles) =>
             prevFiles.filter((_, i) => i !== index)
         );
     };
 
-    const [isZoomed, setIsZoomed] = useState(false);
-
+    // toggle zoom
     const toggleZoom = () => {
         setIsZoomed(!isZoomed);
     };
@@ -56,36 +64,42 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     return (
         <>
             <div style={containerStyle}>
-                <Flex justifyContent="left" gap="20px">
-                    <strong style={{ marginTop: "10px" }}>Screenshots:</strong>
-                    <FileInputWithCustomIcon
-                        handleFileChange={handleFileChange}
-                    />
-                </Flex>
-                <div style={previewContainerStyle}>
-                    {selectedFiles.map((file, index) => (
-                        <div key={index} style={previewItemStyle}>
-                            <img
-                                style={previewImageStyle}
-                                src={URL.createObjectURL(file)}
-                                alt={`Preview ${index}`}
-                                onClick={() => handleImageClick(index)}
-                            />
+                <div className="my-2 row">
+                    <strong className="col-4 d-flex">Screenshots:</strong>
+                    <div className="col-8">
+                        <FileInputWithCustomIcon
+                            handleFileChange={handleFileChange}
+                            
+                        />       
+                        <div style={previewContainerStyle}>
+                            {selectedFiles.map((file, index) => (
+                                <div key={index} style={previewItemStyle}>
+                                    <img
+                                        style={previewImageStyle}
+                                        className={style.previewItemStyleOnHover}
+                                        src={URL.createObjectURL(file)}
+                                        alt={`Preview ${index}`}
+                                        onClick={() => handleImageClick(index)}
+                                    />
 
-                            <button
-                                style={{
-                                    margin: "2px",
-                                    backgroundColor: "transparent",
-                                }}
-                                backgroundColor="white"
-                                onClick={() => handleDeleteImage(index)}
-                            >
-                                <RiDeleteBin6Line color="red" />
-                            </button>
+                                    <button
+                                        style={{
+                                            margin: "2px",
+                                            backgroundColor: "transparent",
+                                        }}
+                                        backgroundColor="white"
+                                        onClick={() => handleDeleteImage(index)}
+                                    >
+                                        <RiDeleteBin6Line color="red" />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+                      
                 </div>
-
+               
+                {/* Modal for View Upldoad Image */}
                 <ReactModal
                     isOpen={modalIsOpen}
                     onRequestClose={handleModalClose}
@@ -165,14 +179,16 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     );
 };
 
+
+// Styles
 const containerStyle = {
-    textAlign: "center",
-    padding: "10px",
+    // textAlign: "center",
+    padding: "10px 0px",
 };
 
 const previewContainerStyle = {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "start",
     flexWrap: "wrap",
     marginTop: "10px",
 };
@@ -186,11 +202,13 @@ const previewItemStyle = {
 };
 
 const previewImageStyle = {
-    width: "50px",
-    height: "50px",
+    width: "80px",
+    height: "80px",
     objectFit: "cover",
     borderRadius: "5px",
     cursor: "pointer",
+    transition: "transform 0.2s",
+    border: "1px solid #e5e5e5",
 };
 
 const modalContainer = {

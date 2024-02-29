@@ -1,6 +1,4 @@
 import * as React from "react";
-import styled from "styled-components";
-
 
 import {
     useGetPmGoalQuery,
@@ -13,6 +11,7 @@ import Filterbar from "../components/Filter-bar/Filterbar";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
+import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetModal";
 
 const ProjectStatus = () => {
     const [search,setSearch] = React.useState('');
@@ -23,6 +22,9 @@ const ProjectStatus = () => {
         pageIndex: 0,
         pageSize: 10,
     });
+    const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
+    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
+    const [selectedProjectName, setSelectedProjectName] = React.useState("");
 
     // make query string
     const queryString = (object) => {
@@ -30,6 +32,7 @@ const ProjectStatus = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
+    // get project status fetch
     const { data:projectStatusData, isFetching, refetch } = useGetProjectStatusQuery(
         queryString({
             page: pageIndex + 1,
@@ -38,6 +41,7 @@ const ProjectStatus = () => {
         }),
         { refetchOnMountOrArgChange: true }
     );
+    // get pm goal fetch
     const {
         data: pmGoalData,
         isFetching: isFetchingPmGoal,
@@ -46,16 +50,15 @@ const ProjectStatus = () => {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
     });
 
-    const projectStatus = projectStatusData?.data;
+    // Data from the API
+    const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
+    const percentageOfGoalsMet = pmGoalData?.data
 
+    // Table columns
     let tableColumns = ProjectStatusTableColumns;
 
-    const onPageChange = (paginate) => {
-        setPagination(paginate);
-    };
-    const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
-    const [selectedProjectName, setSelectedProjectName] = React.useState("");
+
     const closeModalOne = () => {
         setIsModalOneOpen(false);
         setSelectedProjectName("");
@@ -64,24 +67,7 @@ const ProjectStatus = () => {
     // On filter
     const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
-        const queryString = new URLSearchParams(queryObject).toString();
         setFilter(queryObject);
-        if(filter?.start_date && filter?.end_date){
-            await getTasks(`?${queryString}`)
-            .unwrap()
-            .then(res => {
-                let _data = res?.tasks
-                if(auth.getRoleId() === 4){
-                    _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
-                }else if(auth.getRoleId() === 1 || auth.getRoleId() === 4 || auth.getRoleId() === 8){
-                    _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
-                }
-
-                const data = _.orderBy(_data, 'due_date', 'desc');
-                dispatch(storeTasks({tasks: data}))
-            })
-            .catch(err => console.log(err))
-        }
     }
     
 
@@ -92,14 +78,30 @@ const ProjectStatus = () => {
         refetch();
     }
 
+    // handle pm goal modal
     const handlePmGoalModal = (data) => {
         setProjectDetails(data);
         setProjectId(data.project_id);
         setIsModalOneOpen(true);
         setSelectedProjectName(data.project_name);
+        refetchPmGoal()
+    }
+
+    // handle percent of goal met  modal
+    const handlePercentOfGoalMet = (data) => {
+        setProjectId(data.project_id);
+        setSelectedProjectName(data.project_name);
+        setProjectDetails(data);
+        setIsOpenPercentageofGoalsMetModal(true)
+    }
+
+    // handle close percentage of goal met modal
+    const handleClosePercentageofGoalsMetModal = () => {
+        setIsOpenPercentageofGoalsMetModal(false);
     }
 
 
+    
 
     return (
 
@@ -120,7 +122,7 @@ const ProjectStatus = () => {
                         </div>
                     </div>
 
-                   {/* Prjusct Status Main Table */}
+                   {/* Project Status Main Table */}
                     <ProjectStatusTable
                         isLoading={isFetching}
                         filter={filter}
@@ -130,9 +132,11 @@ const ProjectStatus = () => {
                         tableColumns={tableColumns}
                         refetch={refetch}
                         handlePmGoalModal={handlePmGoalModal}
+                        handlePercentOfGoalMet={handlePercentOfGoalMet}
                     />
                 </div>
             </div>
+            {/* Project Status Modal */}
             <ProjectModal
                 refetchPmGoal={refetchPmGoal}
                 isFetchingPmGoal={isFetchingPmGoal}
@@ -141,6 +145,15 @@ const ProjectStatus = () => {
                 closeModal={closeModalOne}
                 selectedProjectName={selectedProjectName}
                 projectDetails={projectDetails}
+            />
+            {/* Percent of Goals Met Modal */}
+            <PercentageofGoalsMetModal
+                projectDetails={projectDetails}
+                refetchPmGoal={refetchPmGoal}
+                isOpen={isOpenPercentageofGoalsMetModal}
+                isLoading={isFetchingPmGoal}
+                percentageOfGoalsMet={percentageOfGoalsMet}
+                closeModal={handleClosePercentageofGoalsMetModal}
             />
         </React.Fragment>
     );

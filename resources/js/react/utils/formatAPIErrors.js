@@ -32,3 +32,4 @@ const errors = {
 const replaceWord = {
   rating: "Rating"
 };
+

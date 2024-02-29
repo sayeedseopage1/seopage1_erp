@@ -1,0 +1,13 @@
+.projectStatus_popover_panel{
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+  /* width: clamp(255px, 100%, 350px); */
+  width: 300px;
+}
+.projectStatus_popover_button{
+  padding: 1rem;
+  width: clamp(255px, 100%, 350px);
+  cursor: pointer !important;
+}
