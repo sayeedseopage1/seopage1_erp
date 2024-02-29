@@ -382,7 +382,7 @@ const Point = ({ row, isAuthorized }) => {
                 <Dropdown>
                     <Dropdown.Toggle icon={false}>
                         <span style={{ color: "#000000", fontWeight: "bold" }}>
-                            {Number(row?.total_points)}
+                            {row?.total_points}
                         </span>
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
