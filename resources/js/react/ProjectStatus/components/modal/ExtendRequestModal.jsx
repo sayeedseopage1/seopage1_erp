@@ -8,62 +8,58 @@ import CKEditorComponent from "../../../ckeditor";
 
 import FileUpload from "./FileUpload";
 import { useCreateExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
+import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
 
-const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
-    const [extendedDaysData, setExtendedDaysData] = useState("");
-    const [reasonData, setReasonData] = useState("");
+const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoalId }) => {
+    const [extendReqestData, setExtendReqestData] = useState({
+        extended_day: "",
+        is_client_communication: "",
+        goal_id: extendRequestGoalId,
+    });
+    const [extendReqestDataValidation, setExtendReqestDataValidation] = useState({
+        extended_day: false,
+        is_client_communication: false,
+        isSubmitting: false,
+    });
     const [selectedFiles, setSelectedFiles] = useState([]);
-    const [formError, setFormError] = React.useState(null);
-    const handleResetForm = () => {
-        setExtendedDaysData("");
-        setReasonData("");
-        setSelectedFiles([]);
-    };
     const [submitData, { isLoading }] = useCreateExtendRequestMutation();
 
-    useEffect(() => {
-        handleResetForm();
-    }, []);
+ 
+    console.log("extendRequestData", extendReqestData);
+  
 
-    const handleReasonChange = (e, editor) => {
-        setReasonData(editor.getData());
-    };
-    const handleExtendedDaysDataChange = (e) => {
-        setExtendedDaysData(e.target.value);
-    };
-
-    // check validation
-    const isValid = () => {
-        let err = new Object();
-        let errCount = 0;
-
-        if (extendedDaysData === "") {
-            (err.extendedDaysData = "This field is required!"), errCount++;
-        }
-
-        if (reasonData === "") {
-            (err.reasonData = "This field is required!"), errCount++;
-        }
-        // if (selectedFiles === "") {
-        //     (err.selectedFiles = "This field is required!"), errCount++;
-        // }
-
-        setFormError(err);
-        return !errCount;
-    };
+    const handleResetForm = () => {
+        setExtendReqestData({
+            extended_day: "",
+            is_client_communication: "",
+            goal_id: extendRequestGoalId,
+        });
+        setSelectedFiles([]);
+        setExtendReqestDataValidation({
+            extended_day: false,
+            is_client_communication: false,
+            isSubmitting: false,
+        });
+    }
 
     const handleSubmit = async (e) => {
-        if (!isValid()) {
-            toast.error("Missing required field or invalid input");
+        e.preventDefault();
+        const isEmpty = isStateAllHaveValue(extendReqestData);
+
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation(extendReqestData);
+            setExtendReqestDataValidation({
+                ...extendReqestDataValidation,
+                ...validation,
+                isSubmitting: true,
+            });
             return;
         }
 
-        e.preventDefault();
         const fd = new FormData();
-
-        fd.append("extended_day", extendedDaysData ?? "");
-        fd.append("is_client_communication", reasonData ?? "");
-        fd.append("project_id", projectDetails?.project_id ?? "");
+        fd.append("extended_day", extendReqestData.extended_day ?? "");
+        fd.append("is_client_communication", extendReqestData?.is_client_communication ?? "");
+        fd.append("goal_id", extendReqestData?.goal_id  ?? extendRequestGoalId);
         Array.from(selectedFiles).forEach((file) => {
             fd.append("screenshot[]", file);
         });
@@ -74,8 +70,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                 .getAttribute("content")
         );
 
-        if (isValid()) {
-            submitData(fd)
+   
+        submitData(fd)
                 .unwrap()
                 .then((res) => {
                     onClose();
@@ -86,11 +82,36 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                     if (err?.status === 422) {
                         toast.error("Please fillup all required fields");
                     }
-                });
-        } else {
-            toast.error("Please fillup all required fields");
-        }
+        });
+       
     };
+
+ 
+
+    useEffect(() => {
+        if(extendReqestDataValidation.isSubmitting){
+            const validation = markEmptyFieldsValidation(extendReqestData);
+            setExtendReqestDataValidation({
+                ...extendReqestDataValidation,
+                ...validation,
+            });
+        }
+    }, [extendReqestData, extendReqestDataValidation.isSubmitting]);
+
+
+    useEffect(() => {
+        if(!isOpen){
+            handleResetForm();
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        setExtendReqestData({
+            ...extendReqestData,
+            goal_id: extendRequestGoalId
+        });
+    }, [extendRequestGoalId]);
+
 
     return (
         <ReactModal
@@ -102,7 +123,8 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                 style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    marginBottom: "20px",
+                    alignItems: "center",
+                    marginBottom: "15px",
                 }}
             >
                 <div
@@ -112,14 +134,18 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                 >
                     Extend Request
                 </div>
-
                 <button
                     onClick={onClose}
                     style={{
-                        backgroundColor: "red",
+                        backgroundColor: "gray",
                         padding: "2px 4px 2px 4px",
-
                         color: "white",
+                        borderRadius: "50%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "24px",
+                        height: "24px",
                     }}
                 >
                     <IoClose />
@@ -127,35 +153,41 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
             </div>
 
             <section style={styles.container}>
-                <div>
-                    <p>
-                        <strong>Project Name </strong>{" "}
-                        {projectDetails.project_name}
-                    </p>
-                    <p>
-                        <strong>Client:</strong> {projectDetails.clientName}
-                    </p>
-
-                    <p>
-                        <strong>Project Budget:</strong> $
-                        {projectDetails.project_budget}
-                    </p>
-
-                    <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <strong>Extended days:</strong>
-                        <input
-                            placeholder="Enter the extended days"
-                            value={extendedDaysData}
-                            error={formError?.extendedDaysData}
-                            required={true}
-                            onChange={handleExtendedDaysDataChange}
-                            style={{ padding: "5px" }}
-                        ></input>
-                    </Flex>
+                <div className="w-100">
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Project Name:</strong>{" "}</p>
+                        <p className="col-8">{projectDetails.project_name}</p>
+                    </div>
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Client:</strong>{" "}</p>
+                        <p className="col-8">{projectDetails.clientName}</p>
+                    </div>
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
+                        <p className="col-8"> {projectDetails?.currency_symbol}{projectDetails.project_budget}</p>
+                    </div>
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Extended days:</strong>{" "}</p>
+                        <div className="col-8">
+                            <input
+                                placeholder="Enter the extended days"
+                                value={extendReqestData.extended_day}
+                                
+                                required={true}
+                                onChange={(e) => setExtendReqestData({
+                                    ...extendReqestData,
+                                    extended_day: e.target.value
+                                })}
+                                style={{ padding: "5px", borderRadius: "5px" }}
+                            />
+                            {extendReqestDataValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
+                        </div>
+                    </div>
 
                     <FileUpload
                         selectedFiles={selectedFiles}
                         setSelectedFiles={setSelectedFiles}
+                        className=""
                     />
 
                     <div>
@@ -169,8 +201,14 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={handleReasonChange} />
+                            <CKEditorComponent onChange={(e, editor) => setExtendReqestData({
+                                ...extendReqestData,
+                                is_client_communication: editor.getData()
+                            })} />
                         </div>
+                        {
+                            extendReqestDataValidation.is_client_communication && <p className="text-danger my-1">Reason is required</p>
+                        }
                     </div>
 
                     <Button

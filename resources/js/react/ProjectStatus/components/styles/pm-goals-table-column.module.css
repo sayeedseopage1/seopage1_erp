@@ -57,6 +57,10 @@
     padding: 8px 10px !important;
     cursor: pointer;
 }
+.action.resolveed{
+    font-weight: 600;
+    padding: 8px 10px !important;
+}
 .action.extend:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;

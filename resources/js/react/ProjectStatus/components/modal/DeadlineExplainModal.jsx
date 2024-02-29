@@ -41,7 +41,8 @@ const DeadlineExplainModal = ({
                 style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    marginBottom: "20px",
+                    alignItems: "center",
+                    marginBottom: "15px",
                 }}
             >
                 <div
@@ -55,10 +56,15 @@ const DeadlineExplainModal = ({
                 <button
                     onClick={closeModalTwo}
                     style={{
-                        backgroundColor: "red",
+                        backgroundColor: "gray",
                         padding: "2px 4px 2px 4px",
-
                         color: "white",
+                        borderRadius: "50%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: "24px",
+                        height: "24px",
                     }}
                 >
                     <IoClose />
@@ -67,6 +73,7 @@ const DeadlineExplainModal = ({
 
             <DeadlineExplanation
                 closeModalTwo={closeModalTwo}
+                isModalTwoOpen={isModalTwoOpen}
                 projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
             />

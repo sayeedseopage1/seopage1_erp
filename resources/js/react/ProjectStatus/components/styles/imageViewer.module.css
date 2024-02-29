@@ -1,0 +1,5 @@
+.previewItemStyleOnHover:hover {
+  cursor: pointer;
+  border: 1px solid gray;
+  transform: scale(1.1);
+}

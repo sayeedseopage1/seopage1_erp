@@ -1,11 +1,11 @@
 import React from "react";
 import ReactModal from "react-modal";
-import PMGoalsTable from "./PmGoalsTable";
+
 
 import RefreshButton from "../RefreshButton";
 import { PmGoalsTableColumns } from "./PmGoalsTableColumn";
 import PmGoalsTable from "./PmGoalsTable";
-import ExtendRequestModal from "./ExtendRequestModal";
+
 
 const ProjectModal = ({
     refetchPmGoal,
@@ -39,6 +39,7 @@ const ProjectModal = ({
                 </div>
                   <PmGoalsTable
                     projectDetails={projectDetails}
+                    refetchPmGoal={refetchPmGoal}
                     pmGoal={pmGoal}
                     tableName="pmGoalsTable"
                     isLoading={isFetchingPmGoal}
@@ -63,6 +64,7 @@ const customStyles = {
         zIndex: 9999999,
         maxWidth: "90%",
         maxHeight: "fit-content",
+        height: "fit-content",
         margin: "auto auto",
         padding: "20px",
     },

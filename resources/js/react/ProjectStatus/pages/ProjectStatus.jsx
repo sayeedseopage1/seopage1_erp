@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+
 
 
 import {
@@ -13,6 +13,7 @@ import Filterbar from "../components/Filter-bar/Filterbar";
 import Button from "../components/Button";
 import Loader from "../components/Loader";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
+import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetModal";
 
 const ProjectStatus = () => {
     const [search,setSearch] = React.useState('');
@@ -46,15 +47,16 @@ const ProjectStatus = () => {
         refetchOnMountOrArgChange: true /*, skip: !filter?.start_date*/,
     });
 
-    const projectStatus = projectStatusData?.data;
+    const projectStatus = projectStatusData?.data?.data;
     const pmGoal = pmGoalData?.data;
+    const parcenatgeOfGoalsMet = pmGoalData?.data
+
 
     let tableColumns = ProjectStatusTableColumns;
 
-    const onPageChange = (paginate) => {
-        setPagination(paginate);
-    };
+
     const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
+    const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
     const [selectedProjectName, setSelectedProjectName] = React.useState("");
     const closeModalOne = () => {
         setIsModalOneOpen(false);
@@ -64,24 +66,7 @@ const ProjectStatus = () => {
     // On filter
     const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
-        const queryString = new URLSearchParams(queryObject).toString();
         setFilter(queryObject);
-        if(filter?.start_date && filter?.end_date){
-            await getTasks(`?${queryString}`)
-            .unwrap()
-            .then(res => {
-                let _data = res?.tasks
-                if(auth.getRoleId() === 4){
-                    _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
-                }else if(auth.getRoleId() === 1 || auth.getRoleId() === 4 || auth.getRoleId() === 8){
-                    _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
-                }
-
-                const data = _.orderBy(_data, 'due_date', 'desc');
-                dispatch(storeTasks({tasks: data}))
-            })
-            .catch(err => console.log(err))
-        }
     }
     
 
@@ -99,6 +84,17 @@ const ProjectStatus = () => {
         setSelectedProjectName(data.project_name);
     }
 
+    const handlePercentOfGoalMet = (data) => {
+        setProjectId(data.project_id);
+        setIsOpenPercentageofGoalsMetModal(true);
+        setSelectedProjectName(data.project_name);
+        setProjectDetails(data);
+        console.log("data",data)
+    }
+
+    const handleClosePercentageofGoalsMetModal = () => {
+        setIsOpenPercentageofGoalsMetModal(false);
+    }
 
 
     return (
@@ -130,6 +126,7 @@ const ProjectStatus = () => {
                         tableColumns={tableColumns}
                         refetch={refetch}
                         handlePmGoalModal={handlePmGoalModal}
+                        handlePercentOfGoalMet={handlePercentOfGoalMet}
                     />
                 </div>
             </div>
@@ -141,6 +138,13 @@ const ProjectStatus = () => {
                 closeModal={closeModalOne}
                 selectedProjectName={selectedProjectName}
                 projectDetails={projectDetails}
+            />
+            <PercentageofGoalsMetModal
+                projectDetails={projectDetails}
+                isOpen={isOpenPercentageofGoalsMetModal}
+                isLoading={isFetchingPmGoal}
+                parcenatgeOfGoalsMet={parcenatgeOfGoalsMet}
+                closeModal={handleClosePercentageofGoalsMetModal}
             />
         </React.Fragment>
     );

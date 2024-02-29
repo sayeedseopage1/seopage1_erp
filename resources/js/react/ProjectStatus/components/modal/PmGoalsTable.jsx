@@ -17,8 +17,9 @@ import { DragableColumnHeader } from "../table/DragableColumnHeader";
 import EmptyTable from "../../../global/EmptyTable";
 import ExtendRequestModal from "./ExtendRequestModal";
 import ReviewExtendRequestModal from "./ReviewExtendModal";
+import PercentageofGoalsMetModal from "./PercentageofGoalsMetModal";
 
-const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName }) => {
+const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName, refetchPmGoal }) => {
     const [data, setData] = React.useState(pmGoal || []);
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -34,6 +35,8 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const [isOpenExtendRequestModal, setIsOpenExtendRequestModal] = React.useState(false);
     const [isOpenResolveModal, setIsOpenResolveModal] = React.useState(false);
     const [isOpenReviewExtendRequestModal, setIsOpenReviewExtendRequestModal] = React.useState(false);
+    const [reviewExtendRequestData, setReviewExtendRequestData] = React.useState(null);
+    const [extendRequestGoalId, setExtendRequestGoalId] = React.useState(null);
     //pagination start
     // Number of items to display per page
     const [itemsPerPage, setItemsPerPage] = React.useState(5);
@@ -101,21 +104,24 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
         paginateExpandedRows: false,
         meta: {
             extendReviewRequestClick: (row) => {
-                console.log("row", row);
+                setReviewExtendRequestData(row);
                 setIsOpenReviewExtendRequestModal(true);
+                refetchPmGoal();
             },
             extendRequestClick: (row) => {
-                console.log("row", row);
+                setExtendRequestGoalId(row.id)
                 setIsOpenExtendRequestModal(true);
+                refetchPmGoal();
             },
             deadlineExplainClick: (row) => {
                 setProjectPmGoalId(row.id)
-                console.log("row", row);
+                refetchPmGoal();
                 setIsOpenDeadlineExplainModal(true);
             },
             resolveExplainClick: (row) => {
                 setPmGoalExtendReason(row.reason);
                 setProjectPmGoalId(row.id)
+                refetchPmGoal();
                 setIsOpenResolveModal(true);
             }
         }
@@ -139,7 +145,9 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
         setIsOpenResolveModal(false);
     }
 
-    console.log(projectPmGoalId, "projectPmGoalId")
+
+    
+
 
     return (
         <div className="sp1_tasks_table_wrapper">
@@ -181,12 +189,16 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                 {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
                 <ExtendRequestModal
                     projectDetails={projectDetails}
+                    extendRequestGoalId={extendRequestGoalId}
                     isOpen={isOpenExtendRequestModal}
                     onClose={handleClosExtendRequestModal}
                 />
-                < ReviewExtendRequestModal
+                <ReviewExtendRequestModal
+                     projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
+                    reviewExtendRequestData={reviewExtendRequestData}
                     isOpen={isOpenReviewExtendRequestModal}
+                    refetchPmGoal={refetchPmGoal}
                     onClose={handleCloseExtendReviewModal}
                 />
                 <DeadlineExplainModal
@@ -200,8 +212,10 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     pmGoalExtendReason={pmGoalExtendReason}
                     projectPmGoalId={projectPmGoalId}
                     isModalOpen={isOpenResolveModal}
+                    refetchPmGoal={refetchPmGoal}
                     closeModal={handleCloseResolveModal}
                 />
+                
             <Toaster />
         </div>
     );

@@ -8,11 +8,11 @@ export const PmGoalsTableColumns = [
         id: "id",
         header: "#",
         accessorKey: "id",
-        cell: ({ row }) => {
+        cell: ({ row, table ,column,cell }) => {
             const data = row?.original;
             return (
                 <div className={`${styles.idContainer}`}> 
-                    {data?.id ?? "--"}
+                    {cell?.row?.index +1}
                 </div>
             )
         }
@@ -24,7 +24,7 @@ export const PmGoalsTableColumns = [
     },
     {
         id: "goal_end_date",
-        header: "Goal DeadLine",
+        header: "Goal Dead Line",
         accessorKey: "goal_end_date",
     },
     {
@@ -47,7 +47,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span > 
+                <span title={data?.description} className="multine-ellipsis"> 
                     {data?.description ?? "--"}
                 </span>
             )
@@ -60,7 +60,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span 
+                <span className="multine-ellipsis"
                 dangerouslySetInnerHTML={{ __html: data?.reason ?? "--",}}
             />
             )
@@ -73,7 +73,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span 
+                <span className="multine-ellipsis"
                 dangerouslySetInnerHTML={{ __html: data?.suggestion ?? "--",}}
             />
             )
@@ -86,7 +86,7 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span 
+                <span className="multine-ellipsis"
                 dangerouslySetInnerHTML={{ __html: data?.admin_comment ?? "--",}}
             />
             )
@@ -121,10 +121,10 @@ export const PmGoalsTableColumns = [
                         </Switch.Case>
                         <Switch.Case condition={user?.roleId === 1 && data.reason}>
                             <Switch>
-                                <Switch.Case condition={data.admin_comment && data.suggestion}>
-                                    <div  className={`${styles.action} f-12`}> Resolved </div>
+                                <Switch.Case condition={data.reason_status == 2}>
+                                    <div  className={`${styles.action} ${styles.resolved}f-12`}> Resolved </div>
                                 </Switch.Case>
-                                <Switch.Case condition={!data.admin_comment && !data.suggestion}>
+                                <Switch.Case condition={data.reason_status === 0}>
                                     <div onClick={() => handle.resolveExplainClick(data)} className={`${styles.action} ${styles.resolve} f-12`}> Resolve </div>
                                 </Switch.Case>
                             </Switch>
@@ -154,10 +154,10 @@ export const PmGoalsTableColumns = [
                     </Switch.Case>
                     </Switch>
                     <Switch>
-                        <Switch.Case condition={data?.extended_request_status !== 1 &&
+                        {/* <Switch.Case condition={data?.extended_request_status !== 1 &&
                                     (user.roleId === 1 || user.roleId === 8)}>
                             <span>--</span>
-                        </Switch.Case>
+                        </Switch.Case> */}
                     </Switch>
                </div>
             

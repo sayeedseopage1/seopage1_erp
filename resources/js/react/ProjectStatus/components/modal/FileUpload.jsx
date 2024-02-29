@@ -4,6 +4,10 @@ import { useState } from "react";
 import Button from "../../../global/Button";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Flex } from "../table/ui";
+import style from  "../styles/imageViewer.module.css"
+
+
+
 import FileInputWithCustomIcon from "./CustomInput";
 const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -56,35 +60,42 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
     return (
         <>
             <div style={containerStyle}>
-                <Flex justifyContent="left" gap="20px">
-                    <strong style={{ marginTop: "10px" }}>Screenshots:</strong>
-                    <FileInputWithCustomIcon
-                        handleFileChange={handleFileChange}
-                    />
-                </Flex>
-                <div style={previewContainerStyle}>
-                    {selectedFiles.map((file, index) => (
-                        <div key={index} style={previewItemStyle}>
-                            <img
-                                style={previewImageStyle}
-                                src={URL.createObjectURL(file)}
-                                alt={`Preview ${index}`}
-                                onClick={() => handleImageClick(index)}
-                            />
+                <div className="my-2 row">
+                    
+                    <strong className="col-4 d-flex">Screenshots:</strong>
+                    <div className="col-8">
+                        <FileInputWithCustomIcon
+                            handleFileChange={handleFileChange}
+                            
+                        />       
+                        <div style={previewContainerStyle}>
+                            {selectedFiles.map((file, index) => (
+                                <div key={index} style={previewItemStyle}>
+                                    <img
+                                        style={previewImageStyle}
+                                        className={style.previewItemStyleOnHover}
+                                        src={URL.createObjectURL(file)}
+                                        alt={`Preview ${index}`}
+                                        onClick={() => handleImageClick(index)}
+                                    />
 
-                            <button
-                                style={{
-                                    margin: "2px",
-                                    backgroundColor: "transparent",
-                                }}
-                                backgroundColor="white"
-                                onClick={() => handleDeleteImage(index)}
-                            >
-                                <RiDeleteBin6Line color="red" />
-                            </button>
+                                    <button
+                                        style={{
+                                            margin: "2px",
+                                            backgroundColor: "transparent",
+                                        }}
+                                        backgroundColor="white"
+                                        onClick={() => handleDeleteImage(index)}
+                                    >
+                                        <RiDeleteBin6Line color="red" />
+                                    </button>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+                      
                 </div>
+               
 
                 <ReactModal
                     isOpen={modalIsOpen}
@@ -166,13 +177,13 @@ const FileUpload = ({ selectedFiles, setSelectedFiles }) => {
 };
 
 const containerStyle = {
-    textAlign: "center",
-    padding: "10px",
+    // textAlign: "center",
+    padding: "10px 0px",
 };
 
 const previewContainerStyle = {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "start",
     flexWrap: "wrap",
     marginTop: "10px",
 };
@@ -186,11 +197,13 @@ const previewItemStyle = {
 };
 
 const previewImageStyle = {
-    width: "50px",
-    height: "50px",
+    width: "80px",
+    height: "80px",
     objectFit: "cover",
     borderRadius: "5px",
     cursor: "pointer",
+    transition: "transform 0.2s",
+    border: "1px solid #e5e5e5",
 };
 
 const modalContainer = {

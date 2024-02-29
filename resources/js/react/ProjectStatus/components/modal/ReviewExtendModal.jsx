@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactModal from "react-modal";
 import Button from "../../../global/Button";
 toast;
@@ -11,30 +11,57 @@ import {
 import ImageViewer from "./ImageViewer";
 import RefreshButton from "../RefreshButton";
 import { toast } from "react-toastify";
-const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
-    const [commentData, setCommentData] = useState("");
-    const [extendedDay, setExtendedDay] = useState(
-        projectDetails?.extended_day
-    );
+import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
+const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose, projectPmGoalId,refetchPmGoal, reviewExtendRequestData }) => {
+    const [reviewExtendState, setReviewExtendState] = useState({
+        extended_day: reviewExtendRequestData?.extended_day,
+        comment: "",
+        goal_id: reviewExtendRequestData?.id,
+    });
+    const [reviewExtendStateValidation, setReviewExtendStateValidation] = useState({
+        extended_day: false,
+        comment: false,
+        isSubmitting: false,
+    })
     const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
-        projectDetails?.project_id
+        reviewExtendRequestData?.id
     );
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 
     const imageData = data?.data;
 
     const handleResetForm = () => {
-        setCommentData("");
+        setReviewExtendState({
+            extended_day: null,
+            comment: "",
+        });
+        setReviewExtendStateValidation({
+            extended_day: false,
+            comment: false,
+            isSubmitting: false,
+        });
     };
 
-    console.log("comment data", commentData);
     const handleAccept = async (e) => {
         e.preventDefault();
+        const isEmpty = isStateAllHaveValue(reviewExtendState);
+
+        if (isEmpty) {
+            const validation = markEmptyFieldsValidation(reviewExtendState);
+
+            setReviewExtendStateValidation({
+                ...reviewExtendStateValidation,
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
+
+
         const fd = new FormData();
-        console.log("accept data", fd);
-        fd.append("extended_day", extendedDay ?? "");
-        fd.append("is_any_negligence", commentData ?? "");
-        fd.append("project_id", projectDetails?.project_id ?? "");
+        fd.append("extended_day", reviewExtendState.extended_day ?? "");
+        fd.append("is_any_negligence", reviewExtendState.comment ?? "");
+        fd.append("goal_id", reviewExtendState.goal_id ?? "");
         fd.append("status", "1");
         fd.append(
             "_token",
@@ -43,16 +70,21 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                 .getAttribute("content")
         );
 
+        
         submitData(fd)
             .unwrap()
             .then((res) => {
                 onClose();
+                refetchPmGoal();
                 toast.success("Submission was successful");
                 handleResetForm();
             })
             .catch((err) => {
+                console.log("err", err);
                 if (err?.status === 422) {
                     toast.error("Please fill up all required fields");
+                } else {
+                    toast.error("Submission was not successful");
                 }
             });
     };
@@ -61,9 +93,9 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
         e.preventDefault();
         const fd = new FormData();
 
-        fd.append("extended_day", extendedDay ?? "");
-        fd.append("is_any_negligence", commentData ?? "");
-        fd.append("project_id", projectDetails?.project_id ?? "");
+        fd.append("extended_day", reviewExtendStateValidation.extended_day ?? "");
+        fd.append("is_any_negligence", reviewExtendState.comment ?? "");
+        fd.append("project_id", reviewExtendState?.id ?? "");
         fd.append("status", "0");
         fd.append(
             "_token",
@@ -85,14 +117,37 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                 }
             });
     };
-    const handleCommentChange = (e, editor) => {
-        setCommentData(editor.getData());
-    };
-    const handleExtendedDayChange = (e) => {
-        setExtendedDay(e.target.value);
-    };
 
-    console.log("extend days", extendedDay);
+
+
+    useEffect(() => {
+        if(reviewExtendStateValidation.isSubmitting){
+            const validation = markEmptyFieldsValidation(reviewExtendState);
+            setReviewExtendStateValidation({
+                ...reviewExtendStateValidation,
+                ...validation
+            });
+        }
+    }, [reviewExtendState, reviewExtendStateValidation.isSubmitting]);
+
+
+    useEffect(() => {
+        if(!isOpen){
+            handleResetForm()
+        }
+    }, [isOpen]);
+
+
+    useEffect(() => {
+            setReviewExtendState({
+                extended_day: reviewExtendRequestData?.extended_day,
+                comment: "",
+                goal_id: reviewExtendRequestData?.id,
+            });
+        
+    }, [reviewExtendRequestData]);
+
+    console.log("reviewExtendState", reviewExtendState)
 
     return (
         <ReactModal
@@ -119,34 +174,45 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
             </div>
 
             <section style={styles.container}>
-                <div>
-                    <p>
-                        <strong>Project Name</strong>{" "}
-                        {projectDetails.project_name}
-                    </p>
-                    <p>
-                        <strong>Client:</strong> {projectDetails.clientName}
-                    </p>
-                    <p>
-                        <p>
-                            <strong>Project Manager: </strong>
-                            {projectDetails.pmName}
-                        </p>
-                        <strong>Project Budget:</strong> $
-                        {projectDetails.project_budget}
-                    </p>
-
-                    <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <strong>Extended Days:</strong>
-                        <input
-                            value={extendedDay}
-                            onChange={handleExtendedDayChange}
+                <div className="w-100">
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Project Name:</strong>{" "}</p>
+                        <p className="col-8">{projectDetails.project_name}</p>
+                    </div>
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Client:</strong>{" "}</p>
+                        <p className="col-8">{projectDetails.clientName}</p>
+                    </div>
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Project Manager:</strong>{" "}</p>
+                        <p className="col-8">{projectDetails.pmName}</p>
+                    </div>
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
+                        <p className="col-8">{projectDetails?.currency_symbol}{projectDetails.project_budget}</p>
+                    </div>
+                    <div className="my-2 row">
+                        <p className="col-4"><strong>Extended Days:</strong>{" "}</p>
+                        <div className="col-8">
+                        <input 
+                            className="p-1 rounded"
+                            defaultValue={reviewExtendState?.extended_day }
+                            placeholder="Enter extended days"
+                            onChange={(e) => setReviewExtendState({
+                                ...reviewExtendState,
+                                extended_day: e.target.value
+                            })}
                         ></input>
-                    </Flex>
-                    <Flex justifyContent="left" style={{ marginTop: "10px" }}>
-                        <strong htmlFor="itemsPerPage">Screenshots:</strong>
-                        <ImageViewer imageData={imageData} />
-                    </Flex>
+                        {reviewExtendStateValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
+                        </div>
+                    </div>
+                    <div className="row my-2">
+                        <p className="col-4"> <strong htmlFor="itemsPerPage">Screenshots:</strong>{" "}</p>
+                        <div className="col-8">
+                        <ImageViewer imageData={imageData} />  
+                        </div>
+                    </div>
+
 
                     <div style={styles.reasonContainer}>
                         <p>
@@ -159,8 +225,14 @@ const ReviewExtendRequestModal = ({ projectDetails, isOpen, onClose }) => {
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={handleCommentChange} />
+                            <CKEditorComponent onChange={(e, editor) => setReviewExtendState({
+                                ...reviewExtendState,
+                                comment: editor.getData()
+                            })} />
                         </div>
+                        {
+                            reviewExtendStateValidation.comment && <p className="text-danger my-1">Comment is required</p>
+                        }    
                     </div>
                     <Flex justifyContent="flex-end">
                         <Button
