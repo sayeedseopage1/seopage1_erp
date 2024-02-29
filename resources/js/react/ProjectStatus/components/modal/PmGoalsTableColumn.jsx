@@ -1,3 +1,4 @@
+import { getWidth } from "../../../utils/conditionalWidthReduse";
 import { User } from "../../../utils/user-details";
 import Switch from "../Switch";
 import styles from "../styles/pm-goals-table-column.module.css";
@@ -8,11 +9,11 @@ export const PmGoalsTableColumns = [
         id: "id",
         header: "#",
         accessorKey: "id",
-        cell: ({ row }) => {
+        cell: ({ row, table ,column,cell }) => {
             const data = row?.original;
             return (
                 <div className={`${styles.idContainer}`}> 
-                    {data?.id ?? "--"}
+                    {cell?.row?.index +1}
                 </div>
             )
         }
@@ -24,7 +25,7 @@ export const PmGoalsTableColumns = [
     },
     {
         id: "goal_end_date",
-        header: "Goal DeadLine",
+        header: "Goal Dead Line",
         accessorKey: "goal_end_date",
     },
     {
@@ -47,48 +48,50 @@ export const PmGoalsTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span > 
+                <span title={data?.description} className="multine-ellipsis"> 
                     {data?.description ?? "--"}
                 </span>
             )
         }
     },
     {
-        id: "reason",
-        header: "Reason",
-        accessorKey: "reason",
+        id: "goal_status",
+        header: "Goal Status",
+        accessorKey: "goal_status",
         cell: ({ row }) => {
-            const data = row?.original;
+            const data = row?.goal_status;
             return (
-                <span 
-                dangerouslySetInnerHTML={{ __html: data?.reason ?? "--",}}
-            />
+                <div className="d-flex align-items-center" > 
+                    <i class="fa fa-circle mr-1 f-10" style={{
+                        color: data?.status === "In progress" ? "#3F9C35" : "#00b5ff",
+                    }}></i>  
+
+                    {data?.status === 0 ? "In progress" : "Completed" } 
+                </div>
             )
         }
     },
     {
-        id: "suggestion",
-        header: "Suggestion",
-        accessorKey: "suggestion",
-        cell: ({ row }) => {
+        id: "goal_extension_history",
+        header: "Goal Extension History",
+        accessorKey: "goal_extension_history",
+        cell: ({ row, table }) => {
+            const handle = table.options.meta
             const data = row?.original;
             return (
-                <span 
-                dangerouslySetInnerHTML={{ __html: data?.suggestion ?? "--",}}
-            />
+                <span role="button" onClick={() => handle.goalExtensionHistoryClick(data)}>6</span>
             )
         }
     },
     {
-        id: "admin_comment",
-        header: "Comment",
-        accessorKey: "admin_comment",
-        cell: ({ row }) => {
+        id: "deadline_explanation_history",
+        header: "Goal Expired History",
+        accessorKey: "deadline_explanation_history",
+        cell: ({ row, table }) => {
+            const handle = table.options.meta
             const data = row?.original;
             return (
-                <span 
-                dangerouslySetInnerHTML={{ __html: data?.admin_comment ?? "--",}}
-            />
+                <span role="button" onClick={() => handle.deadlineExplanationHistoryClick(data)} >5</span>
             )
         }
     },
@@ -101,19 +104,18 @@ export const PmGoalsTableColumns = [
             const user = new User(window?.Laravel?.user)
             const handle = table.options.meta
             return (
-
-               <div className={`${styles.actionContainer}`} >
+               <div className={`${styles.actionContainer}`}  >
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
                                     <Switch.Case condition={!data.reason}>
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
-                                                    <div 
-                                                        onClick={() => handle.deadlineExplainClick(data)} className={`${styles.action} ${styles.deadlineExplained} f-12`}
+                                                    <button 
+                                                        onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.deadlineExplained}`}
                                                     > 
-                                                        Deadline Explanation 
-                                                    </div>
+                                                        Explain Why Expired 
+                                                    </button>
                                                 </Switch.Case>
                                             </Switch>
                                     </Switch.Case>
@@ -121,26 +123,25 @@ export const PmGoalsTableColumns = [
                         </Switch.Case>
                         <Switch.Case condition={user?.roleId === 1 && data.reason}>
                             <Switch>
-                                <Switch.Case condition={data.admin_comment && data.suggestion}>
-                                    <div  className={`${styles.action} f-12`}> Resolved </div>
+                                <Switch.Case condition={data.reason_status == 2}>
+                                    <button  className={`btn ${styles?.resolved}`}> Resolved  </button>
                                 </Switch.Case>
-                                <Switch.Case condition={!data.admin_comment && !data.suggestion}>
-                                    <div onClick={() => handle.resolveExplainClick(data)} className={`${styles.action} ${styles.resolve} f-12`}> Resolve </div>
+                                <Switch.Case condition={data.reason_status === 1}>
+                                    <button 
+                                        onClick={() => handle.resolveExplainClick(data)} 
+                                        className={`btn btn-warning ${styles?.authorize}`}
+                                    > 
+                                         Authorize Explanation 
+                                    </button>
                                 </Switch.Case>
                             </Switch>
                         </Switch.Case>
                     </Switch>
                     <Switch>
                             <Switch.Case condition={user.roleId === 4}>
-                                <div onClick={() => handle.extendRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
-                                    Extend Request
-                                </div>
-                                {/* <Dropdown.Item
-                                    className={styles.dropdownItem}
-                                    onClick={handleExtendRequestClick}
-                                >
-                                    Extend Request
-                                </Dropdown.Item> */}
+                                <button onClick={() => handle.extendRequestClick(data)} className={`btn btn-success ${styles?.extend}`}>
+                                    Request Deadline Extension
+                                </button>
                             </Switch.Case>
                             <Switch.Case
                                 condition={
@@ -148,16 +149,16 @@ export const PmGoalsTableColumns = [
                                     (user.roleId === 1 || user.roleId === 8)
                                 }
                             >
-                                <div onClick={() => handle.extendReviewRequestClick(data)} className={`${styles.action} ${styles.extend} `}>
-                                Review Extend Time
-                                </div>
-                    </Switch.Case>
+                                <button onClick={() => handle.extendReviewRequestClick(data)} className={`btn btn-success ${styles?.extendReview}`}>
+                                    Extend Time
+                                </button>
+                            </Switch.Case>
                     </Switch>
                     <Switch>
-                        <Switch.Case condition={data?.extended_request_status !== 1 &&
+                        {/* <Switch.Case condition={data?.extended_request_status !== 1 &&
                                     (user.roleId === 1 || user.roleId === 8)}>
                             <span>--</span>
-                        </Switch.Case>
+                        </Switch.Case> */}
                     </Switch>
                </div>
             

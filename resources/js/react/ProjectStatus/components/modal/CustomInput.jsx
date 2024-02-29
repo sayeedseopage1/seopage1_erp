@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { FaCloudUploadAlt } from "react-icons/fa";
-const FileInputWithCustomIcon = ({ handleFileChange }) => {
+const FileInputWithCustomIcon = ({ handleFileChange,className }) => {
     const fileInputRef = useRef(null);
 
     const handleIconClick = () => {
@@ -8,11 +8,10 @@ const FileInputWithCustomIcon = ({ handleFileChange }) => {
     };
 
     return (
-        <div>
+        <div className={className}>
             <div onClick={handleIconClick}>
                 <FaCloudUploadAlt style={customIconStyle} />
             </div>
-
             <input
                 ref={fileInputRef}
                 style={fileInputStyle}

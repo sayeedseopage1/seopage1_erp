@@ -30,22 +30,24 @@ const ProjectStatusTable = ({
     hideColumns,
     tableColumns,
     tableData,
-    handlePmGoalModal
+    handlePmGoalModal,
+    handlePercentOfGoalMet
 }) => {
-    const [data, setData] = React.useState(tableData || []);
+    const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
+    const [value, setValue] = useLocalStorage(tableName);
+    const [data, setData] = React.useState(tableData || []);
     const [ globalFilter, setGlobalFilter ] = React.useState('');
+    const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
-    const [skipPageReset, setSkipPageReset] = React.useState(false);
-    const [sorting, setSorting] = React.useState([]);
-    const [value, setValue] = useLocalStorage(tableName);
 
-
+    // remember the state of our table
     const _projectStatus = React.useMemo(()=> tableData, [tableData]);
 
+    // set data
     React.useEffect(() => {
         if(_.size(_projectStatus) === _.size(data)){
           setSkipPageReset(true);
@@ -68,6 +70,7 @@ const ProjectStatusTable = ({
     // columns
     const [columns, setColumns] = React.useState([...defaultColumns]);
 
+    // set columns
     React.useEffect(() => {
         let auth = new User(window?.Laravel?.user);
         let _cols = [...defaultColumns?.filter(f => !_.includes(hideColumns, f.id))];
@@ -129,16 +132,22 @@ const ProjectStatusTable = ({
                  */
             onClickHandler: (rowData) => {
                 handlePmGoalModal(rowData);
-            }
+            },
+            onPercentOfGoalMet: (rowData) => {
+                handlePercentOfGoalMet(rowData);
+            },
         }
     })
 
+  
 
     
     return (
         <React.Fragment>
             <div className="sp1_tasks_table_wrapper">
+                {/* Project Status Table */}
                 <table className='sp1_tasks_table'>
+                    {/* Project Status table Header */}
                     <thead className="sp1_tasks_thead">
                             {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id} className='sp1_tasks_tr'>
@@ -148,6 +157,7 @@ const ProjectStatusTable = ({
                             </tr>
                             ))}
                     </thead>
+                    {/* Project Status table Body */}
                     <tbody className='sp1_tasks_tbody'>
                             {!isLoading &&table.getRowModel().rows.map(row => {
                             return (
@@ -170,11 +180,13 @@ const ProjectStatusTable = ({
                                 </tr>
                             )
                             })}
-                            {isLoading && <ProjectStatusTableLoader />}
+                            {isLoading && <ProjectStatusTableLoader prevItemLength={tableData?.length} />}
                     </tbody>
                 </table>
+                {/* Empty table View */}
                 {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}   
             </div>
+            {/* Project Status Table Pagination */}
             <ProjectStatusTablePagination
                 currentPage = {pageIndex + 1}
                 perpageRow= {pageSize}

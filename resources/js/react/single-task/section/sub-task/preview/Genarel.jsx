@@ -8,10 +8,11 @@ import ArticleLoader from "../../../components/loader/ArticleLoader";
 import dayjs from "dayjs";
 import PMGuideline from "../../../components/PMGuideline";
 import FileUploader from "../../../../file-upload/FileUploader";
+import { useAuth } from "../../../../hooks/useAuth";
 
 const Genarel = ({ task, isFetching }) => {
     const loggedUser = new User(window?.Laravel?.user);
-
+    const auth = useAuth();
     console.log("task revision", task?.revisions);
 
     return (
@@ -404,7 +405,12 @@ const Genarel = ({ task, isFetching }) => {
 
                 {_.size(task?.revisions) > 0 && (
                     <Accordion
-                        title={_.last(task?.revisions)?.revisionStatus}
+                        title={
+                            task?.category?.name === "Graphic Design" ||
+                            task?.category?.name === "UI/UIX Design"
+                                ? "Lead Designer Revision"
+                                : _.last(task?.revisions)?.revisionStatus
+                        }
                         headingClass="d-flex align-items-center justify-content-between"
                         headingStyle={{
                             background: "rgba(227,62,79,1)",

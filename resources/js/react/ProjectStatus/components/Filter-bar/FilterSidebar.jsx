@@ -5,6 +5,7 @@ import StatusFilter from './StatusFilter';
 import DateTypeFilter from './DateTypeFilter';
 import { useAuth } from '../../../hooks/useAuth';
 import _ from 'lodash';
+import SearchBox from '../Searchbox';
 
 const FilterSidebar = ({
     page,
@@ -37,56 +38,26 @@ const FilterSidebar = ({
 
 
         <div className='p-3 d-flex flex-column' style={{gap: '10px'}}>
-            <DateTypeFilter state={dateType} setState={setDateType} />
-
+            {/* <DateTypeFilter state={dateType} setState={setDateType} /> */}
             <UserFilter
                 title="Client"
                 state={client}
                 setState={setClient}
+                sidebarOpen={true}
                 roleIds={null}
             />
-
-
             <UserFilter
                 title="Project Manager"
                 state={pm}
+                sidebarOpen={true}
                 setState={setPm}
                 roleIds={[4]}
             />
-
-            {page === "subtasks" ? 
-                <UserFilter
-                    title="Assigned By"
-                    state={leadDeveloper}
-                    setState={setLeadDeveloper}
-                    roleIds={[1, 6]}
-                /> :
-                <UserFilter
-                    title="Assigned By"
-                    state={leadDeveloper}
-                    setState={setLeadDeveloper}
-                    roleIds={[1, 4]}
-                />
-            }
-            
-
-            {page === "subtasks" ? (
-                !isDev &&  <UserFilter
-                    title="Assigned To"
-                    state={developer}
-                    setState={setDeveloper}
-                    roleIds={[5, 9, 10]}
-                />
-            ): (
-                <UserFilter
-                    title="Assigned To"
-                    state={developer}
-                    setState={setDeveloper}
-                    roleIds={[4, 6, 9, 10]}
-                />
-            )}
-
-            <StatusFilter state={status} setState={setStatus} />
+            <SearchBox
+                value={search}
+                onChange={setSearch}
+                className="tasks_search_bar"
+            />
         </div>
     </div>
   )

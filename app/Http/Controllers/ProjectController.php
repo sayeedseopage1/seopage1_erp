@@ -6402,6 +6402,7 @@ public function updatePmBasicSEO(Request $request){
         $pd_ext->deadline_requested_for = $dayDifference;
         $pd_ext->extension = $request->extension;
         $pd_ext->description = $request->description;
+        $pd_ext->status = 1;
         $pd_ext->save();
 
         $project_F = Project::where('id',$request->project_id)->first();
@@ -6419,6 +6420,7 @@ public function updatePmBasicSEO(Request $request){
     }
 
     public function storeAuthorization(Request $request){
+        // dd($request->all());
         $validator = $request->validate([
             'new_deadline' => 'required',
         ], [
@@ -6429,21 +6431,34 @@ public function updatePmBasicSEO(Request $request){
         $dayDifference = $newDeadline->diffInDays($oldDeadline);
         
 
-        $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
-        $pde->new_deadline = $request->new_deadline;
-        $pde->deadline_extend_admin = $request->new_deadline;
-        $pde->deadline_extended_for = $dayDifference;
-        $pde->admin_comment = $request->admin_comment;
-        $pde->approved_on = Carbon::now();
-        $pde->approved_by = Auth::user()->id;
-        $pde->status = 1;
-        $pde->save();
+        if($request->type =='accept'){
+            $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
+            $pde->new_deadline = $request->new_deadline;
+            $pde->deadline_extend_admin = $request->new_deadline;
+            $pde->deadline_extended_for = $dayDifference;
+            $pde->admin_comment = $request->admin_comment;
+            $pde->approved_on = Carbon::now();
+            $pde->approved_by = Auth::user()->id;
+            $pde->status = 2;
+            $pde->save();
 
-        $project = Project::where('id',$request->project_id)->first();
-        $project->old_deadline = $pde->old_deadline;
-        $project->deadline = $pde->new_deadline;
-        $project->deadline_auth_status = 2;
-        $project->save();
+            $project = Project::where('id',$request->project_id)->first();
+            $project->old_deadline = $pde->old_deadline;
+            $project->deadline = $pde->new_deadline;
+            $project->deadline_auth_status = 2;
+            $project->save();
+        }else{
+            $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
+            $pde->admin_comment = $request->admin_comment;
+            $pde->approved_on = Carbon::now();
+            $pde->approved_by = Auth::user()->id;
+            $pde->status = 3;
+            $pde->save();
+
+            $project = Project::where('id',$request->project_id)->first();
+            $project->deadline_auth_status = 0;
+            $project->save();
+        }
 
         return response()->json([
             'status'=> 200

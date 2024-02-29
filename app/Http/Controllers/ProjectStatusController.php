@@ -10,10 +10,13 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Helper\Reply;
+use App\Models\Deal;
+use App\Models\PmGoalHistory;
 use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use DB;
 
 class ProjectStatusController extends AccountBaseController
 {
@@ -168,25 +171,44 @@ class ProjectStatusController extends AccountBaseController
         // \DB::beginTransaction();
         $validator = Validator::make($request->all(), [
             'rating' => 'required',
-            'suggestion' => 'required',
-            'comment' => 'required',
+            'client_communication' => 'required',
+            'client_communication_rating' => 'required',
+            'negligence_pm' => 'required',
+            'negligence_pm_rating' => 'required',
 
-        ], [
-            'rating.required' => 'This field is required!',
-            'suggestion.required' => 'This field is required!',
-            'comment.required' => 'This field is required!',
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
         $projectPG->rating = $request->rating;
-        $projectPG->suggestion = $request->suggestion;
-        $projectPG->admin_comment = $request->comment;
+        $projectPG->client_communication = $request->client_communication;
+        $projectPG->client_communication_rating = $request->client_communication_rating;
+        $projectPG->negligence_pm = $request->negligence_pm;
+        $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
         $projectPG->reason_status = 2;
         $projectPG->save();
 
-        // dd($projectPG)
+        $project = Project::where('id',$projectPG->project_id)->first();
+        $deal = Deal::where('id',$project->deal_id)->first();
+        $goalHistory = new PmGoalHistory();
+        $goalHistory->goal_id = $projectPG->id;
+        $goalHistory->project_id = $project->id;
+        $goalHistory->client_id = $projectPG->client_id;
+        $goalHistory->pm_id = $projectPG->pm_id;
+        $goalHistory->project_budget = $deal->actual_amount;
+        $goalHistory->currency_id = $deal->original_currency_id;
+        $goalHistory->project_category = $projectPG->project_category;
+        $goalHistory->start_date = $projectPG->goal_start_date;
+        $goalHistory->deadline = $projectPG->goal_end_date;
+        $goalHistory->description = $projectPG->description;
+        $goalHistory->reason = $projectPG->reason;
+        $goalHistory->rating = $request->rating;
+        $goalHistory->client_communication = $request->client_communication;
+        $goalHistory->client_communication_rating = $request->client_communication_rating;
+        $goalHistory->negligence_pm = $request->negligence_pm;;
+        $goalHistory->negligence_pm_rating = $request->negligence_pm_rating;
+        $goalHistory->save();
 
         return response()->json(['status'=>200]);
     }
@@ -198,16 +220,14 @@ class ProjectStatusController extends AccountBaseController
     public function storePMExtendRequest(Request $request){
         // dd($request->all());
         // \DB::beginTransaction();
-        $pmGoals = ProjectPmGoal::where('project_id',$request->project_id)->get();
-        $goal = '';
-        foreach($pmGoals as $pmGoal){
-            $goal = ProjectPmGoal::where('id', $pmGoal->id)->first();
-            $goal->is_client_communication = $request->is_client_communication;
-            $goal->extended_day = $request->extended_day;
-            $goal->extended_request_status = 1;
-            $goal->save();
-        }
 
+        $goal = ProjectPmGoal::where('id', $request->goal_id)->first();
+        $goal->is_client_communication = $request->is_client_communication;
+        $goal->extended_day = $request->extended_day;
+        $goal->extended_request_status = 1;
+        $goal->save();
+
+        
         if ($request->hasFile('screenshot')) {
             $files = $request->file('screenshot');
             $destinationPath = storage_path('app/public/');
@@ -216,7 +236,7 @@ class ProjectStatusController extends AccountBaseController
             foreach ($files as $file) {
                 $pmGoalFile = new ProjectPmGoalFile();
                 $pmGoalFile->goal_id = $goal->id;
-                $pmGoalFile->project_id = $request->project_id;
+                $pmGoalFile->project_id = $goal->project_id;
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 array_push($file_name, $filename);
                 $pmGoalFile->file_name = $filename;
@@ -225,13 +245,11 @@ class ProjectStatusController extends AccountBaseController
                 Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
             }
         }
-
-        // dd('ok');
-        
         return response()->json(['status'=>200]);
     }
     public function extendImage($id){
-        $projectFile = ProjectPmGoalFile::where('project_id',$id)->get();
+        $projectFile = ProjectPmGoalFile::where('goal_id',$id)->get();
+        
         return response()->json([
             'status'=>200,
             'data'=>$projectFile
@@ -243,28 +261,18 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.review_extend_request',$this->data);
     }
     public function acceptOrDenyExtendRequest(Request $request){
-        // \DB::beginTransaction();
-        // dd($request->all());
-        $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
-        $updateGoal = '';
         if($request->status==1){
-            foreach($pmGoalFinds as $item){
-                $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
-                $updateGoal->extended_goal_end_day = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
-                $updateGoal->is_any_negligence = $request->is_any_negligence;
-                $updateGoal->extended_request_status = 2;
-                $updateGoal->save();
-            }
+            $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
+            $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
+            $updateGoal->is_any_negligence = $request->is_any_negligence;
+            $updateGoal->extended_request_status = 2;
+            $updateGoal->save();
         }else{
-            foreach($pmGoalFinds as $item){
-                $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
-                $updateGoal->is_any_negligence = $request->is_any_negligence;
-                $updateGoal->extended_request_status = 3;
-                $updateGoal->save();
-            }
+            $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
+            $updateGoal->is_any_negligence = $request->is_any_negligence;
+            $updateGoal->extended_request_status = 3;
+            $updateGoal->save();
         }
-        
-        // dd($updateGoal->extended_goal_end_day);
         return response()->json(['status'=>200]);
     }
     public function calendarShow($id)
@@ -283,17 +291,59 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.index', $this->data);
 
     }
-    public function allProjectStatus(){
-        $project_pm_goal = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','projects.project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage')
+    public function allProjectStatus(Request $request){
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $limit = $request->limit ??  10;
+
+        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','deals.actual_amount as project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage','currencies.currency_symbol')
             ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
+            ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
+            ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
             ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
             ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
-            ->groupBy('projects.id')
-            ->get();
+            ->groupBy('projects.id');
 
+            if ($startDate !== null && $endDate !== null) {
+                $pmGoalsQuery->where(function ($query) use ($startDate, $endDate) {
+                    $query->whereBetween(DB::raw('DATE(project_pm_goals.`created_at`)'), [$startDate, $endDate]);
+                    $query->orWhereBetween(DB::raw('DATE(project_pm_goals.`updated_at`)'), [$startDate, $endDate]);
+                });
+            }
+            if ($request->search != '') {
+                $pmGoalsQuery->where(function ($query) {
+                    $query->where('project_pm_goals.project_id', 'like', '%' . request('search') . '%')
+                    ->orWhere('projects.project_name', 'like', '%' . request('search') . '%')
+                    ->orWhere('client.name', 'like', '%' . request('search') . '%')
+                    ->orWhere('pm.name', 'like', '%' . request('search') . '%');
+                });
+            }
+            if ($request->client_id != null) {
+                $pmGoalsQuery->where('project_pm_goals.client_id', $request->client_id);
+            }
+            if ($request->pm_id != null) {
+                $pmGoalsQuery->where('project_pm_goals.pm_id', $request->pm_id);
+            }
+            $pm_goals = $pmGoalsQuery
+            ->orderBy('project_pm_goals.id', 'desc')
+            ->paginate($limit);
             return response()->json([
-                'data'=>$project_pm_goal,
+                'data'=>$pm_goals,
                 'status'=>200
             ]);
+    }
+    public function resolvedHistory(){
+        $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
+                ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')
+                ->leftJoin('projects','pm_goal_histories.project_id','projects.id')
+                ->leftJoin('users as client','pm_goal_histories.client_id','client.id')
+                ->leftJoin('users as pm','pm_goal_histories.pm_id','pm.id')
+                ->leftJoin('currencies','pm_goal_histories.currency_id','currencies.id')
+                ->get();
+
+                return response()->json([
+                    'data' => $data,
+                    'status' => 200
+                ]);
     }
 }

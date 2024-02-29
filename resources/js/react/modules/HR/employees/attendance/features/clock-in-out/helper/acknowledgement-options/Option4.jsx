@@ -29,6 +29,7 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         client: "",
     });
 
+    // console.log("data in option 4", data);
     const [durationStart, setDurationStart] = React.useState("08:00 AM");
     const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
     const [person, setPerson] = React.useState({});
@@ -134,16 +135,28 @@ const Option4 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
 
     // handle submission
     // handle submission
+
+    const fd = {
+        ...data,
+        durations: JSON.stringify([
+            { id: "de2sew", start: durationStart, end: durationEnd },
+        ]),
+    };
+
+    // console.log("data in option 4", fd);
+
     const handleSubmission = (e, submissionType) => {
         e.preventDefault();
 
         try {
-            const fd = {
-                ...data,
-                durations: JSON.stringify([
-                    { id: "de2sew", start: durationStart, end: durationEnd },
-                ]),
-            };
+            // const fd = {
+            //     ...data,
+            //     durations: JSON.stringify([
+            //         { id: "de2sew", start: durationStart, end: durationEnd },
+            //     ]),
+            // };
+
+            // console.log("data in option 4", fd);
 
             setSType(submissionType);
 
