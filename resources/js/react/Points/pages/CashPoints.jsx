@@ -99,7 +99,7 @@ const CashPoints = () => {
                                 id: "points",
                                 cell: (row) => {
                                     
-                                    return <span>{totalPointData[row?.id]?.points}</span>
+                                    return <span>{totalPointData[row?.id]?.points?.toFixed(2)}</span>
                                 }
                             },
                             {
