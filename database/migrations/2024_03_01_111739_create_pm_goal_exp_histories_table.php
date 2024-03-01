@@ -25,7 +25,7 @@ return new class extends Migration
             $table->longText('negligence_pm')->nullable();
             $table->integer('goal_status')->default(0);
             $table->integer('authorization_status')->default(0);
-            $table->integer('authorization_on')->nullable();
+            $table->dateTime('authorization_on');
             $table->integer('authorization_by')->nullable();
             $table->timestamps();
         });

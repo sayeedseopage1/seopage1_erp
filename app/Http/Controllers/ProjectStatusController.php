@@ -11,12 +11,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Helper\Reply;
 use App\Models\Deal;
-use App\Models\PmGoalHistory;
+use App\Models\PmGoalExpHistory;
 use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use DB;
+use Auth;
 
 class ProjectStatusController extends AccountBaseController
 {
@@ -80,7 +81,7 @@ class ProjectStatusController extends AccountBaseController
         $project_pm_goals = ProjectPmGoal::where('project_id',$id)->get();
 
         foreach($project_pm_goals as $goal){
-            $pm_goal = PmGoalHistory::where('goal_id',$goal->id)->count();
+            $pm_goal = PmGoalExpHistory::where('goal_id',$goal->id)->count();
             $goal->goal_expired_history = $pm_goal;
         }
 
@@ -196,22 +197,19 @@ class ProjectStatusController extends AccountBaseController
 
         $project = Project::where('id',$projectPG->project_id)->first();
         $deal = Deal::where('id',$project->deal_id)->first();
-        $goalHistory = new PmGoalHistory();
+        $goalHistory = new PmGoalExpHistory();
         $goalHistory->goal_id = $projectPG->id;
-        $goalHistory->project_id = $project->id;
-        $goalHistory->client_id = $projectPG->client_id;
-        $goalHistory->pm_id = $projectPG->pm_id;
-        $goalHistory->project_budget = $deal->actual_amount;
-        $goalHistory->currency_id = $deal->original_currency_id;
-        $goalHistory->project_category = $projectPG->project_category;
         $goalHistory->start_date = $projectPG->goal_start_date;
         $goalHistory->deadline = $projectPG->goal_end_date;
         $goalHistory->description = $projectPG->description;
+        $goalHistory->duration = $projectPG->duration;
+        $goalHistory->goal_status = $projectPG->goal_status;
         $goalHistory->reason = $projectPG->reason;
         $goalHistory->client_communication = $request->client_communication;
-        $goalHistory->client_communication_rating = $request->client_communication_rating;
-        $goalHistory->negligence_pm = $request->negligence_pm;;
-        $goalHistory->negligence_pm_rating = $request->negligence_pm_rating;
+        $goalHistory->negligence_pm = $request->negligence_pm;
+        $goalHistory->authorization_status = 1;
+        $goalHistory->authorization_on = Carbon::now();
+        $goalHistory->authorization_by = Auth::user()->id;
         $goalHistory->save();
 
         return response()->json(['status'=>200]);
@@ -352,27 +350,25 @@ class ProjectStatusController extends AccountBaseController
                 'status'=>200
             ]);
     }
-    public function resolvedHistory(){
-        $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
-                ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')
-                ->leftJoin('projects','pm_goal_histories.project_id','projects.id')
-                ->leftJoin('users as client','pm_goal_histories.client_id','client.id')
-                ->leftJoin('users as pm','pm_goal_histories.pm_id','pm.id')
-                ->leftJoin('currencies','pm_goal_histories.currency_id','currencies.id')
-                ->get();
+    // public function resolvedHistory(){
+    //     $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
+    //             ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')
+    //             ->leftJoin('projects','pm_goal_histories.project_id','projects.id')
+    //             ->leftJoin('users as client','pm_goal_histories.client_id','client.id')
+    //             ->leftJoin('users as pm','pm_goal_histories.pm_id','pm.id')
+    //             ->leftJoin('currencies','pm_goal_histories.currency_id','currencies.id')
+    //             ->get();
 
-                return response()->json([
-                    'data' => $data,
-                    'status' => 200
-                ]);
-    }
+    //             return response()->json([
+    //                 'data' => $data,
+    //                 'status' => 200
+    //             ]);
+    // }
     public function extensionHistory($id){
-        $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
-                ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')
-                ->leftJoin('projects','pm_goal_histories.project_id','projects.id')
-                ->leftJoin('users as client','pm_goal_histories.client_id','client.id')
-                ->leftJoin('users as pm','pm_goal_histories.pm_id','pm.id')
-                ->leftJoin('currencies','pm_goal_histories.currency_id','currencies.id')
+        $data = PmGoalExpHistory::select('pm_goal_exp_histories.*','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
+                ->leftJoin('users as authorization_by','pm_goal_exp_histories.authorization_by','authorization_by.id')
+                ->where('pm_goal_exp_histories.id',$id)
+                ->groupBy('pm_goal_exp_histories.goal_id')
                 ->get();
 
                 return response()->json([
