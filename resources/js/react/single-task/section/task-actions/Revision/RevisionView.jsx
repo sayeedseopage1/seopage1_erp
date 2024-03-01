@@ -15,18 +15,45 @@ const RevisionView = ({
 }) => {
     const auth = new User(window?.Laravel?.user);
 
+    //old logic
+    // const getComment = () => {
+    //     if (
+    //         auth?.isHasRolePermission(6) ||
+    //         auth?.isHasRolePermission(13) ||
+    //         auth?.isHasRolePermission(9) ||
+    //         auth?.isHasRolePermission(10)
+    //     ) {
+    //         return revision?.pm_comment;
+    //     } else {
+    //         return revision?.lead_comment;
+    //     }
+    // };
+
+    //new logic
+
     const getComment = () => {
-        if (
-            auth?.isHasRolePermission(6) ||
-            auth?.isHasRolePermission(13) ||
-            auth?.isHasRolePermission(9) ||
-            auth?.isHasRolePermission(10)
-        ) {
+        if (auth?.isHasRolePermission(6) || auth?.isHasRolePermission(13)) {
             return revision?.pm_comment;
+        } else if (
+            auth?.isHasRolePermission(9) ||
+            auth?.isHasRolePermission(10) ||
+            auth?.isHasRolePermission(5)
+        ) {
+            if (
+                revision?.revision_status === "Project Manager Revision" ||
+                revision?.revision_status === "Client Has Revision"
+            ) {
+                return revision?.pm_comment;
+            } else {
+                return revision?.lead_comment;
+            }
         } else {
-            return revision?.lead_comment;
+            return revision?.pm_comment;
         }
     };
+
+    console.log("revision", revision);
+
     const comment = getComment();
     if (isLoading) {
         return (

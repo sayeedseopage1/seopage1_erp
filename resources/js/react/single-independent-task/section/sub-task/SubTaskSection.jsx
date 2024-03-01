@@ -159,7 +159,7 @@ const SubTaskSection = ({ status }) => {
                     {/* modal */}
                     <Modal isOpen={isTaskModalOpen}>
                         {!edit ? (
-                            <SubTaskFsorm
+                            <SubTaskForm
                                 close={closeAddModal}
                                 isFirstSubtask={!Task.workEnvData}
                             />

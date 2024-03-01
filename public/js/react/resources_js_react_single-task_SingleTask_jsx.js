@@ -17700,7 +17700,7 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     show = _useState2[0],
     setShow = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState4 = _slicedToArray(_useState3, 2),
     accept = _useState4[0],
     setAccept = _useState4[1];
@@ -17723,19 +17723,19 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
             _data = {
-              comment: (_data$comment = data === null || data === void 0 ? void 0 : data.comment) !== null && _data$comment !== void 0 ? _data$comment : '',
-              deny_reason: (_data$denyReason = data === null || data === void 0 ? void 0 : data.denyReason) !== null && _data$denyReason !== void 0 ? _data$denyReason : '',
+              comment: (_data$comment = data === null || data === void 0 ? void 0 : data.comment) !== null && _data$comment !== void 0 ? _data$comment : "",
+              deny_reason: (_data$denyReason = data === null || data === void 0 ? void 0 : data.denyReason) !== null && _data$denyReason !== void 0 ? _data$denyReason : "",
               task_id: task === null || task === void 0 ? void 0 : task.id,
               user_id: auth === null || auth === void 0 ? void 0 : auth.getId(),
               revision_id: revision === null || revision === void 0 ? void 0 : revision.id,
-              mode: data !== null && data !== void 0 && data["continue"] ? 'continue' : accept
+              mode: data !== null && data !== void 0 && data["continue"] ? "continue" : accept
             };
             _context.next = 3;
             return revisionAcceptOrDeny(_data).unwrap().then(function (res) {
               if (lodash__WEBPACK_IMPORTED_MODULE_11___default().includes([4, 6], auth === null || auth === void 0 ? void 0 : auth.getRoleId())) {
                 setShow(type);
               } else {
-                react_toastify__WEBPACK_IMPORTED_MODULE_10__.toast.success('Your request has been successfully processed');
+                react_toastify__WEBPACK_IMPORTED_MODULE_10__.toast.success("Your request has been successfully processed");
                 dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
                 close();
               }
@@ -17758,14 +17758,18 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
   // generate modal title by user role id
 
   var isTaskTypeDesign = lodash__WEBPACK_IMPORTED_MODULE_11___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id);
-  var _text = isTaskTypeDesign ? 'Designer' : "Developer";
+  var _text = isTaskTypeDesign ? "Designer" : "Developer";
   var generateModalTitle = function generateModalTitle() {
     if (auth.getRoleId() === 4) {
       return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead ".concat(_text) : "Revision By Project Manager";
     } else if (auth.getRoleId() === 6) {
       return show === "ASSIGNEE_TO_DEV" ? "Revision For ".concat(_text) : "Revision By Project Manager";
     } else if ((auth.getRoleId() === 9 || auth.getRoleId() === 10) && !auth.isHasRolePermission(13)) {
-      return "Revision By Lead Designer";
+      if ((revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Project Manager Revision" || (revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Client Has Revision") {
+        return "Revision By Project Manager";
+      } else {
+        return "Revision By Lead Designer";
+      }
     } else return "Revision By Lead Developer";
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
@@ -17778,7 +17782,7 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
         className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
           className: "font-weight-bold f-16",
-          children: ["Task#", task === null || task === void 0 ? void 0 : task.id, ": ", " ", " ", generateModalTitle()]
+          children: ["Task#", task === null || task === void 0 ? void 0 : task.id, ": ", generateModalTitle()]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           onClick: close,
           className: "",
@@ -17788,25 +17792,25 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         className: "px-3",
-        children: [show === 'REVISION' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_RevisionView__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: [show === "REVISION" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_RevisionView__WEBPACK_IMPORTED_MODULE_2__["default"], {
           revision: revision,
           isLoading: isFetchingRevision,
           isContinue: isLoadingRevisionReview,
           onAccept: function onAccept() {
-            setAccept('accept');
-            setShow('ACCEPT_AND_CONTINUE');
+            setAccept("accept");
+            setShow("ACCEPT_AND_CONTINUE");
           },
           onDeny: function onDeny() {
             setAccept("deny");
-            setShow('DENY_AND_CONTINUE');
+            setShow("DENY_AND_CONTINUE");
           },
           onContinue: function onContinue() {
-            setAccept('continue');
+            setAccept("continue");
             handleAcceptAndContinueSubmission({
               "continue": true
-            }, '');
+            }, "");
           }
-        }), show === 'ACCEPT_AND_CONTINUE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
+        }), show === "ACCEPT_AND_CONTINUE" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
           task: task,
           isSubmitting: isLoadingRevisionReview,
           onSubmit: function onSubmit(data) {
@@ -18456,13 +18460,37 @@ var RevisionView = function RevisionView(_ref) {
     onContinue = _ref.onContinue,
     isContinue = _ref.isContinue;
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_4__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
+
+  //old logic
+  // const getComment = () => {
+  //     if (
+  //         auth?.isHasRolePermission(6) ||
+  //         auth?.isHasRolePermission(13) ||
+  //         auth?.isHasRolePermission(9) ||
+  //         auth?.isHasRolePermission(10)
+  //     ) {
+  //         return revision?.pm_comment;
+  //     } else {
+  //         return revision?.lead_comment;
+  //     }
+  // };
+
+  //new logic
+
   var getComment = function getComment() {
-    if (auth !== null && auth !== void 0 && auth.isHasRolePermission(6) || auth !== null && auth !== void 0 && auth.isHasRolePermission(13) || auth !== null && auth !== void 0 && auth.isHasRolePermission(9) || auth !== null && auth !== void 0 && auth.isHasRolePermission(10)) {
+    if (auth !== null && auth !== void 0 && auth.isHasRolePermission(6) || auth !== null && auth !== void 0 && auth.isHasRolePermission(13)) {
       return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
+    } else if (auth !== null && auth !== void 0 && auth.isHasRolePermission(9) || auth !== null && auth !== void 0 && auth.isHasRolePermission(10) || auth !== null && auth !== void 0 && auth.isHasRolePermission(5)) {
+      if ((revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Project Manager Revision" || (revision === null || revision === void 0 ? void 0 : revision.revision_status) === "Client Has Revision") {
+        return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
+      } else {
+        return revision === null || revision === void 0 ? void 0 : revision.lead_comment;
+      }
     } else {
-      return revision === null || revision === void 0 ? void 0 : revision.lead_comment;
+      return revision === null || revision === void 0 ? void 0 : revision.pm_comment;
     }
   };
+  console.log("revision", revision);
   var comment = getComment();
   if (isLoading) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
