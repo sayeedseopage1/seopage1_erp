@@ -80,8 +80,8 @@ class ProjectStatusController extends AccountBaseController
         $project_pm_goals = ProjectPmGoal::where('project_id',$id)->get();
 
         foreach($project_pm_goals as $goal){
-            $pm_goal = ProjectPmGoal::where('id',$goal->id)->where('reason','!=',null)->count();
-            $goal->goal_extension_history = $pm_goal;
+            $pm_goal = PmGoalHistory::where('goal_id',$goal->id)->count();
+            $goal->goal_expired_history = $pm_goal;
         }
 
         return response()->json([
@@ -353,6 +353,20 @@ class ProjectStatusController extends AccountBaseController
             ]);
     }
     public function resolvedHistory(){
+        $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
+                ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')
+                ->leftJoin('projects','pm_goal_histories.project_id','projects.id')
+                ->leftJoin('users as client','pm_goal_histories.client_id','client.id')
+                ->leftJoin('users as pm','pm_goal_histories.pm_id','pm.id')
+                ->leftJoin('currencies','pm_goal_histories.currency_id','currencies.id')
+                ->get();
+
+                return response()->json([
+                    'data' => $data,
+                    'status' => 200
+                ]);
+    }
+    public function extensionHistory($id){
         $data = PmGoalHistory::select('pm_goal_histories.*','project_pm_goals.goal_name','projects.project_name','client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmIName','pm.image as pmImage','currencies.currency_symbol')
                 ->leftJoin('project_pm_goals','pm_goal_histories.goal_id','project_pm_goals.id')
                 ->leftJoin('projects','pm_goal_histories.project_id','projects.id')
