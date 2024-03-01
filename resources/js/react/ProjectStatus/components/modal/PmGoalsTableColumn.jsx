@@ -1,4 +1,3 @@
-import { getWidth } from "../../../utils/conditionalWidthReduse";
 import { User } from "../../../utils/user-details";
 import Switch from "../Switch";
 import styles from "../styles/pm-goals-table-column.module.css";
@@ -136,6 +135,7 @@ export const PmGoalsTableColumns = [
                                 </Switch.Case>
                             </Switch>
                         </Switch.Case>
+                      
                     </Switch>
                     <Switch>
                             <Switch.Case condition={user.roleId === 4}>
