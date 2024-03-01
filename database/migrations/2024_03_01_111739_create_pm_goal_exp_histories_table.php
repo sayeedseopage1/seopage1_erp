@@ -23,6 +23,8 @@ return new class extends Migration
             $table->longText('reason');
             $table->longText('client_communication')->nullable();
             $table->longText('negligence_pm')->nullable();
+            $table->double('client_communication_rating')->nullable();
+            $table->double('negligence_pm_rating')->nullable();
             $table->integer('goal_status')->default(0);
             $table->integer('authorization_status')->default(0);
             $table->dateTime('authorization_on');

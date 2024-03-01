@@ -207,6 +207,8 @@ class ProjectStatusController extends AccountBaseController
         $goalHistory->reason = $projectPG->reason;
         $goalHistory->client_communication = $request->client_communication;
         $goalHistory->negligence_pm = $request->negligence_pm;
+        $goalHistory->client_communication_rating = $request->client_communication_rating;
+        $goalHistory->negligence_pm_rating = $request->negligence_pm_rating;
         $goalHistory->authorization_status = 1;
         $goalHistory->authorization_on = Carbon::now();
         $goalHistory->authorization_by = Auth::user()->id;
@@ -367,8 +369,7 @@ class ProjectStatusController extends AccountBaseController
     public function extensionHistory($id){
         $data = PmGoalExpHistory::select('pm_goal_exp_histories.*','authorization_by.id as authorization_by_id','authorization_by.name as authorization_by_name','authorization_by.image as authorization_by_img')
                 ->leftJoin('users as authorization_by','pm_goal_exp_histories.authorization_by','authorization_by.id')
-                ->where('pm_goal_exp_histories.id',$id)
-                ->groupBy('pm_goal_exp_histories.goal_id')
+                ->where('pm_goal_exp_histories.goal_id',$id)
                 ->get();
 
                 return response()->json([
