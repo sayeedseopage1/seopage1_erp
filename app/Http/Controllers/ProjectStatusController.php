@@ -267,7 +267,6 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.review_extend_request',$this->data);
     }
     public function acceptOrDenyExtendRequest(Request $request){
-        dd($request->all());
         if($request->status==1){
             $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
             $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
