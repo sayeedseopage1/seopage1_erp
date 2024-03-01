@@ -1160,7 +1160,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('project-status-review-extend-request/{id}', [ProjectStatusController::class, 'reviewExtendRequest'])->name('project-status.reviewExtendRequest');
     Route::post('project-status-accept-extend-request', [ProjectStatusController::class, 'acceptOrDenyExtendRequest'])->name('project-status-extend-request-accept');
     Route::get('goal-extension-history/{id}', [ProjectStatusController::class, 'extensionHistory']);
-    Route::get('goal-resolved-history', [ProjectStatusController::class, 'resolvedHistory']);
+    Route::get('goal-resolved-history/{id}', [ProjectStatusController::class, 'resolvedHistory']);
 
     //qualified sales Settings
 

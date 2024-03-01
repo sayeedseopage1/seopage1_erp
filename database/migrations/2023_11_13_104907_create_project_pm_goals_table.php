@@ -40,6 +40,8 @@ return new class extends Migration
             $table->longText('description')->nullable();
             $table->longText('negligence_pm')->nullable();
             $table->longText('reason')->nullable();
+            $table->longText('extended_reason')->nullable();
+            $table->longText('extended_admin_cmnt')->nullable();
             $table->integer('reason_status')->default(0);
             $table->integer('extended_day')->nullable();
             $table->dateTime('extended_goal_end_day')->nullable();
