@@ -79,6 +79,11 @@ class ProjectStatusController extends AccountBaseController
     {
         $project_pm_goals = ProjectPmGoal::where('project_id',$id)->get();
 
+        foreach($project_pm_goals as $goal){
+            $pm_goal = ProjectPmGoal::where('id',$goal->id)->where('reason','!=',null)->count();
+            $goal->goal_extension_history = $pm_goal;
+        }
+
         return response()->json([
             'data' => $project_pm_goals,
             'status' => 200
@@ -168,9 +173,10 @@ class ProjectStatusController extends AccountBaseController
     }
     public function projectStatusResolve(Request $request){
         // dd($request->all());
+
+
         // \DB::beginTransaction();
         $validator = Validator::make($request->all(), [
-            'rating' => 'required',
             'client_communication' => 'required',
             'client_communication_rating' => 'required',
             'negligence_pm' => 'required',
@@ -181,7 +187,6 @@ class ProjectStatusController extends AccountBaseController
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
-        $projectPG->rating = $request->rating;
         $projectPG->client_communication = $request->client_communication;
         $projectPG->client_communication_rating = $request->client_communication_rating;
         $projectPG->negligence_pm = $request->negligence_pm;
@@ -203,7 +208,6 @@ class ProjectStatusController extends AccountBaseController
         $goalHistory->deadline = $projectPG->goal_end_date;
         $goalHistory->description = $projectPG->description;
         $goalHistory->reason = $projectPG->reason;
-        $goalHistory->rating = $request->rating;
         $goalHistory->client_communication = $request->client_communication;
         $goalHistory->client_communication_rating = $request->client_communication_rating;
         $goalHistory->negligence_pm = $request->negligence_pm;;
