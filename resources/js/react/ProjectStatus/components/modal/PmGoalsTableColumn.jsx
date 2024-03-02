@@ -77,7 +77,14 @@ export const PmGoalsTableColumns = [
             const handle = table.options.meta
             const data = row?.original;
             return (
-                <span role="button" onClick={() => handle.goalExtensionHistoryClick(data)}>6</span>
+                <span 
+                role="button" 
+                onClick={() => {
+                    // condition to check if the goal extension history is available
+                    data?.goal_extension_history &&  handle.goalExtensionHistoryClick(data)
+                }}>
+                    {data?.goal_extension_history ?? "--"}
+                </span>
             )
         }
     },
@@ -89,7 +96,14 @@ export const PmGoalsTableColumns = [
             const handle = table.options.meta
             const data = row?.original;
             return (
-                <span role="button" onClick={() => handle.deadlineExplanationHistoryClick(data)} >5</span>
+                <span 
+                role="button" 
+                onClick={() => {
+                    // condition to check if the deadline explanation history is available
+                    data.goal_expired_history &&  handle.deadlineExplanationHistoryClick(data)
+                }} >
+                    {data.goal_expired_history}
+                </span>
             )
         }
     },
@@ -136,9 +150,14 @@ export const PmGoalsTableColumns = [
                         </Switch.Case>
                     </Switch>
                     <Switch>
-                            <Switch.Case condition={user.roleId === 4}>
+                            <Switch.Case condition={user.roleId === 4 && data?.extended_request_status === 0}>
                                 <button onClick={() => handle.extendRequestClick(data)} className={`btn btn-success ${styles?.extend}`}>
                                     Request Deadline Extension
+                                </button>
+                            </Switch.Case>
+                            <Switch.Case condition={user.roleId === 4 && data?.extended_request_status === 1}>
+                                <button className={`btn btn-outline-success ${styles?.extend}`}>
+                                        Awaiting Deadline Extension Request Authorization
                                 </button>
                             </Switch.Case>
                             <Switch.Case
