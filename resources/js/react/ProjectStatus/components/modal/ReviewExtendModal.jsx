@@ -9,7 +9,6 @@ import {
     useGetProjectExtendImagesQuery,
 } from "../../../services/api/projectStatusApiSlice";
 import ImageViewer from "./ImageViewer";
-import RefreshButton from "../RefreshButton";
 import { toast } from "react-toastify";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
 const ReviewExtendRequestModal = ({ 
@@ -30,13 +29,16 @@ const ReviewExtendRequestModal = ({
         comment: false,
         isSubmitting: false,
     })
+    // Get image data
     const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
         reviewExtendRequestData?.id
     );
+    // Submit data
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
-
+    // Get image data
     const imageData = data?.data;
 
+    // Reset form
     const handleResetForm = () => {
         setReviewExtendState({
             extended_day: null,
@@ -49,10 +51,13 @@ const ReviewExtendRequestModal = ({
         });
     };
 
+    // Accept request
     const handleAccept = async (e) => {
         e.preventDefault();
+        // Check if fields are empty using state validation
         const isEmpty = isStateAllHaveValue(reviewExtendState);
         if (isEmpty) {
+            // mark empty fields
             const validation = markEmptyFieldsValidation(reviewExtendState);
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
@@ -89,6 +94,7 @@ const ReviewExtendRequestModal = ({
             });
     };
 
+    // Reject request
     const handleReject = async (e) => {
         e.preventDefault();
         const fd = new FormData();
@@ -119,7 +125,7 @@ const ReviewExtendRequestModal = ({
     };
 
 
-
+    // Check if fields are empty
     useEffect(() => {
         if(reviewExtendStateValidation.isSubmitting){
             const validation = markEmptyFieldsValidation(reviewExtendState);
@@ -130,7 +136,7 @@ const ReviewExtendRequestModal = ({
         }
     }, [reviewExtendState, reviewExtendStateValidation.isSubmitting]);
 
-
+    // reset form when modal is closed
     useEffect(() => {
         if(!isOpen){
             handleResetForm()
@@ -138,6 +144,7 @@ const ReviewExtendRequestModal = ({
     }, [isOpen]);
 
 
+    // set review extend state
     useEffect(() => {
             setReviewExtendState({
                 extended_day: reviewExtendRequestData?.extended_day,
@@ -146,6 +153,19 @@ const ReviewExtendRequestModal = ({
             });
         
     }, [reviewExtendRequestData]);
+
+    // disable keypress except 0-9, backspace, left and right arrow
+    const handleOnkeypress = e => {
+        const keyCode = e.keyCode || e.which;
+        if (
+            (keyCode < 48 || keyCode > 57) && // 0-9
+            keyCode !== 8 && // Backspace
+            keyCode !== 37 && // Left arrow
+            keyCode !== 39 // Right arrow
+        ) {
+            e.preventDefault();
+        }
+    }
 
     
 
@@ -207,6 +227,7 @@ const ReviewExtendRequestModal = ({
                             defaultValue={reviewExtendState?.extended_day}
                             placeholder="Enter extended days"
                             type="number"
+                            onKeyPress={handleOnkeypress}
                             min={1}
                             onChange={(e) => setReviewExtendState({
                                 ...reviewExtendState,

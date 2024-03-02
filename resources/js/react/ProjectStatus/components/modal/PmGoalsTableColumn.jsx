@@ -58,14 +58,13 @@ export const PmGoalsTableColumns = [
         header: "Goal Status",
         accessorKey: "goal_status",
         cell: ({ row }) => {
-            const data = row?.goal_status;
+            const data = row?.original;
             return (
                 <div className="d-flex align-items-center" > 
                     <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.status === "In progress" ? "#3F9C35" : "#00b5ff",
+                        color: data?.goal_status === 0 ? "#FF0000" : "#00b5ff",
                     }}></i>  
-
-                    {data?.status === 0 ? "In progress" : "Completed" } 
+                    {data?.goal_status === 0 ? "Incomplete" : "Completed" } 
                 </div>
             )
         }
@@ -107,7 +106,7 @@ export const PmGoalsTableColumns = [
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
-                                    <Switch.Case condition={!data.reason}>
+                                    <Switch.Case condition={data.reason_status === 0 ||  data.reason_status === 2}>
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 
@@ -135,7 +134,6 @@ export const PmGoalsTableColumns = [
                                 </Switch.Case>
                             </Switch>
                         </Switch.Case>
-                      
                     </Switch>
                     <Switch>
                             <Switch.Case condition={user.roleId === 4}>
@@ -155,10 +153,9 @@ export const PmGoalsTableColumns = [
                             </Switch.Case>
                     </Switch>
                     <Switch>
-                        {/* <Switch.Case condition={data?.extended_request_status !== 1 &&
-                                    (user.roleId === 1 || user.roleId === 8)}>
+                        <Switch.Case condition={user?.roleId === 1 && data?.extended_request_status === 0 && !data.reason}>
                             <span>--</span>
-                        </Switch.Case> */}
+                        </Switch.Case>
                     </Switch>
                </div>
             

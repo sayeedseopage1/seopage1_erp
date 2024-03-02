@@ -60,10 +60,10 @@ export const PercentageofGMTableColumn = [
           return (
             <div className="d-flex align-items-center" > 
                 <i class="fa fa-circle mr-1 f-10" style={{
-                color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
+                color: data?.goal_status === 0 ? "#FF0000" : "#3F9C35",
                 }}></i>  
-
-                {data?.status === 0 ? "In progress" : "Completed" } 
+ 
+                {data?.goal_status === 0 ? "Incomplete" : "Completed" } 
             </div>
           )
       }

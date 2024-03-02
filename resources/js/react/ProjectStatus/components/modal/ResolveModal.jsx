@@ -30,9 +30,12 @@ const ResolveModal = ({
         negligence_pm_rating: false,
         isSubmitting: false,
       });
+    
+      // toolkit query
     const [submitData, { isLoading }] =
         useCreateResolveSuggestionCommentMutation();
 
+    // Api Call    
     const handleSubmit = async () => {
         const isEmpty = isStateAllHaveValue({
             project_pm_goal_id: projectPmGoalId,
@@ -63,6 +66,7 @@ const ResolveModal = ({
                 closeModal();
                 toast.success("Submission was successful");
                 refetchPmGoal();
+                handleResetForm()
             } else {
                 toast.error("Submission was not successful");
             }
@@ -81,7 +85,7 @@ const ResolveModal = ({
         }
     };
 
-
+    // 
     useEffect(() => {
         if(resolveModalDataValidation.isSubmitting){
             const validation = markEmptyFieldsValidation({
@@ -95,6 +99,25 @@ const ResolveModal = ({
         }
     }, [resolveModalData, resolveModalDataValidation.isSubmitting]);
 
+
+    // Reset form when modal is closed
+    const handleResetForm = () => {
+        setResolveModalData({
+            client_communication: "",
+            client_communication_rating: null,
+            negligence_pm: "",
+            negligence_pm_rating: null,
+        });
+        setResolveModalDataValidation({
+            client_communication: false,
+            client_communication_rating: false,
+            negligence_pm: false,
+            negligence_pm_rating: false,
+            isSubmitting: false,
+        });
+    }
+
+  
 
     return (
         <ReactModal
@@ -114,7 +137,6 @@ const ResolveModal = ({
                 >
                     Resolve
                 </h6>
-
                 <button
                     onClick={closeModal}
                     style={{
@@ -259,6 +281,8 @@ const ResolveModal = ({
                              />
                              {resolveModalData?.negligence_pm_rating  && <small>{resolveModalData?.negligence_pm_rating} /10</small>}
                             </div>
+
+                            {/* Error  */}
                             {resolveModalDataValidation.negligence_pm_rating && <small className="text-danger my-1">Client Communication Rating is required</small>}
                         </div>
                     </div>

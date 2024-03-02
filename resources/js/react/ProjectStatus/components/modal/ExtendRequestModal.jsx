@@ -110,6 +110,21 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
     }, [extendRequestGoalId]);
 
 
+      // disable keypress for rating
+    const handleOnkeypress = e => {
+        const keyCode = e.keyCode || e.which;
+        if (
+            (keyCode < 48 || keyCode > 57) && // 0-9
+            keyCode !== 8 && // Backspace
+            keyCode !== 37 && // Left arrow
+            keyCode !== 39 // Right arrow
+        ) {
+            e.preventDefault();
+        }
+    }
+
+
+
     return (
         <ReactModal
             style={customStyles}
@@ -164,6 +179,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                                 placeholder="Enter the extended days"
                                 value={extendRequestData.extended_day}
                                 type="number"
+                                onKeyPress={handleOnkeypress}
                                 required={true}
                                 min={1}
                                 onChange={(e) => setExtendRequestData({

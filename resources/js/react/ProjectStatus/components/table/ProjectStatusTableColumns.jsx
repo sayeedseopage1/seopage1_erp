@@ -135,9 +135,9 @@ export const ProjectStatusTableColumns = [
                                 <div 
                                     className="d-flex flex-column justify-content-start align-items-start"
                                 >
-                                    <p>Total goals: 10</p>
-                                    <p>Goals deadline expired so far: 8</p>
-                                    <p>Goals met: 4</p>
+                                    <p>Total goals: {data?.total_goal}</p>
+                                    <p>Goals deadline expired so far: {data?.goal_expire}</p>
+                                    <p>Goals met: {data?.goal_meet}</p>
                                     <p>Percentage of goals met: {percentage}%</p>
                                 </div>
                             </div>
@@ -157,9 +157,9 @@ export const ProjectStatusTableColumns = [
                 <Popover>
                     <Popover.Button>
                             <div className={`${style.projectStatus_popover_button}`}>
-                                <p>
-                                    In 02 Days
-                                </p>
+                                {data.upcoming_goal_day === 0 ? <p>
+                                    Today
+                                </p> : <p>In {data.upcoming_goal_day} Days</p>}
                             </div>
                     </Popover.Button>
                     <Popover.Panel>
@@ -167,7 +167,7 @@ export const ProjectStatusTableColumns = [
                              <div 
                                 className="d-flex flex-column justify-content-start align-items-start"
                             >
-                                 <p>Next Goal Date : 2024-02-16 09:10:26</p>
+                                 <p>Next Goal Date : {data.next_goal_date}</p>
                             </div>
                         </div>
                     </Popover.Panel>

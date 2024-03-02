@@ -93,6 +93,7 @@ const ProjectStatus = () => {
         setSelectedProjectName(data.project_name);
         setProjectDetails(data);
         setIsOpenPercentageofGoalsMetModal(true)
+        refetchPmGoal()
     }
 
     // handle close percentage of goal met modal
