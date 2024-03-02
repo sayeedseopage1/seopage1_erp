@@ -83,7 +83,9 @@ class ProjectStatusController extends AccountBaseController
 
         foreach($project_pm_goals as $goal){
             $pm_goal = PmGoalExpHistory::where('goal_id',$goal->id)->count();
+            $goal_deadline = PmGoalDeadlineExtHistory::where('goal_id',$goal->id)->count();
             $goal->goal_expired_history = $pm_goal;
+            $goal->goal_extension_history = $goal_deadline;
         }
 
         return response()->json([
