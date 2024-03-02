@@ -221,6 +221,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                     projectDetails={projectDetails}
                     extendRequestGoalId={extendRequestGoalId}
                     isOpen={isOpenExtendRequestModal}
+                    refetchPmGoal={refetchPmGoal}
                     onClose={handleClosExtendRequestModal}
                 />
                 <ReviewExtendRequestModal

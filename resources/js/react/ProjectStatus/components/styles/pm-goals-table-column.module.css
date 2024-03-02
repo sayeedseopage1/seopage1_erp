@@ -63,6 +63,17 @@
     cursor: not-allowed !important;
 }
 
+.awaitingDeadlineExtension{
+    cursor: not-allowed !important;
+    
+}
+.awaitingDeadlineExtension:hover{
+    cursor: not-allowed !important;
+    color: #28a745 !important;
+    border-color: #28a745;
+    background-color: #e6f8ef;
+}
+
 .action.extend:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;

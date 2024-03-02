@@ -156,7 +156,7 @@ export const PmGoalsTableColumns = [
                                 </button>
                             </Switch.Case>
                             <Switch.Case condition={user.roleId === 4 && data?.extended_request_status === 1}>
-                                <button className={`btn btn-outline-success ${styles?.extend}`}>
+                                <button disabled className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}>
                                         Awaiting Deadline Extension Request Authorization
                                 </button>
                             </Switch.Case>

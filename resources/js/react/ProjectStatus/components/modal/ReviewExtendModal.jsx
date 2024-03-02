@@ -35,8 +35,9 @@ const ReviewExtendRequestModal = ({
     );
     // Submit data
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
+
     // Get image data
-    const imageData = data?.data;
+    const imageData = data?.data?.project_goal_files
 
     // Reset form
     const handleResetForm = () => {
@@ -173,6 +174,7 @@ const ReviewExtendRequestModal = ({
         <ReactModal
             style={customStyles}
             isOpen={isOpen}
+            ariaHideApp={false}
             onRequestClose={onClose}
         >
             <div

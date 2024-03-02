@@ -8,7 +8,7 @@ import FileUpload from "./FileUpload";
 import { useCreateExtendRequestMutation } from "../../../services/api/projectStatusApiSlice";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
 
-const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoalId }) => {
+const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoalId, refetchPmGoal }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [extendRequestData, setExtendRequestData] = useState({
         extended_day: null,
@@ -73,6 +73,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                     onClose();
                     toast.success("Submission was successful");
                     handleResetForm();
+                    refetchPmGoal();
                 })
                 .catch((err) => {
                     if (err?.status === 422) {
