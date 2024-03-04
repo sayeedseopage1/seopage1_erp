@@ -54,6 +54,15 @@ const PercentageofGoalsMetModal = ({
                 </button>
               </div>
           </div>
+          
+          <div 
+            className="d-flex flex-column justify-content-center align-items-center my-3"
+          >
+              <p>Total goals: {projectDetails?.total_goal}</p>
+              <p>Goals deadline expired so far: {projectDetails?.goal_expire}</p>
+              <p>Goals met: {projectDetails?.goal_meet}</p>
+              <p>Percentage of goals met: {projectDetails.goal_progress}%</p>
+          </div>          
           <PercentageofGoalsMetTable
             projectDetails={projectDetails}
             closeModal={closeModal}     

@@ -119,26 +119,24 @@ export const ProjectStatusTableColumns = [
                                 <div 
                                     className="progress-bar f-12" 
                                     role="progressbar" 
-                                    style={{width: `${percentage}%`, backgroundColor: getColor(percentage)}} 
-                                    aria-valuenow={percentage}
+                                    style={{width: `${data.goal_progress}%`, backgroundColor: getColor(data.goal_progress)}} 
+                                    aria-valuenow={data.goal_progress}
                                     aria-valuemin="0" 
                                     aria-valuemax="100"
                                 >
-                                    {percentage}%
+                                    {data.goal_progress}%
                                 </div>
                             </div>
                         </Popover.Button>
                         <Popover.Panel>
-                            <div onTouchStartCapture={() => {
-                                debugger
-                            }} className={`${style.projectStatus_popover_panel}`}>
+                            <div className={`${style.projectStatus_popover_panel}`}>
                                 <div 
                                     className="d-flex flex-column justify-content-start align-items-start"
                                 >
                                     <p>Total goals: {data?.total_goal}</p>
                                     <p>Goals deadline expired so far: {data?.goal_expire}</p>
                                     <p>Goals met: {data?.goal_meet}</p>
-                                    <p>Percentage of goals met: {percentage}%</p>
+                                    <p>Percentage of goals met: {data.goal_progress}%</p>
                                 </div>
                             </div>
                         </Popover.Panel>
@@ -180,9 +178,11 @@ export const ProjectStatusTableColumns = [
     {
         id: "next_goal_details",
         header: "Next Goal Details",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
+                 const data = row.original;
+                const handler = table.options.meta;
                 return (
-                    <button className="btn btn-success">View Details</button>
+                    <button onClick={() => handler.onNextGoalDetails(data)} className="btn btn-success">View Details</button>
                 );
             
         }

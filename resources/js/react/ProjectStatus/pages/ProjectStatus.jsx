@@ -12,6 +12,7 @@ import Button from "../components/Button";
 import Loader from "../components/Loader";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
 import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetModal";
+import NextGoalDetailsModal from "../components/modal/NextGoalDetailsModal";
 
 const ProjectStatus = () => {
     const [search,setSearch] = React.useState('');
@@ -25,6 +26,7 @@ const ProjectStatus = () => {
     const [isModalOneOpen, setIsModalOneOpen] = React.useState(false);
     const [isOpenPercentageofGoalsMetModal, setIsOpenPercentageofGoalsMetModal] = React.useState(false);
     const [selectedProjectName, setSelectedProjectName] = React.useState("");
+    const [isOpenNextGoalDetailsModal, setIsOpenNextGoalDetailsModal] = React.useState(false);
 
     // make query string
     const queryString = (object) => {
@@ -96,11 +98,20 @@ const ProjectStatus = () => {
         refetchPmGoal()
     }
 
+    const handleNextGoalDetails = (data) => {
+        setProjectDetails(data);
+        setIsOpenNextGoalDetailsModal(true);
+    }
+
     // handle close percentage of goal met modal
     const handleClosePercentageofGoalsMetModal = () => {
         setIsOpenPercentageofGoalsMetModal(false);
     }
 
+    // handle close next goal details modal
+    const handleCloseNextGoalDetailsModal = () => {
+        setIsOpenNextGoalDetailsModal(false);
+    }
 
     
 
@@ -134,6 +145,7 @@ const ProjectStatus = () => {
                         refetch={refetch}
                         handlePmGoalModal={handlePmGoalModal}
                         handlePercentOfGoalMet={handlePercentOfGoalMet}
+                        handleNextGoalDetails={handleNextGoalDetails}
                     />
                 </div>
             </div>
@@ -155,6 +167,11 @@ const ProjectStatus = () => {
                 isLoading={isFetchingPmGoal}
                 percentageOfGoalsMet={percentageOfGoalsMet}
                 closeModal={handleClosePercentageofGoalsMetModal}
+            />
+            <NextGoalDetailsModal
+                isOpen={isOpenNextGoalDetailsModal}
+                closeModal={handleCloseNextGoalDetailsModal}
+                projectDetails={projectDetails}
             />
         </React.Fragment>
     );
