@@ -110,8 +110,8 @@
 
 .tableAnchor{
     color: #007bff !important;
-    text-decoration: none !important;
-  }
-  .tableAnchor:hover{
     text-decoration: underline !important;
   }
+.tableAnchor:hover{
+    text-decoration: underline !important;
+}

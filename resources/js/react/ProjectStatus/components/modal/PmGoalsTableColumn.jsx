@@ -83,6 +83,9 @@ export const PmGoalsTableColumns = [
                     (data?.goal_extension_history && data.goal_status === 0 && 
                         new Date(row.original?.goal_end_date) > new Date()) 
                         ? styles?.tableAnchor : ""}`}
+                style={{
+                    textDecoration: data?.goal_extension_history ?  "underline" : "none",
+                }}
                 onClick={() => {
                     // condition to check if the goal extension history is available
                     data?.goal_extension_history &&  handle.goalExtensionHistoryClick(data)
@@ -102,7 +105,11 @@ export const PmGoalsTableColumns = [
             return (
                 <span 
                 role="button" 
+                
                 className={`${(data.goal_expired_history && data.goal_status === 0 && new Date(row.original?.goal_end_date) > new Date()) ? styles?.tableAnchor : ""}`}
+                style={{
+                    textDecoration: data?.goal_expired_history ? "underline" : "none",
+                }}
                 onClick={() => {
                     // condition to check if the deadline explanation history is available
                     data.goal_expired_history &&  handle.deadlineExplanationHistoryClick(data)
