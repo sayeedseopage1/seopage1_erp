@@ -270,6 +270,7 @@ class ProjectStatusController extends AccountBaseController
         return view('project-status.modal.review_extend_request',$this->data);
     }
     public function acceptOrDenyExtendRequest(Request $request){
+        // dd($request->all());
         if($request->status==1){
             $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
             $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
@@ -279,19 +280,20 @@ class ProjectStatusController extends AccountBaseController
 
             $deadline_ext_history = new PmGoalDeadlineExtHistory();
             $deadline_ext_history->goal_id = $updateGoal->id;
-            $deadline_ext_history->start_date = $updateGoal->start_date;
-            $deadline_ext_history->old_deadline = $updateGoal->old_deadline;
+            $deadline_ext_history->start_date = $updateGoal->goal_start_date;
+            $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
             $deadline_ext_history->new_deadline = $updateGoal->extended_goal_end_day;
             $deadline_ext_history->duration = $updateGoal->duration;
-            $deadline_ext_history->description = $updateGoal->extended_admin_cmnt;
+            $deadline_ext_history->description = $updateGoal->description;
             $deadline_ext_history->goal_status = $updateGoal->goal_status;
-            $deadline_ext_history->reason = $updateGoal->reason;
+            $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
             $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
             $deadline_ext_history->extension_req_for = $updateGoal->extended_day;
             $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
             $deadline_ext_history->extension_req_auth_for = $request->extended_day; 
             $deadline_ext_history->authorization_by = Auth::user()->id; 
             $deadline_ext_history->auth_status = 1; 
+            $deadline_ext_history->save();
         }else{
             $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
             $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
@@ -300,18 +302,19 @@ class ProjectStatusController extends AccountBaseController
 
             $deadline_ext_history = new PmGoalDeadlineExtHistory();
             $deadline_ext_history->goal_id = $updateGoal->id;
-            $deadline_ext_history->start_date = $updateGoal->start_date;
-            $deadline_ext_history->old_deadline = $updateGoal->old_deadline;
+            $deadline_ext_history->start_date = $updateGoal->goal_start_date;
+            $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
             $deadline_ext_history->duration = $updateGoal->duration;
             $deadline_ext_history->description = $updateGoal->extended_admin_cmnt;
             $deadline_ext_history->goal_status = $updateGoal->goal_status;
-            $deadline_ext_history->reason = $updateGoal->reason;
+            $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
             $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
             $deadline_ext_history->extension_req_for = $updateGoal->extended_day;
             $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
             $deadline_ext_history->extension_req_auth_for = $request->extended_day; 
             $deadline_ext_history->authorization_by = Auth::user()->id; 
             $deadline_ext_history->auth_status = 2;
+            $deadline_ext_history->save();
         }
         return response()->json(['status'=>200]);
     }
