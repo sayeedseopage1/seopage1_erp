@@ -234,6 +234,7 @@ class ProjectStatusController extends AccountBaseController
         $goal->extension_req_on = Carbon::now();
         $goal->extended_request_status = 1;
         $goal->screenshot = $request->hasFile('screenshot') ? 'yes' : 'no';
+        $goal->uuid = uniqid();
         $goal->save();
 
         
@@ -246,6 +247,7 @@ class ProjectStatusController extends AccountBaseController
                 $pmGoalFile = new ProjectPmGoalFile();
                 $pmGoalFile->goal_id = $goal->id;
                 $pmGoalFile->project_id = $goal->project_id;
+                $pmGoalFile->uuid = $goal->uuid;
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 array_push($file_name, $filename);
                 $pmGoalFile->file_name = $filename;
@@ -256,11 +258,15 @@ class ProjectStatusController extends AccountBaseController
         }
         return response()->json(['status'=>200]);
     }
-    public function extendImage($id){
+    public function extendImage(Request $request){
+
+        $id = $request->query('goal_id');
+        $uuid = $request->query('uuid');
+
         $goal = ProjectPmGoal::where('id',$id)->first();
         $data = [];
         if($goal->screenshot == 'yes'){
-        $data = ProjectPmGoalFile::where('goal_id',$id)->get();
+        $data = ProjectPmGoalFile::where('goal_id',$id)->where('uuid',$uuid)->get();
         }
         
         return response()->json([

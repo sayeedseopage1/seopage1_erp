@@ -1157,7 +1157,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('project-status-resolve-submit', [ProjectStatusController::class, 'projectStatusResolve']);
     Route::get('project-status-extend-request/{id}', [ProjectStatusController::class, 'projectStatusExtendRequest'])->name('project-status.extendRequest');
     Route::post('pm-extend-request-store', [ProjectStatusController::class, 'storePMExtendRequest']);
-    Route::get('project-extend-image/{id}', [ProjectStatusController::class, 'extendImage']);
+    Route::get('project-extend-image', [ProjectStatusController::class, 'extendImage']);
     Route::get('project-status-review-extend-request/{id}', [ProjectStatusController::class, 'reviewExtendRequest'])->name('project-status.reviewExtendRequest');
     Route::post('project-status-accept-extend-request', [ProjectStatusController::class, 'acceptOrDenyExtendRequest'])->name('project-status-extend-request-accept');
     Route::get('goal-extension-history/{id}', [ProjectStatusController::class, 'extensionHistory']);
