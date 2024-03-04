@@ -17,7 +17,8 @@ const ReviewExtendRequestModal = ({
     onClose, 
     projectPmGoalId, 
     refetchPmGoal, 
-    reviewExtendRequestData 
+    reviewExtendRequestData,
+    projectExtendImages
 }) => {
     const [reviewExtendState, setReviewExtendState] = useState({
         extended_day: reviewExtendRequestData?.extended_day,
@@ -30,14 +31,14 @@ const ReviewExtendRequestModal = ({
         isSubmitting: false,
     })
     // Get image data
-    const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
-        reviewExtendRequestData?.id
-    );
+    // const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
+    //     reviewExtendRequestData?.id
+    // );
     // Submit data
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 
     // Get image data
-    const imageData = data?.data?.project_goal_files
+    const imageData = projectExtendImages?.data
 
     // Reset form
     const handleResetForm = () => {

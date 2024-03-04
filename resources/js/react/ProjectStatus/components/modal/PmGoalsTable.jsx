@@ -20,7 +20,7 @@ import GoalExtensionHistoryModal from "./GoalExtensionHistoryModal";
 import DeadlineExplanationHistoryModal from "./DeadlineExplanationHistoryModal";
 import PmGoalsTableLoader from "../loader/PmGoalsTableLoader";
 import style from "../styles/pmgoaltable.module.css"
-import { useLazyGetGoalExpiredHistoryQuery, useLazyGetGoalExtensionHistoryQuery } from "../../../services/api/projectStatusApiSlice";
+import { useLazyGetGoalExpiredHistoryQuery, useLazyGetGoalExtensionHistoryQuery, useLazyGetProjectExtendImagesQuery } from "../../../services/api/projectStatusApiSlice";
 
 const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName, refetchPmGoal }) => {
     const [data, setData] = React.useState(pmGoal || []);
@@ -108,6 +108,15 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
         refetch: refetchGoalExpiredHistory
     }] = useLazyGetGoalExpiredHistoryQuery();
 
+    const [
+        getProjectExtendImages,
+        {
+            data: projectExtendImages,
+            isLoading: isProjectExtendImagesLoading,
+            refetch: refetchProjectExtendImages
+        }
+    ] = useLazyGetProjectExtendImagesQuery()
+
      
     const table = useReactTable({
         data,
@@ -135,6 +144,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
             extendReviewRequestClick: (row) => {
                 refetchPmGoal();
                 setReviewExtendRequestData(row);
+                getProjectExtendImages(row.id);
                 setIsOpenReviewExtendRequestModal(true);
             },
             extendRequestClick: (row) => {
@@ -173,6 +183,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
 
     const handleCloseExtendReviewModal = () => {
         setIsOpenReviewExtendRequestModal(false);
+        setReviewExtendRequestData(null);
     };
 
 
@@ -251,6 +262,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                      projectPmGoalId={projectPmGoalId}
                     projectDetails={projectDetails}
                     reviewExtendRequestData={reviewExtendRequestData}
+                    projectExtendImages={projectExtendImages}
                     isOpen={isOpenReviewExtendRequestModal}
                     refetchPmGoal={refetchPmGoal}
                     onClose={handleCloseExtendReviewModal}
