@@ -298,9 +298,9 @@ class ProjectStatusController extends AccountBaseController
             $deadline_ext_history->goal_status = $updateGoal->goal_status;
             $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
             $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
-            $deadline_ext_history->extension_req_for = $updateGoal->extended_day;
+            $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
             $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
-            $deadline_ext_history->extension_req_auth_for = $request->extended_day; 
+            $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day); 
             $deadline_ext_history->authorization_by = Auth::user()->id; 
             $deadline_ext_history->auth_status = 1; 
             $deadline_ext_history->save();
@@ -319,9 +319,9 @@ class ProjectStatusController extends AccountBaseController
             $deadline_ext_history->goal_status = $updateGoal->goal_status;
             $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
             $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
-            $deadline_ext_history->extension_req_for = $updateGoal->extended_day;
+            $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
             $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
-            $deadline_ext_history->extension_req_auth_for = $request->extended_day; 
+            $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
             $deadline_ext_history->authorization_by = Auth::user()->id; 
             $deadline_ext_history->auth_status = 2;
             $deadline_ext_history->save();
