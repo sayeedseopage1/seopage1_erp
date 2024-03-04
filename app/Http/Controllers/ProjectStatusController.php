@@ -257,11 +257,15 @@ class ProjectStatusController extends AccountBaseController
         return response()->json(['status'=>200]);
     }
     public function extendImage($id){
-        $goal = ProjectPmGoal::select('id','screenshot')->with('projectGoalFiles')->find($id);
+        $goal = ProjectPmGoal::where('id',$id)->first();
+        $data = '';
+        if($goal->screenshot == 'yes'){
+        $data = ProjectPmGoalFile::where('goal_id',$id)->get();
+        }
         
         return response()->json([
             'status'=>200,
-            'data'=>$goal
+            'data'=>$data
         ]);
     }
 
