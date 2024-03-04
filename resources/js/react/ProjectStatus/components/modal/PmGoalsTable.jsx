@@ -272,10 +272,10 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
                 />
                  <GoalExtensionHistoryModal 
                     projectDetails={projectDetails}
-                    goalExtensionHistoryData={goalExtensionHistoryData}
+                    goalExtensionHistoryData={goalExtensionHistory}
                     isOpen={isOpenGoalExtensionHistoryModal}
-                    refetchPmGoal={refetchPmGoal}
-                    isLoading={isLoading}
+                    refetchGoalExtensionHistory={refetchGoalExtensionHistory}
+                    isLoading={isGoalExtensionHistoryLoading}
                     closeModal={() => setIsOpenGoalExtensionHistoryModal(false)}
                  />   
                 <DeadlineExplanationHistoryModal

@@ -12,7 +12,7 @@ const GoalExtensionHistoryModal = ({
   isOpen,
   closeModal,
   goalExtensionHistoryData,
-  refetchPmGoal,
+  refetchGoalExtensionHistory,
   isLoading,
 }) => {
 
@@ -33,7 +33,7 @@ const GoalExtensionHistoryModal = ({
             gap: "10px"
           }}>
             <RefreshButton
-              onClick={refetchPmGoal}
+              onClick={() => refetchGoalExtensionHistory()}
               isLoading={isLoading}
             />
              <button
@@ -60,7 +60,7 @@ const GoalExtensionHistoryModal = ({
           closeModal={closeModal}     
           tableName="goalExtensionHistoryTable"   
           tableColumns={GoalExtensionHistoryTableColumn}
-          goalExtensionHistoryData={GoalExtentionHistoryTableData}
+          goalExtensionHistoryData={goalExtensionHistoryData}
           isLoading={isLoading}
         />
     </ReactModal>

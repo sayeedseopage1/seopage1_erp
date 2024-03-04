@@ -92,6 +92,7 @@ export const {
     useCreateResolveSuggestionCommentMutation,
     useCreateExtendRequestMutation,
     useGetProjectExtendImagesQuery,
+    useLazyGetProjectExtendImagesQuery,
     useCreateReviewExtendRequestMutation,
     useGetGoalExtensionHistoryQuery,
     useLazyGetGoalExtensionHistoryQuery,

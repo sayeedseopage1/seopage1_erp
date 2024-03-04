@@ -19,25 +19,17 @@ export const GoalExtensionHistoryTableColumn = [
   {
       id: "goal_start_date",
       header: "Goal Start Date",
-      accessorKey: "goal_start_date",
+      accessorKey: "start_date",
   },
   {
       id: "goal_end_date",
       header: "Prev. Goal Deadline",
-      accessorKey: "goal_end_date",
+      accessorKey: "old_deadline",
   },
   {
       id: "new_goal_deadline",
       header: "New Goal Deadline",
-      accessorKey: "new_goal_deadline",
-      cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <span > 
-                {data?.goal_end_date ?? "--"} 
-            </span>
-        )
-    }
+      accessorKey: "new_deadline",
   },
   {
       id: "duration",
@@ -74,10 +66,10 @@ export const GoalExtensionHistoryTableColumn = [
           return (
             <div className="d-flex align-items-center" > 
                 <i class="fa fa-circle mr-1 f-10" style={{
-                    color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
+                    color: data?.goal_status === 0 ? "#FF0000" : "#3F9C35",
                 }}></i>  
 
-                {data?.status ?? "--"} 
+                {data?.goal_status === 0 ? "Incomplete" : "Completed" } 
             </div>
           )
       }
@@ -90,49 +82,25 @@ export const GoalExtensionHistoryTableColumn = [
         const data = row?.original;
         return (
             <span title={data?.reason} className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.reason ?? "--",}}
+            dangerouslySetInnerHTML={{ __html: data?.extended_admin_cmnt ?? "--",}}
         />
         )
     }
   },
   {
-    id: "extension_requested_on",
+    id: "extension_req_on",
     header: "Extension Requested On",
-    accessorKey: "extension_requested_on",
-    cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <span className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.extension_requested_on ?? "--",}}
-        />
-        )
-    }
+    accessorKey: "extension_req_on",
   },
   {
-    id: "extension_requested_for",
+    id: "extension_req_for",
     header: "Extension Requested For",
-    accessorKey: "extension_requested_for",
-    cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <span className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.extension_requested_for ?? "--",}}
-        />
-        )
-    }
+    accessorKey: "extension_req_for",
   },
   {
-    id: "extension_req_authorized_on",
+    id: "extension_req_auth_on",
     header: "Extension Req. Authorized On",
-    accessorKey: "extension_req_authorized_on",
-    cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <span className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.extension_req_authorized_on ?? "--",}}
-        />
-        )
-    }
+    accessorKey: "extension_req_auth_on",
   },
   {
     id: "extension_req_authorized_by",
@@ -142,14 +110,14 @@ export const GoalExtensionHistoryTableColumn = [
         const data = row?.original;
         return (
             <CreatedBy
-                href={`/account/clients/${data.pmName}`}
+                href={`/account/employees/${data.authorization_by_id}`}
             >
                 <Avatar
                         type="circle"
-                        name={data?.pmName}
-                        src={data?.clientImage ? `/user-uploads/avatar/${data?.clientImage}` : null}
+                        name={data?.authorization_by_name}
+                        src={data?.clientImage ? `/user-uploads/avatar/${data?.authorization_by_img}` : null}
                 />
-                <span>{data?.pmName}</span>
+                <span>{data?.authorization_by_name}</span>
             </CreatedBy> 
         )
     }
@@ -157,15 +125,7 @@ export const GoalExtensionHistoryTableColumn = [
   {
     id: "extension_req_authorized_for",
     header: "Extension Req. Authorized For",
-    accessorKey: "extension_req_authorized_for",
-    cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <span className="multine-ellipsis"
-            dangerouslySetInnerHTML={{ __html: data?.extension_req_authorized_for ?? "--",}}
-        />
-        )
-    }
+    accessorKey: "extension_req_auth_for",
   },
 
  
