@@ -246,7 +246,6 @@ class ProjectStatusController extends AccountBaseController
                 $pmGoalFile = new ProjectPmGoalFile();
                 $pmGoalFile->goal_id = $goal->id;
                 $pmGoalFile->project_id = $goal->project_id;
-                $pmGoalFile->status = $goal->screenshot;
                 $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                 array_push($file_name, $filename);
                 $pmGoalFile->file_name = $filename;
