@@ -17,14 +17,14 @@ export const DeadlineEHColumn = [
       }
   },
   {
-      id: "goal_start_date",
+      id: "start_date",
       header: "Goal Start Date",
-      accessorKey: "goal_start_date",
+      accessorKey: "start_date",
   },
   {
-      id: "goal_end_date",
+      id: "deadline",
       header: "Goal Dead Line",
-      accessorKey: "goal_end_date",
+      accessorKey: "deadline",
   },
   {
       id: "duration",
@@ -61,10 +61,9 @@ export const DeadlineEHColumn = [
           return (
             <div className="d-flex align-items-center" > 
                   <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.status === "In progress" ? "#00b5ff" : "#3F9C35",
-                  }}></i>  
-
-                  {data?.status ?? "--"} 
+                       color: data?.goal_status === 0 ? "#FF0000" : "#00b5ff",
+                    }}></i>  
+                    {data?.goal_status === 0 ? "Incomplete" : "Completed" } 
             </div>
           )
       }
@@ -143,50 +142,34 @@ export const DeadlineEHColumn = [
                 padding: "0px 10px",
                 borderRadius: "20px",
                 color: "white",
-                backgroundColor: data?.authorization_status === "Pending" ? "#FFB800" : "#3F9C35",
+                backgroundColor: data?.authorization_status === 0 ? "#FFB800" : "#3F9C35",
               }}> 
-                  {data?.authorization_status ?? "--"} 
+                  {data?.authorization_status === 0 ? "Pending" : "Authorized"} 
               </div>
         )
     }
   },
   {
-    id: "authorized_on",
+    id: "authorization_on",
     header: "Authorized On",
-    accessorKey: "authorized_on",
-    cell: ({ row }) => {
-        const data = row?.original;
-        return (
-            <CreatedBy
-            href={`/account/clients/${data.pmName}`}
-            >
-                <Avatar
-                        type="circle"
-                        name={data?.pmName}
-                        src={data?.clientImage ? `/user-uploads/avatar/${data?.clientImage}` : null}
-                />
-                <span>{data?.pmName}</span>
-            </CreatedBy> 
-           
-        )
-    }
+    accessorKey: "authorization_on",
   },
   {
-    id: "authorized_by",
+    id: "authorization_by",
     header: "Authorized By",
-    accessorKey: "authorized_by",
+    accessorKey: "authorization_by",
     cell: ({ row }) => {
         const data = row?.original;
         return (
             <CreatedBy
-                href={`/account/clients/${data.pmName}`}
+                href={`/account/employees/${data.authorization_by_id}`}
             >
                 <Avatar
                         type="circle"
-                        name={data?.pmName}
-                        src={data?.clientImage ? `/user-uploads/avatar/${data?.clientImage}` : null}
+                        name={data?.authorization_by_name}
+                        src={data?.authorization_by_img ? `/user-uploads/avatar/${data?.authorization_by_img}` : null}
                 />
-                <span>{data?.pmName}</span>
+                <span>{data?.authorization_by_name}</span>
             </CreatedBy> 
             
         )

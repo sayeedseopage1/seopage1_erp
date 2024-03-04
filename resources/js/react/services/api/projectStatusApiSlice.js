@@ -60,8 +60,8 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             ],
         }),
         getProjectExtendImages: build.query({
-            query: (goal_id) =>
-                `/account/project-extend-image/${goal_id}`,
+            query: (query) =>
+                `/account/project-extend-image${query}`,
             providesTags: "GET_PROJECT_EXTEND_IMAGE",
         }),
         createReviewExtendRequest: build.mutation({
@@ -75,12 +75,10 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
         getGoalExtensionHistory: build.query({
             query: (goal_id) =>
                 `/account/goal-extension-history/${goal_id}`,
-            providesTags: "GET_GOAL_EXTENSION_HISTORY",
         }),
         getGoalExpiredHistory: build.query({
             query: (goal_id) =>
                 `/account/goal-resolved-history/${goal_id}`,
-            providesTags: "GET_GOAL_EXPIRED_HISTORY",
         }),
     }),
 });

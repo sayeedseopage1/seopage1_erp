@@ -30,10 +30,6 @@ const ReviewExtendRequestModal = ({
         comment: false,
         isSubmitting: false,
     })
-    // Get image data
-    // const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
-    //     reviewExtendRequestData?.id
-    // );
     // Submit data
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 

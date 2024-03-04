@@ -131,6 +131,17 @@ export const PmGoalsTableColumns = [
                                                 </Switch.Case>
                                             </Switch>
                                     </Switch.Case>
+                                    <Switch.Case condition={data.reason_status === 1}>
+                                            <Switch>
+                                                <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
+                                                    <button 
+                                                      className={`btn btn-outline-success ${styles?.awaitingDeadlineExplanation}`}
+                                                    > 
+                                                        Awaiting Authorization on Deadline Explanation
+                                                    </button>
+                                                </Switch.Case>
+                                            </Switch>
+                                    </Switch.Case>
                                 </Switch> 
                         </Switch.Case>
                         <Switch.Case condition={user?.roleId === 1 && data.reason}>
