@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('duration');
             $table->longText('description');
             $table->integer('goal_status')->default(0);
-            $table->longText('reason');
+            $table->longText('extended_admin_cmnt');
             $table->dateTime('extension_req_on');
             $table->dateTime('extension_req_for');
             $table->dateTime('extension_req_auth_on');
