@@ -258,7 +258,7 @@ class ProjectStatusController extends AccountBaseController
     }
     public function extendImage($id){
         $goal = ProjectPmGoal::where('id',$id)->first();
-        $data = '';
+        $data = [];
         if($goal->screenshot == 'yes'){
         $data = ProjectPmGoalFile::where('goal_id',$id)->get();
         }
