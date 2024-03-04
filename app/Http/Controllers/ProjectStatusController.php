@@ -394,6 +394,7 @@ class ProjectStatusController extends AccountBaseController
                 $pmGoal->total_goal = $goal_count;
                 $pmGoal->goal_expire = $goal_expire;
                 $pmGoal->goal_meet = $goal_meet;
+                $pmGoal->goal_description = $goal->goal_name;
             }
 
             return response()->json([
