@@ -16,7 +16,6 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             query: (project_id) => `/account/get-pm-goal-date/${project_id}`,
             providesTags: "GET_PM_GOAL",
         }),
-
         createDeadlineExplanationReason: build.mutation({
             query: (data) => ({
                 url: `/account/project-status-reason-submit`,
@@ -73,6 +72,16 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
                 formData: true,
             }),
         }),
+        getGoalExtensionHistory: build.query({
+            query: (goal_id) =>
+                `/account/goal-extension-history/${goal_id}`,
+            providesTags: "GET_GOAL_EXTENSION_HISTORY",
+        }),
+        getGoalExpiredHistory: build.query({
+            query: (goal_id) =>
+                `/account/goal-resolved-history/${goal_id}`,
+            providesTags: "GET_GOAL_EXPIRED_HISTORY",
+        }),
     }),
 });
 
@@ -84,4 +93,8 @@ export const {
     useCreateExtendRequestMutation,
     useGetProjectExtendImagesQuery,
     useCreateReviewExtendRequestMutation,
+    useGetGoalExtensionHistoryQuery,
+    useLazyGetGoalExtensionHistoryQuery,
+    useGetGoalExpiredHistoryQuery,
+    useLazyGetGoalExpiredHistoryQuery,
 } = projectStatusApiSlice;

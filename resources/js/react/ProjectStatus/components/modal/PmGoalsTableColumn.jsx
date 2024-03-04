@@ -150,14 +150,14 @@ export const PmGoalsTableColumns = [
                         </Switch.Case>
                     </Switch>
                     <Switch>
-                            <Switch.Case condition={user.roleId === 4 && data?.extended_request_status === 0 || data?.extended_request_status === 2}>
+                            <Switch.Case condition={user.roleId === 4 && (data?.extended_request_status === 0 || data?.extended_request_status === 2)}>
                                 <button onClick={() => handle.extendRequestClick(data)} className={`btn btn-success ${styles?.extend}`}>
                                     Request Deadline Extension
                                 </button>
                             </Switch.Case>
                             <Switch.Case condition={user.roleId === 4 && data?.extended_request_status === 1}>
                                 <button disabled className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}>
-                                        Awaiting Deadline Extension Request Authorization
+                                    Awaiting Deadline Extension Request Authorization
                                 </button>
                             </Switch.Case>
                             <Switch.Case

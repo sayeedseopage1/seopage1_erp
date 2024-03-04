@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import _ from "lodash";
 import {
     useReactTable, getCoreRowModel,
@@ -20,12 +20,15 @@ import GoalExtensionHistoryModal from "./GoalExtensionHistoryModal";
 import DeadlineExplanationHistoryModal from "./DeadlineExplanationHistoryModal";
 import PmGoalsTableLoader from "../loader/PmGoalsTableLoader";
 import style from "../styles/pmgoaltable.module.css"
+import { useLazyGetGoalExpiredHistoryQuery, useLazyGetGoalExtensionHistoryQuery } from "../../../services/api/projectStatusApiSlice";
 
 const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmGoalsTableColumns, tableName, refetchPmGoal }) => {
     const [data, setData] = React.useState(pmGoal || []);
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [projectPmGoalId, setProjectPmGoalId] = React.useState(null);
+    const [projectPmGoalIdForExtension, setProjectPmGoalIdForExtension] = React.useState(null);
+    const [projectPmGoalIdForExpired, setProjectPmGoalIdForExpired] = React.useState(null);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
@@ -33,6 +36,8 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const [pmGoalExtendReason, setPmGoalExtendReason] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [value, setValue] = useLocalStorage(tableName);
+
+
     // modals state
     const [ isOpenDeadlineExplainModal,setIsOpenDeadlineExplainModal] = React.useState(false);
     const [isOpenExtendRequestModal, setIsOpenExtendRequestModal] = React.useState(false);
@@ -46,6 +51,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
     const [extendRequestGoalId, setExtendRequestGoalId] = React.useState(null);
     const [goalExtensionHistoryData, setGoalExtensionHistoryData] = React.useState(null)
     const [deadlineExplanationHistoryData, setDeadlineExplanationHistoryData] = React.useState(null)
+
 
     //pagination start
     // Number of items to display per page
@@ -88,6 +94,19 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
         setColumnOrder(value.columnOrders);
         }
     }, [])
+
+
+    // history Api call
+    const [getGoalExtensionHistory, {
+        data: goalExtensionHistory,
+        isLoading: isGoalExtensionHistoryLoading,
+        refetch: refetchGoalExtensionHistory,
+    }] = useLazyGetGoalExtensionHistoryQuery() ;
+    const [getGoalExpiredHistory, {
+        data: goalExpiredHistoryData,
+        isLoading: isGoalExpiredHistoryLoading,
+        refetch: refetchGoalExpiredHistory
+    }] = useLazyGetGoalExpiredHistoryQuery();
 
      
     const table = useReactTable({
@@ -136,12 +155,16 @@ const PmGoalsTable = ({ projectDetails, isLoading, isFetchingPmGoal, pmGoal, PmG
             },
             goalExtensionHistoryClick: (row) => {
                 refetchPmGoal();
+                getGoalExtensionHistory(row.id);
                 setGoalExtensionHistoryData(row);
+                setProjectPmGoalIdForExtension(row.id);
                 setIsOpenGoalExtensionHistoryModal(true);
             },
             deadlineExplanationHistoryClick: (row) => {
                 refetchPmGoal();
+                getGoalExpiredHistory(row.id)
                 setDeadlineExplanationHistoryData(row);
+                setProjectPmGoalIdForExpired(row.id);
                 setIsOpenDeadlineExplanationHistoryModal(true);
             }
         }
