@@ -51,9 +51,9 @@ export const GoalExtensionHistoryTableColumn = [
       cell: ({ row }) => {
           const data = row?.original;
           return (
-              <span title={data?.description} className="multine-ellipsis"> 
-                  {data?.description ?? "--"}
-              </span>
+            <span title={data?.reason} className="multine-ellipsis"
+                dangerouslySetInnerHTML={{ __html: data?.description ?? "--",}}
+            />
           )
       }
   },

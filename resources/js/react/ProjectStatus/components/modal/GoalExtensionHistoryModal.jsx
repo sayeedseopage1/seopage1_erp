@@ -18,7 +18,7 @@ const GoalExtensionHistoryModal = ({
 }) => {
 
 
-  console.log("Goal Extension History Data: ", isLoading)
+
   return (
     <ReactModal
       style={customStyles}

@@ -46,9 +46,8 @@ export const DeadlineEHColumn = [
       cell: ({ row }) => {
           const data = row?.original;
           return (
-              <span title={data?.description} className="multine-ellipsis"> 
-                  {data?.description ?? "--"}
-              </span>
+            <span className="multine-ellipsis"
+            dangerouslySetInnerHTML={{ __html: data?.description ?? "--",}}/>
           )
       }
   },

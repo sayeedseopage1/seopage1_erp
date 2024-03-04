@@ -9,6 +9,7 @@ const DeadlineExplanation = ({
     isModalTwoOpen,
     projectDetails,
     refetchPmGoal,
+    deadlineExplanationData,
 }) => {
     const {
         project_name,

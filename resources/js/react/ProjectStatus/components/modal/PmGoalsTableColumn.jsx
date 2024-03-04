@@ -79,6 +79,10 @@ export const PmGoalsTableColumns = [
             return (
                 <span 
                 role="button" 
+                className={`${
+                    (data?.goal_extension_history && data.goal_status === 0 && 
+                        new Date(row.original?.goal_end_date) > new Date()) 
+                        ? styles?.tableAnchor : ""}`}
                 onClick={() => {
                     // condition to check if the goal extension history is available
                     data?.goal_extension_history &&  handle.goalExtensionHistoryClick(data)
@@ -98,6 +102,7 @@ export const PmGoalsTableColumns = [
             return (
                 <span 
                 role="button" 
+                className={`${(data.goal_expired_history && data.goal_status === 0 && new Date(row.original?.goal_end_date) > new Date()) ? styles?.tableAnchor : ""}`}
                 onClick={() => {
                     // condition to check if the deadline explanation history is available
                     data.goal_expired_history &&  handle.deadlineExplanationHistoryClick(data)
@@ -124,7 +129,7 @@ export const PmGoalsTableColumns = [
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 
-                                                        onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.deadlineExplained}`}
+                                                        onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.authorize}`}
                                                     > 
                                                         Explain Why Expired 
                                                     </button>
@@ -135,7 +140,7 @@ export const PmGoalsTableColumns = [
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 
-                                                      className={`btn btn-outline-success ${styles?.awaitingDeadlineExplanation}`}
+                                                      className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}
                                                     > 
                                                         Awaiting Authorization on Deadline Explanation
                                                     </button>
@@ -161,7 +166,7 @@ export const PmGoalsTableColumns = [
                         </Switch.Case>
                     </Switch>
                     <Switch>
-                            <Switch.Case condition={user.roleId === 4 && (data?.extended_request_status === 0 || data?.extended_request_status === 2)}>
+                            <Switch.Case condition={user.roleId === 4 && data?.extended_request_status !== 1  && new Date(data.goal_end_date) > new Date()}>
                                 <button onClick={() => handle.extendRequestClick(data)} className={`btn btn-success ${styles?.extend}`}>
                                     Request Deadline Extension
                                 </button>
@@ -183,7 +188,7 @@ export const PmGoalsTableColumns = [
                             </Switch.Case>
                     </Switch>
                     <Switch>
-                        <Switch.Case condition={user?.roleId === 1 && data?.extended_request_status === 0 && !data.reason}>
+                        <Switch.Case condition={user?.roleId === 1 && data?.extended_request_status !== 1 && !data.reason}>
                             <span>--</span>
                         </Switch.Case>
                     </Switch>

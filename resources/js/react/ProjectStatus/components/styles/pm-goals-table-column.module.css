@@ -67,7 +67,7 @@
     cursor: not-allowed !important;
     color: #ffc107 !important;
     border-color: #ffc107 !important;
-    padding: 0px !important;
+    padding: 5px !important;
     font-size: 13px !important;
     opacity: 1 !important;
 }
@@ -76,23 +76,23 @@
     color: #ffc107  !important;
     border-color: #ffc107 ;
     background-color: #e6f8ef !important;
-    padding: 0px !important;
+    padding: 5px !important;
     font-size: 13px !important;
     opacity: 1 !important;
 }
 .awaitingDeadlineExplanation{
     cursor: not-allowed !important;
-    color: #ffc107 !important;
-    border-color: #ffc107 !important;
-    padding: 0px !important;
+    color: #1492d2  !important;
+    border-color: #1492d2  !important;
+    padding: 5px !important;
     font-size: 13px !important;
 }
 .awaitingDeadlineExplanation:hover{
     cursor: not-allowed !important;
-    color: #ffc107  !important;
-    border-color: #ffc107 ;
+    color: #1492d2   !important;
+    border-color: #1492d2  ;
     background-color: #e6f8ef !important;
-    padding: 0px !important;
+    padding: 5px !important;
     font-size: 13px !important;
 }
 
@@ -106,3 +106,12 @@
 }
 
 
+
+
+.tableAnchor{
+    color: #007bff !important;
+    text-decoration: none !important;
+  }
+  .tableAnchor:hover{
+    text-decoration: underline !important;
+  }

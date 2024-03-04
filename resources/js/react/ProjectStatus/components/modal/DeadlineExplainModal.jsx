@@ -9,7 +9,8 @@ const DeadlineExplainModal = ({
     projectDetails,
     isModalTwoOpen,
     closeModalTwo,
-    refetchPmGoal
+    refetchPmGoal,
+    deadlineExplanationData
 }) => {
     return (
         <ReactModal
@@ -52,6 +53,7 @@ const DeadlineExplainModal = ({
                 projectPmGoalId={projectPmGoalId}
                 projectDetails={projectDetails}
                 refetchPmGoal={refetchPmGoal}
+                deadlineExplanationData={deadlineExplanationData}
             />
         </ReactModal>
     );
