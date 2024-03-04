@@ -3031,7 +3031,7 @@ public function getAllContracts(Request $request){
     }
     
     if (Auth::user()->role_id == 4) {
-        $dealsQuery->where('pm_id',Auth::id());
+        $dealsQuery->where('deals.pm_id',Auth::id());
     }
     $deals = $dealsQuery
         ->orderBy('deals.id', 'desc')
