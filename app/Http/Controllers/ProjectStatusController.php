@@ -426,10 +426,12 @@ class ProjectStatusController extends AccountBaseController
                 ]);
     }
     public function expireGoal($id){
-        $pmGoal = ProjectPmGoal::select('project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.description','users.id as user_id','users.name as user_name','users.image as user_image','projects.project_name')
+        $pmGoal = ProjectPmGoal::select('project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.description','project_pm_goals.project_category','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image')
         ->leftJoin('projects','project_pm_goals.project_id','projects.id')
+        ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
+        ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
         ->leftJoin('users','project_pm_goals.client_id','users.id')
-        ->where('pm_id',$id)
+        ->where('project_pm_goals.pm_id',$id)
         ->where('goal_status',0)
         ->get();
         return response()->json([
