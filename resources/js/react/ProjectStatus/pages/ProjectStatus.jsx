@@ -13,6 +13,7 @@ import Loader from "../components/Loader";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
 import PercentageofGoalsMetModal from "../components/modal/PercentageofGoalsMetModal";
 import NextGoalDetailsModal from "../components/modal/NextGoalDetailsModal";
+import ProjectManagerExplanationModal from "../components/modal/ProjectManagerExplanationModal";
 
 const ProjectStatus = () => {
     const [search,setSearch] = React.useState('');
@@ -173,6 +174,7 @@ const ProjectStatus = () => {
                 closeModal={handleCloseNextGoalDetailsModal}
                 projectDetails={projectDetails}
             />
+            <ProjectManagerExplanationModal/>
         </React.Fragment>
     );
 };

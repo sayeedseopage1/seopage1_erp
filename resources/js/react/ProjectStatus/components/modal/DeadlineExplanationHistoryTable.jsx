@@ -44,7 +44,7 @@ const DeadlineExplanationHistoryTable = ({
         }else{
             _deadlineExplanationHistoryData && setData(_deadlineExplanationHistoryData);
         }
-      }, [_deadlineExplanationHistoryData])
+  }, [_deadlineExplanationHistoryData])
 
     // clear skipPageReset
     React.useEffect(() => {

@@ -10,12 +10,12 @@ import FractionalRating from "../FractionalRating";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
 import { formatAPIErrors } from "../../../utils/formatAPIErrors";
 const ResolveModal = ({
-    pmGoalExtendReason,
     projectPmGoalId,
     projectDetails,
     isModalOpen,
     closeModal,
-    refetchPmGoal
+    refetchPmGoal,
+    resolveDeadlineExplanationData
 }) => {
     const [resolveModalData, setResolveModalData] = useState({
         client_communication: "",
@@ -187,14 +187,14 @@ const ResolveModal = ({
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Description:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.description}</p>
+                        <p className="col-8">{resolveDeadlineExplanationData?.description}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Reason:</strong>{" "}</p>
                         <p className="col-8"><span
                             dangerouslySetInnerHTML={{
-                                __html: pmGoalExtendReason
-                                    ? pmGoalExtendReason
+                                __html: resolveDeadlineExplanationData?.reason
+                                    ? resolveDeadlineExplanationData?.reason
                                     : "--",
                             }}
                         /></p>

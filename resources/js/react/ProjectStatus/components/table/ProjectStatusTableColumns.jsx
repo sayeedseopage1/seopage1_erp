@@ -105,7 +105,6 @@ export const ProjectStatusTableColumns = [
         cell: ({ row, table }) => {
             const data = row.original;
             const handler = table.options.meta
-            const percentage = 50;
             return (
                 <div className="progress" style={{
                     height: "15px",
@@ -119,12 +118,12 @@ export const ProjectStatusTableColumns = [
                                 <div 
                                     className="progress-bar f-12" 
                                     role="progressbar" 
-                                    style={{width: `${data.goal_progress}%`, backgroundColor: getColor(data.goal_progress)}} 
-                                    aria-valuenow={data.goal_progress}
+                                    style={{width: `${data?.goal_percentage ?? 0}%`, backgroundColor: getColor(data?.goal_percentage ?? 0)}} 
+                                    aria-valuenow={data?.goal_percentage ?? 0}
                                     aria-valuemin="0" 
                                     aria-valuemax="100"
                                 >
-                                    {data.goal_progress}%
+                                    {data?.goal_percentage ?? 0}%
                                 </div>
                             </div>
                         </Popover.Button>
@@ -136,7 +135,7 @@ export const ProjectStatusTableColumns = [
                                     <p>Total goals: {data?.total_goal}</p>
                                     <p>Goals deadline expired so far: {data?.goal_expire}</p>
                                     <p>Goals met: {data?.goal_meet}</p>
-                                    <p>Percentage of goals met: {data.goal_progress}%</p>
+                                    <p>Percentage of goals met: {data?.goal_percentage ?? 0}%</p>
                                 </div>
                             </div>
                         </Popover.Panel>

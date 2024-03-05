@@ -33,9 +33,9 @@ const PmGoalsTable = ({ projectDetails, isLoading, pmGoal, PmGoalsTableColumns, 
         pageIndex: 0,
         pageSize: 10,
     });
-    const [pmGoalExtendReason, setPmGoalExtendReason] = React.useState("");
+
     const [skipPageReset, setSkipPageReset] = React.useState(false);
-    const [value, setValue] = useLocalStorage(tableName);
+    const [value, setValue] = useLocalStorage(tableName ?? '');
     const [isGoalExpiredHistoryLoading, setIsGoalExpiredHistoryLoading] = React.useState(false);
     const [isGoalExtensionHistoryLoading, setIsGoalExtensionHistoryLoading] = React.useState(false);
 
@@ -52,6 +52,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, pmGoal, PmGoalsTableColumns, 
     const [reviewExtendRequestData, setReviewExtendRequestData] = React.useState(null);
     const [extendRequestGoalId, setExtendRequestGoalId] = React.useState(null);
     const [deadlineExplanationData, setDeadlineExplanationData] = React.useState(null);
+    const [resolveDeadlineExplanationData, setResolveDeadlineExplanationData] = React.useState(null)
     const [goalExtensionHistoryData, setGoalExtensionHistoryData] = React.useState(null)
     const [deadlineExplanationHistoryData, setDeadlineExplanationHistoryData] = React.useState(null)
 
@@ -193,7 +194,7 @@ const PmGoalsTable = ({ projectDetails, isLoading, pmGoal, PmGoalsTableColumns, 
                 refetchPmGoal();
                 setProjectPmGoalId(row.id)
                 setIsOpenResolveModal(true);
-                setPmGoalExtendReason(row.reason);
+                setResolveDeadlineExplanationData(row);
             },
             goalExtensionHistoryClick: (row) => {
                 refetchPmGoal();
@@ -316,10 +317,10 @@ const PmGoalsTable = ({ projectDetails, isLoading, pmGoal, PmGoalsTableColumns, 
                 />
                 <ResolveModal
                     projectDetails={projectDetails}
-                    pmGoalExtendReason={pmGoalExtendReason}
                     projectPmGoalId={projectPmGoalId}
                     isModalOpen={isOpenResolveModal}
                     refetchPmGoal={refetchPmGoal}
+                    resolveDeadlineExplanationData={resolveDeadlineExplanationData}
                     closeModal={handleCloseResolveModal}
                 />
                  <GoalExtensionHistoryModal 

@@ -16,7 +16,7 @@ import Toaster from "../../../global/Toaster";
 
 const PercentageofGoalsMetTable = ({percentageOfGoalsMet,tableColumns, projectDetails,closeModal, tableName, isLoading}) => {
   const [data, setData] = React.useState(percentageOfGoalsMet || []);
-  const [value, setValue] = useLocalStorage(tableName);
+  const [value, setValue] = useLocalStorage(tableName ?? '');
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
