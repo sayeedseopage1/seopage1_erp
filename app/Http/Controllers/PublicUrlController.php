@@ -95,7 +95,7 @@ class PublicUrlController extends Controller
     public function projectSign(SignRequest $request, $id)
     {
         // dd($request->all());
-       // DB::beginTransaction();
+    //    DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
         //dd($this->project);
 
@@ -200,6 +200,9 @@ class PublicUrlController extends Controller
     $pm_goal = ProjectPmGoal::where('project_id',$this->project->id)->where('goal_code','DCS')->first();
     if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
     {
+        $goal_count= ProjectPmGoal::where('project_id',$this->project->id)->count();
+        $goal_percentage = 100/$goal_count;
+        $pm_goal->goal_progress = $goal_percentage;
         $pm_goal->goal_status = 1;
         
        

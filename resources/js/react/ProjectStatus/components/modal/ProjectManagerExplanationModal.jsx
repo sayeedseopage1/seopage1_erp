@@ -8,19 +8,17 @@ import { ProjectManagerExplanationColumns } from './ProjectManagerExplanationCol
 import { projectManagerExplanationData } from '../../constant'
 import RefreshButton from '../RefreshButton'
 import { useAuth } from '../../../hooks/useAuth'
+import { useGetProjectManagerDeadlineExpiredGoalsQuery } from '../../../services/api/projectStatusApiSlice'
 
 
 
 const ProjectManagerExplanationModal = () => {
   const user = useAuth()
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = React.useState(false);
-  const refetch = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }
+
+  const {data, isFetching, isLoading, refetch} = useGetProjectManagerDeadlineExpiredGoalsQuery(user.id)
+
+
   const close = () => {
     searchParams.delete("modal_type");
     searchParams.delete("status");
@@ -46,7 +44,8 @@ const ProjectManagerExplanationModal = () => {
                         tableColumns={ProjectManagerExplanationColumns}
                         tableName="Need-Project-Managers-Explanation"
                         isLoading={isLoading}
-                        projectManagerExplanationData={projectManagerExplanationData}
+                        refetch={refetch}
+                        projectManagerExplanationData={data?.data}
                       />
                   </Card.Body>
               </Card>

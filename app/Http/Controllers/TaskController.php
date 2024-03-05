@@ -3035,6 +3035,9 @@ class TaskController extends AccountBaseController
     $pm_goal = ProjectPmGoal::where('project_id',$task_status->project_id)->where('goal_code','TSM')->first();
     if($pm_goal != null && $current_date < $pm_goal->goal_end_date)
     {
+        $goal_count= ProjectPmGoal::where('project_id',$task_status->project_id)->count();
+        $goal_percentage = 100/$goal_count;
+        $pm_goal->goal_progress = $goal_percentage;
         $pm_goal->goal_status = 1;
         
 

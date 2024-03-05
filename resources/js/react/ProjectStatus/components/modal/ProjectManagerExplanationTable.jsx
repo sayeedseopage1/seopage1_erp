@@ -21,7 +21,8 @@ const ProjectManagerExplanationTable = ({
   tableColumns,
   tableName,
   isLoading,
-  projectManagerExplanationData
+  projectManagerExplanationData,
+  refetch
 }) => {
   const [data, setData] = React.useState(projectManagerExplanationData || []);
   const [value, setValue] = useLocalStorage(tableName);
@@ -154,7 +155,7 @@ const ProjectManagerExplanationTable = ({
           <DeadlineExplainModal
               projectPmGoalId={projectPmGoalId}
               projectDetails={deadlineExplanationData}
-              // refetchPmGoal={refetchPmGoal}
+              refetchPmGoal={refetch}
               deadlineExplanationData={deadlineExplanationData}
               isModalTwoOpen={isOpenDeadlineExplainModal}
               closeModalTwo={handleCloseDeadlineExplainModal}

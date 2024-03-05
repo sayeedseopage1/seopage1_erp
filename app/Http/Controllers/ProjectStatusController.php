@@ -349,7 +349,7 @@ class ProjectStatusController extends AccountBaseController
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','deals.actual_amount as project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage','currencies.currency_symbol')
+        $pmGoalsQuery = ProjectPmGoal::select('project_pm_goals.*','projects.id as projectId','projects.project_name','deals.actual_amount as project_budget', 'client.id as clientId','client.name as clientName','client.image as clientImage','pm.id as pmId','pm.name as pmName','pm.image as pmImage','currencies.currency_symbol',DB::raw('SUM(project_pm_goals.goal_progress) as goal_percentage') )
             ->leftJoin('projects', 'project_pm_goals.project_id', '=', 'projects.id')
             ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
             ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
@@ -386,7 +386,7 @@ class ProjectStatusController extends AccountBaseController
                 $goal_count = ProjectPmGoal::where('project_id',$pmGoal->project_id)->count();
                 $goal_expire = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('description','!=',null)->where('goal_status',0)->count();
                 $goal_meet = ProjectPmGoal::where('project_id',$pmGoal->project_id)->where('goal_status',1)->count();
-                $next_goal_date = $goal->goal_end_date;
+                $next_goal_date = $goal->goal_end_date ?? '';
                 $currentDate = Carbon::now();
                 $upcoming_goal_day = $currentDate->diffInDays($next_goal_date);
                 $pmGoal->next_goal_date = $next_goal_date;
@@ -394,7 +394,7 @@ class ProjectStatusController extends AccountBaseController
                 $pmGoal->total_goal = $goal_count;
                 $pmGoal->goal_expire = $goal_expire;
                 $pmGoal->goal_meet = $goal_meet;
-                $pmGoal->goal_description = $goal->goal_name;
+                $pmGoal->goal_description = $goal->goal_name ?? '';
             }
 
             return response()->json([
@@ -424,5 +424,18 @@ class ProjectStatusController extends AccountBaseController
                     'data' => $data,
                     'status' => 200
                 ]);
+    }
+    public function expireGoal($id){
+        $pmGoal = ProjectPmGoal::select('project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.description','project_pm_goals.project_category','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image')
+        ->leftJoin('projects','project_pm_goals.project_id','projects.id')
+        ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
+        ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
+        ->leftJoin('users','project_pm_goals.client_id','users.id')
+        ->where('project_pm_goals.pm_id',$id)
+        ->where('goal_status',0)
+        ->get();
+        return response()->json([
+            'data'=>$pmGoal
+        ]);
     }
 }

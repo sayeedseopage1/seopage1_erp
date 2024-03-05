@@ -64,15 +64,15 @@ export const ProjectManagerExplanationColumns = [
           const data = row?.original;
           return (
             <CreatedBy
-              href={`/account/employees/${data.client.pmId}`}
+              href={`/account/client/${data?.user_id}`}
             >
               <Avatar
                   type="circle"
-                  name={data?.client?.pmName}
-                  src={data?.client?.pmImage ? `/user-uploads/avatar/${data?.client?.pmImage}` : null}
+                  name={data?.user_name}
+                  src={data?.user_image ? `/user-uploads/avatar/${data?.user_image}` : null}
               />
 
-                <span>{data?.client?.pmName}</span>
+                <span>{data?.user_name}</span>
             </CreatedBy> 
           )
       }
@@ -100,7 +100,7 @@ export const ProjectManagerExplanationColumns = [
     cell: ({ row , table}) => {
         const data = row?.original;
         const user = new User(window?.Laravel?.user)
-        const handle = table.options.meta
+        const handle = table?.options?.meta
         return (
            <div className={`${styles.actionContainer}`}  >
                 <Switch>

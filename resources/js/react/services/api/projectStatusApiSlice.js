@@ -80,6 +80,10 @@ const projectStatusApiSlice = apiSlice.injectEndpoints({
             query: (goal_id) =>
                 `/account/goal-resolved-history/${goal_id}`,
         }),
+        getProjectManagerDeadlineExpiredGoals: build.query({
+            query: (pm_id) =>
+                `/account/goal-expire/${pm_id}`,
+        }),
     }),
 });
 
@@ -96,4 +100,5 @@ export const {
     useLazyGetGoalExtensionHistoryQuery,
     useGetGoalExpiredHistoryQuery,
     useLazyGetGoalExpiredHistoryQuery,
+    useGetProjectManagerDeadlineExpiredGoalsQuery,
 } = projectStatusApiSlice;
