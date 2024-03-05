@@ -41,7 +41,7 @@ class PMGoal extends Command
     {
       
         $goals= ProjectPmGoal::where('goal_status',0)->where('description',null)->get();
-      //  dd($goals);
+    //    dd($goals);
         foreach ($goals as $goal) {
             $current_date = Carbon::now();
             if($goal->extended_goal_end_day == null)
@@ -59,8 +59,6 @@ class PMGoal extends Command
                // dd($deliverable_sign);
                 $task_count= Task::where('project_id',$goal->project_id)->count();
                 $deliverables_count = ProjectDeliverable::where('project_id',$goal->project_id)->count();
-              //  dd($deliverables_count -$task_count);
-                // $goal_count= ProjectPmGoal::where('project_id',$goal->project_id)->count();
                 // $goal_met_count= ProjectPmGoal::where('project_id',$goal->project_id)->count();
                 if($deliverable_sign == null && $deliverables_count > 0 &&  $task_count > 0)
                 {
@@ -81,6 +79,7 @@ class PMGoal extends Command
                 {
                     $goal_update->description = 'Deliverables is not signed and tasks has not been created properly';
                 }
+                
                 $goal_update->updated_at = Carbon::now();
                 $goal_update->save();
               //  dd($goal_update);
@@ -96,6 +95,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = 'The first submission has not been completed and it is not ready for submission to the client';
+                    $goal_update->goal_progress = 100;
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -115,6 +115,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$total_milestones. ' milestones could not be released in this week';
+                    
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -136,6 +137,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -156,6 +158,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -176,6 +179,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of '.$required_to_complete. ' milestones could not be released in this week';
+                    
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
@@ -194,6 +198,7 @@ class PMGoal extends Command
                 {
                     $goal_update= ProjectPmGoal::where('id',$goal->id)->first();
                     $goal_update->description = $complete_milestones . ' out of 1 milestones could not be released in this week';
+                    
                     $goal_update->updated_at = Carbon::now();
                     $goal_update->save();
 
