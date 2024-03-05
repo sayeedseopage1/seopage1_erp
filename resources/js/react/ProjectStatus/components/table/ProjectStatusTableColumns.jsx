@@ -113,12 +113,15 @@ export const ProjectStatusTableColumns = [
                         <Popover.Button>
                             <div 
                                 onClick={() => handler.onPercentOfGoalMet(data)} 
-                                className={`${style.projectStatus_popover_button}`}
+                                className={`${style.projectStatus_percent_popover_button}`}
                             >
                                 <div 
                                     className="progress-bar f-12" 
-                                    role="progressbar" 
-                                    style={{width: `${data?.goal_percentage ?? 0}%`, backgroundColor: getColor(data?.goal_percentage ?? 0)}} 
+                                    role="progressbar"
+                                    style={{
+                                        width: `${data?.goal_percentage ?? 0}%`, 
+                                        backgroundColor: getColor(data?.goal_percentage ?? 0), 
+                                        height: "15px"}} 
                                     aria-valuenow={data?.goal_percentage ?? 0}
                                     aria-valuemin="0" 
                                     aria-valuemax="100"

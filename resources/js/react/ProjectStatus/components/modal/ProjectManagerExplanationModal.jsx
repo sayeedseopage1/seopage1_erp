@@ -16,17 +16,18 @@ const ProjectManagerExplanationModal = () => {
   const user = useAuth()
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const {data, isFetching, isLoading, refetch} = useGetProjectManagerDeadlineExpiredGoalsQuery(user.id)
+  // APi call
+  const {data, isLoading, refetch} = useGetProjectManagerDeadlineExpiredGoalsQuery(user.id)
 
-
+  // close modal
   const close = () => {
     searchParams.delete("modal_type");
-    searchParams.delete("status");
     setSearchParams(searchParams);
   };
+
   return (
     <div className={styles.project_manager_explanation}>
-      <Modal isOpen={searchParams.get("modal_type") === "individual_goal_details" && user.roleId === 4}>
+      <Modal isOpen={searchParams.get("modal_type") === "individual_goal_details" && user.roleId === 4 && data?.data?.length}>
           <div className={styles.modal_overlay}>
               <Card className={styles.card}>
                   <Card.Head onClose={close} className={styles.card_head}>

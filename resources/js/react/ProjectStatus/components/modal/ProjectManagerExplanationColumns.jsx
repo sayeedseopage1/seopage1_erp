@@ -113,6 +113,9 @@ export const ProjectManagerExplanationColumns = [
                                 Explain Why Expired 
                               </button>
                             </Switch.Case>
+                            <Switch.Case condition={data?.reason_status === 1}>
+                              <span>--</span>
+                            </Switch.Case>
                         </Switch> 
                     </Switch.Case>
                 </Switch>

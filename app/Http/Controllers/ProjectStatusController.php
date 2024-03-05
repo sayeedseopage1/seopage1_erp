@@ -432,7 +432,8 @@ class ProjectStatusController extends AccountBaseController
         ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
         ->leftJoin('users','project_pm_goals.client_id','users.id')
         ->where('project_pm_goals.pm_id',$id)
-        ->where('goal_status',0)
+        ->where('project_pm_goals.goal_status',0)
+        ->where('project_pm_goals.reason_status',0)
         ->get();
         return response()->json([
             'data'=>$pmGoal
