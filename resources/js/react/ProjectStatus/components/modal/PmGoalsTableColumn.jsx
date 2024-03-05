@@ -56,7 +56,6 @@ export const PmGoalsTableColumns = [
     {
         id: "goal_status",
         header: "Goal Status",
-        accessorKey: "goal_status",
         cell: ({ row }) => {
             const data = row?.original;
             return (

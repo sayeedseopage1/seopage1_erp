@@ -64,6 +64,9 @@ export const DragableColumnHeader = ({header, table, className='', ...props}) =>
 
   drag(drop(dropRef));
 
+
+
+
   return (
     <> 
       <th
