@@ -38,7 +38,7 @@ const NextGoalDetailsModal = ({isOpen, closeModal, projectDetails}) => {
               </div>
           </div>
           <div>
-            <p>{projectDetails.goal_description}</p>
+            <p>{projectDetails.goal_description ?? "All goals are completed!"}</p>
           </div>
       </ReactModal>
   )
