@@ -325,10 +325,24 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function ruleList()
     {
+        // $department = Team::with('childs')->find(1);
+        // dd($department);
         $list = SalesRiskPolicy::where('parent_id', null)->get()->map(function ($item) {
+
             return [
                 'title' => $item->title,
-                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title', 'point', 'value', 'department'])
+                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get()->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'point' => $item->point,
+                        'value' => $item->value,
+                        'department' => [
+                            'id' => $item->department,
+                            'name' => Team::with('childs')->find($item->department)->team_name
+                        ]
+                    ];
+                })
             ];
         });
 
