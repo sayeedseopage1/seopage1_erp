@@ -37,6 +37,10 @@ const SalesRiskAnalysis = () => {
                   refetch()
               }}
             />
+            <button>
+              <i className="fa fa-plus-" aria-hidden="true"></i>
+              Add New Policies
+            </button>
         </div>
         <div className='sp1_tlr_container'>
             <div className="sp1_tlr_tbl_container mx-0">
