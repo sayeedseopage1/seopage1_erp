@@ -25,7 +25,6 @@ const SalesRiskAnalysis = () => {
   // sales risk analysis rules data
   const salesRiskAnalysisRules = data?.data
 
-  console.log('salesRiskAnalysisRules', salesRiskAnalysisRules)
  
   return (
     <React.Fragment>
@@ -36,20 +35,21 @@ const SalesRiskAnalysis = () => {
               onClick={() => {
                   refetch()
               }}
+              isLoading={isFetching}
             />
-            <button className=''>
-              <i className="fa fa-plus" aria-hidden="true"></i>
+            <button className='ml-2 btn btn-success'>
+              <i className="fa fa-plus mr-2" aria-hidden="true"></i>
               Add New Policies
             </button>
         </div>
         <div className='sp1_tlr_container'>
-            <div className="sp1_tlr_tbl_container mx-0">
+            <div className="sp1_tlr_tbl_container mx-0 py-3">
+                {/* sales risk analysis table */}
                 <SalesRiskAnalysisTable
                   tableColumns={SalesRiskAnalysisTableColumns}
                   tableName="SalesRiskAnalysisTable"
                   tableData={salesRiskAnalysisRules}
-                  isFetching={isFetching}
-                  isLoading={isLoading}
+                  isLoading={isFetching}
                 />
             </div>
         </div>

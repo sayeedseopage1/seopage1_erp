@@ -92,54 +92,60 @@ const SalesRiskAnalysisTable = ({
   })
 
 
-  console.log(data)
-  console.log(table?.getRowModel())
-  console.log(table)
   return (
     <React.Fragment>
-            <div className="sp1_tasks_table_wrapper">
-                <table className='sp1_tasks_table'>
-                    <thead className="sp1_tasks_thead">
-                            {table.getHeaderGroups().map(headerGroup => (
-                            <tr key={headerGroup.id} className='sp1_tasks_tr'>
-                                {headerGroup.headers.map(header => 
-                                {
-                                  return <WithoutDraggableColumnHeader 
-                                  header={header} 
-                                  table={table} 
-                                  key={header.id} />
-                                })}
-                            </tr>
-                            ))}
-                    </thead>
-                    <tbody className='sp1_tasks_tbody'>
-                            {!isLoading && table.getRowModel().rows.map(row => {
-                            return (
-                                <tr
-                                className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
-                                    key={row.id}
-                                >
-                                {row.getVisibleCells().map(cell => {
-                                    return (
-                                    <td key={cell.id} className='px-2 sp1_tasks_td'>
-                                         
-                                        { flexRender(
-                                            cell.column.columnDef.cell,
-                                            cell.getContext()
-                                            )
-                                        }
-                                    </td>
-                                    )
-                                })}
-                                </tr>
-                            )
-                            })}
-                            {isLoading && <SalesRiskAnalysisTableLoader />}
-                    </tbody>
-                </table>
-                {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}   
-            </div>
-     </React.Fragment>
+      <div 
+        className="sp1_tasks_table_wrapper" 
+        style={{
+          height: '100%',
+          overflow: 'auto',
+          maxHeight: '100%'
+        }}
+      >
+        <table className='sp1_tasks_table'>
+          {/* table Header */}
+          <thead className="sp1_tasks_thead">
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id} className='sp1_tasks_tr'>
+                {headerGroup.headers.map(header => 
+                  {
+                    return <WithoutDraggableColumnHeader 
+                    header={header} 
+                    table={table} 
+                    key={header.id} />
+                })}
+              </tr>
+            ))}
+          </thead>
+          {/* table Body */}
+          <tbody className='sp1_tasks_tbody'>
+            {!isLoading && table.getRowModel().rows.map(row => {
+              return (
+                <tr
+                  className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
+                  key={row.id}
+                >
+                  {row.getVisibleCells().map(cell => {
+                      return (
+                        <td key={cell.id} className='px-2 sp1_tasks_td'>
+                          { flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext())
+                          }
+                        </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+            {/* Loading Table */}
+            {isLoading && <SalesRiskAnalysisTableLoader prevItemLength={data?.length}  />}
+          </tbody>
+        </table>
+        {/* Table for empty */}
+        {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}   
+      </div>
+    </React.Fragment>
   )
 }
 
