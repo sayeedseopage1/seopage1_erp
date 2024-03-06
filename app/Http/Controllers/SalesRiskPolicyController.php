@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
@@ -16,7 +15,7 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         parent::__construct();
         $this->pageTitle = 'Sales Risk Policy';
-        $this->activeSettingMenu = 'sales_risk_policies';
+        // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
             abort_403(user()->permission('manage_company_setting') !== 'all');
             return $next($request);
