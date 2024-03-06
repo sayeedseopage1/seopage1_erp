@@ -115,7 +115,7 @@ class ProjectDeadlineExtensionDataTable extends BaseDataTable
             }
             })
             ->editColumn('deadline_extended', function ($row) {
-                return $row->deadline_requested_for;
+                return $row->deadline_requested_for . ' Days';
             })
             ->editColumn('reason', function ($row) {
                 if($row->extension =='Client Ordered New Things'){

@@ -33,8 +33,8 @@
                         <td>{{\Carbon\Carbon::parse($row->created_at)->format('Y-m-d h:i:s A')}}</td>
                         <td>{{$row->extension}}</td>
                         <td>
-                            @if ($row->status == 1)
-                                <p>Approved</p>
+                            @if ($row->status == 2)
+                                <p class="badge badge-success p-2">Approved</p>
                             @else
                             <p>Awaiting Approval</p>
                             @endif
