@@ -6423,6 +6423,7 @@ public function updatePmBasicSEO(Request $request){
 
     public function storeAuthorization(Request $request){
         // dd($request->all());
+        // DB::beginTransaction();
         $validator = $request->validate([
             'new_deadline' => 'required',
         ], [
@@ -6431,7 +6432,6 @@ public function updatePmBasicSEO(Request $request){
         $oldDeadline = Carbon::parse($request->old_deadline);
         $newDeadline = Carbon::parse($request->new_deadline);
         $dayDifference = $newDeadline->diffInDays($oldDeadline);
-        
 
         if($request->type =='accept'){
             $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
@@ -6449,6 +6449,7 @@ public function updatePmBasicSEO(Request $request){
             $project->deadline = $pde->new_deadline;
             $project->deadline_auth_status = 2;
             $project->save();
+
         }else{
             $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();
             $pde->admin_comment = $request->admin_comment;
