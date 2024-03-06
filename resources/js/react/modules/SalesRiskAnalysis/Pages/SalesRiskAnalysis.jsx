@@ -23,7 +23,7 @@ const SalesRiskAnalysis = () => {
   } = useGetSalesRiskAnalysisRulesQuery(null)
 
   // sales risk analysis rules data
-  const salesRiskAnalysisRules = data
+  const salesRiskAnalysisRules = data?.data
 
   console.log('salesRiskAnalysisRules', salesRiskAnalysisRules)
  

@@ -37,16 +37,16 @@ const SalesRiskAnalysisTable = ({
   });
 
   
-  const _projectStatus = React.useMemo(()=> tableData, [tableData]);
+  const _salesRiskAnalysis = React.useMemo(()=> tableData, [tableData]);
 
   React.useEffect(() => {
-      if(_.size(_projectStatus) === _.size(data)){
+      if(_.size(_salesRiskAnalysis) === _.size(data)){
         setSkipPageReset(true);
-        _projectStatus && setData(_projectStatus)
+        _salesRiskAnalysis && setData(_salesRiskAnalysis)
       }else{
-          _projectStatus && setData(_projectStatus);
+          _salesRiskAnalysis && setData(_salesRiskAnalysis);
       }
-    }, [_projectStatus])
+    }, [_salesRiskAnalysis])
 
   // clear skipPageReset
   React.useEffect(() => {
@@ -94,6 +94,7 @@ const SalesRiskAnalysisTable = ({
 
   console.log(data)
   console.log(table?.getRowModel())
+  console.log(table)
   return (
     <React.Fragment>
             <div className="sp1_tasks_table_wrapper">
@@ -112,7 +113,7 @@ const SalesRiskAnalysisTable = ({
                             ))}
                     </thead>
                     <tbody className='sp1_tasks_tbody'>
-                            {!isLoading &&table.getRowModel().rows.map(row => {
+                            {!isLoading && table.getRowModel().rows.map(row => {
                             return (
                                 <tr
                                 className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
