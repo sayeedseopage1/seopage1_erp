@@ -92,6 +92,8 @@ const SalesRiskAnalysisTable = ({
   })
 
 
+  console.log(data)
+  console.log(table?.getRowModel())
   return (
     <React.Fragment>
             <div className="sp1_tasks_table_wrapper">

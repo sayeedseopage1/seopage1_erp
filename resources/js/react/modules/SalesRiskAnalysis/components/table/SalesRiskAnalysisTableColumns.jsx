@@ -8,6 +8,10 @@ export const SalesRiskAnalysisTableColumns = [
       id: "department_name",
       header: "Department Name",
       accessorKey: "department_name",
+      cell: ({row}) => {
+        console.log('row', row?.original)
+        return <span>--</span>
+      }
     },
     {
       id: "policy_rules",

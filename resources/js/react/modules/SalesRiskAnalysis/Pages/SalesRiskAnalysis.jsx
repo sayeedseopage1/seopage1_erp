@@ -18,12 +18,12 @@ const SalesRiskAnalysis = () => {
   const {
     data,
     isFetching,
+    isLoading,
     refetch
   } = useGetSalesRiskAnalysisRulesQuery(null)
 
   // sales risk analysis rules data
   const salesRiskAnalysisRules = data
-  const isLoading = true
 
   console.log('salesRiskAnalysisRules', salesRiskAnalysisRules)
  
@@ -37,8 +37,8 @@ const SalesRiskAnalysis = () => {
                   refetch()
               }}
             />
-            <button>
-              <i className="fa fa-plus-" aria-hidden="true"></i>
+            <button className=''>
+              <i className="fa fa-plus" aria-hidden="true"></i>
               Add New Policies
             </button>
         </div>
