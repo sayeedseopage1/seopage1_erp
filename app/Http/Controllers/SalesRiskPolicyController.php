@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
@@ -16,7 +15,7 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         parent::__construct();
         $this->pageTitle = 'Sales Risk Policy';
-        $this->activeSettingMenu = 'sales_risk_policies';
+        // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
             abort_403(user()->permission('manage_company_setting') !== 'all');
             return $next($request);
@@ -62,6 +61,8 @@ class SalesRiskPolicyController extends AccountBaseController
         $department = Team::with('childs')->get()->map(function ($item) {
             return ['id' => $item->id, 'name' => $item->team_name];
         });
+
+        // $department = Team::with('childs')->get();
         // dd($department);
 
         // options and their structures
@@ -324,10 +325,24 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function ruleList()
     {
+        // $department = Team::with('childs')->find(1);
+        // dd($department);
         $list = SalesRiskPolicy::where('parent_id', null)->get()->map(function ($item) {
+
             return [
                 'title' => $item->title,
-                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title', 'point'])
+                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get()->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'point' => $item->point,
+                        'value' => $item->value,
+                        'department' => [
+                            'id' => $item->department,
+                            'name' => Team::with('childs')->find($item->department)->team_name
+                        ]
+                    ];
+                })
             ];
         });
 
