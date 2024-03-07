@@ -30,17 +30,17 @@ const SalesRiskAnalysis = () => {
     <React.Fragment>
       <SalesRiskAnalysisContainer>
         {/* refresh button */}
-        <div className='d-flex justify-content-end'>
+        <div className='d-flex justify-content-between align-items-center'>
+            <button className='btn btn-success'>
+              <i className="fa fa-plus mr-2" aria-hidden="true"></i>
+              Add New Policies
+            </button>
             <RefreshButton
               onClick={() => {
                   refetch()
               }}
               isLoading={isFetching}
             />
-            <button className='ml-2 btn btn-success'>
-              <i className="fa fa-plus mr-2" aria-hidden="true"></i>
-              Add New Policies
-            </button>
         </div>
         <div className='sp1_tlr_container'>
             <div className="sp1_tlr_tbl_container mx-0 py-3">

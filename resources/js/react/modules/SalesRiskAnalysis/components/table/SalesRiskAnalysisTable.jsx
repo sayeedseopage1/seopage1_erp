@@ -15,6 +15,7 @@ import SalesRiskAnalysisTableLoader from '../loader/SalesRiskAnalysisTableLoader
 
 // table header
 import WithoutDraggableColumnHeader from './WithoutDraggableColumnHeader';
+import SalesRiskAnalysisTablePagination from './SalesRiskAnalysisTablePagination';
 
 
 const SalesRiskAnalysisTable = ({
@@ -98,7 +99,6 @@ const SalesRiskAnalysisTable = ({
         className="sp1_tasks_table_wrapper" 
         style={{
           height: '100%',
-          overflow: 'auto',
           maxHeight: '100%'
         }}
       >
@@ -145,6 +145,19 @@ const SalesRiskAnalysisTable = ({
         {/* Table for empty */}
         {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}   
       </div>
+      {/* pagination */}
+      <SalesRiskAnalysisTablePagination
+        currentPage = {pageIndex + 1}
+        perPageRow= {pageSize}
+        onPageSize = {(size) => table?.setPageSize(size)}
+        onPaginate = {(page) => table?.setPageIndex(page - 1)}
+        totalEntry= {_.size(data)}
+        onNext = {() => table.getCanNextPage() && table.nextPage()}
+        disableNext = {!table?.getCanNextPage()}
+        onPrevious = {() => table?.getCanPreviousPage() && table?.previousPage()}
+        disablePrevious = {!table?.getCanPreviousPage()}
+        totalPages = {table?.getPageCount()}
+      />
     </React.Fragment>
   )
 }
