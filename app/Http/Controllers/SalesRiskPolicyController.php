@@ -86,14 +86,14 @@ class SalesRiskPolicyController extends AccountBaseController
                         ],
                         [
                             'label' => 'Value',
-                            'type' => 'input',
+                            'type' => 'number',
                             'placeholder' => ''
                         ]
                     ],
                 ],
                 [
                     'label' => 'Point',
-                    'type' => 'input',
+                    'type' => 'number',
                     'placeholder' => ''
                 ]
             ]
@@ -119,14 +119,14 @@ class SalesRiskPolicyController extends AccountBaseController
                         ],
                         [
                             'label' => 'Value',
-                            'type' => 'input',
+                            'type' => 'number',
                             'placeholder' => ''
                         ]
                     ],
                 ],
                 [
                     'label' => 'Point',
-                    'type' => 'input',
+                    'type' => 'number',
                     'placeholder' => ''
                 ]
             ]
@@ -152,14 +152,14 @@ class SalesRiskPolicyController extends AccountBaseController
                         ],
                         [
                             'label' => 'Value',
-                            'type' => 'input',
+                            'type' => 'number',
                             'placeholder' => ''
                         ]
                     ],
                 ],
                 [
                     'label' => 'Point',
-                    'type' => 'input',
+                    'type' => 'number',
                     'placeholder' => ''
                 ]
             ]
@@ -187,20 +187,20 @@ class SalesRiskPolicyController extends AccountBaseController
                         [
                             'label' => 'From',
                             'name' => 'from',
-                            'type' => 'input',
+                            'type' => 'number',
                             'placeholder' => ''
                         ],
                         [
                             'label' => 'To',
                             'name' => 'to',
-                            'type' => 'input',
+                            'type' => 'number',
                             'placeholder' => ''
                         ]
                     ],
                 ],
                 [
                     'label' => 'Point',
-                    'type' => 'input',
+                    'type' => 'number',
                     'placeholder' => ''
                 ]
             ]
@@ -223,12 +223,12 @@ class SalesRiskPolicyController extends AccountBaseController
                         [
                             'label' => 'Yes',
                             'name' => 'yes',
-                            'type' => 'input',
+                            'type' => 'number',
                         ],
                         [
                             'label' => 'No',
                             'name' => 'no',
-                            'type' => 'input',
+                            'type' => 'number',
                         ],
                     ]
                 ]
@@ -240,17 +240,22 @@ class SalesRiskPolicyController extends AccountBaseController
             'name' => 'list',
             'structure' => [
                 [
+                    'label' => 'Title',
+                    'name' => 'title',
+                    'type' => 'input',
+                ],
+                [
                     'label' => 'Type',
-                    'type' => 'select',
+                    'type' => 'multiselect',
                     'structure' => [
                         'countries' => $countries,
                     ]
                 ],
                 [
-                    'label' => 'Title',
-                    'name' => 'title',
-                    'type' => 'input',
-                ],
+                    'label' => 'Point',
+                    'type' => 'number',
+                    'placeholder' => ''
+                ]
             ]
         ];
 
@@ -285,6 +290,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function save(Request $req)
     {
+        // TODO: Convert Model to BaseModel
+        // ex: class Attendance extends BaseModel
         dd($req->all());
         $validator = Validator::make($req->all(), [
             'title' => 'required',
