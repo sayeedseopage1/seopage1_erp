@@ -290,6 +290,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function save(Request $req)
     {
+        // TODO: Convert Model to BaseModel
+        // ex: class Attendance extends BaseModel
         dd($req->all());
         $validator = Validator::make($req->all(), [
             'title' => 'required',
