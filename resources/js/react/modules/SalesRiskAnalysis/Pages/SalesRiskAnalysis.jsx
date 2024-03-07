@@ -13,7 +13,6 @@ import { SalesRiskAnalysisTableColumns } from '../components/table/SalesRiskAnal
 
 
 const SalesRiskAnalysis = () => {
-
   // get sales risk analysis rules
   const {
     data,
