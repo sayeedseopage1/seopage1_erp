@@ -70,6 +70,55 @@ export const ModalInput = styled.input`
   font-weight: 500;
   line-height: normal;
   background-color: #F8F8F8;
+  color: ${props => props.value ? '#000000' : '#8F8F8F'};
+  outline: none;
+  border: 1px solid #B1B1B1;
+  border-radius: 9px;
+  width: ${props => props.width || "auto"};
+`
+
+export const ModalDepartmentSelect = styled.div`
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background-color: #F8F8F8;
+  border: 1px solid #B1B1B1;
+  color: #8F8F8F;
+  outline: none;
+  border-radius: 9px;
+  width: auto;
+
+  #select-department-sal-risk {
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    span{
+      color: #000000;
+    }
+  }
+  #cnx_dropdown__menu_open--policyType{
+    transform: translate(864px, 485px) !important;
+  }
+  #cnx_dropdown__menu_open--department{
+    transform: translate(864px, 560px) !important;
+  }
+`
+
+export const ModalSelect = styled.select`
+  padding: 13px 18px;
+  border-radius: 8px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background-color: #F8F8F8;
   color: #8F8F8F;
   outline: none;
   border: 1px solid #B1B1B1;

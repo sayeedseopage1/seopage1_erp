@@ -9,6 +9,7 @@ import subtaskReducer from './features/subTaskSlice';
 import timeLogHistoryReducer from "./features/timeLogHistorySlice";
 import tasksReducer from './features/tasksSlice';
 import errorSlice from "./features/errorSlice";
+import filterOptionReducer from "./features/filterOptionSlice";
 
 export const store = configureStore({
     reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
         subTask: subtaskReducer,
         timeLogHistory: timeLogHistoryReducer,
         tasks: tasksReducer,
+        filterOptions: filterOptionReducer,
         error: errorSlice
     },
 

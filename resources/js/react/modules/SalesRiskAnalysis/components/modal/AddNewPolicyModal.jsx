@@ -2,12 +2,26 @@ import React from "react";
 import PropTypes from "prop-types";
 // ui components
 import CustomModal from "../ui/CustomModal/CustomModal";
-import { ModalButton, ModalInput, ModalInputLabel, ModalTitle } from "../ui/Styles/ui";
+import {
+    ModalButton,
+    ModalDepartmentSelect,
+    ModalInput,
+    ModalInputLabel,
+    ModalSelect,
+    ModalTitle,
+} from "../ui/Styles/ui";
 import { Flex } from "../../../../global/styled-component/Flex";
+import DepartmentSelect from "../DepartmentSelect";
+import CustomDropDown from "../CustomDropDown";
+import { PolicyTypeItems } from "../../constant";
 
-
-
-const AddNewPolicyModal = ({ open, closeModal }) => {
+const AddNewPolicyModal = ({
+    open,
+    closeModal,
+    departments,
+    newPolicyData,
+    handleChange,
+}) => {
     return (
         <CustomModal
             open={open}
@@ -17,60 +31,49 @@ const AddNewPolicyModal = ({ open, closeModal }) => {
             isCloseButtonShow={true}
         >
             {/* Modal Content */}
-             <div className="d-flex flex-column">
+            <div className="d-flex flex-column">
                 <div className="d-flex justify-content-center align-items-center mb-4">
-                    <ModalTitle>Edit Applicable Point</ModalTitle>
+                    <ModalTitle>Add a New Policy</ModalTitle>
                 </div>
                 <div className="d-flex flex-column mb-4 px-3 w-100">
                     <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-5">
+                        <ModalInputLabel className="col-4">
                             Policy Name <sup>*</sup>{" "}
                         </ModalInputLabel>
                         <ModalInput
-                            className="col-7"
-                            type="number"
-                            placeholder="Write here eg: 0.5,1,2 "
+                            className="col-8"
+                            type="text"
+                            name="policyName"
+                            value={newPolicyData?.policyName}
+                            onChange={handleChange}
+                            placeholder="Write Here"
                         />
                     </div>
-                    <div className="row mb-4">
-                        <ModalInputLabel className="col-5" color="#8F8F8F">
-                            Department Name{" "}
+
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Policy Type<sup>*</sup>{" "}
                         </ModalInputLabel>
-                        <ModalInput
-                            className="col-7"
-                            type="number"
-                            placeholder="Write here eg: 0.5,1,2 "
-                        />
-                    </div>
-                    <div className="row mb-4">
-                        <ModalInputLabel className="col-5" color="#8F8F8F">
-                            Policy Rules{" "}
-                        </ModalInputLabel>
-                        <ModalInput
-                            className="col-7"
-                            type="number"
-                            placeholder="Write here eg: 0.5,1,2 "
-                        />
+                        <ModalDepartmentSelect className="col-8">
+                            <CustomDropDown
+                                filedName="policyType"
+                                data={PolicyTypeItems}
+                                selected={newPolicyData?.policyType}
+                                setSelected={handleChange}
+                            />
+                        </ModalDepartmentSelect>
                     </div>
                     <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-5" color="#8F8F8F">
-                            Current point{" "}
+                        <ModalInputLabel className="col-4">
+                            Department Name<sup>*</sup>
                         </ModalInputLabel>
-                        <ModalInput
-                            className="col-7"
-                            type="number"
-                            defaultValue="0.5"
-                        />
-                    </div>
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-5">
-                            New point<sup>*</sup>{" "}
-                        </ModalInputLabel>
-                        <ModalInput
-                            className="col-7"
-                            type="number"
-                            placeholder="Write here eg: 0.5,1,2 "
-                        />
+                        <ModalDepartmentSelect className="col-8">
+                            <DepartmentSelect
+                                data={departments}
+                                selected={newPolicyData?.department}
+                                setSelectedDept={handleChange}
+                            />
+                        </ModalDepartmentSelect>
                     </div>
                 </div>
                 <Flex gap="10px" justifyContent="center">
@@ -95,4 +98,7 @@ export default AddNewPolicyModal;
 AddNewPolicyModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
-}
+    departments: PropTypes.array,
+    newPolicyData: PropTypes.object,
+    handleChange: PropTypes.func,
+};
