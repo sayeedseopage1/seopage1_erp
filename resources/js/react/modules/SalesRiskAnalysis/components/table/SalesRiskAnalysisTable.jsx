@@ -8,6 +8,7 @@ import {
     getSortedRowModel,
     flexRender,
 } from "@tanstack/react-table";
+import PropTypes from "prop-types";
 
 // ui components
 import EmptyTable from "../../../../global/EmptyTable";
@@ -33,12 +34,15 @@ const SalesRiskAnalysisTable = ({
     const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
-      pageIndex: 0,
-      pageSize: 10,
-    })
-    // modal state
-    const [editPointModalOpen,setEditPointModalOpen] = React.useState(false)
- 
+        pageIndex: 0,
+        pageSize: 10,
+    });
+    // modal open close state
+    const [editPointModalOpen, setEditPointModalOpen] = React.useState(false);
+
+    // modal state data
+    const [editPointData, setEditPointData] = React.useState({});
+
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
     React.useEffect(() => {
@@ -90,19 +94,21 @@ const SalesRiskAnalysisTable = ({
         getSortedRowModel: getSortedRowModel(),
         paginateExpandedRows: false,
         meta: {
-           handleEditApplicablePoint : (row) => {
-              console.log(row)
-              setEditPointModalOpen(true)
-           }
-        }
+            handleEditApplicablePoint: (row, selectedRule) => {
+                setEditPointModalOpen(true);
+                setEditPointData({
+                    ...row,
+                    selectedRule: selectedRule,
+                });
+            },
+        },
     });
-
 
     // modal Close Handler
 
     const handleCloseEditPointModal = () => {
-        setEditPointModalOpen(false)
-    }
+        setEditPointModalOpen(false);
+    };
 
     return (
         <React.Fragment>
@@ -115,7 +121,12 @@ const SalesRiskAnalysisTable = ({
             >
                 <table className="sp1_tasks_table">
                     {/* table Header */}
-                    <thead className="sp1_tasks_thead">
+                    <thead
+                        className="sp1_tasks_thead"
+                        style={{
+                            zIndex: 0,
+                        }}
+                    >
                         {table.getHeaderGroups().map((headerGroup) => (
                             <tr key={headerGroup.id} className="sp1_tasks_tr">
                                 {headerGroup.headers.map((header) => {
@@ -180,8 +191,9 @@ const SalesRiskAnalysisTable = ({
 
             {/* Modals */}
             <EditApplicablePointsModal
-              open={editPointModalOpen}
-              closeModal={handleCloseEditPointModal}
+                open={editPointModalOpen}
+                closeModal={handleCloseEditPointModal}
+                editPointData={editPointData}
             />
 
             {/* pagination */}
@@ -204,3 +216,13 @@ const SalesRiskAnalysisTable = ({
 };
 
 export default SalesRiskAnalysisTable;
+
+
+SalesRiskAnalysisTable.propTypes = {
+    isLoading: PropTypes.bool,
+    filter: PropTypes.func,
+    tableName: PropTypes.string,
+    search: PropTypes.string,
+    tableColumns: PropTypes.array,
+    tableData: PropTypes.array,
+}

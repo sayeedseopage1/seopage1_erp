@@ -65,6 +65,32 @@ export const SalesRiskAnalysisTableColumns = [
                             </p>
                         );
                     })}
+                    <div className="">
+                        <button
+                            style={{
+                                fontSize: "13px",
+                            }}
+                            className="btn btn-info"
+                        >
+                            <i
+                                className="fa fa-edit mr-2"
+                                aria-hidden="true"
+                            ></i>{" "}
+                            Edit Policy
+                        </button>
+                        <button
+                            style={{
+                                fontSize: "13px",
+                            }}
+                            className="btn btn-success ml-2"
+                        >
+                            <i
+                                className="fa fa-plus mr-2"
+                                aria-hidden="true"
+                            ></i>{" "}
+                            Add New Rule
+                        </button>
+                    </div>
                 </div>
             );
         },
@@ -87,8 +113,12 @@ export const SalesRiskAnalysisTableColumns = [
                                 <p>{rule?.point}</p>
                                 <div
                                     onClick={() => {
-                                        action.handleEditApplicablePoint(data);
+                                        action.handleEditApplicablePoint(
+                                            data,
+                                            rule
+                                        );
                                     }}
+                                    role="button"
                                 >
                                     <EditIcon />
                                 </div>

@@ -1,5 +1,6 @@
 import * as React from "react";
 import Button from "../Button";
+import PropTypes from "prop-types";
 
 
 const SalesRiskAnalysisTablePagination = ({
@@ -165,3 +166,16 @@ const SalesRiskAnalysisTablePagination = ({
 }
 
 export default SalesRiskAnalysisTablePagination
+
+SalesRiskAnalysisTablePagination.propTypes = {
+    currentPage: PropTypes.number,
+    perPageRow: PropTypes.number,
+    onPaginate: PropTypes.func,
+    totalEntry: PropTypes.number,
+    onNext: PropTypes.func,
+    disableNext: PropTypes.bool,
+    onPrevious: PropTypes.func,
+    disablePrevious: PropTypes.bool,
+    totalPages: PropTypes.number,
+    onPageSize: PropTypes.func
+}

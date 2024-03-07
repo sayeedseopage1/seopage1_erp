@@ -1,4 +1,5 @@
 import _ from "lodash";
+import PropTypes from "prop-types";
 import { Placeholder } from "../../../../global/Placeholder";
 
 
@@ -32,4 +33,9 @@ export default function SalesRiskAnalysisTableLoader({prevItemLength = 5,tableCo
             </tr>
         ))
     )
+}
+
+SalesRiskAnalysisTableLoader.propTypes = {
+    prevItemLength: PropTypes.number,
+    tableCol: PropTypes.number
 }

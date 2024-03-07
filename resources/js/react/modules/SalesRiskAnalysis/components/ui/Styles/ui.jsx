@@ -39,10 +39,11 @@ export const ModalTitle = styled.h6`
 `
 
 export const ModalInputLabel = styled.label`
-  font-size: 20px;
+  font-size: 18px;
   font-family: 'Poppins', sans-serif;
   color: ${props => props.color || "#000000"};
   margin-bottom: 0px;
+  padding: 0px !important;
 `
 
 export const ModalButton = styled.button`
@@ -58,5 +59,20 @@ export const ModalButton = styled.button`
   outline: ${props => props.outline || "none"};
   border: ${props => props.border || "none"};
   cursor: pointer;
+  width: ${props => props.width || "auto"};
+`
+export const ModalInput = styled.input`
+  padding: 13px 18px;
+  border-radius: 8px;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  background-color: #F8F8F8;
+  color: #8F8F8F;
+  outline: none;
+  border: 1px solid #B1B1B1;
+  border-radius: 9px;
   width: ${props => props.width || "auto"};
 `

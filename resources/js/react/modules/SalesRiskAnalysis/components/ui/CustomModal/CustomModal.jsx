@@ -1,4 +1,5 @@
 import ReactModal from "react-modal";
+import PropTypes from "prop-types";
 import { ModalCloseButton } from "../Styles/ui";
 import { IoClose } from "react-icons/io5";
 
@@ -7,12 +8,22 @@ const CustomModal = ({
     closeModal,
     children,
     contentLabel,
+    width,
     isCloseButtonShow = false,
     ...props
 }) => {
     return (
         <ReactModal
-            style={customStyles}
+            style={{
+              customStyles,
+              content:{
+                ...customStyles.content,
+                width: width || "600px",
+                maxWidth: width || "600px",
+                height: props.height || "fit-content",
+                maxHeight: props.maxHeight || "fit-content",
+              }
+            }}
             isOpen={open}
             ariaHideApp={false}
             onRequestClose={closeModal}
@@ -50,5 +61,21 @@ const customStyles = {
         margin: "auto auto",
         padding: "20px",
         borderRadius: "20px",
+        border: "none",
+        boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.2)",
+        blur: "5px"
     },
 };
+
+
+
+CustomModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    closeModal: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
+    contentLabel: PropTypes.string.isRequired,
+    width: PropTypes.string,
+    isCloseButtonShow: PropTypes.bool,
+    height: PropTypes.string,
+    maxHeight: PropTypes.string,
+}

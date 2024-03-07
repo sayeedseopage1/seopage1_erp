@@ -1,5 +1,6 @@
-import { flexRender } from '@tanstack/react-table';
 import React from 'react';
+import { flexRender } from '@tanstack/react-table';
+import PropTypes from "prop-types";
 
 // without draggable column header
 const WithoutDraggableColumnHeader = ({header, table, className='', ...props}) => {
@@ -64,3 +65,10 @@ const WithoutDraggableColumnHeader = ({header, table, className='', ...props}) =
 
 
 export default WithoutDraggableColumnHeader;
+
+
+WithoutDraggableColumnHeader.propTypes = {
+  header: PropTypes.object.isRequired,
+  table: PropTypes.object.isRequired,
+  className: PropTypes.string
+}
