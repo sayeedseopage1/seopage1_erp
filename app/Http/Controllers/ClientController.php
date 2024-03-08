@@ -74,6 +74,9 @@ class ClientController extends AccountBaseController
         $this->addClientPermission = user()->permission('add_clients');
 
         abort_403(!in_array($viewPermission, ['all', 'added', 'both']));
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
 
         if (!request()->ajax()) {
             $this->clients = User::allClients();
@@ -418,6 +421,9 @@ class ClientController extends AccountBaseController
 
         if (!$this->client->hasRole('client')) {
             abort(404);
+        }
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
         }
 
         abort_403 (!($this->viewPermission == 'all'
