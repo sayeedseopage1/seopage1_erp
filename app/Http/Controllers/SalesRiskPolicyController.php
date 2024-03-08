@@ -222,9 +222,14 @@ class SalesRiskPolicyController extends AccountBaseController
                 ],
                 [
                     'label' => 'Type',
+                    'name' => 'type',
                     'type' => 'multiselect',
                     'structure' => [
-                        'countries' => $countries,
+                        'countries' => [
+                            'label' => 'Contries',
+                            'name' => 'countries',
+                            'structure' => $countries
+                        ]
                     ]
                 ]
             ]
