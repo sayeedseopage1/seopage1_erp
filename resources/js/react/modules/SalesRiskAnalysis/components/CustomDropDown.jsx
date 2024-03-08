@@ -13,6 +13,9 @@ const CustomDropDown = ({
     className,
     filedName,
 }) => {
+    // set selected value from data (because this dropdown reused in multiple places with different data)
+    const _Options = data?.data;
+
     return (
         <div
             className={`${
@@ -40,14 +43,14 @@ const CustomDropDown = ({
                             {selected?.label ? (
                                 <span>{_.startCase(selected?.label)}</span>
                             ) : (
-                              data?.emptyOptionsLabel
+                                data?.emptyOptionsLabel
                             )}
                         </span>
                     </Tooltip>
                 </Dropdown.Toggle>
                 <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`}>
                     <div className="sp1_filter--users">
-                        {data?.data?.map((item) => (
+                        {_Options.map((item) => (
                             <Dropdown.Item
                                 key={item.id}
                                 className={

@@ -40,26 +40,50 @@ export const PolicyTypeItemValuesType = {
   label: 'Value Type',
   emptyOptionsLabel: 'Select Value Type',
   id: 'valueType',
-  data: [
-    {
-      id: 1,
-      label: "Percentage",
-      name: "percentage"
+  data: {
+    regularTypes: {
+      label: 'Policy Rules Type',
+      emptyOptionsLabel: 'Select Policy Rules Type',
+      id: 'rulesType',
+      data: [
+        {
+          id: 1,
+          label: "Percentage",
+          name: "percentage"
+        },
+        {
+          id: 2,
+          label: "Currency",
+          name: "currency"
+        },
+        {
+          id: 3,
+          label: "Hourly",
+          name: "hourly"
+        },
+        {
+          id: 4,
+          label: "Days",
+          name: "days"
+        }
+      ]
     },
-    {
-      id: 2,
-      label: "Currency",
-      name: "currency"
-    },
-    {
-      id: 3,
-      label: "Hourly",
-      name: "hourly"
-    },
-    {
-      id: 4,
-      label: "Days",
-      name: "days"
+    yesNoTypes: {
+      label: 'Policy Rules Type',
+      emptyOptionsLabel: 'Select Policy Rules Type',
+      id: 'rulesType',
+      data: [
+        {
+          id: 1,
+          label: "Yes",
+          name: "yes"
+        },
+        {
+          id: 2,
+          label: "No",
+          name: "no"
+        }
+      ]
     }
-  ]
+  }
 }

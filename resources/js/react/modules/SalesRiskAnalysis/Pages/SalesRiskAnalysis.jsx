@@ -29,7 +29,13 @@ const SalesRiskAnalysis = () => {
     const [newPolicyData, setNewPolicyData] = React.useState({
         policyName: "",
         department: {},
-        policyType: {}
+        policyType: {},
+        title: "",
+        rulesType:{},
+        value: "",
+        from: "",
+        to: "",
+        points: "",
     });
     const [dept, setDept] = React.useState(null);
 
