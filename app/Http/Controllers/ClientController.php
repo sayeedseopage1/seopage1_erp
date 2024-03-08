@@ -49,6 +49,7 @@ use App\Models\LanguageSetting;
 use App\Models\Payment;
 use Google\Service\Dfareporting\Resource\Languages;
 use Google\Service\Gmail\LanguageSettings;
+use Auth;
 
 class ClientController extends AccountBaseController
 {
