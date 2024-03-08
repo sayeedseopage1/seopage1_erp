@@ -25,11 +25,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
         @if(Auth::user()->role_id == 4)
             <div style="margin-bottom: -40px;">
                 @if ($pdExtension !=null && $pdExtension->status ==1)
-                <button type="button" class="btn btn-warning"> 
+                <button type="button" class="btn btn-warning">
                     Pending
                 </button>
                 @else
-                <button type="button" class="btn btn-success project-deadline-extension" data-project-id="{{$project->id}}"> 
+                <button type="button" class="btn btn-success project-deadline-extension" data-project-id="{{$project->id}}">
                     Extend Deadline
                 </button>
                 @endif
@@ -1012,7 +1012,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <div class="col">
                             <h4>Project General Guidelines</h4>
                             <br>
-                            <p>{!! $project->project_summary !!}</p>
+                            <div id="project-summary">{!! $project->project_summary !!}</div>
+
+                            @if(Auth::user()->role_id == 1)
+                            <br>
+                            <button id="chatgpt-translation" class="btn-secondary rounded f-15">
+                                <div class="spinner-border" style="display:none;height: 1.2rem;width: 1.2rem;" role="status" aria-hidden="true"></div>
+                                Translate
+
+                            </button>
+                            <button id="chatgpt-pompt" class="btn-secondary rounded f-15" data-container="body" title="Chatgpt direction Propmt" data-toggle="popover" data-placement="right" data-html="true"  data-content="{{$prompt}} <a href='#' class='btn btn-primary btn-sm' id ='checkout'>Checkout</a>"> <i class="bi bi-gear"></i> </button>
+                            <div id="translated-text" >
+                            </div>
+                            @endif
 
                         </div>
 
@@ -1713,8 +1725,10 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
 
 </div>
-  @include('projects.modals.projectacceptmodal')
-    @include('projects.modals.projectdenymodal')
+
+
+@include('projects.modals.projectacceptmodal')
+@include('projects.modals.projectdenymodal')
 
 
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
@@ -1973,4 +1987,54 @@ if (list && list.length > 0) {
 </script>
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 
+@push('scripts')
+
+<script>
+
+    // chat gpt translation
+    $('#chatgpt-translation').click(function(){
+
+        $('#chatgpt-translation').find('.spinner-border').show();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: "{{ route('chatgpt.ask') }}",
+            type: "post",
+            data: {
+                message: $('#project-summary').html()
+            },
+            success: function (data) {
+
+                $("#translated-text").html( `<br/>`+ data);
+                $('#chatgpt-translation').find('.spinner-border').hide();
+            },
+            error: function (xhr, exception) {
+                var msg = "";
+                if (xhr.status === 0) {
+                    msg = "Not connect.\n Verify Network." + xhr.responseText;
+                } else if (xhr.status == 404) {
+                    msg = "Requested page not found. [404]" + xhr.responseText;
+                } else if (xhr.status == 500) {
+                    msg = "Internal Server Error [500]." +  xhr.responseText;
+                } else if (exception === "parsererror") {
+                    msg = "Requested JSON parse failed.";
+                } else if (exception === "timeout") {
+                    msg = "Time out error." + xhr.responseText;
+                } else if (exception === "abort") {
+                    msg = "Ajax request aborted.";
+                } else {
+                    msg = "Error:" + xhr.status + " " + xhr.responseText;
+                }
+            }
+        });
+    });
+
+</script>
+
+@endpush
 
