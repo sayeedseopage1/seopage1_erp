@@ -6,7 +6,10 @@ import RefreshButton from "../components/RefreshButton";
 import { SalesRiskAnalysisContainer } from "../components/ui/Styles/ui";
 
 // api
-import { useGetSalesRiskAnalysisRulesQuery } from "../../../services/api/salesRiskAnalysisSlice";
+import {
+    useGetSalesRiskAnalysisInputsQuery,
+    useGetSalesRiskAnalysisRulesQuery,
+} from "../../../services/api/salesRiskAnalysisSlice";
 import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptionsApiSlice";
 
 // table
@@ -15,11 +18,17 @@ import { SalesRiskAnalysisTableColumns } from "../components/table/SalesRiskAnal
 
 // modal
 import AddNewPolicyModal from "../components/modal/AddNewPolicyModal";
-import { setFilterOptionsState } from "../../../services/features/filterOptionSlice";
+import {
+    setFilterOptionsState,
+    setFilterCountriesState,
+} from "../../../services/features/filterOptionSlice";
 
 const SalesRiskAnalysis = () => {
     const dispatch = useDispatch();
-    const { departments } =  useSelector(state => state.filterOptions);
+    const { departments, countries } = useSelector(
+        (state) => state.filterOptions
+    );
+    const [dept, setDept] = React.useState(null);
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
@@ -31,44 +40,61 @@ const SalesRiskAnalysis = () => {
         department: {},
         policyType: {},
         title: "",
-        rulesType:{},
+        rulesType: {},
         value: "",
         from: "",
         to: "",
+        yes: "",
+        no: "",
+        countries: [],
         points: "",
     });
-    const [dept, setDept] = React.useState(null);
 
     // get sales risk analysis rules
     const { data, isFetching, isLoading, refetch } =
         useGetSalesRiskAnalysisRulesQuery(null);
 
     // fetch filter options
-    const {
-        data: filterOptions,
-        isFetching: isFilterOptionsFetching,
-    } = useGetAllFilterOptionQuery('', {
-        refetchOnMountOrArgChange: true,
-        skip: departments.length
-    });
+    const { data: filterOptions, isFetching: isFilterOptionsFetching } =
+        useGetAllFilterOptionQuery("", {
+            refetchOnMountOrArgChange: true,
+            skip: departments?.length,
+        });
+
+    const { data: salesRiskInputs, isFetching: isSalesRiskInputsFetching } =
+        useGetSalesRiskAnalysisInputsQuery("", {
+            refetchOnMountOrArgChange: true,
+            skip: countries?.length,
+        });
 
     // handle input change
     const handleChange = (e) => {
-        const {name, value} = e.target;
-        setNewPolicyData({...newPolicyData, [name]: value});
-    }
-
+        const { name, value } = e.target;
+        // for testing
+        if (name === "policyType") {
+            setNewPolicyData({
+                ...newPolicyData,
+                [name]: value,
+                rulesType: {},
+            });
+        } else {
+            setNewPolicyData({ ...newPolicyData, [name]: value });
+        }
+    };
 
     // set filter options state
     React.useEffect(() => {
-        if(filterOptions && !isFilterOptionsFetching){
+        if (filterOptions && !isFilterOptionsFetching) {
             setDept(filterOptions?.department);
-            dispatch(
-                setFilterOptionsState(filterOptions)
-            )
+            dispatch(setFilterOptionsState(filterOptions));
         }
-    }, [filterOptions, isFilterOptionsFetching])
+    }, [filterOptions, isFilterOptionsFetching]);
 
+    React.useEffect(() => {
+        if (salesRiskInputs && !isSalesRiskInputsFetching) {
+            dispatch(setFilterCountriesState(salesRiskInputs));
+        }
+    }, [salesRiskInputs, isSalesRiskInputsFetching]);
 
     // sales risk analysis rules data
     const salesRiskAnalysisRules = data?.data;
@@ -89,7 +115,7 @@ const SalesRiskAnalysis = () => {
                         onClick={handleAddNewPolicyModal}
                         className="btn btn-primary"
                     >
-                        <i className="fa fa-plus mr-2" aria-hidden="true"/>
+                        <i className="fa fa-plus mr-2" aria-hidden="true" />
                         Add New Policy
                     </button>
                     <RefreshButton
@@ -111,7 +137,7 @@ const SalesRiskAnalysis = () => {
                         />
                     </div>
                 </div>
-                
+
                 {/* Add new Policy Modal */}
 
                 <AddNewPolicyModal
@@ -120,13 +146,12 @@ const SalesRiskAnalysis = () => {
                     departments={dept}
                     newPolicyData={newPolicyData}
                     handleChange={handleChange}
+                    countries={countries}
+                    handleMultiSelectChange={setNewPolicyData}
                 />
-
             </SalesRiskAnalysisContainer>
         </React.Fragment>
     );
 };
 
 export default SalesRiskAnalysis;
-
-

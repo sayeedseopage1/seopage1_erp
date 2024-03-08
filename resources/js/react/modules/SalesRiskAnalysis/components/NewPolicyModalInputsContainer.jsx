@@ -12,8 +12,14 @@ import Switch from "./Switch";
 
 // Constants
 import { PolicyTypeItemValuesType } from "../constant";
+import MultiSelect from "./MultiSelect";
 
-const NewPolicyModalInputsContainer = ({ newPolicyData, handleChange }) => {
+const NewPolicyModalInputsContainer = ({
+    newPolicyData,
+    handleChange,
+    countries,
+    handleMultiSelectChange,
+}) => {
     // Constants
     const validPolicyTypes = [
         "lessThan",
@@ -27,6 +33,8 @@ const NewPolicyModalInputsContainer = ({ newPolicyData, handleChange }) => {
     const validPolicyTypesOptions =
         newPolicyData?.policyType?.name === "yesNo"
             ? PolicyTypeItemValuesType?.data?.yesNoTypes
+            : newPolicyData?.policyType?.name === "list"
+            ? PolicyTypeItemValuesType?.data?.listTypes
             : PolicyTypeItemValuesType?.data?.regularTypes;
 
     return (
@@ -54,6 +62,7 @@ const NewPolicyModalInputsContainer = ({ newPolicyData, handleChange }) => {
                             placeholder="Write Here"
                         />
                     </div>
+                    {/* conditionally show only  "lessThan", "greaterThan", "fixed", "range", */}
                     <Switch.Case
                         condition={
                             !_.includes(
@@ -165,17 +174,64 @@ const NewPolicyModalInputsContainer = ({ newPolicyData, handleChange }) => {
                             </div>
                         </div>
                     </Switch.Case>
+                    {/* conditionally show only  "yesNo",*/}
                     <Switch.Case
                         condition={_.includes(
-                            ["list", "yesNo"],
+                            ["yesNo"],
                             newPolicyData.policyType.name
                         )}
                     >
                         <div className="row mb-4 align-items-center">
-                            <ModalInputLabel
-                                fontSize="16px"
-                                className="col-4"
-                            >
+                            <ModalInputLabel className="col-4">
+                                Write Value<sup>*</sup>{" "}
+                            </ModalInputLabel>
+                            <div className="d-flex col-8 px-0">
+                                <div className="col-6 flex-column px-0">
+                                    <ModalInputLabel
+                                        fontSize="16px"
+                                        className="mb-2"
+                                        color="#8F8F8F"
+                                    >
+                                        Yes <sup>*</sup>{" "}
+                                    </ModalInputLabel>
+                                    <ModalInput
+                                        type="number"
+                                        name="yes"
+                                        value={newPolicyData?.from}
+                                        onChange={handleChange}
+                                        placeholder="Write Here"
+                                        className="w-100"
+                                    />
+                                </div>
+                                <div className="col-6 flex-column pr-0">
+                                    <ModalInputLabel
+                                        fontSize="16px"
+                                        className="mb-2"
+                                        color="#8F8F8F"
+                                    >
+                                        No <sup>*</sup>{" "}
+                                    </ModalInputLabel>
+                                    <ModalInput
+                                        type="number"
+                                        name="no"
+                                        value={newPolicyData?.to}
+                                        onChange={handleChange}
+                                        placeholder="Write Here"
+                                        className="w-100"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </Switch.Case>
+                    {/* conditionally show only  "list",*/}
+                    <Switch.Case
+                        condition={_.includes(
+                            ["list"],
+                            newPolicyData.policyType.name
+                        )}
+                    >
+                        <div className="row mb-4 align-items-center">
+                            <ModalInputLabel fontSize="16px" className="col-4">
                                 Type <sup>*</sup>{" "}
                             </ModalInputLabel>
                             <ModalSelectContainer className="px-0 col-8">
@@ -187,6 +243,30 @@ const NewPolicyModalInputsContainer = ({ newPolicyData, handleChange }) => {
                                 />
                             </ModalSelectContainer>
                         </div>
+                        <Switch.Case
+                            condition={
+                                newPolicyData.rulesType.name === "countries"
+                            }
+                        >
+                            <div className="row mb-4 align-items-center">
+                                <ModalInputLabel
+                                    fontSize="16px"
+                                    className="col-4"
+                                >
+                                    Countries <sup>*</sup>{" "}
+                                </ModalInputLabel>
+                                <ModalSelectContainer className="px-0 col-8">
+                                    <MultiSelect
+                                        data={countries}
+                                        multiple
+                                        filedName="countries"
+                                        newPolicyData={newPolicyData}
+                                        selected={newPolicyData?.countries}
+                                        setSelected={handleMultiSelectChange}
+                                    />
+                                </ModalSelectContainer>
+                            </div>
+                        </Switch.Case>
                     </Switch.Case>
                 </Switch.Case>
 
@@ -215,4 +295,5 @@ export default NewPolicyModalInputsContainer;
 NewPolicyModalInputsContainer.propTypes = {
     newPolicyData: PropTypes.object,
     handleChange: PropTypes.func,
+    countries: PropTypes.array,
 };

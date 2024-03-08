@@ -84,6 +84,18 @@ export const PolicyTypeItemValuesType = {
           name: "no"
         }
       ]
+    },
+    listTypes: {
+      label: 'Policy Rules Type',
+      emptyOptionsLabel: 'Select Policy Rules Type',
+      id: 'rulesType',
+      data: [
+        {
+          id: 1,
+          label: "Countries",
+          name: "countries"
+        }
+      ]
     }
   }
 }

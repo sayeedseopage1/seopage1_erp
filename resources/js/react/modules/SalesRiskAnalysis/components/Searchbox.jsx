@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import PropTypes from 'prop-types';
 import * as React from 'react';
 

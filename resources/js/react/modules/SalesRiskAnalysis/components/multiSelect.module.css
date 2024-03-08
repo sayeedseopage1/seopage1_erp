@@ -1,0 +1,14 @@
+.cnx_select_box_toggle_multi{
+  border: 1px solid #B1B1B1;
+  border-radius: 9px;
+  padding: 13px 18px;
+  font-family: 'Poppins';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+}
+#cnx_select_box_tag_item{
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 5px !important;
+}

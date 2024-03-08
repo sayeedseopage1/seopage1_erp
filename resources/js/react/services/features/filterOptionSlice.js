@@ -7,6 +7,7 @@ const initialState = {
     departments: [],
     shift: [],
     employees: [],
+    countries: [],
     status: 'idle',
     error: ''
 }
@@ -26,12 +27,21 @@ const filterOptionSlice = createSlice({
         },
         setFilterOptionsStatus: (state, action) => {
             state.status = action.payload
+        },
+        setFilterCountriesState: (state, action) => {
+            const countries = _.get(action, 'payload.data', [])
+                .find(item => item?.label === "Policy type")
+                ?.structure?.list?.structure
+                ?.find(item => item?.label === "Type")
+                ?.structure?.countries?.structure;
+            console.log(countries);
+            state.countries = countries
         }
     }
 });
 
 
-export const { setFilterOptionsState, setFilterOptionsStatus } = filterOptionSlice.actions;
+export const { setFilterOptionsState, setFilterOptionsStatus, setFilterCountriesState } = filterOptionSlice.actions;
 
 
 export default filterOptionSlice.reducer;

@@ -4,7 +4,8 @@ import PropTypes from "prop-types";
 
 import Dropdown from "./Dropdown";
 import Tooltip from "./Tooltip";
-import Search from './Searchbox';
+import SearchBox from "./SearchBox";
+
 
 const DepartmentSelect = ({
     data,
@@ -61,7 +62,7 @@ const DepartmentSelect = ({
                 </Dropdown.Toggle>
                 <Dropdown.Menu id="cnx_dropdown__menu_open--department">
                     <div>
-                        <Search autoFocus={true} value={query} onChange={setQuery} />
+                        <SearchBox autoFocus={true} value={query} onChange={setQuery} />
                     </div>
                     <div className="sp1_filter--users">
                         {_department?.map((dept) => (

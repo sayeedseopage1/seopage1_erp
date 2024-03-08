@@ -23,6 +23,8 @@ const AddNewPolicyModal = ({
     departments,
     newPolicyData,
     handleChange,
+    countries,
+    handleMultiSelectChange
 }) => {
     return (
         <CustomModal
@@ -80,6 +82,8 @@ const AddNewPolicyModal = ({
                     <NewPolicyModalInputsContainer
                         newPolicyData={newPolicyData}
                         handleChange={handleChange}
+                        countries={countries}
+                        handleMultiSelectChange={handleMultiSelectChange}
                     />
                    
                 </div>
@@ -108,4 +112,6 @@ AddNewPolicyModal.propTypes = {
     departments: PropTypes.array,
     newPolicyData: PropTypes.object,
     handleChange: PropTypes.func,
+    countries: PropTypes.array,
+    handleMultiSelectChange: PropTypes.func,
 };
