@@ -39,7 +39,7 @@ export const ModalTitle = styled.h6`
 `
 
 export const ModalInputLabel = styled.label`
-  font-size: 18px;
+  font-size: ${props => props.fontSize || "18px"};
   font-family: 'Poppins', sans-serif;
   color: ${props => props.color || "#000000"};
   margin-bottom: 0px;
@@ -67,7 +67,7 @@ export const ModalInput = styled.input`
   font-family: Poppins;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: normal;
   background-color: #F8F8F8;
   color: ${props => props.value ? '#000000' : '#8F8F8F'};
@@ -77,19 +77,14 @@ export const ModalInput = styled.input`
   width: ${props => props.width || "auto"};
 `
 
-export const ModalDepartmentSelect = styled.div`
-  padding: 11px 18px;
-  border-radius: 8px;
+export const ModalSelectContainer = styled.div`
   font-family: Poppins;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  background-color: #F8F8F8;
-  border: 1px solid #B1B1B1;
   color: #8F8F8F;
   outline: none;
-  border-radius: 9px;
   width: auto;
 
   #select-department-sal-risk {
@@ -102,11 +97,12 @@ export const ModalDepartmentSelect = styled.div`
       color: #000000;
     }
   }
-  #cnx_dropdown__menu_open--policyType{
-    transform: translate(864px, 485px) !important;
-  }
-  #cnx_dropdown__menu_open--department{
-    transform: translate(864px, 560px) !important;
+  .cnx_dropdown__dd__toggle{
+    padding: 11px 18px;
+    border-radius: 8px;
+    background-color: #F8F8F8;
+    border: 1px solid #B1B1B1;
+    border-radius: 9px;
   }
 `
 

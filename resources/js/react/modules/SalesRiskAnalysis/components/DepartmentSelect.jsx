@@ -18,13 +18,6 @@ const DepartmentSelect = ({
     const [query, setQuery] = React.useState('');
     let _department;
 
-    const handleSelection = (e, dept) => {
-        e.preventDefault();
-        if (onSelect !== undefined) {
-            onSelect(dept);
-        }
-    };
-
     const textLength = sidebarItem ? 33 : 11;
     const splitLength = sidebarItem ? 32 : 10;
 
@@ -52,7 +45,7 @@ const DepartmentSelect = ({
                     className={
                         sidebarItem
                             ? "sp1__pp_filter_dd_toggle py-2 px-2 border w-100"
-                            : "sp1__pp_filter_dd_toggle w-100 mw-100"
+                            : "sp1__pp_filter_dd_toggle w-100 mw-100 cnx_dropdown__dd__toggle"
                     }
                 >
                     <Tooltip text={_.startCase(selected?.team_name)} key="select-department-sal-risk">
@@ -107,4 +100,5 @@ DepartmentSelect.propTypes = {
     selected: PropTypes.object,
     loading: PropTypes.bool,
     sidebarItem: PropTypes.bool,
+    className: PropTypes.string,
 };

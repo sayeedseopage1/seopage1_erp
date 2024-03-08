@@ -35,3 +35,31 @@ export const PolicyTypeItems = {
     }
   ]
 }
+
+export const PolicyTypeItemValuesType = {
+  label: 'Value Type',
+  emptyOptionsLabel: 'Select Value Type',
+  id: 'valueType',
+  data: [
+    {
+      id: 1,
+      label: "Percentage",
+      name: "percentage"
+    },
+    {
+      id: 2,
+      label: "Currency",
+      name: "currency"
+    },
+    {
+      id: 3,
+      label: "Hourly",
+      name: "hourly"
+    },
+    {
+      id: 4,
+      label: "Days",
+      name: "days"
+    }
+  ]
+}

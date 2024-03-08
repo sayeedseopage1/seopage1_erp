@@ -4,16 +4,18 @@ import PropTypes from "prop-types";
 import CustomModal from "../ui/CustomModal/CustomModal";
 import {
     ModalButton,
-    ModalDepartmentSelect,
+    ModalSelectContainer,
     ModalInput,
     ModalInputLabel,
-    ModalSelect,
     ModalTitle,
 } from "../ui/Styles/ui";
 import { Flex } from "../../../../global/styled-component/Flex";
 import DepartmentSelect from "../DepartmentSelect";
 import CustomDropDown from "../CustomDropDown";
+// Constants
 import { PolicyTypeItems } from "../../constant";
+// Components
+import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
 
 const AddNewPolicyModal = ({
     open,
@@ -49,32 +51,37 @@ const AddNewPolicyModal = ({
                             placeholder="Write Here"
                         />
                     </div>
-
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Department Name<sup>*</sup>
+                        </ModalInputLabel>
+                        <ModalSelectContainer className="col-8 px-0">
+                            <DepartmentSelect
+                                data={departments}
+                                selected={newPolicyData?.department}
+                                setSelectedDept={handleChange}
+                            />
+                        </ModalSelectContainer>
+                    </div>
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Policy Type<sup>*</sup>{" "}
                         </ModalInputLabel>
-                        <ModalDepartmentSelect className="col-8">
+                        <ModalSelectContainer className="col-8 px-0">
                             <CustomDropDown
                                 filedName="policyType"
                                 data={PolicyTypeItems}
                                 selected={newPolicyData?.policyType}
                                 setSelected={handleChange}
                             />
-                        </ModalDepartmentSelect>
+                        </ModalSelectContainer>
                     </div>
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Department Name<sup>*</sup>
-                        </ModalInputLabel>
-                        <ModalDepartmentSelect className="col-8">
-                            <DepartmentSelect
-                                data={departments}
-                                selected={newPolicyData?.department}
-                                setSelectedDept={handleChange}
-                            />
-                        </ModalDepartmentSelect>
-                    </div>
+                    {/* All Rules Inputs */}
+                    <NewPolicyModalInputsContainer
+                        newPolicyData={newPolicyData}
+                        handleChange={handleChange}
+                    />
+                   
                 </div>
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton width="177px">Save</ModalButton>
