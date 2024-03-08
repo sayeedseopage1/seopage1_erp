@@ -40,7 +40,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function riskPolicyInputFields()
     {
-
         // value types
         $valueTypes = [
             ['label' => 'Percentage', 'name' => 'percentage'],
@@ -90,11 +89,6 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
-                ],
-                [
-                    'label' => 'Point',
-                    'type' => 'number',
-                    'placeholder' => ''
                 ]
             ]
         ];
@@ -123,11 +117,6 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
-                ],
-                [
-                    'label' => 'Point',
-                    'type' => 'number',
-                    'placeholder' => ''
                 ]
             ]
         ];
@@ -156,11 +145,6 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
-                ],
-                [
-                    'label' => 'Point',
-                    'type' => 'number',
-                    'placeholder' => ''
                 ]
             ]
         ];
@@ -197,15 +181,9 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
-                ],
-                [
-                    'label' => 'Point',
-                    'type' => 'number',
-                    'placeholder' => ''
                 ]
             ]
         ];
-
 
         $yesNo = [
             'label' => 'Yes/No',
@@ -217,18 +195,16 @@ class SalesRiskPolicyController extends AccountBaseController
                     'type' => 'input',
                 ],
                 [
-                    'label' => 'Point',
-                    'type' => 'multiField',
+                    'label' => 'Type',
+                    'type' => 'select',
                     'structure' => [
                         [
                             'label' => 'Yes',
                             'name' => 'yes',
-                            'type' => 'number',
                         ],
                         [
                             'label' => 'No',
                             'name' => 'no',
-                            'type' => 'number',
                         ],
                     ]
                 ]
@@ -250,11 +226,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     'structure' => [
                         'countries' => $countries,
                     ]
-                ],
-                [
-                    'label' => 'Point',
-                    'type' => 'number',
-                    'placeholder' => ''
                 ]
             ]
         ];
@@ -264,6 +235,12 @@ class SalesRiskPolicyController extends AccountBaseController
                 'label' => 'Policy Title',
                 'type' => 'input',
                 'placeholder' => 'Write Here',
+            ],
+            [
+                'label' => 'Department',
+                'name' => 'department',
+                'type' => 'select',
+                'structure' => $department
             ],
             [
                 'label' => 'Policy type',
@@ -278,10 +255,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 ]
             ],
             [
-                'label' => 'Department',
-                'name' => 'department',
-                'type' => 'select',
-                'structure' => $department
+                'label' => 'Point',
+                'type' => 'number',
+                'placeholder' => ''
             ]
         ];
 
