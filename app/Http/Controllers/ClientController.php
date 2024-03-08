@@ -88,6 +88,9 @@ class ClientController extends AccountBaseController
             $this->countries = countries();
             $this->totalClients = count($this->clients);
         }
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(404);
+        }
 
         return $dataTable->render('clients.index', $this->data);
     }
@@ -416,6 +419,9 @@ class ClientController extends AccountBaseController
      */
     public function show($id)
     {
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(404);
+        }
         $this->client = User::withoutGlobalScope('active')->with('clientDetails')->findOrFail($id);
         $this->clientLanguage = LanguageSetting::where('language_code', $this->client->locale)->first();
         $this->viewPermission = user()->permission('view_clients');
