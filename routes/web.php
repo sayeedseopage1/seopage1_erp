@@ -137,6 +137,7 @@ use App\Http\Controllers\RecurringExpenseController;
 use App\Http\Controllers\RecurringInvoiceController;
 use App\Http\Controllers\TicketCustomFormController;
 use App\Http\Controllers\AttendanceSettingController;
+use App\Http\Controllers\ChatGptController;
 use App\Http\Controllers\ClientSubCategoryController;
 use App\Http\Controllers\KnowledgeBaseFileController;
 use App\Http\Controllers\LeadSourceSettingController;
@@ -1510,7 +1511,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
 
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-    
+
     Route::resource('client-review', ClientReviewController::class);
     Route::resource('task-report-issues', IssuedTaskReportController::class);
     Route::get('get-task-report',[IssuedTaskReportController::class,'getTaskReport']);
@@ -1821,3 +1822,4 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
+ChatGptController::Routes();
