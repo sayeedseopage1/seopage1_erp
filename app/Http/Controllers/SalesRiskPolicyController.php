@@ -195,19 +195,17 @@ class SalesRiskPolicyController extends AccountBaseController
                     'type' => 'input',
                 ],
                 [
-                    'label' => 'Type',
-                    'type' => 'select',
-                    'structure' => [
-                        [
-                            'label' => 'Yes',
-                            'name' => 'yes',
-                        ],
-                        [
-                            'label' => 'No',
-                            'name' => 'no',
-                        ],
-                    ]
-                ]
+                    'label' => 'Yes',
+                    'name' => 'yes',
+                    'type' => 'input',
+                    'placeholder' => 'point'
+                ],
+                [
+                    'label' => 'No',
+                    'name' => 'no',
+                    'type' => 'input',
+                    'placeholder' => 'point'
+                ],
             ]
         ];
 
