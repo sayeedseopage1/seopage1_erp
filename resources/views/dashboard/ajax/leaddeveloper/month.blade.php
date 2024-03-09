@@ -43,7 +43,7 @@
                          
                         </span> --}}
                     </p>
-                    @include('dashboard.ajax.leaddeveloper.modals.number_of_task_submitted')
+                    {{-- @include('dashboard.ajax.leaddeveloper.modals.number_of_task_submitted') --}}
                    
     
                    
