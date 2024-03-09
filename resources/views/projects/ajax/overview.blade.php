@@ -1021,7 +1021,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                 Translate
 
                             </button>
-                            <button id="chatgpt-pompt" class="btn-secondary rounded f-15" data-container="body" title="Chatgpt direction Propmt" data-toggle="popover" data-placement="right" data-html="true"  data-content="{{$prompt}} <a href='#' class='btn btn-primary btn-sm' id ='checkout'>Checkout</a>"> <i class="bi bi-gear"></i> </button>
+                            {{-- <button id="chatgpt-pompt" class="btn-secondary rounded f-15" data-container="body" title="Chatgpt direction Propmt" data-toggle="popover" data-placement="right" data-html="true"  data-content="{{$prompt}}"> <i class="bi bi-gear"></i> </button> --}}
                             <div id="translated-text" >
                             </div>
                             @endif
