@@ -12,3 +12,8 @@
   flex-wrap: wrap !important;
   gap: 5px !important;
 }
+
+.multiSelectOptions{
+  height: 250px !important;
+  overflow-y: auto !important;
+}

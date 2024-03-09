@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // ui components
@@ -34,6 +34,7 @@ const SalesRiskAnalysis = () => {
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
         React.useState(false);
 
+    const [newPolicyInputData, setNewPolicyInputData] = React.useState([]);
     // modal state data
     const [newPolicyData, setNewPolicyData] = React.useState({
         policyName: "",
@@ -71,16 +72,44 @@ const SalesRiskAnalysis = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         // for testing
-        if (name === "policyType") {
+
+        if (name === "department" || name === "policyName") {
+            setNewPolicyData({ ...newPolicyData, [name]: value });
+        } else if (name === "policyType") {
             setNewPolicyData({
                 ...newPolicyData,
-                [name]: value,
                 rulesType: {},
+                value: "",
+                from: "",
+                to: "",
+                yes: "",
+                no: "",
+                countries: [],
+                points: "",
+                [name]: value,
             });
         } else {
             setNewPolicyData({ ...newPolicyData, [name]: value });
         }
     };
+
+    const handleAddRuleOnPolicy = () => {
+        setNewPolicyInputData([...newPolicyInputData, newPolicyData]);
+        setNewPolicyData({
+            ...newPolicyData,
+            policyType: {},
+            title: "",
+            rulesType: {},
+            value: "",
+            from: "",
+            to: "",
+            yes: "",
+            no: "",
+            countries: [],
+            points: "",
+        });
+    };
+
 
     // set filter options state
     React.useEffect(() => {
@@ -104,7 +133,29 @@ const SalesRiskAnalysis = () => {
         setAddNewPolicyModalOpen(!addNewPolicyModalOpen);
     };
 
+    useMemo(() => {
+        setNewPolicyData({
+            ...newPolicyData,
+            title: `${newPolicyData?.policyType?.label} ${
+                newPolicyData?.rulesType?.name === "currency" ? "$" : ""
+            }${newPolicyData?.value}${newPolicyData.from}${
+                newPolicyData?.from && newPolicyData?.to ? "-" : ""
+            }${newPolicyData.to}${
+                newPolicyData?.rulesType?.name === "percentage" ? "%" : ""
+            }${newPolicyData?.rulesType?.name === "hourly" ? "hr" : ""}${
+                newPolicyData?.rulesType?.name === "days" ? "days" : ""
+            }`,
+        });
+    }, [
+        newPolicyData?.policyType?.name,
+        newPolicyData?.rulesType?.name,
+        newPolicyData.value,
+        newPolicyData.from,
+        newPolicyData.to,
+    ]);
+
     console.log(newPolicyData);
+    console.log(newPolicyInputData);
 
     return (
         <React.Fragment>
@@ -148,6 +199,7 @@ const SalesRiskAnalysis = () => {
                     handleChange={handleChange}
                     countries={countries}
                     handleMultiSelectChange={setNewPolicyData}
+                    handleAddRuleOnPolicy={handleAddRuleOnPolicy}
                 />
             </SalesRiskAnalysisContainer>
         </React.Fragment>

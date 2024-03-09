@@ -24,7 +24,8 @@ const AddNewPolicyModal = ({
     newPolicyData,
     handleChange,
     countries,
-    handleMultiSelectChange
+    handleMultiSelectChange,
+    handleAddRuleOnPolicy,
 }) => {
     return (
         <CustomModal
@@ -85,10 +86,22 @@ const AddNewPolicyModal = ({
                         countries={countries}
                         handleMultiSelectChange={handleMultiSelectChange}
                     />
-                   
+                    <div className="d-flex justify-content-end">
+                        <button
+                            className="d-flex btn btn-success align-items-center"
+                            style={{
+                                fontSize: "13px",
+                            }}
+                            disabled={_.isEmpty(newPolicyData?.policyType)}
+                            onClick={handleAddRuleOnPolicy}
+                        >
+                            <i className="fa fa-plus mr-2" aria-hidden="true" />
+                        Create Rule
+                        </button>
+                    </div>
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton width="177px">Save</ModalButton>
+                    <ModalButton width="177px">Create Policy</ModalButton>
                     <ModalButton
                         onClick={closeModal}
                         width="177px"
@@ -114,4 +127,5 @@ AddNewPolicyModal.propTypes = {
     handleChange: PropTypes.func,
     countries: PropTypes.array,
     handleMultiSelectChange: PropTypes.func,
+    handleAddRuleOnPolicy: PropTypes.func,
 };

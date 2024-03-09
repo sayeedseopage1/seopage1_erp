@@ -26,7 +26,7 @@ export const PolicyTypeItems = {
     {
       id: 5,
       label: "Yes/No",
-      name: "yesNo",
+      name: "yes/No",
     },
     {
       id: 6,

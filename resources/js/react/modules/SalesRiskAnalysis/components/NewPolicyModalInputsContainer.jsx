@@ -26,12 +26,12 @@ const NewPolicyModalInputsContainer = ({
         "greaterThan",
         "fixed",
         "range",
-        "yesNo",
+        "yes/No",
         "list",
     ];
     // get valid policy types conditionally based on policy type
     const validPolicyTypesOptions =
-        newPolicyData?.policyType?.name === "yesNo"
+        newPolicyData?.policyType?.name === "yes/No"
             ? PolicyTypeItemValuesType?.data?.yesNoTypes
             : newPolicyData?.policyType?.name === "list"
             ? PolicyTypeItemValuesType?.data?.listTypes
@@ -66,7 +66,7 @@ const NewPolicyModalInputsContainer = ({
                     <Switch.Case
                         condition={
                             !_.includes(
-                                ["list", "yesNo"],
+                                ["list", "yes/No"],
                                 newPolicyData.policyType.name
                             )
                         }
@@ -80,7 +80,7 @@ const NewPolicyModalInputsContainer = ({
                                     className={`d-flex flex-column px-0 ${
                                         newPolicyData?.policyType?.name ===
                                         "range"
-                                            ? "col-4"
+                                            ? "col-7"
                                             : "col-8"
                                     }`}
                                 >
@@ -133,7 +133,7 @@ const NewPolicyModalInputsContainer = ({
                                             "range"
                                         }
                                     >
-                                        <div className="d-flex col-8 pr-0">
+                                        <div className="d-flex col-5 pr-0">
                                             <div className="col-6 flex-column px-0">
                                                 <ModalInputLabel
                                                     fontSize="16px"
@@ -147,11 +147,11 @@ const NewPolicyModalInputsContainer = ({
                                                     name="from"
                                                     value={newPolicyData?.from}
                                                     onChange={handleChange}
-                                                    placeholder="Write Here"
+                                                    placeholder="Write ..."
                                                     className="w-100"
                                                 />
                                             </div>
-                                            <div className="col-6 flex-column pr-0">
+                                            <div className="col-6 flex-column pl-1 pr-0">
                                                 <ModalInputLabel
                                                     fontSize="16px"
                                                     className="mb-2"
@@ -164,7 +164,7 @@ const NewPolicyModalInputsContainer = ({
                                                     name="to"
                                                     value={newPolicyData?.to}
                                                     onChange={handleChange}
-                                                    placeholder="Write Here"
+                                                    placeholder="Write ..."
                                                     className="w-100"
                                                 />
                                             </div>
@@ -174,16 +174,16 @@ const NewPolicyModalInputsContainer = ({
                             </div>
                         </div>
                     </Switch.Case>
-                    {/* conditionally show only  "yesNo",*/}
+                    {/* conditionally show only  "yes/No",*/}
                     <Switch.Case
                         condition={_.includes(
-                            ["yesNo"],
+                            ["yes/No"],
                             newPolicyData.policyType.name
                         )}
                     >
                         <div className="row mb-4 align-items-center">
                             <ModalInputLabel className="col-4">
-                                Write Value<sup>*</sup>{" "}
+                                Point<sup>*</sup>{" "}
                             </ModalInputLabel>
                             <div className="d-flex col-8 px-0">
                                 <div className="col-6 flex-column px-0">
@@ -270,7 +270,12 @@ const NewPolicyModalInputsContainer = ({
                     </Switch.Case>
                 </Switch.Case>
 
-                <Switch.Case condition={!_.isEmpty(newPolicyData?.policyType)}>
+                <Switch.Case
+                    condition={
+                        !_.isEmpty(newPolicyData?.policyType) &&
+                        newPolicyData?.policyType.name !== "yes/No"
+                    }
+                >
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Point<sup>*</sup>{" "}

@@ -65,7 +65,7 @@ const MultiSelect = ({
 
     return (
         <React.Fragment>
-            <Dropdown disabled={true} className="cnx_select_box_dd">
+            <Dropdown disabled={true} className="cnx_select_box_dd" >
                 <Dropdown.Toggle
                     className={`cnx_select_box_toggle ${style.cnx_select_box_toggle_multi}`}
                 >
@@ -92,8 +92,9 @@ const MultiSelect = ({
                               ))
                             : "Select Country"}
                     </div>
+                    
                 </Dropdown.Toggle>
-                <Dropdown.Menu className="cnx_select_box_options pipeline">
+                <Dropdown.Menu className={`cnx_select_box_options ${style.multiSelectOptions}`}>
                     <div className="cnx_select_box_search">
                         <SearchBox
                             autoFocus={true}
@@ -116,6 +117,7 @@ const MultiSelect = ({
                             onClick={() => {
                                 onSelected(item);
                             }}
+                            isCloseSingle={true}
                         >
                             <div className="d-flex justify-content-between align-items-center w-100">
                                 <p>
@@ -136,38 +138,6 @@ const MultiSelect = ({
                             </div>
                         </Dropdown.Item>
                     ))}
-
-                    {/* {
-                      multiple && (
-                          <>
-                              <Dropdown.Item
-                              onClick={() => setSelected([...options()])}
-                              className={`cnx_select_box_option all`}> All Pipeline </Dropdown.Item>
-                              <div className="hr" />
-                          </>
-                      )
-                  } */}
-                    {/* {options()
-                        ?.filter((f) => f.includes(search))
-                        .map((option) => (
-                            <Dropdown.Item
-                                key={`${option}-${Math.random()}`}
-                                onClick={() => onSelected(option)}
-                                className={`cnx_select_box_option ${
-                                    multiple
-                                        ? pipeline.includes(option) && "active"
-                                        : pipeline === option
-                                        ? "active"
-                                        : ""
-                                }`}
-                            >
-                                {" "}
-                                {option}
-                                {pipeline.includes(option) && (
-                                    <i className="fa-solid fa-check" />
-                                )}
-                            </Dropdown.Item>
-                        ))} */}
                 </Dropdown.Menu>
             </Dropdown>
         </React.Fragment>
