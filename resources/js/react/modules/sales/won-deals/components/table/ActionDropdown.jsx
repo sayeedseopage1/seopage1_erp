@@ -80,8 +80,8 @@ const ActionDropdown = ({ ...rest }) => {
                         View Won Deal
                     </Dropdown.Item>
 
-                    {_.includes([1, 7, 8], auth.getRoleId()) && (
-                        <Dropdown.Item
+                    {_.includes([1, 7, 8], auth.getRoleId()) && rest?.row?.original?.status?.toLowerCase() !== "accepted" && (
+                        <Dropdown.Item 
                             onClick={() =>
                                 handleRedirection(
                                     `/deals/details/edit/${rest?.row?.original?.id}`
@@ -90,13 +90,14 @@ const ActionDropdown = ({ ...rest }) => {
                             className={styles.dropdownItem}
                         >
                             <i className="fa-regular fa-pen-to-square" />
-                            Edit
+                            { rest?.row?.original?.is_drafted===1 ? "Draft Edit" : "Edit"}
+                            
                         </Dropdown.Item>
                     )}
 
                     {/* Authorization Need */}
-                    {rest?.row?.original.authorization_status === 2 &&
-                        auth.getRoleId() === 8 && (
+                    {(rest?.row?.original.authorization_status === 2 &&
+                        auth.getRoleId() === 8 && rest?.row?.original?.is_drafted===0 )&& (
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(

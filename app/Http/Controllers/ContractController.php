@@ -464,7 +464,7 @@ class ContractController extends AccountBaseController
     //storing lead to deal
     public function storeLeadDeal(Request $request)
     {
-            //    dd($request->all());
+        // dd($request->all());
         \DB::beginTransaction();
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
@@ -553,6 +553,7 @@ class ContractController extends AccountBaseController
         $deal->currency_id = 1;
         $deal->project_type = $request->project_type;
         $deal->actual_amount =  $request->amount;
+        $deal->is_drafted = 1;
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //  dd($currency);
         $deal->amount = ($request->amount) / $currency->exchange_rate;
@@ -1524,7 +1525,8 @@ class ContractController extends AccountBaseController
             // $clientdetail->company_name= $request->organization;
             // $clientdetail->save();
             $deal = Deal::find($deal->id);
-            $deal->authorization_status = 2;
+            $deal->authorization_status = $request->is_drafted ? 0 : 2;
+            $deal->is_drafted = $request->is_drafted;
             $deal->save();
 
             $sender = User::where('id', Auth::id())->first();
@@ -1673,6 +1675,9 @@ class ContractController extends AccountBaseController
         $milestone = ProjectMilestone::where('project_id', $project_milestone->id)->first();
         //      dd($milestone);
         $won_deal_id = Deal::where('id', $request->id)->first();
+
+        if(!$won_deal_id->is_drafted && $request->is_drafted) abort_403(true);
+
         if ($won_deal_id->project_type != 'hourly') {
 
 
@@ -2070,9 +2075,11 @@ class ContractController extends AccountBaseController
 
 
             }
-            // $deal= Deal::find($deal->id);
-            //         $deal->authorization_status= 2;
-            //         $deal->save();
+            $deal= Deal::find($deal->id);
+            $deal->authorization_status = $deal->is_drafted && !$request->is_drafted ? 2 : $deal->authorization_status;
+            $deal->is_drafted = $request->is_drafted;
+            $deal->save();
+
             //         $sender= User::where('id',Auth::id())->first();
             //         $users= User::where('role_id',8)->orWhere('role_id',1)->get();
 
@@ -2455,6 +2462,8 @@ class ContractController extends AccountBaseController
 
     public function authorization_request(Deal $data)
     {
+        if($data->is_drafted) abort_403(true);
+
         $this->pageTitle = 'Authorize Deal';
         $this->middleware(function ($request, $next) {
             abort_403(!in_array('contracts', $this->user->modules));
