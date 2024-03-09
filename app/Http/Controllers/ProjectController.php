@@ -163,6 +163,9 @@ class ProjectController extends AccountBaseController
     {
         $viewPermission = user()->permission('view_projects');
         abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
 
         if (!request()->ajax()) {
 
@@ -2381,6 +2384,9 @@ class ProjectController extends AccountBaseController
                 abort(403);
             };
 
+        }
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
         }
 
         $this->viewPermission = user()->permission('view_projects');
