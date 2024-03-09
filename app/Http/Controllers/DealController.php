@@ -85,6 +85,9 @@ class DealController extends AccountBaseController
             }
 
         }
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        } 
 
         return view('deals.index', $this->data);
     }
@@ -553,6 +556,9 @@ class DealController extends AccountBaseController
 
         $this->deal = DealStage::findOrFail($id);
       //  dd($this->deal );
+      if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+        abort(403);
+    } 
 
         // abort_403(
         //     !(

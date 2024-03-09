@@ -31,7 +31,9 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function index(Request $request)
     {
-
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
 
         if($request->mode == 'json')
         {
