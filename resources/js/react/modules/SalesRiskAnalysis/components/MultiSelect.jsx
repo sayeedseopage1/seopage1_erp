@@ -39,7 +39,6 @@ const MultiSelect = ({
                 ),
             });
         } else {
-            console.log(option, "else");
             setSelected({
                 ...newPolicyData,
                 [filedName]: [...newPolicyData?.countries, option],
@@ -52,14 +51,6 @@ const MultiSelect = ({
         setSelected({
             ...newPolicyData,
             [filedName]: newPolicyData?.countries?.filter((p) => p !== option),
-        });
-    };
-
-    // remove all tags
-    const removeAll = () => {
-        setSelected({
-            ...newPolicyData,
-            [filedName]: [],
         });
     };
 

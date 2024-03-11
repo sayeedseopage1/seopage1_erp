@@ -14,10 +14,22 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         getSalesRiskAnalysisInputs: build.query({
             query: (query) => `/account/sales-risk-policies/input-fields`,
         }),
+        addSalesRiskAnalysisRule: build.mutation({
+            query: (body) => ({
+                url: `/account/sales-risk-policies/rule`,
+                method: "POST",
+                body,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+        }),
     }),
 });
 
 export const {
     useGetSalesRiskAnalysisRulesQuery,
     useGetSalesRiskAnalysisInputsQuery,
+    useAddSalesRiskAnalysisRuleMutation,
 } = salesRiskAnalysisApiSlice;

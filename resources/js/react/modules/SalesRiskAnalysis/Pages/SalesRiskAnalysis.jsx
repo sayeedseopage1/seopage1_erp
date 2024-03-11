@@ -7,6 +7,7 @@ import { SalesRiskAnalysisContainer } from "../components/ui/Styles/ui";
 
 // api
 import {
+    useAddSalesRiskAnalysisRuleMutation,
     useGetSalesRiskAnalysisInputsQuery,
     useGetSalesRiskAnalysisRulesQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
@@ -22,6 +23,8 @@ import {
     setFilterOptionsState,
     setFilterCountriesState,
 } from "../../../services/features/filterOptionSlice";
+import { addNewRulesValidation } from "../helper/createFromValidation";
+import { toast } from "react-toastify";
 
 const SalesRiskAnalysis = () => {
     const dispatch = useDispatch();
@@ -29,6 +32,7 @@ const SalesRiskAnalysis = () => {
         (state) => state.filterOptions
     );
     const [dept, setDept] = React.useState(null);
+    const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
@@ -50,6 +54,22 @@ const SalesRiskAnalysis = () => {
         countries: [],
         points: "",
     });
+    // modal state validation
+    const [newPolicyDataValidation, setNewPolicyDataValidation] =
+        React.useState({
+            policyName: false,
+            department: false,
+            policyType: false,
+            rulesType: false,
+            value: false,
+            from: false,
+            to: false,
+            yes: false,
+            no: false,
+            countries: false,
+            points: false,
+            isSubmitting: false,
+        });
 
     // get sales risk analysis rules
     const { data, isFetching, isLoading, refetch } =
@@ -68,11 +88,46 @@ const SalesRiskAnalysis = () => {
             skip: countries?.length,
         });
 
+    const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
+        useAddSalesRiskAnalysisRuleMutation();
+
+    const resetFormState = () => {
+        // reset form data
+        setNewPolicyData({
+            ...newPolicyData,
+            policyType: {},
+            title: "",
+            rulesType: {},
+            value: "",
+            from: "",
+            to: "",
+            yes: "",
+            no: "",
+            countries: [],
+            points: "",
+            id: "",
+        });
+        // reset validation
+        setNewPolicyDataValidation({
+            policyName: false,
+            department: false,
+            policyType: false,
+            rulesType: false,
+            value: false,
+            from: false,
+            to: false,
+            yes: false,
+            no: false,
+            countries: false,
+            points: false,
+            isSubmitting: false,
+        });
+    };
+
     // handle input change
     const handleChange = (e) => {
         const { name, value } = e.target;
         // for testing
-
         if (name === "department" || name === "policyName") {
             setNewPolicyData({ ...newPolicyData, [name]: value });
         } else if (name === "policyType") {
@@ -94,22 +149,69 @@ const SalesRiskAnalysis = () => {
     };
 
     const handleAddRuleOnPolicy = () => {
-        setNewPolicyInputData([...newPolicyInputData, newPolicyData]);
-        setNewPolicyData({
-            ...newPolicyData,
-            policyType: {},
-            title: "",
-            rulesType: {},
-            value: "",
-            from: "",
-            to: "",
-            yes: "",
-            no: "",
-            countries: [],
-            points: "",
-        });
+        const validation = addNewRulesValidation(
+            newPolicyData,
+            newPolicyDataValidation
+        );
+        if (
+            Object.entries(validation).some(
+                ([key, value]) => key !== "isSubmitting" && value === true
+            )
+        ) {
+            setNewPolicyDataValidation({
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
+
+        // check if policy rule already exist
+        const isExist = newPolicyInputData.find(
+            (item) => item?.id === newPolicyData?.id
+        );
+
+        if (isExist) {
+            const updatedData = newPolicyInputData.map((item) => {
+                if (item.id === newPolicyData.id) {
+                    return {
+                        ...item,
+                        ...newPolicyData,
+                    };
+                }
+                return item;
+            });
+            setIsRuleUpdating(false);
+            setNewPolicyInputData(updatedData);
+        } else {
+            setNewPolicyInputData([
+                ...newPolicyInputData,
+                {
+                    ...newPolicyData,
+                    id: Math.random().toString(36).substring(7),
+                },
+            ]);
+            console.log("else");
+        }
+        resetFormState();
     };
 
+    const handlePolicyAdded = async () => {
+        if(newPolicyInputData?.length === 0) {
+            toast.error("Please add a policy first");
+            return;
+        }
+        try {
+            const response = await submitData(newPolicyInputData);
+            if (response?.data) {
+                toast.success("New policy added successfully");
+                handleAddNewPolicyModal();
+                setNewPolicyInputData([]);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to add new policy");
+        }
+    };
 
     // set filter options state
     React.useEffect(() => {
@@ -131,8 +233,11 @@ const SalesRiskAnalysis = () => {
     // handle modal open close
     const handleAddNewPolicyModal = () => {
         setAddNewPolicyModalOpen(!addNewPolicyModalOpen);
+        resetFormState();
+        setNewPolicyInputData([]);
     };
 
+    // add title on change
     useMemo(() => {
         setNewPolicyData({
             ...newPolicyData,
@@ -154,9 +259,19 @@ const SalesRiskAnalysis = () => {
         newPolicyData.to,
     ]);
 
-    console.log(newPolicyData);
-    console.log(newPolicyInputData);
+    // add new policy validation on change
+    useEffect(() => {
+        if (newPolicyDataValidation?.isSubmitting) {
+            const validation = addNewRulesValidation(
+                newPolicyData,
+                newPolicyDataValidation
+            );
+            setNewPolicyDataValidation(validation);
+        }
+    }, [newPolicyData]);
 
+    console.log(newPolicyInputData);
+    console.log(newPolicyData);
     return (
         <React.Fragment>
             <SalesRiskAnalysisContainer>
@@ -190,7 +305,6 @@ const SalesRiskAnalysis = () => {
                 </div>
 
                 {/* Add new Policy Modal */}
-
                 <AddNewPolicyModal
                     open={addNewPolicyModalOpen}
                     closeModal={handleAddNewPolicyModal}
@@ -198,9 +312,17 @@ const SalesRiskAnalysis = () => {
                     newPolicyData={newPolicyData}
                     handleChange={handleChange}
                     countries={countries}
+                    setNewPolicyData={setNewPolicyData}
+                    newPolicyDataValidation={newPolicyDataValidation}
                     handleMultiSelectChange={setNewPolicyData}
                     handleAddRuleOnPolicy={handleAddRuleOnPolicy}
+                    newPolicyInputData={newPolicyInputData}
+                    setIsRuleUpdating={setIsRuleUpdating}
+                    isRuleUpdating={isRuleUpdating}
+                    handlePolicyAdded={handlePolicyAdded}
+                    isLoadingAddSalesRiskAnalysisRule={isLoadingAddSalesRiskAnalysisRule}
                 />
+
             </SalesRiskAnalysisContainer>
         </React.Fragment>
     );

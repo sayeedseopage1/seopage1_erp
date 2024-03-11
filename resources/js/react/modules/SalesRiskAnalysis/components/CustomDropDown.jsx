@@ -12,6 +12,7 @@ const CustomDropDown = ({
     sidebarItem = false,
     className,
     filedName,
+    register
 }) => {
     // set selected value from data (because this dropdown reused in multiple places with different data)
     const _Options = data?.data;
@@ -25,7 +26,7 @@ const CustomDropDown = ({
                     : "d-flex align-items-center"
             } ${className}`}
         >
-            <Dropdown className="w-100">
+            <Dropdown register className="w-100">
                 <Dropdown.Toggle
                     className={
                         sidebarItem
@@ -48,7 +49,7 @@ const CustomDropDown = ({
                         </span>
                     </Tooltip>
                 </Dropdown.Toggle>
-                <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`}>
+                <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`} >
                     <div className="sp1_filter--users">
                         {_Options.map((item) => (
                             <Dropdown.Item

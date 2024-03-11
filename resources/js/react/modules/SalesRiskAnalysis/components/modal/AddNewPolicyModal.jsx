@@ -16,6 +16,8 @@ import CustomDropDown from "../CustomDropDown";
 import { PolicyTypeItems } from "../../constant";
 // Components
 import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
+import NewRulesModalTable from "../table/NewRulesModalTable";
+import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumns";
 
 const AddNewPolicyModal = ({
     open,
@@ -26,6 +28,13 @@ const AddNewPolicyModal = ({
     countries,
     handleMultiSelectChange,
     handleAddRuleOnPolicy,
+    newPolicyDataValidation,
+    newPolicyInputData,
+    setNewPolicyData,
+    isRuleUpdating,
+    setIsRuleUpdating,
+    handlePolicyAdded,
+    isLoadingAddSalesRiskAnalysisRule
 }) => {
     return (
         <CustomModal
@@ -33,6 +42,8 @@ const AddNewPolicyModal = ({
             closeModal={closeModal}
             contentLabel="Add New Policy"
             width="700px"
+            height={newPolicyInputData?.length > 0 ? "700px" : "fit-content"}
+            maxHeight={newPolicyInputData?.length > 0 ? "700px" : "fit-content"}
             isCloseButtonShow={true}
         >
             {/* Modal Content */}
@@ -40,44 +51,84 @@ const AddNewPolicyModal = ({
                 <div className="d-flex justify-content-center align-items-center mb-4">
                     <ModalTitle>Add a New Policy</ModalTitle>
                 </div>
-                <div className="d-flex flex-column mb-4 px-3 w-100">
+                <div className="d-flex flex-column mb-4 px-3  w-100">
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Policy Name <sup>*</sup>{" "}
                         </ModalInputLabel>
-                        <ModalInput
-                            className="col-8"
-                            type="text"
-                            name="policyName"
-                            value={newPolicyData?.policyName}
-                            onChange={handleChange}
-                            placeholder="Write Here"
-                        />
+                        <div className="col-8 flex-column px-0">
+                            <ModalInput
+                                type="text"
+                                className="w-100"
+                                name="policyName"
+                                value={newPolicyData?.policyName}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
+                            {newPolicyDataValidation?.policyName && (
+                                <p className="text-danger">
+                                    Policy name is required
+                                </p>
+                            )}
+                        </div>
                     </div>
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Department Name<sup>*</sup>
                         </ModalInputLabel>
-                        <ModalSelectContainer className="col-8 px-0">
-                            <DepartmentSelect
-                                data={departments}
-                                selected={newPolicyData?.department}
-                                setSelectedDept={handleChange}
-                            />
-                        </ModalSelectContainer>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <DepartmentSelect
+                                    data={departments}
+                                    selected={newPolicyData?.department}
+                                    setSelectedDept={handleChange}
+                                />
+                            </ModalSelectContainer>
+                            {newPolicyDataValidation?.department && (
+                                <p className="text-danger">
+                                    Department is required
+                                </p>
+                            )}
+                        </div>
                     </div>
+                    {newPolicyInputData?.length > 0 ? (
+                        <div
+                            className="row px-0 py-4 px-2 mb-2"
+                            style={{
+                                border: "1px dotted #E5E5E5",
+                                borderRadius: "5px",
+                            }}
+                        >
+                            <NewRulesModalTable
+                                newPolicyInputData={newPolicyInputData}
+                                tableColumns={NewRulesModalTableColumnsData}
+                                tableName={"NewRulesModalTable"}
+                                setNewPolicyData={setNewPolicyData}
+                                setIsRuleUpdating={setIsRuleUpdating}
+                            />
+                        </div>
+                    ) : (
+                        ""
+                    )}
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Policy Type<sup>*</sup>{" "}
                         </ModalInputLabel>
-                        <ModalSelectContainer className="col-8 px-0">
-                            <CustomDropDown
-                                filedName="policyType"
-                                data={PolicyTypeItems}
-                                selected={newPolicyData?.policyType}
-                                setSelected={handleChange}
-                            />
-                        </ModalSelectContainer>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    filedName="policyType"
+                                    data={PolicyTypeItems}
+                                    selected={newPolicyData?.policyType}
+                                    setSelected={handleChange}
+                                />
+                            </ModalSelectContainer>
+                            {newPolicyDataValidation?.policyType && (
+                                <p className="text-danger">
+                                    Policy type is required
+                                </p>
+                            )}
+                        </div>
                     </div>
                     {/* All Rules Inputs */}
                     <NewPolicyModalInputsContainer
@@ -85,6 +136,7 @@ const AddNewPolicyModal = ({
                         handleChange={handleChange}
                         countries={countries}
                         handleMultiSelectChange={handleMultiSelectChange}
+                        newPolicyDataValidation={newPolicyDataValidation}
                     />
                     <div className="d-flex justify-content-end">
                         <button
@@ -95,13 +147,16 @@ const AddNewPolicyModal = ({
                             disabled={_.isEmpty(newPolicyData?.policyType)}
                             onClick={handleAddRuleOnPolicy}
                         >
-                            <i className="fa fa-plus mr-2" aria-hidden="true" />
-                        Create Rule
+                            {isRuleUpdating ? "Update rule" : "Create Rule"}
                         </button>
                     </div>
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton width="177px">Create Policy</ModalButton>
+                    <ModalButton onClick={handlePolicyAdded} width="177px">
+                        {
+                            isLoadingAddSalesRiskAnalysisRule ? "Loading..." : "Add Policy"
+                        }
+                    </ModalButton>
                     <ModalButton
                         onClick={closeModal}
                         width="177px"
@@ -128,4 +183,11 @@ AddNewPolicyModal.propTypes = {
     countries: PropTypes.array,
     handleMultiSelectChange: PropTypes.func,
     handleAddRuleOnPolicy: PropTypes.func,
+    newPolicyDataValidation: PropTypes.object,
+    newPolicyInputData: PropTypes.array,
+    setNewPolicyData: PropTypes.func,
+    isRuleUpdating: PropTypes.bool,
+    setIsRuleUpdating: PropTypes.func,
+    handlePolicyAdded: PropTypes.func,
+    isLoadingAddSalesRiskAnalysisRule: PropTypes.bool
 };

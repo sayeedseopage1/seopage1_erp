@@ -1,6 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 import _ from "lodash";
+import PropTypes from "prop-types";
 // ui components
 import {
     ModalSelectContainer,
@@ -19,6 +19,7 @@ const NewPolicyModalInputsContainer = ({
     handleChange,
     countries,
     handleMultiSelectChange,
+    newPolicyDataValidation,
 }) => {
     // Constants
     const validPolicyTypes = [
@@ -53,14 +54,21 @@ const NewPolicyModalInputsContainer = ({
                         <ModalInputLabel className="col-4">
                             Title<sup>*</sup>{" "}
                         </ModalInputLabel>
-                        <ModalInput
-                            className="col-8"
-                            type="text"
-                            name="title"
-                            value={newPolicyData?.title}
-                            onChange={handleChange}
-                            placeholder="Write Here"
-                        />
+                        <div className="col-8 px-0">
+                            <ModalInput
+                                type="text"
+                                name="title"
+                                className="w-100"
+                                value={newPolicyData?.title}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
+                            {newPolicyDataValidation?.title && (
+                                <p className="text-danger py-1">
+                                    Title is required
+                                </p>
+                            )}
+                        </div>
                     </div>
                     {/* conditionally show only  "lessThan", "greaterThan", "fixed", "range", */}
                     <Switch.Case
@@ -99,6 +107,11 @@ const NewPolicyModalInputsContainer = ({
                                             filedName="rulesType"
                                         />
                                     </ModalSelectContainer>
+                                    {newPolicyDataValidation?.rulesType && (
+                                        <p className="text-danger py-1">
+                                            Type is required
+                                        </p>
+                                    )}
                                 </div>
                                 <Switch>
                                     {/* conditional for range or yes type value */}
@@ -125,6 +138,11 @@ const NewPolicyModalInputsContainer = ({
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
                                             />
+                                            {newPolicyDataValidation?.value && (
+                                                <p className="text-danger py-1">
+                                                    Value is required
+                                                </p>
+                                            )}
                                         </div>
                                     </Switch.Case>
                                     <Switch.Case
@@ -150,6 +168,11 @@ const NewPolicyModalInputsContainer = ({
                                                     placeholder="Write ..."
                                                     className="w-100"
                                                 />
+                                                {newPolicyDataValidation?.from && (
+                                                    <p className="text-danger py-1">
+                                                        From is required
+                                                    </p>
+                                                )}
                                             </div>
                                             <div className="col-6 flex-column pl-1 pr-0">
                                                 <ModalInputLabel
@@ -167,6 +190,11 @@ const NewPolicyModalInputsContainer = ({
                                                     placeholder="Write ..."
                                                     className="w-100"
                                                 />
+                                                {newPolicyDataValidation?.to && (
+                                                    <p className="text-danger py-1">
+                                                        To is required
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     </Switch.Case>
@@ -197,11 +225,16 @@ const NewPolicyModalInputsContainer = ({
                                     <ModalInput
                                         type="number"
                                         name="yes"
-                                        value={newPolicyData?.from}
+                                        value={newPolicyData?.yes}
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                         className="w-100"
                                     />
+                                    {newPolicyDataValidation?.yes && (
+                                        <p className="text-danger py-1">
+                                            Yes is required
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="col-6 flex-column pr-0">
                                     <ModalInputLabel
@@ -214,11 +247,16 @@ const NewPolicyModalInputsContainer = ({
                                     <ModalInput
                                         type="number"
                                         name="no"
-                                        value={newPolicyData?.to}
+                                        value={newPolicyData?.no}
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                         className="w-100"
                                     />
+                                    {newPolicyDataValidation?.no && (
+                                        <p className="text-danger py-1">
+                                            No is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -234,14 +272,21 @@ const NewPolicyModalInputsContainer = ({
                             <ModalInputLabel fontSize="16px" className="col-4">
                                 Type <sup>*</sup>{" "}
                             </ModalInputLabel>
-                            <ModalSelectContainer className="px-0 col-8">
-                                <CustomDropDown
-                                    data={validPolicyTypesOptions}
-                                    selected={newPolicyData?.rulesType}
-                                    setSelected={handleChange}
-                                    filedName="rulesType"
-                                />
-                            </ModalSelectContainer>
+                            <div className="px-0 col-8 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        data={validPolicyTypesOptions}
+                                        selected={newPolicyData?.rulesType}
+                                        setSelected={handleChange}
+                                        filedName="rulesType"
+                                    />
+                                </ModalSelectContainer>
+                                {newPolicyDataValidation?.rulesType && (
+                                    <p className="text-danger py-1">
+                                        Type is required
+                                    </p>
+                                )}
+                            </div>
                         </div>
                         <Switch.Case
                             condition={
@@ -255,16 +300,25 @@ const NewPolicyModalInputsContainer = ({
                                 >
                                     Countries <sup>*</sup>{" "}
                                 </ModalInputLabel>
-                                <ModalSelectContainer className="px-0 col-8">
-                                    <MultiSelect
-                                        data={countries}
-                                        multiple
-                                        filedName="countries"
-                                        newPolicyData={newPolicyData}
-                                        selected={newPolicyData?.countries}
-                                        setSelected={handleMultiSelectChange}
-                                    />
-                                </ModalSelectContainer>
+                                <div className="px-0 col-8 flex-column">
+                                    <ModalSelectContainer className="">
+                                        <MultiSelect
+                                            data={countries}
+                                            multiple
+                                            filedName="countries"
+                                            newPolicyData={newPolicyData}
+                                            selected={newPolicyData?.countries}
+                                            setSelected={
+                                                handleMultiSelectChange
+                                            }
+                                        />
+                                    </ModalSelectContainer>
+                                    {newPolicyDataValidation?.countries && (
+                                        <p className="text-danger py-1">
+                                            Select at least one country
+                                        </p>
+                                    )}
+                                </div>
                             </div>
                         </Switch.Case>
                     </Switch.Case>
@@ -280,14 +334,21 @@ const NewPolicyModalInputsContainer = ({
                         <ModalInputLabel className="col-4">
                             Point<sup>*</sup>{" "}
                         </ModalInputLabel>
-                        <ModalInput
-                            className="col-8"
-                            type="number"
-                            name="points"
-                            value={newPolicyData?.points}
-                            onChange={handleChange}
-                            placeholder="Write Here"
-                        />
+                        <div className="col-8 px-0 flex-column">
+                            <ModalInput
+                                type="number"
+                                name="points"
+                                className="w-100"
+                                value={newPolicyData?.points}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
+                            {newPolicyDataValidation?.points && (
+                                <p className="text-danger">
+                                    Points is required
+                                </p>
+                            )}
+                        </div>
                     </div>
                 </Switch.Case>
             </Switch>
@@ -301,4 +362,5 @@ NewPolicyModalInputsContainer.propTypes = {
     newPolicyData: PropTypes.object,
     handleChange: PropTypes.func,
     countries: PropTypes.array,
+    newPolicyDataValidation: PropTypes.object,
 };

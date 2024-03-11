@@ -34,7 +34,6 @@ const filterOptionSlice = createSlice({
                 ?.structure?.list?.structure
                 ?.find(item => item?.label === "Type")
                 ?.structure?.countries?.structure;
-            console.log(countries);
             state.countries = countries
         }
     }
