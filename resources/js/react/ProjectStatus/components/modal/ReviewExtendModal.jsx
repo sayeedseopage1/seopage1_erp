@@ -264,15 +264,15 @@ const ReviewExtendRequestModal = ({
                             reviewExtendStateValidation.comment && <p className="text-danger my-1">Comment is required</p>
                         }
                     </div>
-                    <Flex justifyContent="between" align-items="center">
-                        <Flex>
+                    <Flex justifyContent="space-between" align-items="center">
+                        <Flex align-items="center">
                             <div>
                                 <input type="checkbox" name="" id="" />
-                                <label htmlFor="yes">Apply this extension to all goals</label>
+                                <label className="ml-2" htmlFor="yes">Apply this extension to all goals</label>
                             </div>
                             <div>
                                 <input type="checkbox" name="" id="" />
-                                <label htmlFor="yes">Only authorize for this goal</label>
+                                <label className="ml-2" htmlFor="yes">Only authorize for this goal</label>
                             </div>
                         </Flex>
                         <Flex>
@@ -309,7 +309,7 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "550px",
+        maxWidth: "700px",
         height: "fit-content",
         maxHeight: "100vh",
 
