@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('start_date');
             $table->dateTime('deadline');
             $table->string('duration');
+            $table->string('goal_name');
             $table->longText('description');
             $table->longText('reason');
             $table->longText('client_communication')->nullable();

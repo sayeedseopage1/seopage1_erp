@@ -39,8 +39,8 @@
                 </div>
                 <div class="card-body">
                     <x-cards.data-row :label="__('Goal Start Date')" :value="$pmGoal->goal_start_date" html="true" />
-                    <x-cards.data-row :label="__('Goal Deadline')" :value="$pmGoal->goal_start_date" html="true" />
-                    <x-cards.data-row :label="__('Duration')" :value="$pmGoal->duration" html="true" />
+                    <x-cards.data-row :label="__('Goal Deadline')" :value="$pmGoal->goal_end_date" html="true" />
+                    <x-cards.data-row :label="__('Duration')" :value="$pmGoal->duration . ' Days'" html="true" />
                     <x-cards.data-row :label="__('Reason')" :value="$pmGoal->reason??'--'" html="true" />
                     <x-cards.data-row :label="__('Suggestion')" :value="$pmGoal->suggestion??'--'" html="true" />
                 </div>

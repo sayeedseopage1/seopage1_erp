@@ -171,6 +171,7 @@ class ProjectStatusController extends AccountBaseController
         $ppg = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
         $ppg->reason = $request->reason;
         $ppg->reason_status = 1;
+        $ppg->expired_status = 1;
         $ppg->save();
 
         return response()->json(['status'=>200]);
@@ -196,6 +197,7 @@ class ProjectStatusController extends AccountBaseController
         $projectPG->negligence_pm = $request->negligence_pm;
         $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
         $projectPG->reason_status = 2;
+        $projectPG->expired_status = 2;
         $projectPG->save();
 
         $project = Project::where('id',$projectPG->project_id)->first();
@@ -204,6 +206,7 @@ class ProjectStatusController extends AccountBaseController
         $goalHistory->goal_id = $projectPG->id;
         $goalHistory->start_date = $projectPG->goal_start_date;
         $goalHistory->deadline = $projectPG->goal_end_date;
+        $goalHistory->goal_name = $projectPG->goal_name;
         $goalHistory->description = $projectPG->description;
         $goalHistory->duration = $projectPG->duration;
         $goalHistory->goal_status = $projectPG->goal_status;
@@ -432,8 +435,7 @@ class ProjectStatusController extends AccountBaseController
         ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
         ->leftJoin('users','project_pm_goals.client_id','users.id')
         ->where('project_pm_goals.pm_id',$id)
-        ->where('project_pm_goals.goal_status',0)
-        ->where('project_pm_goals.reason_status',0)
+        ->where('project_pm_goals.expired_status',1)
         ->get();
         return response()->json([
             'data'=>$pmGoal
