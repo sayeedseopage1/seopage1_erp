@@ -317,6 +317,14 @@
                     $deal_id = App\Models\Deal::where('status', 'pending')
                         ->orderBy('id', 'asc')
                         ->where('pm_id', Auth::id())
+                        ->where('is_drafted', 0)
+                        ->where(function ($query) {
+                            $query->where('authorization_status', 1)
+                                ->orWhere(function ($subquery) {
+                                    $subquery->where('authorization_status', 2)
+                                    ->whereRaw('TIMESTAMPDIFF(MINUTE, released_at, NOW()) > 180');
+                                });
+                        })
                         ->get();
                 @endphp
                 @if (count($deal_id) > 0)
@@ -363,6 +371,14 @@
                 @php
                     $deal_id = App\Models\Deal::where('status', 'pending')
                         ->orderBy('id', 'asc')
+                        ->where('is_drafted', 0)
+                        ->where(function ($query) {
+                            $query->where('authorization_status', 1)
+                                ->orWhere(function ($subquery) {
+                                    $subquery->where('authorization_status', 2)
+                                    ->whereRaw('TIMESTAMPDIFF(MINUTE, released_at, NOW()) > 180');
+                                });
+                        })
                         ->get();
                 @endphp
                 @if (count($deal_id) > 0)
