@@ -1527,6 +1527,7 @@ class ContractController extends AccountBaseController
             $deal = Deal::find($deal->id);
             $deal->authorization_status = $request->is_drafted ? 0 : 2;
             $deal->is_drafted = $request->is_drafted;
+            $deal->released_at = $request->is_drafted ? null : Carbon::now();
             $deal->save();
 
             $sender = User::where('id', Auth::id())->first();
@@ -2078,6 +2079,7 @@ class ContractController extends AccountBaseController
             $deal= Deal::find($deal->id);
             $deal->authorization_status = $deal->is_drafted && !$request->is_drafted ? 2 : $deal->authorization_status;
             $deal->is_drafted = $request->is_drafted;
+            $deal->released_at = $request->is_drafted ? null : Carbon::now();
             $deal->save();
 
             //         $sender= User::where('id',Auth::id())->first();
