@@ -77,6 +77,7 @@ const ReviewExtendRequestModal = ({
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
         fd.append("goal_extension_auth_checkbox", reviewExtendState.goal_extension_auth_checkbox ?? "");
         fd.append("goal_id", reviewExtendState.goal_id ?? "");
+        fd.append("project_id", reviewExtendRequestData.project_id)
         fd.append("status", "1");
         fd.append(
             "_token",
@@ -109,6 +110,7 @@ const ReviewExtendRequestModal = ({
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
         fd.append("goal_extension_auth_checkbox", reviewExtendState.goal_extension_auth_checkbox ?? "");
         fd.append("goal_id", reviewExtendState.goal_id ?? "");
+        fd.append("project_id", reviewExtendRequestData.project_id)
         fd.append("status", "0");
         fd.append(
             "_token",

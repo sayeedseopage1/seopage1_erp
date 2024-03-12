@@ -324,12 +324,24 @@ class ProjectStatusController extends AccountBaseController
     }
     public function acceptOrDenyExtendRequest(Request $request){
         // dd($request->all());
+        // \DB::beginTransaction();
         if($request->status==1){
-            $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
-            $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
-            $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
-            $updateGoal->extended_request_status = 2;
-            $updateGoal->save();
+            if($request->goal_extension_auth_checkbox == 'Apply this extension to all goals'){
+                $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
+                foreach($pmGoalFinds as $item){
+                    $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
+                    $updateGoal->extended_goal_end_day = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
+                    $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
+                    $updateGoal->extended_request_status = 2;
+                    $updateGoal->save();
+                }
+            }else{
+                $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
+                $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
+                $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
+                $updateGoal->extended_request_status = 2;
+                $updateGoal->save();
+            }
 
             $deadline_ext_history = new PmGoalDeadlineExtHistory();
             $deadline_ext_history->goal_id = $updateGoal->id;
@@ -337,7 +349,7 @@ class ProjectStatusController extends AccountBaseController
             $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
             $deadline_ext_history->new_deadline = $updateGoal->extended_goal_end_day;
             $deadline_ext_history->duration = $updateGoal->duration;
-            $deadline_ext_history->description = $updateGoal->description;
+            $deadline_ext_history->description = $updateGoal->description ?? '';
             $deadline_ext_history->goal_status = $updateGoal->goal_status;
             $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
             $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
