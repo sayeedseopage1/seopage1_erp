@@ -7,8 +7,29 @@ import React, { useCallback } from "react";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
 
+import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
+import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
+import { useWindowSize } from "react-use";
+import ReactModal from "react-modal";
+import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
+import Button from "../../../../../../../react/global/Button";
+
 // action buttons
 const ActionsButton = ({ data }) => {
+    const [fullScreenView, setFullScreenView] = React.useState(false);
+    const [viewCommentModal, setViewCommentModal] = React.useState(false);
+    const [isRelevantModal, setIsRelevantModal] = React.useState(false);
+    const { width } = useWindowSize();
+    const taskId = data?.task_id;
+    // const { commentState } = useCommentStore();
+
+    // console.log("commentstate", commentState);
+    const {
+        data: comments,
+        isFetching,
+        isLoading,
+        refetch,
+    } = useGetCommentsQuery(taskId);
     // window.location.assign();
 
     // return (
@@ -118,8 +139,135 @@ const ActionsButton = ({ data }) => {
                     );
                 }
             })}
+
+            {data?.task_id && (
+                <button
+                    onClick={() => setViewCommentModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    {data?.expired_status === 0 ? "View & Reply" : "View"}
+                </button>
+            )}
+            {data?.task_id && (
+                <button
+                    onClick={() => setIsRelevantModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    Not Relevant to me
+                </button>
+            )}
+
+            <ReactModal
+                style={{
+                    overlay: {
+                        backgroundColor: "rgba(0, 0, 0, 0.6)",
+                        margin: "auto auto",
+                        zIndex: 100,
+                    },
+                    content: {
+                        borderRadius: "10px",
+                        maxWidth: fullScreenView ? "100vw" : "720px",
+                        height: fullScreenView ? "100vh" : "750px",
+                        margin: "auto auto",
+                        border: "none",
+                        overflow: "hidden",
+                    },
+                }}
+                isOpen={viewCommentModal}
+                onRequestClose={() => setViewCommentModal(false)}
+            >
+                <CommentsBody
+                    fullScreenView={fullScreenView}
+                    setFullScreenView={setFullScreenView}
+                    isOpen={viewCommentModal}
+                    close={() => setViewCommentModal(false)}
+                    comments={comments?.slice(data?.length - 3)}
+                    loading={isLoading}
+                    fetching={isFetching}
+                    refetch={refetch}
+                    taskId={taskId}
+                    showFullScreenBtn={width <= 991 ? false : true}
+                    height={"720px"}
+                    showCommentEditor={true}
+                    showSearchBtn={true}
+                />
+            </ReactModal>
+
+            <RelevantModal
+                setIsRelevantModal={setIsRelevantModal}
+                isRelevantModal={isRelevantModal}
+            />
         </>
     );
 };
 
 export default React.memo(ActionsButton);
+
+const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
+    const submitHandler = (e) => {
+        e.preventDefault();
+        console.log(e);
+    };
+    return (
+        <ReactModal
+            style={{
+                overlay: {
+                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    margin: "auto auto",
+                    zIndex: 100,
+                },
+                content: {
+                    borderRadius: "10px",
+                    maxWidth: "350px",
+                    height: "320px",
+                    margin: "auto auto",
+                    border: "none",
+                    overflow: "hidden",
+                    padding: "10px",
+                },
+            }}
+            isOpen={isRelevantModal}
+            onRequestClose={() => setIsRelevantModal(false)}
+        >
+            <div className="d-flex align-items-center justify-content-end">
+                <Button onClick={close}>
+                    <i className="fa-solid fa-xmark" />
+                </Button>
+            </div>
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "110px",
+                    justifyContent: "space-between",
+                    marginTop: "60px",
+                }}
+            >
+                <h4
+                    style={{
+                        textAlign: "center",
+                    }}
+                >
+                    Are You sure this comment is not relevant to you?
+                </h4>
+
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+
+                        gap: "30px",
+                    }}
+                >
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onClick={submitHandler}
+                    >
+                        Yes
+                    </button>
+                </div>
+            </div>
+        </ReactModal>
+    );
+};
