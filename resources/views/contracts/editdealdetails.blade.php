@@ -608,7 +608,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
                                     <label class="form-check-label m-1" for="flexCheckDefault">
-                                        Want to remain as draft
+                                        Keep it as draft
                                     </label>
                                 </div>
                               </div>

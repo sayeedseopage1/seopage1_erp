@@ -196,7 +196,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                 @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                     @if($contract->deal->status == 'pending')
                         @if($contract->deal->is_drafted == 0 && ($contract->deal->authorization_status == 1 || 
-                        Carbon\Carbon::now()->diffInMinutes($contract->deal->released_at) > 180))
+                        Carbon\Carbon::now()->diffInSeconds($contract->deal->released_at) > 10800))
                             <div class="wrapper-timezone d-flex justify-content-center">
                                 <p>You have </p>
                                 <div class="clock">
@@ -221,13 +221,13 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                             @if($contract->deal->is_drafted == 1)
                             <h3>The project is drafted!</h3>
                             @else
-                            <h3>Your action button unavailable!</h3>
+                            <h3>Awaiting Authorization from Sales Lead!</h3>
                             @endif
                         @endif
                     @endif
                 @endif
     @if($contract->deal->is_drafted == 0 && ($contract->deal->authorization_status == 1 || 
-    Carbon\Carbon::now()->diffInMinutes($contract->deal->released_at) > 180))
+    Carbon\Carbon::now()->diffInSeconds($contract->deal->released_at) > 10800))
     <div class="wrapper-timezone d-flex justify-content-center">
 
         @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
