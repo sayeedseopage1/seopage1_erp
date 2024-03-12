@@ -41,6 +41,19 @@ export const PmGoalsTableColumns = [
         }
     },
     {
+        id: "goal_name",
+        header: "Goal Name",
+        accessorKey: "goal_name",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span title={data?.goal_name} className="multine-ellipsis"> 
+                    {data?.goal_name ?? "--"}
+                </span>
+            )
+        }
+    },
+    {
         id: "description",
         header: "Description",
         accessorKey: "description",
@@ -131,7 +144,7 @@ export const PmGoalsTableColumns = [
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
-                                    <Switch.Case condition={data.reason_status === 0 ||  data.reason_status === 2}>
+                                    <Switch.Case condition={data.reason_status === 0 ||  data.reason_status === 2 && data?.expired_status !== 2}>
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 
@@ -142,7 +155,18 @@ export const PmGoalsTableColumns = [
                                                 </Switch.Case>
                                             </Switch>
                                     </Switch.Case>
-                                    <Switch.Case condition={data.reason_status === 1}>
+                                    <Switch.Case condition={data.reason_status === 0 ||  data.reason_status === 2 && data?.expired_status === 2}>
+                                            <Switch>
+                                                <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
+                                                    <div
+                                                        className={`${styles?.explanationSubmitted}`}
+                                                    > 
+                                                        Goal Expired & Explanation Submitted
+                                                    </div>
+                                                </Switch.Case>
+                                            </Switch>
+                                    </Switch.Case>
+                                    <Switch.Case condition={data.reason_status === 1 && data?.expired_status !== 2}>
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 

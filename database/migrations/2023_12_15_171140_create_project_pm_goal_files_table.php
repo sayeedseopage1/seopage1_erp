@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->integer('goal_id');
             $table->integer('project_id');
-            $table->string('uuid');
             $table->text('file_name')->nullable();
             $table->timestamps();
         });

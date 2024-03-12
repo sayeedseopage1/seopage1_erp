@@ -11,12 +11,12 @@ import {
 import ImageViewer from "./ImageViewer";
 import { toast } from "react-toastify";
 import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
-const ReviewExtendRequestModal = ({ 
-    projectDetails, 
-    isOpen, 
-    onClose, 
-    projectPmGoalId, 
-    refetchPmGoal, 
+const ReviewExtendRequestModal = ({
+    projectDetails,
+    isOpen,
+    onClose,
+    projectPmGoalId,
+    refetchPmGoal,
     reviewExtendRequestData,
     projectExtendImages
 }) => {
@@ -125,7 +125,7 @@ const ReviewExtendRequestModal = ({
 
     // Check if fields are empty
     useEffect(() => {
-        if(reviewExtendStateValidation.isSubmitting){
+        if (reviewExtendStateValidation.isSubmitting) {
             const validation = markEmptyFieldsValidation(reviewExtendState);
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
@@ -136,7 +136,7 @@ const ReviewExtendRequestModal = ({
 
     // reset form when modal is closed
     useEffect(() => {
-        if(!isOpen){
+        if (!isOpen) {
             handleResetForm()
         }
     }, [isOpen]);
@@ -144,12 +144,12 @@ const ReviewExtendRequestModal = ({
 
     // set review extend state
     useEffect(() => {
-            setReviewExtendState({
-                extended_day: reviewExtendRequestData?.extended_day,
-                comment: "",
-                goal_id: reviewExtendRequestData?.id,
-            });
-        
+        setReviewExtendState({
+            extended_day: reviewExtendRequestData?.extended_day,
+            comment: "",
+            goal_id: reviewExtendRequestData?.id,
+        });
+
     }, [reviewExtendRequestData]);
 
     // disable keypress except 0-9, backspace, left and right arrow
@@ -165,7 +165,7 @@ const ReviewExtendRequestModal = ({
         }
     }
 
-    
+
 
     return (
         <ReactModal
@@ -196,7 +196,7 @@ const ReviewExtendRequestModal = ({
                     }}
                 >
                     <IoClose />
-                </button>    
+                </button>
                 {/* <RefreshButton onClick={refetch} isLoading={isFetching} /> */}
             </div>
 
@@ -221,25 +221,25 @@ const ReviewExtendRequestModal = ({
                     <div className="my-2 row">
                         <p className="col-4"><strong>Extended Days:</strong>{" "}</p>
                         <div className="col-8">
-                        <input 
-                            className="p-1 rounded"
-                            defaultValue={reviewExtendState?.extended_day}
-                            placeholder="Enter extended days"
-                            type="number"
-                            onKeyPress={handleOnkeypress}
-                            min={1}
-                            onChange={(e) => setReviewExtendState({
-                                ...reviewExtendState,
-                                extended_day: e.target.value
-                            })}
-                        ></input>
-                        {reviewExtendStateValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
+                            <input
+                                className="p-1 rounded"
+                                defaultValue={reviewExtendState?.extended_day}
+                                placeholder="Enter extended days"
+                                type="number"
+                                onKeyPress={handleOnkeypress}
+                                min={1}
+                                onChange={(e) => setReviewExtendState({
+                                    ...reviewExtendState,
+                                    extended_day: e.target.value
+                                })}
+                            ></input>
+                            {reviewExtendStateValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
                         </div>
                     </div>
                     <div className="row my-2">
                         <p className="col-4"> <strong htmlFor="itemsPerPage">Screenshots:</strong>{" "}</p>
                         <div className="col-8">
-                        <ImageViewer imageData={imageData} />  
+                            <ImageViewer imageData={imageData} />
                         </div>
                     </div>
 
@@ -262,25 +262,37 @@ const ReviewExtendRequestModal = ({
                         </div>
                         {
                             reviewExtendStateValidation.comment && <p className="text-danger my-1">Comment is required</p>
-                        }    
+                        }
                     </div>
-                    <Flex justifyContent="flex-end">
-                        <Button
-                            variant="success"
-                            style={styles.button}
-                            onClick={handleAccept}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? "Accepting..." : "Accept"}
-                        </Button>
-                        <Button
-                            variant="danger"
-                            style={styles.button}
-                            onClick={handleReject}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? "Rejecting..." : "Reject"}
-                        </Button>
+                    <Flex justifyContent="space-between" align-items="center">
+                        <Flex align-items="center">
+                            <div>
+                                <input type="checkbox" name="" id="" />
+                                <label className="ml-2" htmlFor="yes">Apply this extension to all goals</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" name="" id="" />
+                                <label className="ml-2" htmlFor="yes">Only authorize for this goal</label>
+                            </div>
+                        </Flex>
+                        <Flex>
+                            <Button
+                                variant="success"
+                                style={styles.button}
+                                onClick={handleAccept}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "Accepting..." : "Accept"}
+                            </Button>
+                            <Button
+                                variant="danger"
+                                style={styles.button}
+                                onClick={handleReject}
+                                disabled={isLoading}
+                            >
+                                {isLoading ? "Rejecting..." : "Reject"}
+                            </Button>
+                        </Flex>
                     </Flex>
                 </div>
             </section>
@@ -297,7 +309,7 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "550px",
+        maxWidth: "700px",
         height: "fit-content",
         maxHeight: "100vh",
 
