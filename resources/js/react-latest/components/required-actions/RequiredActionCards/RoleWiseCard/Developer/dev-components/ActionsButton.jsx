@@ -13,7 +13,8 @@ import { useWindowSize } from "react-use";
 import ReactModal from "react-modal";
 import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 import Button from "../../../../../../../react/global/Button";
-
+import WarningIcon from "../../../../../../assest/warning.svg";
+import Background from "../../../../../../assest/background.svg";
 // action buttons
 const ActionsButton = ({ data }) => {
     const [fullScreenView, setFullScreenView] = React.useState(false);
@@ -166,8 +167,8 @@ const ActionsButton = ({ data }) => {
                     },
                     content: {
                         borderRadius: "10px",
-                        maxWidth: fullScreenView ? "100vw" : "720px",
-                        height: fullScreenView ? "100vh" : "750px",
+                        maxWidth: fullScreenView ? "100vw" : "1020px",
+                        height: fullScreenView ? "100vh" : "550px",
                         margin: "auto auto",
                         border: "none",
                         overflow: "hidden",
@@ -187,7 +188,7 @@ const ActionsButton = ({ data }) => {
                     refetch={refetch}
                     taskId={taskId}
                     showFullScreenBtn={width <= 991 ? false : true}
-                    height={"720px"}
+                    height={"520px"}
                     showCommentEditor={true}
                     showSearchBtn={true}
                 />
@@ -218,8 +219,8 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
                 },
                 content: {
                     borderRadius: "10px",
-                    maxWidth: "350px",
-                    height: "320px",
+                    maxWidth: "800px",
+                    height: "260px",
                     margin: "auto auto",
                     border: "none",
                     overflow: "hidden",
@@ -229,37 +230,57 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
             isOpen={isRelevantModal}
             onRequestClose={() => setIsRelevantModal(false)}
         >
-            <div className="d-flex align-items-center justify-content-end">
-                <Button onClick={close}>
+            <div className="d-flex justify-content-end">
+                <button
+                    type="button"
+                    class="btn btn-secondary "
+                    onClick={() => setIsRelevantModal(false)}
+                >
                     <i className="fa-solid fa-xmark" />
-                </Button>
+                </button>
             </div>
             <div
                 style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "110px",
-                    justifyContent: "space-between",
-                    marginTop: "60px",
+                    gap: "15px",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "50px",
                 }}
             >
-                <h4
-                    style={{
-                        textAlign: "center",
-                    }}
-                >
-                    Are You sure this comment is not relevant to you?
-                </h4>
-
                 <div
                     style={{
                         display: "flex",
                         justifyContent: "center",
-
-                        gap: "30px",
+                        alignItems: "center",
+                        gap: "15px",
                     }}
                 >
+                    <img
+                        src={WarningIcon}
+                        width={`40px`}
+                        style={{
+                            marginBottom: "2px",
+                        }}
+                    />
+
+                    <h3
+                        style={{
+                            textAlign: "center",
+                        }}
+                    >
+                        Are You sure this comment is not relevant to you?
+                    </h3>
+                </div>
+
+                <div style={{}}>
                     <button
+                        style={{
+                            paddingLeft: "40px",
+                            paddingRight: "40px",
+                            fontSize: "18px",
+                        }}
                         type="button"
                         class="btn btn-primary"
                         onClick={submitHandler}
