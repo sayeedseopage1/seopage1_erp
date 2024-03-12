@@ -26,6 +26,7 @@ import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 
 const fileInputStyle = {
     height: "39px",
+    zIndex: '0'
 }
 
 const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
@@ -38,7 +39,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
-    // for graphic designer start
+    //state for graphic designer start
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
@@ -51,7 +52,18 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [fontName, setFontName] = useState('');
     const [fontUrl, setFontUrl] = useState('');
     const [brandGuideline, setBrandGuideline] = useState(null);
-    // for graphic designer end
+    const [colorSchema, setColorSchema] = React.useState("");
+    const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
+    const [primaryColorDescription, setPrimaryColorDescription] =
+        React.useState("");
+    const [secondaryColors, setSecondaryColors] = React.useState([
+        {
+            id: "egqsz",
+            color: "#1D82F5",
+            description: "",
+        },
+    ]);
+    //state for graphic designer end
     const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
@@ -251,35 +263,38 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
+        console.log("formk data", fd)
+
+        // TODO: it will be uncommented when it will be ready
         // handle form submit
-        const formSubmit = async () => {
-            if (isValid()) {
-                await storeProjectTask(fd)
-                    .unwrap()
-                    .then((res) => {
-                        toast.success("Task created successfully");
-                        onSuccess();
-                        handleRefresh();
-                    })
-                    .catch((err) => {
-                        if (err?.status === 422) {
-                            Swal.fire({
-                                position: "center",
-                                icon: "error",
-                                title: "Please fill out the all required fields",
-                                showConfirmButton: true,
-                            });
-                        }
-                    });
-            } else {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Please fill out the all required fields",
-                    showConfirmButton: true,
-                });
-            }
-        };
+        // const formSubmit = async () => {
+        //     if (isValid()) {
+        //         await storeProjectTask(fd)
+        //             .unwrap()
+        //             .then((res) => {
+        //                 toast.success("Task created successfully");
+        //                 onSuccess();
+        //                 handleRefresh();
+        //             })
+        //             .catch((err) => {
+        //                 if (err?.status === 422) {
+        //                     Swal.fire({
+        //                         position: "center",
+        //                         icon: "error",
+        //                         title: "Please fill out the all required fields",
+        //                         showConfirmButton: true,
+        //                     });
+        //                 }
+        //             });
+        //     } else {
+        //         Swal.fire({
+        //             position: "center",
+        //             icon: "error",
+        //             title: "Please fill out the all required fields",
+        //             showConfirmButton: true,
+        //         });
+        //     }
+        // };
 
         const response = await checkRestrictedWords(params?.projectId).unwrap();
 
@@ -364,6 +379,71 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         const text = _.head(err?.errors?.hours);
         return text;
     };
+
+    // add secondary color
+    const addSecondaryColor = (e) => {
+        e.stopPropagation();
+        setSecondaryColors((prev) => [
+            ...prev,
+            {
+                id: (Math.random() + 1).toString(36).substring(7),
+                color: "#1D82F5",
+                description: "",
+            },
+        ]);
+    };
+
+    // handle secondary color change
+    const handleSecondaryColorChange = (e, id) => {
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id
+                ? { id, color: e.target.value, description: "" }
+                : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // handle secondary color description change
+    const handleSecondaryColorDescriptionChange = (e, editor, id) => {
+        let text = editor.getData();
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id ? { ...item, description: text } : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // remove secondary color
+    const removeSecondaryColor = (e, id) => {
+        let newColors = _.filter(secondaryColors, (item) => item.id !== id);
+        setSecondaryColors([...newColors]);
+    };
+
+    // color schema
+    const onChange = (e, setState) => {
+        setState(e.target.value);
+    };
+
+    let count = 0;
+    const err = new Object();
+
+    if (colorSchema === "") {
+        err.colorSchema = "You Need to Select An Option";
+        count++;
+    }
+    if (colorSchema === "yes") {
+        if (primaryColorDescription === "") {
+            err.pColorDesc = "You Have to Provide This Field!";
+            count++;
+        }
+
+        _.map(secondaryColors, (item) => {
+            if (item.description === "") {
+                err.sDescription = "You Have to Provide This Field!";
+                count++;
+            }
+        });
+    }
+
 
     return (
         <Modal isOpen={isOpen}>
@@ -743,7 +823,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             Images/videos that will be used for the work
                                                             <sup className='f-14 mr-1'>*</sup>
                                                         </label>
-                                                        <div className="custom-file" style={fileInputStyle}>
+                                                        <div className="custom-file z-n1" style={fileInputStyle}>
                                                             <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={formError?.imgOrVidForWork} onChange={(e) =>
                                                                 handleChange(e, setImgOrVidForWork)
                                                             } multiple />
@@ -825,6 +905,295 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 </div>
                                             </div>
                                         </div>
+
+
+                                        {/* color schema */}
+                                        <div className="col-12">
+                                            <div className="form-group">
+                                                <label
+                                                    htmlFor={'brandGuideline'}
+                                                    className={`f-14 text-dark-gray mb-2`}
+                                                    data-label="true"
+                                                >
+                                                    Color Schema
+                                                </label>
+                                                <React.Fragment>
+                                                    {/* primary color */}
+                                                    <div
+                                                        className="mt-3 mx-3 p-3"
+                                                        style={{
+                                                            background: "#F9F9F9",
+                                                            borderRadius: "10px",
+                                                        }}
+                                                    >
+                                                        <div className="form-group">
+                                                            <label
+                                                                htmlFor=""
+                                                                className="mb-2"
+                                                                style={{
+                                                                    fontWeight: 600,
+                                                                    color: "#777",
+                                                                }}
+                                                            >
+                                                                1. Primary Color{" "}
+                                                                <sup>*</sup>{" "}
+                                                            </label>
+
+                                                            <div className="form-group px-2">
+                                                                <label htmlFor="">
+                                                                    Choose Color:
+                                                                </label>
+                                                                <div className="input-group mb-3 col-12 col-md-6">
+                                                                    <input
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        placeholder="Recipient's username"
+                                                                        aria-label="Recipient's username"
+                                                                        aria-describedby="basic-addon2"
+                                                                        value={
+                                                                            primaryColor
+                                                                        }
+                                                                        onChange={(e) =>
+                                                                            onChange(
+                                                                                e,
+                                                                                setPrimaryColor
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                    <div className="input-group-append">
+                                                                        <span
+                                                                            className="input-group-text px-1 border-0"
+                                                                            id="basic-addon2"
+                                                                        >
+                                                                            <input
+                                                                                type="color"
+                                                                                value={
+                                                                                    primaryColor
+                                                                                }
+                                                                                onChange={(
+                                                                                    e
+                                                                                ) =>
+                                                                                    onChange(
+                                                                                        e,
+                                                                                        setPrimaryColor
+                                                                                    )
+                                                                                }
+                                                                                style={{
+                                                                                    width: "32px",
+                                                                                    border: "none",
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group pl-2">
+                                                                <label htmlFor="">
+                                                                    Where Should
+                                                                    Designer Use this
+                                                                    Color <sup>*</sup>
+                                                                </label>
+                                                                <div className="ck-editor-holder">
+                                                                    <CKEditorComponent
+                                                                        onChange={(
+                                                                            e,
+                                                                            editor
+                                                                        ) =>
+                                                                            setPrimaryColorDescription(
+                                                                                editor.getData()
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </div>
+
+                                                                {error?.pColorDesc && (
+                                                                    <div
+                                                                        className=""
+                                                                        style={{
+                                                                            color: "red",
+                                                                        }}
+                                                                    >
+                                                                        {" "}
+                                                                        {
+                                                                            error?.pColorDesc
+                                                                        }{" "}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* secondary color */}
+                                                    <div
+                                                        className="mt-3 mx-3 p-3"
+                                                        style={{
+                                                            background: "#F9F9F9",
+                                                            borderRadius: "10px",
+                                                        }}
+                                                    >
+                                                        <div className="form-group">
+                                                            <label
+                                                                htmlFor=""
+                                                                className="mb-2"
+                                                                style={{
+                                                                    fontWeight: 600,
+                                                                    color: "#777",
+                                                                }}
+                                                            >
+                                                                2. Secondary Color{" "}
+                                                                <sup>*</sup>{" "}
+                                                            </label>
+
+                                                            {_.map(
+                                                                secondaryColors,
+                                                                (item, index) => (
+                                                                    <div
+                                                                        className="p-3"
+                                                                        key={item.id}
+                                                                    >
+                                                                        <div className="form-group">
+                                                                            <label htmlFor="">
+                                                                                <b>
+                                                                                    {index +
+                                                                                        1}
+                                                                                    .
+                                                                                </b>{" "}
+                                                                                Choose
+                                                                                Color:
+                                                                            </label>
+                                                                            <div className="d-flex align-items-center">
+                                                                                <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        className="form-control"
+                                                                                        placeholder="Recipient's username"
+                                                                                        aria-label="Recipient's username"
+                                                                                        aria-describedby="basic-addon2"
+                                                                                        value={
+                                                                                            item.color
+                                                                                        }
+                                                                                        onChange={(
+                                                                                            e
+                                                                                        ) =>
+                                                                                            handleSecondaryColorChange(
+                                                                                                e,
+                                                                                                item.id
+                                                                                            )
+                                                                                        }
+                                                                                    />
+
+                                                                                    <div className="input-group-append">
+                                                                                        <span
+                                                                                            className="input-group-text px-1 border-0"
+                                                                                            id="basic-addon2"
+                                                                                        >
+                                                                                            <input
+                                                                                                type="color"
+                                                                                                value={
+                                                                                                    item.color
+                                                                                                }
+                                                                                                onChange={(
+                                                                                                    e
+                                                                                                ) =>
+                                                                                                    handleSecondaryColorChange(
+                                                                                                        e,
+                                                                                                        item.id
+                                                                                                    )
+                                                                                                }
+                                                                                                style={{
+                                                                                                    width: "32px",
+                                                                                                    border: "none",
+                                                                                                }}
+                                                                                            />
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                {_.size(
+                                                                                    secondaryColors
+                                                                                ) >
+                                                                                    1 && (
+                                                                                        <button
+                                                                                            aria-label="remove"
+                                                                                            onClick={(
+                                                                                                e
+                                                                                            ) =>
+                                                                                                removeSecondaryColor(
+                                                                                                    e,
+                                                                                                    item.id
+                                                                                                )
+                                                                                            }
+                                                                                            className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                                        >
+                                                                                            <i className="fa-solid fa-trash-can" />
+                                                                                        </button>
+                                                                                    )}
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div className="form-group pl-3">
+                                                                            <label htmlFor="">
+                                                                                Where
+                                                                                Should
+                                                                                Designer
+                                                                                Use this
+                                                                                Color{" "}
+                                                                                <sup>
+                                                                                    *
+                                                                                </sup>
+                                                                            </label>
+                                                                            <div className="ck-editor-holder">
+                                                                                <CKEditorComponent
+                                                                                    onChange={(
+                                                                                        e,
+                                                                                        editor
+                                                                                    ) =>
+                                                                                        handleSecondaryColorDescriptionChange(
+                                                                                            e,
+                                                                                            editor,
+                                                                                            item.id
+                                                                                        )
+                                                                                    }
+                                                                                />
+                                                                            </div>
+
+                                                                            {error?.sDescription && (
+                                                                                <div
+                                                                                    className=""
+                                                                                    style={{
+                                                                                        color: "red",
+                                                                                    }}
+                                                                                >
+                                                                                    {" "}
+                                                                                    {
+                                                                                        error?.sDescription
+                                                                                    }{" "}
+                                                                                </div>
+                                                                            )}
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            )}
+
+                                                            <div className="d-flex align-items-center px-3">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={
+                                                                        addSecondaryColor
+                                                                    }
+                                                                    className="bg-transparent text-primary hover-underline ml-auto"
+                                                                >
+                                                                    + Another Color
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </React.Fragment>
+
+                                            </div>
+                                        </div>
+                                        {/* end color schema */}
 
                                     </> : null
                                 }
