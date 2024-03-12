@@ -18,6 +18,7 @@ import SalesRiskAnalysisTableLoader from "../loader/SalesRiskAnalysisTableLoader
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import SalesRiskAnalysisTablePagination from "./SalesRiskAnalysisTablePagination";
 import EditApplicablePointsModal from "../modal/EditApplicablePointsModal";
+import RuleActionConfirmationModal from "../modal/RuleActionConfirmationModal";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -39,6 +40,7 @@ const SalesRiskAnalysisTable = ({
     });
     // modal open close state
     const [editPointModalOpen, setEditPointModalOpen] = React.useState(false);
+    const [ruleActionModalOpen, setRuleActionModalOpen] = React.useState(false);
 
     // modal state data
     const [editPointData, setEditPointData] = React.useState({});
@@ -101,6 +103,10 @@ const SalesRiskAnalysisTable = ({
                     selectedRule: selectedRule,
                 });
             },
+            handleRuleActions: (rule, data) => {
+                console.log("Rule Actions", rule, data);
+                setRuleActionModalOpen(true);
+            },
         },
     });
 
@@ -108,6 +114,10 @@ const SalesRiskAnalysisTable = ({
 
     const handleCloseEditPointModal = () => {
         setEditPointModalOpen(false);
+    };
+
+    const handleCloseRuleActionModal = () => {
+        setRuleActionModalOpen(false);
     };
 
     return (
@@ -196,6 +206,12 @@ const SalesRiskAnalysisTable = ({
                 editPointData={editPointData}
             />
 
+            <RuleActionConfirmationModal
+                open={ruleActionModalOpen}
+                closeModal={handleCloseRuleActionModal}
+                actionType={"Disable"}
+            />
+
             {/* pagination */}
             <SalesRiskAnalysisTablePagination
                 currentPage={pageIndex + 1}
@@ -217,7 +233,6 @@ const SalesRiskAnalysisTable = ({
 
 export default SalesRiskAnalysisTable;
 
-
 SalesRiskAnalysisTable.propTypes = {
     isLoading: PropTypes.bool,
     filter: PropTypes.func,
@@ -225,4 +240,4 @@ SalesRiskAnalysisTable.propTypes = {
     search: PropTypes.string,
     tableColumns: PropTypes.array,
     tableData: PropTypes.array,
-}
+};

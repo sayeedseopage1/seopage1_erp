@@ -118,14 +118,12 @@ export const NewRulesModalTableColumnsData = [
                         </p>
                     </Switch.Case>
                     <Switch.Case condition={data?.policyType.name === "yes/No"}>
-                        <p
+                        <div
                             style={{
-                                color: "#8F8F8F",
-                                fontSize: "14px",
-                                fontFamily: "Poppins",
+                                height: "56px",
+                                width: "100%",
                             }}
-                            className="py-3"
-                        >   </p>
+                        />
                         <ul
                             style={{
                                 listStyle: "disc",
@@ -201,14 +199,12 @@ export const NewRulesModalTableColumnsData = [
                         <Switch.Case
                             condition={data?.policyType.name === "yes/No"}
                         >
-                            <p
+                            <div
                                 style={{
-                                    color: "#8F8F8F",
-                                    fontSize: "14px",
-                                    fontFamily: "Poppins",
+                                    height: "56px",
+                                    width: "100%",
                                 }}
-                                className="py-3"
-                            ></p>
+                            />
                             <ul
                                 style={{
                                     listStyle: "disc",

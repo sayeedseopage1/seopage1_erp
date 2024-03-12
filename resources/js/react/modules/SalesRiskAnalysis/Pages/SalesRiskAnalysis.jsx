@@ -196,12 +196,39 @@ const SalesRiskAnalysis = () => {
     };
 
     const handlePolicyAdded = async () => {
-        if(newPolicyInputData?.length === 0) {
+        if (newPolicyInputData?.length === 0) {
             toast.error("Please add a policy first");
             return;
         }
         try {
-            const response = await submitData(newPolicyInputData);
+
+            // prepare payload
+            const payload = {
+                title: newPolicyInputData[0]?.title,
+                department: newPolicyInputData[0]?.department?.id,
+                ruleList: newPolicyInputData.map((item) => {
+                    const rule = {
+                        policyType: item.policyType?.name,
+                        title: item.title,
+                    };
+                    if (item.value) rule.value = item.value;
+                    if (!_.isEmpty(item.rulesType))
+                        rule.rulesType = item.rulesType.name;
+                    if (item.from) rule.from = item.from;
+                    if (item.to) rule.to = item.to;
+                    if (item.points) rule.points = item.points;
+                    if (item.yes) rule.yes = item.yes;
+                    if (item.no) rule.no = item.no;
+                    if (item.countries?.length > 0) {
+                        rule.countries = item.countries.map((country) => ({
+                            [country.iso]: country.niceName,
+                        }));
+                    }
+                    return rule;
+                }),
+            };
+
+            const response = await submitData(payload);
             if (response?.data) {
                 toast.success("New policy added successfully");
                 handleAddNewPolicyModal();
@@ -320,9 +347,10 @@ const SalesRiskAnalysis = () => {
                     setIsRuleUpdating={setIsRuleUpdating}
                     isRuleUpdating={isRuleUpdating}
                     handlePolicyAdded={handlePolicyAdded}
-                    isLoadingAddSalesRiskAnalysisRule={isLoadingAddSalesRiskAnalysisRule}
+                    isLoadingAddSalesRiskAnalysisRule={
+                        isLoadingAddSalesRiskAnalysisRule
+                    }
                 />
-
             </SalesRiskAnalysisContainer>
         </React.Fragment>
     );

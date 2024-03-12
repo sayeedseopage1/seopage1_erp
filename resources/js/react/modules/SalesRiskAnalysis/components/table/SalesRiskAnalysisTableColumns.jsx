@@ -9,15 +9,18 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <span
-                    style={{
-                        color: "#000000",
-                        fontSize: "14px",
-                        fontFamily: "Poppins",
-                    }}
-                >
-                    {data?.title}
-                </span>
+                <div className="d-flex align-items-center">
+                    <span
+                        style={{
+                            color: "#000000",
+                            fontSize: "14px",
+                            fontFamily: "Poppins",
+                        }}
+                    >
+                        {data?.title}
+                    </span>
+                    <button className="btn btn-info ml-4">Questions</button>
+                </div>
             );
         },
     },
@@ -122,9 +125,28 @@ export const SalesRiskAnalysisTableColumns = [
                                 >
                                     <EditIcon />
                                 </div>
+                                <button
+                                    className="btn btn-success"
+                                    style={{
+                                        fontSize: "12px",
+                                        padding: "3px 12px",
+                                        marginLeft: "10px",
+                                    }}
+                                    onClick={() => {
+                                        action.handleRuleActions(rule, data);
+                                    }}
+                                >
+                                    Enable
+                                </button>
                             </SalesPointsContainer>
                         );
                     })}
+                    <div
+                        style={{
+                            height: "33px",
+                            width: "253px",
+                        }}
+                    />
                 </div>
             );
         },
