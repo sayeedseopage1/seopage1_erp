@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('/', 'index')->name('index');
             Route::get('input-fields', 'riskPolicyInputFields')->name('input-fields');
             Route::post('save', 'save')->name('save');
+            Route::get('question-fields', 'policyQuestionInputFields')->name('question-fields');
             Route::get('rule-list', 'ruleList')->name('rule-list');
         });
     }
@@ -307,6 +309,71 @@ class SalesRiskPolicyController extends AccountBaseController
             'status' => 'success',
             'message' => 'New Sale Risk Policy created Successfully.'
         ]);
+    }
+
+    function policyQuestionInputFields()
+    {
+        $fileds = [
+            [
+                'label' => 'Title',
+                'name' => 'title',
+                'type' => 'input'
+            ],
+            [
+                'label' => 'Type',
+                'name' => 'type',
+                'type' => 'select',
+                'structure' => [
+                    [
+                        'label' => 'Text',
+                        'name' => 'text',
+                    ],
+                    [
+                        'label' => 'Yes/No',
+                        'name' => 'yes_no',
+                    ],
+                    [
+                        'label' => 'Nemeric',
+                        'name' => 'nemeric',
+                    ],
+                    [
+                        'label' => 'List',
+                        'name' => 'list',
+                    ],
+                    [
+                        'label' => 'Long Text',
+                        'name' => 'long_text',
+                    ],
+                ]
+            ],
+            [
+                'label' => 'Parent Question',
+                'name' => 'parent_id',
+                'type' => 'select',
+                'structure' => SalesPolicyQuestion::get(['id', 'title'])
+            ],
+            [
+                'label' => 'Placeholder',
+                'name' => 'placeholder',
+                'type' => 'input'
+            ],
+            [
+                'label' => 'Sequence',
+                'name' => 'sequence',
+                'type' => 'numeric'
+            ],
+            [
+                'label' => 'Department',
+                'name' => 'department',
+                'type' => 'select',
+                'structure' => Team::with('childs')->get()->map(function ($item) {
+                    return ['id' => $item->id, 'name' => $item->team_name];
+                })
+            ],
+
+        ];
+
+        return response()->json($fileds);
     }
 
     function ruleList()
