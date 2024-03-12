@@ -16,7 +16,7 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         }),
         addSalesRiskAnalysisRule: build.mutation({
             query: (body) => ({
-                url: `/account/sales-risk-policies/rule`,
+                url: `/account/sales-risk-policies/save`,
                 method: "POST",
                 body,
                 headers: {
