@@ -20,6 +20,13 @@ import { convertTime } from "../../utils/converTime";
 import { CompareDate } from "../../utils/dateController";
 import AssginedToSelection from "./AssignedToSelection";
 import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementModal";
+import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsWorkSelection";
+import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
+import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
+
+const fileInputStyle = {
+    height: "39px",
+}
 
 const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const dispatch = useDispatch();
@@ -31,6 +38,20 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
+    // for graphic designer start
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
+    const [typeOfLogo, setTypeOfLogo] = useState("");
+    const [brandName, setBrandName] = useState("");
+    const [numOfVersions, setNumOfVersions] = useState(null);
+    const [reference, setReference] = useState("");
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
+    const [textForDesign, setTextForDesign] = useState('');
+    const [imageForDesigner, setImageForDesigner] = useState(null);
+    const [imgOrVidForWork, setImgOrVidForWork] = useState(null);
+    const [fontName, setFontName] = useState('');
+    const [fontUrl, setFontUrl] = useState('');
+    const [brandGuideline, setBrandGuideline] = useState(null);
+    // for graphic designer end
     const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
@@ -38,6 +59,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
+
 
     const [formError, setFormError] = React.useState(null);
 
@@ -59,6 +81,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [checkRestrictedWords, { isLoading: checking }] =
         useCheckRestrictedWordsMutation();
 
+    //TODO: clear form for new added fields
     const clearForm = () => {
         setTitle("");
         setMilestone(null);
@@ -121,6 +144,48 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
         if (!dueDate) {
             err.dueDate = "You have to select a due date";
+            errCount++;
+        }
+
+        if (!typeOfGraphicsCategory) {
+            err.typeOfGraphicsCategory = "You have to select Type of graphic work";
+            errCount++;
+        }
+        if (!typeOfLogo) {
+            err.typeOfLogo = "You have to select Type of logo";
+            errCount++;
+        }
+
+        if (!reference) {
+            err.reference = "The reference field is required";
+            errCount++;
+        }
+        if (!textForDesign) {
+            err.textForDesign = "The text for design field is required";
+            errCount++;
+        }
+        if (!brandName) {
+            err.brandName = "The brand name field is required";
+            errCount++;
+        }
+        if (!numOfVersions) {
+            err.numOfVersions = "Number of versions is required";
+            errCount++;
+        }
+        if (!fileTypesNeeded) {
+            err.fileTypesNeeded = "File types is required";
+            errCount++;
+        }
+        if (!imageForDesigner) {
+            err.imageForDesigner = "Image is required for designer";
+            errCount++;
+        }
+        if (!imgOrVidForWork) {
+            err.imgOrVidForWork = "Images/videos is requiredn for work";
+            errCount++;
+        }
+        if (!fontName) {
+            err.fontName = "Font name is required";
             errCount++;
         }
 
@@ -397,7 +462,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             }}
                                                         >
                                                             {milestone?.milestone_title ??
-                                                                "--"}
+                                                                "Select a milestone"}
                                                         </span>
                                                         <div className="__icon">
                                                             <i className="fa-solid fa-sort"></i>
@@ -415,11 +480,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                 active,
                                                                 selected,
                                                             }) =>
-                                                                `sp1-select-option selected ${
-                                                                    active ||
+                                                                `sp1-select-option selected ${active ||
                                                                     selected
-                                                                        ? "active"
-                                                                        : ""
+                                                                    ? "active"
+                                                                    : ""
                                                                 }`
                                                             }
                                                             value={milestone}
@@ -529,6 +593,243 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                     </div>
                                 </div>
 
+                                {/* TODO: it will show conditionally here, when task category is graphics or ui/ux  */}
+                                {
+                                    taskCategory ? taskCategory?.category_name === "Graphic Design" && <>
+                                        {/* Type Of Graphics Work */}
+                                        <div className="col-12 col-md-6">
+                                            <TypeOfGraphicsWorkSelection
+                                                selected={typeOfGraphicsCategory}
+                                                onSelect={setTypeOfGraphicsCategory}
+                                                taskId={params?.projectId}
+                                            />
+                                            {formError?.typeOfGraphicsCategory && (
+                                                <div style={{ color: "red" }}>
+                                                    {formError?.typeOfGraphicsCategory}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* for logo  */}
+                                        {
+                                            typeOfGraphicsCategory?.type_name === "Logo" && <>
+                                                <div className="col-12 col-md-6">
+                                                    <TypeOfLogo
+                                                        selected={typeOfLogo}
+                                                        onSelect={setTypeOfLogo}
+                                                        taskId={params?.projectId}
+                                                    />
+                                                    {formError?.typeOfLogo && (
+                                                        <div style={{ color: "red" }}>
+                                                            {formError?.typeOfLogo}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="brandName"
+                                                        label="Brand Name"
+                                                        type="text"
+                                                        placeholder="Enter brand name"
+                                                        name="brandName"
+                                                        required={true}
+                                                        value={brandName}
+                                                        error={formError?.brandName}
+                                                        onChange={(e) =>
+                                                            handleChange(e, setBrandName)
+                                                        }
+                                                    />
+                                                </div>
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="numOfVersions"
+                                                        label="Number of Versions"
+                                                        type="number"
+                                                        placeholder="Enter Number of versions"
+                                                        name="numOfVersions"
+                                                        required={true}
+                                                        value={numOfVersions}
+                                                        error={formError?.numOfVersions}
+                                                        onChange={(e) =>
+                                                            handleChange(e, setNumOfVersions)
+                                                        }
+                                                    />
+                                                </div>
+                                                <div className="col-12 col-md-6">
+                                                    <div className={`form-group my-3 w-100`}>
+                                                        <label
+                                                            htmlFor={'fileTypesNeeded'}
+                                                            className={`f-14 text-dark-gray mb-1`}
+                                                            data-label="true"
+                                                        >
+                                                            File Types Needed
+                                                            <sup className='f-14 mr-1'>*</sup>
+                                                        </label>
+                                                        <FileTypesNeeded
+                                                            className={`form-control height-35 w-100 f-14`}
+                                                            id='fileTypesNeeded'
+                                                            fileTypesNeeded={fileTypesNeeded}
+                                                            setFileTypesNeeded={setFileTypesNeeded}
+                                                            multiple
+                                                        />
+                                                        {formError?.fileTypesNeeded && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.fileTypesNeeded}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        }
+                                        {/* for Banner or company profile */}
+                                        {
+                                            (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="textForDesign"
+                                                        label="Attach text that will be used for the design"
+                                                        type="text"
+                                                        placeholder="Enter a text for design"
+                                                        name="textForDesign"
+                                                        required={true}
+                                                        value={textForDesign}
+                                                        error={formError?.textForDesign}
+                                                        onChange={(e) =>
+                                                            handleChange(e, setTextForDesign)
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        }
+
+                                        {/* background removal or image retouching */}
+                                        {
+                                            (typeOfGraphicsCategory?.type_name === "Background Removal" || typeOfGraphicsCategory?.type_name === "Image Retouching") && <>
+                                                <div className="col-12 col-md-6">
+                                                    <div className={`form-group my-3 w-100`}>
+                                                        <label
+                                                            htmlFor={'imageForDesigner'}
+                                                            className={`f-14 text-dark-gray mb-2`}
+                                                            data-label="true"
+                                                        >
+                                                            Image where the designer will work
+                                                            <sup className='f-14 mr-1'>*</sup>
+                                                        </label>
+                                                        <div className="custom-file" style={fileInputStyle}>
+                                                            <input type="file" className="custom-file-input" id="imageForDesigner" required={true} error={formError?.imageForDesigner} onChange={(e) =>
+                                                                handleChange(e, setImageForDesigner)
+                                                            } />
+                                                            <label className="custom-file-label" htmlFor="imageForDesigner">Choose file</label>
+                                                        </div>
+                                                        {formError?.imageForDesigner && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.imageForDesigner}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        }
+
+                                        {/* motion graphics */}
+                                        {
+                                            typeOfGraphicsCategory?.type_name === "Motion Graphics" && <>
+                                                <div className="col-12 col-md-6">
+                                                    <div className={`form-group my-3 w-100`}>
+                                                        <label
+                                                            htmlFor={'imgOrVidForWork'}
+                                                            className={`f-14 text-dark-gray mb-2`}
+                                                            data-label="true"
+                                                        >
+                                                            Images/videos that will be used for the work
+                                                            <sup className='f-14 mr-1'>*</sup>
+                                                        </label>
+                                                        <div className="custom-file" style={fileInputStyle}>
+                                                            <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={formError?.imgOrVidForWork} onChange={(e) =>
+                                                                handleChange(e, setImgOrVidForWork)
+                                                            } multiple />
+                                                            <label className="custom-file-label" htmlFor="imgOrVidForWork">Choose file</label>
+                                                        </div>
+                                                        {formError?.imgOrVidForWork && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.imgOrVidForWork}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        }
+
+                                        {/* Reference */}
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="reference"
+                                                label="Reference"
+                                                type="text"
+                                                placeholder="Enter a task reference"
+                                                name="reference"
+                                                required={true}
+                                                value={reference}
+                                                error={formError?.reference}
+                                                onChange={(e) =>
+                                                    handleChange(e, setReference)
+                                                }
+                                            />
+                                        </div>
+
+                                        {/* Font name */}
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="fontName"
+                                                label="Font Name"
+                                                type="text"
+                                                placeholder="Enter a font name"
+                                                name="fontName"
+                                                required={true}
+                                                value={fontName}
+                                                error={formError?.fontName}
+                                                onChange={(e) =>
+                                                    handleChange(e, setFontName)
+                                                }
+                                            />
+                                        </div>
+
+                                        {/* font url  */}
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="fontUrl"
+                                                label="Font Url"
+                                                type="url"
+                                                placeholder="Enter font url"
+                                                name="fontUrl"
+                                                value={fontUrl}
+                                                onChange={(e) =>
+                                                    handleChange(e, setFontUrl)
+                                                }
+                                            />
+                                        </div>
+                                        {/* Brand guideline */}
+                                        <div className="col-12 col-md-6">
+                                            <div className={`form-group my-3 w-100`}>
+                                                <label
+                                                    htmlFor={'brandGuideline'}
+                                                    className={`f-14 text-dark-gray mb-2`}
+                                                    data-label="true"
+                                                >
+                                                    Brand guideline
+                                                </label>
+                                                <div className="custom-file" style={fileInputStyle}>
+                                                    <input type="file" className="custom-file-input" id="brandGuideline" error={formError?.brandGuideline} onChange={(e) =>
+                                                        handleChange(e, setBrandGuideline)
+                                                    } multiple />
+                                                    <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </> : null
+                                }
+
+
                                 {/* assignee to */}
                                 <div className="col-12 col-md-6">
                                     <AssginedToSelection
@@ -603,8 +904,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     projectInfo?.minutes_left
                                                 ) > 0
                                                     ? Number(
-                                                          projectInfo?.minutes_left
-                                                      )
+                                                        projectInfo?.minutes_left
+                                                    )
                                                     : 0
                                             )}
                                         </div>

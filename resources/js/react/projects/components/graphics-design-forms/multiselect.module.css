@@ -1,0 +1,20 @@
+.cnx_select_box_custom {
+    width: 100% !important;
+    padding: 7px 10px !important;
+    border: 1px solid #e8eef3 !important;
+    border-radius: 4px !important;
+    font-size: 14px !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    min-height: 39px !important;
+}
+
+#cnx_select_box_tag_item {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+}
+
+.multiSelectOptions {
+    height: 250px !important;
+    overflow-y: auto !important;
+}
