@@ -204,7 +204,7 @@ const SalesRiskAnalysis = () => {
 
             // prepare payload
             const payload = {
-                title: newPolicyInputData[0]?.title,
+                title: newPolicyInputData[0]?.policyName,
                 department: newPolicyInputData[0]?.department?.id,
                 ruleList: newPolicyInputData.map((item) => {
                     const rule = {

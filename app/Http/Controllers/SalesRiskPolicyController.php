@@ -7,11 +7,13 @@ use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
 class SalesRiskPolicyController extends AccountBaseController
 {
+    protected $policyTypes = ['lessThan', 'greaterThan', 'fixed', 'range', 'yesNo', 'list'];
     public function __construct()
     {
         parent::__construct();
@@ -271,17 +273,12 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function save(Request $req)
     {
-        // TODO: Convert Model to BaseModel
-        // ex: class Attendance extends BaseModel
-        dd($req->all());
         $validator = Validator::make($req->all(), [
             'title' => 'required',
-            'policyType' => 'required',
-            'valueType' => 'required',
-            'valueTitle' => 'required',
-            'value' => 'required|numeric',
-            'point' => 'required|numeric',
             'department' => 'required',
+            'ruleList' => 'required|array|min:1',
+            'ruleList.policyType' => 'in:' . implode(',', $this->policyTypes),
+            // 'ruleList.title' => 'required',
             'comment' => 'nullable'
         ]);
 
@@ -292,19 +289,77 @@ class SalesRiskPolicyController extends AccountBaseController
             ]);
         }
 
-        /* SalesRiskPolicy::create([
-            'title' => $req->title,
-            'type' => $req->policyType,
-            'value_type' => $req->valueType,
-            'valueTitle' => $req->valueTitle,
-            'value' => $req->value,
-            'point' => $req->point,
-            'department' => $req->department,
-            'comment' => $req->comment,
-        ]); */
+        // dd($req->all());
 
+        DB::beginTransaction();
 
+        try {
+            $policy =  SalesRiskPolicy::create([
+                'title' => $req->title,
+                'department' => $req->department,
+                'type' => 'parent',
+            ]);
 
+            // dd($policy);
+            foreach ($req->ruleList as $item) {
+                $item = (object)$item;
+                // dd($item);
+                $rowData = [
+                    'title' => $item->title,
+                    'parent_id' => $policy->id,
+                    'department' => $req->department,
+                ];
+
+                switch ($item->policyType) {
+                    case "lessThan":
+                        $rowData['type'] = 'less_than';
+                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value'] = $item->value;
+                        $rowData['point'] = $item->points;
+                        break;
+                    case "greaterThan":
+                        $rowData['type'] = 'greater_than';
+                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value'] = $item->value;
+                        $rowData['point'] = $item->points;
+                        break;
+                    case "fixed":
+                        $rowData['type'] = 'fixed';
+                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value'] = $item->value;
+                        $rowData['point'] = $item->points;
+                        break;
+
+                    case "range":
+                        $rowData['type'] = 'range';
+                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value'] = $item->from . ', ' . $item->to;
+                        $rowData['point'] = $item->points;
+                        break;
+
+                    case "yesNo":
+                        $rowData['type'] = 'yes_no';
+                        $rowData['value'] = $item->yes . ', ' . $item->no;
+                        break;
+
+                    case "list":
+                        $rowData['type'] = 'list';
+                        $rowData['value_type'] = $item->rulesType;
+                        if ($item->rulesType == "countries") {
+                            $rowData['value'] = json_encode($item->countries);
+                        }
+                        $rowData['point'] = $item->points;
+                        break;
+                }
+                // dd($rowData);
+                SalesRiskPolicy::create($rowData);
+            }
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        dd('');
         return response()->json([
             'status' => 'success',
             'message' => 'New Sale Risk Policy created Successfully.'
@@ -372,6 +427,25 @@ class SalesRiskPolicyController extends AccountBaseController
             ],
 
         ];
+
+        // $fileds = [
+        //     'title' => 'asdf',
+        //     'department' => '1',
+        //     'ruleList' => [
+        //         [
+        //             'policyType' => 'lessThan',
+        //             'title' => 'Less Than 32%',
+        //             'rulesType' => 'percentage',
+        //             'value' => '32'
+        //         ],
+        //         [
+        //             'policyType' => 'greaterThan',
+        //             'title' => 'Greater Than $12',
+        //             'rulesType' => 'currency',
+        //             'value' => '12'
+        //         ]
+        //     ]
+        // ];
 
         return response()->json($fileds);
     }
