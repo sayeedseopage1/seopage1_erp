@@ -263,7 +263,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
-        console.log("formk data", fd)
+        console.log("form data", fd)
 
         // TODO: it will be uncommented when it will be ready
         // handle form submit
@@ -673,7 +673,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                     </div>
                                 </div>
 
-                                {/* TODO: it will show conditionally here, when task category is graphics or ui/ux  */}
+                                {/* TODO: it will show conditionally here, when task category is graphics  */}
                                 {
                                     taskCategory ? taskCategory?.category_name === "Graphic Design" && <>
                                         {/* Type Of Graphics Work */}

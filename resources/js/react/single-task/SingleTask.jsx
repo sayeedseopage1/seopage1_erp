@@ -60,7 +60,6 @@ const SingleTaskPage = () => {
 
     const calculateTotalTime = (task) => {
         if (task) {
-            console.log("task in function", task);
             let totalTimeInMinutes = 0;
             const parentTimeArray = task?.parent_task_time_log?.split(" ");
             const subTimeArray = task?.sub_task_time_log?.split(" ");
@@ -68,7 +67,6 @@ const SingleTaskPage = () => {
             // console.log("parent time array", parentTimeArray);
             // console.log("sub time array", subTimeArray);
 
-            console.log("length", task?.subtask.length);
             if (task?.subtask.length === 0) {
                 if (parentTimeArray && parentTimeArray.length >= 1) {
                     totalTimeInMinutes += parseInt(parentTimeArray[0]) * 60;
@@ -287,18 +285,18 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                            <sup
-                                                                className="rounded-pill bg-dark text-white px-1 ml-1"
-                                                                style={{
-                                                                    fontSize:
-                                                                        "10px",
-                                                                    whiteSpace:
-                                                                        "nowrap",
-                                                                }}
-                                                            >
-                                                                It's You
-                                                            </sup>
-                                                        )}
+                                                                <sup
+                                                                    className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "10px",
+                                                                        whiteSpace:
+                                                                            "nowrap",
+                                                                    }}
+                                                                >
+                                                                    It's You
+                                                                </sup>
+                                                            )}
                                                     </span>
 
                                                     <span
@@ -360,18 +358,18 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                            <sup
-                                                                className="rounded-pill bg-dark text-white px-1 ml-1"
-                                                                style={{
-                                                                    fontSize:
-                                                                        "10px",
-                                                                    whiteSpace:
-                                                                        "nowrap",
-                                                                }}
-                                                            >
-                                                                It's You
-                                                            </sup>
-                                                        )}
+                                                                <sup
+                                                                    className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "10px",
+                                                                        whiteSpace:
+                                                                            "nowrap",
+                                                                    }}
+                                                                >
+                                                                    It's You
+                                                                </sup>
+                                                            )}
                                                     </span>
 
                                                     <span
@@ -421,16 +419,16 @@ const SingleTaskPage = () => {
                                                             Number(
                                                                 loggedUser?.getId()
                                                             ) && (
-                                                            <sup
-                                                                className="rounded-pill bg-dark text-white px-1"
-                                                                style={{
-                                                                    fontSize:
-                                                                        "10px",
-                                                                }}
-                                                            >
-                                                                It's You
-                                                            </sup>
-                                                        )}
+                                                                <sup
+                                                                    className="rounded-pill bg-dark text-white px-1"
+                                                                    style={{
+                                                                        fontSize:
+                                                                            "10px",
+                                                                    }}
+                                                                >
+                                                                    It's You
+                                                                </sup>
+                                                            )}
                                                     </span>
 
                                                     <span

@@ -29,6 +29,14 @@ import { CompareDate } from "../../../utils/dateController";
 import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
 import { calenderOpen } from "./helper/calender_open";
+import TypeOfGraphicsWorkSelection from "../../../projects/components/graphics-design-forms/TypeOfGraphicsWorkSelection";
+import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeOfLogo";
+import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
+
+const fileInputStyle = {
+    height: "39px",
+    zIndex: '0'
+}
 
 const SubTaskForm = ({ close, isDesignerTask }) => {
     const {
@@ -55,6 +63,32 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
+
+    //state for graphic designer start
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
+    const [typeOfLogo, setTypeOfLogo] = useState("");
+    const [brandName, setBrandName] = useState("");
+    const [numOfVersions, setNumOfVersions] = useState(null);
+    const [reference, setReference] = useState("");
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
+    const [textForDesign, setTextForDesign] = useState('');
+    const [imageForDesigner, setImageForDesigner] = useState(null);
+    const [imgOrVidForWork, setImgOrVidForWork] = useState(null);
+    const [fontName, setFontName] = useState('');
+    const [fontUrl, setFontUrl] = useState('');
+    const [brandGuideline, setBrandGuideline] = useState(null);
+    const [colorSchema, setColorSchema] = React.useState("");
+    const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
+    const [primaryColorDescription, setPrimaryColorDescription] =
+        React.useState("");
+    const [secondaryColors, setSecondaryColors] = React.useState([
+        {
+            id: "egqsz",
+            color: "#1D82F5",
+            description: "",
+        },
+    ]);
+    //state for graphic designer end
 
     const [pageType, setPageType] = React.useState("");
     const [pageTypeOthers, setPageTypeOthers] = React.useState("");
@@ -145,11 +179,52 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
         if (assignedTo && assignedTo?.isOverloaded) {
             toast.warn(
-                `You cannot assign this task to ${assignedTo?.name}  because ${
-                    assignedTo?.gender === "male" ? "He " : "She "
+                `You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === "male" ? "He " : "She "
                 } has more than 04 Submittable tasks.`
             );
             count++;
+        }
+
+        if (!typeOfGraphicsCategory) {
+            err.typeOfGraphicsCategory = "You have to select Type of graphic work";
+            errCount++;
+        }
+        if (!typeOfLogo) {
+            err.typeOfLogo = "You have to select Type of logo";
+            errCount++;
+        }
+
+        if (!reference) {
+            err.reference = "The reference field is required";
+            errCount++;
+        }
+        if (!textForDesign) {
+            err.textForDesign = "The text for design field is required";
+            errCount++;
+        }
+        if (!brandName) {
+            err.brandName = "The brand name field is required";
+            errCount++;
+        }
+        if (!numOfVersions) {
+            err.numOfVersions = "Number of versions is required";
+            errCount++;
+        }
+        if (!fileTypesNeeded) {
+            err.fileTypesNeeded = "File types is required";
+            errCount++;
+        }
+        if (!imageForDesigner) {
+            err.imageForDesigner = "Image is required for designer";
+            errCount++;
+        }
+        if (!imgOrVidForWork) {
+            err.imgOrVidForWork = "Images/videos is requiredn for work";
+            errCount++;
+        }
+        if (!fontName) {
+            err.fontName = "Font name is required";
+            errCount++;
         }
 
         if (!pageType) {
@@ -439,6 +514,70 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPageTypeName("");
     }, [pageType]);
 
+    // add secondary color
+    const addSecondaryColor = (e) => {
+        e.stopPropagation();
+        setSecondaryColors((prev) => [
+            ...prev,
+            {
+                id: (Math.random() + 1).toString(36).substring(7),
+                color: "#1D82F5",
+                description: "",
+            },
+        ]);
+    };
+
+    // handle secondary color change
+    const handleSecondaryColorChange = (e, id) => {
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id
+                ? { id, color: e.target.value, description: "" }
+                : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // handle secondary color description change
+    const handleSecondaryColorDescriptionChange = (e, editor, id) => {
+        let text = editor.getData();
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id ? { ...item, description: text } : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // remove secondary color
+    const removeSecondaryColor = (e, id) => {
+        let newColors = _.filter(secondaryColors, (item) => item.id !== id);
+        setSecondaryColors([...newColors]);
+    };
+
+    // color schema
+    const onChange = (e, setState) => {
+        setState(e.target.value);
+    };
+
+    let count = 0;
+    const cErr = new Object();
+
+    if (colorSchema === "") {
+        cErr.colorSchema = "You Need to Select An Option";
+        count++;
+    }
+    if (colorSchema === "yes") {
+        if (primaryColorDescription === "") {
+            cErr.pColorDesc = "You Have to Provide This Field!";
+            count++;
+        }
+
+        _.map(secondaryColors, (item) => {
+            if (item.description === "") {
+                cErr.sDescription = "You Have to Provide This Field!";
+                count++;
+            }
+        });
+    }
+
     return (
         <form onSubmit={handleSubmit}>
             <div className="sp1-subtask-form --form row">
@@ -600,6 +739,526 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     )}
                 </div>
 
+                {/* TODO: new fields will added here  */}
+                {/* Type Of Graphics Work */}
+                <div className="col-12 col-md-6">
+                    <TypeOfGraphicsWorkSelection
+                        selected={typeOfGraphicsCategory}
+                        onSelect={setTypeOfGraphicsCategory}
+                    />
+                    {err?.typeOfGraphicsCategory && (
+                        <div style={{ color: "red" }}>
+                            {err?.typeOfGraphicsCategory}
+                        </div>
+                    )}
+                </div>
+                {/* for logo  */}
+                {
+                    typeOfGraphicsCategory?.type_name === "Logo" && <>
+                        <div className="col-12 col-md-6">
+                            <TypeOfLogo
+                                selected={typeOfLogo}
+                                onSelect={setTypeOfLogo}
+                            />
+                            {err?.typeOfLogo && (
+                                <div style={{ color: "red" }}>
+                                    {err?.typeOfLogo}
+                                </div>
+                            )}
+                        </div>
+                        <div className="col-12 col-md-6">
+                            <Input
+                                id="brandName"
+                                label="Brand Name"
+                                type="text"
+                                placeholder="Enter brand name"
+                                name="brandName"
+                                required={true}
+                                value={brandName}
+                                error={err?.brandName}
+                                onChange={(e) =>
+                                    handleChange(e, setBrandName)
+                                }
+                            />
+                        </div>
+                        <div className="col-12 col-md-6">
+                            <Input
+                                id="numOfVersions"
+                                label="Number of Versions"
+                                type="number"
+                                placeholder="Enter Number of versions"
+                                name="numOfVersions"
+                                required={true}
+                                value={numOfVersions}
+                                error={err?.numOfVersions}
+                                onChange={(e) =>
+                                    handleChange(e, setNumOfVersions)
+                                }
+                            />
+                        </div>
+                        <div className="col-12 col-md-6">
+                            <div className={`form-group my-3 w-100`}>
+                                <label
+                                    htmlFor={'fileTypesNeeded'}
+                                    className={`f-14 text-dark-gray mb-1`}
+                                    data-label="true"
+                                >
+                                    File Types Needed
+                                    <sup className='f-14 mr-1'>*</sup>
+                                </label>
+                                <FileTypesNeeded
+                                    className={`form-control height-35 w-100 f-14`}
+                                    id='fileTypesNeeded'
+                                    fileTypesNeeded={fileTypesNeeded}
+                                    setFileTypesNeeded={setFileTypesNeeded}
+                                    multiple
+                                />
+                                {err?.fileTypesNeeded && (
+                                    <div style={{ color: "red" }}>
+                                        {err?.fileTypesNeeded}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                }
+
+                {/* for Banner or company profile */}
+                {
+                    (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
+                        <div className="col-12 col-md-6">
+                            <Input
+                                id="textForDesign"
+                                label="Attach text that will be used for the design"
+                                type="text"
+                                placeholder="Enter a text for design"
+                                name="textForDesign"
+                                required={true}
+                                value={textForDesign}
+                                error={err?.textForDesign}
+                                onChange={(e) =>
+                                    handleChange(e, setTextForDesign)
+                                }
+                            />
+                        </div>
+                    </>
+                }
+
+                {/* background removal or image retouching */}
+                {
+                    (typeOfGraphicsCategory?.type_name === "Background Removal" || typeOfGraphicsCategory?.type_name === "Image Retouching") && <>
+                        <div className="col-12 col-md-6">
+                            <div className={`form-group my-3 w-100`}>
+                                <label
+                                    htmlFor={'imageForDesigner'}
+                                    className={`f-14 text-dark-gray mb-2`}
+                                    data-label="true"
+                                >
+                                    Image where the designer will work
+                                    <sup className='f-14 mr-1'>*</sup>
+                                </label>
+                                <div className="custom-file" style={fileInputStyle}>
+                                    <input type="file" className="custom-file-input" id="imageForDesigner" required={true} error={err?.imageForDesigner} onChange={(e) =>
+                                        handleChange(e, setImageForDesigner)
+                                    } />
+                                    <label className="custom-file-label" htmlFor="imageForDesigner">Choose file</label>
+                                </div>
+                                {err?.imageForDesigner && (
+                                    <div style={{ color: "red" }}>
+                                        {err?.imageForDesigner}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                }
+
+
+                {/* motion graphics */}
+                {
+                    typeOfGraphicsCategory?.type_name === "Motion Graphics" && <>
+                        <div className="col-12 col-md-6">
+                            <div className={`form-group my-3 w-100`}>
+                                <label
+                                    htmlFor={'imgOrVidForWork'}
+                                    className={`f-14 text-dark-gray mb-2`}
+                                    data-label="true"
+                                >
+                                    Images/videos that will be used for the work
+                                    <sup className='f-14 mr-1'>*</sup>
+                                </label>
+                                <div className="custom-file z-n1" style={fileInputStyle}>
+                                    <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={err?.imgOrVidForWork} onChange={(e) =>
+                                        handleChange(e, setImgOrVidForWork)
+                                    } multiple />
+                                    <label className="custom-file-label" htmlFor="imgOrVidForWork">Choose file</label>
+                                </div>
+                                {err?.imgOrVidForWork && (
+                                    <div style={{ color: "red" }}>
+                                        {err?.imgOrVidForWork}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </>
+                }
+
+                {/* Reference */}
+                <div className="col-12 col-md-6">
+                    <Input
+                        id="reference"
+                        label="Reference"
+                        type="text"
+                        placeholder="Enter a task reference"
+                        name="reference"
+                        required={true}
+                        value={reference}
+                        error={err?.reference}
+                        onChange={(e) =>
+                            handleChange(e, setReference)
+                        }
+                    />
+                </div>
+
+                {/* Font name */}
+                <div className="col-12 col-md-6">
+                    <Input
+                        id="fontName"
+                        label="Font Name"
+                        type="text"
+                        placeholder="Enter a font name"
+                        name="fontName"
+                        required={true}
+                        value={fontName}
+                        error={err?.fontName}
+                        onChange={(e) =>
+                            handleChange(e, setFontName)
+                        }
+                    />
+                </div>
+
+                {/* font url  */}
+                <div className="col-12 col-md-6">
+                    <Input
+                        id="fontUrl"
+                        label="Font Url"
+                        type="url"
+                        placeholder="Enter font url"
+                        name="fontUrl"
+                        value={fontUrl}
+                        onChange={(e) =>
+                            handleChange(e, setFontUrl)
+                        }
+                    />
+                </div>
+
+                {/* Brand guideline */}
+                <div className="col-12 col-md-6">
+                    <div className={`form-group my-3 w-100`}>
+                        <label
+                            htmlFor={'brandGuideline'}
+                            className={`f-14 text-dark-gray mb-2`}
+                            data-label="true"
+                        >
+                            Brand guideline
+                        </label>
+                        <div className="custom-file" style={fileInputStyle}>
+                            <input type="file" className="custom-file-input" id="brandGuideline" error={err?.brandGuideline} onChange={(e) =>
+                                handleChange(e, setBrandGuideline)
+                            } multiple />
+                            <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+
+                {/* color schema */}
+                <div className="col-12">
+                    <div className="form-group">
+                        <label
+                            htmlFor={'brandGuideline'}
+                            className={`f-14 text-dark-gray mb-2`}
+                            data-label="true"
+                        >
+                            Color Schema
+                        </label>
+                        <React.Fragment>
+                            {/* primary color */}
+                            <div
+                                className="mt-3 mx-3 p-3"
+                                style={{
+                                    background: "#F9F9F9",
+                                    borderRadius: "10px",
+                                }}
+                            >
+                                <div className="form-group">
+                                    <label
+                                        htmlFor=""
+                                        className="mb-2"
+                                        style={{
+                                            fontWeight: 600,
+                                            color: "#777",
+                                        }}
+                                    >
+                                        1. Primary Color{" "}
+                                        <sup>*</sup>{" "}
+                                    </label>
+
+                                    <div className="form-group px-2">
+                                        <label htmlFor="">
+                                            Choose Color:
+                                        </label>
+                                        <div className="input-group mb-3 col-12 col-md-6">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Recipient's username"
+                                                aria-label="Recipient's username"
+                                                aria-describedby="basic-addon2"
+                                                value={
+                                                    primaryColor
+                                                }
+                                                onChange={(e) =>
+                                                    onChange(
+                                                        e,
+                                                        setPrimaryColor
+                                                    )
+                                                }
+                                            />
+                                            <div className="input-group-append">
+                                                <span
+                                                    className="input-group-text px-1 border-0"
+                                                    id="basic-addon2"
+                                                >
+                                                    <input
+                                                        type="color"
+                                                        value={
+                                                            primaryColor
+                                                        }
+                                                        onChange={(
+                                                            e
+                                                        ) =>
+                                                            onChange(
+                                                                e,
+                                                                setPrimaryColor
+                                                            )
+                                                        }
+                                                        style={{
+                                                            width: "32px",
+                                                            border: "none",
+                                                        }}
+                                                    />
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="form-group pl-2">
+                                        <label htmlFor="">
+                                            Where Should
+                                            Designer Use this
+                                            Color <sup>*</sup>
+                                        </label>
+                                        <div className="ck-editor-holder">
+                                            <CKEditorComponent
+                                                onChange={(
+                                                    e,
+                                                    editor
+                                                ) =>
+                                                    setPrimaryColorDescription(
+                                                        editor.getData()
+                                                    )
+                                                }
+                                            />
+                                        </div>
+
+                                        {error?.pColorDesc && (
+                                            <div
+                                                className=""
+                                                style={{
+                                                    color: "red",
+                                                }}
+                                            >
+                                                {" "}
+                                                {
+                                                    error?.pColorDesc
+                                                }{" "}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* secondary color */}
+                            <div
+                                className="mt-3 mx-3 p-3"
+                                style={{
+                                    background: "#F9F9F9",
+                                    borderRadius: "10px",
+                                }}
+                            >
+                                <div className="form-group">
+                                    <label
+                                        htmlFor=""
+                                        className="mb-2"
+                                        style={{
+                                            fontWeight: 600,
+                                            color: "#777",
+                                        }}
+                                    >
+                                        2. Secondary Color{" "}
+                                        <sup>*</sup>{" "}
+                                    </label>
+
+                                    {_.map(
+                                        secondaryColors,
+                                        (item, index) => (
+                                            <div
+                                                className="p-3"
+                                                key={item.id}
+                                            >
+                                                <div className="form-group">
+                                                    <label htmlFor="">
+                                                        <b>
+                                                            {index +
+                                                                1}
+                                                            .
+                                                        </b>{" "}
+                                                        Choose
+                                                        Color:
+                                                    </label>
+                                                    <div className="d-flex align-items-center">
+                                                        <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                            <input
+                                                                type="text"
+                                                                className="form-control"
+                                                                placeholder="Recipient's username"
+                                                                aria-label="Recipient's username"
+                                                                aria-describedby="basic-addon2"
+                                                                value={
+                                                                    item.color
+                                                                }
+                                                                onChange={(
+                                                                    e
+                                                                ) =>
+                                                                    handleSecondaryColorChange(
+                                                                        e,
+                                                                        item.id
+                                                                    )
+                                                                }
+                                                            />
+
+                                                            <div className="input-group-append">
+                                                                <span
+                                                                    className="input-group-text px-1 border-0"
+                                                                    id="basic-addon2"
+                                                                >
+                                                                    <input
+                                                                        type="color"
+                                                                        value={
+                                                                            item.color
+                                                                        }
+                                                                        onChange={(
+                                                                            e
+                                                                        ) =>
+                                                                            handleSecondaryColorChange(
+                                                                                e,
+                                                                                item.id
+                                                                            )
+                                                                        }
+                                                                        style={{
+                                                                            width: "32px",
+                                                                            border: "none",
+                                                                        }}
+                                                                    />
+                                                                </span>
+                                                            </div>
+                                                        </div>
+
+                                                        {_.size(
+                                                            secondaryColors
+                                                        ) >
+                                                            1 && (
+                                                                <button
+                                                                    aria-label="remove"
+                                                                    onClick={(
+                                                                        e
+                                                                    ) =>
+                                                                        removeSecondaryColor(
+                                                                            e,
+                                                                            item.id
+                                                                        )
+                                                                    }
+                                                                    className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                >
+                                                                    <i className="fa-solid fa-trash-can" />
+                                                                </button>
+                                                            )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group pl-3">
+                                                    <label htmlFor="">
+                                                        Where
+                                                        Should
+                                                        Designer
+                                                        Use this
+                                                        Color{" "}
+                                                        <sup>
+                                                            *
+                                                        </sup>
+                                                    </label>
+                                                    <div className="ck-editor-holder">
+                                                        <CKEditorComponent
+                                                            onChange={(
+                                                                e,
+                                                                editor
+                                                            ) =>
+                                                                handleSecondaryColorDescriptionChange(
+                                                                    e,
+                                                                    editor,
+                                                                    item.id
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+
+                                                    {error?.sDescription && (
+                                                        <div
+                                                            className=""
+                                                            style={{
+                                                                color: "red",
+                                                            }}
+                                                        >
+                                                            {" "}
+                                                            {
+                                                                error?.sDescription
+                                                            }{" "}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )
+                                    )}
+
+                                    <div className="d-flex align-items-center px-3">
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                addSecondaryColor
+                                            }
+                                            className="bg-transparent text-primary hover-underline ml-auto"
+                                        >
+                                            + Another Color
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </React.Fragment>
+
+                    </div>
+                </div>
+                {/* end color schema */}
+
                 <div className="col-12 col-md-6">
                     <AssginedToSelection
                         selected={assignedTo}
@@ -613,11 +1272,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                     {assignedTo?.isOverloaded && (
                         <div style={{ color: "red" }}>
-                            {`You cannot assign this task to ${
-                                assignedTo?.name
-                            }  because ${
-                                assignedTo?.gender === "male" ? "He " : "She "
-                            } has more than 4 Submittable tasks.`}
+                            {`You cannot assign this task to ${assignedTo?.name
+                                }  because ${assignedTo?.gender === "male" ? "He " : "She "
+                                } has more than 4 Submittable tasks.`}
                         </div>
                     )}
                 </div>
@@ -660,8 +1317,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         <Listbox.Option
                                             key={i}
                                             className={({ active }) =>
-                                                `sp1-select-option ${
-                                                    active ? "active" : ""
+                                                `sp1-select-option ${active ? "active" : ""
                                                 }`
                                             }
                                             value={s}
@@ -719,8 +1375,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         <Listbox.Option
                                             key={i}
                                             className={({ active }) =>
-                                                `sp1-select-option ${
-                                                    active ? "active" : ""
+                                                `sp1-select-option ${active ? "active" : ""
                                                 }`
                                             }
                                             value={s}
@@ -776,19 +1431,18 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 <Listbox.Options className="sp1-select-options">
                                     {(isDesignerTask
                                         ? [
-                                              "Primary Page Design",
-                                              "Secondary Page Design",
-                                          ]
+                                            "Primary Page Design",
+                                            "Secondary Page Design",
+                                        ]
                                         : [
-                                              "Primary Page Development",
-                                              "Secondary Page Development",
-                                          ]
+                                            "Primary Page Development",
+                                            "Secondary Page Development",
+                                        ]
                                     )?.map((s, i) => (
                                         <Listbox.Option
                                             key={i}
                                             className={({ active }) =>
-                                                `sp1-select-option ${
-                                                    active ? "active" : ""
+                                                `sp1-select-option ${active ? "active" : ""
                                                 }`
                                             }
                                             value={s}
@@ -849,8 +1503,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         <Listbox.Option
                                             key={i}
                                             className={({ active }) =>
-                                                `sp1-select-option ${
-                                                    active ? "active" : ""
+                                                `sp1-select-option ${active ? "active" : ""
                                                 }`
                                             }
                                             value={s}
@@ -905,23 +1558,22 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             <Listbox.Options className="sp1-select-options">
                                                 {(isDesignerTask
                                                     ? [
-                                                          "Primary Page Design",
-                                                          "Secondary Page Design",
-                                                      ]
+                                                        "Primary Page Design",
+                                                        "Secondary Page Design",
+                                                    ]
                                                     : [
-                                                          "Primary Page Development",
-                                                          "Secondary Page Development",
-                                                      ]
+                                                        "Primary Page Development",
+                                                        "Secondary Page Development",
+                                                    ]
                                                 )?.map((s, i) => (
                                                     <Listbox.Option
                                                         key={i}
                                                         className={({
                                                             active,
                                                         }) =>
-                                                            `sp1-select-option ${
-                                                                active
-                                                                    ? "active"
-                                                                    : ""
+                                                            `sp1-select-option ${active
+                                                                ? "active"
+                                                                : ""
                                                             }`
                                                         }
                                                         value={s}

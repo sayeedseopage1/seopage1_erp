@@ -1,11 +1,11 @@
 import * as React from 'react'
 import _ from 'lodash';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 // import Loader from '../../../single-task/components/Loader';
 // import { useGetTaskDetailsQuery } from '../../../../react-latest/services/api/SingleTaskPageApi';
 import { Combobox } from '@headlessui/react';
-import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
-import Loader from '../../../single-task/components/Loader';
+// import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
+// import Loader from '../../../single-task/components/Loader';
 
 // FIXME: it will be replace with api data in future
 const graphicOptions = [
@@ -23,12 +23,13 @@ const graphicOptions = [
 const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTask }) => {
     const [query, setQuery] = React.useState('');
 
-    const params = useParams();
+    // const params = useParams();
 
-    const {
-        data,
-        isFetching
-    } = useGetTaskDetailsQuery(`/${params?.taskId || taskId}/json?mode=category`);
+    // TODO: if needed, implement api here 
+    // const {
+    //     data,
+    //     isFetching
+    // } = useGetTaskDetailsQuery(`/${params?.taskId || taskId}/json?mode=category`);
 
     const types_list = graphicOptions?.map(d => ({
         id: d?.id,
@@ -60,11 +61,12 @@ const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTas
 
                 <Combobox.Options className="sp1-select-options">
 
-                    {isFetching && (
+                    {/* TODO: if api added then active it  */}
+                    {/* {isFetching && (
                         <div className='sp1-select-option-nodata'>
                             <Loader />
                         </div>
-                    )}
+                    )} */}
 
                     {filteredData?.length === 0 ?
                         <div className='sp1-select-option-nodata'>
