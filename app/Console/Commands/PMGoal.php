@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\HelperPendingActionController;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Task;
@@ -40,7 +41,7 @@ class PMGoal extends Command
     public function handle()
     {
       
-        $goals= ProjectPmGoal::where('goal_status',0)->where('description',null)->get();
+        $goals= ProjectPmGoal::where('goal_status',0)->get();
     //    dd($goals);
         foreach ($goals as $goal) {
             $current_date = Carbon::now();
@@ -210,20 +211,22 @@ class PMGoal extends Command
 
 
             $goal_check = ProjectPmGoal::where('id',$goal->id)->first();
+            
             $current_date = now();
             if($goal_check->extended_goal_end_day ==null){
                 $goal_end_date = Carbon::parse($goal_check->goal_end_date)->addHours(24);
             }else{
                 $goal_end_date = Carbon::parse($goal_check->extended_goal_end_day)->addHours(24);
             }
-            if($goal_check->goal_status ==0 && $goal_check->goal_end_date >= $current_date){
+            if($goal_check->goal_status ==0 && $goal_check->goal_end_date <= $current_date){
+            $helper = new HelperPendingActionController();
+            $helper->PmGoalDeadlineCheck(ProjectPmGoal::where('id',$goal->id)->first());
             $pm = $goal_check->pm_id;
             $users = User::where('id',$pm)->get();
                 foreach ($users as $user) {
                     // Notification::send($user, new PmGoalMissNotification($goal_check));
                 }
             }
-
             
         }
   

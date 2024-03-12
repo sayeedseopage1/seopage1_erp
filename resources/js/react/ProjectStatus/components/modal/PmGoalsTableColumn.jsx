@@ -144,7 +144,7 @@ export const PmGoalsTableColumns = [
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
-                                    <Switch.Case condition={data.reason_status === 0 ||  data.reason_status === 2 && data?.expired_status !== 2}>
+                                    <Switch.Case condition={(data.reason_status === 0 ||  data.reason_status === 2) && data?.expired_status !== 2}>
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 
@@ -155,7 +155,7 @@ export const PmGoalsTableColumns = [
                                                 </Switch.Case>
                                             </Switch>
                                     </Switch.Case>
-                                    <Switch.Case condition={data.reason_status === 0 ||  data.reason_status === 2 && data?.expired_status === 2}>
+                                    <Switch.Case condition={(data?.reason_status === 0 ||  data?.reason_status === 2) && data?.expired_status === 2}>
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <div

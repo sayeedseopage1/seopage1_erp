@@ -11,6 +11,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Helper\Reply;
 use App\Models\Deal;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\PmGoalDeadlineExtHistory;
 use App\Models\PmGoalExpHistory;
 use App\Models\Project;
@@ -162,6 +164,7 @@ class ProjectStatusController extends AccountBaseController
     }
     public function projectStatusReason(Request $request){
         // dd($request->all());
+        // \DB::beginTransaction();
         $validator =  $request->validate([
             'reason' => 'required',
 
@@ -173,6 +176,43 @@ class ProjectStatusController extends AccountBaseController
         $ppg->reason_status = 1;
         $ppg->expired_status = 1;
         $ppg->save();
+
+        $actions = PendingAction::where('code','PMGM')->where('past_status',0)->where('goal_id',$ppg->id)->get();
+          if($actions != null)
+          {
+          foreach ($actions as $key => $action) {
+              $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
+              $project= Project::where('id',$pm_goal->project_id)->first();
+                  $action->authorized_by= Auth::id();
+                  $action->authorized_at= Carbon::now();
+                  $action->past_status = 1;
+                  $action->save();
+                  $project_manager= User::where('id',$pm_goal->pm_id)->first();
+                  $client= User::where('id',$pm_goal->client_id)->first();
+                  $authorize_by= User::where('id',$action->authorized_by)->first();
+                  
+                  $past_action= new PendingActionPast();
+                  $past_action->item_name = $action->item_name;
+                  $past_action->code = $action->code;
+                  $past_action->serial = $action->serial;
+                  $past_action->action_id = $action->id;
+                  $past_action->heading = $action->heading;
+                  $action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
+                //   $past_action->message = 'Task guideline authorization from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was completed by '.$authorize_by->name;
+                  $past_action->timeframe = $action->timeframe;
+                  $past_action->authorization_for = $action->authorization_for;
+                  $past_action->authorized_by = $action->authorized_by;
+                  $past_action->authorized_at = $action->authorized_at;
+                  $past_action->expired_status = $action->expired_status;
+                  $past_action->past_status = $action->past_status;
+                  $past_action->goal_id = $action->goal_id;
+                  $past_action->project_id = $action->project_id;
+                  $past_action->client_id = $action->client_id;
+                  $past_action->save();
+
+
+          }
+      }
 
         return response()->json(['status'=>200]);
     }
@@ -429,7 +469,7 @@ class ProjectStatusController extends AccountBaseController
                 ]);
     }
     public function expireGoal($id){
-        $pmGoal = ProjectPmGoal::select('project_pm_goals.id','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.description','project_pm_goals.project_category','project_pm_goals.reason_status','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image')
+        $pmGoal = ProjectPmGoal::select('project_pm_goals.id','project_pm_goals.goal_name','project_pm_goals.goal_start_date','project_pm_goals.goal_end_date','project_pm_goals.duration','project_pm_goals.description','project_pm_goals.project_category','project_pm_goals.reason_status','deals.actual_amount as project_budget','currencies.currency_symbol','projects.id as project_id','projects.project_name','users.id as user_id','users.name as user_name','users.image as user_image')
         ->leftJoin('projects','project_pm_goals.project_id','projects.id')
         ->leftJoin('deals', 'projects.deal_id', '=', 'deals.id')
         ->leftJoin('currencies', 'deals.original_currency_id', '=', 'currencies.id')
