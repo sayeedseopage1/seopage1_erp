@@ -6,8 +6,9 @@ export const SalesRiskAnalysisTableColumns = [
         id: "policy_name",
         header: "Policy Name",
         accessorKey: "policy_name",
-        cell: ({ row }) => {
+        cell: ({ row , table}) => {
             const data = row?.original;
+            const action = table.options.meta;
             return (
                 <div className="d-flex align-items-center">
                     <span
@@ -19,7 +20,14 @@ export const SalesRiskAnalysisTableColumns = [
                     >
                         {data?.title}
                     </span>
-                    <button className="btn btn-info ml-4">Questions</button>
+                    <button
+                        onClick={() => {
+                            action.handleAddQuestions(data);
+                        }}
+                        className="btn btn-info ml-4"
+                    >
+                        Questions
+                    </button>
                 </div>
             );
         },

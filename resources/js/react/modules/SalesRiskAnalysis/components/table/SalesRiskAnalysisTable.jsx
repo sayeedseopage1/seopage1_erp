@@ -19,6 +19,7 @@ import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import SalesRiskAnalysisTablePagination from "./SalesRiskAnalysisTablePagination";
 import EditApplicablePointsModal from "../modal/EditApplicablePointsModal";
 import RuleActionConfirmationModal from "../modal/RuleActionConfirmationModal";
+import AddQuestionsModal from "../modal/AddQuestionsModal";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -27,6 +28,7 @@ const SalesRiskAnalysisTable = ({
     search,
     tableColumns,
     tableData,
+    questionInputFields
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
@@ -41,9 +43,12 @@ const SalesRiskAnalysisTable = ({
     // modal open close state
     const [editPointModalOpen, setEditPointModalOpen] = React.useState(false);
     const [ruleActionModalOpen, setRuleActionModalOpen] = React.useState(false);
+    const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
+        React.useState(false);
 
     // modal state data
     const [editPointData, setEditPointData] = React.useState({});
+    const [addQuestionsData, setAddQuestionsData] = React.useState({});
 
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
@@ -104,8 +109,13 @@ const SalesRiskAnalysisTable = ({
                 });
             },
             handleRuleActions: (rule, data) => {
+                setAddQuestionsData(data);
                 console.log("Rule Actions", rule, data);
                 setRuleActionModalOpen(true);
+            },
+            handleAddQuestions: (data) => {
+                setAddQuestionsData(data);
+                setAddQuestionsModalOpen(true);
             },
         },
     });
@@ -118,6 +128,10 @@ const SalesRiskAnalysisTable = ({
 
     const handleCloseRuleActionModal = () => {
         setRuleActionModalOpen(false);
+    };
+
+    const handleCloseAddQuestionsModal = () => {
+        setAddQuestionsModalOpen(false);
     };
 
     return (
@@ -212,6 +226,13 @@ const SalesRiskAnalysisTable = ({
                 actionType={"Disable"}
             />
 
+            <AddQuestionsModal
+                open={addQuestionsModalOpen}
+                closeModal={handleCloseAddQuestionsModal}
+                addQuestionsData={addQuestionsData}
+                questionInputFields={questionInputFields}
+            />
+
             {/* pagination */}
             <SalesRiskAnalysisTablePagination
                 currentPage={pageIndex + 1}
@@ -240,4 +261,5 @@ SalesRiskAnalysisTable.propTypes = {
     search: PropTypes.string,
     tableColumns: PropTypes.array,
     tableData: PropTypes.array,
+    questionInputFields: PropTypes.array,
 };

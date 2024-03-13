@@ -2,9 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import CustomModal from "../ui/CustomModal/CustomModal";
 import {
-    ModalButton,
-    ModalSelectContainer,
-    ModalInput,
     ModalInputLabel,
     ModalTitle,
 } from "../ui/Styles/ui";

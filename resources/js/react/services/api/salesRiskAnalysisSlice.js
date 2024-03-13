@@ -25,11 +25,16 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
         }),
-    }),
+        questionInputFields: build.query({
+            query: (query) => `/account/sales-risk-policies/question-fields`,
+
+        })
+    })
 });
 
 export const {
     useGetSalesRiskAnalysisRulesQuery,
     useGetSalesRiskAnalysisInputsQuery,
     useAddSalesRiskAnalysisRuleMutation,
+    useQuestionInputFieldsQuery
 } = salesRiskAnalysisApiSlice;

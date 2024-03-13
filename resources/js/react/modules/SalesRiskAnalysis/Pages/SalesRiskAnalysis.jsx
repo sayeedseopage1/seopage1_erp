@@ -10,6 +10,7 @@ import {
     useAddSalesRiskAnalysisRuleMutation,
     useGetSalesRiskAnalysisInputsQuery,
     useGetSalesRiskAnalysisRulesQuery,
+    useQuestionInputFieldsQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptionsApiSlice";
 
@@ -87,6 +88,14 @@ const SalesRiskAnalysis = () => {
             refetchOnMountOrArgChange: true,
             skip: countries?.length,
         });
+
+    // question input fields
+
+    const {
+        data: questionInputFields,
+        isFetching: isQuestionInputFieldsFetching,
+        isLoading: isQuestionInputFieldsLoading,
+    } = useQuestionInputFieldsQuery("");
 
     const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
         useAddSalesRiskAnalysisRuleMutation();
@@ -201,10 +210,9 @@ const SalesRiskAnalysis = () => {
             return;
         }
         try {
-
             // prepare payload
             const payload = {
-                title: newPolicyInputData[0]?.title,
+                title: newPolicyInputData[0]?.policyName,
                 department: newPolicyInputData[0]?.department?.id,
                 ruleList: newPolicyInputData.map((item) => {
                     const rule = {
@@ -235,7 +243,10 @@ const SalesRiskAnalysis = () => {
                 setNewPolicyInputData([]);
             }
         } catch (error) {
-            console.log(error);
+            if(error?.status === 403) {
+                toast.error("You are not authorized to perform this action");
+                return;
+            }
             toast.error("Failed to add new policy");
         }
     };
@@ -327,6 +338,8 @@ const SalesRiskAnalysis = () => {
                             tableName="SalesRiskAnalysisTable"
                             tableData={salesRiskAnalysisRules}
                             isLoading={isFetching}
+                            questionInputFields={questionInputFields}
+                            
                         />
                     </div>
                 </div>
