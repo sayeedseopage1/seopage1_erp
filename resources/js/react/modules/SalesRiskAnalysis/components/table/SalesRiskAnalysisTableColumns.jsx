@@ -61,6 +61,31 @@ export const SalesRiskAnalysisTableColumns = [
         accessorKey: "policy_rules",
         cell: ({ row }) => {
             const data = row?.original;
+            const countries = data?.ruleList?.find(
+                (item) => item?.type === "list"
+            );
+            let countriesList = [];
+
+            if (countries?.value) {
+                const parsedValue = JSON.parse(countries.value);
+         
+                parsedValue.forEach((obj) => {
+                    const iso = Object.keys(obj)[0]; // Extracting the ISO code
+                    const name = obj[iso]; // Extracting the country name
+                    countriesList.push({
+                        name: name.toUpperCase(),
+                        niceName: name,
+                        iso: iso,
+                    });
+                });
+            }
+
+            const validPolicyTypes = [
+                "lessThan",
+                "greaterThan",
+                "fixed",
+                "range",
+            ];
             return (
                 <div className="d-flex justify-content-center align-items-center flex-column">
                     {data?.ruleList?.map((rule, index) => {
@@ -81,6 +106,7 @@ export const SalesRiskAnalysisTableColumns = [
                                         style={{
                                             listStyle: "disc",
                                             padding: "0 1.5rem",
+                                            marginLeft: "35px",
                                         }}
                                     >
                                         <li
@@ -102,28 +128,28 @@ export const SalesRiskAnalysisTableColumns = [
                                     </ul>
                                 </Switch.Case>
                                 <Switch.Case condition={rule?.type === "list"}>
-                                    <p
-                                        style={{
-                                            color: "#8F8F8F",
-                                            fontSize: "14px",
-                                            fontFamily: "Poppins",
-                                        }}
-                                        className="py-3"
-                                    >
-                                        {data.title}
-                                    </p>
-                                    <MultiSelectShowDropDown
-                                        data={rule?.value}
-                                        multiple
-                                    />
+                                    <div className="d-flex">
+                                        <p
+                                            style={{
+                                                color: "#8F8F8F",
+                                                fontSize: "14px",
+                                                fontFamily: "Poppins",
+                                            }}
+                                            className="py-3 mr-2"
+                                        >
+                                            {data.title}
+                                        </p>
+                                        <MultiSelectShowDropDown
+                                            data={countriesList}
+                                            multiple
+                                        />
+                                    </div>
                                 </Switch.Case>
                                 <Switch.Case
-                                    condition={
-                                        !_.includes(
-                                            ["yes_no, list"],
-                                            rule?.type
-                                        )
-                                    }
+                                    condition={_.includes(
+                                        validPolicyTypes,
+                                        rule?.type
+                                    )}
                                 >
                                     <p
                                         style={{
@@ -180,17 +206,17 @@ export const SalesRiskAnalysisTableColumns = [
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     {data?.ruleList?.map((rule, index) => {
                         return (
-                            <SalesPointsContainer
-                                key={rule?.id}
-                                className="py-3"
-                            >
-                                <Switch>
-                                    <Switch.Case
-                                        condition={
-                                            !_.includes(["yes_no"], rule?.type)
-                                        }
+                            <Switch>
+                                <Switch.Case
+                                    condition={
+                                        !_.includes(["yesNo"], rule?.type)
+                                    }
+                                >
+                                    <SalesPointsContainer
+                                        key={rule?.id}
+                                        className="py-3"
                                     >
-                                        <div className="d-flex">
+                                        <div className="d-flex align-items-center justify-content-end">
                                             <p>{rule?.point}</p>
                                             <div
                                                 onClick={() => {
@@ -220,62 +246,120 @@ export const SalesRiskAnalysisTableColumns = [
                                                 Enable
                                             </button>
                                         </div>
-                                    </Switch.Case>
-                                    <Switch.Case
-                                        condition={_.includes(
-                                            ["yes_no"],
-                                            rule?.type
-                                        )}
-                                    >
-                                        <div className="d-flex">
-                                            <p>{rule?.point}</p>
-                                            <div
-                                                onClick={() => {
-                                                    action.handleEditApplicablePoint(
-                                                        data,
-                                                        rule
-                                                    );
-                                                }}
-                                                role="button"
-                                            >
-                                                <EditIcon />
-                                            </div>
-                                            <button
-                                                className="btn btn-success"
-                                                style={{
-                                                    fontSize: "12px",
-                                                    padding: "3px 12px",
-                                                    marginLeft: "10px",
-                                                }}
-                                                onClick={() => {
-                                                    action.handleRuleActions(
-                                                        rule,
-                                                        data
-                                                    );
-                                                }}
-                                            >
-                                                Enable
-                                            </button>
-                                        </div>
-                                        <ul>
-                                            <li
-                                                style={{
-                                                    padding: "4px 0",
-                                                }}
-                                            >
-                                                {rule?.value?.split(",")[0]}
-                                            </li>
-                                            <li
-                                                style={{
-                                                    padding: "4px 0",
-                                                }}
-                                            >
-                                                {rule?.value?.split(",")[1]}
-                                            </li>
-                                        </ul>
-                                    </Switch.Case>
-                                </Switch>
-                            </SalesPointsContainer>
+                                    </SalesPointsContainer>
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={_.includes(
+                                        ["yesNo"],
+                                        rule?.type
+                                    )}
+                                >
+                                    <div className="d-flex justify-content-start align-items-start flex-column">
+                                        <div
+                                            style={{
+                                                height: "40px",
+                                                width: "100%",
+                                            }}
+                                        />
+                                        <SalesPointsContainer key={rule?.id}>
+                                            <ul>
+                                                <li
+                                                    style={{
+                                                        padding: "4px 0",
+                                                    }}
+                                                    className="d-flex align-items-center justify-content-end"
+                                                >
+                                                    <span
+                                                        style={{
+                                                            marginRight: "10px",
+                                                        }}
+                                                    >
+                                                        {" "}
+                                                        {
+                                                            rule?.value?.split(
+                                                                ","
+                                                            )[0]
+                                                        }
+                                                    </span>
+                                                    <div
+                                                        onClick={() => {
+                                                            action.handleEditApplicablePoint(
+                                                                data,
+                                                                rule
+                                                            );
+                                                        }}
+                                                        role="button"
+                                                    >
+                                                        <EditIcon />
+                                                    </div>
+                                                    <button
+                                                        className="btn btn-success"
+                                                        style={{
+                                                            fontSize: "12px",
+                                                            padding: "3px 12px",
+                                                            marginLeft: "10px",
+                                                        }}
+                                                        onClick={() => {
+                                                            action.handleRuleActions(
+                                                                rule,
+                                                                data
+                                                            );
+                                                        }}
+                                                    >
+                                                        Enable
+                                                    </button>
+                                                </li>
+                                                <li
+                                                    style={{
+                                                        padding: "4px 0",
+                                                    }}
+                                                    className="d-flex align-items-center justify-content-end"
+                                                >
+                                                    <span
+                                                        style={{
+                                                            marginRight: "10px",
+                                                        }}
+                                                    >
+                                                        {
+                                                            rule?.value?.split(
+                                                                ","
+                                                            )[1]
+                                                        }
+                                                    </span>
+                                                    <div
+                                                        onClick={() => {
+                                                            action.handleEditApplicablePoint(
+                                                                data,
+                                                                rule
+                                                            );
+                                                        }}
+                                                        role="button"
+                                                        className="d-flex align-items-center"
+                                                    >
+                                                        <EditIcon />
+                                                    </div>
+                                                    <button
+                                                        className="btn btn-success"
+                                                        style={{
+                                                            fontSize: "12px",
+                                                            padding: "3px 12px",
+                                                            marginLeft: "10px",
+                                                        }}
+                                                        onClick={() => {
+                                                            action.handleRuleActions(
+                                                                rule,
+                                                                data
+                                                            );
+                                                        }}
+                                                    >
+                                                        Enable
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </SalesPointsContainer>
+                                    </div>
+                                </Switch.Case>
+                            </Switch>
                         );
                     })}
                     <div

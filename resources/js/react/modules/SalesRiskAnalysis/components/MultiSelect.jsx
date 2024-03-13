@@ -31,7 +31,7 @@ const MultiSelect = ({
 
     const onSelected = (option) => {
         if (newPolicyData?.countries?.includes(option)) {
-            console.log(option);
+        
             setSelected({
                 ...newPolicyData,
                 [filedName]: newPolicyData?.countries?.filter(

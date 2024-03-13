@@ -20,10 +20,7 @@ const QuestionsSelect = ({
     const [query, setQuery] = React.useState('');
     let _Options;
 
-    const textLength = sidebarItem ? 33 : 11;
-    const splitLength = sidebarItem ? 32 : 10;
-
-    _department = _.filter(data?.data, (item) => _.includes(_.lowerCase(dept.title), _.lowerCase(query)));
+    _department = _.filter(data?.data, (item) => _.includes(_.lowerCase(item?.title), _.lowerCase(query)));
 
     React.useMemo(() => {
         if (!query) {

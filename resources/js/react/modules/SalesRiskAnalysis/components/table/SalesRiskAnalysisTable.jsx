@@ -110,7 +110,7 @@ const SalesRiskAnalysisTable = ({
             },
             handleRuleActions: (rule, data) => {
                 setAddQuestionsData(data);
-                console.log("Rule Actions", rule, data);
+                
                 setRuleActionModalOpen(true);
             },
             handleAddQuestions: (data) => {

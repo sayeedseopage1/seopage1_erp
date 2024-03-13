@@ -11,9 +11,10 @@ export const NewRulesModalTableColumnsData = [
         id: "rules_name",
         header: "Rules Name",
         accessorKey: "rules_name",
+
         cell: ({ row }) => {
             const data = row?.original;
-            console.log("table", data);
+           
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
                     <Switch>
@@ -102,7 +103,7 @@ export const NewRulesModalTableColumnsData = [
         accessorKey: "rules_type",
         cell: ({ row }) => {
             const data = row?.original;
-            console.log("table", data);
+         
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
                     <Switch.Case condition={data?.policyType.name !== "yesNo"}>

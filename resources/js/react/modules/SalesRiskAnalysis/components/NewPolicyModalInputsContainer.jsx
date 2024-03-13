@@ -38,7 +38,7 @@ const NewPolicyModalInputsContainer = ({
             ? PolicyTypeItemValuesType?.data?.listTypes
             : PolicyTypeItemValuesType?.data?.regularTypes;
 
-     console.log("newPolicyData", newPolicyData);       
+       
     return (
         <React.Fragment>
             <Switch>

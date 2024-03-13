@@ -39,7 +39,6 @@ const AddQuestionsModal = ({
         data: QuestionsList?.structure,
     };
 
-    console.log("updateQuestionsListForReuseFormat", updateQuestionsList);
 
     return (
         <CustomModal
