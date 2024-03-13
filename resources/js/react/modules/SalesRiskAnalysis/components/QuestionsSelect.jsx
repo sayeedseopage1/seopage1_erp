@@ -17,19 +17,18 @@ const QuestionsSelect = ({
     sidebarItem = false,
     className,
 }) => {
-    const [query, setQuery] = React.useState('');
+    const [query, setQuery] = React.useState("");
     let _Options;
 
-    _department = _.filter(data?.data, (item) => _.includes(_.lowerCase(item?.title), _.lowerCase(query)));
+    _Options = _.filter(data?.data, (item) =>
+        _.includes(_.lowerCase(item?.title), _.lowerCase(query))
+    );
 
     React.useMemo(() => {
         if (!query) {
-            _department = data?.data;
+            _Options = data?.data;
         }
     }, [query]);
-
-
-
 
     return (
         <div

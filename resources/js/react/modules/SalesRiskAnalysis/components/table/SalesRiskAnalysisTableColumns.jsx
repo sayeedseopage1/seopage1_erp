@@ -100,7 +100,7 @@ export const SalesRiskAnalysisTableColumns = [
                                         }}
                                         className="py-3"
                                     >
-                                        {data.title}
+                                        {rule.title}
                                     </p>
                                     <ul
                                         style={{
@@ -137,7 +137,7 @@ export const SalesRiskAnalysisTableColumns = [
                                             }}
                                             className="py-3 mr-2"
                                         >
-                                            {data.title}
+                                            {rule.title}
                                         </p>
                                         <MultiSelectShowDropDown
                                             data={countriesList}
@@ -159,7 +159,7 @@ export const SalesRiskAnalysisTableColumns = [
                                         }}
                                         className="py-3"
                                     >
-                                        {data.title}
+                                        {rule.title}
                                     </p>
                                 </Switch.Case>
                             </Switch>
@@ -285,7 +285,8 @@ export const SalesRiskAnalysisTableColumns = [
                                                         onClick={() => {
                                                             action.handleEditApplicablePoint(
                                                                 data,
-                                                                rule
+                                                                rule,
+                                                                "yes"
                                                             );
                                                         }}
                                                         role="button"
@@ -302,7 +303,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                         onClick={() => {
                                                             action.handleRuleActions(
                                                                 rule,
-                                                                data
+                                                                data,
                                                             );
                                                         }}
                                                     >
@@ -330,7 +331,8 @@ export const SalesRiskAnalysisTableColumns = [
                                                         onClick={() => {
                                                             action.handleEditApplicablePoint(
                                                                 data,
-                                                                rule
+                                                                rule,
+                                                                "no"
                                                             );
                                                         }}
                                                         role="button"

@@ -358,6 +358,7 @@ const SalesRiskAnalysis = () => {
                     setIsRuleUpdating={setIsRuleUpdating}
                     isRuleUpdating={isRuleUpdating}
                     handlePolicyAdded={handlePolicyAdded}
+                    setNewPolicyInputData={setNewPolicyInputData}
                     isLoadingAddSalesRiskAnalysisRule={
                         isLoadingAddSalesRiskAnalysisRule
                     }

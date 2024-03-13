@@ -10,11 +10,16 @@ import {
 } from "../ui/Styles/ui";
 import CustomModal from "../ui/CustomModal/CustomModal";
 import { Flex } from "../../../../global/styled-component/Flex";
+import _ from "lodash";
 
 const EditApplicablePointsModal = ({
     open,
     closeModal,
     editPointData,
+    handleChange,
+    handleUpdatePoints,
+    isLoadingEditSalesRiskAnalysisPoint,
+    editPointDataValidation,
     ...props
 }) => {
     return (
@@ -53,7 +58,14 @@ const EditApplicablePointsModal = ({
                             Policy Rules{" "}
                         </ModalInputLabel>
                         <ModalInputLabel className="col-7" color="#8F8F8F">
-                            {editPointData?.selectedRule?.title}
+                            {editPointData?.selectedRule?.title}{" "}
+                            {`${
+                                editPointData?.ruleType
+                                    ? `(${_.startCase(
+                                          editPointData?.ruleType
+                                      )})`
+                                    : ""
+                            }`}
                         </ModalInputLabel>
                     </div>
                     <div className="row mb-4 align-items-center">
@@ -71,15 +83,30 @@ const EditApplicablePointsModal = ({
                         <ModalInputLabel className="col-5">
                             New point<sup>*</sup>{" "}
                         </ModalInputLabel>
-                        <ModalInput
-                            className="col-7"
-                            type="number"
-                            placeholder="Write here eg: 0.5,1,2 "
-                        />
+                        <div className="col-7 px-0">
+                            <ModalInput
+                                className="w-100"
+                                type="number"
+                                name="newPoint"
+                                onChange={handleChange}
+                                value={editPointData?.newPoint}
+                                placeholder="Write here eg: 0.5,1,2 "
+                            />
+
+                            {editPointDataValidation?.newPoint && (
+                                <p className="text-danger">
+                                    New Point is required
+                                </p>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton width="177px">Save</ModalButton>
+                    <ModalButton onClick={handleUpdatePoints} width="177px">
+                        {isLoadingEditSalesRiskAnalysisPoint
+                            ? "Saving"
+                            : "Save"}
+                    </ModalButton>
                     <ModalButton
                         onClick={closeModal}
                         width="177px"
@@ -102,4 +129,5 @@ EditApplicablePointsModal.propTypes = {
     closeModal: PropTypes.func,
     editPointData: PropTypes.object,
     props: PropTypes.object,
-}
+    handleChange: PropTypes.func,
+};

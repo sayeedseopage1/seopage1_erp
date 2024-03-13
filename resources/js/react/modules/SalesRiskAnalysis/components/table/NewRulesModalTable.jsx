@@ -19,7 +19,8 @@ const NewRulesModalTable = ({
     tableName,
     tableColumns,
     setNewPolicyData,
-    setIsRuleUpdating
+    setIsRuleUpdating,
+    setNewPolicyInputData
 }) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -56,7 +57,7 @@ const NewRulesModalTable = ({
             sorting,
             expanded,
             columnOrder,
-            tableName
+            tableName,
         },
         onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
@@ -74,8 +75,13 @@ const NewRulesModalTable = ({
                 console.log(row);
                 setNewPolicyData(row);
                 setIsRuleUpdating(true);
-            }
-        }
+            },
+            deleteSingleRules: (row) => {
+                const _data = _.filter(data, (item) => item.id !== row.id);
+                setData(_data);
+                setNewPolicyInputData(_data);
+            },
+        },
     });
 
     return (
@@ -113,38 +119,36 @@ const NewRulesModalTable = ({
                     </thead>
                     {/* table Body */}
                     <tbody className="sp1_tasks_tbody">
-                        {
-                            table.getRowModel().rows.map((row) => {
-                                return (
-                                    <tr
-                                        className={`sp1_tasks_tr ${
-                                            row.parentId !== undefined
-                                                ? "expended_row"
-                                                : ""
-                                        } ${
-                                            row.getIsExpanded()
-                                                ? "expended_parent_row"
-                                                : ""
-                                        }`}
-                                        key={row.id}
-                                    >
-                                        {row.getVisibleCells().map((cell) => {
-                                            return (
-                                                <td
-                                                    key={cell.id}
-                                                    className="px-2 sp1_tasks_td"
-                                                >
-                                                    {flexRender(
-                                                        cell.column.columnDef
-                                                            .cell,
-                                                        cell.getContext()
-                                                    )}
-                                                </td>
-                                            );
-                                        })}
-                                    </tr>
-                                );
-                            })}
+                        {table.getRowModel().rows.map((row) => {
+                            return (
+                                <tr
+                                    className={`sp1_tasks_tr ${
+                                        row.parentId !== undefined
+                                            ? "expended_row"
+                                            : ""
+                                    } ${
+                                        row.getIsExpanded()
+                                            ? "expended_parent_row"
+                                            : ""
+                                    }`}
+                                    key={row.id}
+                                >
+                                    {row.getVisibleCells().map((cell) => {
+                                        return (
+                                            <td
+                                                key={cell.id}
+                                                className="px-2 sp1_tasks_td"
+                                            >
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>

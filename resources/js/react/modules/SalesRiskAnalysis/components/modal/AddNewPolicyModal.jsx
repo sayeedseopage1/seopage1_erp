@@ -34,7 +34,9 @@ const AddNewPolicyModal = ({
     isRuleUpdating,
     setIsRuleUpdating,
     handlePolicyAdded,
-    isLoadingAddSalesRiskAnalysisRule
+    isLoadingAddSalesRiskAnalysisRule,
+    setNewPolicyInputData,
+    han,
 }) => {
     return (
         <CustomModal
@@ -105,6 +107,7 @@ const AddNewPolicyModal = ({
                                 tableName={"NewRulesModalTable"}
                                 setNewPolicyData={setNewPolicyData}
                                 setIsRuleUpdating={setIsRuleUpdating}
+                                setNewPolicyInputData={setNewPolicyInputData}
                             />
                         </div>
                     ) : (
@@ -153,9 +156,9 @@ const AddNewPolicyModal = ({
                 </div>
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton onClick={handlePolicyAdded} width="177px">
-                        {
-                            isLoadingAddSalesRiskAnalysisRule ? "Loading..." : "Add Policy"
-                        }
+                        {isLoadingAddSalesRiskAnalysisRule
+                            ? "Loading..."
+                            : "Add Policy"}
                     </ModalButton>
                     <ModalButton
                         onClick={closeModal}
@@ -189,5 +192,5 @@ AddNewPolicyModal.propTypes = {
     isRuleUpdating: PropTypes.bool,
     setIsRuleUpdating: PropTypes.func,
     handlePolicyAdded: PropTypes.func,
-    isLoadingAddSalesRiskAnalysisRule: PropTypes.bool
+    isLoadingAddSalesRiskAnalysisRule: PropTypes.bool,
 };
