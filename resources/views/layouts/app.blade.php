@@ -322,8 +322,26 @@
                             $query->where('authorization_status', 1)
                                 ->orWhere(function ($subquery) {
                                     $subquery->where('authorization_status', 2)
-                                    // ->whereRaw('TIMESTAMPDIFF(MINUTE, released_at, NOW()) > 180');
-                                    ->whereRaw('TIMESTAMPDIFF(SECOND, released_at, NOW()) > ' . (180 * 60)); 
+                                    ->where(function ($innerSubquery) {
+                                        $innerSubquery->whereRaw('
+                                            (
+                                                (
+                                                    (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                    AND (DATE(released_at) < CURDATE())
+                                                )
+                                                OR
+                                                (
+                                                    (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                    AND TIME(NOW()) >= "10:00"
+                                                )
+                                                OR
+                                                (
+                                                    TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                                                    AND TIMESTAMPDIFF(SECOND, released_at, NOW()) > ' . (180 * 60) . '
+                                                )
+                                            )
+                                        ');
+                                    });
                                 });
                         })
                         ->get();
@@ -377,7 +395,27 @@
                             $query->where('authorization_status', 1)
                                 ->orWhere(function ($subquery) {
                                     $subquery->where('authorization_status', 2)
-                                    ->whereRaw('TIMESTAMPDIFF(SECOND, released_at, NOW()) > ' . (180 * 60)); 
+                                    // ->whereRaw('TIMESTAMPDIFF(SECOND, released_at, NOW()) > ' . (180 * 60));
+                                    ->where(function ($innerSubquery) {
+                                        $innerSubquery->whereRaw('
+                                            (
+                                                (
+                                                    (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                    AND (DATE(released_at) < CURDATE())
+                                                )
+                                                OR
+                                                (
+                                                    (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                                    AND TIME(NOW()) >= "10:00"
+                                                )
+                                                OR
+                                                (
+                                                    TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                                                    AND TIMESTAMPDIFF(SECOND, released_at, NOW()) > ' . (180 * 60) . '
+                                                )
+                                            )
+                                        ');
+                                    }); 
                                 });
                         })
                         ->get();
