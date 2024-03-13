@@ -1,5 +1,6 @@
-import WarningIcon from "../../../../../../assest/warning.svg";
+//mitul work start
 
+import WarningIcon from "../../../../../../assest/warning.svg";
 import { RxCrossCircled } from "react-icons/rx";
 import ReactModal from "react-modal";
 const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
@@ -90,3 +91,5 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
 };
 
 export default RelevantModal;
+
+//mitul work end

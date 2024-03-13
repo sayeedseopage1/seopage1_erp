@@ -7,38 +7,29 @@ import React, { useCallback } from "react";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
 
+//mitul work start
 import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import { useWindowSize } from "react-use";
 import ReactModal from "react-modal";
 import RelevantModal from "./RelevantModal";
-RelevantModal;
-// action buttons
+import EvaluationModal from "./EvaluationModal";
 const ActionsButton = ({ data }) => {
     const [fullScreenView, setFullScreenView] = React.useState(false);
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
+    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
-    // const { commentState } = useCommentStore();
 
-    // console.log("commentstate", commentState);
     const {
         data: comments,
         isFetching,
         isLoading,
         refetch,
     } = useGetCommentsQuery(taskId);
-    // window.location.assign();
 
-    // return (
-    //     <>
-    //         <button className={style.action_btn}>Review</button>
-    //         <button className={style.action_btn}>Approve</button>
-    //         <button className={style.action_btn}>Deny</button>
-    //         <button className={style.action_btn}>Request Modifications</button>
-    //     </>
-    // );
+    //mitul work end
 
     const handleModalWidth = useCallback(
         (btn) => {
@@ -139,6 +130,8 @@ const ActionsButton = ({ data }) => {
                 }
             })}
 
+            {/* mitul work start */}
+
             {data?.task_id && (
                 <button
                     onClick={() => setViewCommentModal((prev) => !prev)}
@@ -155,7 +148,14 @@ const ActionsButton = ({ data }) => {
                     Not Relevant to me
                 </button>
             )}
-
+            {data?.task_id && (
+                <button
+                    onClick={() => setIsEvaluationModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    Evaluate
+                </button>
+            )}
             <ReactModal
                 style={{
                     overlay: {
@@ -191,13 +191,18 @@ const ActionsButton = ({ data }) => {
                     showSearchBtn={true}
                 />
             </ReactModal>
-
             <RelevantModal
                 setIsRelevantModal={setIsRelevantModal}
                 isRelevantModal={isRelevantModal}
+            />
+
+            <EvaluationModal
+                setIsEvaluationModal={setIsEvaluationModal}
+                isEvaluationModal={isEvaluationModal}
             />
         </>
     );
 };
 
+//mitul work start
 export default React.memo(ActionsButton);
