@@ -28,7 +28,8 @@ return new class extends Migration
             ['name' => 'Image retouching'],
             ['name' => 'Background removal'],
             ['name' => 'Illustration'],
-            ['name' => 'Motion graph']
+            ['name' => 'Motion graph'],
+            ['name' => 'Others']
         ]);
     }
 
