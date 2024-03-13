@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SalesRiskPolicyController extends AccountBaseController
 {
-    protected $policyTypes = ['lessThan', 'greaterThan', 'fixed', 'range', 'yesNo', 'list'];
+    protected $policyTypes = ['parent', 'greaterThan', 'lessThan', 'fixed', 'range', 'yesNo', 'list'];
     public function __construct()
     {
         parent::__construct();
@@ -309,42 +309,37 @@ class SalesRiskPolicyController extends AccountBaseController
                     'title' => $item->title,
                     'parent_id' => $policy->id,
                     'department' => $req->department,
+                    'type' => $item->policyType
                 ];
 
                 switch ($item->policyType) {
                     case "lessThan":
-                        $rowData['type'] = 'less_than';
                         $rowData['value_type'] = $item->rulesType;
                         $rowData['value'] = $item->value;
                         $rowData['point'] = $item->points;
                         break;
                     case "greaterThan":
-                        $rowData['type'] = 'greater_than';
                         $rowData['value_type'] = $item->rulesType;
                         $rowData['value'] = $item->value;
                         $rowData['point'] = $item->points;
                         break;
                     case "fixed":
-                        $rowData['type'] = 'fixed';
                         $rowData['value_type'] = $item->rulesType;
                         $rowData['value'] = $item->value;
                         $rowData['point'] = $item->points;
                         break;
 
                     case "range":
-                        $rowData['type'] = 'range';
                         $rowData['value_type'] = $item->rulesType;
                         $rowData['value'] = $item->from . ', ' . $item->to;
                         $rowData['point'] = $item->points;
                         break;
 
                     case "yesNo":
-                        $rowData['type'] = 'yes_no';
                         $rowData['value'] = $item->yes . ', ' . $item->no;
                         break;
 
                     case "list":
-                        $rowData['type'] = 'list';
                         $rowData['value_type'] = $item->rulesType;
                         if ($item->rulesType == "countries") {
                             $rowData['value'] = json_encode($item->countries);
