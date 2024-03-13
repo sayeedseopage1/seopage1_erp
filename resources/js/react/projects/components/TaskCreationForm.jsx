@@ -1,13 +1,13 @@
 import { Listbox } from "@headlessui/react";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import CKEditorComponent from "../../ckeditor";
 import UploadFilesInLine from "../../file-upload/UploadFilesInLine";
 import Button from "../../global/Button";
-import { useCheckRestrictedWordsMutation } from "../../services/api/SingleTaskPageApi";
+import { useCheckRestrictedWordsMutation, useGetTypesOfGraphicWorksQuery, } from "../../services/api/SingleTaskPageApi";
 import { useLazyGetMilestoneDetailsQuery } from "../../services/api/projectApiSlice";
 import { useStoreProjectTaskMutation } from "../../services/api/tasksApiSlice";
 import DatePickerComponent from "../../single-task/section/comments/DatePicker";
@@ -23,6 +23,8 @@ import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementM
 import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsWorkSelection";
 import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
+
+import axios from "axios";
 
 const fileInputStyle = {
     height: "39px",
@@ -69,10 +71,23 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
+
     const [priority, setPriority] = useState("Medium");
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
+
+
+
+    // const { data, isError } = useGetTypesOfGraphicWorksQuery()
+
+    // console.log("data", data)
+
+
+
+    // axios.get('/type-of-graphic-works').then(res => {
+    //     console.log("89", res);
+    // })
 
 
     const [formError, setFormError] = React.useState(null);
@@ -702,7 +717,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         </div>
                                         {/* for logo  */}
                                         {
-                                            typeOfGraphicsCategory?.type_name === "Logo" && <>
+                                            typeOfGraphicsCategory?.id === 1 && <>
                                                 <div className="col-12 col-md-6">
                                                     <TypeOfLogo
                                                         selected={typeOfLogo}
@@ -773,7 +788,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         }
                                         {/* for Banner, Brochure or company profile */}
                                         {
-                                            (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Brochure" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
+                                            (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
                                                 <div className="col-12 col-md-6">
                                                     <div className={`form-group my-3 w-100`}>
                                                         <label
@@ -815,7 +830,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
                                         {/* background removal or image retouching */}
                                         {
-                                            (typeOfGraphicsCategory?.type_name === "Background Removal" || typeOfGraphicsCategory?.type_name === "Image Retouching") && <>
+                                            (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) && <>
                                                 <div className="col-12 col-md-6">
                                                     <div className={`form-group my-3 w-100`}>
                                                         <label
@@ -844,7 +859,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
                                         {/* motion graphics */}
                                         {
-                                            typeOfGraphicsCategory?.type_name === "Motion Graphics" && <>
+                                            typeOfGraphicsCategory?.id === 8 && <>
                                                 <div className="col-12 col-md-6">
                                                     <div className={`form-group my-3 w-100`}>
                                                         <label
@@ -873,7 +888,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
                                         {/* Illustration */}
                                         {
-                                            typeOfGraphicsCategory?.type_name === "Illustration" && <>
+                                            typeOfGraphicsCategory?.id === 7 && <>
                                                 <div className="col-12">
                                                     <div className="form-group my-3">
                                                         <label htmlFor="">
@@ -907,7 +922,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         }
                                         {/* Others */}
                                         {
-                                            typeOfGraphicsCategory?.type_name === "Others" && <>
+                                            typeOfGraphicsCategory?.name === "Others" && <>
                                                 <div className="col-12">
                                                     <div className="form-group my-3">
                                                         <label htmlFor="">

@@ -1,46 +1,27 @@
 import * as React from 'react'
 import _ from 'lodash';
 // import { useParams } from 'react-router-dom';
-// import Loader from '../../../single-task/components/Loader';
-// import { useGetTaskDetailsQuery } from '../../../../react-latest/services/api/SingleTaskPageApi';
+import Loader from '../../../single-task/components/Loader';
 import { Combobox } from '@headlessui/react';
-// import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
-// import Loader from '../../../single-task/components/Loader';
-
-// FIXME: it will be replace with api data in future
-const graphicOptions = [
-    { id: 1, type_name: 'Logo' },
-    { id: 2, type_name: 'Banner' },
-    { id: 3, type_name: 'Brochure' },
-    { id: 4, type_name: 'Company Profile' },
-    { id: 5, type_name: 'Image Retouching' },
-    { id: 6, type_name: 'Background Removal' },
-    { id: 7, type_name: 'Illustration' },
-    { id: 8, type_name: 'Motion Graphics' },
-    { id: 9, type_name: 'Others' },
-];
+import { useGetTypesOfGraphicWorksQuery } from '../../../services/api/SingleTaskPageApi';
 
 const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTask }) => {
     const [query, setQuery] = React.useState('');
 
     // const params = useParams();
 
-    // TODO: if needed, implement api here 
-    // const {
-    //     data,
-    //     isFetching
-    // } = useGetTaskDetailsQuery(`/${params?.taskId || taskId}/json?mode=category`);
+    const { data: graphicOptions, isFetching } = useGetTypesOfGraphicWorksQuery("")
 
     const types_list = graphicOptions?.map(d => ({
         id: d?.id,
-        type_name: d?.type_name
+        name: d?.name
     }))
 
     const filteredData =
         query === ''
             ? types_list
             : types_list?.filter((gType) => {
-                return gType?.type_name.toLowerCase().includes(query.toLowerCase())
+                return gType?.name.toLowerCase().includes(query.toLowerCase())
             })
 
     return (
@@ -51,7 +32,7 @@ const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTas
                     <Combobox.Input
                         onChange={e => setQuery(e.target.value)}
                         placeholder='Select type of graphics work'
-                        displayValue={(value) => value?.type_name || ''}
+                        displayValue={(value) => value?.name || ''}
                         className="form-control height-35 f-14 sp1-selection-display w-100"
                     />
                     <div className='__icon'>
@@ -61,12 +42,11 @@ const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTas
 
                 <Combobox.Options className="sp1-select-options">
 
-                    {/* TODO: if api added then active it  */}
-                    {/* {isFetching && (
+                    {isFetching && (
                         <div className='sp1-select-option-nodata'>
                             <Loader />
                         </div>
-                    )} */}
+                    )}
 
                     {filteredData?.length === 0 ?
                         <div className='sp1-select-option-nodata'>
@@ -84,7 +64,7 @@ const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTas
                                             className={`block truncate ${selected ? 'font-medium' : 'font-normal'
                                                 }`}
                                         >
-                                            {gType?.type_name}
+                                            {gType?.name}
                                         </span>
                                         {selected ? (
                                             <span className="ml-auto"> <i className='fa-solid fa-check' /> </span>

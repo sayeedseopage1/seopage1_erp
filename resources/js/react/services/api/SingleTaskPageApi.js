@@ -502,6 +502,10 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 method: "GET",
             }),
         }),
+
+        getTypesOfGraphicWorks: build.query({
+            query: () => `/type-of-graphic-works`,
+        }),
     }),
 });
 
@@ -557,4 +561,5 @@ export const {
     useGetWorkingEnvironmentQuery,
     useLazyGetWorkingEnvironmentQuery,
     useCheckWorkingReportMutation,
+    useGetTypesOfGraphicWorksQuery,
 } = singleTaskPageApiSlice;
