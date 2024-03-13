@@ -26,7 +26,7 @@ export const PolicyTypeItems = {
     {
       id: 5,
       label: "Yes/No",
-      name: "yes/No",
+      name: "yesNo",
     },
     {
       id: 6,
@@ -98,4 +98,38 @@ export const PolicyTypeItemValuesType = {
       ]
     }
   }
+}
+
+export const QuestionsTypes = {
+  label: 'Questions Type',
+  emptyOptionsLabel: 'Select Questions Type',
+  id: 'questionsType',
+  data: [
+    {
+      id: 1,
+      label: "Text",
+      name: "text"
+    },
+    {
+      id: 2,
+      label: "Yes/No",
+      name: "yes_no"
+    },
+    {
+      id: 3,
+      label: "Nemeric",
+      name: "nemeric"
+    },
+    {
+      id: 4,
+      label: "List",
+      name: "list"
+    },
+    {
+      id: 5,
+      label: "Long Text",
+      name: "long_text"
+    }
+
+  ]
 }

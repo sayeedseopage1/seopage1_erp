@@ -35,7 +35,7 @@ export const NewRulesModalTableColumnsData = [
                             </p>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "yes/No"}
+                            condition={data?.policyType.name === "yesNo"}
                         >
                             <p
                                 style={{
@@ -105,7 +105,7 @@ export const NewRulesModalTableColumnsData = [
             console.log("table", data);
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
-                    <Switch.Case condition={data?.policyType.name !== "yes/No"}>
+                    <Switch.Case condition={data?.policyType.name !== "yesNo"}>
                         <p
                             style={{
                                 color: "#8F8F8F",
@@ -117,7 +117,7 @@ export const NewRulesModalTableColumnsData = [
                             {data?.rulesType?.label}
                         </p>
                     </Switch.Case>
-                    <Switch.Case condition={data?.policyType.name === "yes/No"}>
+                    <Switch.Case condition={data?.policyType.name === "yesNo"}>
                         <div
                             style={{
                                 height: "56px",
@@ -197,7 +197,7 @@ export const NewRulesModalTableColumnsData = [
                             </p>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "yes/No"}
+                            condition={data?.policyType.name === "yesNo"}
                         >
                             <div
                                 style={{
@@ -273,14 +273,16 @@ export const NewRulesModalTableColumnsData = [
                                     onClick={() => {
                                         action.editSingleRules(data);
                                     }}
+                                    className=" d-flex"
                                     role="button"
                                 >
                                     <EditIcon />
+                                    <i class="fa-solid fa-trash ml-2"></i>
                                 </div>
                             </SalesPointsContainer>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "yes/No"}
+                            condition={data?.policyType.name === "yesNo"}
                         >
                             <SalesPointsContainer className="py-3 flex-column">
                                 <div
@@ -288,9 +290,10 @@ export const NewRulesModalTableColumnsData = [
                                         action.editSingleRules(data);
                                     }}
                                     role="button"
-                                    className="py-3"
+                                    className="py-3 d-flex"
                                 >
                                     <EditIcon />
+                                    <i class="fa-solid fa-trash ml-2"></i>
                                 </div>
                                 <ul>
                                     <li

@@ -51,7 +51,7 @@ const CustomDropDown = ({
                 </Dropdown.Toggle>
                 <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`} >
                     <div className="sp1_filter--users">
-                        {_Options.map((item) => (
+                        {_Options?.map((item) => (
                             <Dropdown.Item
                                 key={item.id}
                                 className={

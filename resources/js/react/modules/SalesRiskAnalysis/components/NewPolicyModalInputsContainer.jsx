@@ -27,17 +27,18 @@ const NewPolicyModalInputsContainer = ({
         "greaterThan",
         "fixed",
         "range",
-        "yes/No",
+        "yesNo",
         "list",
     ];
     // get valid policy types conditionally based on policy type
     const validPolicyTypesOptions =
-        newPolicyData?.policyType?.name === "yes/No"
+        newPolicyData?.policyType?.name === "yesNo"
             ? PolicyTypeItemValuesType?.data?.yesNoTypes
             : newPolicyData?.policyType?.name === "list"
             ? PolicyTypeItemValuesType?.data?.listTypes
             : PolicyTypeItemValuesType?.data?.regularTypes;
 
+     console.log("newPolicyData", newPolicyData);       
     return (
         <React.Fragment>
             <Switch>
@@ -74,7 +75,7 @@ const NewPolicyModalInputsContainer = ({
                     <Switch.Case
                         condition={
                             !_.includes(
-                                ["list", "yes/No"],
+                                ["list", "yesNo"],
                                 newPolicyData.policyType.name
                             )
                         }
@@ -205,7 +206,7 @@ const NewPolicyModalInputsContainer = ({
                     {/* conditionally show only  "yes/No",*/}
                     <Switch.Case
                         condition={_.includes(
-                            ["yes/No"],
+                            ["yesNo"],
                             newPolicyData.policyType.name
                         )}
                     >
@@ -327,7 +328,7 @@ const NewPolicyModalInputsContainer = ({
                 <Switch.Case
                     condition={
                         !_.isEmpty(newPolicyData?.policyType) &&
-                        newPolicyData?.policyType.name !== "yes/No"
+                        newPolicyData?.policyType.name !== "yesNo"
                     }
                 >
                     <div className="row mb-4 align-items-center">

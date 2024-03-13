@@ -89,7 +89,7 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
       }
       const rangeFieldsValidation = getValidFields(rangeFields, newPolicyDataValidation);
       return rangeFieldsValidation;
-    case "yes/No":
+    case "yesNo":
       const yesNoFields = {
         title: inputsData.title,
         yes: inputsData.yes,
