@@ -2,72 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\WonDealsDataTable;
-use App\Events\ContractSignedEvent;
+use Auth;
+use Mail;
+use Crypt;
+use Toastr;
+use DateTime;
+use Exception;
+use DataTables;
+use Notification;
+use Carbon\Carbon;
+use App\Models\Deal;
+use App\Models\Lead;
+use App\Models\User;
 use App\Helper\Files;
 use App\Helper\Reply;
-use App\Http\Requests\Admin\Contract\StoreRequest;
-use App\Http\Requests\Admin\Contract\UpdateRequest;
-use App\Http\Requests\ClientContracts\SignRequest;
-use App\Models\Contract;
-use App\Models\ContractSign;
-use App\Models\ContractTemplate;
-use App\Models\ContractType;
-use App\Models\Currency;
-use App\Models\kpiSettingGenerateSale;
-use App\Models\PendingAction;
-use App\Models\PendingActionPast;
-use App\Models\User;
-use Carbon\Carbon;
-use DateTime;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use App\Models\ContractCustomForm;
-use App\Traits\CustomFieldsTrait;
-use App\Models\CustomField;
-use App\Models\CustomFieldData;
-use App\Models\RoleUser;
-use App\Models\Deal;
-use Illuminate\Support\Facades\Redirect;
-use App\Models\Project;
-use App\Models\PMProject;
-use App\Models\PMAssign;
-use Auth;
-use Crypt;
-use App\Models\ClientForm;
-use App\Models\ClientDetails;
-use App\Models\DealStage;
-use App\Models\Lead;
-use App\Models\ProjectMember;
-use App\Models\ProjectMilestone;
-use Illuminate\Support\Facades\Validator;
-use App\Models\SalesCount;
-use Mail;
-use App\Mail\WonDealMail;
 use App\Models\Country;
-use Toastr;
-use Exception;
-use App\Models\EmployeeDetails;
-use App\Notifications\DealAuthorizationSendNotification;
-use Notification;
-use App\Models\kpiSetting;
-use App\Models\CashPoint;
-use App\Models\LeadsDealsActivityLog;
-use App\Models\DealStageChange;
-use App\Models\QualifiedSale;
-use App\Models\AuthorizationAction;
-use App\Models\AwardTimeIncress;
-use DataTables;
+use App\Models\Project;
 use App\Models\BasicSeo;
-use App\Models\BlogArticle;
-use App\Models\ProductCategoryCollection;
-use App\Models\ProductDescription;
+use App\Models\Contract;
+use App\Models\Currency;
+use App\Models\PMAssign;
+use App\Models\RoleUser;
+use App\Mail\WonDealMail;
+use App\Models\CashPoint;
+use App\Models\DealStage;
+use App\Models\PMProject;
+use App\Models\ClientForm;
+use App\Models\kpiSetting;
+use App\Models\SalesCount;
 use App\Models\WebContent;
-use App\Notifications\HourlyDealNotification;
+use App\Models\BlogArticle;
+use App\Models\CustomField;
+use App\Models\ContractSign;
+use App\Models\ContractType;
+use Illuminate\Http\Request;
+use App\Models\ClientDetails;
+use App\Models\PendingAction;
+use App\Models\ProjectMember;
+use App\Models\QualifiedSale;
+use App\Models\CustomFieldData;
+use App\Models\DealStageChange;
+use App\Models\EmployeeDetails;
+use App\Models\AwardTimeIncress;
+use App\Models\ContractTemplate;
+use App\Models\ProjectMilestone;
+use App\Models\PendingActionPast;
+use App\Traits\CustomFieldsTrait;
+use App\Models\ContractCustomForm;
+use App\Models\ProductDescription;
+use Illuminate\Support\Facades\DB;
+use App\Events\ContractSignedEvent;
+use App\Models\AuthorizationAction;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
+use App\DataTables\WonDealsDataTable;
+use App\Models\LeadsDealsActivityLog;
+use App\Models\kpiSettingGenerateSale;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\ProductCategoryCollection;
+use Illuminate\Support\Facades\Validator;
 use App\Notifications\WonDealNotification;
+use App\Notifications\HourlyDealNotification;
+use App\Http\Requests\Admin\Contract\StoreRequest;
+use App\Http\Requests\ClientContracts\SignRequest;
+use App\Http\Requests\Admin\Contract\UpdateRequest;
 use App\Http\Controllers\HelperPendingActionController;
+use App\Notifications\DealAuthorizationSendNotification;
 
 class ContractController extends AccountBaseController
 {
@@ -3042,7 +3042,34 @@ public function getAllContracts(Request $request){
     }
     
     if (Auth::user()->role_id == 4) {
-        $dealsQuery->where('deals.pm_id',Auth::id());
+        $dealsQuery->where('deals.pm_id',Auth::id())
+        ->where('is_drafted', 0)
+        ->where(function ($query) {
+            $query->where('authorization_status', 1)
+            ->orWhere(function ($subquery) {
+                $subquery->where('authorization_status', 2)
+                ->where(function ($innerSubquery) {
+                    $innerSubquery->whereRaw('
+                        (
+                            (
+                                (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                AND (DATE(released_at) < CURDATE())
+                            )
+                            OR
+                            (
+                                (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                AND TIME(NOW()) >= "10:00"
+                            )
+                            OR
+                            (
+                                TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                                AND TIMESTAMPDIFF(SECOND, released_at, NOW()) > ' . (180 * 60) . '
+                            )
+                        )
+                    ');
+                });
+            });
+        });
     }
     $deals = $dealsQuery
         ->orderBy('deals.id', 'desc')
