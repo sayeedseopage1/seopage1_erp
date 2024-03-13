@@ -14,6 +14,7 @@ use App\Models\ProjectDeliverable;
 use DB;
 use App\Models\Payment;
 use App\Models\ProjectMilestone;
+use App\Notifications\PmGoalBeforeExpireNotification;
 use App\Notifications\PmGoalMissNotification;
 use Notification;
 
@@ -211,7 +212,19 @@ class PMGoal extends Command
 
 
             $goal_check = ProjectPmGoal::where('id',$goal->id)->first();
-            
+            /** WHEN GOAL DEADLINE EXPIRE IN NEXT 24 HOURS */
+            $currentTime = Carbon::now();
+            $goalEndDate = Carbon::parse($goal_check->goal_end_date);
+            $goalExtEndDate = Carbon::parse($goal_check->extended_goal_end_day);
+            $hoursDifference = $currentTime->diffInHours($goalEndDate);
+            $extEndDateHoursDifference = $currentTime->diffInHours($goalExtEndDate);
+            if ($hoursDifference < 24 || $extEndDateHoursDifference < 24) {
+                $helper = new HelperPendingActionController();
+                $helper->PmGoalBeforeExpireCheck($goal_check);
+                $user  = User::where('id',$goal_check->pm_id)->first();
+                Notification::send($user, new PmGoalBeforeExpireNotification($goal_check));
+            }
+            /**WHEN GOAL DEADLINE OVER*/
             $current_date = now();
             if($goal_check->extended_goal_end_day ==null){
                 $goal_end_date = Carbon::parse($goal_check->goal_end_date)->addHours(24);
@@ -221,11 +234,8 @@ class PMGoal extends Command
             if($goal_check->goal_status ==0 && $goal_check->goal_end_date <= $current_date){
             $helper = new HelperPendingActionController();
             $helper->PmGoalDeadlineCheck(ProjectPmGoal::where('id',$goal->id)->first());
-            $pm = $goal_check->pm_id;
-            $users = User::where('id',$pm)->get();
-                foreach ($users as $user) {
-                    // Notification::send($user, new PmGoalMissNotification($goal_check));
-                }
+            $user = User::where('id',$goal_check->pm_id)->get();
+                Notification::send($user, new PmGoalMissNotification($goal_check));
             }
             
         }

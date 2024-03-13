@@ -1755,7 +1755,42 @@ class HelperPendingActionController extends AccountBaseController
             }
 
         }
+/** WHEN GOAL DEADLINE EXPIRE IN NEXT 24 HOURS */
+        public function PmGoalBeforeExpireCheck($goal_check)
+        {
+            $goal = ProjectPmGoal::where('id',$goal_check->id)->first();
+            $project= Project::where('id',$goal_check->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            // $authorizer= User::where('id',$task_user->user_id)->first();
 
+                $action = new PendingAction();
+                $action->code = 'PMGE';
+                $action->serial = 'PMGE'.'x0';
+                $action->item_name= 'Goal expire in 24 hours';
+                $action->heading= 'Goal expire in 24 hours!';
+                $action->message = 'Goal '.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in 24 hours!';
+                $action->timeframe= 24;
+                $action->goal_id = $goal->id;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= $project_manager->id;
+                $button = [
+                    [
+                        'button_name' => 'View details',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details', 'goal_id' => $goal->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            //   dd($action);
+
+        }
+
+/**WHEN GOAL DEADLINE OVER*/
         public function PmGoalDeadlineCheck($goal_check)
         {
             $goal = ProjectPmGoal::where('id',$goal_check->id)->first();

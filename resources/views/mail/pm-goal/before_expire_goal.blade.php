@@ -25,10 +25,10 @@
 
 
 @component('mail::button', ['url' => $url])
-@lang('Add an explanation as to why this goal was not met!')
+@lang('View')
 @endcomponent
 
-@lang('Please remember that meeting goals is essential for fulfilling our commitments to the client and also keeping your performance metrics good.'),<br><br>
+@lang('Please do your best to meet the goal before it will expire to keep your performance metrics good!'),<br><br>
 @lang('email.regards'),<br>
 {{ config('app.name') }}
 @endcomponent

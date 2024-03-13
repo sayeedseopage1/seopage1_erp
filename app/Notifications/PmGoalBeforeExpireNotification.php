@@ -10,7 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PmGoalMissNotification extends Notification
+class PmGoalBeforeExpireNotification extends Notification
 {
     use Queueable;
     protected $goal_check;
@@ -45,31 +45,30 @@ class PmGoalMissNotification extends Notification
     public function toMail($notifiable)
     {
 
-        $pm_goal= ProjectPmGoal::where('id',$this->goal_check->id)->first();
-        $project= Project::where('id',$pm_goal->project_id)->first();
-        $url = url('/account/project-status?modal_type=individual_goal_details&status=expired');
-        $client= User::where('id',$pm_goal->client_id)->first();
+        $goal= ProjectPmGoal::where('id',$this->goal_check->id)->first();
+        $project= Project::where('id',$goal->project_id)->first();
+        $url = url('/account/project-status?modal_type=filtered_goal_details&goal_id=' . $goal->id);
+        $client= User::where('id',$goal->client_id)->first();
 
         $goal_count = '';
-        if($pm_goal->duration ==3){
+        if($goal->duration ==3){
             $goal_count = '1st';
-        }elseif($pm_goal->duration ==7){
+        }elseif($goal->duration ==7){
             $goal_count = '2nd';
-        }elseif($pm_goal->duration ==12){
+        }elseif($goal->duration ==12){
             $goal_count = '3rd';
-        }elseif($pm_goal->duration ==15){
+        }elseif($goal->duration ==15){
             $goal_count = '4th';
-        }elseif($pm_goal->duration ==22){
+        }elseif($goal->duration ==22){
             $goal_count = '5th';
         }else{
             $goal_count = '6th';
         }
-
+        
         $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
+        $header = '<strong>' . __(''.$goal_count.' goal for client ' . $client->name . ' will expire in 24 hours!') . '</strong>';
 
-        $header = '<strong>' . __(''.$goal_count.' goal for client ' . $client->name . ' was not met') . '</strong>';
-
-        $body= '<p>'.'You couldn’t meet this goal!'.'</p>';
+        $body= '<p>'.'You have a goal to meet in the next 24 hours:'.'</p>';
         $content =
         '<p>
             <b style="color: black">' . __('Project name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
@@ -79,7 +78,7 @@ class PmGoalMissNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Project category') . ': '.'</b>' . '<span>'.$pm_goal->project_category.'</span>'. '
+            <b style="color: black">' . __('Project category') . ': '.'</b>' . '<span>'.$goal->project_category.'</span>'. '
         </p>'
         .
         '<p>
@@ -87,16 +86,16 @@ class PmGoalMissNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Goal description') . ': '.'</b>' . '<span>'.$pm_goal->description.'</span>'. '
+            <b style="color: black">' . __('Goal name') . ': '.'</b>' . '<span>'.$goal->goal_name.'</span>'. '
         </p>';
-        $pm_goal->mail_status = 1;
-        $pm_goal->save();
+        $goal->mail_status = 1;
+        $goal->save();
 
           return (new MailMessage)
-          ->subject(__(''.$goal_count.' goal for client ' . $client->name . ' was not met') )
+          ->subject(__(''.$goal_count.' goal for client ' . $client->name . ' will expire in 24 hours!') )
 
           ->greeting(__('email.Hi') . ' ' . mb_ucwords($notifiable->name) . ',')
-          ->markdown('mail.pm-goal.miss_goal', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
+          ->markdown('mail.pm-goal.before_expire_goal', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
 
     /**
