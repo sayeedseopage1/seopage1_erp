@@ -14,7 +14,7 @@ export const NewRulesModalTableColumnsData = [
 
         cell: ({ row }) => {
             const data = row?.original;
-           
+
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
                     <Switch>
@@ -103,7 +103,7 @@ export const NewRulesModalTableColumnsData = [
         accessorKey: "rules_type",
         cell: ({ row }) => {
             const data = row?.original;
-         
+
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
                     <Switch.Case condition={data?.policyType.name !== "yesNo"}>
@@ -278,7 +278,18 @@ export const NewRulesModalTableColumnsData = [
                                     role="button"
                                 >
                                     <EditIcon />
-                                    <i class="fa-solid fa-trash ml-2"></i>
+                                </div>
+                                <div
+                                    onClick={() => {
+                                        action.deleteSingleRules(data);
+                                    }}
+                                >
+                                    <i
+                                        className="fa-solid fa-trash ml-2"
+                                        style={{
+                                            fontSize: "20px",
+                                        }}
+                                    ></i>
                                 </div>
                             </SalesPointsContainer>
                         </Switch.Case>
@@ -294,7 +305,12 @@ export const NewRulesModalTableColumnsData = [
                                     className="py-3 d-flex"
                                 >
                                     <EditIcon />
-                                    <i class="fa-solid fa-trash ml-2"></i>
+                                    <i
+                                        className="fa-solid fa-trash ml-2"
+                                        style={{
+                                            fontSize: "20px",
+                                        }}
+                                    ></i>
                                 </div>
                                 <ul>
                                     <li

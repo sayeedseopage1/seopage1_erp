@@ -9,6 +9,7 @@ import {
     flexRender,
 } from "@tanstack/react-table";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 
 // ui components
 import EmptyTable from "../../../../global/EmptyTable";
@@ -21,6 +22,10 @@ import EditApplicablePointsModal from "../modal/EditApplicablePointsModal";
 import RuleActionConfirmationModal from "../modal/RuleActionConfirmationModal";
 import AddQuestionsModal from "../modal/AddQuestionsModal";
 
+// Api
+import { useEditSalesRiskAnalysisPointsMutation } from "../../../../services/api/salesRiskAnalysisSlice";
+import { useEffect } from "react";
+
 const SalesRiskAnalysisTable = ({
     isLoading,
     filter,
@@ -28,7 +33,7 @@ const SalesRiskAnalysisTable = ({
     search,
     tableColumns,
     tableData,
-    questionInputFields
+    questionInputFields,
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
@@ -49,6 +54,11 @@ const SalesRiskAnalysisTable = ({
     // modal state data
     const [editPointData, setEditPointData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
+    const [editPointDataValidation, setEditPointDataValidation] =
+        React.useState({
+            newPoint: false,
+            isSubmitting: false,
+        });
 
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
@@ -67,6 +77,10 @@ const SalesRiskAnalysisTable = ({
             setSkipPageReset(false);
         }
     }, [data]);
+
+    // mutation
+    const [submitData, { isLoading: isLoadingEditSalesRiskAnalysisPoint }] =
+        useEditSalesRiskAnalysisPointsMutation();
 
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
@@ -101,16 +115,16 @@ const SalesRiskAnalysisTable = ({
         getSortedRowModel: getSortedRowModel(),
         paginateExpandedRows: false,
         meta: {
-            handleEditApplicablePoint: (row, selectedRule) => {
+            handleEditApplicablePoint: (row, selectedRule, ruleType) => {
                 setEditPointModalOpen(true);
                 setEditPointData({
                     ...row,
                     selectedRule: selectedRule,
+                    ruleType: ruleType
                 });
             },
             handleRuleActions: (rule, data) => {
                 setAddQuestionsData(data);
-                
                 setRuleActionModalOpen(true);
             },
             handleAddQuestions: (data) => {
@@ -120,10 +134,51 @@ const SalesRiskAnalysisTable = ({
         },
     });
 
-    // modal Close Handler
+    const handleUpdatePoints = async (data) => {
+        if (!editPointData.newPoint) {
+            setEditPointDataValidation({
+                isSubmitting: true,
+                newPoint: true,
+            });
+            return;
+        }
 
+        try {
+            const payload = {
+                id: editPointData?.id,
+                newPoint: editPointData?.newPoint,
+                ruleType: editPointData?.ruleType
+            }
+            const res = await submitData(payload);
+            if (res.data) {
+                toast.success("Points updated successfully");
+                handleCloseEditPointModal()
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    };
+
+    const resetFormSate = () => {
+        setEditPointData({})
+        setEditPointDataValidation({
+            isSubmitting: false,
+            newPoint: false
+        })
+    }
+
+
+    const handleChange = (e) => {
+        setEditPointData({
+            ...editPointData,
+            newPoint: e.target.value,
+        });
+    };
+
+    // modal Close Handler
     const handleCloseEditPointModal = () => {
         setEditPointModalOpen(false);
+        resetFormSate()
     };
 
     const handleCloseRuleActionModal = () => {
@@ -133,6 +188,18 @@ const SalesRiskAnalysisTable = ({
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
     };
+
+    // Validation Update
+    useEffect(() => {
+        if (editPointDataValidation.isSubmitting) {
+            setEditPointDataValidation({
+                ...editPointDataValidation,
+                newPoint: editPointData?.newPoint ? false : true,
+            });
+        }
+    }, [editPointData?.newPoint]);
+
+    console.log(editPointData)
 
     return (
         <React.Fragment>
@@ -218,6 +285,12 @@ const SalesRiskAnalysisTable = ({
                 open={editPointModalOpen}
                 closeModal={handleCloseEditPointModal}
                 editPointData={editPointData}
+                handleChange={handleChange}
+                handleUpdatePoints={handleUpdatePoints}
+                editPointDataValidation={editPointDataValidation}
+                isLoadingEditSalesRiskAnalysisPoint={
+                    isLoadingEditSalesRiskAnalysisPoint
+                }
             />
 
             <RuleActionConfirmationModal

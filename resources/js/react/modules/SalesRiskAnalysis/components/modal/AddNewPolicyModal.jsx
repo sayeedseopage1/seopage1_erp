@@ -34,7 +34,9 @@ const AddNewPolicyModal = ({
     isRuleUpdating,
     setIsRuleUpdating,
     handlePolicyAdded,
-    isLoadingAddSalesRiskAnalysisRule
+    isLoadingAddSalesRiskAnalysisRule,
+    setNewPolicyInputData,
+    handleCancelRuleOnPolicy
 }) => {
     return (
         <CustomModal
@@ -105,6 +107,7 @@ const AddNewPolicyModal = ({
                                 tableName={"NewRulesModalTable"}
                                 setNewPolicyData={setNewPolicyData}
                                 setIsRuleUpdating={setIsRuleUpdating}
+                                setNewPolicyInputData={setNewPolicyInputData}
                             />
                         </div>
                     ) : (
@@ -149,13 +152,24 @@ const AddNewPolicyModal = ({
                         >
                             {isRuleUpdating ? "Update rule" : "Create Rule"}
                         </button>
+                        <button
+                            className="d-flex btn btn-warning align-items-center text-white"
+                            style={{
+                                fontSize: "13px",
+                                marginLeft: "10px"
+                            }}
+                            disabled={_.isEmpty(newPolicyData?.policyType)}
+                            onClick={handleCancelRuleOnPolicy}
+                        >
+                            {isRuleUpdating ? "Cancel Edit" : "Cancel"}
+                        </button>
                     </div>
                 </div>
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton onClick={handlePolicyAdded} width="177px">
-                        {
-                            isLoadingAddSalesRiskAnalysisRule ? "Loading..." : "Add Policy"
-                        }
+                        {isLoadingAddSalesRiskAnalysisRule
+                            ? "Loading..."
+                            : "Add Policy"}
                     </ModalButton>
                     <ModalButton
                         onClick={closeModal}
@@ -189,5 +203,5 @@ AddNewPolicyModal.propTypes = {
     isRuleUpdating: PropTypes.bool,
     setIsRuleUpdating: PropTypes.func,
     handlePolicyAdded: PropTypes.func,
-    isLoadingAddSalesRiskAnalysisRule: PropTypes.bool
+    isLoadingAddSalesRiskAnalysisRule: PropTypes.bool,
 };
