@@ -714,7 +714,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var useRevision = function useRevision(task) {
   var _task$category;
-  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? "design" : "development";
+  var isIndependent = task === null || task === void 0 ? void 0 : task.isIndependentTask;
 
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
@@ -722,27 +723,46 @@ var useRevision = function useRevision(task) {
     if (isAlreadyAccepted) {
       return [];
     }
+    if (isIndependent) {
+      return [{
+        id: "PLRx01",
+        revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
+        isDeniable: false
+      }, {
+        id: "PLRx02",
+        revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
+        isDeniable: false
+      }, {
+        id: "PLRx3",
+        revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+        isDeniable: true
+      }, {
+        id: "PLRx04",
+        revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
+        isDeniable: true
+      }];
+    }
     return [{
-      id: 'PLRx01',
+      id: "PLRx01",
       revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
       isDeniable: false
     }, {
-      id: 'PLRx02',
+      id: "PLRx02",
       revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
       isDeniable: false
     }, {
-      id: 'PLRx3',
-      revision: "The Lead ".concat(taskType === 'design' ? 'designer' : 'developer', "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+      id: "PLRx3",
+      revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
       isDeniable: true
     }, {
-      id: 'PLRx04',
-      revision: "The instruction was followed, but the lead ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out some default/basic things or best practices which are not essential to write in instruction"),
+      id: "PLRx04",
+      revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
       isDeniable: true
     }, {
-      id: 'PLRx05',
+      id: "PLRx05",
       revision: "I have some general revisions",
       isDeniable: false,
-      type: 'GENERAL_REVISION'
+      type: "GENERAL_REVISION"
     }];
   };
 
@@ -754,20 +774,20 @@ var useRevision = function useRevision(task) {
       return [];
     } else {
       return [{
-        id: 'LDRx1',
-        revision: "The concerned ".concat(taskType === 'design' ? 'designer’s' : 'developer’s', "  delivered work doesn\u2019t match my shared requirement"),
+        id: "LDRx1",
+        revision: "The concerned ".concat(taskType === "design" ? "designer’s" : "developer’s", "  delivered work doesn\u2019t match my shared requirement"),
         isDeniable: true
       }, {
-        id: 'LDRx2',
+        id: "LDRx2",
         revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right.",
         isDeniable: false
       }, {
-        id: 'LDRx3',
+        id: "LDRx3",
         revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes.",
         isDeniable: false
       }, {
-        id: 'LDRx4',
-        revision: "The instruction was followed but the ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
+        id: "LDRx4",
+        revision: "The instruction was followed but the ".concat(taskType === "design" ? "designer" : "developer", " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
         isDeniable: true
       }];
     }
@@ -3195,13 +3215,30 @@ var RevisionText = function RevisionText(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "px-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      children: [revision !== null && revision !== void 0 && revision.revisionAcknowledgement ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+        className: "d-block mb-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+          className: "font-weight-bold text-danger",
+          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+            children: "Reason: "
+          }), " "]
+        }), revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement, revision !== null && revision !== void 0 && revision.isDeny ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "badge badge-danger",
+          children: "Rejected By Developer"
+        }) : null, revision !== null && revision !== void 0 && revision.isAccept ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "badge badge-success",
+          children: "Accepted By Developer"
+        }) : null]
+      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "font-weight-bold text-success",
+          children: "Statement:"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "sp1_ck_content",
           dangerouslySetInnerHTML: {
             __html: showText
           }
-        })
+        })]
       }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
         href: "#",
         className: "ml-2",

@@ -66,10 +66,14 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
     // console.log(developer)
     useLayoutEffect(() => {
-        if(page === "subtasks" && auth.getRoleId() === 5 && window !== undefined) {
+        if (
+            page === "subtasks" &&
+            auth.getRoleId() === 5 &&
+            window !== undefined
+        ) {
             setDeveloper(window.Laravel.user);
         }
-    }, [])
+    }, []);
 
     return (
         <div className="sp1_task_filter_bar">
@@ -128,7 +132,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                             state={developer}
                             setState={setDeveloper}
                             disabled={auth.getRoleId() === 5}
-                            roleIds={[5]}
+                            roleIds={[5, 9, 10]}
                         />
                     ) : (
                         <UserFilter
