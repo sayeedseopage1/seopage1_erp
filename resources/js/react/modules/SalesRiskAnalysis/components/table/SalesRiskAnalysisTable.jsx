@@ -152,6 +152,7 @@ const SalesRiskAnalysisTable = ({
             const res = await submitData(payload);
             if (res.data) {
                 toast.success("Points updated successfully");
+                handleCloseEditPointModal()
             }
         } catch (error) {
             toast.error("Something went wrong");
