@@ -36,7 +36,7 @@ const AddNewPolicyModal = ({
     handlePolicyAdded,
     isLoadingAddSalesRiskAnalysisRule,
     setNewPolicyInputData,
-    han,
+    handleCancelRuleOnPolicy
 }) => {
     return (
         <CustomModal
@@ -151,6 +151,17 @@ const AddNewPolicyModal = ({
                             onClick={handleAddRuleOnPolicy}
                         >
                             {isRuleUpdating ? "Update rule" : "Create Rule"}
+                        </button>
+                        <button
+                            className="d-flex btn btn-warning align-items-center text-white"
+                            style={{
+                                fontSize: "13px",
+                                marginLeft: "10px"
+                            }}
+                            disabled={_.isEmpty(newPolicyData?.policyType)}
+                            onClick={handleCancelRuleOnPolicy}
+                        >
+                            {isRuleUpdating ? "Cancel Edit" : "Cancel"}
                         </button>
                     </div>
                 </div>

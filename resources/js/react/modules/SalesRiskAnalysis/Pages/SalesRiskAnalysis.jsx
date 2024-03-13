@@ -199,9 +199,23 @@ const SalesRiskAnalysis = () => {
                     id: Math.random().toString(36).substring(7),
                 },
             ]);
-           
         }
         resetFormState();
+    };
+
+    const handleCancelRuleOnPolicy = () => {
+        setNewPolicyData({
+            ...newPolicyData,
+            rulesType: {},
+            policyType: {},
+            value: "",
+            from: "",
+            to: "",
+            yes: "",
+            no: "",
+            countries: [],
+            points: "",
+        });
     };
 
     const handlePolicyAdded = async () => {
@@ -243,7 +257,7 @@ const SalesRiskAnalysis = () => {
                 setNewPolicyInputData([]);
             }
         } catch (error) {
-            if(error?.status === 403) {
+            if (error?.status === 403) {
                 toast.error("You are not authorized to perform this action");
                 return;
             }
@@ -337,7 +351,6 @@ const SalesRiskAnalysis = () => {
                             tableData={salesRiskAnalysisRules}
                             isLoading={isFetching}
                             questionInputFields={questionInputFields}
-                            
                         />
                     </div>
                 </div>
@@ -362,6 +375,7 @@ const SalesRiskAnalysis = () => {
                     isLoadingAddSalesRiskAnalysisRule={
                         isLoadingAddSalesRiskAnalysisRule
                     }
+                    handleCancelRuleOnPolicy={handleCancelRuleOnPolicy}
                 />
             </SalesRiskAnalysisContainer>
         </React.Fragment>
