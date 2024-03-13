@@ -1,6 +1,11 @@
 import React from "react";
+
+// ui components
 import Dropdown from "./Dropdown";
 import Tooltip from "./Tooltip";
+
+// style 
+import "./questionsSelect.css";
 
 const MultiSelectShowDropDown = ({
     data,
@@ -18,7 +23,7 @@ const MultiSelectShowDropDown = ({
                     : "d-flex align-items-center"
             } ${className}`}
         >
-            <Dropdown register className="w-100">
+            <Dropdown register className="w-100 cnx_dropdown_show_items_sales" >
                 <Dropdown.Toggle
                     className={
                         sidebarItem
@@ -30,15 +35,18 @@ const MultiSelectShowDropDown = ({
                         text={_Options?.length}
                         key="select-department-sal-risk"
                     >
-                        <span
+                        <p
                             data-toggle={"tooltip"}
                             id="select-department-sal-risk"
                         >
                             {_Options?.length}
-                        </span>
+                        </p>
                     </Tooltip>
                 </Dropdown.Toggle>
                 <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`}>
+                    <div>
+                        <p>Country list ({_Options?.length})</p>
+                    </div>
                     {_Options.map((item) => (
                         <Dropdown.Item
                             key={item?.name}

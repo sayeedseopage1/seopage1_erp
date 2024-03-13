@@ -199,7 +199,7 @@ const SalesRiskAnalysis = () => {
                     id: Math.random().toString(36).substring(7),
                 },
             ]);
-            console.log("else");
+           
         }
         resetFormState();
     };
@@ -308,8 +308,6 @@ const SalesRiskAnalysis = () => {
         }
     }, [newPolicyData]);
 
-    console.log(newPolicyInputData);
-    console.log(newPolicyData);
     return (
         <React.Fragment>
             <SalesRiskAnalysisContainer>
