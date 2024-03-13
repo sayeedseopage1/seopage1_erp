@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -32,8 +33,9 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('/', 'index')->name('index');
             Route::get('input-fields', 'riskPolicyInputFields')->name('input-fields');
             Route::post('save', 'save')->name('save');
-            Route::get('question-fields', 'policyQuestionInputFields')->name('question-fields');
+            Route::post('edit/{id}', 'edit')->name('edit');
             Route::get('rule-list', 'ruleList')->name('rule-list');
+            Route::get('question-fields', 'policyQuestionInputFields')->name('question-fields');
         });
     }
 
@@ -265,6 +267,11 @@ class SalesRiskPolicyController extends AccountBaseController
                 'label' => 'Point',
                 'type' => 'number',
                 'placeholder' => ''
+            ],
+            [
+                'label' => 'Comment',
+                'type' => 'input',
+                'placeholder' => ''
             ]
         ];
 
@@ -362,6 +369,33 @@ class SalesRiskPolicyController extends AccountBaseController
         ]);
     }
 
+    function edit(Request $req, $id) :JsonResponse
+    {
+        dd($id, $req->all());
+        return response()->json();
+    }
+
+    function ruleList()
+    {
+        // $department = Team::with('childs')->find(1);
+        // dd($department);
+        $list = SalesRiskPolicy::where('parent_id', null)->get()->map(function ($item) {
+
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id','value','point', 'comment']),
+                'department' => [
+                    'id' => $item->department,
+                    'name' => Team::with('childs')->find($item->department)->team_name
+                ],
+                'comment' => $item->comment
+            ];
+        });
+
+        return response()->json(['data' => $list]);
+    }
+
     function policyQuestionInputFields()
     {
         $fileds = [
@@ -424,47 +458,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
         ];
 
-        // $fileds = [
-        //     'title' => 'asdf',
-        //     'department' => '1',
-        //     'ruleList' => [
-        //         [
-        //             'policyType' => 'lessThan',
-        //             'title' => 'Less Than 32%',
-        //             'rulesType' => 'percentage',
-        //             'value' => '32'
-        //         ],
-        //         [
-        //             'policyType' => 'greaterThan',
-        //             'title' => 'Greater Than $12',
-        //             'rulesType' => 'currency',
-        //             'value' => '12'
-        //         ]
-        //     ]
-        // ];
-
         return response()->json($fileds);
     }
 
-    function ruleList()
-    {
-        // $department = Team::with('childs')->find(1);
-        // dd($department);
-        $list = SalesRiskPolicy::where('parent_id', null)->get()->map(function ($item) {
 
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id','value','point']),
-                'department' => [
-                    'id' => $item->department,
-                    'name' => Team::with('childs')->find($item->department)->team_name
-                ]
-            ];
-        });
-
-        return response()->json(['data' => $list]);
-    }
 
     function questionList()
     {
