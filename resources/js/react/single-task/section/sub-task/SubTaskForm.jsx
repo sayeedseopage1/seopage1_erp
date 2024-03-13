@@ -503,6 +503,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         }
     }, []);
 
+    console.log('user role', auth.getDesignationName())
+
     // page type change clear related entries
     useEffect(() => {
         setPageTypeOthers("");
@@ -739,421 +741,403 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     )}
                 </div>
 
-                {/* TODO: new fields will added here  */}
-                {/* Type Of Graphics Work */}
-                <div className="col-12 col-md-6">
-                    <TypeOfGraphicsWorkSelection
-                        selected={typeOfGraphicsCategory}
-                        onSelect={setTypeOfGraphicsCategory}
-                    />
-                    {err?.typeOfGraphicsCategory && (
-                        <div style={{ color: "red" }}>
-                            {err?.typeOfGraphicsCategory}
-                        </div>
-                    )}
-                </div>
-                {/* for logo  */}
                 {
-                    typeOfGraphicsCategory?.type_name === "Logo" && <>
+                    auth?.isHasRolePermission(13) && <>
+                        {/* TODO: new fields will added here "Estimated hours"  */}
+                        {/* Type Of Graphics Work */}
                         <div className="col-12 col-md-6">
-                            <TypeOfLogo
-                                selected={typeOfLogo}
-                                onSelect={setTypeOfLogo}
+                            <TypeOfGraphicsWorkSelection
+                                selected={typeOfGraphicsCategory}
+                                onSelect={setTypeOfGraphicsCategory}
                             />
-                            {err?.typeOfLogo && (
+                            {err?.typeOfGraphicsCategory && (
                                 <div style={{ color: "red" }}>
-                                    {err?.typeOfLogo}
+                                    {err?.typeOfGraphicsCategory}
                                 </div>
                             )}
                         </div>
-                        <div className="col-12 col-md-6">
-                            <Input
-                                id="brandName"
-                                label="Brand Name"
-                                type="text"
-                                placeholder="Enter brand name"
-                                name="brandName"
-                                required={true}
-                                value={brandName}
-                                error={err?.brandName}
-                                onChange={(e) =>
-                                    handleChange(e, setBrandName)
-                                }
-                            />
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <Input
-                                id="numOfVersions"
-                                label="Number of Versions"
-                                type="number"
-                                placeholder="Enter Number of versions"
-                                name="numOfVersions"
-                                required={true}
-                                value={numOfVersions}
-                                error={err?.numOfVersions}
-                                onChange={(e) =>
-                                    handleChange(e, setNumOfVersions)
-                                }
-                            />
-                        </div>
-                        <div className="col-12 col-md-6">
-                            <div className={`form-group my-3 w-100`}>
-                                <label
-                                    htmlFor={'fileTypesNeeded'}
-                                    className={`f-14 text-dark-gray mb-1`}
-                                    data-label="true"
-                                >
-                                    File Types Needed
-                                    <sup className='f-14 mr-1'>*</sup>
-                                </label>
-                                <FileTypesNeeded
-                                    className={`form-control height-35 w-100 f-14`}
-                                    id='fileTypesNeeded'
-                                    fileTypesNeeded={fileTypesNeeded}
-                                    setFileTypesNeeded={setFileTypesNeeded}
-                                    multiple
-                                />
-                                {err?.fileTypesNeeded && (
-                                    <div style={{ color: "red" }}>
-                                        {err?.fileTypesNeeded}
+                        {/* for logo  */}
+                        {
+                            typeOfGraphicsCategory?.type_name === "Logo" && <>
+                                <div className="col-12 col-md-6">
+                                    <TypeOfLogo
+                                        selected={typeOfLogo}
+                                        onSelect={setTypeOfLogo}
+                                    />
+                                    {err?.typeOfLogo && (
+                                        <div style={{ color: "red" }}>
+                                            {err?.typeOfLogo}
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="brandName"
+                                        label="Brand Name"
+                                        type="text"
+                                        placeholder="Enter brand name"
+                                        name="brandName"
+                                        required={true}
+                                        value={brandName}
+                                        error={err?.brandName}
+                                        onChange={(e) =>
+                                            handleChange(e, setBrandName)
+                                        }
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="numOfVersions"
+                                        label="Number of Versions"
+                                        type="number"
+                                        placeholder="Enter Number of versions"
+                                        name="numOfVersions"
+                                        required={true}
+                                        value={numOfVersions}
+                                        error={err?.numOfVersions}
+                                        onChange={(e) =>
+                                            handleChange(e, setNumOfVersions)
+                                        }
+                                    />
+                                </div>
+                                <div className="col-12 col-md-6">
+                                    <div className={`form-group my-3 w-100`}>
+                                        <label
+                                            htmlFor={'fileTypesNeeded'}
+                                            className={`f-14 text-dark-gray mb-1`}
+                                            data-label="true"
+                                        >
+                                            File Types Needed
+                                            <sup className='f-14 mr-1'>*</sup>
+                                        </label>
+                                        <FileTypesNeeded
+                                            className={`form-control height-35 w-100 f-14`}
+                                            id='fileTypesNeeded'
+                                            fileTypesNeeded={fileTypesNeeded}
+                                            setFileTypesNeeded={setFileTypesNeeded}
+                                            multiple
+                                        />
+                                        {err?.fileTypesNeeded && (
+                                            <div style={{ color: "red" }}>
+                                                {err?.fileTypesNeeded}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                    </>
-                }
+                                </div>
+                            </>
+                        }
 
-                {/* for Banner or company profile */}
-                {
-                    (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
+                        {/* for Banner or company profile */}
+                        {
+                            (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="textForDesign"
+                                        label="Attach text that will be used for the design"
+                                        type="text"
+                                        placeholder="Enter a text for design"
+                                        name="textForDesign"
+                                        required={true}
+                                        value={textForDesign}
+                                        error={err?.textForDesign}
+                                        onChange={(e) =>
+                                            handleChange(e, setTextForDesign)
+                                        }
+                                    />
+                                </div>
+                            </>
+                        }
+
+                        {/* background removal or image retouching */}
+                        {
+                            (typeOfGraphicsCategory?.type_name === "Background Removal" || typeOfGraphicsCategory?.type_name === "Image Retouching") && <>
+                                <div className="col-12 col-md-6">
+                                    <div className={`form-group my-3 w-100`}>
+                                        <label
+                                            htmlFor={'imageForDesigner'}
+                                            className={`f-14 text-dark-gray mb-2`}
+                                            data-label="true"
+                                        >
+                                            Image where the designer will work
+                                            <sup className='f-14 mr-1'>*</sup>
+                                        </label>
+                                        <div className="custom-file" style={fileInputStyle}>
+                                            <input type="file" className="custom-file-input" id="imageForDesigner" required={true} error={err?.imageForDesigner} onChange={(e) =>
+                                                handleChange(e, setImageForDesigner)
+                                            } />
+                                            <label className="custom-file-label" htmlFor="imageForDesigner">Choose file</label>
+                                        </div>
+                                        {err?.imageForDesigner && (
+                                            <div style={{ color: "red" }}>
+                                                {err?.imageForDesigner}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        }
+
+
+                        {/* motion graphics */}
+                        {
+                            typeOfGraphicsCategory?.type_name === "Motion Graphics" && <>
+                                <div className="col-12 col-md-6">
+                                    <div className={`form-group my-3 w-100`}>
+                                        <label
+                                            htmlFor={'imgOrVidForWork'}
+                                            className={`f-14 text-dark-gray mb-2`}
+                                            data-label="true"
+                                        >
+                                            Images/videos that will be used for the work
+                                            <sup className='f-14 mr-1'>*</sup>
+                                        </label>
+                                        <div className="custom-file z-n1" style={fileInputStyle}>
+                                            <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={err?.imgOrVidForWork} onChange={(e) =>
+                                                handleChange(e, setImgOrVidForWork)
+                                            } multiple />
+                                            <label className="custom-file-label" htmlFor="imgOrVidForWork">Choose file</label>
+                                        </div>
+                                        {err?.imgOrVidForWork && (
+                                            <div style={{ color: "red" }}>
+                                                {err?.imgOrVidForWork}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        }
+
+                        {/* Reference */}
                         <div className="col-12 col-md-6">
                             <Input
-                                id="textForDesign"
-                                label="Attach text that will be used for the design"
+                                id="reference"
+                                label="Reference"
                                 type="text"
-                                placeholder="Enter a text for design"
-                                name="textForDesign"
+                                placeholder="Enter a task reference"
+                                name="reference"
                                 required={true}
-                                value={textForDesign}
-                                error={err?.textForDesign}
+                                value={reference}
+                                error={err?.reference}
                                 onChange={(e) =>
-                                    handleChange(e, setTextForDesign)
+                                    handleChange(e, setReference)
                                 }
                             />
                         </div>
-                    </>
-                }
 
-                {/* background removal or image retouching */}
-                {
-                    (typeOfGraphicsCategory?.type_name === "Background Removal" || typeOfGraphicsCategory?.type_name === "Image Retouching") && <>
+                        {/* Font name */}
+                        <div className="col-12 col-md-6">
+                            <Input
+                                id="fontName"
+                                label="Font Name"
+                                type="text"
+                                placeholder="Enter a font name"
+                                name="fontName"
+                                required={true}
+                                value={fontName}
+                                error={err?.fontName}
+                                onChange={(e) =>
+                                    handleChange(e, setFontName)
+                                }
+                            />
+                        </div>
+
+                        {/* font url  */}
+                        <div className="col-12 col-md-6">
+                            <Input
+                                id="fontUrl"
+                                label="Font Url"
+                                type="url"
+                                placeholder="Enter font url"
+                                name="fontUrl"
+                                value={fontUrl}
+                                onChange={(e) =>
+                                    handleChange(e, setFontUrl)
+                                }
+                            />
+                        </div>
+
+                        {/* Brand guideline */}
                         <div className="col-12 col-md-6">
                             <div className={`form-group my-3 w-100`}>
                                 <label
-                                    htmlFor={'imageForDesigner'}
+                                    htmlFor={'brandGuideline'}
                                     className={`f-14 text-dark-gray mb-2`}
                                     data-label="true"
                                 >
-                                    Image where the designer will work
-                                    <sup className='f-14 mr-1'>*</sup>
+                                    Brand guideline
                                 </label>
                                 <div className="custom-file" style={fileInputStyle}>
-                                    <input type="file" className="custom-file-input" id="imageForDesigner" required={true} error={err?.imageForDesigner} onChange={(e) =>
-                                        handleChange(e, setImageForDesigner)
-                                    } />
-                                    <label className="custom-file-label" htmlFor="imageForDesigner">Choose file</label>
+                                    <input type="file" className="custom-file-input" id="brandGuideline" error={err?.brandGuideline} onChange={(e) =>
+                                        handleChange(e, setBrandGuideline)
+                                    } multiple />
+                                    <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
                                 </div>
-                                {err?.imageForDesigner && (
-                                    <div style={{ color: "red" }}>
-                                        {err?.imageForDesigner}
-                                    </div>
-                                )}
                             </div>
                         </div>
-                    </>
-                }
 
-
-                {/* motion graphics */}
-                {
-                    typeOfGraphicsCategory?.type_name === "Motion Graphics" && <>
-                        <div className="col-12 col-md-6">
-                            <div className={`form-group my-3 w-100`}>
+                        {/* color schema */}
+                        <div className="col-12">
+                            <div className="form-group">
                                 <label
-                                    htmlFor={'imgOrVidForWork'}
+                                    htmlFor={'brandGuideline'}
                                     className={`f-14 text-dark-gray mb-2`}
                                     data-label="true"
                                 >
-                                    Images/videos that will be used for the work
-                                    <sup className='f-14 mr-1'>*</sup>
+                                    Color Schema
                                 </label>
-                                <div className="custom-file z-n1" style={fileInputStyle}>
-                                    <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={err?.imgOrVidForWork} onChange={(e) =>
-                                        handleChange(e, setImgOrVidForWork)
-                                    } multiple />
-                                    <label className="custom-file-label" htmlFor="imgOrVidForWork">Choose file</label>
-                                </div>
-                                {err?.imgOrVidForWork && (
-                                    <div style={{ color: "red" }}>
-                                        {err?.imgOrVidForWork}
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </>
-                }
-
-                {/* Reference */}
-                <div className="col-12 col-md-6">
-                    <Input
-                        id="reference"
-                        label="Reference"
-                        type="text"
-                        placeholder="Enter a task reference"
-                        name="reference"
-                        required={true}
-                        value={reference}
-                        error={err?.reference}
-                        onChange={(e) =>
-                            handleChange(e, setReference)
-                        }
-                    />
-                </div>
-
-                {/* Font name */}
-                <div className="col-12 col-md-6">
-                    <Input
-                        id="fontName"
-                        label="Font Name"
-                        type="text"
-                        placeholder="Enter a font name"
-                        name="fontName"
-                        required={true}
-                        value={fontName}
-                        error={err?.fontName}
-                        onChange={(e) =>
-                            handleChange(e, setFontName)
-                        }
-                    />
-                </div>
-
-                {/* font url  */}
-                <div className="col-12 col-md-6">
-                    <Input
-                        id="fontUrl"
-                        label="Font Url"
-                        type="url"
-                        placeholder="Enter font url"
-                        name="fontUrl"
-                        value={fontUrl}
-                        onChange={(e) =>
-                            handleChange(e, setFontUrl)
-                        }
-                    />
-                </div>
-
-                {/* Brand guideline */}
-                <div className="col-12 col-md-6">
-                    <div className={`form-group my-3 w-100`}>
-                        <label
-                            htmlFor={'brandGuideline'}
-                            className={`f-14 text-dark-gray mb-2`}
-                            data-label="true"
-                        >
-                            Brand guideline
-                        </label>
-                        <div className="custom-file" style={fileInputStyle}>
-                            <input type="file" className="custom-file-input" id="brandGuideline" error={err?.brandGuideline} onChange={(e) =>
-                                handleChange(e, setBrandGuideline)
-                            } multiple />
-                            <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
-                        </div>
-                    </div>
-                </div>
-
-                {/* color schema */}
-                <div className="col-12">
-                    <div className="form-group">
-                        <label
-                            htmlFor={'brandGuideline'}
-                            className={`f-14 text-dark-gray mb-2`}
-                            data-label="true"
-                        >
-                            Color Schema
-                        </label>
-                        <React.Fragment>
-                            {/* primary color */}
-                            <div
-                                className="mt-3 mx-3 p-3"
-                                style={{
-                                    background: "#F9F9F9",
-                                    borderRadius: "10px",
-                                }}
-                            >
-                                <div className="form-group">
-                                    <label
-                                        htmlFor=""
-                                        className="mb-2"
+                                <React.Fragment>
+                                    {/* primary color */}
+                                    <div
+                                        className="mt-3 mx-3 p-3"
                                         style={{
-                                            fontWeight: 600,
-                                            color: "#777",
+                                            background: "#F9F9F9",
+                                            borderRadius: "10px",
                                         }}
                                     >
-                                        1. Primary Color{" "}
-                                        <sup>*</sup>{" "}
-                                    </label>
+                                        <div className="form-group">
+                                            <label
+                                                htmlFor=""
+                                                className="mb-2"
+                                                style={{
+                                                    fontWeight: 600,
+                                                    color: "#777",
+                                                }}
+                                            >
+                                                1. Primary Color{" "}
+                                                <sup>*</sup>{" "}
+                                            </label>
 
-                                    <div className="form-group px-2">
-                                        <label htmlFor="">
-                                            Choose Color:
-                                        </label>
-                                        <div className="input-group mb-3 col-12 col-md-6">
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                placeholder="Recipient's username"
-                                                aria-label="Recipient's username"
-                                                aria-describedby="basic-addon2"
-                                                value={
-                                                    primaryColor
-                                                }
-                                                onChange={(e) =>
-                                                    onChange(
-                                                        e,
-                                                        setPrimaryColor
-                                                    )
-                                                }
-                                            />
-                                            <div className="input-group-append">
-                                                <span
-                                                    className="input-group-text px-1 border-0"
-                                                    id="basic-addon2"
-                                                >
+                                            <div className="form-group px-2">
+                                                <label htmlFor="">
+                                                    Choose Color:
+                                                </label>
+                                                <div className="input-group mb-3 col-12 col-md-6">
                                                     <input
-                                                        type="color"
+                                                        type="text"
+                                                        className="form-control"
+                                                        placeholder="Recipient's username"
+                                                        aria-label="Recipient's username"
+                                                        aria-describedby="basic-addon2"
                                                         value={
                                                             primaryColor
                                                         }
-                                                        onChange={(
-                                                            e
-                                                        ) =>
+                                                        onChange={(e) =>
                                                             onChange(
                                                                 e,
                                                                 setPrimaryColor
                                                             )
                                                         }
-                                                        style={{
-                                                            width: "32px",
-                                                            border: "none",
-                                                        }}
                                                     />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="form-group pl-2">
-                                        <label htmlFor="">
-                                            Where Should
-                                            Designer Use this
-                                            Color <sup>*</sup>
-                                        </label>
-                                        <div className="ck-editor-holder">
-                                            <CKEditorComponent
-                                                onChange={(
-                                                    e,
-                                                    editor
-                                                ) =>
-                                                    setPrimaryColorDescription(
-                                                        editor.getData()
-                                                    )
-                                                }
-                                            />
-                                        </div>
-
-                                        {error?.pColorDesc && (
-                                            <div
-                                                className=""
-                                                style={{
-                                                    color: "red",
-                                                }}
-                                            >
-                                                {" "}
-                                                {
-                                                    error?.pColorDesc
-                                                }{" "}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* secondary color */}
-                            <div
-                                className="mt-3 mx-3 p-3"
-                                style={{
-                                    background: "#F9F9F9",
-                                    borderRadius: "10px",
-                                }}
-                            >
-                                <div className="form-group">
-                                    <label
-                                        htmlFor=""
-                                        className="mb-2"
-                                        style={{
-                                            fontWeight: 600,
-                                            color: "#777",
-                                        }}
-                                    >
-                                        2. Secondary Color{" "}
-                                        <sup>*</sup>{" "}
-                                    </label>
-
-                                    {_.map(
-                                        secondaryColors,
-                                        (item, index) => (
-                                            <div
-                                                className="p-3"
-                                                key={item.id}
-                                            >
-                                                <div className="form-group">
-                                                    <label htmlFor="">
-                                                        <b>
-                                                            {index +
-                                                                1}
-                                                            .
-                                                        </b>{" "}
-                                                        Choose
-                                                        Color:
-                                                    </label>
-                                                    <div className="d-flex align-items-center">
-                                                        <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                    <div className="input-group-append">
+                                                        <span
+                                                            className="input-group-text px-1 border-0"
+                                                            id="basic-addon2"
+                                                        >
                                                             <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                placeholder="Recipient's username"
-                                                                aria-label="Recipient's username"
-                                                                aria-describedby="basic-addon2"
+                                                                type="color"
                                                                 value={
-                                                                    item.color
+                                                                    primaryColor
                                                                 }
                                                                 onChange={(
                                                                     e
                                                                 ) =>
-                                                                    handleSecondaryColorChange(
+                                                                    onChange(
                                                                         e,
-                                                                        item.id
+                                                                        setPrimaryColor
                                                                     )
                                                                 }
+                                                                style={{
+                                                                    width: "32px",
+                                                                    border: "none",
+                                                                }}
                                                             />
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-                                                            <div className="input-group-append">
-                                                                <span
-                                                                    className="input-group-text px-1 border-0"
-                                                                    id="basic-addon2"
-                                                                >
+                                            <div className="form-group pl-2">
+                                                <label htmlFor="">
+                                                    Where Should
+                                                    Designer Use this
+                                                    Color <sup>*</sup>
+                                                </label>
+                                                <div className="ck-editor-holder">
+                                                    <CKEditorComponent
+                                                        onChange={(
+                                                            e,
+                                                            editor
+                                                        ) =>
+                                                            setPrimaryColorDescription(
+                                                                editor.getData()
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+
+                                                {error?.pColorDesc && (
+                                                    <div
+                                                        className=""
+                                                        style={{
+                                                            color: "red",
+                                                        }}
+                                                    >
+                                                        {" "}
+                                                        {
+                                                            error?.pColorDesc
+                                                        }{" "}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* secondary color */}
+                                    <div
+                                        className="mt-3 mx-3 p-3"
+                                        style={{
+                                            background: "#F9F9F9",
+                                            borderRadius: "10px",
+                                        }}
+                                    >
+                                        <div className="form-group">
+                                            <label
+                                                htmlFor=""
+                                                className="mb-2"
+                                                style={{
+                                                    fontWeight: 600,
+                                                    color: "#777",
+                                                }}
+                                            >
+                                                2. Secondary Color{" "}
+                                                <sup>*</sup>{" "}
+                                            </label>
+
+                                            {_.map(
+                                                secondaryColors,
+                                                (item, index) => (
+                                                    <div
+                                                        className="p-3"
+                                                        key={item.id}
+                                                    >
+                                                        <div className="form-group">
+                                                            <label htmlFor="">
+                                                                <b>
+                                                                    {index +
+                                                                        1}
+                                                                    .
+                                                                </b>{" "}
+                                                                Choose
+                                                                Color:
+                                                            </label>
+                                                            <div className="d-flex align-items-center">
+                                                                <div className="input-group mb-3 pl-3 col-10 col-md-6">
                                                                     <input
-                                                                        type="color"
+                                                                        type="text"
+                                                                        className="form-control"
+                                                                        placeholder="Recipient's username"
+                                                                        aria-label="Recipient's username"
+                                                                        aria-describedby="basic-addon2"
                                                                         value={
                                                                             item.color
                                                                         }
@@ -1165,99 +1149,123 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                                                 item.id
                                                                             )
                                                                         }
-                                                                        style={{
-                                                                            width: "32px",
-                                                                            border: "none",
-                                                                        }}
                                                                     />
-                                                                </span>
+
+                                                                    <div className="input-group-append">
+                                                                        <span
+                                                                            className="input-group-text px-1 border-0"
+                                                                            id="basic-addon2"
+                                                                        >
+                                                                            <input
+                                                                                type="color"
+                                                                                value={
+                                                                                    item.color
+                                                                                }
+                                                                                onChange={(
+                                                                                    e
+                                                                                ) =>
+                                                                                    handleSecondaryColorChange(
+                                                                                        e,
+                                                                                        item.id
+                                                                                    )
+                                                                                }
+                                                                                style={{
+                                                                                    width: "32px",
+                                                                                    border: "none",
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+
+                                                                {_.size(
+                                                                    secondaryColors
+                                                                ) >
+                                                                    1 && (
+                                                                        <button
+                                                                            aria-label="remove"
+                                                                            onClick={(
+                                                                                e
+                                                                            ) =>
+                                                                                removeSecondaryColor(
+                                                                                    e,
+                                                                                    item.id
+                                                                                )
+                                                                            }
+                                                                            className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                        >
+                                                                            <i className="fa-solid fa-trash-can" />
+                                                                        </button>
+                                                                    )}
                                                             </div>
                                                         </div>
 
-                                                        {_.size(
-                                                            secondaryColors
-                                                        ) >
-                                                            1 && (
-                                                                <button
-                                                                    aria-label="remove"
-                                                                    onClick={(
-                                                                        e
+                                                        <div className="form-group pl-3">
+                                                            <label htmlFor="">
+                                                                Where
+                                                                Should
+                                                                Designer
+                                                                Use this
+                                                                Color{" "}
+                                                                <sup>
+                                                                    *
+                                                                </sup>
+                                                            </label>
+                                                            <div className="ck-editor-holder">
+                                                                <CKEditorComponent
+                                                                    onChange={(
+                                                                        e,
+                                                                        editor
                                                                     ) =>
-                                                                        removeSecondaryColor(
+                                                                        handleSecondaryColorDescriptionChange(
                                                                             e,
+                                                                            editor,
                                                                             item.id
                                                                         )
                                                                     }
-                                                                    className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                />
+                                                            </div>
+
+                                                            {error?.sDescription && (
+                                                                <div
+                                                                    className=""
+                                                                    style={{
+                                                                        color: "red",
+                                                                    }}
                                                                 >
-                                                                    <i className="fa-solid fa-trash-can" />
-                                                                </button>
+                                                                    {" "}
+                                                                    {
+                                                                        error?.sDescription
+                                                                    }{" "}
+                                                                </div>
                                                             )}
-                                                    </div>
-                                                </div>
-
-                                                <div className="form-group pl-3">
-                                                    <label htmlFor="">
-                                                        Where
-                                                        Should
-                                                        Designer
-                                                        Use this
-                                                        Color{" "}
-                                                        <sup>
-                                                            *
-                                                        </sup>
-                                                    </label>
-                                                    <div className="ck-editor-holder">
-                                                        <CKEditorComponent
-                                                            onChange={(
-                                                                e,
-                                                                editor
-                                                            ) =>
-                                                                handleSecondaryColorDescriptionChange(
-                                                                    e,
-                                                                    editor,
-                                                                    item.id
-                                                                )
-                                                            }
-                                                        />
-                                                    </div>
-
-                                                    {error?.sDescription && (
-                                                        <div
-                                                            className=""
-                                                            style={{
-                                                                color: "red",
-                                                            }}
-                                                        >
-                                                            {" "}
-                                                            {
-                                                                error?.sDescription
-                                                            }{" "}
                                                         </div>
-                                                    )}
-                                                </div>
+                                                    </div>
+                                                )
+                                            )}
+
+                                            <div className="d-flex align-items-center px-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={
+                                                        addSecondaryColor
+                                                    }
+                                                    className="bg-transparent text-primary hover-underline ml-auto"
+                                                >
+                                                    + Another Color
+                                                </button>
                                             </div>
-                                        )
-                                    )}
-
-                                    <div className="d-flex align-items-center px-3">
-                                        <button
-                                            type="button"
-                                            onClick={
-                                                addSecondaryColor
-                                            }
-                                            className="bg-transparent text-primary hover-underline ml-auto"
-                                        >
-                                            + Another Color
-                                        </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                        </React.Fragment>
+                                </React.Fragment>
 
-                    </div>
-                </div>
-                {/* end color schema */}
+                            </div>
+                        </div>
+                        {/* end color schema */}
+                    </>
+                }
+
+
 
                 <div className="col-12 col-md-6">
                     <AssginedToSelection

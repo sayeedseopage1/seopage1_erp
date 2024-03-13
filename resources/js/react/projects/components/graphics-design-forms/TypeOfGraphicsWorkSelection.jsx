@@ -17,7 +17,7 @@ const graphicOptions = [
     { id: 6, type_name: 'Background Removal' },
     { id: 7, type_name: 'Illustration' },
     { id: 8, type_name: 'Motion Graphics' },
-    // { id: 9, type_name: 'Others' },
+    { id: 9, type_name: 'Others' },
 ];
 
 const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTask }) => {

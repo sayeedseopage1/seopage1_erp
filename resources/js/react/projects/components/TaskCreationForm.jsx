@@ -46,12 +46,14 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
-    const [textForDesign, setTextForDesign] = useState('');
+    const [textForDesign, setTextForDesign] = useState(null);
     const [imageForDesigner, setImageForDesigner] = useState(null);
     const [imgOrVidForWork, setImgOrVidForWork] = useState(null);
     const [fontName, setFontName] = useState('');
     const [fontUrl, setFontUrl] = useState('');
     const [brandGuideline, setBrandGuideline] = useState(null);
+    const [illustration, setIllustration] = useState("");
+    const [others, setOthers] = useState("");
     const [colorSchema, setColorSchema] = React.useState("");
     const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
     const [primaryColorDescription, setPrimaryColorDescription] =
@@ -198,6 +200,15 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         }
         if (!fontName) {
             err.fontName = "Font name is required";
+            errCount++;
+        }
+
+        if (illustration === "") {
+            err.others = "Write Name of the illustration design work";
+            errCount++;
+        }
+        if (others === "") {
+            err.others = "Write Name of the graphic design work";
             errCount++;
         }
 
@@ -760,11 +771,32 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 </div>
                                             </>
                                         }
-                                        {/* for Banner or company profile */}
+                                        {/* for Banner, Brochure or company profile */}
                                         {
-                                            (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
+                                            (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Brochure" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
                                                 <div className="col-12 col-md-6">
-                                                    <Input
+                                                    <div className={`form-group my-3 w-100`}>
+                                                        <label
+                                                            htmlFor={'textForDesign'}
+                                                            className={`f-14 text-dark-gray mb-2`}
+                                                            data-label="true"
+                                                        >
+                                                            Attach text that will be used for the design
+                                                            <sup className='f-14 mr-1'>*</sup>
+                                                        </label>
+                                                        <div className="custom-file" style={fileInputStyle}>
+                                                            <input type="file" className="custom-file-input" id="textForDesign" required={true} multiple error={formError?.textForDesign} onChange={(e) =>
+                                                                handleChange(e, setTextForDesign)
+                                                            } />
+                                                            <label className="custom-file-label" htmlFor="textForDesign">Choose file</label>
+                                                        </div>
+                                                        {formError?.textForDesign && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.textForDesign}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    {/* <Input
                                                         id="textForDesign"
                                                         label="Attach text that will be used for the design"
                                                         type="text"
@@ -776,7 +808,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         onChange={(e) =>
                                                             handleChange(e, setTextForDesign)
                                                         }
-                                                    />
+                                                    /> */}
                                                 </div>
                                             </>
                                         }
@@ -795,7 +827,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             <sup className='f-14 mr-1'>*</sup>
                                                         </label>
                                                         <div className="custom-file" style={fileInputStyle}>
-                                                            <input type="file" className="custom-file-input" id="imageForDesigner" required={true} error={formError?.imageForDesigner} onChange={(e) =>
+                                                            <input type="file" className="custom-file-input" id="imageForDesigner" required={true} multiple error={formError?.imageForDesigner} onChange={(e) =>
                                                                 handleChange(e, setImageForDesigner)
                                                             } />
                                                             <label className="custom-file-label" htmlFor="imageForDesigner">Choose file</label>
@@ -832,6 +864,75 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         {formError?.imgOrVidForWork && (
                                                             <div style={{ color: "red" }}>
                                                                 {formError?.imgOrVidForWork}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        }
+
+                                        {/* Illustration */}
+                                        {
+                                            typeOfGraphicsCategory?.type_name === "Illustration" && <>
+                                                <div className="col-12">
+                                                    <div className="form-group my-3">
+                                                        <label htmlFor="">
+                                                            {" "}
+                                                            Name of the illustration work!<sup>*</sup>{" "}
+                                                        </label>
+                                                        <div
+                                                            className="ck-editor-holder"
+                                                            style={{ minHeight: "50px" }}
+                                                        >
+                                                            <CKEditorComponent
+                                                                data={illustration}
+                                                                onChange={(
+                                                                    e,
+                                                                    editor
+                                                                ) =>
+                                                                    setIllustration(
+                                                                        editor.getData()
+                                                                    )
+                                                                }
+                                                            />
+                                                        </div>
+                                                        {formError?.illustration && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.illustration}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </>
+                                        }
+                                        {/* Others */}
+                                        {
+                                            typeOfGraphicsCategory?.type_name === "Others" && <>
+                                                <div className="col-12">
+                                                    <div className="form-group my-3">
+                                                        <label htmlFor="">
+                                                            {" "}
+                                                            Name of the graphic design work!<sup>*</sup>{" "}
+                                                        </label>
+                                                        <div
+                                                            className="ck-editor-holder"
+                                                            style={{ minHeight: "50px" }}
+                                                        >
+                                                            <CKEditorComponent
+                                                                data={others}
+                                                                onChange={(
+                                                                    e,
+                                                                    editor
+                                                                ) =>
+                                                                    setOthers(
+                                                                        editor.getData()
+                                                                    )
+                                                                }
+                                                            />
+                                                        </div>
+                                                        {formError?.others && (
+                                                            <div style={{ color: "red" }}>
+                                                                {formError?.others}
                                                             </div>
                                                         )}
                                                     </div>
@@ -898,9 +999,9 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     Brand guideline
                                                 </label>
                                                 <div className="custom-file" style={fileInputStyle}>
-                                                    <input type="file" className="custom-file-input" id="brandGuideline" error={formError?.brandGuideline} onChange={(e) =>
+                                                    <input type="file" className="custom-file-input" id="brandGuideline" multiple error={formError?.brandGuideline} onChange={(e) =>
                                                         handleChange(e, setBrandGuideline)
-                                                    } multiple />
+                                                    } />
                                                     <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
                                                 </div>
                                             </div>
@@ -911,7 +1012,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         <div className="col-12">
                                             <div className="form-group">
                                                 <label
-                                                    htmlFor={'brandGuideline'}
+                                                    htmlFor=""
                                                     className={`f-14 text-dark-gray mb-2`}
                                                     data-label="true"
                                                 >
