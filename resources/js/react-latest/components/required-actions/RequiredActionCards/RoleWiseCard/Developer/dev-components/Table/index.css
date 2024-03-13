@@ -1,0 +1,90 @@
+.btn {
+  
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  width: 150px;
+  height: 50px;
+  border: 4px solid #f9c23c;
+  padding: 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  background-color: #00BFB6; 
+  
+}
+
+
+/* Style the p tag */
+.btn p{
+   
+   text-align: center;
+   color: #eee9e9;
+   font-weight: 900;
+   font-size: 16px;
+   margin-left: 30px;
+   transition: all 0.5s ease;
+}
+
+/* Style the first icon with class send */
+.send{
+  position: absolute;
+  top:15px;
+  left: 25px;
+  color: #fff;
+  transition: all 0.5s ease;
+}
+
+/* Style the second icon with class send2 */
+.send2{
+  position: absolute;
+  top:80px;
+  left: 25px;
+  color: #696666;
+  transition: all 0.5s ease;
+}
+
+
+/* Hover effects */
+.btn:hover{
+  background: #f9c23c;
+  transition: all 0.5s ease;
+}
+
+.btn:hover p{
+  color: #696666;
+  transition: all 0.5s ease;
+  animation: move 1s linear 1s forwards;
+}
+
+.btn:hover .send{
+  top: -50px;
+  transition: all 0.5s ease;
+}
+
+.btn:hover .send2{
+  top: 15px;
+  transition: all 0.5s ease;
+  animation: sending 1s linear 1s forwards;
+}
+
+
+/* CSS3 animation keyframes */
+@keyframes sending{
+  0%{
+    transform: translateY(0);
+  }
+  100%{
+    transform: translate(40px, -60px);
+  }
+}
+
+@keyframes move{
+  0%{
+    transform: translateX(0);
+  }
+  100%{
+    transform: translateX(-18px);
+  }
+}
