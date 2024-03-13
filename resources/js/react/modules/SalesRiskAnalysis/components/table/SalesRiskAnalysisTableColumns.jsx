@@ -1,3 +1,5 @@
+import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
+import Switch from "../Switch";
 import EditIcon from "../ui/EditIcon";
 import { SalesPointsContainer } from "../ui/Styles/ui";
 
@@ -6,7 +8,7 @@ export const SalesRiskAnalysisTableColumns = [
         id: "policy_name",
         header: "Policy Name",
         accessorKey: "policy_name",
-        cell: ({ row , table}) => {
+        cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
             return (
@@ -63,17 +65,78 @@ export const SalesRiskAnalysisTableColumns = [
                 <div className="d-flex justify-content-center align-items-center flex-column">
                     {data?.ruleList?.map((rule, index) => {
                         return (
-                            <p
-                                style={{
-                                    color: "#8F8F8F",
-                                    fontSize: "14px",
-                                    fontFamily: "Poppins",
-                                }}
-                                className="py-3"
-                                key={rule?.id}
-                            >
-                                {rule.title}
-                            </p>
+                            <Switch>
+                                <Switch.Case condition={rule?.type === "yesNo"}>
+                                    <p
+                                        style={{
+                                            color: "#8F8F8F",
+                                            fontSize: "14px",
+                                            fontFamily: "Poppins",
+                                        }}
+                                        className="py-3"
+                                    >
+                                        {data.title}
+                                    </p>
+                                    <ul
+                                        style={{
+                                            listStyle: "disc",
+                                            padding: "0 1.5rem",
+                                        }}
+                                    >
+                                        <li
+                                            style={{
+                                                listStyle: "disc",
+                                                padding: "4px 0",
+                                            }}
+                                        >
+                                            Yes
+                                        </li>
+                                        <li
+                                            style={{
+                                                listStyle: "disc",
+                                                padding: "4px 0",
+                                            }}
+                                        >
+                                            No
+                                        </li>
+                                    </ul>
+                                </Switch.Case>
+                                <Switch.Case condition={rule?.type === "list"}>
+                                    <p
+                                        style={{
+                                            color: "#8F8F8F",
+                                            fontSize: "14px",
+                                            fontFamily: "Poppins",
+                                        }}
+                                        className="py-3"
+                                    >
+                                        {data.title}
+                                    </p>
+                                    <MultiSelectShowDropDown
+                                        data={rule?.value}
+                                        multiple
+                                    />
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={
+                                        !_.includes(
+                                            ["yes_no, list"],
+                                            rule?.type
+                                        )
+                                    }
+                                >
+                                    <p
+                                        style={{
+                                            color: "#8F8F8F",
+                                            fontSize: "14px",
+                                            fontFamily: "Poppins",
+                                        }}
+                                        className="py-3"
+                                    >
+                                        {data.title}
+                                    </p>
+                                </Switch.Case>
+                            </Switch>
                         );
                     })}
                     <div className="">
@@ -121,31 +184,97 @@ export const SalesRiskAnalysisTableColumns = [
                                 key={rule?.id}
                                 className="py-3"
                             >
-                                <p>{rule?.point}</p>
-                                <div
-                                    onClick={() => {
-                                        action.handleEditApplicablePoint(
-                                            data,
-                                            rule
-                                        );
-                                    }}
-                                    role="button"
-                                >
-                                    <EditIcon />
-                                </div>
-                                <button
-                                    className="btn btn-success"
-                                    style={{
-                                        fontSize: "12px",
-                                        padding: "3px 12px",
-                                        marginLeft: "10px",
-                                    }}
-                                    onClick={() => {
-                                        action.handleRuleActions(rule, data);
-                                    }}
-                                >
-                                    Enable
-                                </button>
+                                <Switch>
+                                    <Switch.Case
+                                        condition={
+                                            !_.includes(["yes_no"], rule?.type)
+                                        }
+                                    >
+                                        <div className="d-flex">
+                                            <p>{rule?.point}</p>
+                                            <div
+                                                onClick={() => {
+                                                    action.handleEditApplicablePoint(
+                                                        data,
+                                                        rule
+                                                    );
+                                                }}
+                                                role="button"
+                                            >
+                                                <EditIcon />
+                                            </div>
+                                            <button
+                                                className="btn btn-success"
+                                                style={{
+                                                    fontSize: "12px",
+                                                    padding: "3px 12px",
+                                                    marginLeft: "10px",
+                                                }}
+                                                onClick={() => {
+                                                    action.handleRuleActions(
+                                                        rule,
+                                                        data
+                                                    );
+                                                }}
+                                            >
+                                                Enable
+                                            </button>
+                                        </div>
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={_.includes(
+                                            ["yes_no"],
+                                            rule?.type
+                                        )}
+                                    >
+                                        <div className="d-flex">
+                                            <p>{rule?.point}</p>
+                                            <div
+                                                onClick={() => {
+                                                    action.handleEditApplicablePoint(
+                                                        data,
+                                                        rule
+                                                    );
+                                                }}
+                                                role="button"
+                                            >
+                                                <EditIcon />
+                                            </div>
+                                            <button
+                                                className="btn btn-success"
+                                                style={{
+                                                    fontSize: "12px",
+                                                    padding: "3px 12px",
+                                                    marginLeft: "10px",
+                                                }}
+                                                onClick={() => {
+                                                    action.handleRuleActions(
+                                                        rule,
+                                                        data
+                                                    );
+                                                }}
+                                            >
+                                                Enable
+                                            </button>
+                                        </div>
+                                        <ul>
+                                            <li
+                                                style={{
+                                                    padding: "4px 0",
+                                                }}
+                                            >
+                                                {rule?.value?.split(",")[0]}
+                                            </li>
+                                            <li
+                                                style={{
+                                                    padding: "4px 0",
+                                                }}
+                                            >
+                                                {rule?.value?.split(",")[1]}
+                                            </li>
+                                        </ul>
+                                    </Switch.Case>
+                                </Switch>
                             </SalesPointsContainer>
                         );
                     })}
