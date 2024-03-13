@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->bigInteger('parent_id')->nullable()->unsigned();
             $table->enum('type', ['parent', 'greater_than', 'less_than', 'fixed', 'range', 'yes_no', 'list']);
-            $table->enum('value_type', ['percentage', 'currency', 'hourly', 'day'])->nullable();
+            $table->enum('value_type', ['percentage', 'currency', 'hourly', 'days', 'countries'])->nullable();
             $table->text('value')->nullable();
             $table->float('point')->default('0');
             $table->string('department');
