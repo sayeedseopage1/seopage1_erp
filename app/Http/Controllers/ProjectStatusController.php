@@ -180,39 +180,40 @@ class ProjectStatusController extends AccountBaseController
         $actions = PendingAction::where('code','PMGM')->where('past_status',0)->where('goal_id',$ppg->id)->get();
           if($actions != null)
           {
-          foreach ($actions as $key => $action) {
-              $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
-              $project= Project::where('id',$pm_goal->project_id)->first();
-                  $action->authorized_by= Auth::id();
-                  $action->authorized_at= Carbon::now();
-                  $action->past_status = 1;
-                  $action->save();
-                  $project_manager= User::where('id',$pm_goal->pm_id)->first();
-                  $client= User::where('id',$pm_goal->client_id)->first();
-                  $authorize_by= User::where('id',$action->authorized_by)->first();
-                  
-                  $past_action= new PendingActionPast();
-                  $past_action->item_name = $action->item_name;
-                  $past_action->code = $action->code;
-                  $past_action->serial = $action->serial;
-                  $past_action->action_id = $action->id;
-                  $past_action->heading = $action->heading;
-                  $action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
-                //   $past_action->message = 'Task guideline authorization from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was completed by '.$authorize_by->name;
-                  $past_action->timeframe = $action->timeframe;
-                  $past_action->authorization_for = $action->authorization_for;
-                  $past_action->authorized_by = $action->authorized_by;
-                  $past_action->authorized_at = $action->authorized_at;
-                  $past_action->expired_status = $action->expired_status;
-                  $past_action->past_status = $action->past_status;
-                  $past_action->goal_id = $action->goal_id;
-                  $past_action->project_id = $action->project_id;
-                  $past_action->client_id = $action->client_id;
-                  $past_action->save();
-
-
-          }
-      }
+                foreach ($actions as $key => $action) {
+                    $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
+                    $project= Project::where('id',$pm_goal->project_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $project_manager= User::where('id',$pm_goal->pm_id)->first();
+                    $client= User::where('id',$pm_goal->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+                    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
+                    //   $past_action->message = 'Task guideline authorization from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was completed by '.$authorize_by->name;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->goal_id = $action->goal_id;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->save();
+                }
+            }
+        /** WHEN EXPLANATION PM THEN  */
+        $helper = new HelperPendingActionController();
+        $helper->PmGoalReviewExplanation($ppg);
 
         return response()->json(['status'=>200]);
     }

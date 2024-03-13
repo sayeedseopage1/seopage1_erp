@@ -1821,7 +1821,38 @@ class HelperPendingActionController extends AccountBaseController
                 ];
                 $action->button = json_encode($button);
                 $action->save();
-            //   dd($action);
+
+        }
+
+        public function PmGoalReviewExplanation($ppg)
+        {
+            $goal = ProjectPmGoal::where('id',$ppg->id)->first();
+            $project= Project::where('id',$ppg->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $admin = User::where('role_id',1)->first();
+
+                $action = new PendingAction();
+                $action->code = 'PMRE';
+                $action->serial = 'PMRE'.'x0';
+                $action->item_name= 'Review explanation';
+                $action->heading= 'Review explanation!';
+                $action->message = 'Review explanation given by PM on missing goal'.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
+                $action->timeframe= 24;
+                $action->goal_id = $goal->id;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= $admin->id;
+                $button = [
+                    [
+                        'button_name' => 'Review explanation and add your ratings!',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('project-status.index', ['modal_type' => 'review_explanation', 'project_id' => $project->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
 
         }
 
