@@ -277,16 +277,17 @@ class SalesRiskPolicyController extends AccountBaseController
             'title' => 'required',
             'department' => 'required',
             'ruleList' => 'required|array|min:1',
-            'ruleList.policyType' => 'in:' . implode(',', $this->policyTypes),
-            // 'ruleList.title' => 'required',
+            'ruleList.*.policyType' => 'in:' . implode(',', $this->policyTypes),
+            'ruleList.*.title' => 'required',
             'comment' => 'nullable'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 'validation fails',
-                'message' => $validator->errors()
-            ]);
+                'status' => 'error',
+                'message' => 'validation fails',
+                'data' => $validator->errors()
+            ], 403);
         }
 
         // dd($req->all());
@@ -359,7 +360,7 @@ class SalesRiskPolicyController extends AccountBaseController
             DB::rollBack();
             throw $th;
         }
-        dd('');
+        // dd('');
         return response()->json([
             'status' => 'success',
             'message' => 'New Sale Risk Policy created Successfully.'
