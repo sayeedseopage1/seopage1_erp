@@ -17,6 +17,7 @@ use App\Models\PmGoalDeadlineExtHistory;
 use App\Models\PmGoalExpHistory;
 use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
+use App\Notifications\PmGoalReviewExplanationNotification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use DB;
@@ -214,6 +215,8 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
+        $user  = User::where('role_id',1)->first();
+        Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
 
         return response()->json(['status'=>200]);
     }

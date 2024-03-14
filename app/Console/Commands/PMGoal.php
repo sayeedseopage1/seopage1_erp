@@ -217,7 +217,6 @@ class PMGoal extends Command
             
             $goal_end_date = Carbon::parse($goal_check->goal_end_date)->subDays(1);
             $goal_ext_end_date = Carbon::parse($goal_check->extended_goal_end_day)->subDays(1);
-
             if($goal_check->goal_end_date >= $currentTime && $goal_end_date <=$currentTime || $goal_check->extended_goal_end_day >= $currentTime && $goal_ext_end_date <=$currentTime){
                 $helper = new HelperPendingActionController();
                 $helper->PmGoalBeforeExpireCheck($goal_check);
