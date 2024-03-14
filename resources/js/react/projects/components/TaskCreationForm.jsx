@@ -23,6 +23,7 @@ import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementM
 import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsWorkSelection";
 import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
+import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
 
 const fileInputStyle = {
     height: "39px",
@@ -40,8 +41,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
     //state for graphic designer start
-    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
-    const [typeOfLogo, setTypeOfLogo] = useState("");
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState({});
+    const [typeOfLogo, setTypeOfLogo] = useState({});
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
@@ -66,6 +67,13 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         },
     ]);
     //state for graphic designer end
+
+    // state for ui/ux start
+    const { cms, setCms } = useState('')
+    const [themeType, setThemeType] = useState({})
+    const [themeName, setThemeName] = useState("")
+    const [themeTemplate, setThemeTemplate] = useState("")
+    // state for ui/ux end
     const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
@@ -125,8 +133,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setEstimateTimeMin(0);
         setFiles([]);
         setDescription("");
-        setTypeOfGraphicsCategory("");
-        setTypeOfLogo("");
+        setTypeOfGraphicsCategory({});
+        setTypeOfLogo({});
         setBrandName("");
         setNumOfVersions(null);
         setReference("");
@@ -149,6 +157,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 description: "",
             },
         ]);
+        setCms("")
+        setThemeType({})
+        setThemeName("")
+        setThemeTemplate("")
     };
     // handle change
     React.useEffect(() => {
@@ -723,7 +735,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                     </div>
                                 </div>
 
-                                {/* TODO: it will show conditionally here, when task category is graphics  */}
+                                {/* it will show conditionally here, when task category is graphics  */}
                                 {
                                     taskCategory ? taskCategory?.category_name === "Graphic Design" && <>
                                         {/* Type Of Graphics Work */}
@@ -1325,6 +1337,76 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                     </> : null
                                 }
 
+
+                                {
+                                    taskCategory ? taskCategory?.category_name === "UI/UIX Design" && <>
+                                        {/* cms name  */}
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="cms"
+                                                label="CMS"
+                                                type="text"
+                                                placeholder="Enter a CMS"
+                                                name="cms"
+                                                required={true}
+                                                value={cms}
+                                                error={formError?.cms}
+                                                onChange={(e) =>
+                                                    handleChange(e, setCms)
+                                                }
+                                            />
+                                        </div>
+                                        <div className="col-12 col-md-6">
+                                            <ThemeTypeSelect
+                                                selected={themeType}
+                                                onSelect={setThemeType}
+                                            />
+                                            {formError?.themeType && (
+                                                <div style={{ color: "red" }}>
+                                                    {formError?.themeType}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {
+                                            themeType?.id === 2 && <>
+                                                {/* theme name */}
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="themeName"
+                                                        label="Theme Name"
+                                                        type="text"
+                                                        placeholder="Enter a theme name"
+                                                        name="themeName"
+                                                        required={true}
+                                                        value={themeName}
+                                                        error={formError?.themeName}
+                                                        onChange={(e) =>
+                                                            handleChange(e, setThemeName)
+                                                        }
+                                                    />
+                                                </div>
+                                                {/* theme template url */}
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="themeTemplate"
+                                                        label="Theme template library link"
+                                                        type="url"
+                                                        placeholder="Enter a template library link"
+                                                        name="themeTemplate"
+                                                        required={true}
+                                                        value={themeTemplate}
+                                                        error={formError?.themeTemplate}
+                                                        onChange={(e) =>
+                                                            handleChange(e, setThemeTemplate)
+                                                        }
+                                                    />
+                                                </div>
+                                            </>
+                                        }
+
+                                    </> : null
+                                }
 
                                 {/* assignee to */}
                                 <div className="col-12 col-md-6">

@@ -308,7 +308,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     };
 
     // TODO: hide fields conditionally by this condition 
-    console.log("task", task)
+    console.log("task", task?.category?.name)
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -742,8 +742,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                 </div>
 
                 {
-                    auth?.isHasRolePermission(13) && <>
-                        {/* TODO: new fields will added here "Estimated hours"  */}
+                    // lead designer to graphic designer 
+                    (auth?.isHasRolePermission(13) && task?.category?.name === "Graphic Design") && <>
                         {/* Type Of Graphics Work */}
                         <div className="col-12 col-md-6">
                             <TypeOfGraphicsWorkSelection
