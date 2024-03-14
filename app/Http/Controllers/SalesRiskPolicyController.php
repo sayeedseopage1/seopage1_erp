@@ -35,6 +35,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::post('save', 'save')->name('save');
             Route::post('edit/{id}', 'edit')->name('edit');
             Route::get('rule-list', 'ruleList')->name('rule-list');
+            Route::get('status-change', 'policyRuleStatusChange')->name('status-change');
             Route::get('question-fields', 'policyQuestionInputFields')->name('question-fields');
         });
     }
@@ -371,7 +372,38 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function edit(Request $req, $id) :JsonResponse
     {
-        dd($id, $req->all());
+        $validator = Validator::make($req->all(), [
+            'newPoint' => 'required|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'validation fails',
+                'data' => $validator->errors()
+            ], 403);
+        }
+
+        // dd($id, $req->all());
+
+        try {
+            $policy = SalesRiskPolicy::findOrFail($id);
+            // dd($policy);
+
+            if($req->input('ruleType'))
+            {
+                if($req->input('ruleType') == 'yes')
+
+                // dd($policy->value);
+
+                $policy->point = $req->newPoint;
+
+            }
+            // $policy->save();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
         return response()->json();
     }
 
@@ -394,6 +426,13 @@ class SalesRiskPolicyController extends AccountBaseController
         });
 
         return response()->json(['data' => $list]);
+    }
+
+    function policyRuleStatusChange($id, $status)
+    {
+
+
+        return response()->json(['status' => 'success', 'data' => [$id, $status]]);
     }
 
     function policyQuestionInputFields()
