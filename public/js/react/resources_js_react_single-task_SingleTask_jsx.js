@@ -11357,7 +11357,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
     secondaryColors = _React$useState12[0],
     setSecondaryColors = _React$useState12[1];
   //state for graphic designer end
-
   var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState14 = _slicedToArray(_React$useState13, 2),
     pageType = _React$useState14[0],
@@ -11585,6 +11584,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
     return !count;
   };
 
+  // TODO: hide fields conditionally by this condition 
+  console.log("task", task);
+
   // handle submission
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
@@ -11770,7 +11772,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
       }
     }
   }, []);
-  console.log('user role', auth.getDesignationName());
 
   // page type change clear related entries
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {

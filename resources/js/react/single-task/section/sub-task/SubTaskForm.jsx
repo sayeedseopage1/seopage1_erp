@@ -89,7 +89,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         },
     ]);
     //state for graphic designer end
-
     const [pageType, setPageType] = React.useState("");
     const [pageTypeOthers, setPageTypeOthers] = React.useState("");
     const [pageName, setPageName] = React.useState("");
@@ -308,6 +307,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         return !count;
     };
 
+    // TODO: hide fields conditionally by this condition 
+    console.log("task", task)
+
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -502,8 +504,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             }
         }
     }, []);
-
-    console.log('user role', auth.getDesignationName())
 
     // page type change clear related entries
     useEffect(() => {

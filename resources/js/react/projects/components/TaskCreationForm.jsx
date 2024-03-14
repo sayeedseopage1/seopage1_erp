@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import CKEditorComponent from "../../ckeditor";
 import UploadFilesInLine from "../../file-upload/UploadFilesInLine";
 import Button from "../../global/Button";
-import { useCheckRestrictedWordsMutation, useGetTypesOfGraphicWorksQuery, } from "../../services/api/SingleTaskPageApi";
+import { useCheckRestrictedWordsMutation } from "../../services/api/SingleTaskPageApi";
 import { useLazyGetMilestoneDetailsQuery } from "../../services/api/projectApiSlice";
 import { useStoreProjectTaskMutation } from "../../services/api/tasksApiSlice";
 import DatePickerComponent from "../../single-task/section/comments/DatePicker";
@@ -23,8 +23,6 @@ import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementM
 import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsWorkSelection";
 import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
-
-import axios from "axios";
 
 const fileInputStyle = {
     height: "39px",
@@ -77,19 +75,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
 
-
-
-    // const { data, isError } = useGetTypesOfGraphicWorksQuery()
-
-    // console.log("data", data)
-
-
-
-    // axios.get('/type-of-graphic-works').then(res => {
-    //     console.log("89", res);
-    // })
-
-
     const [formError, setFormError] = React.useState(null);
 
     // ui
@@ -110,6 +95,22 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [checkRestrictedWords, { isLoading: checking }] =
         useCheckRestrictedWordsMutation();
 
+    const taskData = {
+        typeOfGraphicsCategory,
+        typeOfLogo,
+        brandName,
+        reference,
+        numOfVersions,
+        fileTypesNeeded,
+        textForDesign,
+        imageForDesigner,
+        imgOrVidForWork,
+        fontName,
+        fontUrl, brandGuideline, illustration, others, colorSchema, primaryColor, primaryColorDescription, secondaryColors
+    }
+
+    console.log(taskData)
+
     //TODO: clear form for new added fields
     const clearForm = () => {
         setTitle("");
@@ -124,6 +125,30 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setEstimateTimeMin(0);
         setFiles([]);
         setDescription("");
+        setTypeOfGraphicsCategory("");
+        setTypeOfLogo("");
+        setBrandName("");
+        setNumOfVersions(null);
+        setReference("");
+        setFileTypesNeeded([]);
+        setTextForDesign(null);
+        setImageForDesigner(null);
+        setImgOrVidForWork(null);
+        setFontName('');
+        setFontUrl('');
+        setBrandGuideline(null);
+        setIllustration("");
+        setOthers("");
+        setColorSchema("");
+        setPrimaryColor("#1D82F5");
+        setPrimaryColorDescription("");
+        setSecondaryColors([
+            {
+                id: "egqsz",
+                color: "#1D82F5",
+                description: "",
+            },
+        ]);
     };
     // handle change
     React.useEffect(() => {
@@ -176,56 +201,57 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        if (!typeOfGraphicsCategory) {
-            err.typeOfGraphicsCategory = "You have to select Type of graphic work";
-            errCount++;
-        }
-        if (!typeOfLogo) {
-            err.typeOfLogo = "You have to select Type of logo";
-            errCount++;
-        }
+        // TODO: active it LuAsterisk, when new field is added 
+        // if (!typeOfGraphicsCategory) {
+        //     err.typeOfGraphicsCategory = "You have to select Type of graphic work";
+        //     errCount++;
+        // }
+        // if (!typeOfLogo) {
+        //     err.typeOfLogo = "You have to select Type of logo";
+        //     errCount++;
+        // }
 
-        if (!reference) {
-            err.reference = "The reference field is required";
-            errCount++;
-        }
-        if (!textForDesign) {
-            err.textForDesign = "The text for design field is required";
-            errCount++;
-        }
-        if (!brandName) {
-            err.brandName = "The brand name field is required";
-            errCount++;
-        }
-        if (!numOfVersions) {
-            err.numOfVersions = "Number of versions is required";
-            errCount++;
-        }
-        if (!fileTypesNeeded) {
-            err.fileTypesNeeded = "File types is required";
-            errCount++;
-        }
-        if (!imageForDesigner) {
-            err.imageForDesigner = "Image is required for designer";
-            errCount++;
-        }
-        if (!imgOrVidForWork) {
-            err.imgOrVidForWork = "Images/videos is requiredn for work";
-            errCount++;
-        }
-        if (!fontName) {
-            err.fontName = "Font name is required";
-            errCount++;
-        }
+        // if (!reference) {
+        //     err.reference = "The reference field is required";
+        //     errCount++;
+        // }
+        // if (!textForDesign) {
+        //     err.textForDesign = "The text for design field is required";
+        //     errCount++;
+        // }
+        // if (!brandName) {
+        //     err.brandName = "The brand name field is required";
+        //     errCount++;
+        // }
+        // if (!numOfVersions) {
+        //     err.numOfVersions = "Number of versions is required";
+        //     errCount++;
+        // }
+        // if (!fileTypesNeeded) {
+        //     err.fileTypesNeeded = "File types is required";
+        //     errCount++;
+        // }
+        // if (!imageForDesigner) {
+        //     err.imageForDesigner = "Image is required for designer";
+        //     errCount++;
+        // }
+        // if (!imgOrVidForWork) {
+        //     err.imgOrVidForWork = "Images/videos is requiredn for work";
+        //     errCount++;
+        // }
+        // if (!fontName) {
+        //     err.fontName = "Font name is required";
+        //     errCount++;
+        // }
 
-        if (illustration === "") {
-            err.others = "Write Name of the illustration design work";
-            errCount++;
-        }
-        if (others === "") {
-            err.others = "Write Name of the graphic design work";
-            errCount++;
-        }
+        // if (illustration === "") {
+        //     err.others = "Write Name of the illustration design work";
+        //     errCount++;
+        // }
+        // if (others === "") {
+        //     err.others = "Write Name of the graphic design work";
+        //     errCount++;
+        // }
 
         if (!assignedTo?.id) {
             err.assignedTo = "You have to select an user";
@@ -289,38 +315,36 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
-        console.log("form data", fd)
-
         // TODO: it will be uncommented when it will be ready
         // handle form submit
-        // const formSubmit = async () => {
-        //     if (isValid()) {
-        //         await storeProjectTask(fd)
-        //             .unwrap()
-        //             .then((res) => {
-        //                 toast.success("Task created successfully");
-        //                 onSuccess();
-        //                 handleRefresh();
-        //             })
-        //             .catch((err) => {
-        //                 if (err?.status === 422) {
-        //                     Swal.fire({
-        //                         position: "center",
-        //                         icon: "error",
-        //                         title: "Please fill out the all required fields",
-        //                         showConfirmButton: true,
-        //                     });
-        //                 }
-        //             });
-        //     } else {
-        //         Swal.fire({
-        //             position: "center",
-        //             icon: "error",
-        //             title: "Please fill out the all required fields",
-        //             showConfirmButton: true,
-        //         });
-        //     }
-        // };
+        const formSubmit = async () => {
+            if (isValid()) {
+                // await storeProjectTask(fd)
+                //     .unwrap()
+                //     .then((res) => {
+                //         toast.success("Task created successfully");
+                //         onSuccess();
+                //         handleRefresh();
+                //     })
+                //     .catch((err) => {
+                //         if (err?.status === 422) {
+                //             Swal.fire({
+                //                 position: "center",
+                //                 icon: "error",
+                //                 title: "Please fill out the all required fields",
+                //                 showConfirmButton: true,
+                //             });
+                //         }
+                //     });
+            } else {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Please fill out the all required fields",
+                    showConfirmButton: true,
+                });
+            }
+        };
 
         const response = await checkRestrictedWords(params?.projectId).unwrap();
 
@@ -811,19 +835,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             </div>
                                                         )}
                                                     </div>
-                                                    {/* <Input
-                                                        id="textForDesign"
-                                                        label="Attach text that will be used for the design"
-                                                        type="text"
-                                                        placeholder="Enter a text for design"
-                                                        name="textForDesign"
-                                                        required={true}
-                                                        value={textForDesign}
-                                                        error={formError?.textForDesign}
-                                                        onChange={(e) =>
-                                                            handleChange(e, setTextForDesign)
-                                                        }
-                                                    /> */}
                                                 </div>
                                             </>
                                         }
