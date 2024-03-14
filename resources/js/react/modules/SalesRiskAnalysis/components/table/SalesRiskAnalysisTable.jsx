@@ -117,6 +117,7 @@ const SalesRiskAnalysisTable = ({
         meta: {
             handleEditApplicablePoint: (row, selectedRule, ruleType) => {
                 setEditPointModalOpen(true);
+
                 setEditPointData({
                     ...row,
                     selectedRule: selectedRule,
@@ -144,8 +145,9 @@ const SalesRiskAnalysisTable = ({
         }
 
         try {
+            
             const payload = {
-                id: editPointData?.id,
+                id: editPointData?.selectedRule?.id,
                 newPoint: editPointData?.newPoint,
                 ruleType: editPointData?.ruleType
             }
@@ -199,7 +201,6 @@ const SalesRiskAnalysisTable = ({
         }
     }, [editPointData?.newPoint]);
 
-    console.log(editPointData)
 
     return (
         <React.Fragment>
