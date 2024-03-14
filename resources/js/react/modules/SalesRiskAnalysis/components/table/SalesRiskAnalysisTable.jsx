@@ -23,9 +23,13 @@ import RuleActionConfirmationModal from "../modal/RuleActionConfirmationModal";
 import AddQuestionsModal from "../modal/AddQuestionsModal";
 
 // Api
-import { useEditSalesRiskAnalysisPointsMutation } from "../../../../services/api/salesRiskAnalysisSlice";
+import {
+    useEditSalesRiskAnalysisPointsMutation,
+    useSingleRuleStatusUpdateMutation,
+} from "../../../../services/api/salesRiskAnalysisSlice";
 import { useEffect } from "react";
 import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
+import { FormatJsonCountry } from "../../helper/countriesFormat";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -55,6 +59,7 @@ const SalesRiskAnalysisTable = ({
     // modal state data
     const [editPointData, setEditPointData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
+    const [rulesActionData, setRulesActionData] = React.useState({});
     const [editPointDataValidation, setEditPointDataValidation] =
         React.useState({
             newPoint: false,
@@ -82,6 +87,11 @@ const SalesRiskAnalysisTable = ({
     // mutation
     const [submitData, { isLoading: isLoadingEditSalesRiskAnalysisPoint }] =
         useEditSalesRiskAnalysisPointsMutation();
+
+    const [
+        singleRuleStatusUpdate,
+        { isLoading: isLoadingSingleRuleStatusUpdate },
+    ] = useSingleRuleStatusUpdateMutation();
 
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
@@ -117,6 +127,8 @@ const SalesRiskAnalysisTable = ({
         paginateExpandedRows: false,
         meta: {
             handleEditApplicablePoint: (row, selectedRule, ruleType) => {
+                const valueTypeConst =
+                    PolicyTypeItemValuesType?.data?.regularTypes?.data;
                 console.log("row", row, selectedRule);
 
                 const payload = {
@@ -128,9 +140,12 @@ const SalesRiskAnalysisTable = ({
                     ),
                     title: selectedRule.title,
                     valueType:
-                        PolicyTypeItemValuesType.data.regularTypes.data.map(
-                            (item) => item?.name === selectedRule?.valueType
-                        ),
+                        selectedRule?.type !== "yesNo"
+                            ? valueTypeConst.find(
+                                  (item) =>
+                                      item?.name === selectedRule?.value_type
+                              )
+                            : "",
                     from:
                         selectedRule?.type === "range"
                             ? selectedRule?.value.split(",")[0]
@@ -158,55 +173,12 @@ const SalesRiskAnalysisTable = ({
                             ? FormatJsonCountry(selectedRule?.value)
                             : "",
                     points: selectedRule?.point,
-                
-                }
-
-                console.log("payload", payload);
-
-                // setEditPointData({
-                //     id: row.id,
-                //     policyName: row.title,
-                //     department: row.department,
-                //     policyType: PolicyTypeItems.data.find(
-                //         (item) => item?.name === selectedRule?.type
-                //     ),
-                //     title: selectedRule.title,
-                //     valueType:
-                //         PolicyTypeItemValuesType.data.regularTypes.data.map(
-                //             (item) => item?.name === selectedRule?.valueType
-                //         ),
-                //     from:
-                //         selectedRule?.type === "range"
-                //             ? selectedRule?.value.split(",")[0]
-                //             : "",
-                //     to:
-                //         selectedRule?.type === "range"
-                //             ? selectedRule?.value.split(",")[1]
-                //             : "",
-                //     yes:
-                //         selectedRule?.type === "yesNo"
-                //             ? selectedRule?.value.split(",")[0]
-                //             : "",
-                //     no:
-                //         selectedRule?.type === "yesNo"
-                //             ? selectedRule?.value.split(",")[1]
-                //             : "",
-                //     value: !_.includes(
-                //         ["range", "yesNo", "list"],
-                //         selectedRule?.type
-                //     )
-                //         ? selectedRule?.value
-                //         : "",
-                //     countries:
-                //         selectedRule?.type === "list"
-                //             ? FormatJsonCountry(selectedRule?.value)
-                //             : "",
-                //     points: selectedRule?.point,
-                // });
+                };
+                setEditPointData(payload);
                 setEditPointModalOpen(true);
             },
             handleRuleActions: (rule, data) => {
-                setAddQuestionsData(data);
+                setRulesActionData(rule);
                 setRuleActionModalOpen(true);
             },
             handleAddQuestions: (data) => {
@@ -235,6 +207,21 @@ const SalesRiskAnalysisTable = ({
             if (res.data) {
                 toast.success("Points updated successfully");
                 handleCloseEditPointModal();
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
+    };
+
+    const handleRuleStatusUpdate = async (rule) => {
+        try {
+            const payload = {
+                id: rule.id,
+                status: rule.status === 1 ? 0 : 1,
+            };
+            const res = await singleRuleStatusUpdate(payload);
+            if (res.data) {
+                toast.success("Rule status updated successfully");
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -375,7 +362,8 @@ const SalesRiskAnalysisTable = ({
             <RuleActionConfirmationModal
                 open={ruleActionModalOpen}
                 closeModal={handleCloseRuleActionModal}
-                actionType={"Disable"}
+                rulesActionData={rulesActionData}
+                handleRuleStatusUpdate={handleRuleStatusUpdate}
             />
 
             <AddQuestionsModal

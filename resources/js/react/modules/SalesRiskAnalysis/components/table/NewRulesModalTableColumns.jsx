@@ -258,13 +258,6 @@ export const NewRulesModalTableColumnsData = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
-            console.log("table", data?.policyType?.name);
-            console.log(
-                _.includes(
-                    [...validPolicyTypes, "list"],
-                    data?.policyType?.name
-                )
-            );
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     <Switch>

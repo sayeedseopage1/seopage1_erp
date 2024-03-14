@@ -345,7 +345,9 @@ export const SalesRiskAnalysisTableColumns = [
                                                             );
                                                         }}
                                                     >
-                                                        Enable
+                                                        {rule.status === 0
+                                                            ? "Enable"
+                                                            : "Disable"}
                                                     </button>
                                                 </li>
                                             </ul>

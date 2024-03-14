@@ -1,12 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 import CustomModal from "../ui/CustomModal/CustomModal";
-import {
-    ModalInputLabel,
-    ModalTitle,
-} from "../ui/Styles/ui";
+import { ModalInputLabel, ModalTitle } from "../ui/Styles/ui";
 
-const RuleActionConfirmationModal = ({ open, closeModal, actionType }) => {
+const RuleActionConfirmationModal = ({
+    open,
+    closeModal,
+    actionType,
+    rulesActionData,
+    handleRuleStatusUpdate,
+    isLoadingSingleRuleStatusUpdate,
+}) => {
     return (
         <CustomModal
             open={open}
@@ -28,13 +32,15 @@ const RuleActionConfirmationModal = ({ open, closeModal, actionType }) => {
                             Are you sure you want to{" "}
                             <span
                                 className={`${
-                                    actionType === "Enable"
+                                    rulesActionData.status === 0
                                         ? "text-success"
                                         : "text-danger"
                                 }`}
                             >
                                 {" "}
-                                {actionType}
+                                {rulesActionData.status === 0
+                                    ? "Enable"
+                                    : "Disable"}
                             </span>{" "}
                             this Rule?
                         </ModalInputLabel>
@@ -42,9 +48,14 @@ const RuleActionConfirmationModal = ({ open, closeModal, actionType }) => {
                     <div className="d-flex justify-content-end align-items-center">
                         <button
                             className="btn btn-success"
-                            onClick={closeModal}
+                            onClick={() => {
+                                handleRuleStatusUpdate();
+                            }}
                         >
-                            Yes, {actionType}
+                            Yes,{" "}
+                            {rulesActionData.status === 1
+                                ? "Enable"
+                                : "Disable"}
                         </button>
                         <button
                             className="btn btn-warning ml-2 text-white"
@@ -65,4 +76,6 @@ RuleActionConfirmationModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     actionType: PropTypes.string,
+    rulesActionData: PropTypes.object,
+    handleRuleStatusUpdate: PropTypes.func,
 };

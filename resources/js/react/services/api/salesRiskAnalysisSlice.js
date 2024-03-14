@@ -43,6 +43,16 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
         }),
+        singleRuleStatusUpdate: build.mutation({
+            query: (rule) => ({
+                url: `account/sales-risk-policies/status-update/${rule.id}/${body.status}`,
+                method: "PUT",
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+        })
 
     })
 });
@@ -53,4 +63,5 @@ export const {
     useAddSalesRiskAnalysisRuleMutation,
     useQuestionInputFieldsQuery,
     useEditSalesRiskAnalysisPointsMutation,
+    useSingleRuleStatusUpdateMutation
 } = salesRiskAnalysisApiSlice;
