@@ -31,7 +31,6 @@ const MultiSelect = ({
 
     const onSelected = (option) => {
         if (newPolicyData?.countries?.includes(option)) {
-        
             setSelected({
                 ...newPolicyData,
                 [filedName]: newPolicyData?.countries?.filter(
@@ -53,6 +52,9 @@ const MultiSelect = ({
             [filedName]: newPolicyData?.countries?.filter((p) => p !== option),
         });
     };
+
+
+    console.log("newPolicyData", _Options, newPolicyData);
 
     return (
         <React.Fragment>

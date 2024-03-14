@@ -39,6 +39,7 @@ const NewPolicyModalInputsContainer = ({
             : PolicyTypeItemValuesType?.data?.regularTypes;
 
        
+    console.log("newPolicyData", newPolicyData);
     return (
         <React.Fragment>
             <Switch>
@@ -76,7 +77,7 @@ const NewPolicyModalInputsContainer = ({
                         condition={
                             !_.includes(
                                 ["list", "yesNo"],
-                                newPolicyData.policyType.name
+                                newPolicyData?.policyType?.name
                             )
                         }
                     >
@@ -120,7 +121,7 @@ const NewPolicyModalInputsContainer = ({
                                         condition={
                                             !_.includes(
                                                 ["range"],
-                                                newPolicyData.policyType.name
+                                                newPolicyData?.policyType?.name
                                             )
                                         }
                                     >
@@ -207,7 +208,7 @@ const NewPolicyModalInputsContainer = ({
                     <Switch.Case
                         condition={_.includes(
                             ["yesNo"],
-                            newPolicyData.policyType.name
+                            newPolicyData?.policyType?.name
                         )}
                     >
                         <div className="row mb-4 align-items-center">
@@ -266,7 +267,7 @@ const NewPolicyModalInputsContainer = ({
                     <Switch.Case
                         condition={_.includes(
                             ["list"],
-                            newPolicyData.policyType.name
+                            newPolicyData?.policyType?.name
                         )}
                     >
                         <div className="row mb-4 align-items-center">
@@ -291,7 +292,7 @@ const NewPolicyModalInputsContainer = ({
                         </div>
                         <Switch.Case
                             condition={
-                                newPolicyData.valueType.name === "countries"
+                                newPolicyData?.valueType?.name === "countries"
                             }
                         >
                             <div className="row mb-4 align-items-center">
@@ -328,7 +329,7 @@ const NewPolicyModalInputsContainer = ({
                 <Switch.Case
                     condition={
                         !_.isEmpty(newPolicyData?.policyType) &&
-                        newPolicyData?.policyType.name !== "yesNo"
+                        newPolicyData?.policyType?.name !== "yesNo"
                     }
                 >
                     <div className="row mb-4 align-items-center">

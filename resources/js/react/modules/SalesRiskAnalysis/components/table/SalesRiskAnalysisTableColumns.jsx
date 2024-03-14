@@ -12,7 +12,6 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
-            console.log(data);
             return (
                 <div className="d-flex align-items-center">
                     <div class="custom-control custom-switch">
@@ -22,7 +21,7 @@ export const SalesRiskAnalysisTableColumns = [
                             class="custom-control-input"
                             id="customSwitch1"
                             onClick={() => {
-                                action.handleRuleActions(data);
+                                action.handlePolicyStatus(data);
                             }}
                         />
                         <label
@@ -241,7 +240,7 @@ export const SalesRiskAnalysisTableColumns = [
                                             <p>{rule?.point}</p>
                                             <div
                                                 onClick={() => {
-                                                    action.handleEditApplicablePoint(
+                                                    action.handleEditApplicableRule(
                                                         data,
                                                         rule
                                                     );
@@ -262,7 +261,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                     marginLeft: "10px",
                                                 }}
                                                 onClick={() => {
-                                                    action.handleRuleActions(
+                                                    action.handleRuleStatus(
                                                         rule,
                                                         data
                                                     );
@@ -307,7 +306,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                 marginLeft: "10px",
                                             }}
                                             onClick={() => {
-                                                action.handleRuleActions(
+                                                action.handleRuleStatus(
                                                     rule,
                                                     data
                                                 );

@@ -17,25 +17,23 @@ import { PolicyTypeItems } from "../../constant";
 import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
 import { useSelector } from "react-redux";
 
-const EditApplicablePointsModal = ({
+const EditApplicableRulesModal = ({
     open,
     closeModal,
-    editPointData,
+    editRuleData,
     handleChange,
-    handleUpdatePoints,
+    handleUpdateRules,
     handleMultiSelectChange,
-    isLoadingEditSalesRiskAnalysisPoint,
-    editPointDataValidation,
+    isLoadingEditSalesRiskAnalysisRule,
+    editRuleDataValidation,
     ...props
 }) => {
-    const {countries} = useSelector((state) => state?.filterOptions);
-
-
+    const { countries } = useSelector((state) => state?.filterOptions);
 
     return (
         <CustomModal
             closeModal={closeModal}
-            contentLabel="Edit Applicable Point Table"
+            contentLabel="Edit Rule Table"
             open={open}
             isCloseButtonShow
             width="700px"
@@ -43,7 +41,7 @@ const EditApplicablePointsModal = ({
             {/* Modal Content */}
             <div className="d-flex flex-column">
                 <div className="d-flex justify-content-center align-items-center mb-4">
-                    <ModalTitle>Edit Applicable Point</ModalTitle>
+                    <ModalTitle>Edit Rule</ModalTitle>
                 </div>
                 <div className="d-flex flex-column mb-4 px-3 w-100">
                     <div className="row mb-4">
@@ -52,7 +50,7 @@ const EditApplicablePointsModal = ({
                         </ModalInputLabel>
                         <ModalInputLabel className="col-7" color="#8F8F8F">
                             {" "}
-                            {editPointData?.policyName}
+                            {editRuleData?.policyName}
                         </ModalInputLabel>
                     </div>
                     <div className="row mb-4">
@@ -60,7 +58,7 @@ const EditApplicablePointsModal = ({
                             Department Name{" "}
                         </ModalInputLabel>
                         <ModalInputLabel className="col-7" color="#8F8F8F">
-                            {editPointData?.department?.name}
+                            {editRuleData?.department?.name}
                         </ModalInputLabel>
                     </div>
                     {/* <div className="row mb-4">
@@ -68,11 +66,11 @@ const EditApplicablePointsModal = ({
                             Policy Rules{" "}
                         </ModalInputLabel>
                         <ModalInputLabel className="col-7" color="#8F8F8F">
-                            {editPointData?.selectedRule?.title}{" "}
+                            {editRuleData?.selectedRule?.title}{" "}
                             {`${
-                                editPointData?.ruleType
+                                editRuleData?.ruleType
                                     ? `(${_.startCase(
-                                          editPointData?.ruleType
+                                          editRuleData?.ruleType
                                       )})`
                                     : ""
                             }`}
@@ -80,32 +78,32 @@ const EditApplicablePointsModal = ({
                     </div>
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-5" color="#8F8F8F">
-                            Current point{" "}
+                            Current Rule{" "}
                         </ModalInputLabel>
                         <ModalInput
                             className="col-7"
                             type="number"
-                            defaultValue={editPointData?.selectedRule?.point}
+                            defaultValue={editRuleData?.selectedRule?.Rule}
                             disabled
                         />
                     </div>
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-5">
-                            New point<sup>*</sup>{" "}
+                            New Rule<sup>*</sup>{" "}
                         </ModalInputLabel>
                         <div className="col-7 px-0">
                             <ModalInput
                                 className="w-100"
                                 type="number"
-                                name="newPoint"
+                                name="newRule"
                                 onChange={handleChange}
-                                value={editPointData?.newPoint}
+                                value={editRuleData?.newRule}
                                 placeholder="Write here eg: 0.5,1,2 "
                             />
 
-                            {editPointDataValidation?.newPoint && (
+                            {editRuleDataValidation?.newRule && (
                                 <p className="text-danger">
-                                    New Point is required
+                                    New Rule is required
                                 </p>
                             )}
                         </div>
@@ -119,27 +117,26 @@ const EditApplicablePointsModal = ({
                                 <CustomDropDown
                                     filedName="policyType"
                                     data={PolicyTypeItems}
-                                    selected={editPointData?.policyType}
+                                    selected={editRuleData?.policyType}
                                     setSelected={handleChange}
                                 />
                             </ModalSelectContainer>
-
                         </div>
                     </div>
                     {/* All Rules Inputs */}
                     <NewPolicyModalInputsContainer
-                        newPolicyData={editPointData}
+                        newPolicyData={editRuleData}
                         handleChange={handleChange}
                         countries={countries}
                         handleMultiSelectChange={handleMultiSelectChange}
-                        newPolicyDataValidation={editPointDataValidation}
+                        newPolicyDataValidation={editRuleDataValidation}
                     />
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton onClick={handleUpdatePoints} width="177px">
-                        {isLoadingEditSalesRiskAnalysisPoint
+                    <ModalButton onClick={handleUpdateRules} width="177px">
+                        {isLoadingEditSalesRiskAnalysisRule
                             ? "Saving"
-                            : "Save"}
+                            : "Update"}
                     </ModalButton>
                     <ModalButton
                         onClick={closeModal}
@@ -156,12 +153,12 @@ const EditApplicablePointsModal = ({
     );
 };
 
-export default EditApplicablePointsModal;
+export default EditApplicableRulesModal;
 
-EditApplicablePointsModal.propTypes = {
+EditApplicableRulesModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
-    editPointData: PropTypes.object,
+    editRuleData: PropTypes.object,
     props: PropTypes.object,
     handleChange: PropTypes.func,
 };

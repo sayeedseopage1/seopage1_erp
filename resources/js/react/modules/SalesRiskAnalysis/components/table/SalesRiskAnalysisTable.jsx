@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
     useReactTable,
     getCoreRowModel,
@@ -18,7 +18,6 @@ import SalesRiskAnalysisTableLoader from "../loader/SalesRiskAnalysisTableLoader
 // table header
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import SalesRiskAnalysisTablePagination from "./SalesRiskAnalysisTablePagination";
-import EditApplicablePointsModal from "../modal/EditApplicablePointsModal";
 import RuleActionConfirmationModal from "../modal/RuleActionConfirmationModal";
 import AddQuestionsModal from "../modal/AddQuestionsModal";
 
@@ -30,6 +29,9 @@ import {
 import { useEffect } from "react";
 import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
 import { FormatJsonCountry } from "../../helper/countriesFormat";
+import { addNewRulesValidation } from "../../helper/createFromValidation";
+import EditApplicableRulesModal from "../modal/EditApplicableRulesModal";
+import _ from "lodash";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -51,20 +53,29 @@ const SalesRiskAnalysisTable = ({
         pageSize: 10,
     });
     // modal open close state
-    const [editPointModalOpen, setEditPointModalOpen] = React.useState(false);
+    const [editRuleModalOpen, setEditRuleModalOpen] = React.useState(false);
     const [ruleActionModalOpen, setRuleActionModalOpen] = React.useState(false);
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
 
     // modal state data
-    const [editPointData, setEditPointData] = React.useState({});
+    const [editRuleData, setEditRuleData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
-    const [rulesActionData, setRulesActionData] = React.useState({});
-    const [policyStatusData, setPolicyStatusData] = React.useState({});
-    const [editPointDataValidation, setEditPointDataValidation] =
+    const [statusActionData, setStatusActionData] = React.useState({});
+    const [editRuleDataValidation, setEditRuleDataValidation] =
         React.useState({
-            newPoint: false,
             isSubmitting: false,
+            policyName: false,
+            department: false,
+            policyType: false,
+            valueType: false,
+            value: false,
+            from: false,
+            to: false,
+            yes: false,
+            no: false,
+            countries: false,
+            points: false,
         });
 
     // sales risk analysis rules data
@@ -86,7 +97,7 @@ const SalesRiskAnalysisTable = ({
     }, [data]);
 
     // mutation
-    const [submitData, { isLoading: isLoadingEditSalesRiskAnalysisPoint }] =
+    const [submitData, { isLoading: isLoadingEditSalesRiskAnalysisRule }] =
         useEditSalesRiskAnalysisPointsMutation();
 
     const [
@@ -127,10 +138,25 @@ const SalesRiskAnalysisTable = ({
         getSortedRowModel: getSortedRowModel(),
         paginateExpandedRows: false,
         meta: {
-            handleEditApplicablePoint: (row, selectedRule, ruleType) => {
+            handleEditApplicableRule: (row, selectedRule, ruleType) => {
                 const valueTypeConst =
                     PolicyTypeItemValuesType?.data?.regularTypes?.data;
-                console.log("row", row, selectedRule);
+
+                const getVueType = (type) => {
+                    if (!_.includes(["yesNo", "list"], type)) {
+                        return valueTypeConst.find(
+                            (item) => item?.name === selectedRule?.value_type
+                        );
+                    } else if (type === "list") {
+                        return {
+                            id: 1,
+                            label: "Countries",
+                            name: "countries",
+                        };
+                    } else {
+                        return "";
+                    }
+                };
 
                 const payload = {
                     id: row.id,
@@ -140,28 +166,22 @@ const SalesRiskAnalysisTable = ({
                         (item) => item?.name === selectedRule?.type
                     ),
                     title: selectedRule.title,
-                    valueType:
-                        selectedRule?.type !== "yesNo"
-                            ? valueTypeConst.find(
-                                  (item) =>
-                                      item?.name === selectedRule?.value_type
-                              )
-                            : "",
+                    valueType: getVueType(selectedRule?.type),
                     from:
                         selectedRule?.type === "range"
-                            ? selectedRule?.value.split(",")[0]
+                            ? selectedRule?.value?.split(",")[0]
                             : "",
                     to:
                         selectedRule?.type === "range"
-                            ? selectedRule?.value.split(",")[1]
+                            ? selectedRule?.value?.split(",")[1]
                             : "",
                     yes:
                         selectedRule?.type === "yesNo"
-                            ? selectedRule?.value.split(",")[0]
+                            ? selectedRule?.value?.split(",")[0]?.trim()
                             : "",
                     no:
                         selectedRule?.type === "yesNo"
-                            ? selectedRule?.value.split(",")[1]
+                            ? selectedRule?.value?.split(", ")[1]
                             : "",
                     value: !_.includes(
                         ["range", "yesNo", "list"],
@@ -175,59 +195,76 @@ const SalesRiskAnalysisTable = ({
                             : "",
                     points: selectedRule?.point,
                 };
-                setEditPointData(payload);
-                setEditPointModalOpen(true);
-            },
-            handleRuleActions: (rule, data) => {
-                setRulesActionData(rule);
-                setRuleActionModalOpen(true);
+                console.log("payload", payload, selectedRule);
+                setEditRuleData(payload);
+                setEditRuleModalOpen(true);
             },
             handleAddQuestions: (data) => {
                 setAddQuestionsData(data);
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (data) => {
-                setPolicyStatusData(data);
+                setStatusActionData({
+                    ...data,
+                    modalType: "Policy",
+                });
                 setRuleActionModalOpen(true);
-            }
+            },
+            handleRuleStatus: (rule) => {
+                setStatusActionData({
+                    ...rule,
+                    modalType: "Rule",
+                });
+                setRuleActionModalOpen(true);
+            },
         },
     });
 
-    const handleUpdatePoints = async (data) => {
-        if (!editPointData.newPoint) {
-            setEditPointDataValidation({
+    const handleUpdateRules = async (data) => {
+        const validation = addNewRulesValidation(
+            editRuleData,
+            editRuleDataValidation
+        );
+        if (
+            Object.entries(validation).some(
+                ([key, value]) => key !== "isSubmitting" && value === true
+            )
+        ) {
+            setEditRuleDataValidation({
+                ...validation,
                 isSubmitting: true,
-                newPoint: true,
             });
             return;
         }
 
         try {
             const payload = {
-                id: editPointData?.selectedRule?.id,
-                newPoint: editPointData?.newPoint,
-                ruleType: editPointData?.ruleType,
+                id: editRuleData?.selectedRule?.id,
+                newRule: editRuleData?.newRule,
+                ruleType: editRuleData?.ruleType,
             };
             const res = await submitData(payload);
             if (res.data) {
-                toast.success("Points updated successfully");
-                handleCloseEditPointModal();
+                toast.success("Rules updated successfully");
+                handleCloseEditRuleModal();
             }
         } catch (error) {
             toast.error("Something went wrong");
         }
     };
 
-    const handleRuleStatusUpdate = async (rule) => {
+    const handleStatusUpdate = async () => {
         try {
             const payload = {
-                id: rulesActionData.id,
-                status: rulesActionData.status === "1" ? "0" : "1",
+                id: statusActionData.id,
+                status: statusActionData.status === "1" ? "0" : "1",
             };
             const res = await singleRuleStatusUpdate(payload);
             if (res.data) {
-                toast.success("Rule status updated successfully");
-                handleCloseRuleActionModal();
+                toast.success(
+                    `${statusActionData?.modalType} Status updated successfully`
+                );
+                handleCloseStatusActionModal();
             }
         } catch (error) {
             console.log("error", error);
@@ -236,43 +273,82 @@ const SalesRiskAnalysisTable = ({
     };
 
     const resetFormSate = () => {
-        setEditPointData({});
-        setEditPointDataValidation({
+        setEditRuleData({});
+        setEditRuleDataValidation({
             isSubmitting: false,
-            newPoint: false,
+            newRule: false,
         });
     };
 
     const handleChange = (e) => {
-        setEditPointData({
-            ...editPointData,
-            newPoint: e.target.value,
-        });
+        const { name, value } = e.target;
+        if (name === "policyType") {
+            setEditRuleData({
+                ...editRuleData,
+                valueType: {},
+                value: "",
+                from: "",
+                to: "",
+                yes: "",
+                no: "",
+                countries: [],
+                points: "",
+                [name]: value,
+            });
+        } else {
+            setEditRuleData({ ...editRuleData, [name]: value });
+        }
     };
 
     // modal Close Handler
-    const handleCloseEditPointModal = () => {
-        setEditPointModalOpen(false);
+    const handleCloseEditRuleModal = () => {
+        setEditRuleModalOpen(false);
         resetFormSate();
     };
 
-    const handleCloseRuleActionModal = () => {
+    const handleCloseStatusActionModal = () => {
         setRuleActionModalOpen(false);
+        setStatusActionData({});
     };
 
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
     };
 
+    // add title on change
+    useMemo(() => {
+        setEditRuleData({
+            ...editRuleData,
+            title: `${editRuleData?.policyType?.label} ${
+                editRuleData?.valueType?.name === "currency" ? "$" : ""
+            }${editRuleData?.value}${editRuleData.from}${
+                editRuleData?.from && editRuleData?.to ? "-" : ""
+            }${editRuleData.to}${
+                editRuleData?.valueType?.name === "percentage" ? "%" : ""
+            }${editRuleData?.valueType?.name === "hourly" ? "hr" : ""}${
+                editRuleData?.valueType?.name === "days" ? "days" : ""
+            }`,
+        });
+    }, [
+        editRuleData?.policyType?.name,
+        editRuleData?.valueType?.name,
+        editRuleData.value,
+        editRuleData.from,
+        editRuleData.to,
+    ]);
+
     // Validation Update
     useEffect(() => {
-        if (editPointDataValidation.isSubmitting) {
-            setEditPointDataValidation({
-                ...editPointDataValidation,
-                newPoint: editPointData?.newPoint ? false : true,
-            });
+        if (editRuleDataValidation.isSubmitting) {
+            const validation = addNewRulesValidation(
+                editRuleData,
+                editRuleDataValidation
+            );
+            setEditRuleDataValidation(validation);
         }
-    }, [editPointData?.newPoint]);
+    }, [editRuleData]);
+
+    console.log("table", editRuleData, editRuleDataValidation);
 
     return (
         <React.Fragment>
@@ -354,23 +430,24 @@ const SalesRiskAnalysisTable = ({
             </div>
 
             {/* Modals */}
-            <EditApplicablePointsModal
-                open={editPointModalOpen}
-                closeModal={handleCloseEditPointModal}
-                editPointData={editPointData}
+            <EditApplicableRulesModal
+                open={editRuleModalOpen}
+                closeModal={handleCloseEditRuleModal}
+                editRuleData={editRuleData}
                 handleChange={handleChange}
-                handleUpdatePoints={handleUpdatePoints}
-                editPointDataValidation={editPointDataValidation}
-                isLoadingEditSalesRiskAnalysisPoint={
-                    isLoadingEditSalesRiskAnalysisPoint
+                handleUpdateRules={handleUpdateRules}
+                editRuleDataValidation={editRuleDataValidation}
+                handleMultiSelectChange={setEditRuleData}
+                isLoadingEditSalesRiskAnalysisRule={
+                    isLoadingEditSalesRiskAnalysisRule
                 }
             />
 
             <RuleActionConfirmationModal
                 open={ruleActionModalOpen}
-                closeModal={handleCloseRuleActionModal}
-                rulesActionData={rulesActionData}
-                handleRuleStatusUpdate={handleRuleStatusUpdate}
+                closeModal={handleCloseStatusActionModal}
+                statusActionData={statusActionData}
+                handleStatusUpdate={handleStatusUpdate}
                 isLoading={isLoadingSingleRuleStatusUpdate}
             />
 
