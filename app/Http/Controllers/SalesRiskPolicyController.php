@@ -322,23 +322,23 @@ class SalesRiskPolicyController extends AccountBaseController
 
                 switch ($item->policyType) {
                     case "lessThan":
-                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->value;
                         $rowData['point'] = $item->points;
                         break;
                     case "greaterThan":
-                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->value;
                         $rowData['point'] = $item->points;
                         break;
                     case "fixed":
-                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->value;
                         $rowData['point'] = $item->points;
                         break;
 
                     case "range":
-                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->from . ', ' . $item->to;
                         $rowData['point'] = $item->points;
                         break;
@@ -348,7 +348,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         break;
 
                     case "list":
-                        $rowData['value_type'] = $item->rulesType;
+                        $rowData['value_type'] = $item->valueType;
                         if ($item->rulesType == "countries") {
                             $rowData['value'] = json_encode($item->countries);
                         }
@@ -416,11 +416,12 @@ class SalesRiskPolicyController extends AccountBaseController
             return [
                 'id' => $item->id,
                 'title' => $item->title,
-                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id','value','point', 'comment']),
+                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'point', 'status', 'comment']),
                 'department' => [
                     'id' => $item->department,
                     'name' => Team::with('childs')->find($item->department)->team_name
                 ],
+                'status' => $item->status,
                 'comment' => $item->comment
             ];
         });
