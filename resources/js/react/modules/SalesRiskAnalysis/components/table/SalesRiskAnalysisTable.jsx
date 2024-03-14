@@ -60,6 +60,7 @@ const SalesRiskAnalysisTable = ({
     const [editPointData, setEditPointData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
     const [rulesActionData, setRulesActionData] = React.useState({});
+    const [policyStatusData, setPolicyStatusData] = React.useState({});
     const [editPointDataValidation, setEditPointDataValidation] =
         React.useState({
             newPoint: false,
@@ -185,6 +186,10 @@ const SalesRiskAnalysisTable = ({
                 setAddQuestionsData(data);
                 setAddQuestionsModalOpen(true);
             },
+            handlePolicyStatus: (data) => {
+                setPolicyStatusData(data);
+                setRuleActionModalOpen(true);
+            }
         },
     });
 
@@ -216,14 +221,16 @@ const SalesRiskAnalysisTable = ({
     const handleRuleStatusUpdate = async (rule) => {
         try {
             const payload = {
-                id: rule.id,
-                status: rule.status === 1 ? 0 : 1,
+                id: rulesActionData.id,
+                status: rulesActionData.status === "1" ? "0" : "1",
             };
             const res = await singleRuleStatusUpdate(payload);
             if (res.data) {
                 toast.success("Rule status updated successfully");
+                handleCloseRuleActionModal();
             }
         } catch (error) {
+            console.log("error", error);
             toast.error("Something went wrong");
         }
     };
@@ -364,6 +371,7 @@ const SalesRiskAnalysisTable = ({
                 closeModal={handleCloseRuleActionModal}
                 rulesActionData={rulesActionData}
                 handleRuleStatusUpdate={handleRuleStatusUpdate}
+                isLoading={isLoadingSingleRuleStatusUpdate}
             />
 
             <AddQuestionsModal

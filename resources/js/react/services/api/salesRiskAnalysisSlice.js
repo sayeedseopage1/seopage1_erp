@@ -45,10 +45,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         }),
         singleRuleStatusUpdate: build.mutation({
             query: (rule) => ({
-                url: `account/sales-risk-policies/status-update/${rule.id}/${body.status}`,
+                url: `account/sales-risk-policies/status-change/${rule.id}/${rule.status}`,
                 method: "PUT",
                 headers: {
                     "X-CSRF-TOKEN": _token,
+                    "origin": "http://localhost:8000"
                 },
             }),
             invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],

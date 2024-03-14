@@ -6,10 +6,9 @@ import { ModalInputLabel, ModalTitle } from "../ui/Styles/ui";
 const RuleActionConfirmationModal = ({
     open,
     closeModal,
-    actionType,
     rulesActionData,
     handleRuleStatusUpdate,
-    isLoadingSingleRuleStatusUpdate,
+    isLoading,
 }) => {
     return (
         <CustomModal
@@ -32,13 +31,13 @@ const RuleActionConfirmationModal = ({
                             Are you sure you want to{" "}
                             <span
                                 className={`${
-                                    rulesActionData.status === 0
+                                    rulesActionData.status === "0"
                                         ? "text-success"
                                         : "text-danger"
                                 }`}
                             >
                                 {" "}
-                                {rulesActionData.status === 0
+                                {rulesActionData.status === "0"
                                     ? "Enable"
                                     : "Disable"}
                             </span>{" "}
@@ -52,10 +51,14 @@ const RuleActionConfirmationModal = ({
                                 handleRuleStatusUpdate();
                             }}
                         >
-                            Yes,{" "}
-                            {rulesActionData.status === 1
-                                ? "Enable"
-                                : "Disable"}
+                            {isLoading
+                                ? "Updating..."
+                                : `Yes,
+                            ${
+                                rulesActionData.status === "0"
+                                    ? "Enable"
+                                    : "Disable"
+                            }`}
                         </button>
                         <button
                             className="btn btn-warning ml-2 text-white"
