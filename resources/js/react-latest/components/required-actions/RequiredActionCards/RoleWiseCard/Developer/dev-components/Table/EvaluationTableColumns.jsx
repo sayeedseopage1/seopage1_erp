@@ -1,6 +1,4 @@
-import { ColumnContent } from "./ui";
-import { IoIosSend } from "react-icons/io";
-import "./index.css";
+import ActionDropdown from "./ActionDropdown";
 export const EvaluationTableColumns = [
     // {
     //     header: "#",
@@ -25,7 +23,7 @@ export const EvaluationTableColumns = [
         accessorKey: "assignDate",
         cell: ({ row }) => {
             const data = row.original;
-            return <ColumnContent>{data?.assignDate}</ColumnContent>;
+            return <div>{data?.assignDate}</div>;
         },
     },
     {
@@ -33,15 +31,7 @@ export const EvaluationTableColumns = [
         accessorKey: "submissionDate",
         cell: ({ row }) => {
             const data = row.original;
-            return <ColumnContent>{data?.submissionDate}</ColumnContent>;
-        },
-    },
-    {
-        header: "Total Hours Tracked",
-        accessorKey: "totalHoursTracked",
-        cell: ({ row }) => {
-            const data = row.original;
-            return <ColumnContent>{data?.totalHoursTracked}</ColumnContent>;
+            return <div>{data?.submissionDate}</div>;
         },
     },
     {
@@ -57,13 +47,28 @@ export const EvaluationTableColumns = [
         },
     },
     {
+        header: "Total Hours Tracked",
+        accessorKey: "totalHoursTracked",
+        cell: ({ row }) => {
+            const data = row.original;
+            return (
+                <div style={{ marginLeft: "30%" }}>
+                    {data?.totalHoursTracked}
+                </div>
+            );
+        },
+    },
+
+    {
         header: "Number of Revision Needed",
         accessorKey: "numberOfRevisionsNeeded",
         cell: ({ row }) => {
             const data = row.original;
 
             return (
-                <ColumnContent>{data?.numberOfRevisionsNeeded}</ColumnContent>
+                <div style={{ marginLeft: "30%" }}>
+                    {data?.numberOfRevisionsNeeded}
+                </div>
             );
         },
     },
@@ -73,15 +78,9 @@ export const EvaluationTableColumns = [
         accessorKey: "action",
 
         cell: ({ row }) => {
-            return (
-                <ColumnContent>
-                    <div className="btn">
-                        <IoIosSend className="send" color="#fff" />
-                        <IoIosSend className="send2" color="#696666" />
-                        <p>Evaluate</p>
-                    </div>
-                </ColumnContent>
-            );
+            const data = row.original;
+
+            return <ActionDropdown data={data} />;
         },
     },
 ];

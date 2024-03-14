@@ -1,47 +1,40 @@
 import React, { useState } from "react";
-
-import styles from "./ActionDropdown.module.css";
-import { BsThreeDotsVertical } from "react-icons/bs";
-
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import _ from "lodash";
-
-import Dropdown from "../../../../../../../../react/global/Dropdown";
+import { ColumnContent } from "./ui";
+import { IoIosSend } from "react-icons/io";
+import ButtonStyles from "./ActionButton.module.css";
 import { useAuth } from "../../../../../../../../react/hooks/useAuth";
+import SingleEvaluationModal from "../SingleEvaluationModal";
 
-const ActionDropdown = ({ ...rest }) => {
+const ActionDropdown = ({ data, table }) => {
     const auth = useAuth();
-
+    const [isSingleEvaluationModalOpen, setSingleEvaluationModalOpen] =
+        useState(false);
+    const toggleSingleEvaluationModal = () => {
+        setSingleEvaluationModalOpen((prevState) => !prevState);
+    };
     return (
         <React.Fragment>
-            <Dropdown>
-                <Dropdown.Toggle icon={false} className={styles.dropdownToggle}>
-                    <BsThreeDotsVertical />
-                </Dropdown.Toggle>
+            <ColumnContent onClick={() => toggleSingleEvaluationModal()}>
+                <button className={ButtonStyles.sendContainer}>
+                    <IoIosSend
+                        className={ButtonStyles.send}
+                        color="#fff"
+                        size={`20px`}
+                    />
+                    <IoIosSend
+                        className={ButtonStyles.send2}
+                        color="#696666"
+                        size={`20px`}
+                    />
+                    <p>Evaluate</p>
+                </button>
+            </ColumnContent>
 
-                <Dropdown.Menu placement="bottom-end">
-                    <Dropdown.Item className={styles.dropdownItem}>
-                        <i className="fa-regular fa-eye" />
-                        View
-                    </Dropdown.Item>
-
-                    {_.includes([1, 7], auth.getRoleId()) && (
-                        <Dropdown.Item className={styles.dropdownItem}>
-                            <i className="fa-regular fa-pen-to-square" />
-                            Edit
-                        </Dropdown.Item>
-                    )}
-
-                    {/* delete lead */}
-                    {auth.getRoleId() === 1 && (
-                        <Dropdown.Item className={styles.dropdownItem}>
-                            <i className="fa-regular fa-trash-can" />
-                            Delete
-                        </Dropdown.Item>
-                    )}
-                </Dropdown.Menu>
-            </Dropdown>
+            <SingleEvaluationModal
+                isSingleEvaluationModalOpen={isSingleEvaluationModalOpen}
+                toggleSingleEvaluationModal={toggleSingleEvaluationModal}
+                data={data}
+            />
         </React.Fragment>
     );
 };
