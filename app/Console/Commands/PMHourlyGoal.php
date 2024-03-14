@@ -60,11 +60,11 @@ class PMHourlyGoal extends Command
 
                         if($project_timelog >= 60){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '1 hours has been tracked out of 30 hours';
+                            $goal_update->description = 'At least 1 task is assigned and 1 hour is tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '1 hours has not been tracked out of 30 hours';
+                            $goal_update->description = 'At least 1 task is assigned and 1 hour is not tracked ';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -76,13 +76,25 @@ class PMHourlyGoal extends Command
                         ->where('updated_at', '<', $end_date)
                         ->sum('total_minutes');
 
+                        if($goal_update->project_category =='Regular'){
+                            $num_of_hr = 3;
+                        }elseif($goal_update->project_category =='Priority'){
+                            $num_of_hr = 3;
+                        }elseif($goal_update->project_category =='High-priority'){
+                            $num_of_hr = 4;
+                        }elseif($goal_update->project_category =='Top most priority'){
+                            $num_of_hr = 5;
+                        }else{
+                            $num_of_hr = 5;
+                        }
+
                         if($project_timelog >= 180){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '3 hours has been tracked out of 60 hours';
+                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '3 hours has not been tracked out of 60 hours';
+                            $goal_update->description = 'At least '.$num_of_hr.' hours are not tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -93,13 +105,25 @@ class PMHourlyGoal extends Command
                         ->where('updated_at', '<', $end_date)
                         ->sum('total_minutes');
 
+                        if($goal_update->project_category =='Regular'){
+                            $num_of_hr = 6;
+                        }elseif($goal_update->project_category =='Priority'){
+                            $num_of_hr = 7;
+                        }elseif($goal_update->project_category =='High-priority'){
+                            $num_of_hr = 8;
+                        }elseif($goal_update->project_category =='Top most priority'){
+                            $num_of_hr = 8;
+                        }else{
+                            $num_of_hr = 10;
+                        }
+
                         if($project_timelog >= 300){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '4 hours has been tracked out of 60 hours';
+                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '4 hour has not been tracked out of 60 hours';
+                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
@@ -110,13 +134,25 @@ class PMHourlyGoal extends Command
                         ->where('updated_at', '<', $end_date)
                         ->sum('total_minutes');
 
+                        if($goal_update->project_category =='Regular'){
+                            $num_of_hr = 10;
+                        }elseif($goal_update->project_category =='Priority'){
+                            $num_of_hr = 12;
+                        }elseif($goal_update->project_category =='High-priority'){
+                            $num_of_hr = 15;
+                        }elseif($goal_update->project_category =='Top most priority'){
+                            $num_of_hr = 15;
+                        }else{
+                            $num_of_hr = 18;
+                        }
+
                         if($project_timelog >= 300){
                             $goal_update->goal_status = 1;
-                            $goal_update->description = '5 hours has been tracked out of 60 hours';
+                            $goal_update->description = 'At least '.$num_of_hr.' hours are tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }else{
-                            $goal_update->description = '5 hour has not been tracked out of 60 hours';
+                            $goal_update->description = 'At least '.$num_of_hr.' hours are not tracked';
                             $goal_update->updated_at= Carbon::now();
                             $goal_update->save();
                         }
