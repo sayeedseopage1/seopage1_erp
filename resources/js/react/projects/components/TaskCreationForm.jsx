@@ -109,7 +109,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fontUrl, brandGuideline, illustration, others, colorSchema, primaryColor, primaryColorDescription, secondaryColors
     }
 
-    console.log(taskData)
+    // console.log(taskData)
 
     //TODO: clear form for new added fields
     const clearForm = () => {
@@ -933,7 +933,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         }
                                         {/* Others */}
                                         {
-                                            typeOfGraphicsCategory?.name === "Others" && <>
+                                            typeOfGraphicsCategory?.id === 9 && <>
                                                 <div className="col-12">
                                                     <div className="form-group my-3">
                                                         <label htmlFor="">
