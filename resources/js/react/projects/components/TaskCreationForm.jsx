@@ -41,8 +41,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
     //state for graphic designer start
-    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState({});
-    const [typeOfLogo, setTypeOfLogo] = useState({});
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
+    const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
@@ -70,7 +70,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
     // state for ui/ux start
     const [cms, setCms] = useState("")
-    const [themeType, setThemeType] = useState({})
+    const [themeType, setThemeType] = useState("")
     const [themeName, setThemeName] = useState("")
     const [themeTemplate, setThemeTemplate] = useState("")
     // state for ui/ux end
@@ -133,8 +133,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setEstimateTimeMin(0);
         setFiles([]);
         setDescription("");
-        setTypeOfGraphicsCategory({});
-        setTypeOfLogo({});
+        setTypeOfGraphicsCategory("");
+        setTypeOfLogo("");
         setBrandName("");
         setNumOfVersions(null);
         setReference("");
@@ -158,7 +158,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             },
         ]);
         setCms("");
-        setThemeType({});
+        setThemeType("");
         setThemeName("");
         setThemeTemplate("");
     };
@@ -214,56 +214,95 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         }
 
         // TODO: active it LuAsterisk, when new field is added 
-        // if (!typeOfGraphicsCategory) {
-        //     err.typeOfGraphicsCategory = "You have to select Type of graphic work";
-        //     errCount++;
-        // }
-        // if (!typeOfLogo) {
-        //     err.typeOfLogo = "You have to select Type of logo";
-        //     errCount++;
-        // }
 
-        // if (!reference) {
-        //     err.reference = "The reference field is required";
-        //     errCount++;
-        // }
-        // if (!textForDesign) {
-        //     err.textForDesign = "The text for design field is required";
-        //     errCount++;
-        // }
-        // if (!brandName) {
-        //     err.brandName = "The brand name field is required";
-        //     errCount++;
-        // }
-        // if (!numOfVersions) {
-        //     err.numOfVersions = "Number of versions is required";
-        //     errCount++;
-        // }
-        // if (!fileTypesNeeded) {
-        //     err.fileTypesNeeded = "File types is required";
-        //     errCount++;
-        // }
-        // if (!imageForDesigner) {
-        //     err.imageForDesigner = "Image is required for designer";
-        //     errCount++;
-        // }
-        // if (!imgOrVidForWork) {
-        //     err.imgOrVidForWork = "Images/videos is requiredn for work";
-        //     errCount++;
-        // }
-        // if (!fontName) {
-        //     err.fontName = "Font name is required";
-        //     errCount++;
-        // }
+        if (taskCategory?.category_name === "Graphic Design") {
+            if (!typeOfGraphicsCategory) {
+                err.typeOfGraphicsCategory = "You have to select Type of graphic work";
+                errCount++;
+            }
+            if (!reference) {
+                err.reference = "The reference field is required";
+                errCount++;
+            }
+            if (!fontName) {
+                err.fontName = "Font name is required";
+                errCount++;
+            }
+        }
 
-        // if (illustration === "") {
-        //     err.others = "Write Name of the illustration design work";
-        //     errCount++;
-        // }
-        // if (others === "") {
-        //     err.others = "Write Name of the graphic design work";
-        //     errCount++;
-        // }
+        if (typeOfGraphicsCategory?.id === 1) {
+            if (!typeOfLogo) {
+                err.typeOfLogo = "You have to select Type of logo";
+                errCount++;
+            }
+            if (!brandName) {
+                err.brandName = "The brand name field is required";
+                errCount++;
+            }
+            if (!numOfVersions) {
+                err.numOfVersions = "Number of versions is required";
+                errCount++;
+            }
+            if (!fileTypesNeeded) {
+                err.fileTypesNeeded = "File types is required";
+                errCount++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+            if (!textForDesign) {
+                err.textForDesign = "The text for design field is required";
+                errCount++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+            if (!imageForDesigner) {
+                err.imageForDesigner = "Image is required for designer";
+                errCount++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 8) {
+            if (!imgOrVidForWork) {
+                err.imgOrVidForWork = "Images/videos is requiredn for work";
+                errCount++;
+            }
+        }
+        if (typeOfGraphicsCategory?.id === 7) {
+            if (illustration === "") {
+                err.others = "Write Name of the illustration design work";
+                errCount++;
+            }
+        }
+        if (typeOfGraphicsCategory?.id === 9) {
+            if (others === "") {
+                err.others = "Write Name of the graphic design work";
+                errCount++;
+            }
+        }
+
+        if (taskCategory?.category_name === "UI/UIX Design") {
+            if (!cms) {
+                err.cms = "The CMS name field is required";
+                errCount++;
+            }
+            if (!themeType) {
+                err.themeType = "You have to select Theme";
+                errCount++;
+            }
+        }
+
+        if (themeType?.id === 2) {
+            if (!themeName) {
+                err.themeName = "The theme name field is required";
+                errCount++;
+            }
+            if (!themeTemplate) {
+                err.themeTemplate = "The theme template url field is required";
+                errCount++;
+            }
+        }
 
         if (!assignedTo?.id) {
             err.assignedTo = "You have to select an user";
@@ -485,26 +524,26 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setState(e.target.value);
     };
 
-    let count = 0;
-    const err = new Object();
+    // let count = 0;
+    // const err = new Object();
 
-    if (colorSchema === "") {
-        err.colorSchema = "You Need to Select An Option";
-        count++;
-    }
-    if (colorSchema === "yes") {
-        if (primaryColorDescription === "") {
-            err.pColorDesc = "You Have to Provide This Field!";
-            count++;
-        }
+    // if (colorSchema === "") {
+    //     err.colorSchema = "You Need to Select An Option";
+    //     count++;
+    // }
+    // if (colorSchema === "yes") {
+    //     if (primaryColorDescription === "") {
+    //         err.pColorDesc = "You Have to Provide This Field!";
+    //         count++;
+    //     }
 
-        _.map(secondaryColors, (item) => {
-            if (item.description === "") {
-                err.sDescription = "You Have to Provide This Field!";
-                count++;
-            }
-        });
-    }
+    //     _.map(secondaryColors, (item) => {
+    //         if (item.description === "") {
+    //             err.sDescription = "You Have to Provide This Field!";
+    //             count++;
+    //         }
+    //     });
+    // }
 
 
     return (

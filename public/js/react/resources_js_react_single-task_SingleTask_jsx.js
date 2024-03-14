@@ -12000,6 +12000,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_19__["default"], {
             selected: typeOfGraphicsCategory,
             onSelect: setTypeOfGraphicsCategory
+            // isDesignerTask={isDesignerTask}
           }), (err === null || err === void 0 ? void 0 : err.typeOfGraphicsCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
             style: {
               color: "red"
@@ -12012,6 +12013,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_projects_components_graphics_design_forms_TypeOfLogo__WEBPACK_IMPORTED_MODULE_20__["default"], {
               selected: typeOfLogo,
               onSelect: setTypeOfLogo
+              // isDesignerTask={isDesignerTask}
             }), (err === null || err === void 0 ? void 0 : err.typeOfLogo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
               style: {
                 color: "red"

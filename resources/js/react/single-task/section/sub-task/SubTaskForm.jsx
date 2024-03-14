@@ -749,6 +749,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             <TypeOfGraphicsWorkSelection
                                 selected={typeOfGraphicsCategory}
                                 onSelect={setTypeOfGraphicsCategory}
+                            // isDesignerTask={isDesignerTask}
                             />
                             {err?.typeOfGraphicsCategory && (
                                 <div style={{ color: "red" }}>
@@ -763,6 +764,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     <TypeOfLogo
                                         selected={typeOfLogo}
                                         onSelect={setTypeOfLogo}
+                                    // isDesignerTask={isDesignerTask}
                                     />
                                     {err?.typeOfLogo && (
                                         <div style={{ color: "red" }}>
