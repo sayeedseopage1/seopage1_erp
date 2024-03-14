@@ -1,0 +1,358 @@
+.project_manager_explanation {
+    font-family: Inter;
+}
+
+.manager_explanation {
+    font-family: Inter;
+    font-weight: 500 !important;
+    background: #199CDE !important;
+    color: #f9f9f9 !important;
+    border-color: #199CDE !important;
+}
+
+.manager_explanation:hover {
+    font-family: Inter;
+    background-color: #1492d2 !important;
+    border-color: #1492d2 !important;
+}
+
+
+.modal_overlay {
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.card {
+    width: 70vw;
+    max-height: 95vh;
+    font-family: Inter;
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+}
+
+@media only screen and (max-width: 756px) {
+    .card {
+        width: 100vw;
+    }
+}
+
+
+@media only screen and (max-width: 1000px) {
+    .card {
+        width: 100vw
+    }
+}
+
+
+
+.card_head {
+    font-weight: 600;
+}
+
+
+.popover_panel {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+    /* width: clamp(255px, 100%, 350px); */
+    width: 100%;
+    max-width: 350px;
+    font-family: Inter;
+}
+
+.action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.card_task_details {
+    width: 600px;
+}
+
+@media only screen and (max-width: 720px) {
+    .card_task_details {
+        width: 100vw;
+    }
+}
+
+.task_info__card_head {
+    background: #fff !important;
+    border: none !important;
+    padding: 16px !important;
+    padding-bottom: 0 !important;
+}
+
+.task_info__card_head button {
+    margin-left: auto;
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 18px !important;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+}
+
+
+.task_project {
+    text-align: center;
+    font-family: Inter;
+}
+
+.task_project h6 {
+    width: 80%;
+    text-align: center;
+    font-family: Inter;
+    margin-inline: auto;
+}
+
+.task_info {
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 14px;
+    font-family: Inter;
+}
+
+.inline_flex {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 135px 1fr;
+}
+
+.task_info__label {
+    color: #626262;
+    font-weight: 500;
+    position: relative;
+    padding-right: 10px;
+}
+
+.task_info__label::before {
+    content: ':';
+    position: absolute;
+    right: 0;
+    top: 0;
+    color: #777;
+    z-index: 1;
+}
+
+.task_info__text {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.task_description {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: rgb(0 0 0 / 5%);
+}
+
+.comment_field>label {
+    color: #626262;
+    font-weight: 500;
+    position: relative;
+}
+
+.comment_field>textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgb(0 0 0 / 15%);
+}
+
+.comment_field>textarea:focus {
+    border-color: rgb(0 0 0 / 25%)
+}
+
+
+.button_group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+
+@media only screen and (max-width: 756px) {
+    .inline_flex {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+}
+
+.accordion_button {
+    width: 100%;
+    padding: 10px;
+}
+
+.question_answer_container {
+    padding-top: 16px;
+    padding-bottom: 30px;
+}
+
+.section_divider {
+    border-top: 1px dashed rgb(0 0 0 / 15%);
+    text-align: center;
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.section_divider span {
+    display: block;
+    width: fit-content;
+    margin-inline: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ebebeb;
+    color: #626262;
+    padding: 5px 10px;
+}
+
+.ques_ans_container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ques_ans_wrapper {
+    font-size: 14px;
+}
+
+.ques_ans_wrapper .ques {
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.ques_ans_wrapper .ans {
+    font-size: 13px;
+    padding-left: 10px;
+    color: #5F5F5F;
+}
+
+.ques_ans_wrapper .ans i {
+    color: #bcbcbc;
+}
+
+
+.hasQuestion {
+    text-align: center;
+}
+
+.ques_by {
+    font-size: 12px !important;
+    color: #797979;
+    padding-inline: 10px;
+    font-size: 400px;
+    display: block;
+    padding-left: 16px;
+}
+
+.ques_by>strong {
+    font-size: 12px;
+    color: #5F5F5F;
+}
+
+.show_more_btn {
+    padding-inline: 8px;
+    border-radius: 6px;
+    background-color: #131313;
+    color: #f8f8f8;
+    font-size: 12px;
+}
+
+
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.tabs a {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabs a span.badge{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(0 0 0 / 15%);
+}
+
+.tabs a[data-type='all'] {
+    background-color: #e9f8fa;
+    color: #24b8cf;
+}
+
+.tabs a[data-type='all']:hover,
+.tabs a[data-type='all'][data-active="true"]{
+   color: #e9f8fa !important;
+   background-color: #24b8cf;
+}
+
+
+.tabs a[data-type='pending'] {
+    background-color:rgb(255, 238, 219);
+    color:rgb(255, 145, 20);
+}
+
+.tabs a[data-type='pending']:hover,
+.tabs a[data-type='pending'][data-active="true"]{
+    color:rgb(255, 248, 240) !important;
+    background-color:rgb(255, 145, 20);
+}
+
+.tabs a[data-type='authorized'] {
+    color: #119911;
+    background-color: #e7f5e7;
+}
+
+.tabs a[data-type='authorized']:hover,
+.tabs a[data-type='authorized'][data-active="true"]{
+    background-color: #119911;
+    color: #e7f5e7 !important;
+}
+
+
+.tabs a[data-type='denied'] {
+    color: rgb(240, 51, 44);
+    background-color: rgb(250, 221, 220);
+}
+
+.tabs a[data-type='denied']:hover,
+.tabs a[data-type='denied'][data-active="true"] {
+    background-color: rgb(240, 51, 44);
+    color: rgb(255, 250, 249) !important;
+}
+
+.task_description{
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: rgb(0 0 0 / 5%);
+    width: 385px;
+}
+
+ 
+

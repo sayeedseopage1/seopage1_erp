@@ -22,19 +22,20 @@ const DeadlineExplanationHistoryTable = ({
   projectDetails,
   closeModal,
   tableColumns,
-  deadlineExplanationHistoryData,
+  goalExpiredHistory,
   isLoading
 }) => {
-  const [data, setData] = React.useState(deadlineExplanationHistoryData || []);
+  const [data, setData] = React.useState(goalExpiredHistory?.data || []);
   const [value, setValue] = useLocalStorage(tableName);
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: 0,
     pageSize: 10,
   });
+
   const [skipPageReset, setSkipPageReset] = React.useState(false);
   const [sorting, setSorting] = React.useState([]);
   const [expanded, setExpanded] = React.useState({});
-  const _deadlineExplanationHistoryData = React.useMemo(()=> deadlineExplanationHistoryData, [deadlineExplanationHistoryData]);
+  const _deadlineExplanationHistoryData = React.useMemo(()=> goalExpiredHistory?.data, [goalExpiredHistory?.data]);
 
   React.useEffect(() => {
         if(_.size(_deadlineExplanationHistoryData) === _.size(data)){
@@ -43,7 +44,7 @@ const DeadlineExplanationHistoryTable = ({
         }else{
             _deadlineExplanationHistoryData && setData(_deadlineExplanationHistoryData);
         }
-      }, [_deadlineExplanationHistoryData])
+  }, [_deadlineExplanationHistoryData])
 
     // clear skipPageReset
     React.useEffect(() => {

@@ -24,7 +24,7 @@ export const DragableColumnHeader = ({header, table, className='', ...props}) =>
   const { columnOrder } = getState();
   const {column} = header;
   const { tableName } = table.getState();
-  const [value, setValue] = useLocalStorage(tableName ??'')
+  const [value, setValue] = useLocalStorage(tableName ?? '')
 
   const dropRef = React.useRef(null);
 
@@ -63,6 +63,9 @@ export const DragableColumnHeader = ({header, table, className='', ...props}) =>
   }, [])
 
   drag(drop(dropRef));
+
+
+
 
   return (
     <> 

@@ -26,7 +26,7 @@ const ProjectModal = ({
     return (
         <>
             <ReactModal
-                style={customStyles}k
+                style={customStyles}
                 isOpen={isOpen}
                 ariaHideApp={false}
                 onRequestClose={closeModal}

@@ -1,4 +1,3 @@
-import { getWidth } from "../../../utils/conditionalWidthReduse";
 import { User } from "../../../utils/user-details";
 import Switch from "../Switch";
 import styles from "../styles/pm-goals-table-column.module.css";
@@ -42,6 +41,19 @@ export const PmGoalsTableColumns = [
         }
     },
     {
+        id: "goal_name",
+        header: "Goal Name",
+        accessorKey: "goal_name",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <span title={data?.goal_name} className="multine-ellipsis"> 
+                    {data?.goal_name ?? "--"}
+                </span>
+            )
+        }
+    },
+    {
         id: "description",
         header: "Description",
         accessorKey: "description",
@@ -57,16 +69,14 @@ export const PmGoalsTableColumns = [
     {
         id: "goal_status",
         header: "Goal Status",
-        accessorKey: "goal_status",
         cell: ({ row }) => {
-            const data = row?.goal_status;
+            const data = row?.original;
             return (
                 <div className="d-flex align-items-center" > 
                     <i class="fa fa-circle mr-1 f-10" style={{
-                        color: data?.status === "In progress" ? "#3F9C35" : "#00b5ff",
+                        color: data?.goal_status === 0 ? "#1492d2 " : "#218838",
                     }}></i>  
-
-                    {data?.status === 0 ? "In progress" : "Completed" } 
+                    {data?.goal_status === 0 ? "Incomplete" : "Completed" } 
                 </div>
             )
         }
@@ -79,7 +89,21 @@ export const PmGoalsTableColumns = [
             const handle = table.options.meta
             const data = row?.original;
             return (
-                <span role="button" onClick={() => handle.goalExtensionHistoryClick(data)}>6</span>
+                <span 
+                role="button" 
+                className={`${
+                    (data?.goal_extension_history && data.goal_status === 0 && 
+                        new Date(row.original?.goal_end_date) > new Date()) 
+                        ? styles?.tableAnchor : ""}`}
+                style={{
+                    textDecoration: data?.goal_extension_history ?  "underline" : "none",
+                }}
+                onClick={() => {
+                    // condition to check if the goal extension history is available
+                    data?.goal_extension_history &&  handle.goalExtensionHistoryClick(data)
+                }}>
+                    {data?.goal_extension_history ?? "--"}
+                </span>
             )
         }
     },
@@ -91,7 +115,19 @@ export const PmGoalsTableColumns = [
             const handle = table.options.meta
             const data = row?.original;
             return (
-                <span role="button" onClick={() => handle.deadlineExplanationHistoryClick(data)} >5</span>
+                <span 
+                role="button" 
+                
+                className={`${(data.goal_expired_history && data.goal_status === 0 && new Date(row.original?.goal_end_date) > new Date()) ? styles?.tableAnchor : ""}`}
+                style={{
+                    textDecoration: data?.goal_expired_history ? "underline" : "none",
+                }}
+                onClick={() => {
+                    // condition to check if the deadline explanation history is available
+                    data.goal_expired_history &&  handle.deadlineExplanationHistoryClick(data)
+                }} >
+                    {data.goal_expired_history}
+                </span>
             )
         }
     },
@@ -108,13 +144,35 @@ export const PmGoalsTableColumns = [
                     <Switch>
                         <Switch.Case condition={user?.roleId === 4}>
                             <Switch>
-                                    <Switch.Case condition={!data.reason}>
+                                    <Switch.Case condition={(data.reason_status === 0 ||  data.reason_status === 2) && data?.expired_status !== 2}>
                                             <Switch>
                                                 <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
                                                     <button 
-                                                        onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.deadlineExplained}`}
+                                                        onClick={() => handle.deadlineExplainClick(data)} className={`btn btn-danger ${styles?.authorize}`}
                                                     > 
                                                         Explain Why Expired 
+                                                    </button>
+                                                </Switch.Case>
+                                            </Switch>
+                                    </Switch.Case>
+                                    <Switch.Case condition={(data?.reason_status === 0 ||  data?.reason_status === 2) && data?.expired_status === 2}>
+                                            <Switch>
+                                                <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
+                                                    <div
+                                                        className={`${styles?.explanationSubmitted}`}
+                                                    > 
+                                                        Goal Expired & Explanation Submitted
+                                                    </div>
+                                                </Switch.Case>
+                                            </Switch>
+                                    </Switch.Case>
+                                    <Switch.Case condition={data.reason_status === 1 && data?.expired_status !== 2}>
+                                            <Switch>
+                                                <Switch.Case condition={new Date(data.goal_end_date) < new Date()}>
+                                                    <button 
+                                                      className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}
+                                                    > 
+                                                        Awaiting Authorization on Deadline Explanation
                                                     </button>
                                                 </Switch.Case>
                                             </Switch>
@@ -138,9 +196,17 @@ export const PmGoalsTableColumns = [
                         </Switch.Case>
                     </Switch>
                     <Switch>
-                            <Switch.Case condition={user.roleId === 4}>
+                            <Switch.Case condition={user.roleId === 4 && data?.extended_request_status !== 1  && new Date(data.goal_end_date) > new Date() && data.goal_status !== 1}>
                                 <button onClick={() => handle.extendRequestClick(data)} className={`btn btn-success ${styles?.extend}`}>
                                     Request Deadline Extension
+                                </button>
+                            </Switch.Case>
+                            <Switch.Case condition={user.roleId === 4 && data?.extended_request_status !== 1  && new Date(data.goal_end_date) > new Date() && data.goal_status === 1}>
+                                <span>--</span>
+                            </Switch.Case>
+                            <Switch.Case condition={user.roleId === 4 && data?.extended_request_status === 1}>
+                                <button disabled className={`btn btn-outline-success ${styles?.awaitingDeadlineExtension}`}>
+                                    Awaiting Deadline Extension Request Authorization
                                 </button>
                             </Switch.Case>
                             <Switch.Case
@@ -155,10 +221,9 @@ export const PmGoalsTableColumns = [
                             </Switch.Case>
                     </Switch>
                     <Switch>
-                        {/* <Switch.Case condition={data?.extended_request_status !== 1 &&
-                                    (user.roleId === 1 || user.roleId === 8)}>
+                        <Switch.Case condition={user?.roleId === 1 && data?.extended_request_status !== 1 && !data.reason}>
                             <span>--</span>
-                        </Switch.Case> */}
+                        </Switch.Case>
                     </Switch>
                </div>
             

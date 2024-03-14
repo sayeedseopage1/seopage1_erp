@@ -17,6 +17,7 @@ use App\Models\TaskRevisionDispute;
 use App\Models\Task;
 use App\Models\Taskuser;
 use App\Models\ProjectMember;
+use App\Models\ProjectPmGoal;
 use DB;
 
 class HelperPendingActionController extends AccountBaseController
@@ -1752,6 +1753,106 @@ class HelperPendingActionController extends AccountBaseController
               //   dd($action);
 
             }
+
+        }
+/** WHEN GOAL DEADLINE EXPIRE IN NEXT 24 HOURS */
+        public function PmGoalBeforeExpireCheck($goal_check)
+        {
+            $goal = ProjectPmGoal::where('id',$goal_check->id)->first();
+            $project= Project::where('id',$goal_check->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            // $authorizer= User::where('id',$task_user->user_id)->first();
+
+                $action = new PendingAction();
+                $action->code = 'PMGE';
+                $action->serial = 'PMGE'.'x0';
+                $action->item_name= 'Goal expire in 24 hours';
+                $action->heading= 'Goal expire in 24 hours!';
+                $action->message = 'Goal '.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in 24 hours!';
+                $action->timeframe= 24;
+                $action->goal_id = $goal->id;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= $project_manager->id;
+                $button = [
+                    [
+                        'button_name' => 'View details',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details', 'goal_id' => $goal->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            //   dd($action);
+
+        }
+
+/**WHEN GOAL DEADLINE OVER*/
+        public function PmGoalDeadlineCheck($goal_check)
+        {
+            $goal = ProjectPmGoal::where('id',$goal_check->id)->first();
+            $project= Project::where('id',$goal_check->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            // $authorizer= User::where('id',$task_user->user_id)->first();
+
+                $action = new PendingAction();
+                $action->code = 'PMGM';
+                $action->serial = 'PMGM'.'x0';
+                $action->item_name= 'Goal Miss';
+                $action->heading= 'Goal Miss!';
+                $action->message = 'Goal '.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
+                $action->timeframe= 24;
+                $action->goal_id = $goal->id;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= $project_manager->id;
+                $button = [
+                    [
+                        'button_name' => 'Add explanation',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('project-status.index', ['modal_type' => 'individual_goal_details', 'status' => 'expired']),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+        }
+
+        public function PmGoalReviewExplanation($ppg)
+        {
+            $goal = ProjectPmGoal::where('id',$ppg->id)->first();
+            $project= Project::where('id',$ppg->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $admin = User::where('role_id',1)->first();
+
+                $action = new PendingAction();
+                $action->code = 'PMRE';
+                $action->serial = 'PMRE'.'x0';
+                $action->item_name= 'Review explanation';
+                $action->heading= 'Review explanation!';
+                $action->message = 'Review explanation given by PM on missing goal'.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
+                $action->timeframe= 24;
+                $action->goal_id = $goal->id;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= $admin->id;
+                $button = [
+                    [
+                        'button_name' => 'Review explanation and add your ratings!',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('project-status.index', ['modal_type' => 'review_explanation', 'project_id' => $project->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
 
         }
 

@@ -105,7 +105,6 @@ export const ProjectStatusTableColumns = [
         cell: ({ row, table }) => {
             const data = row.original;
             const handler = table.options.meta
-            const percentage = 50;
             return (
                 <div className="progress" style={{
                     height: "15px",
@@ -114,31 +113,32 @@ export const ProjectStatusTableColumns = [
                         <Popover.Button>
                             <div 
                                 onClick={() => handler.onPercentOfGoalMet(data)} 
-                                className={`${style.projectStatus_popover_button}`}
+                                className={`${style.projectStatus_percent_popover_button}`}
                             >
                                 <div 
                                     className="progress-bar f-12" 
-                                    role="progressbar" 
-                                    style={{width: `${percentage}%`, backgroundColor: getColor(percentage)}} 
-                                    aria-valuenow={percentage}
+                                    role="progressbar"
+                                    style={{
+                                        width: `${data?.goal_percentage ?? 0}%`, 
+                                        backgroundColor: getColor(data?.goal_percentage ?? 0), 
+                                        height: "15px"}} 
+                                    aria-valuenow={data?.goal_percentage ?? 0}
                                     aria-valuemin="0" 
                                     aria-valuemax="100"
                                 >
-                                    {percentage}%
+                                    {data?.goal_percentage ?? 0}%
                                 </div>
                             </div>
                         </Popover.Button>
                         <Popover.Panel>
-                            <div onTouchStartCapture={() => {
-                                debugger
-                            }} className={`${style.projectStatus_popover_panel}`}>
+                            <div className={`${style.projectStatus_popover_panel}`}>
                                 <div 
                                     className="d-flex flex-column justify-content-start align-items-start"
                                 >
-                                    <p>Total goals: 10</p>
-                                    <p>Goals deadline expired so far: 8</p>
-                                    <p>Goals met: 4</p>
-                                    <p>Percentage of goals met: {percentage}%</p>
+                                    <p>Total goals: {data?.total_goal}</p>
+                                    <p>Goals deadline expired so far: {data?.goal_expire}</p>
+                                    <p>Goals met: {data?.goal_meet}</p>
+                                    <p>Percentage of goals met: {data?.goal_percentage ?? 0}%</p>
                                 </div>
                             </div>
                         </Popover.Panel>
@@ -157,9 +157,12 @@ export const ProjectStatusTableColumns = [
                 <Popover>
                     <Popover.Button>
                             <div className={`${style.projectStatus_popover_button}`}>
-                                <p>
-                                    In 02 Days
-                                </p>
+                                {
+                                    data.upcoming_goal_day === 0 ? 
+                                    <p>Today</p> :
+                                    data.upcoming_goal_day ? 
+                                     <p>In {data.upcoming_goal_day} Days</p> :
+                                         <p>No upcoming goals!</p>}
                             </div>
                     </Popover.Button>
                     <Popover.Panel>
@@ -167,7 +170,11 @@ export const ProjectStatusTableColumns = [
                              <div 
                                 className="d-flex flex-column justify-content-start align-items-start"
                             >
-                                 <p>Next Goal Date : 2024-02-16 09:10:26</p>
+                                {
+                                    data.next_goal_date ? 
+                                        <p>Next Goal Date : {data.next_goal_date}</p> : 
+                                            <p>All goals are completed!</p>
+                                }
                             </div>
                         </div>
                     </Popover.Panel>
@@ -180,9 +187,11 @@ export const ProjectStatusTableColumns = [
     {
         id: "next_goal_details",
         header: "Next Goal Details",
-        cell: ({ row }) => {
+        cell: ({ row, table }) => {
+                 const data = row.original;
+                const handler = table.options.meta;
                 return (
-                    <button className="btn btn-success">View Details</button>
+                    <button onClick={() => handler.onNextGoalDetails(data)} className="btn btn-success">View Details</button>
                 );
             
         }
