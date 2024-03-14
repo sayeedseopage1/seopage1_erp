@@ -6,11 +6,16 @@ import {
     ModalButton,
     ModalInput,
     ModalInputLabel,
+    ModalSelectContainer,
     ModalTitle,
 } from "../ui/Styles/ui";
 import CustomModal from "../ui/CustomModal/CustomModal";
 import { Flex } from "../../../../global/styled-component/Flex";
 import _ from "lodash";
+import CustomDropDown from "../CustomDropDown";
+import { PolicyTypeItems } from "../../constant";
+import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
+import { useSelector } from "react-redux";
 
 const EditApplicablePointsModal = ({
     open,
@@ -18,10 +23,15 @@ const EditApplicablePointsModal = ({
     editPointData,
     handleChange,
     handleUpdatePoints,
+    handleMultiSelectChange,
     isLoadingEditSalesRiskAnalysisPoint,
     editPointDataValidation,
     ...props
 }) => {
+    const {countries} = useSelector((state) => state?.filterOptions);
+
+
+
     return (
         <CustomModal
             closeModal={closeModal}
@@ -42,7 +52,7 @@ const EditApplicablePointsModal = ({
                         </ModalInputLabel>
                         <ModalInputLabel className="col-7" color="#8F8F8F">
                             {" "}
-                            {editPointData?.title}
+                            {editPointData?.policyName}
                         </ModalInputLabel>
                     </div>
                     <div className="row mb-4">
@@ -53,7 +63,7 @@ const EditApplicablePointsModal = ({
                             {editPointData?.department?.name}
                         </ModalInputLabel>
                     </div>
-                    <div className="row mb-4">
+                    {/* <div className="row mb-4">
                         <ModalInputLabel className="col-5" color="#8F8F8F">
                             Policy Rules{" "}
                         </ModalInputLabel>
@@ -99,7 +109,31 @@ const EditApplicablePointsModal = ({
                                 </p>
                             )}
                         </div>
+                    </div> */}
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Policy Type<sup>*</sup>{" "}
+                        </ModalInputLabel>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    filedName="policyType"
+                                    data={PolicyTypeItems}
+                                    selected={editPointData?.policyType}
+                                    setSelected={handleChange}
+                                />
+                            </ModalSelectContainer>
+
+                        </div>
                     </div>
+                    {/* All Rules Inputs */}
+                    <NewPolicyModalInputsContainer
+                        newPolicyData={editPointData}
+                        handleChange={handleChange}
+                        countries={countries}
+                        handleMultiSelectChange={handleMultiSelectChange}
+                        newPolicyDataValidation={editPointDataValidation}
+                    />
                 </div>
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton onClick={handleUpdatePoints} width="177px">

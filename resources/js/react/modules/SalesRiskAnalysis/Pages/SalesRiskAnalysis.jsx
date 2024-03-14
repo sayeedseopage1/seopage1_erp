@@ -38,7 +38,6 @@ const SalesRiskAnalysis = () => {
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
         React.useState(false);
-
     const [newPolicyInputData, setNewPolicyInputData] = React.useState([]);
     // modal state data
     const [newPolicyData, setNewPolicyData] = React.useState({
@@ -90,16 +89,17 @@ const SalesRiskAnalysis = () => {
         });
 
     // question input fields
-
     const {
         data: questionInputFields,
         isFetching: isQuestionInputFieldsFetching,
         isLoading: isQuestionInputFieldsLoading,
     } = useQuestionInputFieldsQuery("");
 
+    // add sales risk analysis rule mutation
     const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
         useAddSalesRiskAnalysisRuleMutation();
 
+    // reset form state
     const resetFormState = () => {
         // reset form data
         setNewPolicyData({
@@ -157,6 +157,7 @@ const SalesRiskAnalysis = () => {
         }
     };
 
+    // handle add rule on policy data to the state
     const handleAddRuleOnPolicy = () => {
         const validation = addNewRulesValidation(
             newPolicyData,
@@ -203,6 +204,7 @@ const SalesRiskAnalysis = () => {
         resetFormState();
     };
 
+    // handle cancel rule on policy
     const handleCancelRuleOnPolicy = () => {
         setNewPolicyData({
             ...newPolicyData,
@@ -216,8 +218,10 @@ const SalesRiskAnalysis = () => {
             countries: [],
             points: "",
         });
+        setIsRuleUpdating(false);
     };
 
+    // handle add new policy  with rules data to the server
     const handlePolicyAdded = async () => {
         if (newPolicyInputData?.length === 0) {
             toast.error("Please add a policy first");
@@ -357,20 +361,20 @@ const SalesRiskAnalysis = () => {
 
                 {/* Add new Policy Modal */}
                 <AddNewPolicyModal
-                    open={addNewPolicyModalOpen}
-                    closeModal={handleAddNewPolicyModal}
                     departments={dept}
-                    newPolicyData={newPolicyData}
-                    handleChange={handleChange}
                     countries={countries}
-                    setNewPolicyData={setNewPolicyData}
-                    newPolicyDataValidation={newPolicyDataValidation}
-                    handleMultiSelectChange={setNewPolicyData}
-                    handleAddRuleOnPolicy={handleAddRuleOnPolicy}
-                    newPolicyInputData={newPolicyInputData}
-                    setIsRuleUpdating={setIsRuleUpdating}
+                    handleChange={handleChange}
+                    open={addNewPolicyModalOpen}
+                    newPolicyData={newPolicyData}
                     isRuleUpdating={isRuleUpdating}
+                    setNewPolicyData={setNewPolicyData}
+                    closeModal={handleAddNewPolicyModal}
+                    setIsRuleUpdating={setIsRuleUpdating}
                     handlePolicyAdded={handlePolicyAdded}
+                    newPolicyInputData={newPolicyInputData}
+                    handleMultiSelectChange={setNewPolicyData}
+                    newPolicyDataValidation={newPolicyDataValidation}
+                    handleAddRuleOnPolicy={handleAddRuleOnPolicy}
                     setNewPolicyInputData={setNewPolicyInputData}
                     isLoadingAddSalesRiskAnalysisRule={
                         isLoadingAddSalesRiskAnalysisRule

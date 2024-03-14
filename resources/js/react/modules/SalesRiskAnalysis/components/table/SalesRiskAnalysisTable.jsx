@@ -116,13 +116,29 @@ const SalesRiskAnalysisTable = ({
         paginateExpandedRows: false,
         meta: {
             handleEditApplicablePoint: (row, selectedRule, ruleType) => {
-                setEditPointModalOpen(true);
-
-                setEditPointData({
-                    ...row,
-                    selectedRule: selectedRule,
-                    ruleType: ruleType
+                console.log("row", row, selectedRule);
+                const [newPolicyData, setNewPolicyData] = React.useState({
+                    policyName: "",
+                    department: {},
+                    policyType: {},
+                    title: "",
+                    rulesType: {},
+                    value: "",
+                    from: "",
+                    to: "",
+                    yes: "",
+                    no: "",
+                    countries: [],
+                    points: "",
                 });
+                setEditPointData({
+                    id: row.id,
+                    title: row.title,
+                    department: row.department,
+                    
+
+                });
+                setEditPointModalOpen(true);
             },
             handleRuleActions: (rule, data) => {
                 setAddQuestionsData(data);
