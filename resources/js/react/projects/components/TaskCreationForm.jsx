@@ -69,7 +69,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     //state for graphic designer end
 
     // state for ui/ux start
-    const { cms, setCms } = useState('')
+    const [cms, setCms] = useState("")
     const [themeType, setThemeType] = useState({})
     const [themeName, setThemeName] = useState("")
     const [themeTemplate, setThemeTemplate] = useState("")
@@ -157,10 +157,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 description: "",
             },
         ]);
-        setCms("")
-        setThemeType({})
-        setThemeName("")
-        setThemeTemplate("")
+        setCms("");
+        setThemeType({});
+        setThemeName("");
+        setThemeTemplate("");
     };
     // handle change
     React.useEffect(() => {
