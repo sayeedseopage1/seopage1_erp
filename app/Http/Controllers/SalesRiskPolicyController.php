@@ -21,8 +21,8 @@ class SalesRiskPolicyController extends AccountBaseController
         $this->pageTitle = 'Sales Risk Policy';
         // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
-            abort_403(user()->permission('manage_company_setting') !== 'all');
-            return $next($request);
+        abort_403(user()->permission('manage_company_setting') !== 'all');
+        return $next($request);
         });
     }
 
@@ -370,7 +370,7 @@ class SalesRiskPolicyController extends AccountBaseController
         ]);
     }
 
-    function edit(Request $req, $id) :JsonResponse
+    function edit(Request $req, $id): JsonResponse
     {
         $validator = Validator::make($req->all(), [
             'newPoint' => 'required|numeric'
@@ -390,14 +390,12 @@ class SalesRiskPolicyController extends AccountBaseController
             $policy = SalesRiskPolicy::findOrFail($id);
             // dd($policy);
 
-            if($req->input('ruleType'))
-            {
-                if($req->input('ruleType') == 'yes')
+            if ($req->input('ruleType')) {
+                if ($req->input('ruleType') == 'yes')
 
-                // dd($policy->value);
+                    // dd($policy->value);
 
-                $policy->point = $req->newPoint;
-
+                    $policy->point = $req->newPoint;
             }
             // $policy->save();
         } catch (\Throwable $th) {
@@ -431,9 +429,20 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyRuleStatusChange($id, $status)
     {
-
-
-        return response()->json(['status' => 'success', 'data' => [$id, $status]]);
+        try {
+            $policy = SalesRiskPolicy::findOrFail($id);
+            if ($status) {
+                $policy->status = 1;
+            } else if ($status == 0) {
+                $policy->status = 0;
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Policy status not changed.']);
+            }
+            $policy->save();
+            return response()->json(['status' => 'success', 'message' => 'Policy status changed.']);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     function policyQuestionInputFields()
