@@ -115,7 +115,7 @@ export const NewRulesModalTableColumnsData = [
                             }}
                             className="py-3"
                         >
-                            {data?.rulesType?.label}
+                            {data?.valueType?.label}
                         </p>
                     </Switch.Case>
                     <Switch.Case condition={data?.policyType.name === "yesNo"}>
@@ -258,14 +258,20 @@ export const NewRulesModalTableColumnsData = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
-            console.log("table", data);
+            console.log("table", data?.policyType?.name);
+            console.log(
+                _.includes(
+                    [...validPolicyTypes, "list"],
+                    data?.policyType?.name
+                )
+            );
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     <Switch>
                         <Switch.Case
                             condition={_.includes(
                                 [...validPolicyTypes, "list"],
-                                data?.policyType.name
+                                data?.policyType?.name
                             )}
                         >
                             <SalesPointsContainer className="py-3">
@@ -294,23 +300,30 @@ export const NewRulesModalTableColumnsData = [
                             </SalesPointsContainer>
                         </Switch.Case>
                         <Switch.Case
-                            condition={data?.policyType.name === "yesNo"}
+                            condition={data?.policyType?.name === "yesNo"}
                         >
                             <SalesPointsContainer className="py-3 flex-column">
-                                <div
-                                    onClick={() => {
-                                        action.editSingleRules(data);
-                                    }}
-                                    role="button"
-                                    className="py-3 d-flex"
-                                >
-                                    <EditIcon />
-                                    <i
-                                        className="fa-solid fa-trash ml-2"
-                                        style={{
-                                            fontSize: "20px",
+                                <div className="py-3 d-flex">
+                                    <div
+                                        onClick={() => {
+                                            action.editSingleRules(data);
                                         }}
-                                    ></i>
+                                        role="button"
+                                    >
+                                        <EditIcon />
+                                    </div>
+                                    <div
+                                        onClick={() => {
+                                            action.deleteSingleRules(data);
+                                        }}
+                                    >
+                                        <i
+                                            className="fa-solid fa-trash ml-2"
+                                            style={{
+                                                fontSize: "20px",
+                                            }}
+                                        ></i>
+                                    </div>
                                 </div>
                                 <ul>
                                     <li

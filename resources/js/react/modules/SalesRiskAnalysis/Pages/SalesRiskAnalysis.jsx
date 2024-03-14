@@ -45,7 +45,7 @@ const SalesRiskAnalysis = () => {
         department: {},
         policyType: {},
         title: "",
-        rulesType: {},
+        valueType: {},
         value: "",
         from: "",
         to: "",
@@ -60,7 +60,7 @@ const SalesRiskAnalysis = () => {
             policyName: false,
             department: false,
             policyType: false,
-            rulesType: false,
+            valueType: false,
             value: false,
             from: false,
             to: false,
@@ -100,28 +100,46 @@ const SalesRiskAnalysis = () => {
         useAddSalesRiskAnalysisRuleMutation();
 
     // reset form state
-    const resetFormState = () => {
+    const resetFormState = (type) => {
         // reset form data
-        setNewPolicyData({
-            ...newPolicyData,
-            policyType: {},
-            title: "",
-            rulesType: {},
-            value: "",
-            from: "",
-            to: "",
-            yes: "",
-            no: "",
-            countries: [],
-            points: "",
-            id: "",
-        });
+        if (type === "all") {
+            setNewPolicyData({
+                policyName: "",
+                department: {},
+                policyType: {},
+                title: "",
+                valueType: {},
+                value: "",
+                from: "",
+                to: "",
+                yes: "",
+                no: "",
+                countries: [],
+                points: "",
+                id: "",
+            });
+        } else {
+            setNewPolicyData({
+                ...newPolicyData,
+                policyType: {},
+                title: "",
+                valueType: {},
+                value: "",
+                from: "",
+                to: "",
+                yes: "",
+                no: "",
+                countries: [],
+                points: "",
+                id: "",
+            });
+        }
         // reset validation
         setNewPolicyDataValidation({
             policyName: false,
             department: false,
             policyType: false,
-            rulesType: false,
+            valueType: false,
             value: false,
             from: false,
             to: false,
@@ -142,7 +160,7 @@ const SalesRiskAnalysis = () => {
         } else if (name === "policyType") {
             setNewPolicyData({
                 ...newPolicyData,
-                rulesType: {},
+                valueType: {},
                 value: "",
                 from: "",
                 to: "",
@@ -204,23 +222,6 @@ const SalesRiskAnalysis = () => {
         resetFormState();
     };
 
-    // handle cancel rule on policy
-    const handleCancelRuleOnPolicy = () => {
-        setNewPolicyData({
-            ...newPolicyData,
-            rulesType: {},
-            policyType: {},
-            value: "",
-            from: "",
-            to: "",
-            yes: "",
-            no: "",
-            countries: [],
-            points: "",
-        });
-        setIsRuleUpdating(false);
-    };
-
     // handle add new policy  with rules data to the server
     const handlePolicyAdded = async () => {
         if (newPolicyInputData?.length === 0) {
@@ -238,8 +239,8 @@ const SalesRiskAnalysis = () => {
                         title: item.title,
                     };
                     if (item.value) rule.value = item.value;
-                    if (!_.isEmpty(item.rulesType))
-                        rule.rulesType = item.rulesType.name;
+                    if (!_.isEmpty(item.valueType))
+                        rule.valueType = item.valueType.name;
                     if (item.from) rule.from = item.from;
                     if (item.to) rule.to = item.to;
                     if (item.points) rule.points = item.points;
@@ -289,8 +290,25 @@ const SalesRiskAnalysis = () => {
     // handle modal open close
     const handleAddNewPolicyModal = () => {
         setAddNewPolicyModalOpen(!addNewPolicyModalOpen);
-        resetFormState();
+        resetFormState("all");
         setNewPolicyInputData([]);
+    };
+
+    // handle cancel rule on policy
+    const handleCancelRuleOnPolicy = () => {
+        setNewPolicyData({
+            ...newPolicyData,
+            valueType: {},
+            policyType: {},
+            value: "",
+            from: "",
+            to: "",
+            yes: "",
+            no: "",
+            countries: [],
+            points: "",
+        });
+        setIsRuleUpdating(false);
     };
 
     // add title on change
@@ -298,18 +316,18 @@ const SalesRiskAnalysis = () => {
         setNewPolicyData({
             ...newPolicyData,
             title: `${newPolicyData?.policyType?.label} ${
-                newPolicyData?.rulesType?.name === "currency" ? "$" : ""
+                newPolicyData?.valueType?.name === "currency" ? "$" : ""
             }${newPolicyData?.value}${newPolicyData.from}${
                 newPolicyData?.from && newPolicyData?.to ? "-" : ""
             }${newPolicyData.to}${
-                newPolicyData?.rulesType?.name === "percentage" ? "%" : ""
-            }${newPolicyData?.rulesType?.name === "hourly" ? "hr" : ""}${
-                newPolicyData?.rulesType?.name === "days" ? "days" : ""
+                newPolicyData?.valueType?.name === "percentage" ? "%" : ""
+            }${newPolicyData?.valueType?.name === "hourly" ? "hr" : ""}${
+                newPolicyData?.valueType?.name === "days" ? "days" : ""
             }`,
         });
     }, [
         newPolicyData?.policyType?.name,
-        newPolicyData?.rulesType?.name,
+        newPolicyData?.valueType?.name,
         newPolicyData.value,
         newPolicyData.from,
         newPolicyData.to,

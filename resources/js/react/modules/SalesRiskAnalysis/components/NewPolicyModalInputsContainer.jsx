@@ -103,12 +103,12 @@ const NewPolicyModalInputsContainer = ({
                                     <ModalSelectContainer className="px-0">
                                         <CustomDropDown
                                             data={validPolicyTypesOptions}
-                                            selected={newPolicyData?.rulesType}
+                                            selected={newPolicyData?.valueType}
                                             setSelected={handleChange}
-                                            filedName="rulesType"
+                                            filedName="valueType"
                                         />
                                     </ModalSelectContainer>
-                                    {newPolicyDataValidation?.rulesType && (
+                                    {newPolicyDataValidation?.valueType && (
                                         <p className="text-danger py-1">
                                             Type is required
                                         </p>
@@ -277,12 +277,12 @@ const NewPolicyModalInputsContainer = ({
                                 <ModalSelectContainer>
                                     <CustomDropDown
                                         data={validPolicyTypesOptions}
-                                        selected={newPolicyData?.rulesType}
+                                        selected={newPolicyData?.valueType}
                                         setSelected={handleChange}
-                                        filedName="rulesType"
+                                        filedName="valueType"
                                     />
                                 </ModalSelectContainer>
-                                {newPolicyDataValidation?.rulesType && (
+                                {newPolicyDataValidation?.valueType && (
                                     <p className="text-danger py-1">
                                         Type is required
                                     </p>
@@ -291,7 +291,7 @@ const NewPolicyModalInputsContainer = ({
                         </div>
                         <Switch.Case
                             condition={
-                                newPolicyData.rulesType.name === "countries"
+                                newPolicyData.valueType.name === "countries"
                             }
                         >
                             <div className="row mb-4 align-items-center">

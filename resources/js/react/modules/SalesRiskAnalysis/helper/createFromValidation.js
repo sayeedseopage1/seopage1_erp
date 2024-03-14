@@ -39,7 +39,7 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
     case "lessThan":
       const lessThenFields = {
         title: inputsData.title,
-        rulesType: inputsData.rulesType,
+        valueType: inputsData.valueType,
         value: inputsData.value,
         points: inputsData.points,
         policyName: inputsData.policyName,
@@ -50,7 +50,7 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
     case "greaterThan":
       const greaterThenFields = {
         title: inputsData.title,
-        rulesType: inputsData.rulesType,
+        valueType: inputsData.valueType,
         value: inputsData.value,
         points: inputsData.points,
         policyName: inputsData.policyName,
@@ -61,7 +61,7 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
     case "fixed":
       const fixedFields = {
         title: inputsData.title,
-        rulesType: inputsData.rulesType,
+        valueType: inputsData.valueType,
         value: inputsData.value,
         points: inputsData.points,
         policyName: inputsData.policyName,
@@ -80,7 +80,7 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
     case "range":
       const rangeFields = {
         title: inputsData.title,
-        rulesType: inputsData.rulesType,
+        valueType: inputsData.valueType,
         from: inputsData.from,
         to: inputsData.to,
         points: inputsData.points,
@@ -102,7 +102,7 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
     case "list":
       const listFields = {
         title: inputsData.title,
-        rulesType: inputsData.rulesType,
+        valueType: inputsData.valueType,
         countries: inputsData.countries,
         points: inputsData.points,
         policyName: inputsData.policyName,

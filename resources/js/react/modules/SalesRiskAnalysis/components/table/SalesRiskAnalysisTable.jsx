@@ -25,6 +25,7 @@ import AddQuestionsModal from "../modal/AddQuestionsModal";
 // Api
 import { useEditSalesRiskAnalysisPointsMutation } from "../../../../services/api/salesRiskAnalysisSlice";
 import { useEffect } from "react";
+import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -117,27 +118,91 @@ const SalesRiskAnalysisTable = ({
         meta: {
             handleEditApplicablePoint: (row, selectedRule, ruleType) => {
                 console.log("row", row, selectedRule);
-                const [newPolicyData, setNewPolicyData] = React.useState({
-                    policyName: "",
-                    department: {},
-                    policyType: {},
-                    title: "",
-                    rulesType: {},
-                    value: "",
-                    from: "",
-                    to: "",
-                    yes: "",
-                    no: "",
-                    countries: [],
-                    points: "",
-                });
-                setEditPointData({
-                    id: row.id,
-                    title: row.title,
-                    department: row.department,
-                    
 
-                });
+                const payload = {
+                    id: row.id,
+                    policyName: row.title,
+                    department: row.department,
+                    policyType: PolicyTypeItems.data.find(
+                        (item) => item?.name === selectedRule?.type
+                    ),
+                    title: selectedRule.title,
+                    valueType:
+                        PolicyTypeItemValuesType.data.regularTypes.data.map(
+                            (item) => item?.name === selectedRule?.valueType
+                        ),
+                    from:
+                        selectedRule?.type === "range"
+                            ? selectedRule?.value.split(",")[0]
+                            : "",
+                    to:
+                        selectedRule?.type === "range"
+                            ? selectedRule?.value.split(",")[1]
+                            : "",
+                    yes:
+                        selectedRule?.type === "yesNo"
+                            ? selectedRule?.value.split(",")[0]
+                            : "",
+                    no:
+                        selectedRule?.type === "yesNo"
+                            ? selectedRule?.value.split(",")[1]
+                            : "",
+                    value: !_.includes(
+                        ["range", "yesNo", "list"],
+                        selectedRule?.type
+                    )
+                        ? selectedRule?.value
+                        : "",
+                    countries:
+                        selectedRule?.type === "list"
+                            ? FormatJsonCountry(selectedRule?.value)
+                            : "",
+                    points: selectedRule?.point,
+                
+                }
+
+                console.log("payload", payload);
+
+                // setEditPointData({
+                //     id: row.id,
+                //     policyName: row.title,
+                //     department: row.department,
+                //     policyType: PolicyTypeItems.data.find(
+                //         (item) => item?.name === selectedRule?.type
+                //     ),
+                //     title: selectedRule.title,
+                //     valueType:
+                //         PolicyTypeItemValuesType.data.regularTypes.data.map(
+                //             (item) => item?.name === selectedRule?.valueType
+                //         ),
+                //     from:
+                //         selectedRule?.type === "range"
+                //             ? selectedRule?.value.split(",")[0]
+                //             : "",
+                //     to:
+                //         selectedRule?.type === "range"
+                //             ? selectedRule?.value.split(",")[1]
+                //             : "",
+                //     yes:
+                //         selectedRule?.type === "yesNo"
+                //             ? selectedRule?.value.split(",")[0]
+                //             : "",
+                //     no:
+                //         selectedRule?.type === "yesNo"
+                //             ? selectedRule?.value.split(",")[1]
+                //             : "",
+                //     value: !_.includes(
+                //         ["range", "yesNo", "list"],
+                //         selectedRule?.type
+                //     )
+                //         ? selectedRule?.value
+                //         : "",
+                //     countries:
+                //         selectedRule?.type === "list"
+                //             ? FormatJsonCountry(selectedRule?.value)
+                //             : "",
+                //     points: selectedRule?.point,
+                // });
                 setEditPointModalOpen(true);
             },
             handleRuleActions: (rule, data) => {
@@ -161,16 +226,15 @@ const SalesRiskAnalysisTable = ({
         }
 
         try {
-            
             const payload = {
                 id: editPointData?.selectedRule?.id,
                 newPoint: editPointData?.newPoint,
-                ruleType: editPointData?.ruleType
-            }
+                ruleType: editPointData?.ruleType,
+            };
             const res = await submitData(payload);
             if (res.data) {
                 toast.success("Points updated successfully");
-                handleCloseEditPointModal()
+                handleCloseEditPointModal();
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -178,13 +242,12 @@ const SalesRiskAnalysisTable = ({
     };
 
     const resetFormSate = () => {
-        setEditPointData({})
+        setEditPointData({});
         setEditPointDataValidation({
             isSubmitting: false,
-            newPoint: false
-        })
-    }
-
+            newPoint: false,
+        });
+    };
 
     const handleChange = (e) => {
         setEditPointData({
@@ -196,7 +259,7 @@ const SalesRiskAnalysisTable = ({
     // modal Close Handler
     const handleCloseEditPointModal = () => {
         setEditPointModalOpen(false);
-        resetFormSate()
+        resetFormSate();
     };
 
     const handleCloseRuleActionModal = () => {
@@ -216,7 +279,6 @@ const SalesRiskAnalysisTable = ({
             });
         }
     }, [editPointData?.newPoint]);
-
 
     return (
         <React.Fragment>

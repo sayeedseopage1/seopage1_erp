@@ -1,3 +1,4 @@
+import { FormatJsonCountry } from "../../helper/countriesFormat";
 import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
 import Switch from "../Switch";
 import EditIcon from "../ui/EditIcon";
@@ -65,19 +66,9 @@ export const SalesRiskAnalysisTableColumns = [
                 (item) => item?.type === "list"
             );
             let countriesList = [];
-
             if (countries?.value) {
-                const parsedValue = JSON.parse(countries.value);
-         
-                parsedValue.forEach((obj) => {
-                    const iso = Object.keys(obj)[0]; // Extracting the ISO code
-                    const name = obj[iso]; // Extracting the country name
-                    countriesList.push({
-                        name: name.toUpperCase(),
-                        niceName: name,
-                        iso: iso,
-                    });
-                });
+                // FormatJsonCountry is a function that formats the countries data
+                countriesList = FormatJsonCountry(countries?.value);
             }
 
             const validPolicyTypes = [
@@ -303,7 +294,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                         onClick={() => {
                                                             action.handleRuleActions(
                                                                 rule,
-                                                                data,
+                                                                data
                                                             );
                                                         }}
                                                     >

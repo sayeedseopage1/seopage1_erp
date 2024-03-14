@@ -44,7 +44,7 @@ export const PolicyTypeItemValuesType = {
     regularTypes: {
       label: 'Policy Rules Type',
       emptyOptionsLabel: 'Select Policy Rules Type',
-      id: 'rulesType',
+      id: 'valueType',
       data: [
         {
           id: 1,
@@ -71,7 +71,7 @@ export const PolicyTypeItemValuesType = {
     yesNoTypes: {
       label: 'Policy Rules Type',
       emptyOptionsLabel: 'Select Policy Rules Type',
-      id: 'rulesType',
+      id: 'valueType',
       data: [
         {
           id: 1,
@@ -88,7 +88,7 @@ export const PolicyTypeItemValuesType = {
     listTypes: {
       label: 'Policy Rules Type',
       emptyOptionsLabel: 'Select Policy Rules Type',
-      id: 'rulesType',
+      id: 'valueType',
       data: [
         {
           id: 1,
