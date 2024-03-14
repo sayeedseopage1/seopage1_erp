@@ -1,0 +1,28 @@
+/* styles.css */
+.tableContainer {
+  width: 100%;
+  
+}
+
+.table {
+  width: 100%;
+}
+
+.table th, .table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table tr:hover {
+  background-color: #ddd;
+}

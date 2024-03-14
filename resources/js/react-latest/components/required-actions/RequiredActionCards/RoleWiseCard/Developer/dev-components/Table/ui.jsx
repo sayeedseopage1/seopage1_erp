@@ -1,7 +1,30 @@
 import styled from "styled-components";
 
+export const EvalTableTitle = styled.div`
+    padding: 20px;
+    width: 100%;
+    height: 70px;
+    padding-bottom: 10px;
+    box-shadow: 0px 0px 16.5px -15px rgba(0, 0, 0, 0.035),
+        0px 0px 80px -15px rgba(0, 0, 0, 0.07);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    font-size: 24px;
+    padding-bottom: 10px;
+    background-color: #1d82f5;
+    color: #ffffff;
+`;
+export const FooterButtons = styled.div`
+    display: flex;
+    justify-content: right;
+    margin-top: 20px;
+    margin-right: 50px;
+    gap: 20px;
+    align-items: center;
+`;
 export const ColumnContent = styled.div`
-    text-align: center;
     position: relative;
     padding: 10px;
     min-width: 200px;
@@ -13,6 +36,10 @@ export const TableContainer = styled.div`
     width: 100%;
     overflow: auto;
     max-height: calc(100vh - 300px);
+
+    padding-bottom: 10px;
+    box-shadow: 0px 0px 16.5px -15px rgba(0, 0, 0, 0.035),
+        0px 0px 80px -15px rgba(0, 0, 0, 0.07);
 `;
 
 export const Table = styled.table`
