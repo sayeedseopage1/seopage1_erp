@@ -241,14 +241,14 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     count++;
                 }
 
-                if (!pageURL) {
-                    error.pageUrl = "You have to provide page URL";
-                    count++;
-                } else if (!checkIsURL(pageURL)) {
-                    error.pageUrl = "You have to provide a valid page URL";
-                    toast.warn("You have to provide a valid page URL");
-                    count++;
-                }
+                // if (!pageURL) {
+                //     error.pageUrl = "You have to provide page URL";
+                //     count++;
+                // } else if (!checkIsURL(pageURL)) {
+                //     error.pageUrl = "You have to provide a valid page URL";
+                //     toast.warn("You have to provide a valid page URL");
+                //     count++;
+                // }
             }
 
             if (_.toLower(pageType) === _.toLower("Others")) {
@@ -1311,7 +1311,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 </label>
                                 <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                     <span className="singleline-ellipsis pr-3">
-                                        {pageType ?? "--"}
+                                        {pageType || "Select task type"}
                                     </span>
 
                                     <div className="__icon">
@@ -1369,7 +1369,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 </label>
                                 <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                     <span className="singleline-ellipsis pr-3">
-                                        {pageType ?? "--"}
+                                        {pageType || "Select task type"}
                                     </span>
 
                                     <div className="__icon">
@@ -1431,7 +1431,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 </label>
                                 <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                     <span className="singleline-ellipsis pr-3">
-                                        {pageTypePriority ?? "--"}
+                                        {pageTypePriority || "Select page type"}
                                     </span>
 
                                     <div className="__icon">
@@ -1558,7 +1558,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             </label>
                                             <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
                                                 <span className="singleline-ellipsis pr-3">
-                                                    {pageTypeName ?? "--"}
+                                                    {pageTypeName || "Select page type name"}
                                                 </span>
 
                                                 <div className="__icon">
@@ -1626,24 +1626,28 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     />
                                 </div>
 
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="page_url"
-                                        label="Page URL"
-                                        type="text"
-                                        placeholder="Enter page url"
-                                        name="page url"
-                                        required={true}
-                                        value={pageURL}
-                                        error={
-                                            err?.pageUrl ||
-                                            required_error?.page_url?.[0]
-                                        }
-                                        onChange={(e) =>
-                                            handleChange(e, setPageURL)
-                                        }
-                                    />
-                                </div>
+                                {
+                                    task?.category?.name !== "UI/UIX Design" && <div className="col-12 col-md-6">
+                                        <Input
+                                            id="page_url"
+                                            label="Page URL"
+                                            type="text"
+                                            placeholder="Enter page url"
+                                            name="page url"
+                                            required={true}
+                                            value={pageURL}
+                                            error={
+                                                err?.pageUrl ||
+                                                required_error?.page_url?.[0]
+                                            }
+                                            onChange={(e) =>
+                                                handleChange(e, setPageURL)
+                                            }
+                                        />
+                                    </div>
+                                }
+
+
                             </>
                         )}
 

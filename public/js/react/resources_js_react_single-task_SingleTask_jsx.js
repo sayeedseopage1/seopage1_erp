@@ -11210,7 +11210,7 @@ var fileInputStyle = {
   zIndex: '0'
 };
 var SubTaskForm = function SubTaskForm(_ref) {
-  var _window, _task$category4, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category5, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _required_error$pageT3, _required_error$pageT4, _ref10, _ref13, _ref16, _required_error$page_, _required_error$page_2, _required_error$descr, _required_error$descr2;
+  var _window, _task$category4, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category5, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _required_error$pageT3, _required_error$pageT4, _ref10, _ref13, _ref16, _required_error$page_, _task$category6, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
@@ -11530,15 +11530,17 @@ var SubTaskForm = function SubTaskForm(_ref) {
           error.pageName = "You have to Select page name";
           count++;
         }
-        if (!pageURL) {
-          error.pageUrl = "You have to provide page URL";
-          count++;
-        } else if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_14__.checkIsURL)(pageURL)) {
-          error.pageUrl = "You have to provide a valid page URL";
-          react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You have to provide a valid page URL");
-          count++;
-        }
+
+        // if (!pageURL) {
+        //     error.pageUrl = "You have to provide page URL";
+        //     count++;
+        // } else if (!checkIsURL(pageURL)) {
+        //     error.pageUrl = "You have to provide a valid page URL";
+        //     toast.warn("You have to provide a valid page URL");
+        //     count++;
+        // }
       }
+
       if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Others")) {
         if (!pageTypeOthers) {
           error.pageTypeOthers = "You have to select an option";
@@ -12469,7 +12471,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
-                children: pageType !== null && pageType !== void 0 ? pageType : "--"
+                children: pageType || "Select task type"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
                 className: "__icon",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("i", {
@@ -12526,7 +12528,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
-                children: pageType !== null && pageType !== void 0 ? pageType : "--"
+                children: pageType || "Select task type"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
                 className: "__icon",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("i", {
@@ -12581,7 +12583,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
-                children: pageTypePriority !== null && pageTypePriority !== void 0 ? pageTypePriority : "--"
+                children: pageTypePriority || "Select page type"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
                 className: "__icon",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("i", {
@@ -12683,7 +12685,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
                     className: "singleline-ellipsis pr-3",
-                    children: pageTypeName !== null && pageTypeName !== void 0 ? pageTypeName : "--"
+                    children: pageTypeName || "Select page type name"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
                     className: "__icon",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("i", {
@@ -12729,7 +12731,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return handleChange(e, setPageName);
               }
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
+          }), (task === null || task === void 0 || (_task$category6 = task.category) === null || _task$category6 === void 0 ? void 0 : _task$category6.name) !== "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "page_url",
