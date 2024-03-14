@@ -431,13 +431,15 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
+
             if ($status) {
-                $policy->status = 1;
+                $policy->status = "1";
             } else if ($status == 0) {
-                $policy->status = 0;
+                $policy->status = "0";
             } else {
                 return response()->json(['status' => 'error', 'message' => 'Policy status not changed.']);
             }
+
             $policy->save();
             return response()->json(['status' => 'success', 'message' => 'Policy status changed.']);
         } catch (\Throwable $th) {
