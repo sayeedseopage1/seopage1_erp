@@ -62,21 +62,20 @@ const SalesRiskAnalysisTable = ({
     const [editRuleData, setEditRuleData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
     const [statusActionData, setStatusActionData] = React.useState({});
-    const [editRuleDataValidation, setEditRuleDataValidation] =
-        React.useState({
-            isSubmitting: false,
-            policyName: false,
-            department: false,
-            policyType: false,
-            valueType: false,
-            value: false,
-            from: false,
-            to: false,
-            yes: false,
-            no: false,
-            countries: false,
-            points: false,
-        });
+    const [editRuleDataValidation, setEditRuleDataValidation] = React.useState({
+        isSubmitting: false,
+        policyName: false,
+        department: false,
+        policyType: false,
+        valueType: false,
+        value: false,
+        from: false,
+        to: false,
+        yes: false,
+        no: false,
+        countries: false,
+        points: false,
+    });
 
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
@@ -173,15 +172,15 @@ const SalesRiskAnalysisTable = ({
                             : "",
                     to:
                         selectedRule?.type === "range"
-                            ? selectedRule?.value?.split(",")[1]
+                            ? selectedRule?.value?.split(", ")[1]?.trim()
                             : "",
                     yes:
                         selectedRule?.type === "yesNo"
-                            ? selectedRule?.value?.split(",")[0]?.trim()
+                            ? selectedRule?.value?.split(",")[0]
                             : "",
                     no:
                         selectedRule?.type === "yesNo"
-                            ? selectedRule?.value?.split(", ")[1]
+                            ? selectedRule?.value?.split(", ")[1]?.trim()
                             : "",
                     value: !_.includes(
                         ["range", "yesNo", "list"],
@@ -195,7 +194,7 @@ const SalesRiskAnalysisTable = ({
                             : "",
                     points: selectedRule?.point,
                 };
-                console.log("payload", payload, selectedRule);
+                
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -220,30 +219,48 @@ const SalesRiskAnalysisTable = ({
         },
     });
 
-    const handleUpdateRules = async (data) => {
+    const handleUpdateRules = async () => {
         const validation = addNewRulesValidation(
             editRuleData,
             editRuleDataValidation
         );
+        
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
             )
         ) {
+            
             setEditRuleDataValidation({
                 ...validation,
                 isSubmitting: true,
             });
             return;
         }
+        
+
+        const payload = {
+            title: editRuleData?.title,
+            policyType: editRuleData?.policyType?.name,
+        };
+        if (editRuleData?.value) payload.value = editRuleData?.value;
+        if (!_.isEmpty(editRuleData.valueType))
+        payload.valueType = editRuleData.valueType?.name;
+        if (editRuleData?.from) payload.from = editRuleData?.from;
+        if (editRuleData?.to) payload.to = editRuleData?.to;
+        if (editRuleData?.points) payload.points = editRuleData?.points;
+        if (editRuleData?.yes) payload.yes = editRuleData?.yes;
+        if (editRuleData?.no) payload.no = editRuleData?.no;
+        if (editRuleData?.countries?.length > 0) {
+            payload.countries = editRuleData?.countries.map((country) => ({
+                [country.iso]: country.niceName,
+            }));
+        }
+
+        console.log("payload", payload);
 
         try {
-            const payload = {
-                id: editRuleData?.selectedRule?.id,
-                newRule: editRuleData?.newRule,
-                ruleType: editRuleData?.ruleType,
-            };
-            const res = await submitData(payload);
+            // const res = await submitData(editRuleData);
             if (res.data) {
                 toast.success("Rules updated successfully");
                 handleCloseEditRuleModal();
@@ -267,7 +284,6 @@ const SalesRiskAnalysisTable = ({
                 handleCloseStatusActionModal();
             }
         } catch (error) {
-            console.log("error", error);
             toast.error("Something went wrong");
         }
     };

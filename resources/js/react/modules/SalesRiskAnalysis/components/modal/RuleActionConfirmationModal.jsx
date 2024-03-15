@@ -10,7 +10,6 @@ const RuleActionConfirmationModal = ({
     handleStatusUpdate,
     isLoading,
 }) => {
-    console.log("statusActionData", statusActionData);
     return (
         <CustomModal
             open={open}

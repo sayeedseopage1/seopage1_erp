@@ -109,9 +109,19 @@ export const SalesRiskAnalysisTableColumns = [
                                             fontSize: "14px",
                                             fontFamily: "Poppins",
                                         }}
-                                        className="py-3"
+                                        className="py-3 d-flex align-items-center"
                                     >
                                         {rule.title}
+                                        {data?.comment ? (
+                                            <>
+                                                <Tooltip text={data?.comment}>
+                                                    {" "}
+                                                    <i class="fa-solid fa-circle-info ml-2"></i>
+                                                </Tooltip>
+                                            </>
+                                        ) : (
+                                            ""
+                                        )}
                                     </p>
                                     <ul
                                         style={{
@@ -146,9 +156,21 @@ export const SalesRiskAnalysisTableColumns = [
                                                 fontSize: "14px",
                                                 fontFamily: "Poppins",
                                             }}
-                                            className="py-3 mr-2"
+                                            className="py-3 mr-2 d-flex align-items-center"
                                         >
                                             {rule.title}
+                                            {data?.comment ? (
+                                                <>
+                                                    <Tooltip
+                                                        text={data?.comment}
+                                                    >
+                                                        {" "}
+                                                        <i class="fa-solid fa-circle-info ml-2"></i>
+                                                    </Tooltip>
+                                                </>
+                                            ) : (
+                                                ""
+                                            )}
                                         </p>
                                         <MultiSelectShowDropDown
                                             data={countriesList}
@@ -168,9 +190,19 @@ export const SalesRiskAnalysisTableColumns = [
                                             fontSize: "14px",
                                             fontFamily: "Poppins",
                                         }}
-                                        className="py-3"
+                                        className="py-3 d-flex align-items-center"
                                     >
                                         {rule.title}
+                                        {data?.comment ? (
+                                            <>
+                                                <Tooltip text={data?.comment}>
+                                                    {" "}
+                                                    <i class="fa-solid fa-circle-info ml-2"></i>
+                                                </Tooltip>
+                                            </>
+                                        ) : (
+                                            ""
+                                        )}
                                     </p>
                                 </Switch.Case>
                             </Switch>
@@ -192,23 +224,6 @@ export const SalesRiskAnalysisTableColumns = [
                                 }}
                             ></i>{" "}
                             Edit Policy
-                        </button>
-                        <button
-                            style={{
-                                fontSize: "12px",
-                                padding: "3px 12px",
-                                marginLeft: "10px",
-                            }}
-                            className="btn btn-success ml-2"
-                        >
-                            <i
-                                className="fa fa-plus mr-2"
-                                aria-hidden="true"
-                                style={{
-                                    fontSize: "12px",
-                                }}
-                            ></i>{" "}
-                            Add New Rule
                         </button>
                     </div>
                 </div>
@@ -283,7 +298,7 @@ export const SalesRiskAnalysisTableColumns = [
                                     <div className="d-flex py-3">
                                         <div
                                             onClick={() => {
-                                                action.handleEditApplicablePoint(
+                                                action.handleEditApplicableRule(
                                                     data,
                                                     rule,
                                                     "no"

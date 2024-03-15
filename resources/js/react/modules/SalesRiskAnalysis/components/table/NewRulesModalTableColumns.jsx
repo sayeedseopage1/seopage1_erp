@@ -3,6 +3,7 @@ import Switch from "../Switch";
 import EditIcon from "../ui/EditIcon";
 import { SalesPointsContainer } from "../ui/Styles/ui";
 import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
+import Tooltip from "../Tooltip";
 
 const validPolicyTypes = ["lessThan", "greaterThan", "fixed", "range"];
 
@@ -14,7 +15,6 @@ export const NewRulesModalTableColumnsData = [
 
         cell: ({ row }) => {
             const data = row?.original;
-
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
                     <Switch>
@@ -30,9 +30,20 @@ export const NewRulesModalTableColumnsData = [
                                     fontSize: "14px",
                                     fontFamily: "Poppins",
                                 }}
-                                className="py-3"
+                                className="py-3 d-flex"
                             >
                                 {data.title}
+
+                                {data?.comment ? (
+                                    <>
+                                        <Tooltip text={data?.comment}>
+                                            {" "}
+                                            <i class="fa-solid fa-circle-info ml-2"></i>
+                                        </Tooltip>
+                                    </>
+                                ) : (
+                                    ""
+                                )}
                             </p>
                         </Switch.Case>
                         <Switch.Case
@@ -44,9 +55,19 @@ export const NewRulesModalTableColumnsData = [
                                     fontSize: "14px",
                                     fontFamily: "Poppins",
                                 }}
-                                className="py-3"
+                                className="py-3 d-flex"
                             >
                                 {data.title}
+                                {data?.comment ? (
+                                    <>
+                                        <Tooltip text={data?.comment}>
+                                            {" "}
+                                            <i class="fa-solid fa-circle-info ml-2"></i>
+                                        </Tooltip>
+                                    </>
+                                ) : (
+                                    ""
+                                )}
                             </p>
                             <ul
                                 style={{
@@ -59,16 +80,38 @@ export const NewRulesModalTableColumnsData = [
                                         listStyle: "disc",
                                         padding: "4px 0",
                                     }}
+                                    className="d-flex"
                                 >
-                                    Yes
+                                    Yes{" "}
+                                    {data?.yesComment ? (
+                                        <>
+                                            <Tooltip text={data?.yesComment}>
+                                                {" "}
+                                                <i class="fa-solid fa-circle-info ml-2"></i>
+                                            </Tooltip>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
                                 </li>
                                 <li
                                     style={{
                                         listStyle: "disc",
                                         padding: "4px 0",
                                     }}
+                                    className="d-flex"
                                 >
                                     No
+                                    {data?.noComment ? (
+                                        <>
+                                            <Tooltip text={data?.noComment}>
+                                                {" "}
+                                                <i class="fa-solid fa-circle-info ml-2"></i>
+                                            </Tooltip>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
                                 </li>
                             </ul>
                         </Switch.Case>
@@ -82,9 +125,19 @@ export const NewRulesModalTableColumnsData = [
                                         fontSize: "14px",
                                         fontFamily: "Poppins",
                                     }}
-                                    className="py-3 pr-2"
+                                    className="py-3 pr-2 d-flex"
                                 >
                                     {data.title}
+                                    {data?.comment ? (
+                                        <>
+                                            <Tooltip text={data?.comment}>
+                                                {" "}
+                                                <i class="fa-solid fa-circle-info ml-2"></i>
+                                            </Tooltip>
+                                        </>
+                                    ) : (
+                                        ""
+                                    )}
                                 </p>
                                 <MultiSelectShowDropDown
                                     data={data?.countries}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 // ui components
@@ -13,14 +13,17 @@ import Switch from "./Switch";
 // Constants
 import { PolicyTypeItemValuesType } from "../constant";
 import MultiSelect from "./MultiSelect";
+import { useSelector } from "react-redux";
 
 const NewPolicyModalInputsContainer = ({
     newPolicyData,
     handleChange,
-    countries,
+    selectedCountries,
     handleMultiSelectChange,
     newPolicyDataValidation,
 }) => {
+    const { countries } = useSelector((state) => state?.filterOptions);
+
     // Constants
     const validPolicyTypes = [
         "lessThan",
@@ -38,8 +41,6 @@ const NewPolicyModalInputsContainer = ({
             ? PolicyTypeItemValuesType?.data?.listTypes
             : PolicyTypeItemValuesType?.data?.regularTypes;
 
-       
-    console.log("newPolicyData", newPolicyData);
     return (
         <React.Fragment>
             <Switch>
@@ -215,50 +216,98 @@ const NewPolicyModalInputsContainer = ({
                             <ModalInputLabel className="col-4">
                                 Point<sup>*</sup>{" "}
                             </ModalInputLabel>
-                            <div className="d-flex col-8 px-0">
-                                <div className="col-6 flex-column px-0">
-                                    <ModalInputLabel
-                                        fontSize="16px"
-                                        className="mb-2"
-                                        color="#8F8F8F"
-                                    >
-                                        Yes <sup>*</sup>{" "}
-                                    </ModalInputLabel>
-                                    <ModalInput
-                                        type="number"
-                                        name="yes"
-                                        value={newPolicyData?.yes}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                        className="w-100"
-                                    />
-                                    {newPolicyDataValidation?.yes && (
-                                        <p className="text-danger py-1">
-                                            Yes is required
-                                        </p>
-                                    )}
+                            <div className="d-flex col-8 flex-column px-0">
+                                <div className="col-12 d-flex px-0 mb-4">
+                                    <div className="col-6 flex-column px-0">
+                                        <ModalInputLabel
+                                            fontSize="16px"
+                                            className="mb-2"
+                                            color="#8F8F8F"
+                                        >
+                                            Yes <sup>*</sup>{" "}
+                                        </ModalInputLabel>
+                                        <ModalInput
+                                            type="number"
+                                            name="yes"
+                                            value={newPolicyData?.yes}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                            className="w-100"
+                                        />
+                                        {newPolicyDataValidation?.yes && (
+                                            <p className="text-danger py-1">
+                                                Yes is required
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="col-6 flex-column pr-0">
+                                        <ModalInputLabel
+                                            fontSize="16px"
+                                            className="mb-2"
+                                            color="#8F8F8F"
+                                        >
+                                            Note
+                                        </ModalInputLabel>
+                                        <ModalInput
+                                            type="text"
+                                            name="yesComment"
+                                            value={newPolicyData?.yesComment}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                            className="w-100"
+                                        />
+                                        {newPolicyDataValidation?.no && (
+                                            <p className="text-danger py-1">
+                                                No is required
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="col-6 flex-column pr-0">
-                                    <ModalInputLabel
-                                        fontSize="16px"
-                                        className="mb-2"
-                                        color="#8F8F8F"
-                                    >
-                                        No <sup>*</sup>{" "}
-                                    </ModalInputLabel>
-                                    <ModalInput
-                                        type="number"
-                                        name="no"
-                                        value={newPolicyData?.no}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                        className="w-100"
-                                    />
-                                    {newPolicyDataValidation?.no && (
-                                        <p className="text-danger py-1">
-                                            No is required
-                                        </p>
-                                    )}
+                                <div className="col-12 d-flex px-0">
+                                    <div className="col-6 flex-column px-0">
+                                        <ModalInputLabel
+                                            fontSize="16px"
+                                            className="mb-2"
+                                            color="#8F8F8F"
+                                        >
+                                            No <sup>*</sup>{" "}
+                                        </ModalInputLabel>
+                                        <ModalInput
+                                            type="number"
+                                            name="no"
+                                            value={newPolicyData?.no}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                            className="w-100"
+                                        />
+                                        {newPolicyDataValidation?.no && (
+                                            <p className="text-danger py-1">
+                                                Yes is required
+                                            </p>
+                                        )}
+                                    </div>
+                                    <div className="col-6 flex-column pr-0">
+                                        <ModalInputLabel
+                                            fontSize="16px"
+                                            className="mb-2"
+                                            color="#8F8F8F"
+                                        >
+                                            Note
+                                        </ModalInputLabel>
+                                        <ModalInput
+                                            type="text"
+                                            name="noComment"
+                                            value={newPolicyData?.noComment}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                            className="w-100"
+                                        />
+                                        {newPolicyDataValidation?.no && (
+                                            <p className="text-danger py-1">
+                                                No is required
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -308,6 +357,9 @@ const NewPolicyModalInputsContainer = ({
                                             data={countries}
                                             multiple
                                             filedName="countries"
+                                            selectedCountries={
+                                                selectedCountries
+                                            }
                                             newPolicyData={newPolicyData}
                                             selected={newPolicyData?.countries}
                                             setSelected={
@@ -350,6 +402,23 @@ const NewPolicyModalInputsContainer = ({
                                     Points is required
                                 </p>
                             )}
+                        </div>
+                    </div>
+                </Switch.Case>
+                <Switch.Case condition={!_.isEmpty(newPolicyData?.policyType)}>
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Single Policy Comment
+                        </ModalInputLabel>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalInput
+                                type="text"
+                                name="ruleComment"
+                                className="w-100"
+                                value={newPolicyData?.comment}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
                         </div>
                     </div>
                 </Switch.Case>

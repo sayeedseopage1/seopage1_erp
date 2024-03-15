@@ -33,10 +33,7 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             query: (body) => ({
                 url: `account/sales-risk-policies/edit/${body.id}`,
                 method: "POST",
-                body: {
-                    newPoint: body?.newPoint,
-                    ruleType: body?.ruleType
-                },
+                body,
                 headers: {
                     "X-CSRF-TOKEN": _token,
                 },

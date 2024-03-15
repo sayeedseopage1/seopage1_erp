@@ -51,6 +51,9 @@ const SalesRiskAnalysis = () => {
         to: "",
         yes: "",
         no: "",
+        comments: "",
+        yesComment: "",
+        noComment: "",
         countries: [],
         points: "",
     });
@@ -112,6 +115,9 @@ const SalesRiskAnalysis = () => {
                 value: "",
                 from: "",
                 to: "",
+                comment: "",
+                yesComment: "",
+                noComment: "",
                 yes: "",
                 no: "",
                 countries: [],
@@ -129,6 +135,9 @@ const SalesRiskAnalysis = () => {
                 to: "",
                 yes: "",
                 no: "",
+                comment: "",
+                yesComment: "",
+                noComment: "",
                 countries: [],
                 points: "",
                 id: "",
@@ -166,6 +175,9 @@ const SalesRiskAnalysis = () => {
                 to: "",
                 yes: "",
                 no: "",
+                comment: "",
+                yesComment: "",
+                noComment: "",
                 countries: [],
                 points: "",
                 [name]: value,
@@ -244,13 +256,24 @@ const SalesRiskAnalysis = () => {
                     if (item.from) rule.from = item.from;
                     if (item.to) rule.to = item.to;
                     if (item.points) rule.points = item.points;
-                    if (item.yes) rule.yes = item.yes;
-                    if (item.no) rule.no = item.no;
+                    if (item.yes)
+                        rule.yes = {
+                            name: "Yes",
+                            point: item.yes,
+                            comment: item.yesComment,
+                        };
+                    if (item.no)
+                        rule.no = {
+                            name: "No",
+                            point: item.no,
+                            comment: item.noComment,
+                        };
                     if (item.countries?.length > 0) {
                         rule.countries = item.countries.map((country) => ({
                             [country.iso]: country.niceName,
                         }));
                     }
+                    if (item.comment) rule.comment = item.comment;
                     return rule;
                 }),
             };
@@ -305,6 +328,9 @@ const SalesRiskAnalysis = () => {
             to: "",
             yes: "",
             no: "",
+            comment: "",
+            yesComment: "",
+            noComment: "",
             countries: [],
             points: "",
         });

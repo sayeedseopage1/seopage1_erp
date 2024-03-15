@@ -28,7 +28,6 @@ const EditApplicableRulesModal = ({
     editRuleDataValidation,
     ...props
 }) => {
-    const { countries } = useSelector((state) => state?.filterOptions);
 
     return (
         <CustomModal
@@ -127,7 +126,6 @@ const EditApplicableRulesModal = ({
                     <NewPolicyModalInputsContainer
                         newPolicyData={editRuleData}
                         handleChange={handleChange}
-                        countries={countries}
                         handleMultiSelectChange={handleMultiSelectChange}
                         newPolicyDataValidation={editRuleDataValidation}
                     />

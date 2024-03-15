@@ -36,16 +36,24 @@ const AddNewPolicyModal = ({
     handlePolicyAdded,
     isLoadingAddSalesRiskAnalysisRule,
     setNewPolicyInputData,
-    handleCancelRuleOnPolicy
+    handleCancelRuleOnPolicy,
 }) => {
+    let allSelectedCountries = [];
+
+    newPolicyInputData.forEach((item) => {
+        if (item?.policyType?.name === "list") {
+            allSelectedCountries.push(item?.countries);
+        }
+    });
+
     return (
         <CustomModal
             open={open}
             closeModal={closeModal}
             contentLabel="Add New Policy"
             width="700px"
-            height={newPolicyInputData?.length > 0 ? "700px" : "fit-content"}
-            maxHeight={newPolicyInputData?.length > 0 ? "700px" : "fit-content"}
+            height="550px"
+            maxHeight="550px"
             isCloseButtonShow={true}
         >
             {/* Modal Content */}
@@ -137,10 +145,30 @@ const AddNewPolicyModal = ({
                     <NewPolicyModalInputsContainer
                         newPolicyData={newPolicyData}
                         handleChange={handleChange}
-                        countries={countries}
+                        selectedCountries={allSelectedCountries.flat()}
                         handleMultiSelectChange={handleMultiSelectChange}
                         newPolicyDataValidation={newPolicyDataValidation}
                     />
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Policy Comment
+                        </ModalInputLabel>
+                        <div className="col-8 flex-column px-0">
+                            <ModalInput
+                                type="text"
+                                className="w-100"
+                                name="policyComment"
+                                value={newPolicyData?.policyName}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
+                            {newPolicyDataValidation?.policyName && (
+                                <p className="text-danger">
+                                    Policy name is required
+                                </p>
+                            )}
+                        </div>
+                    </div>
                     <div className="d-flex justify-content-end">
                         <button
                             className="d-flex btn btn-success align-items-center"
@@ -156,7 +184,7 @@ const AddNewPolicyModal = ({
                             className="d-flex btn btn-warning align-items-center text-white"
                             style={{
                                 fontSize: "13px",
-                                marginLeft: "10px"
+                                marginLeft: "10px",
                             }}
                             disabled={_.isEmpty(newPolicyData?.policyType)}
                             onClick={handleCancelRuleOnPolicy}
