@@ -3837,12 +3837,12 @@ class ProjectController extends AccountBaseController
         // $website_themes->theme_url = $request->theme_url;
         // $website_themes->save();
 
-        foreach($request->plugin_name as $key => $plugin_name) {
-            $website_plugins = new ProjectWebsitePlugin();
-            $website_plugins->plugin_name = $plugin_name;
-            $website_plugins->plugin_url = $request->plugin_url[$key] ;
-            $website_plugins->save();
-        }
+        // foreach($request->plugin_name as $key => $plugin_name) {
+        //     $website_plugins = new ProjectWebsitePlugin();
+        //     $website_plugins->plugin_name = $plugin_name;
+        //     $website_plugins->plugin_url = $request->plugin_url[$key] ;
+        //     $website_plugins->save();
+        // }
 
         $data = $request->all();
 
@@ -3871,8 +3871,9 @@ class ProjectController extends AccountBaseController
         $project_portfolio->description = $data['description'];
         $project_portfolio->portfolio_link = $data['actual_link'];
         $project_portfolio->added_by = $data['added_by'];
-        $project_portfolio->plugin_name = $website_plugins->id;
-        $project_portfolio->plugin_url = $website_plugins->id;
+        // $project_portfolio->plugin_name = $website_plugins->id;
+        // $project_portfolio->plugin_url = $website_plugins->id;
+        $project_portfolio->plugin_list = json_encode($request->plugin_list);
         $project_portfolio->save();
         $milestone_update = ProjectMilestone::where('id', $milestone->milestone_id)->first();
         $milestone_update->project_completion_status = 2;

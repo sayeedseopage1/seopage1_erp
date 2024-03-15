@@ -21,15 +21,15 @@ return new class extends Migration
                 }
             }
 
-            foreach (['theme_id', 'plugin_id'] as $item) {
+            foreach (['theme_id', 'plugin_list'] as $item) {
                 if (!Schema::hasColumn('project_portfolios', $item)) {
 
                     switch ($item) {
                         case 'theme_id':
                             $table->bigInteger('theme_id')->unsigned()->after('sub_niche');
                             break;
-                        case 'plugin_id':
-                            $table->bigInteger('plugin_id')->unsigned()->after('plugin_information');
+                        case 'plugin_list':
+                            $table->json('plugin_list')->after('plugin_information');
                             break;
                     }
                 }

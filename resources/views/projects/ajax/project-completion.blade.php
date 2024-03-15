@@ -495,10 +495,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="theme_name">Theme Name<sup class="f-14 mr-1">*</sup></label>
-                                    <select class="form-control height-35 f-14" name="theme_id" id="theme_id" data-live-search="true" data-size="8">
+                                    <select class="form-control height-35 f-14" name="theme_id" id="theme_id" data-live-search="true" data-size="8" onchange="$('#theme_url').val($(this).find(':selected').data('url'))">
                                         <option value="">--</option>
                                         @foreach ($themeList as $item)
-                                            <option value="{{ $item->id }}" data-url="{{ $item->theme_url }}" onclick="$('#theme_url').val($(this).data('url'))">{{$item->theme_name}}</option>
+                                            <option value="{{ $item->id }}" data-url="{{ $item->theme_url }}">{{$item->theme_name}}</option>
                                         @endforeach
                                     </select>
                                     <span id="theme_nameError" class="text-danger"></span>
@@ -547,7 +547,7 @@
                                         <div class="col-md-10">
                                             <div class="form-group">
                                                 <label for="plugin_name">Plugin Names</label>
-                                                <select class="form-control height-35 f-14" name="plugin_id" id="plugin_id" data-live-search="true" multiple >
+                                                <select class="form-control height-35 f-14" name="plugin_list" id="plugin_list" data-live-search="true" multiple >
                                                     <option value="">--</option>
                                                     @foreach ($pluginList as $item)
                                                         @php
@@ -774,7 +774,7 @@
                 'website_plugin_box_information': website_plugin_box_information,
                 // 'plugin_name': plugin_name_values,
                 // 'plugin_url': plugin_url_values,
-                'plugin_id': $('#plugin_id').val(),
+                'plugin_list': $('#plugin_list').val(),
                 // 'theme_name': document.getElementById("theme_name").value,
                 // 'theme_url': document.getElementById("theme_url").value,
                 'theme_id': document.getElementById("theme_id").value,
@@ -1289,7 +1289,11 @@
         });
 
 
-        $('#plugin_id').selectpicker();
+        $('#plugin_list').selectpicker();
+
+        function changeUrl() {
+            alert('sadf');
+        }
     </script>
 
 
