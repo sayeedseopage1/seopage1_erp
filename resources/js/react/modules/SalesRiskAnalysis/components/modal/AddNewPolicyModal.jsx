@@ -101,6 +101,26 @@ const AddNewPolicyModal = ({
                             )}
                         </div>
                     </div>
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Policy Comment
+                        </ModalInputLabel>
+                        <div className="col-8 flex-column px-0">
+                            <ModalInput
+                                type="text"
+                                className="w-100"
+                                name="comment"
+                                value={newPolicyData?.comment}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
+                            {newPolicyDataValidation?.policyName && (
+                                <p className="text-danger">
+                                    Policy name is required
+                                </p>
+                            )}
+                        </div>
+                    </div>
                     {newPolicyInputData?.length > 0 ? (
                         <div
                             className="row px-0 py-4 px-2 mb-2"
@@ -149,26 +169,7 @@ const AddNewPolicyModal = ({
                         handleMultiSelectChange={handleMultiSelectChange}
                         newPolicyDataValidation={newPolicyDataValidation}
                     />
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Policy Comment
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="text"
-                                className="w-100"
-                                name="policyComment"
-                                value={newPolicyData?.policyName}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                            {newPolicyDataValidation?.policyName && (
-                                <p className="text-danger">
-                                    Policy name is required
-                                </p>
-                            )}
-                        </div>
-                    </div>
+
                     <div className="d-flex justify-content-end">
                         <button
                             className="d-flex btn btn-success align-items-center"

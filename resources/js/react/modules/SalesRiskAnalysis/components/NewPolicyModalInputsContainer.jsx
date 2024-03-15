@@ -408,14 +408,14 @@ const NewPolicyModalInputsContainer = ({
                 <Switch.Case condition={!_.isEmpty(newPolicyData?.policyType)}>
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
-                            Single Policy Comment
+                            Comment
                         </ModalInputLabel>
                         <div className="col-8 px-0 flex-column">
                             <ModalInput
                                 type="text"
                                 name="ruleComment"
                                 className="w-100"
-                                value={newPolicyData?.comment}
+                                value={newPolicyData?.ruleComment}
                                 onChange={handleChange}
                                 placeholder="Write Here"
                             />

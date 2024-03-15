@@ -72,7 +72,6 @@ const NewRulesModalTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             editSingleRules: (row) => {
-                console.log(row);
                 setNewPolicyData(row);
                 setIsRuleUpdating(true);
             },

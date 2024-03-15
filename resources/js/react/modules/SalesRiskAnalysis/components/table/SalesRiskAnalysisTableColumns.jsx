@@ -38,7 +38,18 @@ export const SalesRiskAnalysisTableColumns = [
                     >
                         {data?.title}
                     </span>
-
+                    <span className="ml-2">
+                        {data?.comment ? (
+                            <>
+                                <Tooltip text={data?.comment}>
+                                    {" "}
+                                    <i class="fa-solid fa-circle-info "></i>
+                                </Tooltip>
+                            </>
+                        ) : (
+                            ""
+                        )}
+                    </span>
                     <button
                         onClick={() => {
                             action.handleAddQuestions(data);
@@ -112,16 +123,20 @@ export const SalesRiskAnalysisTableColumns = [
                                         className="py-3 d-flex align-items-center"
                                     >
                                         {rule.title}
-                                        {data?.comment ? (
-                                            <>
-                                                <Tooltip text={data?.comment}>
-                                                    {" "}
-                                                    <i class="fa-solid fa-circle-info ml-2"></i>
-                                                </Tooltip>
-                                            </>
-                                        ) : (
-                                            ""
-                                        )}
+                                        <span className="ml-2">
+                                            {rule?.comment ? (
+                                                <>
+                                                    <Tooltip
+                                                        text={rule?.comment}
+                                                    >
+                                                        {" "}
+                                                        <i class="fa-solid fa-circle-info"></i>
+                                                    </Tooltip>
+                                                </>
+                                            ) : (
+                                                ""
+                                            )}
+                                        </span>
                                     </p>
                                     <ul
                                         style={{
@@ -135,16 +150,46 @@ export const SalesRiskAnalysisTableColumns = [
                                                 listStyle: "disc",
                                                 padding: "4px 0",
                                             }}
+                                            className="d-flex align-items-center"
                                         >
-                                            Yes
+                                            Yes{" "}
+                                            <span className="ml-2">
+                                                {rule?.comment ? (
+                                                    <>
+                                                        <Tooltip
+                                                            text={rule?.comment}
+                                                        >
+                                                            {" "}
+                                                            <i class="fa-solid fa-circle-info"></i>
+                                                        </Tooltip>
+                                                    </>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </span>
                                         </li>
                                         <li
                                             style={{
                                                 listStyle: "disc",
                                                 padding: "4px 0",
                                             }}
+                                            className="d-flex align-items-center"
                                         >
-                                            No
+                                            No{" "}
+                                            <span className="ml-2">
+                                                {rule?.comment ? (
+                                                    <>
+                                                        <Tooltip
+                                                            text={rule?.comment}
+                                                        >
+                                                            {" "}
+                                                            <i class="fa-solid fa-circle-info"></i>
+                                                        </Tooltip>
+                                                    </>
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </span>
                                         </li>
                                     </ul>
                                 </Switch.Case>
@@ -158,14 +203,17 @@ export const SalesRiskAnalysisTableColumns = [
                                             }}
                                             className="py-3 mr-2 d-flex align-items-center"
                                         >
-                                            {rule.title}
-                                            {data?.comment ? (
+                                            <span className="mr-2">
+                                                {" "}
+                                                {rule.title}
+                                            </span>
+                                            {rule?.comment ? (
                                                 <>
                                                     <Tooltip
-                                                        text={data?.comment}
+                                                        text={rule?.comment}
                                                     >
                                                         {" "}
-                                                        <i class="fa-solid fa-circle-info ml-2"></i>
+                                                        <i class="fa-solid fa-circle-info "></i>
                                                     </Tooltip>
                                                 </>
                                             ) : (
@@ -192,12 +240,13 @@ export const SalesRiskAnalysisTableColumns = [
                                         }}
                                         className="py-3 d-flex align-items-center"
                                     >
-                                        {rule.title}
-                                        {data?.comment ? (
+                                        <span className="mr-2">
+                                            {rule.title}
+                                        </span>
+                                        {rule?.comment ? (
                                             <>
-                                                <Tooltip text={data?.comment}>
-                                                    {" "}
-                                                    <i class="fa-solid fa-circle-info ml-2"></i>
+                                                <Tooltip text={rule?.comment}>
+                                                    <i class="fa-solid fa-circle-info"></i>
                                                 </Tooltip>
                                             </>
                                         ) : (
