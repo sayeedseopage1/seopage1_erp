@@ -94,8 +94,9 @@ export const SalesRiskAnalysisTableColumns = [
         id: "policy_rules",
         header: "Policy Rules",
         accessorKey: "policy_rules",
-        cell: ({ row }) => {
+        cell: ({ row , table}) => {
             const data = row?.original;
+            const action = table?.options?.meta;
             const countries = data?.ruleList?.find(
                 (item) => item?.type === "list"
             );
@@ -267,6 +268,9 @@ export const SalesRiskAnalysisTableColumns = [
                                 padding: "3px 12px",
                             }}
                             className="btn btn-info"
+                            onClick={() => {
+                                action.handleEditPolicy(data);
+                            }}
                         >
                             <i
                                 className="fa fa-edit mr-2"

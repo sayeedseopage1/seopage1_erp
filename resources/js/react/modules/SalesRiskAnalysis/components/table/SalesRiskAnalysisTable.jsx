@@ -31,8 +31,9 @@ import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
 import { FormatJsonCountry } from "../../helper/countriesFormat";
 import { addNewRulesValidation } from "../../helper/createFromValidation";
 import EditApplicableRulesModal from "../modal/EditApplicableRulesModal";
-import _ from "lodash";
+import _, { set } from "lodash";
 import EditPolicyModal from "../modal/EditPolicyModal";
+import { formatEditPolicyData } from "../../helper/formatEditPolicyData";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -61,10 +62,13 @@ const SalesRiskAnalysisTable = ({
     const [editPolicyModal, setEditPolicyModalOpen] = React.useState(false);
 
     // modal state data
+    const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
     const [editRuleData, setEditRuleData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
     const [statusActionData, setStatusActionData] = React.useState({});
     const [editPolicyData, setEditPolicyData] = React.useState([]);
+    const [editPolicyDefaultData, setEditPolicyDefaultData] = React.useState([]);
+    const [editPolicyInputData, setEditPolicyInputData] = React.useState([]);
     const [editRuleDataValidation, setEditRuleDataValidation] = React.useState({
         isSubmitting: false,
         policyName: false,
@@ -79,6 +83,8 @@ const SalesRiskAnalysisTable = ({
         countries: false,
         points: false,
     });
+    const [editPolicyDataValidation, setEditPolicyDataValidation] =
+        React.useState({});
 
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
@@ -220,13 +226,21 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleEditPolicy: (data) => {
-                console.log("data", data);
-                setEditPolicyData(data);
+                // function to format data
+                const updateData = formatEditPolicyData(data);
+                console.log("updateData", updateData);
+                setEditPolicyInputData(updateData);
+                setEditPolicyDefaultData({
+                    policyName: data.title,
+                    department: {id: data?.department?.id, team_name: data?.department?.name},
+                    comment: data.comment,
+                })
                 setEditPolicyModalOpen(true);
             },
         },
     });
 
+    // handle update rules
     const handleUpdateRules = async () => {
         const validation = addNewRulesValidation(
             editRuleData,
@@ -263,10 +277,10 @@ const SalesRiskAnalysisTable = ({
             }));
         }
 
-        console.log("payload", payload);
+        // console.log("payload", payload);
 
         try {
-            // const res = await submitData(editRuleData);
+            const res = await submitData(editRuleData);
             if (res.data) {
                 toast.success("Rules updated successfully");
                 handleCloseEditRuleModal();
@@ -276,6 +290,7 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
+    // handle status update on rule and policy action modal server call
     const handleStatusUpdate = async () => {
         try {
             const payload = {
@@ -294,7 +309,8 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
-    const resetFormSate = () => {
+    // reset form for rule on close
+    const resetFormForRule = () => {
         setEditRuleData({});
         setEditRuleDataValidation({
             isSubmitting: false,
@@ -302,6 +318,7 @@ const SalesRiskAnalysisTable = ({
         });
     };
 
+    // handle change on input
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "policyType") {
@@ -317,17 +334,96 @@ const SalesRiskAnalysisTable = ({
                 points: "",
                 [name]: value,
             });
+        } else if(name === "policyName" || name === "department"){
+            setEditPolicyDefaultData({
+                ...editPolicyDefaultData,
+                [name]: value,
+            });
         } else {
             setEditRuleData({ ...editRuleData, [name]: value });
+        }
+    };
+
+    // Edit Policy
+    // handle cancel rule on policy
+    const handleCancelRuleOnPolicy = () => {
+        setEditPolicyData({
+            ...editPolicyData,
+            valueType: {},
+            policyType: {},
+            value: "",
+            from: "",
+            to: "",
+            yes: "",
+            no: "",
+            comment: "",
+            yesComment: "",
+            noComment: "",
+            ruleComment: "",
+            countries: [],
+            points: "",
+        });
+        setIsRuleUpdating(false);
+    };
+
+    // reset form for policy on close
+    const resetFormForPolicy = () => {
+        setEditPolicyData([]);
+        setEditPolicyDefaultData([]);
+        setEditPolicyDataValidation({});
+    }
+
+    // handle add rule on policy
+    const handleAddRuleOnPolicy = async () => {
+        const validation = addNewRulesValidation(
+            editPolicyData,
+            editPolicyDataValidation
+        );
+        if (
+            Object.entries(validation).some(
+                ([key, value]) => key !== "isSubmitting" && value === true
+            )
+        ) {
+            setEditPolicyDataValidation({
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
+
+        // check if policy rule already exist
+        const isExist = editPolicyInputData.find(
+            (item) => item?.id === editPolicyData?.id
+        );
+
+        if (isExist) {
+            const updatedData = editPolicyInputData.map((item) => {
+                if (item.id === editPolicyData.id) {
+                    return {
+                        ...item,
+                        ...editPolicyData,
+                    };
+                }
+                return item;
+            });
+            setIsRuleUpdating(false);
+            setEditPolicyData(updatedData);
+        } else {
+            setEditPolicyData([
+                ...editPolicyInputData,
+                {
+                    ...editPolicyData,
+                    id: Math.random().toString(36).substring(7),
+                },
+            ]);
         }
     };
 
     // modal Close Handler
     const handleCloseEditRuleModal = () => {
         setEditRuleModalOpen(false);
-        resetFormSate();
+        resetFormForRule();
     };
-
     const handleCloseStatusActionModal = () => {
         setRuleActionModalOpen(false);
         setStatusActionData({});
@@ -335,10 +431,9 @@ const SalesRiskAnalysisTable = ({
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
     };
-
     const handleCloseEditPolicyModal = () => {
         setEditPolicyModalOpen(false);
-        setEditPolicyData([]);
+        resetFormForPolicy();
     };
 
     // add title on change
@@ -482,6 +577,17 @@ const SalesRiskAnalysisTable = ({
             <EditPolicyModal
                 open={editPolicyModal}
                 closeModal={handleCloseEditPolicyModal}
+                editPolicyData={editPolicyData}
+                editPolicyDefaultData={editPolicyDefaultData}
+                setEditPolicyData={setEditPolicyData}
+                editPolicyInputData={editPolicyInputData}
+                handleAddRuleOnPolicy={handleAddRuleOnPolicy}
+                setEditPolicyInputData={setEditPolicyInputData}
+                editPolicyDataValidation={editPolicyDataValidation}
+                handleMultiSelectChange={setEditPolicyData}
+                handleCancelRuleOnPolicy={handleCancelRuleOnPolicy}
+                isRuleUpdating={isRuleUpdating}
+                setIsRuleUpdating={setIsRuleUpdating}
             />
 
             {/* pagination */}
