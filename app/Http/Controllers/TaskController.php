@@ -3041,7 +3041,7 @@ class TaskController extends AccountBaseController
         $pm_goal->goal_status = 1;
         
 
-        $pm_goal->description = 'The first submission has been completed and submitted to the client';
+        $pm_goal->description = '1st task submission';
 
                 
         $pm_goal->updated_at= Carbon::now();
