@@ -79,6 +79,7 @@ use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
+use App\Models\GraphicTaskFile;
 use App\Models\GraphicWorkDetails;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
@@ -2136,25 +2137,93 @@ class TaskController extends AccountBaseController
 
                 // Create Graphic Work Details
                 if($request->category_id == 7){
-                    GraphicWorkDetails::create([
+                    $graphicWorkDetails = GraphicWorkDetails::create([
                         'task_id' => $task->id,
                         'type_of_graphic_work_id' => $request->type_of_graphic_work_id,
                         'type_of_logo' => $request->type_of_logo ?? null,
                         'brand_name' => $request->brand_name ?? null,
                         'number_of_versions' => $request->number_of_versions ?? null,
                         'file_types_needed' => $request->file_types_needed ?? null,
-                        // 'attach_text_files' => $request->attach_text_files,
-                        // 'workable_image_files' => $request->workable_image_files,
                         'design_instruction' => $request->design_instruction ?? null,
-                        // 'workable_image_or_video_files' => $request->workable_image_or_video_files,
                         'reference' => $request->reference ?? null,
                         'font_name' => $request->font_name ?? null,
                         'font_url' => $request->font_url ?? null,
-                        // 'brand_guideline_files' => $request->brand_guideline_files,
                         'primary_color' => $request->primary_color ?? null,
                         'primary_color_description' => $request->primary_color_description ?? null,
                         'secondary_colors' => $request->secondary_colors ?? null
                     ]);
+
+                    // attach_text_files
+                    if ($request->hasFile('attach_text_files')) {
+                        $files = $request->file('attach_text_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 1;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+
+                    // workable_image_files
+                    if ($request->hasFile('workable_image_files')) {
+                        $files = $request->file('workable_image_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 2;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+
+                    // workable_image_or_video_files
+                    if ($request->hasFile('workable_image_or_video_files')) {
+                        $files = $request->file('workable_image_or_video_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 3;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
+
+                    // brand_guideline_files
+                    if ($request->hasFile('brand_guideline_files')) {
+                        $files = $request->file('brand_guideline_files');
+                        foreach ($files as $file) {
+                            $graphicTaskFile = new GraphicTaskFile();
+                            $graphicTaskFile->task_id = $task->id;
+                            $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                            $graphicTaskFile->file_type = 4;
+                            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                            $graphicTaskFile->user_id = $this->user->id;
+                            $graphicTaskFile->filename = $filename;
+                            $graphicTaskFile->hashname = $filename;
+                            $graphicTaskFile->size = $file->getSize();
+                            $graphicTaskFile->save();
+                            Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                        }
+                    }
                 }
                 
 
@@ -2175,7 +2244,6 @@ class TaskController extends AccountBaseController
                         $taskFile->save();
 
                         Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
-
 
                         $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
                     }
