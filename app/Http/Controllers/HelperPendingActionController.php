@@ -1780,7 +1780,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_name' => 'View details',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details', 'goal_id' => $goal->id]),
+                        'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details','goal_id' => $goal->id,'project_id' => $project->id]),
                     ],
 
                 ];
