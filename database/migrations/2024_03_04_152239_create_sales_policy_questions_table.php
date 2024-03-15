@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sales_policy_questions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->enum('type', ['yes_no', 'numeric', 'list', 'text', 'long_text']);
+            $table->enum('type', ['yesNo','numeric','list','text','longText']);
             $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->integer('sequence')->default('1');
             $table->bigInteger('policy_id')->unsigned();

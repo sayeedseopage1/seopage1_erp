@@ -15,14 +15,16 @@ use Illuminate\Support\Facades\Validator;
 class SalesRiskPolicyController extends AccountBaseController
 {
     protected $policyTypes = ['parent', 'greaterThan', 'lessThan', 'fixed', 'range', 'yesNo', 'list'];
+    protected $questionTypes = ['yesNo', 'numeric', 'list', 'text', 'longText'];
+
     public function __construct()
     {
         parent::__construct();
         $this->pageTitle = 'Sales Risk Policy';
         // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
-        abort_403(user()->permission('manage_company_setting') !== 'all');
-        return $next($request);
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+            return $next($request);
         });
     }
 
@@ -96,6 +98,11 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
+                ],
+                [
+                    'label' => 'Comment',
+                    'name' => 'comment',
+                    'type' => 'input',
                 ]
             ]
         ];
@@ -124,6 +131,11 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
+                ],
+                [
+                    'label' => 'Comment',
+                    'name' => 'comment',
+                    'type' => 'input',
                 ]
             ]
         ];
@@ -152,6 +164,11 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
+                ],
+                [
+                    'label' => 'Comment',
+                    'name' => 'comment',
+                    'type' => 'input',
                 ]
             ]
         ];
@@ -188,6 +205,11 @@ class SalesRiskPolicyController extends AccountBaseController
                             'placeholder' => ''
                         ]
                     ],
+                ],
+                [
+                    'label' => 'Comment',
+                    'name' => 'comment',
+                    'type' => 'input',
                 ]
             ]
         ];
@@ -202,17 +224,29 @@ class SalesRiskPolicyController extends AccountBaseController
                     'type' => 'input',
                 ],
                 [
-                    'label' => 'Yes',
-                    'name' => 'yes',
-                    'type' => 'input',
-                    'placeholder' => 'point'
+                    [
+                        'label' => 'Yes',
+                        'name' => 'yes',
+                        'type' => 'input',
+                    ],
+                    [
+                        'label' => 'note',
+                        'name' => 'note',
+                        'type' => 'input',
+                    ],
                 ],
                 [
-                    'label' => 'No',
-                    'name' => 'no',
-                    'type' => 'input',
-                    'placeholder' => 'point'
-                ],
+                    [
+                        'label' => 'No',
+                        'name' => 'no',
+                        'type' => 'input',
+                    ],
+                    [
+                        'label' => 'note',
+                        'name' => 'note',
+                        'type' => 'input',
+                    ],
+                ]
             ]
         ];
 
@@ -236,6 +270,11 @@ class SalesRiskPolicyController extends AccountBaseController
                             'structure' => $countries
                         ]
                     ]
+                ],
+                [
+                    'label' => 'Comment',
+                    'name' => 'comment',
+                    'type' => 'input',
                 ]
             ]
         ];
@@ -267,11 +306,6 @@ class SalesRiskPolicyController extends AccountBaseController
             [
                 'label' => 'Point',
                 'type' => 'number',
-                'placeholder' => ''
-            ],
-            [
-                'label' => 'Comment',
-                'type' => 'input',
                 'placeholder' => ''
             ]
         ];
@@ -512,7 +546,22 @@ class SalesRiskPolicyController extends AccountBaseController
         return response()->json($fileds);
     }
 
+    function policyQuestionSave(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'title' => 'required',
+            'type' => 'required',
+            'policy_id' => 'required',
+            'parent_id' => 'nullable',
+            'placeholder' => 'nullable'
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Question added succesfully']);
+    }
 
     function questionList()
     {
