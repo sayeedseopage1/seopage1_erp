@@ -26,10 +26,10 @@ import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../utils/check-is-url";
 
-const fileInputStyle = {
-    height: "39px",
-    zIndex: '0'
-}
+// const fileInputStyle = {
+//     height: "39px",
+//     zIndex: '0'
+// }
 
 const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const dispatch = useDispatch();
