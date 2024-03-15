@@ -389,27 +389,22 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
 
         Array.from(textForDesign).forEach((file) => {
-            fd.append("attach_text_files[]", file);
+            fd.append("attach_text_files", file);
         });
         Array.from(imageForDesigner).forEach((file) => {
-            fd.append("workable_image_files[]", file);
+            fd.append("workable_image_files", file);
         });
         Array.from(imgOrVidForWork).forEach((file) => {
-            fd.append("workable_image_or_video_files[]", file);
+            fd.append("workable_image_or_video_files", file);
         });
         Array.from(brandGuideline).forEach((file) => {
-            fd.append("brand_guideline_files[]", file);
+            fd.append("brand_guideline_files", file);
         });
         // graphics end 
 
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
-
-        // "attach_text_files",
-        //     "workable_image_files"
-        // "workable_image_or_video_files",
-        //     "brand_guideline_files"
 
         fd.append(
             "_token",
