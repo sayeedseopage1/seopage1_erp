@@ -57,11 +57,13 @@ const SalesRiskAnalysisTable = ({
     const [ruleActionModalOpen, setRuleActionModalOpen] = React.useState(false);
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
+    const [EditPolicyModalOpen, setEditPolicyModalOpen] = React.useState(false);
 
     // modal state data
     const [editRuleData, setEditRuleData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
     const [statusActionData, setStatusActionData] = React.useState({});
+    const [editPolicyData, setEditPolicyData] = React.useState([]);
     const [editRuleDataValidation, setEditRuleDataValidation] = React.useState({
         isSubmitting: false,
         policyName: false,
@@ -76,6 +78,7 @@ const SalesRiskAnalysisTable = ({
         countries: false,
         points: false,
     });
+
 
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
@@ -216,6 +219,12 @@ const SalesRiskAnalysisTable = ({
                 });
                 setRuleActionModalOpen(true);
             },
+            handleEditPolicy: (data) => {
+
+                console.log("data", data);
+                setEditPolicyData(data)
+                setEditPolicyModalOpen(true)
+            }
         },
     });
 
@@ -258,6 +267,7 @@ const SalesRiskAnalysisTable = ({
         }
 
         console.log("payload", payload);
+
 
         try {
             // const res = await submitData(editRuleData);
@@ -326,10 +336,11 @@ const SalesRiskAnalysisTable = ({
         setRuleActionModalOpen(false);
         setStatusActionData({});
     };
-
     const handleCloseAddQuestionsModal = () => {
         setAddQuestionsModalOpen(false);
     };
+
+      
 
     // add title on change
     useMemo(() => {
@@ -364,7 +375,6 @@ const SalesRiskAnalysisTable = ({
         }
     }, [editRuleData]);
 
-    console.log("table", editRuleData, editRuleDataValidation);
 
     return (
         <React.Fragment>

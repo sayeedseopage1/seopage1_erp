@@ -19,8 +19,6 @@ const DepartmentSelect = ({
     const [query, setQuery] = React.useState('');
     let _department;
 
-    const textLength = sidebarItem ? 33 : 11;
-    const splitLength = sidebarItem ? 32 : 10;
 
     _department = _.filter(data, (dept) => _.includes(_.lowerCase(dept.team_name), _.lowerCase(query)));
 

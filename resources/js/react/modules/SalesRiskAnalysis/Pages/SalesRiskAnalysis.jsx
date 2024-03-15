@@ -261,19 +261,19 @@ const SalesRiskAnalysis = () => {
                     if (item.from) rule.from = item.from;
                     if (item.to) rule.to = item.to;
                     if (item.points) rule.points = item.points;
-                    if (item.yes && item.no)
-                        rule.value = [
+                    if (item.yes && item.no) {
+                        rule.value = 
                             {
-                                name: "yes",
-                                point: item.yes,
-                                comment: item.yesComment,
-                            },
-                            {
-                                name: "no",
-                                point: item.no,
-                                comment: item.noComment,
-                            },
-                        ];
+                                yes: {
+                                    point: item.yes,
+                                    comment: item.yesComment,
+                                },
+                                no: {
+                                    point: item.no,
+                                    comment: item.noComment,
+                                },
+                            }
+                    };
                     if (item.countries?.length > 0) {
                         rule.countries = item.countries.map((country) => ({
                             [country.iso]: country.niceName,
@@ -284,6 +284,8 @@ const SalesRiskAnalysis = () => {
                 }),
             };
 
+
+            // console.log("payload", payload);
             const response = await submitData(payload);
             if (response?.data) {
                 toast.success("New policy added successfully");

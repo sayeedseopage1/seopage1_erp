@@ -30,7 +30,7 @@ export const NewRulesModalTableColumnsData = [
                                     fontSize: "14px",
                                     fontFamily: "Poppins",
                                 }}
-                                className="py-3"
+                                className="py-3 d-flex align-items-center"
                             >
                                 {data.title}
                                 <span className="ml-2">
@@ -56,10 +56,10 @@ export const NewRulesModalTableColumnsData = [
                                     fontSize: "14px",
                                     fontFamily: "Poppins",
                                 }}
-                                className="py-3"
+                                className="py-3 d-flex align-items-cente"
                             >
                                 {data.title}
-                                <span className="mr-2">
+                                <span className="ml-2">
                                     {data?.ruleComment ? (
                                         <>
                                             <Tooltip text={data?.ruleComment}>
@@ -131,7 +131,7 @@ export const NewRulesModalTableColumnsData = [
                                         fontSize: "14px",
                                         fontFamily: "Poppins",
                                     }}
-                                    className="py-3 pr-2"
+                                    className="py-3 pr-2 d-flex align-items-center"
                                 >
                                     {data.title}
                                     <span className="ml-2">
