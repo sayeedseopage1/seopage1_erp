@@ -308,7 +308,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     };
 
     // TODO: hide fields conditionally by this condition 
-    console.log("task", task?.category?.name)
+    // console.log("task", task?.category?.name)
+    console.log("task1", task)
 
     // handle submission
     const handleSubmit = async (e) => {

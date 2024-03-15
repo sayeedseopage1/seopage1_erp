@@ -112,11 +112,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         file_types_needed: fileTypesNeeded ?? "",
         reference: reference ?? "",
         font_name: fontName ?? "",
-        // textForDesign,
-        // imageForDesigner,
-        // imgOrVidForWork,
+        textForDesign,
+        imageForDesigner,
+        imgOrVidForWork,
         font_url: fontUrl,
-        // brandGuideline,
+        brandGuideline,
         design_instruction: illustration || others,
         primary_color: primaryColor ?? "",
         primary_color_description: primaryColorDescription ?? "",
@@ -242,10 +242,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 toast.warn("You have to provide a valid font URL");
                 errCount++;
             }
-            // if (!brandGuideline) {
-            //     err.brandGuideline = "Brand guideline is required";
-            //     errCount++;
-            // }
+            if (!brandGuideline) {
+                err.brandGuideline = "Brand guideline is required";
+                errCount++;
+            }
         }
 
         if (typeOfGraphicsCategory?.id === 1) {
@@ -267,26 +267,26 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             }
         }
 
-        // if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-        //     if (!textForDesign) {
-        //         err.textForDesign = "The text for design field is required";
-        //         errCount++;
-        //     }
-        // }
+        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+            if (!textForDesign) {
+                err.textForDesign = "The text for design field is required";
+                errCount++;
+            }
+        }
 
-        // if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-        //     if (!imageForDesigner) {
-        //         err.imageForDesigner = "Image is required for designer";
-        //         errCount++;
-        //     }
-        // }
+        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+            if (!imageForDesigner) {
+                err.imageForDesigner = "Image is required for designer";
+                errCount++;
+            }
+        }
 
-        // if (typeOfGraphicsCategory?.id === 8) {
-        //     if (!imgOrVidForWork) {
-        //         err.imgOrVidForWork = "Images/videos is requiredn for work";
-        //         errCount++;
-        //     }
-        // }
+        if (typeOfGraphicsCategory?.id === 8) {
+            if (!imgOrVidForWork) {
+                err.imgOrVidForWork = "Images/videos is requiredn for work";
+                errCount++;
+            }
+        }
 
         if (typeOfGraphicsCategory?.id === 7) {
             if (illustration === "") {
@@ -387,11 +387,29 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("primary_color", primaryColor ?? "");
         fd.append("primary_color_description", primaryColorDescription ?? "");
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+
+        Array.from(textForDesign).forEach((file) => {
+            fd.append("attach_text_files[]", file);
+        });
+        Array.from(imageForDesigner).forEach((file) => {
+            fd.append("workable_image_files[]", file);
+        });
+        Array.from(imgOrVidForWork).forEach((file) => {
+            fd.append("workable_image_or_video_files[]", file);
+        });
+        Array.from(brandGuideline).forEach((file) => {
+            fd.append("brand_guideline_files[]", file);
+        });
         // graphics end 
 
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
+
+        // "attach_text_files",
+        //     "workable_image_files"
+        // "workable_image_or_video_files",
+        //     "brand_guideline_files"
 
         fd.append(
             "_token",
