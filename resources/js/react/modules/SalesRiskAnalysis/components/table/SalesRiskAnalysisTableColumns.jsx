@@ -13,43 +13,45 @@ export const SalesRiskAnalysisTableColumns = [
             const data = row?.original;
             const action = table.options.meta;
             return (
-                <div className="d-flex align-items-center">
-                    <div class="custom-control custom-switch">
-                        <input
-                            type="checkbox"
-                            checked={data?.status === "1" ? true : false}
-                            class="custom-control-input"
-                            id="customSwitch1"
-                            onClick={() => {
-                                action.handlePolicyStatus(data);
+                <div className="d-flex flex-column">
+                    <div className="d-flex align-items-center mb-2">
+                        <div class="custom-control custom-switch">
+                            <input
+                                type="checkbox"
+                                checked={data?.status === "1" ? true : false}
+                                class="custom-control-input"
+                                id="customSwitch1"
+                                onClick={() => {
+                                    action.handlePolicyStatus(data);
+                                }}
+                            />
+                            <label
+                                class="custom-control-label"
+                                for="customSwitch1"
+                            />
+                        </div>
+                        <span
+                            style={{
+                                color: "#000000",
+                                fontSize: "14px",
+                                fontFamily: "Poppins",
                             }}
-                        />
-                        <label
-                            class="custom-control-label"
-                            for="customSwitch1"
-                        />
+                        >
+                            {data?.title}
+                        </span>
+                        <span className="ml-2">
+                            {data?.comment ? (
+                                <>
+                                    <Tooltip text={data?.comment}>
+                                        {" "}
+                                        <i class="fa-solid fa-circle-info "></i>
+                                    </Tooltip>
+                                </>
+                            ) : (
+                                ""
+                            )}
+                        </span>
                     </div>
-                    <span
-                        style={{
-                            color: "#000000",
-                            fontSize: "14px",
-                            fontFamily: "Poppins",
-                        }}
-                    >
-                        {data?.title}
-                    </span>
-                    <span className="ml-2">
-                        {data?.comment ? (
-                            <>
-                                <Tooltip text={data?.comment}>
-                                    {" "}
-                                    <i class="fa-solid fa-circle-info "></i>
-                                </Tooltip>
-                            </>
-                        ) : (
-                            ""
-                        )}
-                    </span>
                     <button
                         onClick={() => {
                             action.handleAddQuestions(data);
@@ -57,8 +59,9 @@ export const SalesRiskAnalysisTableColumns = [
                         style={{
                             fontSize: "12px",
                             padding: "3px 12px",
+                            width: "25%",
                         }}
-                        className="btn btn-info ml-4"
+                        className="btn btn-info"
                     >
                         Questions
                     </button>

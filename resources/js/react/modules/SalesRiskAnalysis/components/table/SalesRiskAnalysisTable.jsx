@@ -32,6 +32,7 @@ import { FormatJsonCountry } from "../../helper/countriesFormat";
 import { addNewRulesValidation } from "../../helper/createFromValidation";
 import EditApplicableRulesModal from "../modal/EditApplicableRulesModal";
 import _ from "lodash";
+import EditPolicyModal from "../modal/EditPolicyModal";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -57,7 +58,7 @@ const SalesRiskAnalysisTable = ({
     const [ruleActionModalOpen, setRuleActionModalOpen] = React.useState(false);
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
-    const [EditPolicyModalOpen, setEditPolicyModalOpen] = React.useState(false);
+    const [editPolicyModal, setEditPolicyModalOpen] = React.useState(false);
 
     // modal state data
     const [editRuleData, setEditRuleData] = React.useState({});
@@ -78,7 +79,6 @@ const SalesRiskAnalysisTable = ({
         countries: false,
         points: false,
     });
-
 
     // sales risk analysis rules data
     const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
@@ -197,7 +197,7 @@ const SalesRiskAnalysisTable = ({
                             : "",
                     points: selectedRule?.point,
                 };
-                
+
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -220,11 +220,10 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleEditPolicy: (data) => {
-
                 console.log("data", data);
-                setEditPolicyData(data)
-                setEditPolicyModalOpen(true)
-            }
+                setEditPolicyData(data);
+                setEditPolicyModalOpen(true);
+            },
         },
     });
 
@@ -233,20 +232,18 @@ const SalesRiskAnalysisTable = ({
             editRuleData,
             editRuleDataValidation
         );
-        
+
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
             )
         ) {
-            
             setEditRuleDataValidation({
                 ...validation,
                 isSubmitting: true,
             });
             return;
         }
-        
 
         const payload = {
             title: editRuleData?.title,
@@ -254,7 +251,7 @@ const SalesRiskAnalysisTable = ({
         };
         if (editRuleData?.value) payload.value = editRuleData?.value;
         if (!_.isEmpty(editRuleData.valueType))
-        payload.valueType = editRuleData.valueType?.name;
+            payload.valueType = editRuleData.valueType?.name;
         if (editRuleData?.from) payload.from = editRuleData?.from;
         if (editRuleData?.to) payload.to = editRuleData?.to;
         if (editRuleData?.points) payload.points = editRuleData?.points;
@@ -267,7 +264,6 @@ const SalesRiskAnalysisTable = ({
         }
 
         console.log("payload", payload);
-
 
         try {
             // const res = await submitData(editRuleData);
@@ -340,7 +336,10 @@ const SalesRiskAnalysisTable = ({
         setAddQuestionsModalOpen(false);
     };
 
-      
+    const handleCloseEditPolicyModal = () => {
+        setEditPolicyModalOpen(false);
+        setEditPolicyData([]);
+    };
 
     // add title on change
     useMemo(() => {
@@ -374,7 +373,6 @@ const SalesRiskAnalysisTable = ({
             setEditRuleDataValidation(validation);
         }
     }, [editRuleData]);
-
 
     return (
         <React.Fragment>
@@ -468,7 +466,6 @@ const SalesRiskAnalysisTable = ({
                     isLoadingEditSalesRiskAnalysisRule
                 }
             />
-
             <RuleActionConfirmationModal
                 open={ruleActionModalOpen}
                 closeModal={handleCloseStatusActionModal}
@@ -476,12 +473,15 @@ const SalesRiskAnalysisTable = ({
                 handleStatusUpdate={handleStatusUpdate}
                 isLoading={isLoadingSingleRuleStatusUpdate}
             />
-
             <AddQuestionsModal
                 open={addQuestionsModalOpen}
                 closeModal={handleCloseAddQuestionsModal}
                 addQuestionsData={addQuestionsData}
                 questionInputFields={questionInputFields}
+            />
+            <EditPolicyModal
+                open={editPolicyModal}
+                closeModal={handleCloseEditPolicyModal}
             />
 
             {/* pagination */}

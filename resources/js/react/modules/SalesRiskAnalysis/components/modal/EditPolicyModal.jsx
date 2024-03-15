@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const EditPolicyModal = ({
-    open,
-    closeModal,
-}) => {
+// Custom Components
+import CustomModal from "../ui/CustomModal/CustomModal";
+
+const EditPolicyModal = ({ open, closeModal }) => {
     return (
         <CustomModal
             open={open}
@@ -22,8 +22,7 @@ const EditPolicyModal = ({
 
 export default EditPolicyModal;
 
-
 EditPolicyModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
-}
+};
