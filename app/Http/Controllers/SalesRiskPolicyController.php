@@ -378,7 +378,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         break;
 
                     case "yesNo":
-                        $rowData['value'] = $item->yes . ', ' . $item->no;
+                        $rowData['value'] = json_encode($item->value);
                         break;
 
                     case "list":
