@@ -24,17 +24,10 @@ import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsW
 import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
+import { checkIsURL } from "../../utils/check-is-url";
 
 const fileInputStyle = {
     height: "39px",
-    zIndex: '0'
-}
-const customfileInputStyle = {
-    height: "39px",
-    border: '1px solid #e8eef3',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'start',
     zIndex: '0'
 }
 
@@ -63,7 +56,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [brandGuideline, setBrandGuideline] = useState([]);
     const [illustration, setIllustration] = useState("");
     const [others, setOthers] = useState("");
-    const [colorSchema, setColorSchema] = React.useState("");
+    // const [colorSchema, setColorSchema] = React.useState("");
     const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
@@ -112,17 +105,22 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         useCheckRestrictedWordsMutation();
 
     const taskData = {
-        typeOfGraphicsCategory,
-        typeOfLogo,
-        brandName,
-        reference,
-        numOfVersions,
-        fileTypesNeeded,
-        textForDesign,
-        imageForDesigner,
-        imgOrVidForWork,
-        fontName,
-        fontUrl, brandGuideline, illustration, others, colorSchema, primaryColor, primaryColorDescription, secondaryColors
+        type_of_graphic_works_id: typeOfGraphicsCategory?.id ?? "",
+        type_of_logo: typeOfLogo?.type_name ?? "",
+        brand_name: brandName ?? "",
+        number_of_versions: numOfVersions ?? "",
+        file_types_needed: fileTypesNeeded ?? "",
+        reference: reference ?? "",
+        font_name: fontName ?? "",
+        // textForDesign,
+        // imageForDesigner,
+        // imgOrVidForWork,
+        font_url: fontUrl,
+        // brandGuideline,
+        design_instruction: illustration || others,
+        primary_color: primaryColor ?? "",
+        primary_color_description: primaryColorDescription ?? "",
+        secondary_colors: secondaryColors ?? ""
     }
 
     // console.log(taskData)
@@ -155,7 +153,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setBrandGuideline([]);
         setIllustration("");
         setOthers("");
-        setColorSchema("");
+        // setColorSchema("");
         setPrimaryColor("#1D82F5");
         setPrimaryColorDescription("");
         setSecondaryColors([
@@ -236,6 +234,18 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.fontName = "Font name is required";
                 errCount++;
             }
+            if (!fontUrl) {
+                err.fontUrl = "You have to provide font URL";
+                count++;
+            } else if (!checkIsURL(fontUrl)) {
+                err.fontUrl = "You have to provide a valid font URL";
+                toast.warn("You have to provide a valid font URL");
+                errCount++;
+            }
+            // if (!brandGuideline) {
+            //     err.brandGuideline = "Brand guideline is required";
+            //     errCount++;
+            // }
         }
 
         if (typeOfGraphicsCategory?.id === 1) {
@@ -257,26 +267,27 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             }
         }
 
-        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
-            if (!textForDesign) {
-                err.textForDesign = "The text for design field is required";
-                errCount++;
-            }
-        }
+        // if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+        //     if (!textForDesign) {
+        //         err.textForDesign = "The text for design field is required";
+        //         errCount++;
+        //     }
+        // }
 
-        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
-            if (!imageForDesigner) {
-                err.imageForDesigner = "Image is required for designer";
-                errCount++;
-            }
-        }
+        // if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+        //     if (!imageForDesigner) {
+        //         err.imageForDesigner = "Image is required for designer";
+        //         errCount++;
+        //     }
+        // }
 
-        if (typeOfGraphicsCategory?.id === 8) {
-            if (!imgOrVidForWork) {
-                err.imgOrVidForWork = "Images/videos is requiredn for work";
-                errCount++;
-            }
-        }
+        // if (typeOfGraphicsCategory?.id === 8) {
+        //     if (!imgOrVidForWork) {
+        //         err.imgOrVidForWork = "Images/videos is requiredn for work";
+        //         errCount++;
+        //     }
+        // }
+
         if (typeOfGraphicsCategory?.id === 7) {
             if (illustration === "") {
                 err.others = "Write Name of the illustration design work";
@@ -363,6 +374,21 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("sub_acknowledgement", data.subAcknowledgement);
         fd.append("need_authorization", data.authorization);
 
+        // graphics start 
+        fd.append("type_of_graphic_work_id", typeOfGraphicsCategory?.id ?? "");
+        fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
+        fd.append("brand_name", brandName ?? "");
+        fd.append("number_of_versions", numOfVersions ?? "");
+        fd.append("file_types_needed", JSON.stringify(fileTypesNeeded) ?? "");
+        fd.append("reference", reference ?? "");
+        fd.append("font_name", fontName ?? "");
+        fd.append("font_url", fontUrl ?? "");
+        fd.append("design_instruction", (illustration || others) ?? "");
+        fd.append("primary_color", primaryColor ?? "");
+        fd.append("primary_color_description", primaryColorDescription ?? "");
+        fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+        // graphics end 
+
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
@@ -378,23 +404,23 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         // handle form submit
         const formSubmit = async () => {
             if (isValid()) {
-                // await storeProjectTask(fd)
-                //     .unwrap()
-                //     .then((res) => {
-                //         toast.success("Task created successfully");
-                //         onSuccess();
-                //         handleRefresh();
-                //     })
-                //     .catch((err) => {
-                //         if (err?.status === 422) {
-                //             Swal.fire({
-                //                 position: "center",
-                //                 icon: "error",
-                //                 title: "Please fill out the all required fields",
-                //                 showConfirmButton: true,
-                //             });
-                //         }
-                //     });
+                await storeProjectTask(fd)
+                    .unwrap()
+                    .then((res) => {
+                        toast.success("Task created successfully");
+                        onSuccess();
+                        handleRefresh();
+                    })
+                    .catch((err) => {
+                        if (err?.status === 422) {
+                            Swal.fire({
+                                position: "center",
+                                icon: "error",
+                                title: "Please fill out the all required fields",
+                                showConfirmButton: true,
+                            });
+                        }
+                    });
             } else {
                 Swal.fire({
                     position: "center",
@@ -1069,6 +1095,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 placeholder="Enter font url"
                                                 name="fontUrl"
                                                 value={fontUrl}
+                                                error={formError?.fontUrl}
                                                 onChange={(e) =>
                                                     handleChange(e, setFontUrl)
                                                 }
