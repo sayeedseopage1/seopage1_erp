@@ -9,6 +9,7 @@ use App\Models\Team;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -438,26 +439,39 @@ class SalesRiskPolicyController extends AccountBaseController
         return response()->json();
     }
 
-    function ruleList()
+    function ruleList(Request $req)
     {
-        // $department = Team::with('childs')->find(1);
-        // dd($department);
-        $list = SalesRiskPolicy::where('parent_id', null)->get()->map(function ($item) {
+        $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->paginate($req->input('limit', 10));
 
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'point', 'status', 'comment']),
-                'department' => [
-                    'id' => $item->department,
-                    'name' => Team::with('childs')->find($item->department)->team_name
-                ],
-                'status' => $item->status,
-                'comment' => $item->comment
-            ];
-        });
+        $itemsTransformed = $itemsPaginated
+            ->getCollection()
+            ->map(function($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'point', 'status', 'comment']),
+                    'department' => [
+                        'id' => $item->department,
+                        'name' => Team::with('childs')->find($item->department)->team_name
+                    ],
+                    'status' => $item->status,
+                    'comment' => $item->comment
+                ];
+        })->toArray();
 
-        return response()->json(['data' => $list]);
+        $data = new \Illuminate\Pagination\LengthAwarePaginator(
+            $itemsTransformed,
+            $itemsPaginated->total(),
+            $itemsPaginated->perPage(),
+            $itemsPaginated->currentPage(), [
+                'path' => FacadesRequest::url(),
+                'query' => [
+                    'page' => $itemsPaginated->currentPage()
+                ]
+            ]
+        );
+
+        return response()->json(['data' => $data]);
     }
 
     function policyRuleStatusChange($id, $status)
