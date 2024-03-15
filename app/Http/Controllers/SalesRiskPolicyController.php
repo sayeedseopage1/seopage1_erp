@@ -103,7 +103,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     'label' => 'Comment',
                     'name' => 'comment',
                     'type' => 'input',
-                    'placeholder' => 'point',
                 ]
             ]
         ];
@@ -137,7 +136,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     'label' => 'Comment',
                     'name' => 'comment',
                     'type' => 'input',
-                    'placeholder' => 'point',
                 ]
             ]
         ];
@@ -171,7 +169,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     'label' => 'Comment',
                     'name' => 'comment',
                     'type' => 'input',
-                    'placeholder' => 'point',
                 ]
             ]
         ];
@@ -213,7 +210,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     'label' => 'Comment',
                     'name' => 'comment',
                     'type' => 'input',
-                    'placeholder' => 'point',
                 ]
             ]
         ];
@@ -232,13 +228,11 @@ class SalesRiskPolicyController extends AccountBaseController
                         'label' => 'Yes',
                         'name' => 'yes',
                         'type' => 'input',
-                        'placeholder' => 'point',
                     ],
                     [
                         'label' => 'note',
                         'name' => 'note',
                         'type' => 'input',
-                        'placeholder' => 'point',
                     ],
                 ],
                 [
@@ -246,13 +240,11 @@ class SalesRiskPolicyController extends AccountBaseController
                         'label' => 'No',
                         'name' => 'no',
                         'type' => 'input',
-                        'placeholder' => 'point',
                     ],
                     [
                         'label' => 'note',
                         'name' => 'note',
                         'type' => 'input',
-                        'placeholder' => 'point',
                     ],
                 ]
             ]
@@ -283,7 +275,6 @@ class SalesRiskPolicyController extends AccountBaseController
                     'label' => 'Comment',
                     'name' => 'comment',
                     'type' => 'input',
-                    'placeholder' => 'point',
                 ]
             ]
         ];
