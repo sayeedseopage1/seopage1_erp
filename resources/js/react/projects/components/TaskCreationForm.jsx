@@ -29,6 +29,14 @@ const fileInputStyle = {
     height: "39px",
     zIndex: '0'
 }
+const customfileInputStyle = {
+    height: "39px",
+    border: '1px solid #e8eef3',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'start',
+    zIndex: '0'
+}
 
 const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const dispatch = useDispatch();
@@ -47,12 +55,12 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
-    const [textForDesign, setTextForDesign] = useState(null);
-    const [imageForDesigner, setImageForDesigner] = useState(null);
-    const [imgOrVidForWork, setImgOrVidForWork] = useState(null);
+    const [textForDesign, setTextForDesign] = useState([]);
+    const [imageForDesigner, setImageForDesigner] = useState([]);
+    const [imgOrVidForWork, setImgOrVidForWork] = useState([]);
     const [fontName, setFontName] = useState('');
     const [fontUrl, setFontUrl] = useState('');
-    const [brandGuideline, setBrandGuideline] = useState(null);
+    const [brandGuideline, setBrandGuideline] = useState([]);
     const [illustration, setIllustration] = useState("");
     const [others, setOthers] = useState("");
     const [colorSchema, setColorSchema] = React.useState("");
@@ -139,12 +147,12 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setNumOfVersions(null);
         setReference("");
         setFileTypesNeeded([]);
-        setTextForDesign(null);
-        setImageForDesigner(null);
-        setImgOrVidForWork(null);
+        setTextForDesign([]);
+        setImageForDesigner([]);
+        setImgOrVidForWork([]);
         setFontName('');
         setFontUrl('');
-        setBrandGuideline(null);
+        setBrandGuideline([]);
         setIllustration("");
         setOthers("");
         setColorSchema("");
@@ -874,17 +882,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             Attach text that will be used for the design
                                                             <sup className='f-14 mr-1'>*</sup>
                                                         </label>
-                                                        <div className="custom-file" style={fileInputStyle}>
-                                                            <input type="file" className="custom-file-input" id="textForDesign" required={true} multiple error={formError?.textForDesign} onChange={(e) =>
-                                                                handleChange(e, setTextForDesign)
-                                                            } />
-                                                            <label className="custom-file-label" htmlFor="textForDesign">Choose file</label>
-                                                        </div>
-                                                        {formError?.textForDesign && (
-                                                            <div style={{ color: "red" }}>
-                                                                {formError?.textForDesign}
-                                                            </div>
-                                                        )}
+                                                        <UploadFilesInLine
+                                                            files={textForDesign}
+                                                            setFiles={setTextForDesign}
+                                                        />
                                                     </div>
                                                 </div>
                                             </>
@@ -903,7 +904,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             Image where the designer will work
                                                             <sup className='f-14 mr-1'>*</sup>
                                                         </label>
-                                                        <div className="custom-file" style={fileInputStyle}>
+                                                        <UploadFilesInLine
+                                                            files={imageForDesigner}
+                                                            setFiles={setImageForDesigner}
+                                                        />
+                                                        {/* <div className="custom-file" style={fileInputStyle}>
                                                             <input type="file" className="custom-file-input" id="imageForDesigner" required={true} multiple error={formError?.imageForDesigner} onChange={(e) =>
                                                                 handleChange(e, setImageForDesigner)
                                                             } />
@@ -913,7 +918,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             <div style={{ color: "red" }}>
                                                                 {formError?.imageForDesigner}
                                                             </div>
-                                                        )}
+                                                        )} */}
                                                     </div>
                                                 </div>
                                             </>
@@ -932,7 +937,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             Images/videos that will be used for the work
                                                             <sup className='f-14 mr-1'>*</sup>
                                                         </label>
-                                                        <div className="custom-file z-n1" style={fileInputStyle}>
+                                                        <UploadFilesInLine
+                                                            files={imgOrVidForWork}
+                                                            setFiles={setImgOrVidForWork}
+                                                        />
+                                                        {/* <div className="custom-file z-n1" style={fileInputStyle}>
                                                             <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={formError?.imgOrVidForWork} onChange={(e) =>
                                                                 handleChange(e, setImgOrVidForWork)
                                                             } multiple />
@@ -942,7 +951,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             <div style={{ color: "red" }}>
                                                                 {formError?.imgOrVidForWork}
                                                             </div>
-                                                        )}
+                                                        )} */}
                                                     </div>
                                                 </div>
                                             </>
@@ -1075,12 +1084,16 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 >
                                                     Brand guideline
                                                 </label>
-                                                <div className="custom-file" style={fileInputStyle}>
+                                                <UploadFilesInLine
+                                                    files={brandGuideline}
+                                                    setFiles={setBrandGuideline}
+                                                />
+                                                {/* <div className="custom-file" style={fileInputStyle}>
                                                     <input type="file" className="custom-file-input" id="brandGuideline" multiple error={formError?.brandGuideline} onChange={(e) =>
                                                         handleChange(e, setBrandGuideline)
                                                     } />
                                                     <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
 
