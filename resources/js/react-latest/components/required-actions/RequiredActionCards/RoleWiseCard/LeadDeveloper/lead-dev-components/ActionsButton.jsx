@@ -6,19 +6,10 @@ import CommentCancellation from "./CommentCancellation";
 import React, { useCallback } from "react";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
 
-// action buttons
 const ActionsButton = ({ data }) => {
-    // window.location.assign();
-
-    // return (
-    //     <>
-    //         <button className={style.action_btn}>Review</button>
-    //         <button className={style.action_btn}>Approve</button>
-    //         <button className={style.action_btn}>Deny</button>
-    //         <button className={style.action_btn}>Request Modifications</button>
-    //     </>
-    // );
+    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
 
     const handleModalWidth = useCallback(
         (btn) => {
@@ -118,6 +109,20 @@ const ActionsButton = ({ data }) => {
                     );
                 }
             })}
+
+            {data?.task_id && (
+                <button
+                    onClick={() => setIsEvaluationModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    Evaluate
+                </button>
+            )}
+
+            <EvaluationModal
+                setIsEvaluationModal={setIsEvaluationModal}
+                isEvaluationModal={isEvaluationModal}
+            />
         </>
     );
 };

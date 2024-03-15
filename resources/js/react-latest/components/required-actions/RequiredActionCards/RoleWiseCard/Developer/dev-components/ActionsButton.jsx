@@ -13,7 +13,8 @@ import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiS
 import { useWindowSize } from "react-use";
 import ReactModal from "react-modal";
 import RelevantModal from "./RelevantModal";
-import EvaluationModal from "./EvaluationModal";
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+
 const ActionsButton = ({ data }) => {
     const [fullScreenView, setFullScreenView] = React.useState(false);
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
@@ -204,5 +205,5 @@ const ActionsButton = ({ data }) => {
     );
 };
 
-//mitul work start
+//mitul work end
 export default React.memo(ActionsButton);
