@@ -32,6 +32,10 @@ const SalesRiskAnalysis = () => {
     const { departments, countries } = useSelector(
         (state) => state.filterOptions
     );
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
     const [dept, setDept] = React.useState(null);
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
 
@@ -75,9 +79,20 @@ const SalesRiskAnalysis = () => {
             isSubmitting: false,
         });
 
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
     // get sales risk analysis rules
     const { data, isFetching, isLoading, refetch } =
-        useGetSalesRiskAnalysisRulesQuery(null);
+        useGetSalesRiskAnalysisRulesQuery(
+            queryString({
+                page: pageIndex + 1,
+                limit: pageSize,
+            })
+        );
 
     // fetch filter options
     const { data: filterOptions, isFetching: isFilterOptionsFetching } =
@@ -260,18 +275,17 @@ const SalesRiskAnalysis = () => {
                     if (item.to) rule.to = item.to;
                     if (item.points) rule.points = item.points;
                     if (item.yes && item.no) {
-                        rule.value = 
-                            {
-                                yes: {
-                                    point: item.yes,
-                                    comment: item.yesComment,
-                                },
-                                no: {
-                                    point: item.no,
-                                    comment: item.noComment,
-                                },
-                            }
-                    };
+                        rule.value = {
+                            yes: {
+                                point: item.yes,
+                                comment: item.yesComment,
+                            },
+                            no: {
+                                point: item.no,
+                                comment: item.noComment,
+                            },
+                        };
+                    }
                     if (item.countries?.length > 0) {
                         rule.countries = item.countries.map((country) => ({
                             [country.iso]: country.niceName,
@@ -281,7 +295,6 @@ const SalesRiskAnalysis = () => {
                     return rule;
                 }),
             };
-
 
             // console.log("payload", payload);
             const response = await submitData(payload);
@@ -314,7 +327,7 @@ const SalesRiskAnalysis = () => {
     }, [salesRiskInputs, isSalesRiskInputsFetching]);
 
     // sales risk analysis rules data
-    const salesRiskAnalysisRules = data?.data;
+    const salesRiskAnalysisRules = data?.data?.data;
 
     // handle modal open close
     const handleAddNewPolicyModal = () => {
@@ -377,6 +390,12 @@ const SalesRiskAnalysis = () => {
         }
     }, [newPolicyData]);
 
+    // main Table page change
+
+    const handlePageChange = (paginate) => {
+        setPagination(paginate);
+    };
+
     return (
         <React.Fragment>
             <SalesRiskAnalysisContainer>
@@ -406,6 +425,7 @@ const SalesRiskAnalysis = () => {
                             tableData={salesRiskAnalysisRules}
                             isLoading={isFetching}
                             questionInputFields={questionInputFields}
+                            handlePageChange={handlePageChange}
                         />
                     </div>
                 </div>
