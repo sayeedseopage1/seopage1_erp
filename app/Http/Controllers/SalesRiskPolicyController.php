@@ -332,8 +332,6 @@ class SalesRiskPolicyController extends AccountBaseController
             ], 403);
         }
 
-        // dd($req->all());
-
         DB::beginTransaction();
 
         try {
@@ -341,17 +339,18 @@ class SalesRiskPolicyController extends AccountBaseController
                 'title' => $req->title,
                 'department' => $req->department,
                 'type' => 'parent',
+                'comment' => $req->comment
             ]);
 
             // dd($policy);
             foreach ($req->ruleList as $item) {
                 $item = (object)$item;
-                // dd($item);
                 $rowData = [
                     'title' => $item->title,
                     'parent_id' => $policy->id,
                     'department' => $req->department,
-                    'type' => $item->policyType
+                    'type' => $item->policyType,
+                    'comment' => $item->comment
                 ];
 
                 switch ($item->policyType) {
@@ -383,7 +382,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     case "list":
                         $rowData['value_type'] = $item->valueType;
-                        if ($item->rulesType == "countries") {
+                        if ($item->valueType == "countries") {
                             $rowData['value'] = json_encode($item->countries);
                         }
                         $rowData['point'] = $item->points;
