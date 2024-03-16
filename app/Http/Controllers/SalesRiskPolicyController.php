@@ -6,6 +6,7 @@ use App\Models\Country;
 use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +38,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('input-fields', 'riskPolicyInputFields')->name('input-fields');
             Route::post('save', 'save')->name('save');
             Route::post('edit/{id}', 'edit')->name('edit');
+            Route::post('edit-single/{id}', 'editSingle')->name('edit-single');
             Route::get('rule-list', 'ruleList')->name('rule-list');
             Route::put('status-change/{id}/{status}', 'policyRuleStatusChange')->name('status-change');
             Route::get('question-fields', 'policyQuestionInputFields')->name('question-fields');
@@ -406,8 +408,32 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function edit(Request $req, $id): JsonResponse
     {
+        // dd($req->all(), $id);
+        $id=2;
+
+        try {
+            $policy = SalesRiskPolicy::findOrFail($id);
+        }
+        catch (ModelNotFoundException $ex)
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data not found'
+            ], 404);
+        }
+        catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 500);
+        }
+
+        if ($policy) {
+            # code...
+        }
+
         $validator = Validator::make($req->all(), [
-            'newPoint' => 'required|numeric'
+            'points' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -422,7 +448,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
-            // dd($policy);
+            dd($policy);
 
             if ($req->input('ruleType')) {
                 if ($req->input('ruleType') == 'yes')
@@ -437,6 +463,15 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         return response()->json();
+    }
+
+    function editSingle(Request $req, $id): JsonResponse
+    {
+        return response()->json([
+            'status' => 'pending',
+            'message' => 'Policy edited ',
+            'data' => []
+        ]);
     }
 
     function ruleList(Request $req)
