@@ -67,7 +67,7 @@ const SalesRiskAnalysisTable = ({
     const [editRuleData, setEditRuleData] = React.useState({});
     const [addQuestionsData, setAddQuestionsData] = React.useState({});
     const [statusActionData, setStatusActionData] = React.useState({});
-    const [editPolicyData, setEditPolicyData] = React.useState([]);
+    const [editPolicyData, setEditPolicyData] = React.useState({});
     const [editPolicyDefaultData, setEditPolicyDefaultData] = React.useState(
         []
     );
@@ -169,7 +169,7 @@ const SalesRiskAnalysisTable = ({
                     }
                 };
                 const payload = {
-                    id: row.id,
+                    id: selectedRule.id,
                     policyName: row.title,
                     department: row.department,
                     policyType: PolicyTypeItems.data.find(
@@ -277,7 +277,8 @@ const SalesRiskAnalysisTable = ({
             id: editRuleData?.id,
         };
         if (editRuleData.value) payload.value = editRuleData.value;
-        if (!_.isEmpty(editRuleData.valueType)) payload.valueType = editRuleData.valueType.name;
+        if (!_.isEmpty(editRuleData.valueType))
+            payload.valueType = editRuleData.valueType.name;
         if (editRuleData.from) payload.from = editRuleData.from;
         if (editRuleData.to) payload.to = editRuleData.to;
         if (editRuleData.points) payload.points = editRuleData.points;
@@ -298,7 +299,8 @@ const SalesRiskAnalysisTable = ({
                 [country.iso]: country.niceName,
             }));
         }
-        if (editRuleData.ruleComment) payload.comment = editRuleData.ruleComment;
+        if (editRuleData.ruleComment)
+            payload.comment = editRuleData.ruleComment;
         try {
             const res = await submitData(payload);
             if (res.data) {
@@ -354,11 +356,6 @@ const SalesRiskAnalysisTable = ({
                 points: "",
                 [name]: value,
             });
-        } else if (name === "policyName" || name === "department") {
-            setEditPolicyDefaultData({
-                ...editPolicyDefaultData,
-                [name]: value,
-            });
         } else {
             setEditRuleData({ ...editRuleData, [name]: value });
         }
@@ -385,6 +382,34 @@ const SalesRiskAnalysisTable = ({
         });
         setIsRuleUpdating(false);
     };
+
+    const handlePolicyEditChange = (e) => {
+        const { name, value } = e.target;
+        if (name === "policyName" || name === "department" || name === "comment") {
+            setEditPolicyDefaultData({
+                ...editPolicyDefaultData,
+                [name]: value,
+            });
+        } else if (name === "policyType") {
+            setEditPolicyData({
+                ...editPolicyData,
+                valueType: {},
+                value: "",
+                from: "",
+                to: "",
+                yes: "",
+                no: "",
+                countries: [],
+                points: "",
+                [name]: value,
+            });
+        } else {
+            setEditPolicyData({ ...editPolicyData, [name]: value });
+        }
+    };
+
+    console.log("editPolicyData", editPolicyData);
+    console.log("editPolicyDefaultData", editPolicyDefaultData);
 
     // reset form for policy on close
     const resetFormForPolicy = () => {
@@ -416,7 +441,12 @@ const SalesRiskAnalysisTable = ({
             (item) => item?.id === editPolicyData?.id
         );
 
+        console.log(editPolicyInputData)
+
+        console.log("isExist", isExist);
+        
         if (isExist) {
+            console.log("isExist", isExist);
             const updatedData = editPolicyInputData.map((item) => {
                 if (item.id === editPolicyData.id) {
                     return {
@@ -427,15 +457,35 @@ const SalesRiskAnalysisTable = ({
                 return item;
             });
             setIsRuleUpdating(false);
-            setEditPolicyData(updatedData);
+            setEditPolicyInputData(updatedData);
         } else {
-            setEditPolicyData([
+            console.log("isExistNot", isExist);
+            setEditPolicyInputData([
                 ...editPolicyInputData,
                 {
                     ...editPolicyData,
                     id: Math.random().toString(36).substring(7),
                 },
             ]);
+            setEditPolicyData({
+                policyName: "",
+                department: "",
+                valueType: {},
+                policyType: {},
+                value: "",
+                from: "",
+                to: "",
+                yes: "",
+                no: "",
+                comment: "",
+                yesComment: "",
+                noComment: "",
+                ruleComment: "",
+                countries: [],
+                points: "",
+                id: "",
+            });
+
         }
     };
 
@@ -456,19 +506,22 @@ const SalesRiskAnalysisTable = ({
         resetFormForPolicy();
     };
 
-    // add title on change
+    // auto generate title
+    const autoGenerateTitle = (data) => {
+        return `${data?.policyType?.label} ${
+            data?.valueType?.name === "currency" ? "$" : ""
+        }${data?.value}${data.from}${data?.from && data?.to ? "-" : ""}${
+            data.to
+        }${data?.valueType?.name === "percentage" ? "%" : ""}${
+            data?.valueType?.name === "hourly" ? "hr" : ""
+        }${data?.valueType?.name === "days" ? "days" : ""}`;
+    }
+
+    // add title on change for single rule
     useMemo(() => {
         setEditRuleData({
             ...editRuleData,
-            title: `${editRuleData?.policyType?.label} ${
-                editRuleData?.valueType?.name === "currency" ? "$" : ""
-            }${editRuleData?.value}${editRuleData.from}${
-                editRuleData?.from && editRuleData?.to ? "-" : ""
-            }${editRuleData.to}${
-                editRuleData?.valueType?.name === "percentage" ? "%" : ""
-            }${editRuleData?.valueType?.name === "hourly" ? "hr" : ""}${
-                editRuleData?.valueType?.name === "days" ? "days" : ""
-            }`,
+            title: autoGenerateTitle(editRuleData),
         });
     }, [
         editRuleData?.policyType?.name,
@@ -476,6 +529,19 @@ const SalesRiskAnalysisTable = ({
         editRuleData.value,
         editRuleData.from,
         editRuleData.to,
+    ]);
+    // 
+    useMemo(() => {
+        setEditPolicyData({
+            ...editPolicyData,
+            title: autoGenerateTitle(editPolicyData),
+        });
+    }, [
+        editPolicyData?.policyType?.name,
+        editPolicyData?.valueType?.name,
+        editPolicyData.value,
+        editPolicyData.from,
+        editPolicyData.to,
     ]);
 
     // Validation Update
@@ -612,6 +678,7 @@ const SalesRiskAnalysisTable = ({
                 handleCancelRuleOnPolicy={handleCancelRuleOnPolicy}
                 isRuleUpdating={isRuleUpdating}
                 setIsRuleUpdating={setIsRuleUpdating}
+                handleChange={handlePolicyEditChange}
             />
 
             {/* pagination */}

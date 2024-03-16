@@ -18,7 +18,7 @@ const MultiSelect = ({
     selectedCountries,
 }) => {
     const [search, setSearch] = React.useState("");
-    let _Options;
+    let _Options = [];
 
     if (selectedCountries?.length) {
         const filterCountries = data?.filter(
@@ -159,9 +159,8 @@ const MultiSelect = ({
 export default MultiSelect;
 
 MultiSelect.propTypes = {
-    pipeline: PropTypes.array.isRequired,
-    setSelected: PropTypes.func.isRequired,
-    options: PropTypes.func.isRequired,
-    newPolicyData: PropTypes.object.isRequired,
-    filedName: PropTypes.string.isRequired,
+    setSelected: PropTypes.func,
+    options: PropTypes.func,
+    newPolicyData: PropTypes.object,
+    filedName: PropTypes.string,
 };
