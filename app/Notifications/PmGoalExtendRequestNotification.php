@@ -10,19 +10,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class PmGoalReviewExplanationNotification extends Notification
+class PmGoalExtendRequestNotification extends Notification
 {
     use Queueable;
-    protected $ppg;
+    protected $goal;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($ppg)
+    public function __construct($goal)
     {
-        $this->ppg = $ppg;
+        $this->goal = $goal;
     }
 
     /**
@@ -45,7 +45,7 @@ class PmGoalReviewExplanationNotification extends Notification
     public function toMail($notifiable)
     {
 
-        $goal= ProjectPmGoal::where('id',$this->ppg->id)->first();
+        $goal= ProjectPmGoal::where('id',$this->goal->id)->first();
         $project= Project::where('id',$goal->project_id)->first();
         $url = url('/account/project-status?modal_type=filtered_goal_details&goal_id=' . $goal->id. '&project_id='.$project->id);
         $client= User::where('id',$goal->client_id)->first();
@@ -67,9 +67,9 @@ class PmGoalReviewExplanationNotification extends Notification
         }
         
         $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
-        $header = '<strong>' . __('PM '.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') . '</strong>';
+        $header = '<strong>' . __('Goal deadline extension requested by PM ('.$pm->name.')') . '</strong>';
 
-        $body= '<p>'.'PM'.$pm->name.'couldn’t meet his goal. Please check the details below:'.'</p>';
+        $body= '<p>'.'PM ('.$pm->name.') requested an extension for the following goal: </p>';
         $content =
         '<p>
             <b style="color: black">' . __('Project name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
@@ -87,16 +87,28 @@ class PmGoalReviewExplanationNotification extends Notification
         </p>'
         .
         '<p>
-            <b style="color: black">' . __('Goal description') . ': '.'</b>' . '<span>'.$goal->description.'</span>'. '
+            <b style="color: black">' . __('Goal title') . ': '.'</b>' . '<span>'.$goal->goal_name.'</span>'. '
+        </p>'
+        .
+        '<p>
+            <b style="color: black">' . __('Actual goal deadline') . ': '.'</b>' . '<span>'.$goal->goal_end_date.'</span>'. '
+        </p>'
+        .
+        '<p>
+            <b style="color: black">' . __('Extension requested') . ': '.'</b>' . '<span>'.$goal->extended_day. 'Days'.'</span>'. '
+        </p>'
+        .
+        '<p>
+            <b style="color: black">' . __('Reason for extension') . ': '.'</b>' . '<span>'.$goal->reason.'</span>'. '
         </p>';
         $goal->mail_status = 1;
         $goal->save();
 
           return (new MailMessage)
-          ->subject(__('PM '.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') )
+          ->subject(__('Goal deadline extension requested by PM ('.$pm->name.')') )
 
           ->greeting(__('email.Hi') . ' ' . mb_ucwords($notifiable->name) . ',')
-          ->markdown('mail.pm-goal.review_explanation', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
+          ->markdown('mail.pm-goal.extend_request', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
 
     /**

@@ -17,6 +17,7 @@ use App\Models\PmGoalDeadlineExtHistory;
 use App\Models\PmGoalExpHistory;
 use App\Models\Project;
 use App\Models\ProjectPmGoalFile;
+use App\Notifications\PmGoalExtendRequestNotification;
 use App\Notifications\PmGoalReviewExplanationNotification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -216,16 +217,13 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
-        $user  = User::where('id',229)->first(); // It's only for admin😒
+        $user  = User::where('id',229)->first(); // It's only for admin
         Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
 
         return response()->json(['status'=>200]);
     }
     public function projectStatusResolve(Request $request){
         // dd($request->all());
-
-
-        // \DB::beginTransaction();
         $validator = Validator::make($request->all(), [
             'client_communication' => 'required',
             'client_communication_rating' => 'required',
@@ -236,34 +234,76 @@ class ProjectStatusController extends AccountBaseController
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-        $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
-        $projectPG->client_communication = $request->client_communication;
-        $projectPG->client_communication_rating = $request->client_communication_rating;
-        $projectPG->negligence_pm = $request->negligence_pm;
-        $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
-        $projectPG->reason_status = 2;
-        $projectPG->expired_status = 2;
-        $projectPG->save();
+        try {
+            \DB::beginTransaction();
+            $projectPG = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
+            $projectPG->client_communication = $request->client_communication;
+            $projectPG->client_communication_rating = $request->client_communication_rating;
+            $projectPG->negligence_pm = $request->negligence_pm;
+            $projectPG->negligence_pm_rating = $request->negligence_pm_rating;
+            $projectPG->reason_status = 2;
+            $projectPG->expired_status = 2;
+            $projectPG->save();
 
-        $project = Project::where('id',$projectPG->project_id)->first();
-        $deal = Deal::where('id',$project->deal_id)->first();
-        $goalHistory = new PmGoalExpHistory();
-        $goalHistory->goal_id = $projectPG->id;
-        $goalHistory->start_date = $projectPG->goal_start_date;
-        $goalHistory->deadline = $projectPG->goal_end_date;
-        $goalHistory->goal_name = $projectPG->goal_name;
-        $goalHistory->description = $projectPG->description;
-        $goalHistory->duration = $projectPG->duration;
-        $goalHistory->goal_status = $projectPG->goal_status;
-        $goalHistory->reason = $projectPG->reason;
-        $goalHistory->client_communication = $request->client_communication;
-        $goalHistory->negligence_pm = $request->negligence_pm;
-        $goalHistory->client_communication_rating = $request->client_communication_rating;
-        $goalHistory->negligence_pm_rating = $request->negligence_pm_rating;
-        $goalHistory->authorization_status = 1;
-        $goalHistory->authorization_on = Carbon::now();
-        $goalHistory->authorization_by = Auth::user()->id;
-        $goalHistory->save();
+            $project = Project::where('id',$projectPG->project_id)->first();
+            $deal = Deal::where('id',$project->deal_id)->first();
+            $goalHistory = new PmGoalExpHistory();
+            $goalHistory->goal_id = $projectPG->id;
+            $goalHistory->start_date = $projectPG->goal_start_date;
+            $goalHistory->deadline = $projectPG->goal_end_date;
+            $goalHistory->goal_name = $projectPG->goal_name;
+            $goalHistory->description = $projectPG->description;
+            $goalHistory->duration = $projectPG->duration;
+            $goalHistory->goal_status = $projectPG->goal_status;
+            $goalHistory->reason = $projectPG->reason;
+            $goalHistory->client_communication = $request->client_communication;
+            $goalHistory->negligence_pm = $request->negligence_pm;
+            $goalHistory->client_communication_rating = $request->client_communication_rating;
+            $goalHistory->negligence_pm_rating = $request->negligence_pm_rating;
+            $goalHistory->authorization_status = 1;
+            $goalHistory->authorization_on = Carbon::now();
+            $goalHistory->authorization_by = Auth::user()->id;
+            $goalHistory->save();
+
+            $actions = PendingAction::where('code','PMRE')->where('past_status',0)->where('goal_id',$projectPG->id)->get();
+            if($actions != null)
+            {
+                foreach ($actions as $key => $action)
+                {
+                    $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
+                    $project= Project::where('id',$pm_goal->project_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $project_manager= User::where('id',$pm_goal->pm_id)->first();
+                    $client= User::where('id',$pm_goal->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+                    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $action->message = 'Review explanation and ratings add successfully!';
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->goal_id = $action->goal_id;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->save();
+                }
+            }
+
+            \DB::commit();   
+        } catch (\Throwable $th) {
+            \DB::rollback();
+        }
 
         return response()->json(['status'=>200]);
     }
@@ -274,35 +314,46 @@ class ProjectStatusController extends AccountBaseController
     }
     public function storePMExtendRequest(Request $request){
         // dd($request->all());
-        // \DB::beginTransaction();
 
-        $goal = ProjectPmGoal::where('id', $request->goal_id)->first();
-        $goal->extended_reason = $request->is_client_communication;
-        $goal->extended_day = $request->extended_day;
-        $goal->extension_req_on = Carbon::now();
-        $goal->extended_request_status = 1;
-        $goal->screenshot = $request->hasFile('screenshot') ? 'yes' : 'no';
-        $goal->uuid = uniqid();
-        $goal->save();
+        try {
+            \DB::beginTransaction();
+            $goal = ProjectPmGoal::where('id', $request->goal_id)->first();
+            $goal->extended_reason = $request->is_client_communication;
+            $goal->extended_day = $request->extended_day;
+            $goal->extension_req_on = Carbon::now();
+            $goal->extended_request_status = 1;
+            $goal->screenshot = $request->hasFile('screenshot') ? 'yes' : 'no';
+            $goal->uuid = uniqid();
+            $goal->save();
 
-        
-        if ($request->hasFile('screenshot')) {
-            $files = $request->file('screenshot');
-            $destinationPath = storage_path('app/public/');
-            $file_name = [];
+            
+            if ($request->hasFile('screenshot')) {
+                $files = $request->file('screenshot');
+                $destinationPath = storage_path('app/public/');
+                $file_name = [];
 
-            foreach ($files as $file) {
-                $pmGoalFile = new ProjectPmGoalFile();
-                $pmGoalFile->goal_id = $goal->id;
-                $pmGoalFile->project_id = $goal->project_id;
-                $pmGoalFile->uuid = $goal->uuid;
-                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                array_push($file_name, $filename);
-                $pmGoalFile->file_name = $filename;
-                $pmGoalFile->save();
+                foreach ($files as $file) {
+                    $pmGoalFile = new ProjectPmGoalFile();
+                    $pmGoalFile->goal_id = $goal->id;
+                    $pmGoalFile->project_id = $goal->project_id;
+                    $pmGoalFile->uuid = $goal->uuid;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $pmGoalFile->file_name = $filename;
+                    $pmGoalFile->save();
 
-                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                }
             }
+
+            $helper = new HelperPendingActionController();
+            $helper->PmGoalExtendRequest($goal);
+            $user  = User::where('id',229)->first(); // It's only for admin
+            Notification::send($user, new PmGoalExtendRequestNotification($goal));
+
+            \DB::commit();
+        } catch (\Throwable $th) {
+            \DB::rollback();
         }
         return response()->json(['status'=>200]);
     }

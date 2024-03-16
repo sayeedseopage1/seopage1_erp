@@ -1847,7 +1847,54 @@ class HelperPendingActionController extends AccountBaseController
                         'button_name' => 'Review explanation and add your ratings!',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('project-status.index', ['modal_type' => 'review_explanation', 'goal_id' => $goal->id, 'project_id' => $project->id]),
+                        'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details', 'goal_id' => $goal->id, 'project_id' => $project->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+
+        }
+
+        public function PmGoalExtendRequest($goal)
+        {
+            $pm_goal = ProjectPmGoal::where('id',$goal->id)->first();
+            $project= Project::where('id',$goal->project_id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $pm = User::where('id',$pm_goal->pm_id)->first();
+            // $admin = User::where('role_id',1)->first();
+            $goal_count = '';
+            if($pm_goal->duration ==3){
+                $goal_count = '1st';
+            }elseif($pm_goal->duration ==7){
+                $goal_count = '2nd';
+            }elseif($pm_goal->duration ==12){
+                $goal_count = '3rd';
+            }elseif($pm_goal->duration ==15){
+                $goal_count = '4th';
+            }elseif($pm_goal->duration ==22){
+                $goal_count = '5th';
+            }else{
+                $goal_count = '6th';
+            }
+
+                $action = new PendingAction();
+                $action->code = 'PMRE';
+                $action->serial = 'PMRE'.'x0';
+                $action->item_name= 'Goal deadline extension request by PM <a href="'.route('employess.show',$pm->id).'">'.$pm->name.'</a>';
+                $action->heading= 'Goal deadline extension request by PM <a href="'.route('employess.show',$pm->id).'">'.$pm->name.'</a>!';
+                $action->message = 'Goal ('.$goal_count.') (Name: '.$pm_goal->goal_name.') extension request has been submitted by PM <a href="'.route('employess.show',$pm->id).'">'.$pm->name.'</a> for project ( <a href="'.route('projects.show',$project->id).'">'.$project->name.'</a> ) from client ( <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>) !';
+                $action->timeframe= 24;
+                $action->goal_id = $pm_goal->id;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->authorization_for= 229; //IT'S ONLY FOR ADMIN NOT FOR ROLE ID =1 (INDIVIDUAL USER ONLY)
+                $button = [
+                    [
+                        'button_name' => 'Review explanation and add your ratings!',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('project-status.index', ['modal_type' => 'filtered_goal_details', 'goal_id' => $pm_goal->id, 'project_id' => $project->id]),
                     ],
 
                 ];
