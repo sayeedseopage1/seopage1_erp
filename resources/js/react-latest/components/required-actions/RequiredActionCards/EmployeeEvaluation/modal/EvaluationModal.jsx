@@ -142,7 +142,8 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                 },
                 content: {
                     borderRadius: "10px",
-                    maxHeight: "700px",
+                    height: "auto",
+                    maxHeight: "800px",
                     maxWidth: "80vw",
                     margin: "auto auto",
                     border: "none",
@@ -153,15 +154,6 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
             isOpen={isEvaluationModal}
             onRequestClose={() => setIsEvaluationModal(false)}
         >
-            {/* <div className="d-flex justify-content-end mb-4">
-                <div
-                    onClick={() => setIsEvaluationModal(false)}
-                    style={{ cursor: "pointer" }}
-                >
-                    <RxCrossCircled size={`30px`} />
-                </div>
-            </div> */}
-
             <EvalTableTitle>
                 <span>New Developer Evaluation :</span>
                 <span>{developerEvaluation?.developerName}</span>
@@ -180,10 +172,13 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                 <Button
                     onClick={() => setIsEvaluationModal(false)}
                     variant="secondary"
+                    size="md"
                 >
                     Close
                 </Button>
-                <Button className="ml-2">Confirm Submission</Button>
+                <Button size="md" className="ml-2" disabled="true">
+                    Confirm Submission
+                </Button>
             </FooterButtons>
         </ReactModal>
     );
