@@ -112,11 +112,12 @@ const ActionDropdown = ({ ...rest }) => {
                         )}
                     {/* delete lead */}
                     {(auth.getRoleId() === 1 ||
-                        auth.getRoleId() === 4 ||
-                        auth.getRoleId() === 8) &&
+                        // auth.getRoleId() === 4 ||
+                        auth.getRoleId() === 8) && 
                         rest?.row?.original.authorization_status === 1 &&
-                        rest?.row?.original.status ===
-                            ("pending" || "Accepted") && (
+                        // rest?.row?.original.status ===
+                        //     ("pending" || "Accepted") && 
+                        (
 
                             <Dropdown.Item
                                 onClick={() =>
