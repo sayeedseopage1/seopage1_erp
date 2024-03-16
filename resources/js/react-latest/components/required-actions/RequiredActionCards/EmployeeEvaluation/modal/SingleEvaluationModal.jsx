@@ -3,23 +3,18 @@ import ReactModal from "react-modal";
 import styles from "./SingleEvaluation.module.css";
 import { EvalTableTitle } from "../Table/ui";
 import FractionalRating from "../../../../../../react/global/FractionalRating";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../../../../../../react/global/Button";
 import ReusableSection from "./ReusableSection";
 import CKEditorComponent from "../../../../../ui/ckeditor";
-
+import { toast } from "react-toastify";
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
-
+    const [averageRating, setAverageRating] = useState(0);
     const [formData, setFormData] = useState({
         work_quality_first_chance_rating: null,
         work_quality_first_revision_rating: null,
@@ -33,6 +28,18 @@ const SingleEvaluationModal = ({
         obedience_rating: null,
         reporting_boss_comment: "",
     });
+
+    useEffect(() => {
+        const calculateAverageRating = () => {
+            const ratings = Object.values(formData).filter(
+                (value) => value !== null && !isNaN(value)
+            );
+            const sum = ratings.reduce((total, rating) => total + rating, 0);
+            return (sum / (ratings.length - 1)).toFixed(2);
+        };
+        setAverageRating(calculateAverageRating());
+    }, [formData]);
+
     const formFields = [
         {
             label: "Quality of work (in the first chance)",
@@ -42,9 +49,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     work_quality_first_chance_rating: value,
                 }),
-            error:
-                errors.work_quality_first_chance_rating &&
-                "Rating is required.",
         },
         {
             label: "Quality of work (After 1st revision)",
@@ -54,9 +58,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     work_quality_first_revision_rating: value,
                 }),
-            error:
-                errors.work_quality_first_revision_rating &&
-                "Rating is required.",
         },
         {
             label: "Quality of work (After 2nd revision)",
@@ -66,9 +67,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     work_quality_second_revision_rating: value,
                 }),
-            error:
-                errors.work_quality_second_revision_rating &&
-                "Rating is required.",
         },
         {
             label: "Speed of work",
@@ -78,7 +76,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     work_speed_rating: value,
                 }),
-            error: errors.work_speed_rating && "Rating is required.",
         },
         {
             label: "Ability to understand instruction",
@@ -88,9 +85,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     instruction_understanding_ability_rating: value,
                 }),
-            error:
-                errors.instruction_understanding_ability_rating &&
-                "Rating is required.",
         },
         {
             label: "Communication",
@@ -100,7 +94,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     communication_rating: value,
                 }),
-            error: errors.communication_rating && "Rating is required.",
         },
         {
             label: "Professionalism",
@@ -110,7 +103,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     professionalism_rating: value,
                 }),
-            error: errors.professionalism_rating && "Rating is required.",
         },
         {
             label: "Ability to identify issues",
@@ -120,9 +112,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     issues_identifications_ability_rating: value,
                 }),
-            error:
-                errors.issues_identifications_ability_rating &&
-                "Rating is required.",
         },
         {
             label: "Dedication",
@@ -132,7 +121,6 @@ const SingleEvaluationModal = ({
                     ...formData,
                     dedication_rating: value,
                 }),
-            error: errors.dedication_rating && "Rating is required.",
         },
         {
             label: "Obedience",
@@ -142,15 +130,64 @@ const SingleEvaluationModal = ({
                     ...formData,
                     obedience_rating: value,
                 }),
-            error: errors.obedience_rating && "Rating is required.",
         },
     ];
 
-    const onSubmit = () => {
+    const handleSubmit = () => {
+        const requiredFields = [
+            {
+                key: "work_quality_first_chance_rating",
+                label: "Quality of work (in the first chance)",
+            },
+            {
+                key: "work_quality_first_revision_rating",
+                label: "Quality of work (After 1st revision)",
+            },
+            {
+                key: "work_quality_second_revision_rating",
+                label: "Quality of work (After 2nd revision)",
+            },
+            { key: "work_speed_rating", label: "Speed of work" },
+            {
+                key: "instruction_understanding_ability_rating",
+                label: "Ability to understand instruction",
+            },
+            { key: "communication_rating", label: "Communication" },
+            { key: "professionalism_rating", label: "Professionalism" },
+            {
+                key: "issues_identifications_ability_rating",
+                label: "Ability to identify issues",
+            },
+            { key: "dedication_rating", label: "Dedication" },
+            { key: "obedience_rating", label: "Obedience" },
+            { key: "reporting_boss_comment", label: "Lead Developers Opinion" },
+        ];
+
+        const emptyFields = requiredFields
+            .filter((field) => !formData[field.key])
+            .map((field) => field.label);
+
+        if (emptyFields.length > 0) {
+            const errorMessage = (
+                <div>
+                    <div style={{ fontWeight: "bold" }}>
+                        {" "}
+                        Please fill in the following fields:
+                    </div>
+                    <div>
+                        {emptyFields.map((field, index) => (
+                            <p key={index}>{field}</p>
+                        ))}
+                    </div>
+                </div>
+            );
+
+            toast.error(errorMessage);
+            return;
+        }
+
         console.log("form data", formData);
     };
-
-    console.log("submit data", formData);
 
     return (
         <ReactModal
@@ -163,7 +200,7 @@ const SingleEvaluationModal = ({
                 content: {
                     borderRadius: "10px",
                     maxHeight: "900px",
-                    maxWidth: "900px",
+                    maxWidth: "1000px",
                     margin: "auto auto",
                     border: "none",
                     overflow: "hidden",
@@ -188,6 +225,7 @@ const SingleEvaluationModal = ({
                             <th>Total hours tracked</th>
                             <th>Link to the completed work</th>
                             <th>Number of Revisions needed</th>
+                            <th>Average Rating</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,22 +238,32 @@ const SingleEvaluationModal = ({
                                 <a href="#">{data?.linkToTheCompletedWork}</a>
                             </td>
                             <td>{data.numberOfRevisionsNeeded}</td>
+                            <td>{averageRating === NaN ? 0 : averageRating}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <form onSubmit={onSubmit}>
+            <div>
                 <div className={styles.rating_container}>
                     {formFields.map((field, index) => (
                         <ReusableSection key={index} {...field} />
                     ))}
                 </div>
+
                 <div
                     style={{
-                        border: "2px solid rgba(0, 0, 0, 0.5)",
+                        marginTop: "30px",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Lead Developers Opinion
+                </div>
+                <div
+                    style={{
+                        border: "2px solid rgba(0, 0, 0, 0.2)",
                         marginBottom: "20px",
-                        marginTop: "20px",
+                        marginTop: "10px",
                     }}
                 >
                     <CKEditorComponent
@@ -230,10 +278,14 @@ const SingleEvaluationModal = ({
                     />
                 </div>
                 <div className="d-flex justify-content-center">
-                    <Button className="mr-2" type="submit">
+                    <button
+                        className="mr-2 btn btn-primary "
+                        onClick={handleSubmit}
+                    >
                         Submit Evaluation
-                    </Button>
+                    </button>
                     <Button
+                        size="md"
                         onClick={() => toggleSingleEvaluationModal()}
                         className="ml-2"
                         variant="secondary"
@@ -241,7 +293,7 @@ const SingleEvaluationModal = ({
                         Close
                     </Button>
                 </div>
-            </form>
+            </div>
         </ReactModal>
     );
 };

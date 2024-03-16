@@ -1,7 +1,7 @@
 import React from "react";
 import FractionalRating from "../../../../../../react/global/FractionalRating";
 
-const ReusableSection = ({ label, value, onChange, error }) => {
+const ReusableSection = ({ label, value, onChange }) => {
     return (
         <section>
             <label>{label}</label>
@@ -24,7 +24,7 @@ const ReusableSection = ({ label, value, onChange, error }) => {
                     ></div>
                 )}
             </div>
-            {error && <p className="error">{error}</p>}
+            {/* {error && <p className="error">{error}</p>} */}
         </section>
     );
 };
