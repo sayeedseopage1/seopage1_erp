@@ -20,15 +20,8 @@ const logoOptions = [
 ];
 
 
-const TypeOfLogo = ({ selected, onSelect, taskId, isDesignerTask }) => {
+const TypeOfLogo = ({ selected, onSelect, isDesignerTask }) => {
     const [query, setQuery] = React.useState('');
-
-    const params = useParams();
-
-    const {
-        data,
-        isFetching
-    } = useGetTaskDetailsQuery(`/${params?.taskId || taskId}/json?mode=category`);
 
     const logos_list = logoOptions?.map(d => ({
         id: d?.id,
@@ -59,13 +52,6 @@ const TypeOfLogo = ({ selected, onSelect, taskId, isDesignerTask }) => {
                 </Combobox.Button>
 
                 <Combobox.Options className="sp1-select-options">
-
-                    {isFetching && (
-                        <div className='sp1-select-option-nodata'>
-                            <Loader />
-                        </div>
-                    )}
-
                     {filteredData?.length === 0 ?
                         <div className='sp1-select-option-nodata'>
                             Nothing found.

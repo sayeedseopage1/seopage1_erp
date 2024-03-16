@@ -4285,7 +4285,7 @@ class TaskController extends AccountBaseController
                      abort(403);
                 }
             }
-            $task = Task::with('users', 'createBy', 'boardColumn')->select([
+            $task = Task::with('graphicWorkDetail.graphicTaskFiles','users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
                 'task_types.task_type',

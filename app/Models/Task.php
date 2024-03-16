@@ -502,4 +502,9 @@ class Task extends BaseModel
     {
         return $this->belongsTo(TaskApprove::class, 'task_id', 'id');
     }*/
+
+    public function graphicWorkDetail()
+    {
+        return $this->hasOne(GraphicWorkDetails::class, 'task_id', 'id');
+    }
 }

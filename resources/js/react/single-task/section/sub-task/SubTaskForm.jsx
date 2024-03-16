@@ -13,6 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
     useCheckRestrictedWordsMutation,
     useCreateSubtaskMutation,
+    useGetTypesOfGraphicWorksQuery,
     useLazyGetTaskDetailsQuery,
 } from "../../../services/api/SingleTaskPageApi";
 
@@ -32,6 +33,7 @@ import { calenderOpen } from "./helper/calender_open";
 import TypeOfGraphicsWorkSelection from "../../../projects/components/graphics-design-forms/TypeOfGraphicsWorkSelection";
 import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
+import { ColorItem } from "../../components/PMGuideline";
 
 const fileInputStyle = {
     height: "39px",
@@ -45,7 +47,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         isWorkingEnvironmentSubmit,
     } = useSelector((s) => s.subTask);
 
-    // console.log(subTask)
+    // graphic task details 
+    const graphicWorkDetails = new Object(taskDetails?.graphic_work_detail);
+
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
     const [showEnvForm, setShowEnvForm] = useState(false);
@@ -72,7 +76,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
-    const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(JSON.parse(graphicWorkDetails?.file_types_needed));
     const [textForDesign, setTextForDesign] = useState('');
     const [imageForDesigner, setImageForDesigner] = useState(null);
     const [imgOrVidForWork, setImgOrVidForWork] = useState(null);
@@ -83,13 +87,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [primaryColor, setPrimaryColor] = React.useState("");
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
-    const [secondaryColors, setSecondaryColors] = React.useState([
-        {
-            id: "",
-            color: "",
-            description: "",
-        },
-    ]);
+    const [secondaryColors, setSecondaryColors] = React.useState(JSON.parse(graphicWorkDetails?.secondary_colors));
     //state for graphic designer end
     const [pageType, setPageType] = React.useState("");
     const [pageTypeOthers, setPageTypeOthers] = React.useState("");
@@ -104,6 +102,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
+
+
 
     const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
@@ -120,13 +120,23 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     const [checkRestrictedWords, { isLoading: checking }] =
         useCheckRestrictedWordsMutation();
+    const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
 
     // handle change
     React.useEffect(() => {
         setMilestone(task?.milestoneTitle);
         setProject(task?.projectName);
         setParentTask(task?.title);
-    }, [task]);
+        setBrandName(graphicWorkDetails?.brand_name)
+        setNumOfVersions(graphicWorkDetails?.number_of_versions);
+        setReference(graphicWorkDetails?.reference);
+        setFontName(graphicWorkDetails?.font_name);
+        setFontUrl(graphicWorkDetails?.font_url);
+        setPrimaryColor(graphicWorkDetails?.primary_color);
+        setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
+        // setSecondaryColors(graphicWorkDetails?.secondary_colors);
+        // setProject(task?.projectName);
+    }, [task, graphicWorkDetails]);
 
     React.useEffect(() => {
         getTaskDetails(`/${task?.id}/json?mode=estimation_time`).unwrap();
@@ -138,6 +148,23 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         let value = e.target.value;
         setState(value);
     };
+
+    // if graphic task for designer select category default
+    React.useEffect(() => {
+        isDesignerTask &&
+            setTypeOfGraphicsCategory({
+                id: graphicWorkDetails?.type_of_graphic_work_id,
+                name: graphicOptions?.find((item) => item.id === graphicWorkDetails?.type_of_graphic_work_id)?.name,
+            });
+    }, [isDesignerTask, graphicWorkDetails?.type_of_graphic_work_id, graphicOptions]);
+
+    React.useEffect(() => {
+        isDesignerTask &&
+            setTypeOfLogo({
+                type_name: graphicWorkDetails?.type_of_logo,
+            });
+    }, [isDesignerTask, graphicWorkDetails?.type_of_logo]);
+
 
     // if task for designer select category default
     React.useEffect(() => {
@@ -311,7 +338,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     // TODO: hide fields conditionally by this condition 
     // console.log("task", task?.category?.name)
-    console.log("task1", task)
+    // console.log("task1", task)
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -689,7 +716,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             <TypeOfGraphicsWorkSelection
                                 selected={typeOfGraphicsCategory}
                                 onSelect={setTypeOfGraphicsCategory}
-                            // isDesignerTask={isDesignerTask}
+                                isDesignerTask={isDesignerTask}
                             />
                             {err?.typeOfGraphicsCategory && (
                                 <div style={{ color: "red" }}>
@@ -699,12 +726,12 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         </div>
                         {/* for logo  */}
                         {
-                            typeOfGraphicsCategory?.type_name === "Logo" && <>
+                            typeOfGraphicsCategory?.id === 1 && <>
                                 <div className="col-12 col-md-6">
                                     <TypeOfLogo
                                         selected={typeOfLogo}
                                         onSelect={setTypeOfLogo}
-                                    // isDesignerTask={isDesignerTask}
+                                        isDesignerTask={isDesignerTask}
                                     />
                                     {err?.typeOfLogo && (
                                         <div style={{ color: "red" }}>
@@ -719,12 +746,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         type="text"
                                         placeholder="Enter brand name"
                                         name="brandName"
-                                        required={true}
-                                        value={brandName}
+                                        defaultValue={brandName}
                                         error={err?.brandName}
-                                        onChange={(e) =>
-                                            handleChange(e, setBrandName)
-                                        }
+                                        readOnly={true}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -734,12 +758,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         type="number"
                                         placeholder="Enter Number of versions"
                                         name="numOfVersions"
-                                        required={true}
-                                        value={numOfVersions}
+                                        defaultValue={numOfVersions}
                                         error={err?.numOfVersions}
-                                        onChange={(e) =>
-                                            handleChange(e, setNumOfVersions)
-                                        }
+                                        readOnly={true}
                                     />
                                 </div>
                                 <div className="col-12 col-md-6">
@@ -752,18 +773,16 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             File Types Needed
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        <FileTypesNeeded
-                                            className={`form-control height-35 w-100 f-14`}
-                                            id='fileTypesNeeded'
-                                            fileTypesNeeded={fileTypesNeeded}
-                                            setFileTypesNeeded={setFileTypesNeeded}
-                                            multiple
-                                        />
-                                        {err?.fileTypesNeeded && (
-                                            <div style={{ color: "red" }}>
-                                                {err?.fileTypesNeeded}
-                                            </div>
-                                        )}
+                                        <div>
+                                            <FileTypesNeeded
+                                                className={`form-control height-35 w-100 f-14`}
+                                                id='fileTypesNeeded'
+                                                fileTypesNeeded={fileTypesNeeded}
+                                                setFileTypesNeeded={setFileTypesNeeded}
+                                                multiple
+                                                readOnly={true}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </>
@@ -857,12 +876,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 type="text"
                                 placeholder="Enter a task reference"
                                 name="reference"
-                                required={true}
                                 value={reference}
                                 error={err?.reference}
-                                onChange={(e) =>
-                                    handleChange(e, setReference)
-                                }
+                                readOnly={true}
                             />
                         </div>
 
@@ -877,9 +893,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 required={true}
                                 value={fontName}
                                 error={err?.fontName}
-                                onChange={(e) =>
-                                    handleChange(e, setFontName)
-                                }
+                                readOnly={true}
                             />
                         </div>
 
@@ -892,9 +906,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 placeholder="Enter font url"
                                 name="fontUrl"
                                 value={fontUrl}
-                                onChange={(e) =>
-                                    handleChange(e, setFontUrl)
-                                }
+                                readOnly={true}
                             />
                         </div>
 
@@ -918,7 +930,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         </div>
 
                         {/* color schema */}
-                        <div className="col-12">
+                        <div className="col-12 col-md-6">
                             <div className="form-group">
                                 <label
                                     htmlFor={'brandGuideline'}
@@ -932,17 +944,29 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     <ul className='ml-0'>
                                         <li className='d-flex flex-column'>
                                             <span className='font-weight-bold mr-2 mb-2'>Primary Color: </span>
-                                            {/* <ColorItem color={guideline?.primary_color} desc={guideline?.primary_color_description} /> */}
+                                            <ColorItem color={primaryColor} desc={primaryColorDescription} />
                                         </li>
 
                                         <li className='d-flex flex-column'>
-                                            <span className='font-weight-bold mr-2 mb-2'>Secondary Color: </span>
+                                            <span className='font-weight-bold mr-2 mb-2'>
+                                                {
+                                                    secondaryColors?.length > 1
+                                                        ? "Secondary Colors: "
+                                                        : "Secondary Color: "
+                                                }
+                                            </span>
                                             {/* {
-                                                _.map(_.toArray(guideline?.color), (color, i) => (
+                                                _.map(_.toArray(secondaryColors), (color, i) => (
                                                     <ColorItem key={i + color} color={color}
-                                                        desc={guideline?.color_description?.[i]} />
+                                                        desc={secondaryColors?.description?.[i]} />
                                                 ))
                                             } */}
+                                            {
+                                                secondaryColors?.map((color, i) => (
+                                                    <ColorItem key={i + color} color={color?.color}
+                                                        desc={color?.description} />
+                                                ))
+                                            }
                                         </li>
                                     </ul>
                                 </div>

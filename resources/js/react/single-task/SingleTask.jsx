@@ -45,7 +45,6 @@ const SingleTaskPage = () => {
         { refetchOnMountOrArgChange: true }
     );
 
-    console.log("48", data)
     const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
 
     const task = new SingleTask(Task); // task instance

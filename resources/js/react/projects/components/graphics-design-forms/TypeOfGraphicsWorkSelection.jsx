@@ -5,10 +5,8 @@ import Loader from '../../../single-task/components/Loader';
 import { Combobox } from '@headlessui/react';
 import { useGetTypesOfGraphicWorksQuery } from '../../../services/api/SingleTaskPageApi';
 
-const TypeOfGraphicsWorkSelection = ({ selected, onSelect, taskId, isDesignerTask }) => {
+const TypeOfGraphicsWorkSelection = ({ selected, onSelect, isDesignerTask }) => {
     const [query, setQuery] = React.useState('');
-
-    // const params = useParams();
 
     const { data: graphicOptions, isFetching } = useGetTypesOfGraphicWorksQuery("")
 

@@ -4,38 +4,35 @@ import SearchBox from '../../../Insights/ui/Searchbox';
 // styles
 import style from "./multiselect.module.css";
 
-const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple }) => {
+const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOnly }) => {
     const [search, setSearch] = React.useState('');
 
     const onSelected = (option) => {
-        if (multiple) {
-            if (fileTypesNeeded.includes(option)) {
-                setFileTypesNeeded(fileTypesNeeded.filter(p => p !== option));
+        if (!readOnly) {
+            if (multiple) {
+                if (fileTypesNeeded.includes(option)) {
+                    setFileTypesNeeded(fileTypesNeeded.filter(p => p !== option));
+                } else {
+                    setFileTypesNeeded([...fileTypesNeeded, option]);
+                }
             } else {
-                setFileTypesNeeded([...fileTypesNeeded, option]);
+                setFileTypesNeeded([option]);
             }
-        } else {
-            setFileTypesNeeded([option]);
         }
     }
 
     // remove tag
     const remove = (option) => {
-        setFileTypesNeeded(fileTypesNeeded.filter(p => p !== option));
+        if (!readOnly) {
+            setFileTypesNeeded(fileTypesNeeded.filter(p => p !== option));
+        }
     }
-
-    // remove all tags
-    // const removeAll = () => {
-    //     if (multiple) {
-    //         setFileTypesNeeded([]);
-    //     } else setFileTypesNeeded(['Select Pipeline']);
-    // }
 
     const options = () => (["Favicon", "Only icon", "Logo with icon", "Logo without icon"])
 
     return (
         <React.Fragment>
-            <Dropdown disabled={true} className="cnx_select_box_dd">
+            <Dropdown disabled={readOnly} className="cnx_select_box_dd">
                 {/* FIXME: Style height is not working */}
                 <Dropdown.Toggle className={`${style.cnx_select_box_custom}`}>
                     <div className="flex-wrap d-flex"
@@ -44,9 +41,9 @@ const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple }) => {
                         }}>
                         {fileTypesNeeded.length > 0 ? fileTypesNeeded.map(p => (
                             <div key={`${p}-${Math.random()}`} className="cnx_select_box_tag">
-                                <button aria-label='removeTag' onMouseDown={() => remove(p)}>
+                                {!readOnly && <button aria-label='removeTag' onMouseDown={() => remove(p)}>
                                     <i className="fa-solid fa-xmark" />
-                                </button>
+                                </button>}
                                 <span>{p}</span>
                             </div>
                         )) : "Select File Types"}
