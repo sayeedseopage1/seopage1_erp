@@ -67,7 +67,7 @@ class PmGoalReviewExplanationNotification extends Notification
         }
         
         $greet= '<p><b style="color: black">'  . '<span style="color:black">'.'Hi '. $notifiable->name. ','.'</span>'.'</b></p>';
-        $header = '<strong>' . __('PM'.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') . '</strong>';
+        $header = '<strong>' . __('PM '.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') . '</strong>';
 
         $body= '<p>'.'PM'.$pm->name.'couldn’t meet his goal. Please check the details below:'.'</p>';
         $content =
@@ -93,7 +93,7 @@ class PmGoalReviewExplanationNotification extends Notification
         $goal->save();
 
           return (new MailMessage)
-          ->subject(__('PM'.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') )
+          ->subject(__('PM '.$pm->name.': '.$goal_count.' goal for client ' . $client->name . ' was not met! Add your rating!') )
 
           ->greeting(__('email.Hi') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.pm-goal.review_explanation', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
