@@ -1841,13 +1841,13 @@ class HelperPendingActionController extends AccountBaseController
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
-                $action->authorization_for= 62; //IT'S ONLY FOR ADMIN NOT FOR ROLE ID =1 (INDIVIDUAL USER ONLY)
+                $action->authorization_for= 229; //IT'S ONLY FOR ADMIN NOT FOR ROLE ID =1 (INDIVIDUAL USER ONLY)
                 $button = [
                     [
                         'button_name' => 'Review explanation and add your ratings!',
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
-                        'button_url' => route('project-status.index', ['modal_type' => 'review_explanation', 'project_id' => $project->id]),
+                        'button_url' => route('project-status.index', ['modal_type' => 'review_explanation', 'goal_id' => $goal->id, 'project_id' => $project->id]),
                     ],
 
                 ];

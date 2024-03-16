@@ -216,7 +216,7 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
-        $user  = User::where('id',62)->first(); // It's only for admin😒
+        $user  = User::where('id',229)->first(); // It's only for admin😒
         Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
 
         return response()->json(['status'=>200]);

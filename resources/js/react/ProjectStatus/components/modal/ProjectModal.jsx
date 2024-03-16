@@ -52,6 +52,8 @@ const ProjectModal = ({
                 searchParams.delete("project_id");
                 setSearchParams(searchParams);
             }
+        } else {
+            setUpdatePmGoal(pmGoal)
         }
     }, [isOpen, pmGoal, projectStatus, searchParams]);
 
