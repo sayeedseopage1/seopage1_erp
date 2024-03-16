@@ -1262,6 +1262,7 @@ var SingleTaskPage = function SingleTaskPage() {
     }),
     data = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
+  console.log("48", data);
   var _useGetTaskStatusQuer = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetTaskStatusQuery)(params === null || params === void 0 ? void 0 : params.taskId),
     taskStatus = _useGetTaskStatusQuer.data;
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_9__.SingleTask(Task); // task instance
@@ -2500,6 +2501,9 @@ var Guideline = function Guideline(_ref) {
   var isLong = (text === null || text === void 0 ? void 0 : text.length) > 400;
   var showText = isLong ? text.slice(0, 400) + '...' : text;
   var ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+
+  // console.log("15", showText)
+
   var handleExpend = function handleExpend(e) {
     e.preventDefault();
     setExpend(!expend);
@@ -11219,6 +11223,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
     taskDetails = _useSelector.task,
     subTask = _useSelector.subTask,
     isWorkingEnvironmentSubmit = _useSelector.isWorkingEnvironmentSubmit;
+
+  // console.log(subTask)
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useDispatch)();
   var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_15__.CompareDate();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
@@ -11340,7 +11346,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     colorSchema = _React$useState6[0],
     setColorSchema = _React$useState6[1];
-  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0___default().useState("#1D82F5"),
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     primaryColor = _React$useState8[0],
     setPrimaryColor = _React$useState8[1];
@@ -11349,8 +11355,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
     primaryColorDescription = _React$useState10[0],
     setPrimaryColorDescription = _React$useState10[1];
   var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_0___default().useState([{
-      id: "egqsz",
-      color: "#1D82F5",
+      id: "",
+      color: "",
       description: ""
     }]),
     _React$useState12 = _slicedToArray(_React$useState11, 2),
@@ -11786,72 +11792,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setPageTypePriority("");
     setPageTypeName("");
   }, [pageType]);
-
-  // add secondary color
-  var addSecondaryColor = function addSecondaryColor(e) {
-    e.stopPropagation();
-    setSecondaryColors(function (prev) {
-      return [].concat(_toConsumableArray(prev), [{
-        id: (Math.random() + 1).toString(36).substring(7),
-        color: "#1D82F5",
-        description: ""
-      }]);
-    });
-  };
-
-  // handle secondary color change
-  var handleSecondaryColorChange = function handleSecondaryColorChange(e, id) {
-    var newColors = lodash__WEBPACK_IMPORTED_MODULE_9___default().map(secondaryColors, function (item) {
-      return item.id === id ? {
-        id: id,
-        color: e.target.value,
-        description: ""
-      } : item;
-    });
-    setSecondaryColors(_toConsumableArray(newColors));
-  };
-
-  // handle secondary color description change
-  var handleSecondaryColorDescriptionChange = function handleSecondaryColorDescriptionChange(e, editor, id) {
-    var text = editor.getData();
-    var newColors = lodash__WEBPACK_IMPORTED_MODULE_9___default().map(secondaryColors, function (item) {
-      return item.id === id ? _objectSpread(_objectSpread({}, item), {}, {
-        description: text
-      }) : item;
-    });
-    setSecondaryColors(_toConsumableArray(newColors));
-  };
-
-  // remove secondary color
-  var removeSecondaryColor = function removeSecondaryColor(e, id) {
-    var newColors = lodash__WEBPACK_IMPORTED_MODULE_9___default().filter(secondaryColors, function (item) {
-      return item.id !== id;
-    });
-    setSecondaryColors(_toConsumableArray(newColors));
-  };
-
-  // color schema
-  var _onChange = function onChange(e, setState) {
-    setState(e.target.value);
-  };
-  var count = 0;
-  var cErr = new Object();
-  if (colorSchema === "") {
-    cErr.colorSchema = "You Need to Select An Option";
-    count++;
-  }
-  if (colorSchema === "yes") {
-    if (primaryColorDescription === "") {
-      cErr.pColorDesc = "You Have to Provide This Field!";
-      count++;
-    }
-    lodash__WEBPACK_IMPORTED_MODULE_9___default().map(secondaryColors, function (item) {
-      if (item.description === "") {
-        cErr.sDescription = "You Have to Provide This Field!";
-        count++;
-      }
-    });
-  }
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("form", {
     onSubmit: handleSubmit,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
@@ -12252,190 +12192,25 @@ var SubTaskForm = function SubTaskForm(_ref) {
               htmlFor: 'brandGuideline',
               className: "f-14 text-dark-gray mb-2",
               "data-label": "true",
-              children: "Color Schema"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
-                className: "mt-3 mx-3 p-3",
-                style: {
-                  background: "#F9F9F9",
-                  borderRadius: "10px"
-                },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                  className: "form-group",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("label", {
-                    htmlFor: "",
-                    className: "mb-2",
-                    style: {
-                      fontWeight: 600,
-                      color: "#777"
-                    },
-                    children: ["1. Primary Color", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("sup", {
-                      children: "*"
-                    }), " "]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                    className: "form-group px-2",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("label", {
-                      htmlFor: "",
-                      children: "Choose Color:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                      className: "input-group mb-3 col-12 col-md-6",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("input", {
-                        type: "text",
-                        className: "form-control",
-                        placeholder: "Recipient's username",
-                        "aria-label": "Recipient's username",
-                        "aria-describedby": "basic-addon2",
-                        value: primaryColor,
-                        onChange: function onChange(e) {
-                          return _onChange(e, setPrimaryColor);
-                        }
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
-                        className: "input-group-append",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
-                          className: "input-group-text px-1 border-0",
-                          id: "basic-addon2",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("input", {
-                            type: "color",
-                            value: primaryColor,
-                            onChange: function onChange(e) {
-                              return _onChange(e, setPrimaryColor);
-                            },
-                            style: {
-                              width: "32px",
-                              border: "none"
-                            }
-                          })
-                        })
-                      })]
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                    className: "form-group pl-2",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("label", {
-                      htmlFor: "",
-                      children: ["Where Should Designer Use this Color ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("sup", {
-                        children: "*"
-                      })]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
-                      className: "ck-editor-holder",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
-                        onChange: function onChange(e, editor) {
-                          return setPrimaryColorDescription(editor.getData());
-                        }
-                      })
-                    }), (error === null || error === void 0 ? void 0 : error.pColorDesc) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                      className: "",
-                      style: {
-                        color: "red"
-                      },
-                      children: [" ", error === null || error === void 0 ? void 0 : error.pColorDesc, " "]
-                    })]
-                  })]
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
-                className: "mt-3 mx-3 p-3",
-                style: {
-                  background: "#F9F9F9",
-                  borderRadius: "10px"
-                },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                  className: "form-group",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("label", {
-                    htmlFor: "",
-                    className: "mb-2",
-                    style: {
-                      fontWeight: 600,
-                      color: "#777"
-                    },
-                    children: ["2. Secondary Color", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("sup", {
-                      children: "*"
-                    }), " "]
-                  }), lodash__WEBPACK_IMPORTED_MODULE_9___default().map(secondaryColors, function (item, index) {
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                      className: "p-3",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                        className: "form-group",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("label", {
-                          htmlFor: "",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("b", {
-                            children: [index + 1, "."]
-                          }), " ", "Choose Color:"]
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                          className: "d-flex align-items-center",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                            className: "input-group mb-3 pl-3 col-10 col-md-6",
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("input", {
-                              type: "text",
-                              className: "form-control",
-                              placeholder: "Recipient's username",
-                              "aria-label": "Recipient's username",
-                              "aria-describedby": "basic-addon2",
-                              value: item.color,
-                              onChange: function onChange(e) {
-                                return handleSecondaryColorChange(e, item.id);
-                              }
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
-                              className: "input-group-append",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
-                                className: "input-group-text px-1 border-0",
-                                id: "basic-addon2",
-                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("input", {
-                                  type: "color",
-                                  value: item.color,
-                                  onChange: function onChange(e) {
-                                    return handleSecondaryColorChange(e, item.id);
-                                  },
-                                  style: {
-                                    width: "32px",
-                                    border: "none"
-                                  }
-                                })
-                              })
-                            })]
-                          }), lodash__WEBPACK_IMPORTED_MODULE_9___default().size(secondaryColors) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("button", {
-                            "aria-label": "remove",
-                            onClick: function onClick(e) {
-                              return removeSecondaryColor(e, item.id);
-                            },
-                            className: "py-2 px-3 ml-auto rounded color_remove_btn",
-                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("i", {
-                              className: "fa-solid fa-trash-can"
-                            })
-                          })]
-                        })]
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                        className: "form-group pl-3",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("label", {
-                          htmlFor: "",
-                          children: ["Where Should Designer Use this Color", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("sup", {
-                            children: "*"
-                          })]
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
-                          className: "ck-editor-holder",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
-                            onChange: function onChange(e, editor) {
-                              return handleSecondaryColorDescriptionChange(e, editor, item.id);
-                            }
-                          })
-                        }), (error === null || error === void 0 ? void 0 : error.sDescription) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("div", {
-                          className: "",
-                          style: {
-                            color: "red"
-                          },
-                          children: [" ", error === null || error === void 0 ? void 0 : error.sDescription, " "]
-                        })]
-                      })]
-                    }, item.id);
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
-                    className: "d-flex align-items-center px-3",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("button", {
-                      type: "button",
-                      onClick: addSecondaryColor,
-                      className: "bg-transparent text-primary hover-underline ml-auto",
-                      children: "+ Another Color"
-                    })
-                  })]
-                })
-              })]
+              children: "Color Scheme"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
+              className: "mb-3",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsxs)("ul", {
+                className: "ml-0",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("li", {
+                  className: "d-flex flex-column",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
+                    className: "font-weight-bold mr-2 mb-2",
+                    children: "Primary Color: "
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("li", {
+                  className: "d-flex flex-column",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("span", {
+                    className: "font-weight-bold mr-2 mb-2",
+                    children: "Secondary Color: "
+                  })
+                })]
+              })
             })]
           })
         })]

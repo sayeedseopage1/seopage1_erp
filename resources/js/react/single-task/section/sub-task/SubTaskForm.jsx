@@ -44,6 +44,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         subTask,
         isWorkingEnvironmentSubmit,
     } = useSelector((s) => s.subTask);
+
+    // console.log(subTask)
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
     const [showEnvForm, setShowEnvForm] = useState(false);
@@ -78,13 +80,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [fontUrl, setFontUrl] = useState('');
     const [brandGuideline, setBrandGuideline] = useState(null);
     const [colorSchema, setColorSchema] = React.useState("");
-    const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
+    const [primaryColor, setPrimaryColor] = React.useState("");
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
     const [secondaryColors, setSecondaryColors] = React.useState([
         {
-            id: "egqsz",
-            color: "#1D82F5",
+            id: "",
+            color: "",
             description: "",
         },
     ]);
@@ -517,69 +519,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPageTypeName("");
     }, [pageType]);
 
-    // add secondary color
-    const addSecondaryColor = (e) => {
-        e.stopPropagation();
-        setSecondaryColors((prev) => [
-            ...prev,
-            {
-                id: (Math.random() + 1).toString(36).substring(7),
-                color: "#1D82F5",
-                description: "",
-            },
-        ]);
-    };
-
-    // handle secondary color change
-    const handleSecondaryColorChange = (e, id) => {
-        let newColors = _.map(secondaryColors, (item) =>
-            item.id === id
-                ? { id, color: e.target.value, description: "" }
-                : item
-        );
-        setSecondaryColors([...newColors]);
-    };
-
-    // handle secondary color description change
-    const handleSecondaryColorDescriptionChange = (e, editor, id) => {
-        let text = editor.getData();
-        let newColors = _.map(secondaryColors, (item) =>
-            item.id === id ? { ...item, description: text } : item
-        );
-        setSecondaryColors([...newColors]);
-    };
-
-    // remove secondary color
-    const removeSecondaryColor = (e, id) => {
-        let newColors = _.filter(secondaryColors, (item) => item.id !== id);
-        setSecondaryColors([...newColors]);
-    };
-
-    // color schema
-    const onChange = (e, setState) => {
-        setState(e.target.value);
-    };
-
-    let count = 0;
-    const cErr = new Object();
-
-    if (colorSchema === "") {
-        cErr.colorSchema = "You Need to Select An Option";
-        count++;
-    }
-    if (colorSchema === "yes") {
-        if (primaryColorDescription === "") {
-            cErr.pColorDesc = "You Have to Provide This Field!";
-            count++;
-        }
-
-        _.map(secondaryColors, (item) => {
-            if (item.description === "") {
-                cErr.sDescription = "You Have to Provide This Field!";
-                count++;
-            }
-        });
-    }
 
     return (
         <form onSubmit={handleSubmit}>
@@ -986,282 +925,27 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     className={`f-14 text-dark-gray mb-2`}
                                     data-label="true"
                                 >
-                                    Color Schema
+                                    Color Scheme
                                 </label>
-                                <React.Fragment>
-                                    {/* primary color */}
-                                    <div
-                                        className="mt-3 mx-3 p-3"
-                                        style={{
-                                            background: "#F9F9F9",
-                                            borderRadius: "10px",
-                                        }}
-                                    >
-                                        <div className="form-group">
-                                            <label
-                                                htmlFor=""
-                                                className="mb-2"
-                                                style={{
-                                                    fontWeight: 600,
-                                                    color: "#777",
-                                                }}
-                                            >
-                                                1. Primary Color{" "}
-                                                <sup>*</sup>{" "}
-                                            </label>
+                                {/* TODO: add color schema from real api */}
+                                <div className='mb-3'>
+                                    <ul className='ml-0'>
+                                        <li className='d-flex flex-column'>
+                                            <span className='font-weight-bold mr-2 mb-2'>Primary Color: </span>
+                                            {/* <ColorItem color={guideline?.primary_color} desc={guideline?.primary_color_description} /> */}
+                                        </li>
 
-                                            <div className="form-group px-2">
-                                                <label htmlFor="">
-                                                    Choose Color:
-                                                </label>
-                                                <div className="input-group mb-3 col-12 col-md-6">
-                                                    <input
-                                                        type="text"
-                                                        className="form-control"
-                                                        placeholder="Recipient's username"
-                                                        aria-label="Recipient's username"
-                                                        aria-describedby="basic-addon2"
-                                                        value={
-                                                            primaryColor
-                                                        }
-                                                        onChange={(e) =>
-                                                            onChange(
-                                                                e,
-                                                                setPrimaryColor
-                                                            )
-                                                        }
-                                                    />
-                                                    <div className="input-group-append">
-                                                        <span
-                                                            className="input-group-text px-1 border-0"
-                                                            id="basic-addon2"
-                                                        >
-                                                            <input
-                                                                type="color"
-                                                                value={
-                                                                    primaryColor
-                                                                }
-                                                                onChange={(
-                                                                    e
-                                                                ) =>
-                                                                    onChange(
-                                                                        e,
-                                                                        setPrimaryColor
-                                                                    )
-                                                                }
-                                                                style={{
-                                                                    width: "32px",
-                                                                    border: "none",
-                                                                }}
-                                                            />
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="form-group pl-2">
-                                                <label htmlFor="">
-                                                    Where Should
-                                                    Designer Use this
-                                                    Color <sup>*</sup>
-                                                </label>
-                                                <div className="ck-editor-holder">
-                                                    <CKEditorComponent
-                                                        onChange={(
-                                                            e,
-                                                            editor
-                                                        ) =>
-                                                            setPrimaryColorDescription(
-                                                                editor.getData()
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-
-                                                {error?.pColorDesc && (
-                                                    <div
-                                                        className=""
-                                                        style={{
-                                                            color: "red",
-                                                        }}
-                                                    >
-                                                        {" "}
-                                                        {
-                                                            error?.pColorDesc
-                                                        }{" "}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* secondary color */}
-                                    <div
-                                        className="mt-3 mx-3 p-3"
-                                        style={{
-                                            background: "#F9F9F9",
-                                            borderRadius: "10px",
-                                        }}
-                                    >
-                                        <div className="form-group">
-                                            <label
-                                                htmlFor=""
-                                                className="mb-2"
-                                                style={{
-                                                    fontWeight: 600,
-                                                    color: "#777",
-                                                }}
-                                            >
-                                                2. Secondary Color{" "}
-                                                <sup>*</sup>{" "}
-                                            </label>
-
-                                            {_.map(
-                                                secondaryColors,
-                                                (item, index) => (
-                                                    <div
-                                                        className="p-3"
-                                                        key={item.id}
-                                                    >
-                                                        <div className="form-group">
-                                                            <label htmlFor="">
-                                                                <b>
-                                                                    {index +
-                                                                        1}
-                                                                    .
-                                                                </b>{" "}
-                                                                Choose
-                                                                Color:
-                                                            </label>
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="input-group mb-3 pl-3 col-10 col-md-6">
-                                                                    <input
-                                                                        type="text"
-                                                                        className="form-control"
-                                                                        placeholder="Recipient's username"
-                                                                        aria-label="Recipient's username"
-                                                                        aria-describedby="basic-addon2"
-                                                                        value={
-                                                                            item.color
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            handleSecondaryColorChange(
-                                                                                e,
-                                                                                item.id
-                                                                            )
-                                                                        }
-                                                                    />
-
-                                                                    <div className="input-group-append">
-                                                                        <span
-                                                                            className="input-group-text px-1 border-0"
-                                                                            id="basic-addon2"
-                                                                        >
-                                                                            <input
-                                                                                type="color"
-                                                                                value={
-                                                                                    item.color
-                                                                                }
-                                                                                onChange={(
-                                                                                    e
-                                                                                ) =>
-                                                                                    handleSecondaryColorChange(
-                                                                                        e,
-                                                                                        item.id
-                                                                                    )
-                                                                                }
-                                                                                style={{
-                                                                                    width: "32px",
-                                                                                    border: "none",
-                                                                                }}
-                                                                            />
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-
-                                                                {_.size(
-                                                                    secondaryColors
-                                                                ) >
-                                                                    1 && (
-                                                                        <button
-                                                                            aria-label="remove"
-                                                                            onClick={(
-                                                                                e
-                                                                            ) =>
-                                                                                removeSecondaryColor(
-                                                                                    e,
-                                                                                    item.id
-                                                                                )
-                                                                            }
-                                                                            className="py-2 px-3 ml-auto rounded color_remove_btn"
-                                                                        >
-                                                                            <i className="fa-solid fa-trash-can" />
-                                                                        </button>
-                                                                    )}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="form-group pl-3">
-                                                            <label htmlFor="">
-                                                                Where
-                                                                Should
-                                                                Designer
-                                                                Use this
-                                                                Color{" "}
-                                                                <sup>
-                                                                    *
-                                                                </sup>
-                                                            </label>
-                                                            <div className="ck-editor-holder">
-                                                                <CKEditorComponent
-                                                                    onChange={(
-                                                                        e,
-                                                                        editor
-                                                                    ) =>
-                                                                        handleSecondaryColorDescriptionChange(
-                                                                            e,
-                                                                            editor,
-                                                                            item.id
-                                                                        )
-                                                                    }
-                                                                />
-                                                            </div>
-
-                                                            {error?.sDescription && (
-                                                                <div
-                                                                    className=""
-                                                                    style={{
-                                                                        color: "red",
-                                                                    }}
-                                                                >
-                                                                    {" "}
-                                                                    {
-                                                                        error?.sDescription
-                                                                    }{" "}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                )
-                                            )}
-
-                                            <div className="d-flex align-items-center px-3">
-                                                <button
-                                                    type="button"
-                                                    onClick={
-                                                        addSecondaryColor
-                                                    }
-                                                    className="bg-transparent text-primary hover-underline ml-auto"
-                                                >
-                                                    + Another Color
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </React.Fragment>
-
+                                        <li className='d-flex flex-column'>
+                                            <span className='font-weight-bold mr-2 mb-2'>Secondary Color: </span>
+                                            {/* {
+                                                _.map(_.toArray(guideline?.color), (color, i) => (
+                                                    <ColorItem key={i + color} color={color}
+                                                        desc={guideline?.color_description?.[i]} />
+                                                ))
+                                            } */}
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                         {/* end color schema */}
