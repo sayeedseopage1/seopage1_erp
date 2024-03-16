@@ -59,7 +59,7 @@ const PercentageofGoalsMetModal = ({
               <p style={customHeader}>Total goals: {projectDetails?.total_goal}</p>
               <p style={customHeader}>Goals deadline expired so far: {projectDetails?.goal_expire}</p>
               <p style={customHeader}>Goals met: {projectDetails?.goal_meet}</p>
-              <p style={customHeader}>Percentage of goals met: {projectDetails.goal_percentage ?? 0}%</p>
+              <p style={customHeader}>Percentage of goals met: {projectDetails?.goal_percentage ?? 0}%</p>
           </div>          
           <PercentageofGoalsMetTable
             projectDetails={projectDetails}

@@ -159,30 +159,30 @@ const ResolveModal = ({
                 <div className="w-100">
                     <div className="my-2 row">
                         <p className="col-4"><strong>Project Name</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.project_name}</p>
+                        <p className="col-8">{projectDetails?.project_name}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Client:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.clientName}</p>
+                        <p className="col-8">{projectDetails?.clientName}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.currency_symbol} {projectDetails.project_budget}</p>
+                        <p className="col-8">{projectDetails?.currency_symbol} {projectDetails?.project_budget}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Project Category:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.project_category}</p>
+                        <p className="col-8">{projectDetails?.project_category}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Start Date:</strong>{" "}</p>
                         <p className="col-8">{new Date(
-                            projectDetails.goal_start_date
+                            projectDetails?.goal_start_date
                         ).toLocaleDateString()}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Deadline:</strong>{" "}</p>
                         <p className="col-8">{new Date(
-                            projectDetails.goal_end_date
+                            projectDetails?.goal_end_date
                         ).toLocaleDateString()}</p>
                     </div>
                     <div className="my-2 row">
@@ -239,7 +239,7 @@ const ResolveModal = ({
                             <p><strong>Client communication rating</strong></p>
                             <div className="d-flex justify-content-between align-items-center">
                              <FractionalRating 
-                                 value={resolveModalData.client_communication_rating}
+                                 value={resolveModalData?.client_communication_rating}
                                 onChange={(value) => setResolveModalData({
                                     ...resolveModalData,
                                     client_communication_rating: value
@@ -247,7 +247,7 @@ const ResolveModal = ({
                              />
                                 {resolveModalData?.client_communication_rating  && <small>{resolveModalData?.client_communication_rating} /10</small>}
                             </div>
-                            {resolveModalDataValidation.client_communication_rating && <small className="text-danger my-1">Client Communication Rating is required</small>}
+                            {resolveModalDataValidation?.client_communication_rating && <small className="text-danger my-1">Client Communication Rating is required</small>}
                         </div>
                     </div>
                     <div style={styles.reasonContainer}>

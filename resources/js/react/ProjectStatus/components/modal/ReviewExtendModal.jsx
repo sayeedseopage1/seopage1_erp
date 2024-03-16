@@ -73,10 +73,10 @@ const ReviewExtendRequestModal = ({
             return;
         }
         const fd = new FormData();
-        fd.append("extended_day", reviewExtendState.extended_day ?? "");
-        fd.append("is_any_negligence", reviewExtendState.comment ?? "");
-        fd.append("goal_extension_auth_checkbox", reviewExtendState.goal_extension_auth_checkbox ?? "");
-        fd.append("goal_id", reviewExtendState.goal_id ?? "");
+        fd.append("extended_day", reviewExtendState?.extended_day ?? "");
+        fd.append("is_any_negligence", reviewExtendState?.comment ?? "");
+        fd.append("goal_extension_auth_checkbox", reviewExtendState?.goal_extension_auth_checkbox ?? "");
+        fd.append("goal_id", reviewExtendState?.goal_id ?? "");
         fd.append("project_id", reviewExtendRequestData.project_id)
         fd.append("status", "1");
         fd.append(
@@ -175,8 +175,7 @@ const ReviewExtendRequestModal = ({
         }
     };
 
-    console.log("projectExtendImages", reviewExtendState);
-    console.log("projectExtendImages", reviewExtendStateValidation);
+    
 
     return (
         <ReactModal
@@ -215,19 +214,19 @@ const ReviewExtendRequestModal = ({
                         <p className="col-4">
                             <strong>Project Name:</strong>{" "}
                         </p>
-                        <p className="col-8">{projectDetails.project_name}</p>
+                        <p className="col-8">{projectDetails?.project_name}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4">
                             <strong>Client:</strong>{" "}
                         </p>
-                        <p className="col-8">{projectDetails.clientName}</p>
+                        <p className="col-8">{projectDetails?.clientName}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4">
                             <strong>Project Manager:</strong>{" "}
                         </p>
-                        <p className="col-8">{projectDetails.pmName}</p>
+                        <p className="col-8">{projectDetails?.pmName}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4">
@@ -235,7 +234,7 @@ const ReviewExtendRequestModal = ({
                         </p>
                         <p className="col-8">
                             {projectDetails?.currency_symbol}
-                            {projectDetails.project_budget}
+                            {projectDetails?.project_budget}
                         </p>
                     </div>
                     <div className="my-2 row">
@@ -377,7 +376,7 @@ const ReviewExtendRequestModal = ({
                         </Flex>
                     </Flex>
                     <Flex justifyContent="flex-start">
-                        {reviewExtendStateValidation.goal_extension_auth_checkbox && (
+                        {reviewExtendStateValidation?.goal_extension_auth_checkbox && (
                             <p className="text-danger mt-1">
                                 Goal extension authorization is required
                             </p>

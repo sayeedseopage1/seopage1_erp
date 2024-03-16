@@ -163,22 +163,22 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                 <div className="w-100">
                     <div className="my-2 row">
                         <p className="col-4"><strong>Project Name:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.project_name}</p>
+                        <p className="col-8">{projectDetails?.project_name}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Client:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.clientName}</p>
+                        <p className="col-8">{projectDetails?.clientName}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
-                        <p className="col-8"> {projectDetails?.currency_symbol}{projectDetails.project_budget}</p>
+                        <p className="col-8"> {projectDetails?.currency_symbol}{projectDetails?.project_budget}</p>
                     </div>
                     <div className="my-2 row">
                         <p className="col-4"><strong>Extended days:</strong>{" "}</p>
                         <div className="col-8">
                             <input
                                 placeholder="Enter the extended days"
-                                value={extendRequestData.extended_day}
+                                value={extendRequestData?.extended_day}
                                 type="number"
                                 onKeyPress={handleOnkeypress}
                                 required={true}
@@ -189,7 +189,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                                 })}
                                 style={{ padding: "5px", borderRadius: "5px" }}
                             />
-                            {extendRequestDataValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
+                            {extendRequestDataValidation?.extended_day && <p className="text-danger my-1">Extended days is required</p>}
                         </div>
                     </div>
 
@@ -216,7 +216,7 @@ const ExtendRequestModal = ({ projectDetails, isOpen, onClose, extendRequestGoal
                             })} />
                         </div>
                         {
-                            extendRequestDataValidation.is_client_communication && <p className="text-danger my-1">Reason is required</p>
+                            extendRequestDataValidation?.is_client_communication && <p className="text-danger my-1">Reason is required</p>
                         }
                     </div>
 
