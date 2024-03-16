@@ -4,6 +4,7 @@ import Switch from "../Switch";
 import Tooltip from "../Tooltip";
 import EditIcon from "../ui/EditIcon";
 import { SalesPointsContainer } from "../ui/Styles/ui";
+import "../Styles/salesRiskAnalysisTableColumns.css";
 
 export const SalesRiskAnalysisTableColumns = [
     {
@@ -16,18 +17,22 @@ export const SalesRiskAnalysisTableColumns = [
             return (
                 <div className="d-flex flex-column">
                     <div className="d-flex align-items-center mb-2">
-                        <div class="custom-control custom-switch">
+                        <div className={`custom-control custom-switch`}>
                             <input
                                 type="checkbox"
                                 checked={data?.status === "1" ? true : false}
-                                class="custom-control-input"
+                                className="custom-control-input"
                                 id="customSwitch1"
                                 onClick={() => {
                                     action.handlePolicyStatus(data);
                                 }}
                             />
                             <label
-                                class="custom-control-label"
+                                className={`custom-control-label ${
+                                    data?.status === "1"
+                                        ? "sales_risk_status_toggle_checked"
+                                        : "sales_risk_status_toggle_not_checked"
+                                }`}
                                 for="customSwitch1"
                             />
                         </div>
@@ -45,7 +50,7 @@ export const SalesRiskAnalysisTableColumns = [
                                 <>
                                     <Tooltip text={data?.comment}>
                                         {" "}
-                                        <i class="fa-solid fa-circle-info "></i>
+                                        <i className="fa-solid fa-circle-info "></i>
                                     </Tooltip>
                                 </>
                             ) : (
@@ -136,7 +141,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                         text={rule?.comment}
                                                     >
                                                         {" "}
-                                                        <i class="fa-solid fa-circle-info"></i>
+                                                        <i className="fa-solid fa-circle-info"></i>
                                                     </Tooltip>
                                                 </>
                                             ) : (
@@ -170,7 +175,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                             )}
                                                         >
                                                             {" "}
-                                                            <i class="fa-solid fa-circle-info"></i>
+                                                            <i className="fa-solid fa-circle-info"></i>
                                                         </Tooltip>
                                                     </>
                                                 ) : (
@@ -197,7 +202,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                             )}
                                                         >
                                                             {" "}
-                                                            <i class="fa-solid fa-circle-info"></i>
+                                                            <i className="fa-solid fa-circle-info"></i>
                                                         </Tooltip>
                                                     </>
                                                 ) : (
@@ -227,7 +232,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                         text={rule?.comment}
                                                     >
                                                         {" "}
-                                                        <i class="fa-solid fa-circle-info "></i>
+                                                        <i className="fa-solid fa-circle-info "></i>
                                                     </Tooltip>
                                                 </>
                                             ) : (
@@ -260,7 +265,7 @@ export const SalesRiskAnalysisTableColumns = [
                                         {rule?.comment ? (
                                             <>
                                                 <Tooltip text={rule?.comment}>
-                                                    <i class="fa-solid fa-circle-info"></i>
+                                                    <i className="fa-solid fa-circle-info"></i>
                                                 </Tooltip>
                                             </>
                                         ) : (
@@ -303,7 +308,6 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
-          
 
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
@@ -413,7 +417,11 @@ export const SalesRiskAnalysisTableColumns = [
                                                 }}
                                             >
                                                 {" "}
-                                                {getYesNoValue(rule, "yes", "point")}
+                                                {getYesNoValue(
+                                                    rule,
+                                                    "yes",
+                                                    "point"
+                                                )}
                                             </span>
                                         </li>
                                         <li
@@ -427,7 +435,11 @@ export const SalesRiskAnalysisTableColumns = [
                                                     marginRight: "10px",
                                                 }}
                                             >
-                                                {getYesNoValue(rule, "no", "point")}
+                                                {getYesNoValue(
+                                                    rule,
+                                                    "no",
+                                                    "point"
+                                                )}
                                             </span>
                                         </li>
                                     </ul>

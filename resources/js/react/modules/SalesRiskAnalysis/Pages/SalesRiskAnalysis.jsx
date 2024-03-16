@@ -396,7 +396,6 @@ const SalesRiskAnalysis = () => {
         setPagination(paginate);
     };
 
-    console.log("salesRiskAnalysisRules", pageIndex, pageSize);
 
     return (
         <React.Fragment>

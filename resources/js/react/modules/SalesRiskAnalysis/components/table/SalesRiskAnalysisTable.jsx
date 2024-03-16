@@ -271,29 +271,36 @@ const SalesRiskAnalysisTable = ({
             });
             return;
         }
-
         const payload = {
             title: editRuleData?.title,
             policyType: editRuleData?.policyType?.name,
+            id: editRuleData?.id,
         };
-        if (editRuleData?.value) payload.value = editRuleData?.value;
-        if (!_.isEmpty(editRuleData.valueType))
-            payload.valueType = editRuleData.valueType?.name;
-        if (editRuleData?.from) payload.from = editRuleData?.from;
-        if (editRuleData?.to) payload.to = editRuleData?.to;
-        if (editRuleData?.points) payload.points = editRuleData?.points;
-        if (editRuleData?.yes) payload.yes = editRuleData?.yes;
-        if (editRuleData?.no) payload.no = editRuleData?.no;
-        if (editRuleData?.countries?.length > 0) {
-            payload.countries = editRuleData?.countries.map((country) => ({
+        if (editRuleData.value) payload.value = editRuleData.value;
+        if (!_.isEmpty(editRuleData.valueType)) payload.valueType = editRuleData.valueType.name;
+        if (editRuleData.from) payload.from = editRuleData.from;
+        if (editRuleData.to) payload.to = editRuleData.to;
+        if (editRuleData.points) payload.points = editRuleData.points;
+        if (editRuleData.yes && editRuleData.no) {
+            payload.value = {
+                yes: {
+                    point: editRuleData.yes,
+                    comment: editRuleData.yesComment,
+                },
+                no: {
+                    point: editRuleData.no,
+                    comment: editRuleData.noComment,
+                },
+            };
+        }
+        if (editRuleData.countries?.length > 0) {
+            payload.countries = editRuleData.countries.map((country) => ({
                 [country.iso]: country.niceName,
             }));
         }
-
-        // console.log("payload", payload);
-
+        if (editRuleData.ruleComment) payload.comment = editRuleData.ruleComment;
         try {
-            const res = await submitData(editRuleData);
+            const res = await submitData(payload);
             if (res.data) {
                 toast.success("Rules updated successfully");
                 handleCloseEditRuleModal();
