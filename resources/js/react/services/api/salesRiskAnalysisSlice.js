@@ -8,7 +8,7 @@ const _token = document
 const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getSalesRiskAnalysisRules: build.query({
-            query: (query) => `/account/sales-risk-policies/rule-list`,
+            query: (query) => `/account/sales-risk-policies/rule-list?${query}`,
             providesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
         }),
         getSalesRiskAnalysisInputs: build.query({

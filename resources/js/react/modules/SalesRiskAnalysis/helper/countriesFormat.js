@@ -12,3 +12,15 @@ export const FormatJsonCountry = (data) => {
   });
   return countriesList;
 }
+
+/**
+  * Retrieves a value from a JSON object based on the specified type and valueType.
+  * @param {Object} data - The data object containing the JSON string.
+  * @param {string} type - The type of data to retrieve from the JSON object.
+  * @param {string} valueType - The type of value to retrieve under the specified type.
+  * @returns {*} The value corresponding to the specified type and valueType, or undefined if not found.
+*/
+export const getYesNoValue = (ruleData, type, valueType) => {
+  if (ruleData?.type !== "yesNo") return;
+  return JSON?.parse(ruleData?.value)[type][valueType];
+};

@@ -1,6 +1,7 @@
-import { FormatJsonCountry } from "../../helper/countriesFormat";
+import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
 import MultiSelectShowDropDown from "../MultiSelectShowDropDown";
 import Switch from "../Switch";
+import Tooltip from "../Tooltip";
 import EditIcon from "../ui/EditIcon";
 import { SalesPointsContainer } from "../ui/Styles/ui";
 
@@ -94,7 +95,7 @@ export const SalesRiskAnalysisTableColumns = [
         id: "policy_rules",
         header: "Policy Rules",
         accessorKey: "policy_rules",
-        cell: ({ row , table}) => {
+        cell: ({ row, table }) => {
             const data = row?.original;
             const action = table?.options?.meta;
             const countries = data?.ruleList?.find(
@@ -112,6 +113,7 @@ export const SalesRiskAnalysisTableColumns = [
                 "fixed",
                 "range",
             ];
+
             return (
                 <div className="d-flex justify-content-center align-items-center flex-column">
                     {data?.ruleList?.map((rule, index) => {
@@ -158,10 +160,14 @@ export const SalesRiskAnalysisTableColumns = [
                                         >
                                             Yes{" "}
                                             <span className="ml-2">
-                                                {rule?.comment ? (
+                                                {getYesNoValue(rule, "yes") ? (
                                                     <>
                                                         <Tooltip
-                                                            text={rule?.comment}
+                                                            text={getYesNoValue(
+                                                                rule,
+                                                                "yes",
+                                                                "comment"
+                                                            )}
                                                         >
                                                             {" "}
                                                             <i class="fa-solid fa-circle-info"></i>
@@ -181,10 +187,14 @@ export const SalesRiskAnalysisTableColumns = [
                                         >
                                             No{" "}
                                             <span className="ml-2">
-                                                {rule?.comment ? (
+                                                {getYesNoValue(rule, "no") ? (
                                                     <>
                                                         <Tooltip
-                                                            text={rule?.comment}
+                                                            text={getYesNoValue(
+                                                                rule,
+                                                                "no",
+                                                                "comment"
+                                                            )}
                                                         >
                                                             {" "}
                                                             <i class="fa-solid fa-circle-info"></i>
@@ -293,6 +303,8 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
+          
+
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     {data?.ruleList?.map((rule, index) => {
@@ -401,7 +413,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                 }}
                                             >
                                                 {" "}
-                                                {rule?.value?.split(",")[0]}
+                                                {getYesNoValue(rule, "yes", "point")}
                                             </span>
                                         </li>
                                         <li
@@ -415,7 +427,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                     marginRight: "10px",
                                                 }}
                                             >
-                                                {rule?.value?.split(",")[1]}
+                                                {getYesNoValue(rule, "no", "point")}
                                             </span>
                                         </li>
                                     </ul>

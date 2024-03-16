@@ -17,7 +17,7 @@
 
 import _ from "lodash";
 import { PolicyTypeItemValuesType, PolicyTypeItems } from "../constant";
-import { FormatJsonCountry } from "./countriesFormat";
+import { FormatJsonCountry, getYesNoValue } from "./countriesFormat";
 
 export const formatEditPolicyData = (data) => {
 
@@ -26,7 +26,7 @@ export const formatEditPolicyData = (data) => {
   const valueTypes = PolicyTypeItemValuesType.data
 
 
-  const formatData = data.ruleList.map((item) => {
+  data.ruleList.map((item) => {
     let payload = {
       policyName: data.title,
       department: data.department,
@@ -46,10 +46,10 @@ export const formatEditPolicyData = (data) => {
         : "",
       from: item?.type === "range" ? item.value.split(', ')[0] : "",
       to: item?.type === "range" ? item.value.split(', ')[1] : "",
-      yes: item?.type === "yesNo" ? item.value.split(', ')[0] : "",
-      no: item?.type === "yesNo" ? item.value.split(', ')[1] : '',
-      yesComment: item.type === 'yesNo' ? item.comment : "",
-      noComment: item.type === 'yesNo' ? item.comment : "",
+      yes: item?.type === "yesNo" ? getYesNoValue(item.value, "yes" , "point") : "",
+      no: item?.type === "yesNo" ? getYesNoValue(item.value, "no" , "point") : '',
+      yesComment: item.type === 'yesNo' ? getYesNoValue(item.value, "yes" , "comment") : "",
+      noComment: item.type === 'yesNo' ? getYesNoValue(item.value, "no" , "comment") : "",
       ruleComment: item.type === 'yesNo' ? "" : item.comment,
       countries: item.type === 'list' ? FormatJsonCountry(item?.value) : [],
       points: item.points,
