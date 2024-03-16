@@ -180,9 +180,9 @@ class ProjectStatusController extends AccountBaseController
         $ppg->save();
 
         $actions = PendingAction::where('code','PMGM')->where('past_status',0)->where('goal_id',$ppg->id)->get();
-          if($actions != null)
-          {
-                foreach ($actions as $key => $action) {
+        if($actions != null)
+        {
+            foreach ($actions as $key => $action) {
                     $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
                     $project= Project::where('id',$pm_goal->project_id)->first();
                     $action->authorized_by= Auth::id();
@@ -216,7 +216,7 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
-        $user  = User::where('role_id',1)->first();
+        $user  = User::where('id',62)->first(); // It's only for admin😒
         Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
 
         return response()->json(['status'=>200]);

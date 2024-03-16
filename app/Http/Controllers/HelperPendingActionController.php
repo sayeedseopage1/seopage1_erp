@@ -1829,7 +1829,7 @@ class HelperPendingActionController extends AccountBaseController
             $goal = ProjectPmGoal::where('id',$ppg->id)->first();
             $project= Project::where('id',$ppg->project_id)->first();
             $client= User::where('id',$project->client_id)->first();
-            $admin = User::where('role_id',1)->first();
+            // $admin = User::where('role_id',1)->first();
 
                 $action = new PendingAction();
                 $action->code = 'PMRE';
@@ -1841,7 +1841,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
-                $action->authorization_for= $admin->id;
+                $action->authorization_for= 62; //IT'S ONLY FOR ADMIN NOT FOR ROLE ID =1 (INDIVIDUAL USER ONLY)
                 $button = [
                     [
                         'button_name' => 'Review explanation and add your ratings!',
