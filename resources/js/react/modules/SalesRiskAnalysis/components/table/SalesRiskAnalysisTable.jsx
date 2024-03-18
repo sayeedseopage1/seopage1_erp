@@ -40,6 +40,7 @@ import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
 import { formatEditPolicyData } from "../../helper/formatEditPolicyData";
 import { addNewRulesValidation } from "../../helper/createFromValidation";
 import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
+import { generateUniqueString } from "../../../../utils/customUidGenerate";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -245,14 +246,16 @@ const SalesRiskAnalysisTable = ({
                 setAddQuestionsData(data);
                 setAddQuestionsModalOpen(true);
             },
-            handlePolicyStatus: (data) => {
+            handlePolicyStatus: (row) => {
+                console.log("selectedData", row);
                 setStatusActionData({
-                    ...data,
+                    ...row,
                     modalType: "Policy",
                 });
                 setRuleActionModalOpen(true);
             },
             handleRuleStatus: (rule) => {
+                console.log("rule", rule);
                 setStatusActionData({
                     ...rule,
                     modalType: "Rule",
@@ -277,6 +280,8 @@ const SalesRiskAnalysisTable = ({
         },
     });
 
+
+    console.log("statusActionData", statusActionData);
     // handle update rules
     const handleUpdateRules = async () => {
         const validation = addNewRulesValidation(
@@ -349,6 +354,7 @@ const SalesRiskAnalysisTable = ({
                     `${statusActionData?.modalType} Status updated successfully`
                 );
                 handleCloseStatusActionModal();
+                setStatusActionData({});
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -509,7 +515,7 @@ const SalesRiskAnalysisTable = ({
                 ...editPolicyInputData,
                 {
                     ...editPolicyData,
-                    id: Math.random().toString(36).substring(7),
+                    id: generateUniqueString(15),
                 },
             ]);
             resetFormForPolicy("single");
@@ -527,7 +533,7 @@ const SalesRiskAnalysisTable = ({
                 const rule = {
                     policyType: item.policyType?.name,
                     title: item.title,
-                    id: item.id,
+                    id: item?.id?.length > 13 ? "newRule" : item.id,
                 };
                 if (item.value) rule.value = item.value;
                 if (!_.isEmpty(item.valueType))
