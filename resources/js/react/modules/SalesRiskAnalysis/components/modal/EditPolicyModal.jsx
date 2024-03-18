@@ -40,7 +40,8 @@ const EditPolicyModal = ({
     editPolicyDataValidation,
     handleMultiSelectChange,
     handleCancelRuleOnPolicy,
-    editPolicyDefaultData
+    editPolicyDefaultData,
+    handleEditPolicyUpdate,
 }) => {
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
@@ -118,11 +119,6 @@ const EditPolicyModal = ({
                                 onChange={handleChange}
                                 placeholder="Write Here"
                             />
-                            {editPolicyDataValidation?.policyName && (
-                                <p className="text-danger">
-                                    Policy name is required
-                                </p>
-                            )}
                         </div>
                     </div>
                     {editPolicyInputData?.length > 0 ? (
@@ -199,7 +195,7 @@ const EditPolicyModal = ({
                     </div>
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton width="177px">
+                    <ModalButton onClick={handleEditPolicyUpdate} width="177px">
                         {isLoading ? "Loading..." : "Update Policy"}
                     </ModalButton>
                     <ModalButton

@@ -34,6 +34,8 @@ const getValidFields = (listFields, newPolicyDataValidation) => {
 
 
 export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
+  console.log("inputsData", inputsData);
+  console.log("newPolicyDataValidation", newPolicyDataValidation);
   switch (inputsData?.policyType?.name) {
     // less than
     case "lessThan":
@@ -46,6 +48,7 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         department: inputsData.department
       }
       const lessThenValidation = getValidFields(lessThenFields, newPolicyDataValidation);
+      console.log("lessThenValidation", lessThenValidation);
       return lessThenValidation;
     case "greaterThan":
       const greaterThenFields = {

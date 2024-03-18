@@ -31,7 +31,29 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         }),
         editSalesRiskAnalysisPoints: build.mutation({
             query: (body) => ({
+                url: `account/sales-risk-policies/edit-single/${body.id}`,
+                method: "POST",
+                body,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+        }),
+        editSinglePolicySalesRiskAnalysis: build.mutation({
+            query: (body) => ({
                 url: `account/sales-risk-policies/edit/${body.id}`,
+                method: "POST",
+                body,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+        }),
+        editSingleRuleSalesRiskAnalysis: build.mutation({
+            query: (body) => ({
+                url: `account/sales-risk-policies/edit-single/${body.id}`,
                 method: "POST",
                 body,
                 headers: {
@@ -60,6 +82,7 @@ export const {
     useGetSalesRiskAnalysisInputsQuery,
     useAddSalesRiskAnalysisRuleMutation,
     useQuestionInputFieldsQuery,
-    useEditSalesRiskAnalysisPointsMutation,
-    useSingleRuleStatusUpdateMutation
+    useSingleRuleStatusUpdateMutation,
+    useEditSinglePolicySalesRiskAnalysisMutation,
+    useEditSingleRuleSalesRiskAnalysisMutation,
 } = salesRiskAnalysisApiSlice;

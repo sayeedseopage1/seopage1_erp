@@ -29,6 +29,7 @@ export const formatEditPolicyData = (data) => {
   data.ruleList.map((item) => {
     console.log(item)
     let payload = {
+      id: item.id,
       policyName: data.title,
       department: data.department,
       comment: item.comment,
