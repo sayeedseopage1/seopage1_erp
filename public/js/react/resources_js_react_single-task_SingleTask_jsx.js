@@ -1275,6 +1275,8 @@ var SingleTaskPage = function SingleTaskPage() {
     totalTime = _React$useState4[0],
     setTotalTime = _React$useState4[1];
   var taskId = task === null || task === void 0 ? void 0 : task.id;
+  console.log("task", task);
+  console.log("file", task === null || task === void 0 ? void 0 : task.attachments);
   var _useGetTaskForTotalTi = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_30__.useGetTaskForTotalTimeQuery)(taskId),
     taskForTime = _useGetTaskForTotalTi.data;
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
@@ -11148,9 +11150,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./TaskCategorySelectionBox */ "./resources/js/react/single-task/section/sub-task/TaskCategorySelectionBox.jsx");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
-/* harmony import */ var _headlessui_react__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @headlessui/react */ "./node_modules/@headlessui/react/dist/components/listbox/listbox.js");
+/* harmony import */ var _headlessui_react__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @headlessui/react */ "./node_modules/@headlessui/react/dist/components/listbox/listbox.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 /* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
@@ -11163,7 +11165,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _projects_components_graphics_design_forms_TypeOfLogo__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../../../projects/components/graphics-design-forms/TypeOfLogo */ "./resources/js/react/projects/components/graphics-design-forms/TypeOfLogo.jsx");
 /* harmony import */ var _projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../../../projects/components/graphics-design-forms/FileTypesNeeded */ "./resources/js/react/projects/components/graphics-design-forms/FileTypesNeeded.jsx");
 /* harmony import */ var _components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../../components/PMGuideline */ "./resources/js/react/single-task/components/PMGuideline.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -11212,12 +11215,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var fileInputStyle = {
   height: "39px",
   zIndex: '0'
 };
 var SubTaskForm = function SubTaskForm(_ref) {
-  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _formError, _formError2, _formError3, _formError4, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _required_error$pageT3, _required_error$pageT4, _ref10, _ref13, _ref16, _required_error$page_, _task$category5, _required_error$page_2, _required_error$descr, _required_error$descr2;
+  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _required_error$pageT3, _required_error$pageT4, _ref10, _ref13, _ref16, _required_error$page_, _task$category5, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
@@ -11229,6 +11233,12 @@ var SubTaskForm = function SubTaskForm(_ref) {
 
   // graphic task details 
   var graphicWorkDetails = new Object(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.graphic_work_detail);
+  var defaultSecondaryColors;
+  var defaultFileTypesNeeded;
+  if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed) {
+    defaultSecondaryColors = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors);
+    defaultFileTypesNeeded = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed);
+  }
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useDispatch)();
   var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_15__.CompareDate();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
@@ -11318,7 +11328,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useState40 = _slicedToArray(_useState39, 2),
     reference = _useState40[0],
     setReference = _useState40[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed)),
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(defaultFileTypesNeeded),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     fileTypesNeeded = _React$useState4[0],
     setFileTypesNeeded = _React$useState4[1];
@@ -11356,60 +11366,56 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setOthers = _useState56[1];
   var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
-    colorSchema = _React$useState6[0],
-    setColorSchema = _React$useState6[1];
+    primaryColor = _React$useState6[0],
+    setPrimaryColor = _React$useState6[1];
   var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
-    primaryColor = _React$useState8[0],
-    setPrimaryColor = _React$useState8[1];
-  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
+    primaryColorDescription = _React$useState8[0],
+    setPrimaryColorDescription = _React$useState8[1];
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(defaultSecondaryColors),
     _React$useState10 = _slicedToArray(_React$useState9, 2),
-    primaryColorDescription = _React$useState10[0],
-    setPrimaryColorDescription = _React$useState10[1];
-  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors)),
-    _React$useState12 = _slicedToArray(_React$useState11, 2),
-    secondaryColors = _React$useState12[0],
-    setSecondaryColors = _React$useState12[1];
+    secondaryColors = _React$useState10[0],
+    setSecondaryColors = _React$useState10[1];
   //state for graphic designer end
+  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
+    _React$useState12 = _slicedToArray(_React$useState11, 2),
+    pageType = _React$useState12[0],
+    setPageType = _React$useState12[1];
   var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState14 = _slicedToArray(_React$useState13, 2),
-    pageType = _React$useState14[0],
-    setPageType = _React$useState14[1];
+    pageTypeOthers = _React$useState14[0],
+    setPageTypeOthers = _React$useState14[1];
   var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState16 = _slicedToArray(_React$useState15, 2),
-    pageTypeOthers = _React$useState16[0],
-    setPageTypeOthers = _React$useState16[1];
+    pageName = _React$useState16[0],
+    setPageName = _React$useState16[1];
   var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState18 = _slicedToArray(_React$useState17, 2),
-    pageName = _React$useState18[0],
-    setPageName = _React$useState18[1];
-  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
+    pageURL = _React$useState18[0],
+    setPageURL = _React$useState18[1];
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(0),
     _React$useState20 = _slicedToArray(_React$useState19, 2),
-    pageURL = _React$useState20[0],
-    setPageURL = _React$useState20[1];
-  var _React$useState21 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(0),
+    numberOfPage = _React$useState20[0],
+    setNumberOfPage = _React$useState20[1];
+  var _React$useState21 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState22 = _slicedToArray(_React$useState21, 2),
-    numberOfPage = _React$useState22[0],
-    setNumberOfPage = _React$useState22[1];
+    existingDesignLink = _React$useState22[0],
+    setExistingDesignLink = _React$useState22[1];
   var _React$useState23 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState24 = _slicedToArray(_React$useState23, 2),
-    existingDesignLink = _React$useState24[0],
-    setExistingDesignLink = _React$useState24[1];
+    pageTypePriority = _React$useState24[0],
+    setPageTypePriority = _React$useState24[1];
   var _React$useState25 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState26 = _slicedToArray(_React$useState25, 2),
-    pageTypePriority = _React$useState26[0],
-    setPageTypePriority = _React$useState26[1];
-  var _React$useState27 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
-    _React$useState28 = _slicedToArray(_React$useState27, 2),
-    pageTypeName = _React$useState28[0],
-    setPageTypeName = _React$useState28[1];
+    pageTypeName = _React$useState26[0],
+    setPageTypeName = _React$useState26[1];
   var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState58 = _slicedToArray(_useState57, 2),
     err = _useState58[0],
     setErr = _useState58[1];
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_16__.SingleTask(taskDetails);
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_17__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
-  var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_24__.useParams)();
+  var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_25__.useParams)();
   var _useCreateSubtaskMuta = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_10__.useCreateSubtaskMutation)(),
     _useCreateSubtaskMuta2 = _slicedToArray(_useCreateSubtaskMuta, 2),
     createSubtask = _useCreateSubtaskMuta2[0],
@@ -11423,16 +11429,16 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useLazyGetTaskDetail3 = _useLazyGetTaskDetail2[1],
     estimation = _useLazyGetTaskDetail3.data,
     isFetching = _useLazyGetTaskDetail3.isFetching;
+  var _React$useState27 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
+    _React$useState28 = _slicedToArray(_React$useState27, 2),
+    showForm = _React$useState28[0],
+    setShowForm = _React$useState28[1];
+  var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;
   var _React$useState29 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
     _React$useState30 = _slicedToArray(_React$useState29, 2),
-    showForm = _React$useState30[0],
-    setShowForm = _React$useState30[1];
-  var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;
-  var _React$useState31 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
-    _React$useState32 = _slicedToArray(_React$useState31, 2),
-    containViolation = _React$useState32[0],
-    setContainViolation = _React$useState32[1];
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_24__.useNavigate)();
+    containViolation = _React$useState30[0],
+    setContainViolation = _React$useState30[1];
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_25__.useNavigate)();
   var _useCheckRestrictedWo = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_10__.useCheckRestrictedWordsMutation)(),
     _useCheckRestrictedWo2 = _slicedToArray(_useCheckRestrictedWo, 2),
     checkRestrictedWords = _useCheckRestrictedWo2[0],
@@ -11452,8 +11458,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setFontUrl(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_url);
     setPrimaryColor(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color);
     setPrimaryColorDescription(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color_description);
-    // setSecondaryColors(graphicWorkDetails?.secondary_colors);
-    // setProject(task?.projectName);
+    setIllustration(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
+    setOthers(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
   }, [task, graphicWorkDetails]);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     getTaskDetails("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=estimation_time")).unwrap();
@@ -11827,13 +11833,13 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setPageTypePriority("");
     setPageTypeName("");
   }, [pageType]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("form", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("form", {
     onSubmit: handleSubmit,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
       className: "sp1-subtask-form --form row",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
           id: "title",
           label: "Title",
           type: "text",
@@ -11846,61 +11852,61 @@ var SubTaskForm = function SubTaskForm(_ref) {
             return handleChange(e, setTitle);
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
             className: "f-14 text-dark-gray mb-1",
             "data-label": "true",
             children: "Milestone"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
             className: "form-control height-35 f-14",
             readOnly: true,
             defaultValue: milestone
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
             className: "f-14 text-dark-gray mb-1",
             "data-label": "true",
             children: "Parent Task"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
             className: "form-control height-35 f-14",
             readOnly: true,
             defaultValue: parentTask
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
             className: "f-14 text-dark-gray mb-1",
             "data-label": "true",
             children: "Project"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
             className: "form-control height-35 f-14",
             readOnly: true,
             defaultValue: project
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
             htmlFor: "",
-            children: ["Start Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+            children: ["Start Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
               className: "f-14",
               children: "*"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "form-control height-35 f-14",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
               placeholderText: "Ex: ".concat(dayjs.dayjs().format("DD-MM-YYYY")),
               minDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate).isBefore(dayjs.dayjs()) ? dayjs.dayjs().toDate() : dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate).toDate(),
               maxDate: dueDate || dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate).toDate(),
@@ -11911,31 +11917,31 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 (0,_helper_calender_open__WEBPACK_IMPORTED_MODULE_18__.calenderOpen)(max);
               }
             })
-          }), (required_error === null || required_error === void 0 || (_required_error$start = required_error.start_date) === null || _required_error$start === void 0 ? void 0 : _required_error$start[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), (required_error === null || required_error === void 0 || (_required_error$start = required_error.start_date) === null || _required_error$start === void 0 ? void 0 : _required_error$start[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             style: {
               color: "red"
             },
             children: required_error === null || required_error === void 0 || (_required_error$start2 = required_error.start_date) === null || _required_error$start2 === void 0 ? void 0 : _required_error$start2[0]
-          }), (err === null || err === void 0 ? void 0 : err.startDate) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), (err === null || err === void 0 ? void 0 : err.startDate) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             style: {
               color: "red"
             },
             children: err === null || err === void 0 ? void 0 : err.startDate
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
             htmlFor: "",
-            children: ["Due Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+            children: ["Due Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
               className: "f-14",
               children: "*"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "form-control height-35 f-14",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
               placeholderText: "Ex: ".concat(dayjs.dayjs().format("DD-MM-YYYY")),
               minDate: dayjs.dayjs(startDate).isAfter(dayjs.dayjs(), "day") ? startDate : dayjs.dayjs().toDate(),
               maxDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate).toDate(),
@@ -11946,25 +11952,25 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 (0,_helper_calender_open__WEBPACK_IMPORTED_MODULE_18__.calenderOpen)(max);
               }
             })
-          }), (required_error === null || required_error === void 0 || (_required_error$due_d = required_error.due_date) === null || _required_error$due_d === void 0 ? void 0 : _required_error$due_d[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), (required_error === null || required_error === void 0 || (_required_error$due_d = required_error.due_date) === null || _required_error$due_d === void 0 ? void 0 : _required_error$due_d[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             style: {
               color: "red"
             },
             children: required_error === null || required_error === void 0 || (_required_error$due_d2 = required_error.due_date) === null || _required_error$due_d2 === void 0 ? void 0 : _required_error$due_d2[0]
-          }), (err === null || err === void 0 ? void 0 : err.dueDate) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), (err === null || err === void 0 ? void 0 : err.dueDate) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             style: {
               color: "red"
             },
             children: err === null || err === void 0 ? void 0 : err.dueDate
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
         className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_8__["default"], {
           selected: taskCategory,
           onSelect: setTaskCategory,
           isDesignerTask: isDesignerTask
-        }), (err === null || err === void 0 ? void 0 : err.taskCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (err === null || err === void 0 ? void 0 : err.taskCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
@@ -11972,35 +11978,35 @@ var SubTaskForm = function SubTaskForm(_ref) {
         })]
       }),
       // lead designer to graphic designer 
-      (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category4 = task.category) === null || _task$category4 === void 0 ? void 0 : _task$category4.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category4 = task.category) === null || _task$category4 === void 0 ? void 0 : _task$category4.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "col-12 col-md-6",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_19__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_19__["default"], {
             selected: typeOfGraphicsCategory,
             onSelect: setTypeOfGraphicsCategory,
             isDesignerTask: isDesignerTask
-          }), (err === null || err === void 0 ? void 0 : err.typeOfGraphicsCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), (err === null || err === void 0 ? void 0 : err.typeOfGraphicsCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             style: {
               color: "red"
             },
             children: err === null || err === void 0 ? void 0 : err.typeOfGraphicsCategory
           })]
-        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "col-12 col-md-6",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_projects_components_graphics_design_forms_TypeOfLogo__WEBPACK_IMPORTED_MODULE_20__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_projects_components_graphics_design_forms_TypeOfLogo__WEBPACK_IMPORTED_MODULE_20__["default"], {
               selected: typeOfLogo,
               onSelect: setTypeOfLogo,
               isDesignerTask: isDesignerTask
-            }), (err === null || err === void 0 ? void 0 : err.typeOfLogo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            }), (err === null || err === void 0 ? void 0 : err.typeOfLogo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
               style: {
                 color: "red"
               },
               children: err === null || err === void 0 ? void 0 : err.typeOfLogo
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "brandName",
               label: "Brand Name",
               type: "text",
@@ -12010,9 +12016,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
               error: err === null || err === void 0 ? void 0 : err.brandName,
               readOnly: true
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "numOfVersions",
               label: "Number of Versions",
               type: "number",
@@ -12022,20 +12028,20 @@ var SubTaskForm = function SubTaskForm(_ref) {
               error: err === null || err === void 0 ? void 0 : err.numOfVersions,
               readOnly: true
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
               className: "form-group my-3 w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
                 htmlFor: 'fileTypesNeeded',
                 className: "f-14 text-dark-gray mb-1",
                 "data-label": "true",
-                children: ["File Types Needed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                children: ["File Types Needed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_21__["default"], {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_21__["default"], {
                   className: "form-control height-35 w-100 f-14",
                   id: "fileTypesNeeded",
                   fileTypesNeeded: fileTypesNeeded,
@@ -12046,40 +12052,27 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             })
           })]
-        }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-            className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              id: "textForDesign",
-              label: "Attach text that will be used for the design",
-              type: "text",
-              placeholder: "Enter a text for design",
-              name: "textForDesign",
-              required: true,
-              value: textForDesign,
-              error: err === null || err === void 0 ? void 0 : err.textForDesign,
-              onChange: function onChange(e) {
-                return handleChange(e, setTextForDesign);
-              }
-            })
+        }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+            className: "col-12 col-md-6"
           })
-        }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.type_name) === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.type_name) === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
               className: "form-group my-3 w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
                 htmlFor: 'imageForDesigner',
                 className: "f-14 text-dark-gray mb-2",
                 "data-label": "true",
-                children: ["Image where the designer will work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                children: ["Image where the designer will work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                 className: "custom-file",
                 style: fileInputStyle,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
                   type: "file",
                   className: "custom-file-input",
                   id: "imageForDesigner",
@@ -12088,12 +12081,12 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   onChange: function onChange(e) {
                     return handleChange(e, setImageForDesigner);
                   }
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
                   className: "custom-file-label",
                   htmlFor: "imageForDesigner",
                   children: "Choose file"
                 })]
-              }), (err === null || err === void 0 ? void 0 : err.imageForDesigner) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              }), (err === null || err === void 0 ? void 0 : err.imageForDesigner) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                 style: {
                   color: "red"
                 },
@@ -12101,23 +12094,23 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             })
           })
-        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
               className: "form-group my-3 w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
                 htmlFor: 'imgOrVidForWork',
                 className: "f-14 text-dark-gray mb-2",
                 "data-label": "true",
-                children: ["Images/videos that will be used for the work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                children: ["Images/videos that will be used for the work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                 className: "custom-file z-n1",
                 style: fileInputStyle,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
                   type: "file",
                   className: "custom-file-input",
                   id: "imgOrVidForWork",
@@ -12127,12 +12120,12 @@ var SubTaskForm = function SubTaskForm(_ref) {
                     return handleChange(e, setImgOrVidForWork);
                   },
                   multiple: true
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
                   className: "custom-file-label",
                   htmlFor: "imgOrVidForWork",
                   children: "Choose file"
                 })]
-              }), (err === null || err === void 0 ? void 0 : err.imgOrVidForWork) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              }), (err === null || err === void 0 ? void 0 : err.imgOrVidForWork) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                 style: {
                   color: "red"
                 },
@@ -12140,67 +12133,51 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             })
           })
-        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 7 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 7 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
               className: "form-group my-3",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
                 htmlFor: "",
-                children: [" ", "Name of the illustration work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                children: [" ", "Name of the illustration work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                   children: "*"
                 }), " "]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-                className: "ck-editor-holder",
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                className: "sp1_ck_content sp1_guideline_text px-2 py-2 rounded",
                 style: {
-                  minHeight: "50px"
+                  backgroundColor: "#E9ECEF"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
-                  data: illustration,
-                  onChange: function onChange(e, editor) {
-                    return setIllustration(editor.getData());
-                  }
-                })
-              }), ((_formError = formError) === null || _formError === void 0 ? void 0 : _formError.illustration) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-                style: {
-                  color: "red"
-                },
-                children: (_formError2 = formError) === null || _formError2 === void 0 ? void 0 : _formError2.illustration
+                dangerouslySetInnerHTML: {
+                  __html: illustration
+                }
               })]
             })
           })
-        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 9 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 9 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
               className: "form-group my-3",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
                 htmlFor: "",
-                children: [" ", "Name of the graphic design work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                children: [" ", "Name of the graphic design work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                   children: "*"
                 }), " "]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-                className: "ck-editor-holder",
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                className: "sp1_ck_content sp1_guideline_text px-2 py-2 rounded",
                 style: {
-                  minHeight: "50px"
+                  backgroundColor: "#E9ECEF"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
-                  data: others,
-                  onChange: function onChange(e, editor) {
-                    return setOthers(editor.getData());
-                  }
-                })
-              }), ((_formError3 = formError) === null || _formError3 === void 0 ? void 0 : _formError3.others) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-                style: {
-                  color: "red"
-                },
-                children: (_formError4 = formError) === null || _formError4 === void 0 ? void 0 : _formError4.others
+                dangerouslySetInnerHTML: {
+                  __html: others
+                }
               })]
             })
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
             id: "reference",
             label: "Reference",
             type: "text",
@@ -12210,9 +12187,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
             error: err === null || err === void 0 ? void 0 : err.reference,
             readOnly: true
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
             id: "fontName",
             label: "Font Name",
             type: "text",
@@ -12223,9 +12200,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
             error: err === null || err === void 0 ? void 0 : err.fontName,
             readOnly: true
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
             id: "fontUrl",
             label: "Font Url",
             type: "url",
@@ -12234,19 +12211,19 @@ var SubTaskForm = function SubTaskForm(_ref) {
             value: fontUrl,
             readOnly: true
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "form-group my-3 w-100",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
               htmlFor: 'brandGuideline',
               className: "f-14 text-dark-gray mb-2",
               "data-label": "true",
               children: "Brand guideline"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
               className: "custom-file",
               style: fileInputStyle,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
                 type: "file",
                 className: "custom-file-input",
                 id: "brandGuideline",
@@ -12255,42 +12232,45 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   return handleChange(e, setBrandGuideline);
                 },
                 multiple: true
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
                 className: "custom-file-label",
                 htmlFor: "brandGuideline",
                 children: "Choose file"
               })]
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "form-group",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
               htmlFor: 'brandGuideline',
               className: "f-14 text-dark-gray mb-2",
               "data-label": "true",
               children: "Color Scheme"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-              className: "mb-3",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("ul", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              className: "mb-3 p-2 rounded",
+              style: {
+                backgroundColor: "#E9ECEF"
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("ul", {
                 className: "ml-0",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("li", {
                   className: "d-flex flex-column",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                     className: "font-weight-bold mr-2 mb-2",
                     children: "Primary Color: "
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__.ColorItem, {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__.ColorItem, {
                     color: primaryColor,
                     desc: primaryColorDescription
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("li", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("li", {
                   className: "d-flex flex-column",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                     className: "font-weight-bold mr-2 mb-2",
                     children: (secondaryColors === null || secondaryColors === void 0 ? void 0 : secondaryColors.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
                   }), secondaryColors === null || secondaryColors === void 0 ? void 0 : secondaryColors.map(function (color, i) {
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__.ColorItem, {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__.ColorItem, {
                       color: color === null || color === void 0 ? void 0 : color.color,
                       desc: color === null || color === void 0 ? void 0 : color.description
                     }, i + color);
@@ -12300,52 +12280,52 @@ var SubTaskForm = function SubTaskForm(_ref) {
             })]
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
         className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_6__["default"], {
           selected: assignedTo,
           onSelect: setAssignedTo,
           taskCategory: taskCategory
-        }), (err === null || err === void 0 ? void 0 : err.assignedTo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (err === null || err === void 0 ? void 0 : err.assignedTo) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: err === null || err === void 0 ? void 0 : err.assignedTo
-        }), (assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.isOverloaded) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.isOverloaded) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 4 Submittable tasks.")
         })]
-      }), auth !== null && auth !== void 0 && auth.isHasRolePermission(13) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      }), auth !== null && auth !== void 0 && auth.isHasRolePermission(13) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
         className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
           value: pageType,
           onChange: setPageType,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
               htmlFor: "",
-              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                 children: "*"
               }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Button, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
               className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
                 children: pageType || "Select task type"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                 className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                   className: "fa-solid fa-sort"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Options, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
               children: (_ref4 = ["New Page Design", "Cloning Existing Design"
               // "Others",
               ]) === null || _ref4 === void 0 ? void 0 : _ref4.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Option, {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
                   className: function className(_ref5) {
                     var active = _ref5.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
@@ -12353,8 +12333,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   value: s,
                   children: function children(_ref6) {
                     var selected = _ref6.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
                       }) : ""]
                     });
@@ -12363,44 +12343,44 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })
             })]
           })
-        }), (required_error === null || required_error === void 0 || (_required_error$pageT = required_error.pageType) === null || _required_error$pageT === void 0 ? void 0 : _required_error$pageT[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (required_error === null || required_error === void 0 || (_required_error$pageT = required_error.pageType) === null || _required_error$pageT === void 0 ? void 0 : _required_error$pageT[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: required_error === null || required_error === void 0 || (_required_error$pageT2 = required_error.pageType) === null || _required_error$pageT2 === void 0 ? void 0 : _required_error$pageT2[0]
-        }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: err === null || err === void 0 ? void 0 : err.taskType
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
         className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
           value: pageType,
           onChange: setPageType,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
               htmlFor: "",
-              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                 children: "*"
               }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Button, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
               className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
                 children: pageType || "Select task type"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                 className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                   className: "fa-solid fa-sort"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Options, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
               children: (_ref7 = ["New Page Design", "Cloning Existing Design", "Others"]) === null || _ref7 === void 0 ? void 0 : _ref7.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Option, {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
                   className: function className(_ref8) {
                     var active = _ref8.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
@@ -12408,8 +12388,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   value: s,
                   children: function children(_ref9) {
                     var selected = _ref9.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
                       }) : ""]
                     });
@@ -12418,44 +12398,44 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })
             })]
           })
-        }), (required_error === null || required_error === void 0 || (_required_error$pageT3 = required_error.pageType) === null || _required_error$pageT3 === void 0 ? void 0 : _required_error$pageT3[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (required_error === null || required_error === void 0 || (_required_error$pageT3 = required_error.pageType) === null || _required_error$pageT3 === void 0 ? void 0 : _required_error$pageT3[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: required_error === null || required_error === void 0 || (_required_error$pageT4 = required_error.pageType) === null || _required_error$pageT4 === void 0 ? void 0 : _required_error$pageT4[0]
-        }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: err === null || err === void 0 ? void 0 : err.taskType
         })]
-      }), pageType === "New Page Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      }), pageType === "New Page Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
         className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
           value: pageTypePriority,
           onChange: setPageTypePriority,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
               htmlFor: "",
-              children: ["Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+              children: ["Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                 children: "*"
               }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Button, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
               className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
                 children: pageTypePriority || "Select page type"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                 className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                   className: "fa-solid fa-sort"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Options, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
               children: (_ref10 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref10 === void 0 ? void 0 : _ref10.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Option, {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
                   className: function className(_ref11) {
                     var active = _ref11.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
@@ -12463,8 +12443,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   value: s,
                   children: function children(_ref12) {
                     var selected = _ref12.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
                       }) : ""]
                     });
@@ -12473,39 +12453,39 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })
             })]
           })
-        }), (err === null || err === void 0 ? void 0 : err.pageTypePriority) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (err === null || err === void 0 ? void 0 : err.pageTypePriority) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: err === null || err === void 0 ? void 0 : err.pageTypePriority
         })]
-      }) : null, pageType === "Others" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      }) : null, pageType === "Others" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
         className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
           value: pageTypeOthers,
           onChange: setPageTypeOthers,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
               htmlFor: "",
-              children: [" ", "Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+              children: [" ", "Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                 children: "*"
               }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Button, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
               className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                 className: "singleline-ellipsis pr-3",
                 children: pageTypeOthers !== null && pageTypeOthers !== void 0 ? pageTypeOthers : "--"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                 className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                   className: "fa-solid fa-sort"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Options, {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
               children: (_ref13 = ["Page Design Change", "Speed Optimization", "Fixing Issues/Bugs", "Responsiveness Issue Fixing/Making Something Responsive"]) === null || _ref13 === void 0 ? void 0 : _ref13.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Option, {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
                   className: function className(_ref14) {
                     var active = _ref14.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
@@ -12513,8 +12493,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   value: s,
                   children: function children(_ref15) {
                     var selected = _ref15.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
                       }) : ""]
                     });
@@ -12523,41 +12503,41 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })
             })]
           })
-        }), (err === null || err === void 0 ? void 0 : err.pageTypeOthers) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (err === null || err === void 0 ? void 0 : err.pageTypeOthers) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           style: {
             color: "red"
           },
           children: err === null || err === void 0 ? void 0 : err.pageTypeOthers
         })]
-      }) : null, pageType ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-        children: [pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+      }) : null, pageType ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+        children: [pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "col-12 col-md-6",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
               value: pageTypeName,
               onChange: setPageTypeName,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                 className: "form-group position-relative my-3",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
                   htmlFor: "",
-                  children: ["Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                  children: ["Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Button, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
                   className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                     className: "singleline-ellipsis pr-3",
                     children: pageTypeName || "Select page type name"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                     className: "__icon",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                       className: "fa-solid fa-sort"
                     })
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Options, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
                   className: "sp1-select-options",
                   children: (_ref16 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref16 === void 0 ? void 0 : _ref16.map(function (s, i) {
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_25__.Listbox.Option, {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
                       className: function className(_ref17) {
                         var active = _ref17.active;
                         return "sp1-select-option ".concat(active ? "active" : "");
@@ -12565,8 +12545,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
                       value: s,
                       children: function children(_ref18) {
                         var selected = _ref18.selected;
-                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-                          children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                          children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                             className: "fa-solid fa-check ml-2"
                           }) : ""]
                         });
@@ -12577,10 +12557,10 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })
             }), (err === null || err === void 0 ? void 0 : err.pageTypeName) || (required_error === null || required_error === void 0 || (_required_error$page_ = required_error.page_type) === null || _required_error$page_ === void 0 ? void 0 : _required_error$page_[0])]
           })
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "page_name",
               label: "Page Name",
               type: "text",
@@ -12593,9 +12573,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return handleChange(e, setPageName);
               }
             })
-          }), (task === null || task === void 0 || (_task$category5 = task.category) === null || _task$category5 === void 0 ? void 0 : _task$category5.name) !== "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), (task === null || task === void 0 || (_task$category5 = task.category) === null || _task$category5 === void 0 ? void 0 : _task$category5.name) !== "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "page_url",
               label: "Page URL",
               type: "text",
@@ -12609,10 +12589,10 @@ var SubTaskForm = function SubTaskForm(_ref) {
               }
             })
           })]
-        }), pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "number_of_pages",
               label: "Number of Pages",
               type: "number",
@@ -12625,9 +12605,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return handleChange(e, setNumberOfPage);
               }
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "exiting_project_url",
               label: "Existing Design Link",
               type: "Link",
@@ -12642,26 +12622,26 @@ var SubTaskForm = function SubTaskForm(_ref) {
             })
           })]
         }) : null]
-      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_PrioritySelection__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_PrioritySelection__WEBPACK_IMPORTED_MODULE_7__["default"], {
           selected: priority,
           setSelected: setPriority
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
             htmlFor: "",
             className: "f-14 text-dark-gray",
-            children: ["Set Estimate Time ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+            children: ["Set Estimate Time ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
               className: "f-14",
               children: " * "
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             className: "d-flex align-items-center",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
               type: "number",
               className: "form-control height-35 f-14 mr-2",
               value: estimateTimeHour,
@@ -12671,7 +12651,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               onChange: function onChange(e) {
                 return handleChange(e, setEstimateTimeHour);
               }
-            }), " ", "hrs", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+            }), " ", "hrs", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
               type: "number",
               className: "form-control height-35 f-14 mr-2 ml-2",
               value: estimateTimeMin,
@@ -12682,68 +12662,68 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return handleChange(e, setEstimateTimeMin);
               }
             }), " ", "min"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             style: {
               color: "red"
             },
             children: estimateError(required_error)
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
             style: {
               color: "#F73B12"
             },
             children: ["Estimation time can't exceed", " ", estimation === null || estimation === void 0 ? void 0 : estimation.hours_left, " hours", " ", estimation === null || estimation === void 0 ? void 0 : estimation.minutes_left, " minutes"]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
             htmlFor: "",
             children: " Description "
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "sp1_st_write_comment_editor",
             style: {
               minHeight: "100px"
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
               onChange: handleEditorChange
             })
-          }), (required_error === null || required_error === void 0 || (_required_error$descr = required_error.description) === null || _required_error$descr === void 0 ? void 0 : _required_error$descr[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+          }), (required_error === null || required_error === void 0 || (_required_error$descr = required_error.description) === null || _required_error$descr === void 0 ? void 0 : _required_error$descr[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
             className: "text-danger",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("small", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("small", {
               children: [" ", required_error === null || required_error === void 0 || (_required_error$descr2 = required_error.description) === null || _required_error$descr2 === void 0 ? void 0 : _required_error$descr2[0], " "]
             })
-          }), (err === null || err === void 0 ? void 0 : err.description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("span", {
+          }), (err === null || err === void 0 ? void 0 : err.description) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
             className: "text-danger",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("small", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("small", {
               children: [" ", err === null || err === void 0 ? void 0 : err.description, " "]
             })
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_2__["default"], {
           files: files,
           setFiles: setFiles
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 mt-3 pb-3",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "d-flex align-items-center justify-content-end",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
             variant: "secondary",
             className: "mr-2",
             onClick: close,
             children: "Cancel"
-          }), !isLoading && !checking ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), !isLoading && !checking ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
             type: "submit",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
               className: "fa-regular fa-paper-plane"
             }), "Create"]
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
             className: "cursor-processing",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
               className: "spinner-border text-white",
               role: "status",
               style: {

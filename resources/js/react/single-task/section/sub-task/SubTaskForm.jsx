@@ -34,6 +34,7 @@ import TypeOfGraphicsWorkSelection from "../../../projects/components/graphics-d
 import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
 import { ColorItem } from "../../components/PMGuideline";
+import FileUploader from "../../../file-upload/FileUploader";
 
 const fileInputStyle = {
     height: "39px",
@@ -49,6 +50,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     // graphic task details 
     const graphicWorkDetails = new Object(taskDetails?.graphic_work_detail);
+
+    let defaultSecondaryColors;
+    let defaultFileTypesNeeded;
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
+        defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
+        defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+    }
 
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
@@ -76,7 +84,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
-    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(JSON.parse(graphicWorkDetails?.file_types_needed));
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
     const [textForDesign, setTextForDesign] = useState('');
     const [imageForDesigner, setImageForDesigner] = useState(null);
     const [imgOrVidForWork, setImgOrVidForWork] = useState(null);
@@ -85,11 +93,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [brandGuideline, setBrandGuideline] = useState(null);
     const [illustration, setIllustration] = useState("");
     const [others, setOthers] = useState("");
-    const [colorSchema, setColorSchema] = React.useState("");
     const [primaryColor, setPrimaryColor] = React.useState("");
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
-    const [secondaryColors, setSecondaryColors] = React.useState(JSON.parse(graphicWorkDetails?.secondary_colors));
+    const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
     //state for graphic designer end
     const [pageType, setPageType] = React.useState("");
     const [pageTypeOthers, setPageTypeOthers] = React.useState("");
@@ -136,8 +143,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setFontUrl(graphicWorkDetails?.font_url);
         setPrimaryColor(graphicWorkDetails?.primary_color);
         setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
-        // setSecondaryColors(graphicWorkDetails?.secondary_colors);
-        // setProject(task?.projectName);
+        setIllustration(graphicWorkDetails?.design_instruction);
+        setOthers(graphicWorkDetails?.design_instruction);
     }, [task, graphicWorkDetails]);
 
     React.useEffect(() => {
@@ -794,19 +801,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         {
                             (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
                                 <div className="col-12 col-md-6">
-                                    <Input
-                                        id="textForDesign"
-                                        label="Attach text that will be used for the design"
-                                        type="text"
-                                        placeholder="Enter a text for design"
-                                        name="textForDesign"
-                                        required={true}
-                                        value={textForDesign}
-                                        error={err?.textForDesign}
-                                        onChange={(e) =>
-                                            handleChange(e, setTextForDesign)
-                                        }
-                                    />
+
                                 </div>
                             </>
                         }
@@ -872,6 +867,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                         {/* Illustration */}
                         {
+
                             typeOfGraphicsCategory?.id === 7 && <>
                                 <div className="col-12">
                                     <div className="form-group my-3">
@@ -879,27 +875,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             {" "}
                                             Name of the illustration work!<sup>*</sup>{" "}
                                         </label>
-                                        <div
-                                            className="ck-editor-holder"
-                                            style={{ minHeight: "50px" }}
-                                        >
-                                            <CKEditorComponent
-                                                data={illustration}
-                                                onChange={(
-                                                    e,
-                                                    editor
-                                                ) =>
-                                                    setIllustration(
-                                                        editor.getData()
-                                                    )
-                                                }
-                                            />
+                                        <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: illustration }}>
                                         </div>
-                                        {formError?.illustration && (
-                                            <div style={{ color: "red" }}>
-                                                {formError?.illustration}
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </>
@@ -913,27 +890,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             {" "}
                                             Name of the graphic design work!<sup>*</sup>{" "}
                                         </label>
-                                        <div
-                                            className="ck-editor-holder"
-                                            style={{ minHeight: "50px" }}
-                                        >
-                                            <CKEditorComponent
-                                                data={others}
-                                                onChange={(
-                                                    e,
-                                                    editor
-                                                ) =>
-                                                    setOthers(
-                                                        editor.getData()
-                                                    )
-                                                }
-                                            />
+                                        <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: others }}>
                                         </div>
-                                        {formError?.others && (
-                                            <div style={{ color: "red" }}>
-                                                {formError?.others}
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </>
@@ -1011,7 +969,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                     Color Scheme
                                 </label>
                                 {/* TODO: add color schema from real api */}
-                                <div className='mb-3'>
+                                <div className='mb-3 p-2 rounded' style={{ backgroundColor: "#E9ECEF" }}>
                                     <ul className='ml-0'>
                                         <li className='d-flex flex-column'>
                                             <span className='font-weight-bold mr-2 mb-2'>Primary Color: </span>
