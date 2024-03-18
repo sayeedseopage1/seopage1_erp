@@ -236,7 +236,7 @@ const SalesRiskAnalysisTable = ({
                         selectedRule?.type === "list"
                             ? FormatJsonCountry(selectedRule?.value)
                             : "",
-                    points: selectedRule?.point,
+                    points: selectedRule?.points,
                 };
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
@@ -556,15 +556,16 @@ const SalesRiskAnalysisTable = ({
                 return rule;
             }),
         };
-        console.log("payload", payload);
         try {
             const res = await submitPolicyData(payload);
+            console.log("res", res);
             if (res.data) {
                 toast.success("Policy updated successfully");
                 handleCloseEditPolicyModal();
                 resetFormForPolicy();
             }
         } catch (error) {
+            console.log("error", error);
             toast.error("Something went wrong");
         }
     };

@@ -5,6 +5,10 @@ const _token = document
     .querySelector("meta[name='csrf-token']")
     .getAttribute("content");
 
+
+
+
+
 const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getSalesRiskAnalysisRules: build.query({
@@ -23,7 +27,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                }
+            }
         }),
         questionInputFields: build.query({
             query: (query) => `/account/sales-risk-policies/question-fields`,
@@ -38,7 +46,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                }
+            }
         }),
         editSinglePolicySalesRiskAnalysis: build.mutation({
             query: (body) => ({
@@ -49,7 +61,13 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                }
+
+
+            },
         }),
         editSingleRuleSalesRiskAnalysis: build.mutation({
             query: (body) => ({
@@ -60,7 +78,12 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                }
+
+            },
         }),
         singleRuleStatusUpdate: build.mutation({
             query: (rule) => ({
@@ -71,7 +94,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "origin": "http://localhost:8000"
                 },
             }),
-            invalidatesTags: ["GET_SALES_RISK_ANALYSIS_RULES"],
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                }
+            },
         })
 
     })

@@ -6,6 +6,8 @@ import EditIcon from "../ui/EditIcon";
 import { SalesPointsContainer } from "../ui/Styles/ui";
 import "../Styles/salesRiskAnalysisTableColumns.css";
 
+import QuestionsIcon from "../../../../../../../public/img/questionIcon.png";
+
 export const SalesRiskAnalysisTableColumns = [
     {
         id: "policy_name",
@@ -21,6 +23,7 @@ export const SalesRiskAnalysisTableColumns = [
                             <input
                                 type="checkbox"
                                 checked={data?.status === "1" ? true : false}
+                                readOnly
                                 className="custom-control-input"
                                 id="customSwitch1"
                                 onClick={() => {
@@ -33,8 +36,43 @@ export const SalesRiskAnalysisTableColumns = [
                                         ? "sales_risk_status_toggle_checked"
                                         : "sales_risk_status_toggle_not_checked"
                                 }`}
-                                for="customSwitch1"
-                            />
+                                htmlFor="customSwitch1"
+                                title={
+                                    data?.status === "1"
+                                        ? "Disable Now"
+                                        : "Enable Now"
+                                }
+                            />{" "}
+                        </div>
+                        <div
+                            onClick={() => {
+                                action.handleEditPolicy(data);
+                            }}
+                            role="button"
+                            className="d-flex align-items-center"
+                        >
+                            <Tooltip text="Edit Policy">
+                                <EditIcon />
+                            </Tooltip>
+                        </div>
+                        <div
+                            onClick={() => {
+                                action.handleAddQuestions(data);
+                            }}
+                            className="mx-2"
+                            style={{
+                                cursor: "pointer",
+                            }}
+                        >
+                            <Tooltip className="d-flex align-items-center" text="Add New Question">
+                                <i
+                                    class="fa-solid fa-circle-question"
+                                    style={{
+                                        fontSize: "22px",
+                                        cursor: "pointer",
+                                    }}
+                                ></i>
+                            </Tooltip>
                         </div>
                         <span
                             style={{
@@ -58,7 +96,7 @@ export const SalesRiskAnalysisTableColumns = [
                             )}
                         </span>
                     </div>
-                    <button
+                    {/* <button
                         onClick={() => {
                             action.handleAddQuestions(data);
                         }}
@@ -70,7 +108,7 @@ export const SalesRiskAnalysisTableColumns = [
                         className="btn btn-info"
                     >
                         Questions
-                    </button>
+                    </button> */}
                 </div>
             );
         },
@@ -123,7 +161,7 @@ export const SalesRiskAnalysisTableColumns = [
                 <div className="d-flex justify-content-center align-items-center flex-column">
                     {data?.ruleList?.map((rule, index) => {
                         return (
-                            <Switch>
+                            <Switch key={rule?.id}>
                                 <Switch.Case condition={rule?.type === "yesNo"}>
                                     <p
                                         style={{
@@ -165,7 +203,11 @@ export const SalesRiskAnalysisTableColumns = [
                                         >
                                             Yes{" "}
                                             <span className="ml-2">
-                                                {getYesNoValue(rule, "yes") ? (
+                                                {getYesNoValue(
+                                                    rule,
+                                                    "yes",
+                                                    "comment"
+                                                ) ? (
                                                     <>
                                                         <Tooltip
                                                             text={getYesNoValue(
@@ -192,7 +234,11 @@ export const SalesRiskAnalysisTableColumns = [
                                         >
                                             No{" "}
                                             <span className="ml-2">
-                                                {getYesNoValue(rule, "no") ? (
+                                                {getYesNoValue(
+                                                    rule,
+                                                    "no",
+                                                    "comment"
+                                                ) ? (
                                                     <>
                                                         <Tooltip
                                                             text={getYesNoValue(
@@ -276,7 +322,7 @@ export const SalesRiskAnalysisTableColumns = [
                             </Switch>
                         );
                     })}
-                    <div className="">
+                    {/* <div className="">
                         <button
                             style={{
                                 fontSize: "12px",
@@ -296,7 +342,7 @@ export const SalesRiskAnalysisTableColumns = [
                             ></i>{" "}
                             Edit Policy
                         </button>
-                    </div>
+                    </div> */}
                 </div>
             );
         },
@@ -313,7 +359,7 @@ export const SalesRiskAnalysisTableColumns = [
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     {data?.ruleList?.map((rule, index) => {
                         return (
-                            <Switch>
+                            <Switch key={rule?.id}>
                                 <Switch.Case
                                     condition={
                                         !_.includes(["yesNo"], rule?.type)
@@ -324,7 +370,7 @@ export const SalesRiskAnalysisTableColumns = [
                                         className="py-3"
                                     >
                                         <div className="d-flex align-items-center justify-content-end">
-                                            <p>{rule?.point}</p>
+                                            <p>{rule?.points}</p>
                                             <div
                                                 onClick={() => {
                                                     action.handleEditApplicableRule(
@@ -354,9 +400,17 @@ export const SalesRiskAnalysisTableColumns = [
                                                     );
                                                 }}
                                             >
-                                                {rule.status === "0"
-                                                    ? "Enable"
-                                                    : "Disable"}
+                                                <Tooltip
+                                                    text={
+                                                        rule.status === "1"
+                                                            ? "Disable Now"
+                                                            : "Enable Now"
+                                                    }
+                                                >
+                                                    {rule.status === "0"
+                                                        ? "Enable"
+                                                        : "Disable"}
+                                                </Tooltip>
                                             </button>
                                         </div>
                                     </SalesPointsContainer>
@@ -399,9 +453,17 @@ export const SalesRiskAnalysisTableColumns = [
                                                 );
                                             }}
                                         >
-                                            {rule.status === "0"
-                                                ? "Enable"
-                                                : "Disable"}
+                                            <Tooltip
+                                                text={
+                                                    rule.status === "1"
+                                                        ? "Enable Now"
+                                                        : "Disable Now"
+                                                }
+                                            >
+                                                {rule.status === "0"
+                                                    ? "Enable"
+                                                    : "Disable"}
+                                            </Tooltip>
                                         </button>
                                     </div>
                                     <ul>
@@ -447,12 +509,6 @@ export const SalesRiskAnalysisTableColumns = [
                             </Switch>
                         );
                     })}
-                    <div
-                        style={{
-                            height: "33px",
-                            width: "253px",
-                        }}
-                    />
                 </div>
             );
         },
