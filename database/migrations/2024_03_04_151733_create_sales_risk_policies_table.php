@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\SalesRiskPolicy;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->bigInteger('parent_id')->nullable()->unsigned();
-            $table->enum('type', ['parent', 'greaterThan', 'lessThan', 'fixed', 'range', 'yesNo', 'list']);
-            $table->enum('value_type', ['percentage', 'currency', 'hourly', 'days', 'countries'])->nullable();
+            $table->enum('type', SalesRiskPolicy::$types);
+            $table->enum('value_type', SalesRiskPolicy::$valueTypes)->nullable();
             $table->text('value')->nullable();
             $table->float('points')->default('0');
             $table->string('department');

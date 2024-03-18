@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 class SalesRiskPolicyController extends AccountBaseController
 {
-    protected $policyTypes = ['parent', 'greaterThan', 'lessThan', 'fixed', 'range', 'yesNo', 'list'];
     protected $questionTypes = ['yesNo', 'numeric', 'list', 'text', 'longText'];
 
     public function __construct()
@@ -322,10 +321,10 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
+            'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
-            'ruleList.*.policyType' => 'in:' . implode(',', $this->policyTypes),
+            'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
             'ruleList.*.title' => 'required',
-            'comment' => 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -348,59 +347,20 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // dd($policy);
             foreach ($req->ruleList as $item) {
-                $item = (object)$item;
-                $rowData = [
-                    'title' => $item->title,
-                    'parent_id' => $policy->id,
+
+                $rule = self::policyRuleDataFormat($item, [
                     'department' => $req->department,
-                    'type' => $item->policyType,
-                    'comment' => $item->comment
-                ];
+                    'parent_id' => $policy->id
+                ]);
 
-                switch ($item->policyType) {
-                    case "lessThan":
-                        $rowData['value_type'] = $item->valueType;
-                        $rowData['value'] = $item->value;
-                        $rowData['points'] = $item->points;
-                        break;
-                    case "greaterThan":
-                        $rowData['value_type'] = $item->valueType;
-                        $rowData['value'] = $item->value;
-                        $rowData['points'] = $item->points;
-                        break;
-                    case "fixed":
-                        $rowData['value_type'] = $item->valueType;
-                        $rowData['value'] = $item->value;
-                        $rowData['points'] = $item->points;
-                        break;
-
-                    case "range":
-                        $rowData['value_type'] = $item->valueType;
-                        $rowData['value'] = $item->from . ', ' . $item->to;
-                        $rowData['points'] = $item->points;
-                        break;
-
-                    case "yesNo":
-                        $rowData['value'] = json_encode($item->value);
-                        break;
-
-                    case "list":
-                        $rowData['value_type'] = $item->valueType;
-                        if ($item->valueType == "countries") {
-                            $rowData['value'] = json_encode($item->countries);
-                        }
-                        $rowData['points'] = $item->points;
-                        break;
-                }
-                // dd($rowData);
-                SalesRiskPolicy::create($rowData);
+                SalesRiskPolicy::create($rule);
             }
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-        // dd('');
+
         return response()->json([
             'status' => 'success',
             'message' => 'New Sale Risk Policy created Successfully.'
@@ -409,32 +369,14 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function edit(Request $req, $id): JsonResponse
     {
-        // dd($req->all(), $id);
-        $id=2;
-
-        try {
-            $policy = SalesRiskPolicy::findOrFail($id);
-        }
-        catch (ModelNotFoundException $ex)
-        {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Data not found'
-            ]);
-        }
-        catch (\Throwable $th) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $th->getMessage()
-            ], 500);
-        }
-
-        if ($policy) {
-            # code...
-        }
-
         $validator = Validator::make($req->all(), [
-            'points' => 'required|numeric'
+            'title' => 'required',
+            'department' => 'required',
+            'comment' => 'nullable',
+            'ruleList' => 'required|array|min:1',
+            'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
+            'ruleList.*.title' => 'required',
+            'ruleList.*.id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -445,22 +387,50 @@ class SalesRiskPolicyController extends AccountBaseController
             ]);
         }
 
-        // dd($id, $req->all());
+        // dd($req->all(), $id);
 
+        DB::beginTransaction();
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
-            dd($policy);
 
-            if ($req->input('ruleType')) {
-                if ($req->input('ruleType') == 'yes')
+            $policy->update([
+                'title' => $req->title,
+                'department' => $req->department,
+                'comment' => $req->comment,
+            ]);
 
-                    // dd($policy->value);
+            foreach ($req->ruleList as $item) {
+                $item = (object) $item;
+                if ($item->id == 'newRule') {
 
-                    $policy->points = $req->newpoints;
+                    $rule = self::policyRuleDataFormat($item, [
+                        'department' => $policy->department,
+                        'parent_id' => $policy->id
+                    ]);
+
+                    SalesRiskPolicy::create($rule);
+                } else {
+                    $rule = self::policyRuleDataFormat($item);
+                    $singleRule = SalesRiskPolicy::findOrFail($item->id);
+                    $singleRule->update($rule);
+                }
             }
-            // $policy->save();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Policy edited successfully.',
+            ]);
+
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
+            DB::rollBack();
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went worng while editing.',
+            ]);
         }
 
         return response()->json();
@@ -471,59 +441,15 @@ class SalesRiskPolicyController extends AccountBaseController
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
 
-            $rowData = [
-                'title' => $req->title,
-                'type'  => $req->policyType,
-                'comment' => $req->comment,
-            ];
+            $rule = self::policyRuleDataFormat($req);
 
-            switch ($req->policyType) {
-                case "lessThan":
-                    $rowData['value_type'] = $req->valueType;
-                    $rowData['value'] = $req->value;
-                    $rowData['points'] = $req->points;
-                    break;
-                case "greaterThan":
-                    $rowData['value_type'] = $req->valueType;
-                    $rowData['value'] = $req->value;
-                    $rowData['points'] = $req->points;
-                    break;
-                case "fixed":
-                    $rowData['value_type'] = $req->valueType;
-                    $rowData['value'] = $req->value;
-                    $rowData['points'] = $req->points;
-                    break;
-
-                case "range":
-                    $rowData['value_type'] = $req->valueType;
-                    $rowData['value'] = $req->from . ', ' . $req->to;
-                    $rowData['points'] = $req->points;
-                    break;
-
-                case "yesNo":
-                    $rowData['value'] = json_encode($req->value);
-                    break;
-
-                case "list":
-                    $rowData['value_type'] = $req->valueType;
-                    if ($req->valueType == "countries") {
-                        $rowData['value'] = json_encode($req->countries);
-                    }
-                    $rowData['points'] = $req->points;
-                    break;
-            }
-
-            $policy->update($rowData);
-
-        }
-        catch (ModelNotFoundException $ex)
-        {
+            $policy->update($rule);
+        } catch (ModelNotFoundException $ex) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Data not found'
             ]);
-        }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Error occured while saveing data.'
@@ -542,7 +468,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $itemsTransformed = $itemsPaginated
             ->getCollection()
-            ->map(function($item) {
+            ->map(function ($item) {
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
@@ -554,13 +480,14 @@ class SalesRiskPolicyController extends AccountBaseController
                     'status' => $item->status,
                     'comment' => $item->comment
                 ];
-        })->toArray();
+            })->toArray();
 
         $data = new \Illuminate\Pagination\LengthAwarePaginator(
             $itemsTransformed,
             $itemsPaginated->total(),
             $itemsPaginated->perPage(),
-            $itemsPaginated->currentPage(), [
+            $itemsPaginated->currentPage(),
+            [
                 'path' => FacadesRequest::url(),
                 'query' => [
                     'page' => $itemsPaginated->currentPage()
@@ -588,8 +515,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // if parent id is not null
             if ($policy->parrent_id) {
                 $policy->status = $status;
-            }
-            else {
+            } else {
                 SalesRiskPolicy::where('parent_id', $id)->update([
                     'status' => $status
                 ]);
@@ -602,6 +528,62 @@ class SalesRiskPolicyController extends AccountBaseController
             // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data not save correctly.']);
         }
+    }
+
+    /**
+     * @param $rule array single rule value
+     * @param $extra array extra values like department, parrent_id
+     *
+     * @return $data formated single rule
+     * */
+    function policyRuleDataFormat($rule, $extra = []): array
+    {
+        $rule = (object) $rule;
+        $data = [
+            'title' => $rule->title,
+            'type'  => $rule->policyType,
+            'comment' => $rule->comment ?? ''
+        ];
+
+        $data = array_merge($data, $extra);
+
+        switch ($rule->policyType) {
+            case "lessThan":
+                $data['value_type'] = $rule->valueType;
+                $data['value'] = $rule->value;
+                $data['points'] = $rule->points;
+                break;
+            case "greaterThan":
+                $data['value_type'] = $rule->valueType;
+                $data['value'] = $rule->value;
+                $data['points'] = $rule->points;
+                break;
+            case "fixed":
+                $data['value_type'] = $rule->valueType;
+                $data['value'] = $rule->value;
+                $data['points'] = $rule->points;
+                break;
+
+            case "range":
+                $data['value_type'] = $rule->valueType;
+                $data['value'] = $rule->from . ', ' . $rule->to;
+                $data['points'] = $rule->points;
+                break;
+
+            case "yesNo":
+                $data['value'] = json_encode($rule->value);
+                break;
+
+            case "list":
+                $data['value_type'] = $rule->valueType;
+                if ($rule->valueType == "countries") {
+                    $data['value'] = json_encode($rule->countries);
+                }
+                $data['points'] = $rule->points;
+                break;
+        }
+
+        return $data;
     }
 
     function policyQuestionInputFields()
