@@ -108,8 +108,8 @@
     
   $mergedEmails = array_unique(array_merge($emails, array_merge([$client->email], [$client_data->client_email??''])));
   $mergedPhones = array_unique(array_merge($phones, array_merge([$client->mobile], [$client_data->client_phone??''])));
-  $filteredEmails = array_filter($mergedEmails, function($email) { return $email !== null; });
-  $filteredPhones = array_filter($mergedPhones, function($phone) { return $phone !== null; });
+  $filteredEmails = array_filter($mergedEmails, function($email) { return !is_null($email) && $email !== ''; });
+  $filteredPhones = array_filter($mergedPhones, function($phone) { return !is_null($phone) && $phone !== ''; });
   $client_emails = implode(', ', $filteredEmails);
   $client_phones = implode(', ', $filteredPhones);
  ?>
