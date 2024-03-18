@@ -13,6 +13,8 @@ const MultiSelectShowDropDown = ({
     sidebarItem = false,
     className,
     multiple,
+    handleEditCountryList,
+    rowDetails
 }) => {
     const _Options = data;
     return (
@@ -49,7 +51,12 @@ const MultiSelectShowDropDown = ({
                 >
                     <div className="d-flex justify-content-between">
                         <p>Country list ({_Options?.length})</p>
-                        <p className="d-flex align-items-center">
+                        <p
+                            onClick={() => {
+                                handleEditCountryList(rowDetails);
+                            }}
+                            className="d-flex align-items-center"
+                        >
                             <i class="fa-solid fa-plus mr-2 text-primary"></i>
                             Add More
                         </p>

@@ -296,7 +296,9 @@ export const SalesRiskAnalysisTableColumns = [
                                         </p>
                                         <MultiSelectShowDropDown
                                             data={countriesList}
+                                            rowDetails={rule}
                                             multiple
+                                            handleEditCountryList={action.handleEditCountryList}
                                         />
                                     </div>
                                 </Switch.Case>

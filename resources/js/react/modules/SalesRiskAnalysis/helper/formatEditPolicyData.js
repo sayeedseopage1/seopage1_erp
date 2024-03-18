@@ -23,7 +23,7 @@ export const formatEditPolicyData = (data) => {
 
   let policies = []
 
-
+  const valueTypes = PolicyTypeItemValuesType?.data?.regularTypes?.data
 
   data.ruleList.map((item) => {
     let payload = {
@@ -37,7 +37,8 @@ export const formatEditPolicyData = (data) => {
         id: 1,
         label: "Countries",
         name: "countries",
-      } : PolicyTypeItems.data.find((type) => type.name === item.type),
+      } : valueTypes?.find((type) => type.name === item.
+        value_type),
       value: !_.includes(
         ["range", "yesNo", "list"],
         item.type
