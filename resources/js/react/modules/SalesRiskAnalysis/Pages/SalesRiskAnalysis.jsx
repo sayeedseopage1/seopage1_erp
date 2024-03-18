@@ -402,7 +402,7 @@ const SalesRiskAnalysis = () => {
 
     // main Table page change
 
-    const handlePageChange = (paginate) => {
+    const onPageChange = (paginate) => {
         setPagination(paginate);
     };
 
@@ -435,7 +435,7 @@ const SalesRiskAnalysis = () => {
                             tableData={salesRiskAnalysisRules}
                             isLoading={isFetching}
                             questionInputFields={questionInputFields}
-                            handlePageChange={handlePageChange}
+                            onPageChange={onPageChange}
                         />
                     </div>
                 </div>

@@ -1,5 +1,7 @@
 import _ from "lodash";
 import React, { useMemo, useEffect } from "react";
+
+
 import {
     useReactTable,
     getCoreRowModel,
@@ -50,7 +52,7 @@ const SalesRiskAnalysisTable = ({
     tableColumns,
     tableData,
     questionInputFields,
-    handlePageChange,
+    onPageChange,
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
@@ -110,7 +112,7 @@ const SalesRiskAnalysisTable = ({
         });
 
     // sales risk analysis rules data
-    const _salesRiskAnalysis = React.useMemo(() => tableData.data, [tableData?.data]);
+    const _salesRiskAnalysis = React.useMemo(() => tableData?.data, [tableData?.data]);
     React.useEffect(() => {
         if (_.size(_salesRiskAnalysis) === _.size(data)) {
             setSkipPageReset(true);
@@ -149,6 +151,29 @@ const SalesRiskAnalysisTable = ({
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
  
 
+    // on pagination
+    const handlePageChange = ({ selected }) => {
+        const paginate = {
+            pageIndex: selected,
+            pageSize,
+        };
+
+        setPagination({ ...paginate, pageIndex: 0 });
+        onPageChange(paginate);
+    };
+
+    // handle page size change
+    const handlePageSizeChange = (e) => {
+        e.preventDefault();
+
+        const paginate = {
+            pageIndex,
+            pageSize: e.target.value,
+        };
+        setPagination({ ...paginate, pageIndex: 0 });
+        onPageChange(paginate);
+    };
+
     // pagination
     const pagination = React.useMemo(
         () => ({ pageIndex, pageSize }),
@@ -169,17 +194,14 @@ const SalesRiskAnalysisTable = ({
         },
         onGlobalFilterChange: setGlobalFilter,
         autoResetPageIndex: !skipPageReset,
-        onPaginationChange: setPagination,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,
         getSubRows: (row) => row.subtasks,
         onColumnOrderChange: setColumnOrder,
         getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
-        paginateExpandedRows: false,
         meta: {
             handleEditApplicableRule: (row, selectedRule, ruleType) => {
                 const valueTypeConst =
@@ -571,7 +593,6 @@ const SalesRiskAnalysisTable = ({
         };
         try {
             const res = await submitPolicyData(payload);
-            console.log("res", res);
             if (res.data) {
                 toast.success("Policy updated successfully");
                 handleCloseEditPolicyModal();
@@ -791,18 +812,10 @@ const SalesRiskAnalysisTable = ({
 
             {/* pagination */}
             <SalesRiskAnalysisTablePagination
-                currentPage={pageIndex + 1}
-                perPageRow={pageSize}
-                onPageSize={(size) => table?.setPageSize(size)}
-                onPaginate={(page) => table?.setPageIndex(page - 1)}
-                totalEntry={_.size(data)}
-                onNext={() => table.getCanNextPage() && table.nextPage()}
-                disableNext={!table?.getCanNextPage()}
-                onPrevious={() =>
-                    table?.getCanPreviousPage() && table?.previousPage()
-                }
-                disablePrevious={!table?.getCanPreviousPage()}
-                totalPages={table?.getPageCount()}
+                tableData={tableData}
+                handlePageSizeChange={handlePageSizeChange}
+                handlePageChange={handlePageChange}
+                pageSize={pageSize}
             />
         </React.Fragment>
     );
