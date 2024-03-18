@@ -8,119 +8,14 @@ import { useState } from "react";
 import { EvalTableTitle, FooterButtons } from "../Table/ui";
 import DataTable from "../Table/EvaluationTable";
 import Button from "../../../../../ui/Button";
+import { useGetTaskListQuery } from "../../../../../services/api/EvaluationApiSlice";
 
 const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
-    const developerEvaluation = {
-        developerId: 1,
-        developerName: "Tanvir Mitul",
-        tasks: [
-            {
-                individualTaskName: "Design homepage layout",
-                id: 1,
-                assignDate: "2024-03-01",
-                submissionDate: "2024-03-10",
-                totalHoursTracked: 15,
-                linkToTheCompletedWork: "https://example.com/homepage",
-                numberOfRevisionsNeeded: 2,
-                action: "Review",
-            },
-            {
-                individualTaskName: "Write product descriptions",
-                id: 2,
-                assignDate: "2024-03-02",
-                submissionDate: "2024-03-08",
-                totalHoursTracked: 12,
-                linkToTheCompletedWork:
-                    "https://example.com/product-descriptions",
-                numberOfRevisionsNeeded: 1,
-                action: "Approve",
-            },
-            {
-                individualTaskName: "Code login functionality",
-                id: 3,
-                assignDate: "2024-03-03",
-                submissionDate: "2024-03-12",
-                totalHoursTracked: 20,
-                linkToTheCompletedWork:
-                    "https://example.com/login-functionality",
-                numberOfRevisionsNeeded: 0,
-                action: "Approve",
-            },
-            {
-                individualTaskName: "Create marketing banners",
-                id: 4,
-                assignDate: "2024-03-04",
-                submissionDate: "2024-03-09",
-                totalHoursTracked: 18,
-                linkToTheCompletedWork: "https://example.com/marketing-banners",
-                numberOfRevisionsNeeded: 3,
-                action: "Review",
-            },
-            {
-                individualTaskName: "Test website on mobile devices",
-                id: 5,
-                assignDate: "2024-03-05",
-                submissionDate: "2024-03-11",
-                totalHoursTracked: 10,
-                linkToTheCompletedWork: "https://example.com/mobile-testing",
-                numberOfRevisionsNeeded: 1,
-                action: "Approve",
-            },
-            {
-                individualTaskName: "Optimize website performance",
-                id: 6,
-                assignDate: "2024-03-06",
-                submissionDate: "2024-03-13",
-                totalHoursTracked: 25,
-                linkToTheCompletedWork:
-                    "https://example.com/performance-optimization",
-                numberOfRevisionsNeeded: 2,
-                action: "Review",
-            },
-            {
-                individualTaskName: "Update contact information",
-                id: 7,
-                assignDate: "2024-03-07",
-                submissionDate: "2024-03-14",
-                totalHoursTracked: 8,
-                linkToTheCompletedWork:
-                    "https://example.com/contact-info-update",
-                numberOfRevisionsNeeded: 0,
-                action: "Approve",
-            },
-            // {
-            //     individualTaskName: "Fix broken links",
-            //     id: 8,
-            //     assignDate: "2024-03-08",
-            //     submissionDate: "2024-03-15",
-            //     totalHoursTracked: 10,
-            //     linkToTheCompletedWork: "https://example.com/broken-links-fix",
-            //     numberOfRevisionsNeeded: 1,
-            //     action: "Review",
-            // },
-            // {
-            //     individualTaskName: "Implement user feedback",
-            //     id: 9,
-            //     assignDate: "2024-03-09",
-            //     submissionDate: "2024-03-16",
-            //     totalHoursTracked: 14,
-            //     linkToTheCompletedWork:
-            //         "https://example.com/user-feedback-implementation",
-            //     numberOfRevisionsNeeded: 2,
-            //     action: "Review",
-            // },
-            // {
-            //     individualTaskName: "Generate weekly report",
-            //     id: 10,
-            //     assignDate: "2024-03-10",
-            //     submissionDate: "2024-03-17",
-            //     totalHoursTracked: 6,
-            //     linkToTheCompletedWork: "https://example.com/weekly-report",
-            //     numberOfRevisionsNeeded: 0,
-            //     action: "Approve",
-            // },
-        ],
-    };
+    const assignToId = "65f7c6d70b0ea43f5888f62a";
+    const { data, isLoading } = useGetTaskListQuery(assignToId);
+
+    const Tasks = data?.data;
+
     const [sorting, setSorting] = useState([]);
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -142,12 +37,12 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                 },
                 content: {
                     borderRadius: "10px",
-                    height: "auto",
-                    maxHeight: "800px",
-                    maxWidth: "80vw",
+                    maxWidth: "90%",
+                    maxHeight: "fit-content",
+                    height: "fit-content",
                     margin: "auto auto",
-                    border: "none",
-                    overflow: "hidden",
+
+                    overflow: "auto",
                     padding: "20px",
                 },
             }}
@@ -156,10 +51,10 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
         >
             <EvalTableTitle>
                 <span>New Developer Evaluation :</span>
-                <span>{developerEvaluation?.developerName}</span>
+                <span>Mitul</span>
             </EvalTableTitle>
             <DataTable
-                data={developerEvaluation?.tasks}
+                data={Tasks}
                 columns={[...EvaluationTableColumns]}
                 isLoading={false}
                 onPageChange={onPageChange}
@@ -176,7 +71,11 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                 >
                     Close
                 </Button>
-                <Button size="md" className="ml-2" disabled="true">
+                <Button
+                    size="md"
+                    className="ml-2"
+                    disabled={data?.finalRatingSubmission}
+                >
                     Confirm Submission
                 </Button>
             </FooterButtons>
