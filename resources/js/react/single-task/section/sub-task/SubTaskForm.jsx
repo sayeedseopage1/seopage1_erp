@@ -788,9 +788,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             </>
                         }
 
-                        {/* for Banner or company profile */}
+                        {/* for Banner, brochure or company profile */}
                         {
-                            (typeOfGraphicsCategory?.type_name === "Banner" || typeOfGraphicsCategory?.type_name === "Company Profile") && <>
+                            (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
                                 <div className="col-12 col-md-6">
                                     <Input
                                         id="textForDesign"
@@ -811,7 +811,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                         {/* background removal or image retouching */}
                         {
-                            (typeOfGraphicsCategory?.type_name === "Background Removal" || typeOfGraphicsCategory?.type_name === "Image Retouching") && <>
+                            (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.type_name === 6) && <>
                                 <div className="col-12 col-md-6">
                                     <div className={`form-group my-3 w-100`}>
                                         <label
