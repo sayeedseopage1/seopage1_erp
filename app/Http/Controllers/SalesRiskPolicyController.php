@@ -307,7 +307,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ]
             ],
             [
-                'label' => 'Point',
+                'label' => 'Points',
                 'type' => 'number',
                 'placeholder' => ''
             ]
@@ -360,23 +360,23 @@ class SalesRiskPolicyController extends AccountBaseController
                     case "lessThan":
                         $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->value;
-                        $rowData['point'] = $item->points;
+                        $rowData['points'] = $item->points;
                         break;
                     case "greaterThan":
                         $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->value;
-                        $rowData['point'] = $item->points;
+                        $rowData['points'] = $item->points;
                         break;
                     case "fixed":
                         $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->value;
-                        $rowData['point'] = $item->points;
+                        $rowData['points'] = $item->pointss;
                         break;
 
                     case "range":
                         $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->from . ', ' . $item->to;
-                        $rowData['point'] = $item->points;
+                        $rowData['points'] = $item->pointss;
                         break;
 
                     case "yesNo":
@@ -388,7 +388,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         if ($item->valueType == "countries") {
                             $rowData['value'] = json_encode($item->countries);
                         }
-                        $rowData['point'] = $item->points;
+                        $rowData['points'] = $item->points;
                         break;
                 }
                 // dd($rowData);
@@ -419,7 +419,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json([
                 'status' => 'error',
                 'message' => 'Data not found'
-            ], 404);
+            ]);
         }
         catch (\Throwable $th) {
             return response()->json([
@@ -433,7 +433,7 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         $validator = Validator::make($req->all(), [
-            'points' => 'required|numeric'
+            'pointss' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -441,7 +441,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'status' => 'error',
                 'message' => 'validation fails',
                 'data' => $validator->errors()
-            ], 403);
+            ]);
         }
 
         // dd($id, $req->all());
@@ -455,7 +455,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
                     // dd($policy->value);
 
-                    $policy->point = $req->newPoint;
+                    $policy->points = $req->newpoints;
             }
             // $policy->save();
         } catch (\Throwable $th) {
@@ -467,10 +467,35 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function editSingle(Request $req, $id): JsonResponse
     {
+        try {
+            $policy = SalesRiskPolicy::findOrFail($id);
+
+            $policy->update([
+                'title' => $req->title,
+                'type' => $req->policyType,
+                'value_type' => $req->valueType,
+                'value' => $req->value,
+                'points' => $req->points
+            ]);
+
+        }
+        catch (ModelNotFoundException $ex)
+        {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data not found'
+            ]);
+        }
+        catch (\Throwable $th) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error occured while saveing data.'
+            ], 500);
+        }
+
         return response()->json([
-            'status' => 'pending',
-            'message' => 'Policy edited ',
-            'data' => []
+            'status' => 'success',
+            'message' => 'Policy edited succesfully.'
         ]);
     }
 
@@ -484,7 +509,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
-                    'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'point', 'status', 'comment']),
+                    'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
                     'department' => [
                         'id' => $item->department,
                         'name' => Team::with('childs')->find($item->department)->team_name

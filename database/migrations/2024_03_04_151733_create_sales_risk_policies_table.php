@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('type', ['parent', 'greaterThan', 'lessThan', 'fixed', 'range', 'yesNo', 'list']);
             $table->enum('value_type', ['percentage', 'currency', 'hourly', 'days', 'countries'])->nullable();
             $table->text('value')->nullable();
-            $table->float('point')->default('0');
+            $table->float('points')->default('0');
             $table->string('department');
             $table->enum('status', ['0', '1'])->default('1')->comment('0 => Disabled, 1=> Enabled');
             $table->text('comment')->nullable();
