@@ -434,7 +434,7 @@ class SalesRiskPolicyController extends AccountBaseController
         }
 
         $validator = Validator::make($req->all(), [
-            'pointss' => 'required|numeric'
+            'points' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -573,21 +573,34 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyRuleStatusChange($id, $status)
     {
+
+        // check if status is valid
+        if (!in_array($status, ['0', '1'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Status not found'
+            ]);
+        }
+
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
 
-            if ($status) {
-                $policy->status = "1";
-            } else if ($status == 0) {
-                $policy->status = "0";
-            } else {
-                return response()->json(['status' => 'error', 'message' => 'Policy status not changed.']);
+            // if parent id is not null
+            if ($policy->parrent_id) {
+                $policy->status = $status;
+            }
+            else {
+                SalesRiskPolicy::where('parent_id', $id)->update([
+                    'status' => $status
+                ]);
+                $policy->status = $status;
             }
 
             $policy->save();
             return response()->json(['status' => 'success', 'message' => 'Policy status changed.']);
         } catch (\Throwable $th) {
-            throw $th;
+            // throw $th;
+            return response()->json(['status' => 'error', 'message' => 'Data not save correctly.']);
         }
     }
 
