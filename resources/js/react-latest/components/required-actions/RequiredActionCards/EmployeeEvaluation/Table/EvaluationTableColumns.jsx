@@ -11,11 +11,11 @@ export const EvaluationTableColumns = [
     // },
     {
         header: "Individual Task Name",
-        accessorKey: "individualTaskName",
+        accessorKey: "taskName",
         cell: ({ row }) => {
             const data = row.original;
 
-            return <div>{data?.individualTaskName}</div>;
+            return <div>{data?.taskName}</div>;
         },
     },
     {
@@ -36,13 +36,11 @@ export const EvaluationTableColumns = [
     },
     {
         header: "Link to the Completed Work",
-        accessorKey: "linkToTheCompletedWork",
+        accessorKey: "completedWorkLink",
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <a href={data.linkToTheCompletedWork}>
-                    {data?.linkToTheCompletedWork}
-                </a>
+                <a href={data.completedWorkLink}>{data?.completedWorkLink}</a>
             );
         },
     },
@@ -61,13 +59,13 @@ export const EvaluationTableColumns = [
 
     {
         header: "Number of Revision Needed",
-        accessorKey: "numberOfRevisionsNeeded",
+        accessorKey: "numberOfRevisions",
         cell: ({ row }) => {
             const data = row.original;
 
             return (
                 <div style={{ marginLeft: "30%" }}>
-                    {data?.numberOfRevisionsNeeded}
+                    {data?.numberOfRevisions}
                 </div>
             );
         },
