@@ -149,19 +149,19 @@ const Tooltip = ({children, text, disabled=false, ...props}) => {
 
 // type
 TooltipProvider.propTypes = {
-    children: PropTypes.element,
+    children: PropTypes.any,
 }
 
 
 TooltipComponent.propTypes = {
-    text: PropTypes.string,
-    children: PropTypes.element,
+    text: PropTypes.any,
+    children: PropTypes.any,
     disabled: PropTypes.bool,
 }
 
 Tooltip.propTypes = {
-    text: PropTypes.string,
-    children: PropTypes.element,
+    text: PropTypes.any,
+    children: PropTypes.any,
     disabled: PropTypes.bool,
 }
 

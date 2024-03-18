@@ -413,7 +413,9 @@ const SalesRiskAnalysis = () => {
                         onClick={() => {
                             refetch();
                         }}
-                        className="py-2"
+                        style={{
+                            padding: "10px 20px"
+                        }}
                         isLoading={isFetching}
                     />
                 </div>

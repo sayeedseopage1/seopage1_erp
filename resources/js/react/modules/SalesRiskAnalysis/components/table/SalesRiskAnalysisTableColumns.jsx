@@ -20,7 +20,7 @@ export const SalesRiskAnalysisTableColumns = [
                         <div className={`custom-control custom-switch`}>
                             <input
                                 type="checkbox"
-                                checked={data?.status === "1" ? true : false}
+                                defaultChecked={data?.status === "1" ? true : false}
                                 className="custom-control-input"
                                 id="customSwitch1"
                                 onClick={() => {
@@ -33,7 +33,7 @@ export const SalesRiskAnalysisTableColumns = [
                                         ? "sales_risk_status_toggle_checked"
                                         : "sales_risk_status_toggle_not_checked"
                                 }`}
-                                for="customSwitch1"
+                                htmlFor="customSwitch1"
                             />
                         </div>
                         <span
@@ -123,7 +123,7 @@ export const SalesRiskAnalysisTableColumns = [
                 <div className="d-flex justify-content-center align-items-center flex-column">
                     {data?.ruleList?.map((rule, index) => {
                         return (
-                            <Switch>
+                            <Switch key={rule?.id}>
                                 <Switch.Case condition={rule?.type === "yesNo"}>
                                     <p
                                         style={{
@@ -313,7 +313,7 @@ export const SalesRiskAnalysisTableColumns = [
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     {data?.ruleList?.map((rule, index) => {
                         return (
-                            <Switch>
+                            <Switch key={rule?.id}>
                                 <Switch.Case
                                     condition={
                                         !_.includes(["yesNo"], rule?.type)

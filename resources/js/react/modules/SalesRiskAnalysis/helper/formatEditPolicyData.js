@@ -54,7 +54,7 @@ export const formatEditPolicyData = (data) => {
       noComment: item.type === 'yesNo' ? getYesNoValue(item, "no" , "comment") : "",
       ruleComment: item.type === 'yesNo' ? "" : item.comment,
       countries: item.type === 'list' ? FormatJsonCountry(item?.value) : [],
-      points: item.point,
+      points: item.points,
 
     }
 
