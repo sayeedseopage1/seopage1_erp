@@ -377,6 +377,7 @@ class SalesRiskPolicyController extends AccountBaseController
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
             'ruleList.*.title' => 'required',
             'ruleList.*.id' => 'required',
+            'deletedRuleIds' => 'nullable|array'
         ]);
 
         if ($validator->fails()) {
@@ -384,7 +385,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'status' => 'error',
                 'message' => 'validation fails',
                 'data' => $validator->errors()
-            ]);
+            ], 403);
         }
 
         // dd($req->all(), $id);
@@ -399,6 +400,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'comment' => $req->comment,
             ]);
 
+            // update children rules
             foreach ($req->ruleList as $item) {
                 $item = (object) $item;
                 if ($item->id == 'newRule') {
@@ -415,6 +417,9 @@ class SalesRiskPolicyController extends AccountBaseController
                     $singleRule->update($rule);
                 }
             }
+
+            // delete children rules
+            SalesRiskPolicy::whereIn('id', $req->input('deletedRuleIds', []))->delete();
 
             DB::commit();
 
@@ -506,7 +511,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json([
                 'status' => 'error',
                 'message' => 'Status not found'
-            ]);
+            ], 403);
         }
 
         try {
