@@ -33,17 +33,21 @@ const MultiSelect = ({
         );
     }
 
+    
+
     React.useMemo(() => {
         if (!search) {
             if (selectedCountries?.length) {
                 _Options = data?.filter(
                     (item) => !selectedCountries?.includes(item)
                 );
+                console.log("_Options !search" , _Options);
             } else {
                 _Options = data;
             }
         }
     }, [search]);
+    console.log("selectedCountries", selectedCountries);
 
     const onSelected = (option) => {
         if (

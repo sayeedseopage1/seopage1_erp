@@ -4,7 +4,7 @@ import React from "react";
 import Dropdown from "./Dropdown";
 import Tooltip from "./Tooltip";
 
-// style 
+// style
 import "./questionsSelect.css";
 
 const MultiSelectShowDropDown = ({
@@ -23,7 +23,7 @@ const MultiSelectShowDropDown = ({
                     : "d-flex align-items-center"
             } ${className}`}
         >
-            <Dropdown register className="w-100 cnx_dropdown_show_items_sales" >
+            <Dropdown register className="w-100 cnx_dropdown_show_items_sales">
                 <Dropdown.Toggle
                     className={
                         sidebarItem
@@ -44,8 +44,12 @@ const MultiSelectShowDropDown = ({
                     </Tooltip>
                 </Dropdown.Toggle>
                 <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`}>
-                    <div>
+                    <div className="d-flex ">
                         <p>Country list ({_Options?.length})</p>
+                        <p className="d-flex align-items-center">
+                            <i class="fa-solid fa-plus"></i>
+                            Add More
+                        </p>
                     </div>
                     {_Options.map((item) => (
                         <Dropdown.Item

@@ -33,7 +33,7 @@ import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptio
 import { addNewRulesValidation } from "../helper/createFromValidation";
 
 // styles
-import "../components/Styles/SalesRiskAnalysis.css"
+import "../components/Styles/SalesRiskAnalysis.css";
 
 const SalesRiskAnalysis = () => {
     const dispatch = useDispatch();
@@ -315,8 +315,9 @@ const SalesRiskAnalysis = () => {
             if (error?.status === 403) {
                 toast.error("You are not authorized to perform this action");
                 return;
+            } else {
+                toast.error("Failed to add new policy");
             }
-            toast.error("Failed to add new policy");
         }
     };
 
@@ -403,7 +404,6 @@ const SalesRiskAnalysis = () => {
     const handlePageChange = (paginate) => {
         setPagination(paginate);
     };
-
 
     return (
         <React.Fragment>

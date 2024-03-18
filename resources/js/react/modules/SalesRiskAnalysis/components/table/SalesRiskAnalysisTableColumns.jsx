@@ -470,7 +470,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                         data
                                                     );
                                             }}
-                                            disabled={data.status === "0"}
+                                        
                                         >
                                             <Tooltip
                                                 text={

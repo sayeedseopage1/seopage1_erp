@@ -148,6 +148,12 @@ const SalesRiskAnalysisTable = ({
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
 
+    // pagination
+    const pagination = React.useMemo(
+        () => ({ pageIndex, pageSize }),
+        [pageIndex, pageSize]
+    );
+
     const table = useReactTable({
         data,
         columns,
@@ -155,6 +161,7 @@ const SalesRiskAnalysisTable = ({
             sorting,
             expanded,
             columnOrder,
+            pagination,
             tableName,
             filter,
             globalFilter: _.trim(search),
@@ -279,7 +286,6 @@ const SalesRiskAnalysisTable = ({
             },
         },
     });
-
 
     console.log("statusActionData", statusActionData);
     // handle update rules

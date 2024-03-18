@@ -52,6 +52,9 @@ const EditPolicyModal = ({
         }
     });
 
+    console.log("editPolicyInputData", editPolicyInputData);
+    console.log("allSelectedCountries.flat()", allSelectedCountries);
+
     return (
         <CustomModal
             open={open}
