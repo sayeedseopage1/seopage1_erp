@@ -9,131 +9,177 @@ import Button from "../../../../../../react/global/Button";
 import ReusableSection from "./ReusableSection";
 import CKEditorComponent from "../../../../../ui/ckeditor";
 import { toast } from "react-toastify";
+import { useUpdateTaskMutation } from "../../../../../services/api/EvaluationApiSlice";
+useUpdateTaskMutation;
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
-    const [averageRating, setAverageRating] = useState(0);
+    const [putTask] = useUpdateTaskMutation();
+
+    console.log("update task mutation", useUpdateTaskMutation());
+    const [averageRating, setAverageRating] = useState(data.averageRating);
     const [formData, setFormData] = useState({
-        work_quality_first_chance_rating: null,
-        work_quality_first_revision_rating: null,
-        work_quality_second_revision_rating: null,
-        work_speed_rating: null,
-        instruction_understanding_ability_rating: null,
-        communication_rating: null,
-        professionalism_rating: null,
-        issues_identifications_ability_rating: null,
-        dedication_rating: null,
-        obedience_rating: null,
-        reporting_boss_comment: "",
+        averageRating: data?.averageRating ?? 0,
+        rating: {
+            work_quality_first_chance_rating:
+                data.rating?.work_quality_first_chance_rating ?? 0,
+            work_quality_first_revision_rating:
+                data.rating?.work_quality_first_chance_rating ?? 0,
+            work_quality_second_revision_rating:
+                data.rating?.work_quality_second_revision_rating ?? 0,
+            work_speed_rating: data.rating.work_speed_rating ?? 0,
+            instruction_understanding_ability_rating:
+                data.rating.instruction_understanding_ability_rating ?? 0,
+            communication_rating: data.rating.communication_rating ?? 0,
+            professionalism_rating: data.rating.professionalism_rating ?? 0,
+            issues_identifications_ability_rating:
+                data.rating.issues_identifications_ability_rating ?? 0,
+            dedication_rating: data.rating.dedication_rating ?? 0,
+            obedience_rating: data.rating.obedience_rating ?? 0,
+            reporting_boss_comment: data.rating.reporting_boss_comment ?? "",
+        },
     });
 
     useEffect(() => {
         const calculateAverageRating = () => {
-            const ratings = Object.values(formData).filter(
-                (value) => value !== null && !isNaN(value)
+            const ratings = Object.values(formData.rating).filter((value) =>
+                /^[+-]?\d+(\.\d+)?$/.test(value)
             );
             const sum = ratings.reduce((total, rating) => total + rating, 0);
-            return (sum / (ratings.length - 1)).toFixed(2);
+            return (sum / ratings.length).toFixed(2);
         };
         setAverageRating(calculateAverageRating());
-    }, [formData]);
+
+        console.log(formData);
+    }, [formData.rating]);
 
     const formFields = [
         {
             label: "Quality of work (in the first chance)",
-            value: formData.work_quality_first_chance_rating,
+            value: formData.rating.work_quality_first_chance_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    work_quality_first_chance_rating: value,
+                    averageRating: averageRating,
+                    rating: {
+                        ...formData.rating,
+                        work_quality_first_chance_rating: value,
+                    },
                 }),
         },
         {
             label: "Quality of work (After 1st revision)",
-            value: formData.work_quality_first_revision_rating,
+            value: formData.rating.work_quality_first_revision_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    work_quality_first_revision_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        work_quality_first_revision_rating: value,
+                    },
                 }),
         },
         {
             label: "Quality of work (After 2nd revision)",
-            value: formData.work_quality_second_revision_rating,
+            value: formData.rating.work_quality_second_revision_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    work_quality_second_revision_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        work_quality_second_revision_rating: value,
+                    },
                 }),
         },
         {
             label: "Speed of work",
-            value: formData.work_speed_rating,
+            value: formData.rating.work_speed_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    work_speed_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        work_speed_rating: value,
+                    },
                 }),
         },
         {
             label: "Ability to understand instruction",
-            value: formData.instruction_understanding_ability_rating,
+            value: formData.rating.instruction_understanding_ability_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    instruction_understanding_ability_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        instruction_understanding_ability_rating: value,
+                    },
                 }),
         },
         {
             label: "Communication",
-            value: formData.communication_rating,
+            value: formData.rating.communication_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    communication_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        communication_rating: value,
+                    },
                 }),
         },
         {
             label: "Professionalism",
-            value: formData.professionalism_rating,
+            value: formData.rating.professionalism_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    professionalism_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        professionalism_rating: value,
+                    },
                 }),
         },
         {
             label: "Ability to identify issues",
-            value: formData.issues_identifications_ability_rating,
+            value: formData.rating.issues_identifications_ability_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    issues_identifications_ability_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        issues_identifications_ability_rating: value,
+                    },
                 }),
         },
         {
             label: "Dedication",
-            value: formData.dedication_rating,
+            value: formData.rating.dedication_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    dedication_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        dedication_rating: value,
+                    },
                 }),
         },
         {
             label: "Obedience",
-            value: formData.obedience_rating,
+            value: formData.rating.obedience_rating,
             onChange: (value) =>
                 setFormData({
                     ...formData,
-                    obedience_rating: value,
+                    rating: {
+                        ...formData.rating,
+                        obedience_rating: value,
+                    },
                 }),
         },
     ];
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const requiredFields = [
             {
                 key: "work_quality_first_chance_rating",
@@ -164,7 +210,7 @@ const SingleEvaluationModal = ({
         ];
 
         const emptyFields = requiredFields
-            .filter((field) => !formData[field.key])
+            .filter((field) => !formData.rating[field.key])
             .map((field) => field.label);
 
         if (emptyFields.length > 0) {
@@ -186,7 +232,22 @@ const SingleEvaluationModal = ({
             return;
         }
 
-        console.log("form data", formData);
+        const fd = new FormData();
+        fd.append("averageRating", averageRating);
+        fd.append("evaluationStatus", "completed");
+        Object.entries(formData.rating).forEach(([key, value]) => {
+            fd.append(`rating[${key}]`, value);
+        });
+
+        putTask({ taskId: data._id, data: fd })
+            .unwrap()
+            .then((response) => {
+                toast.success("Rating submitted");
+                toggleSingleEvaluationModal();
+            })
+            .catch((error) => {
+                toast.error("Rating not submitted");
+            });
     };
 
     return (
@@ -230,15 +291,15 @@ const SingleEvaluationModal = ({
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{data?.individualTaskName}</td>
+                            <td>{data?.taskName}</td>
                             <td>{data?.assignDate}</td>
                             <td>{data.submissionDate}</td>
                             <td>{data?.totalHoursTracked}</td>
                             <td>
-                                <a href="#">{data?.linkToTheCompletedWork}</a>
+                                <a href="#">{data?.completedWorkLink}</a>
                             </td>
-                            <td>{data.numberOfRevisionsNeeded}</td>
-                            <td>{averageRating === NaN ? 0 : averageRating}</td>
+                            <td>{data.numberOfRevisions}</td>
+                            <td>{averageRating ?? "N/A"}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -268,11 +329,16 @@ const SingleEvaluationModal = ({
                 >
                     <CKEditorComponent
                         placeholder="Write your comment here"
+                        data={formData?.rating?.reporting_boss_comment}
                         onChange={(e, editor) => {
                             const data = editor.getData();
                             setFormData((prev) => ({
                                 ...prev,
-                                reporting_boss_comment: data,
+                                averageRating: averageRating,
+                                rating: {
+                                    ...formData.rating,
+                                    reporting_boss_comment: data,
+                                },
                             }));
                         }}
                     />

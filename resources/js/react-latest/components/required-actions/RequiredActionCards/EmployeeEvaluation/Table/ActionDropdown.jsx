@@ -14,17 +14,23 @@ const ActionDropdown = ({ data, table }) => {
         <React.Fragment>
             <ColumnContent onClick={() => toggleSingleEvaluationModal()}>
                 <button className={ButtonStyles.sendContainer}>
-                    <IoIosSend
-                        className={ButtonStyles.send}
-                        color="#fff"
-                        size={`20px`}
-                    />
-                    <IoIosSend
-                        className={ButtonStyles.send2}
-                        color="#696666"
-                        size={`20px`}
-                    />
-                    <p>Evaluate</p>
+                    {data?.evaluationStatus === "completed" ? (
+                        <h4>{data?.averageRating}</h4>
+                    ) : (
+                        <div>
+                            <IoIosSend
+                                className={ButtonStyles.send}
+                                color="#fff"
+                                size={`20px`}
+                            />
+                            <IoIosSend
+                                className={ButtonStyles.send2}
+                                color="#696666"
+                                size={`20px`}
+                            />
+                            <p>Evaluate</p>
+                        </div>
+                    )}
                 </button>
             </ColumnContent>
 

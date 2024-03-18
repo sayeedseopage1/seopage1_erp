@@ -31,6 +31,14 @@
    margin-left: 30px;
    transition: all 0.5s ease;
 }
+.sendContainer h4{
+   
+   text-align: center;
+   color: #eee9e9;
+   font-weight: 900;
+   font-size: 16px;
+   
+}
 
 .send{
   position: absolute;
@@ -57,6 +65,10 @@
   color: #696666;
   transition: all 0.5s ease;
   animation: move 1s linear 1s forwards;
+}
+.sendContainer:hover h4{
+  color: #696666;
+ 
 }
 
 .sendContainer:hover .send{
