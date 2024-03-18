@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 // ui components
 import RefreshButton from "../components/RefreshButton";
@@ -12,7 +13,6 @@ import {
     useGetSalesRiskAnalysisRulesQuery,
     useQuestionInputFieldsQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
-import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptionsApiSlice";
 
 // table
 import SalesRiskAnalysisTable from "../components/table/SalesRiskAnalysisTable";
@@ -20,12 +20,20 @@ import { SalesRiskAnalysisTableColumns } from "../components/table/SalesRiskAnal
 
 // modal
 import AddNewPolicyModal from "../components/modal/AddNewPolicyModal";
+
+// redux actions
 import {
     setFilterOptionsState,
     setFilterCountriesState,
 } from "../../../services/features/filterOptionSlice";
+// Api services
+import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptionsApiSlice";
+
+// helper
 import { addNewRulesValidation } from "../helper/createFromValidation";
-import { toast } from "react-toastify";
+
+// styles
+import "../components/Styles/SalesRiskAnalysis.css"
 
 const SalesRiskAnalysis = () => {
     const dispatch = useDispatch();
@@ -413,9 +421,7 @@ const SalesRiskAnalysis = () => {
                         onClick={() => {
                             refetch();
                         }}
-                        style={{
-                            padding: "10px 20px"
-                        }}
+                        className="sales_risk_refresh_button"
                         isLoading={isFetching}
                     />
                 </div>

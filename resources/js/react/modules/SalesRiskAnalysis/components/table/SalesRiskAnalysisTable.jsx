@@ -236,7 +236,7 @@ const SalesRiskAnalysisTable = ({
                         selectedRule?.type === "list"
                             ? FormatJsonCountry(selectedRule?.value)
                             : "",
-                    points: selectedRule?.point,
+                    points: selectedRule?.points,
                 };
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
