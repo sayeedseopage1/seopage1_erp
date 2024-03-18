@@ -201,7 +201,7 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
+                    $past_action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -289,7 +289,7 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $action->message = 'Review explanation and ratings add successfully!';
+                    $past_action->message = 'Review explanation and ratings add successfully!';
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -369,7 +369,7 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $action->message = 'Goal deadline extension request!';
+                    $past_action->message = 'Goal deadline extension request!';
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -496,7 +496,7 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $action->message = 'Goal deadline extension request!';
+                    $past_action->message = 'Goal deadline extension request!';
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
