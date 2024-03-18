@@ -27,6 +27,8 @@ import EditPolicyModal from "../modal/EditPolicyModal";
 import AddQuestionsModal from "../modal/AddQuestionsModal";
 import EditApplicableRulesModal from "../modal/EditApplicableRulesModal";
 import RuleActionConfirmationModal from "../modal/RuleActionConfirmationModal";
+import EditCountryListModal from "../modal/EditCountryListModal";
+
 
 // Api
 import {
@@ -43,6 +45,7 @@ import { formatEditPolicyData } from "../../helper/formatEditPolicyData";
 import { addNewRulesValidation } from "../../helper/createFromValidation";
 import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
+
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -70,7 +73,7 @@ const SalesRiskAnalysisTable = ({
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
     const [editPolicyModal, setEditPolicyModalOpen] = React.useState(false);
-    const [editPolicyDeleteData, setEditPolicyDeleteData] = React.useState([]);
+    const [editCountryListModalOpen, setEditCountryListModalOpen] = React.useState(false);
 
 
 
@@ -83,6 +86,7 @@ const SalesRiskAnalysisTable = ({
     const [editPolicyDefaultData, setEditPolicyDefaultData] = React.useState(
         []
     );
+    const [editPolicyDeleteData, setEditPolicyDeleteData] = React.useState([]);
     const [editPolicyInputData, setEditPolicyInputData] = React.useState([]);
     const [editRuleDataValidation, setEditRuleDataValidation] = React.useState({
         isSubmitting: false,
@@ -310,6 +314,10 @@ const SalesRiskAnalysisTable = ({
                 });
                 setEditPolicyModalOpen(true);
             },
+            handleEditCountryList: (data) => {
+                setEditRuleData(data);
+                setEditCountryListModalOpen(true);
+            }
         },
     });
 
@@ -627,6 +635,11 @@ const SalesRiskAnalysisTable = ({
         setEditPolicyModalOpen(false);
         resetFormForPolicy();
     };
+    const handleCloseEditCountryListModal = () => {
+        setEditCountryListModalOpen(false);
+        setEditRuleData({});
+    }
+
 
     // auto generate title
     const autoGenerateTitle = (data) => {
@@ -690,9 +703,7 @@ const SalesRiskAnalysisTable = ({
         }
     }, [editPolicyData]);
 
-    useMemo(() => {
-        handlePageChange({ pageIndex, pageSize });
-    }, [pageIndex, pageSize]);
+
 
     return (
         <React.Fragment>
@@ -819,6 +830,10 @@ const SalesRiskAnalysisTable = ({
                 isLoading={
                     isLoadingEditSalesRiskAnalysisPolicy
                 }
+            />
+            <EditCountryListModal
+                open={editCountryListModalOpen}
+                closeModal={handleCloseEditCountryListModal}
             />
 
             {/* pagination */}

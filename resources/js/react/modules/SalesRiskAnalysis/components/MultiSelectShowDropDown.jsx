@@ -43,11 +43,14 @@ const MultiSelectShowDropDown = ({
                         </p>
                     </Tooltip>
                 </Dropdown.Toggle>
-                <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`}>
-                    <div className="d-flex ">
+                <Dropdown.Menu
+                    className="cnx_dropdown__menu_open--multiselectShow"
+                    id={`cnx_dropdown__menu_open--${_Options?.id}`}
+                >
+                    <div className="d-flex justify-content-between">
                         <p>Country list ({_Options?.length})</p>
                         <p className="d-flex align-items-center">
-                            <i class="fa-solid fa-plus"></i>
+                            <i class="fa-solid fa-plus mr-2 text-primary"></i>
                             Add More
                         </p>
                     </div>
