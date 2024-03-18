@@ -11217,7 +11217,7 @@ var fileInputStyle = {
   zIndex: '0'
 };
 var SubTaskForm = function SubTaskForm(_ref) {
-  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _required_error$pageT3, _required_error$pageT4, _ref10, _ref13, _ref16, _required_error$page_, _task$category5, _required_error$page_2, _required_error$descr, _required_error$descr2;
+  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _formError, _formError2, _formError3, _formError4, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _required_error$pageT3, _required_error$pageT4, _ref10, _ref13, _ref16, _required_error$page_, _task$category5, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
@@ -11346,6 +11346,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useState52 = _slicedToArray(_useState51, 2),
     brandGuideline = _useState52[0],
     setBrandGuideline = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState54 = _slicedToArray(_useState53, 2),
+    illustration = _useState54[0],
+    setIllustration = _useState54[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState56 = _slicedToArray(_useState55, 2),
+    others = _useState56[0],
+    setOthers = _useState56[1];
   var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     colorSchema = _React$useState6[0],
@@ -11395,10 +11403,10 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _React$useState28 = _slicedToArray(_React$useState27, 2),
     pageTypeName = _React$useState28[0],
     setPageTypeName = _React$useState28[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState54 = _slicedToArray(_useState53, 2),
-    err = _useState54[0],
-    setErr = _useState54[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState58 = _slicedToArray(_useState57, 2),
+    err = _useState58[0],
+    setErr = _useState58[1];
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_16__.SingleTask(taskDetails);
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_17__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_24__.useParams)();
@@ -12093,7 +12101,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             })
           })
-        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.type_name) === "Motion Graphics" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
@@ -12129,6 +12137,64 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   color: "red"
                 },
                 children: err === null || err === void 0 ? void 0 : err.imgOrVidForWork
+              })]
+            })
+          })
+        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 7 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+              className: "form-group my-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                htmlFor: "",
+                children: [" ", "Name of the illustration work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                  children: "*"
+                }), " "]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                className: "ck-editor-holder",
+                style: {
+                  minHeight: "50px"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                  data: illustration,
+                  onChange: function onChange(e, editor) {
+                    return setIllustration(editor.getData());
+                  }
+                })
+              }), ((_formError = formError) === null || _formError === void 0 ? void 0 : _formError.illustration) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                style: {
+                  color: "red"
+                },
+                children: (_formError2 = formError) === null || _formError2 === void 0 ? void 0 : _formError2.illustration
+              })]
+            })
+          })
+        }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 9 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+              className: "form-group my-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                htmlFor: "",
+                children: [" ", "Name of the graphic design work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                  children: "*"
+                }), " "]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                className: "ck-editor-holder",
+                style: {
+                  minHeight: "50px"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                  data: others,
+                  onChange: function onChange(e, editor) {
+                    return setOthers(editor.getData());
+                  }
+                })
+              }), ((_formError3 = formError) === null || _formError3 === void 0 ? void 0 : _formError3.others) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                style: {
+                  color: "red"
+                },
+                children: (_formError4 = formError) === null || _formError4 === void 0 ? void 0 : _formError4.others
               })]
             })
           })

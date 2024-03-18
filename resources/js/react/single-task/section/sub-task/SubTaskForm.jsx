@@ -83,6 +83,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [fontName, setFontName] = useState('');
     const [fontUrl, setFontUrl] = useState('');
     const [brandGuideline, setBrandGuideline] = useState(null);
+    const [illustration, setIllustration] = useState("");
+    const [others, setOthers] = useState("");
     const [colorSchema, setColorSchema] = React.useState("");
     const [primaryColor, setPrimaryColor] = React.useState("");
     const [primaryColorDescription, setPrimaryColorDescription] =
@@ -841,7 +843,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                         {/* motion graphics */}
                         {
-                            typeOfGraphicsCategory?.type_name === "Motion Graphics" && <>
+                            typeOfGraphicsCategory?.id === 8 && <>
                                 <div className="col-12 col-md-6">
                                     <div className={`form-group my-3 w-100`}>
                                         <label
@@ -861,6 +863,75 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         {err?.imgOrVidForWork && (
                                             <div style={{ color: "red" }}>
                                                 {err?.imgOrVidForWork}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        }
+
+                        {/* Illustration */}
+                        {
+                            typeOfGraphicsCategory?.id === 7 && <>
+                                <div className="col-12">
+                                    <div className="form-group my-3">
+                                        <label htmlFor="">
+                                            {" "}
+                                            Name of the illustration work!<sup>*</sup>{" "}
+                                        </label>
+                                        <div
+                                            className="ck-editor-holder"
+                                            style={{ minHeight: "50px" }}
+                                        >
+                                            <CKEditorComponent
+                                                data={illustration}
+                                                onChange={(
+                                                    e,
+                                                    editor
+                                                ) =>
+                                                    setIllustration(
+                                                        editor.getData()
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                        {formError?.illustration && (
+                                            <div style={{ color: "red" }}>
+                                                {formError?.illustration}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </>
+                        }
+                        {/* Others */}
+                        {
+                            typeOfGraphicsCategory?.id === 9 && <>
+                                <div className="col-12">
+                                    <div className="form-group my-3">
+                                        <label htmlFor="">
+                                            {" "}
+                                            Name of the graphic design work!<sup>*</sup>{" "}
+                                        </label>
+                                        <div
+                                            className="ck-editor-holder"
+                                            style={{ minHeight: "50px" }}
+                                        >
+                                            <CKEditorComponent
+                                                data={others}
+                                                onChange={(
+                                                    e,
+                                                    editor
+                                                ) =>
+                                                    setOthers(
+                                                        editor.getData()
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                        {formError?.others && (
+                                            <div style={{ color: "red" }}>
+                                                {formError?.others}
                                             </div>
                                         )}
                                     </div>

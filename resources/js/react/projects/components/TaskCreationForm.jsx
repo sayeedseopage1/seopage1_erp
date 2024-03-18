@@ -153,7 +153,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setBrandGuideline([]);
         setIllustration("");
         setOthers("");
-        // setColorSchema("");
         setPrimaryColor("#1D82F5");
         setPrimaryColorDescription("");
         setSecondaryColors([
