@@ -46,6 +46,7 @@ const SalesRiskAnalysis = () => {
     });
     const [dept, setDept] = React.useState(null);
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
+    
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =

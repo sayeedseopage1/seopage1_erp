@@ -70,6 +70,9 @@ const SalesRiskAnalysisTable = ({
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
     const [editPolicyModal, setEditPolicyModalOpen] = React.useState(false);
+    const [editPolicyDeleteData, setEditPolicyDeleteData] = React.useState([]);
+
+
 
     // modal state data
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
@@ -277,7 +280,7 @@ const SalesRiskAnalysisTable = ({
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (row) => {
-                console.log("selectedData", row);
+                
                 setStatusActionData({
                     ...row,
                     modalType: "Policy",
@@ -285,7 +288,7 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleRuleStatus: (rule) => {
-                console.log("rule", rule);
+                
                 setStatusActionData({
                     ...rule,
                     modalType: "Rule",
@@ -310,7 +313,6 @@ const SalesRiskAnalysisTable = ({
         },
     });
 
-    console.log("statusActionData", statusActionData);
     // handle update rules
     const handleUpdateRules = async () => {
         const validation = addNewRulesValidation(
@@ -496,6 +498,7 @@ const SalesRiskAnalysisTable = ({
             setEditPolicyData([]);
             setEditPolicyDefaultData([]);
             setEditPolicyDataValidation({});
+            setEditPolicyDeleteData([]);
         }
     };
 
@@ -551,6 +554,9 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
+
+
+
     // handle Edit Policy Update on server
     const handleEditPolicyUpdate = async () => {
         const payload = {
@@ -558,6 +564,7 @@ const SalesRiskAnalysisTable = ({
             title: editPolicyDefaultData?.policyName,
             department: editPolicyDefaultData?.department?.id,
             comment: editPolicyDefaultData?.comment,
+            deletedRuleIds: editPolicyDeleteData,
             ruleList: editPolicyInputData.map((item) => {
                 const rule = {
                     policyType: item.policyType?.name,
@@ -808,6 +815,10 @@ const SalesRiskAnalysisTable = ({
                 setIsRuleUpdating={setIsRuleUpdating}
                 handleChange={handlePolicyEditChange}
                 handleEditPolicyUpdate={handleEditPolicyUpdate}
+                setEditPolicyDeleteData={setEditPolicyDeleteData}
+                isLoading={
+                    isLoadingEditSalesRiskAnalysisPolicy
+                }
             />
 
             {/* pagination */}

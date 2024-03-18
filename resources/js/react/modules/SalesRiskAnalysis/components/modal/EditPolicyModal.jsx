@@ -42,6 +42,7 @@ const EditPolicyModal = ({
     handleCancelRuleOnPolicy,
     editPolicyDefaultData,
     handleEditPolicyUpdate,
+    setEditPolicyDeleteData
 }) => {
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
@@ -51,9 +52,6 @@ const EditPolicyModal = ({
             allSelectedCountries.push(item?.countries);
         }
     });
-
-    console.log("editPolicyInputData", editPolicyInputData);
-    console.log("allSelectedCountries.flat()", allSelectedCountries);
 
     return (
         <CustomModal
@@ -139,6 +137,7 @@ const EditPolicyModal = ({
                                 setNewPolicyData={setEditPolicyData}
                                 setIsRuleUpdating={setIsRuleUpdating}
                                 setNewPolicyInputData={setEditPolicyInputData}
+                                setEditPolicyDeleteData={setEditPolicyDeleteData}
                             />
                         </div>
                     ) : (

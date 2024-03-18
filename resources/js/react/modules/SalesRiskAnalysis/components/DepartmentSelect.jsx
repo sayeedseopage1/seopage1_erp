@@ -28,9 +28,6 @@ const DepartmentSelect = ({
         }
     }, [query]);
 
-
-    console.log("DepartmentSelect -> _department", selected)
-
     return (
         <div
             className={`${

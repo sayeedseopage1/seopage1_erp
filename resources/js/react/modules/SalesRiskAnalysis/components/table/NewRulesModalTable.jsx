@@ -20,7 +20,8 @@ const NewRulesModalTable = ({
     tableColumns,
     setNewPolicyData,
     setIsRuleUpdating,
-    setNewPolicyInputData
+    setNewPolicyInputData,
+    setEditPolicyDeleteData,
 }) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -44,7 +45,6 @@ const NewRulesModalTable = ({
 
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
-
     // columns
     const [columns, setColumns] = React.useState([...defaultColumns]);
 
@@ -79,6 +79,12 @@ const NewRulesModalTable = ({
                 const _data = _.filter(data, (item) => item.id !== row.id);
                 setData(_data);
                 setNewPolicyInputData(_data);
+                setEditPolicyDeleteData((prev) => {
+                    if(typeof(row.id) !== 'number') return prev; 
+                    if (typeof(row.id) === 'number') {
+                        return [...prev, row.id];
+                    }
+                });
             },
         },
     });
