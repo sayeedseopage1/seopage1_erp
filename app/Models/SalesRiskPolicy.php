@@ -9,5 +9,5 @@ class SalesRiskPolicy extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title','department','type', 'parent_id', 'value_type', 'value', 'point', 'comment'];
+    protected $fillable = ['title','department','type', 'parent_id', 'value_type', 'value', 'points', 'comment'];
 }
