@@ -167,13 +167,14 @@ class ProjectStatusController extends AccountBaseController
     }
     public function projectStatusReason(Request $request){
         // dd($request->all());
-        // \DB::beginTransaction();
         $validator =  $request->validate([
             'reason' => 'required',
 
         ], [
             'reason.required' => 'This field is required!',
         ]);
+        try {
+        \DB::beginTransaction();
         $ppg = ProjectPmGoal::where('id',$request->project_pm_goal_id)->first();
         $ppg->reason = $request->reason;
         $ppg->reason_status = 1;
@@ -201,7 +202,6 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
                     $action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
-                    //   $past_action->message = 'Task guideline authorization from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was completed by '.$authorize_by->name;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -217,9 +217,12 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
-        $user  = User::where('id',229)->first(); // It's only for admin
+        $user  = User::where('id',62)->first(); // It's only for admin
         Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
-
+        \DB::commit();
+        } catch (\Throwable $th) {
+            \DB::rollback();
+        }
         return response()->json(['status'=>200]);
     }
     public function projectStatusResolve(Request $request){
@@ -345,10 +348,44 @@ class ProjectStatusController extends AccountBaseController
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 }
             }
+            $actions = PendingAction::where('code','PMGE')->where('past_status',0)->where('goal_id',$goal->id)->get();
+            if($actions != null)
+            {
+                foreach ($actions as $key => $action)
+                {
+                    $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
+                    $project= Project::where('id',$pm_goal->project_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    // $project_manager= User::where('id',$pm_goal->pm_id)->first();
+                    // $client= User::where('id',$pm_goal->client_id)->first();
+                    // $authorize_by= User::where('id',$action->authorized_by)->first();
+                    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $action->message = 'Goal deadline extension request!';
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->goal_id = $action->goal_id;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->save();
+                }
+            }
 
             $helper = new HelperPendingActionController();
             $helper->PmGoalExtendRequest($goal);
-            $user  = User::where('id',229)->first(); // It's only for admin
+            $user  = User::where('id',62)->first(); // It's only for admin
             Notification::send($user, new PmGoalExtendRequestNotification($goal));
 
             \DB::commit();
@@ -380,62 +417,101 @@ class ProjectStatusController extends AccountBaseController
     }
     public function acceptOrDenyExtendRequest(Request $request){
         // dd($request->all());
-        // \DB::beginTransaction();
-        if($request->status==1){
-            if($request->goal_extension_auth_checkbox == 'Apply this extension to all goals'){
-                $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
-                foreach($pmGoalFinds as $item){
-                    $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
-                    $updateGoal->extended_goal_end_day = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
+        try {
+        \DB::beginTransaction();
+            if($request->status==1){
+                if($request->goal_extension_auth_checkbox == 'Apply this extension to all goals'){
+                    $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
+                    foreach($pmGoalFinds as $item){
+                        $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
+                        $updateGoal->extended_goal_end_day = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
+                        $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
+                        $updateGoal->extended_request_status = 2;
+                        $updateGoal->save();
+                    }
+                }else{
+                    $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
+                    $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
                     $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
                     $updateGoal->extended_request_status = 2;
                     $updateGoal->save();
                 }
+
+                $deadline_ext_history = new PmGoalDeadlineExtHistory();
+                $deadline_ext_history->goal_id = $updateGoal->id;
+                $deadline_ext_history->start_date = $updateGoal->goal_start_date;
+                $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
+                $deadline_ext_history->new_deadline = $updateGoal->extended_goal_end_day;
+                $deadline_ext_history->duration = $updateGoal->duration;
+                $deadline_ext_history->description = $updateGoal->description ?? '';
+                $deadline_ext_history->goal_status = $updateGoal->goal_status;
+                $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
+                $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
+                $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
+                $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
+                $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day); 
+                $deadline_ext_history->authorization_by = Auth::user()->id; 
+                $deadline_ext_history->auth_status = 1; 
+                $deadline_ext_history->save();
             }else{
                 $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
-                $updateGoal->extended_goal_end_day = Carbon::parse($updateGoal->goal_end_date)->addDay($request->extended_day);
                 $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
-                $updateGoal->extended_request_status = 2;
+                $updateGoal->extended_request_status = 3;
                 $updateGoal->save();
+
+                $deadline_ext_history = new PmGoalDeadlineExtHistory();
+                $deadline_ext_history->goal_id = $updateGoal->id;
+                $deadline_ext_history->start_date = $updateGoal->goal_start_date;
+                $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
+                $deadline_ext_history->duration = $updateGoal->duration;
+                $deadline_ext_history->description = $updateGoal->extended_admin_cmnt;
+                $deadline_ext_history->goal_status = $updateGoal->goal_status;
+                $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
+                $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
+                $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
+                $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
+                $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
+                $deadline_ext_history->authorization_by = Auth::user()->id; 
+                $deadline_ext_history->auth_status = 2;
+                $deadline_ext_history->save();
             }
-
-            $deadline_ext_history = new PmGoalDeadlineExtHistory();
-            $deadline_ext_history->goal_id = $updateGoal->id;
-            $deadline_ext_history->start_date = $updateGoal->goal_start_date;
-            $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
-            $deadline_ext_history->new_deadline = $updateGoal->extended_goal_end_day;
-            $deadline_ext_history->duration = $updateGoal->duration;
-            $deadline_ext_history->description = $updateGoal->description ?? '';
-            $deadline_ext_history->goal_status = $updateGoal->goal_status;
-            $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
-            $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
-            $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
-            $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
-            $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day); 
-            $deadline_ext_history->authorization_by = Auth::user()->id; 
-            $deadline_ext_history->auth_status = 1; 
-            $deadline_ext_history->save();
-        }else{
-            $updateGoal = ProjectPmGoal::where('id',$request->goal_id)->first();
-            $updateGoal->extended_admin_cmnt = $request->is_any_negligence;
-            $updateGoal->extended_request_status = 3;
-            $updateGoal->save();
-
-            $deadline_ext_history = new PmGoalDeadlineExtHistory();
-            $deadline_ext_history->goal_id = $updateGoal->id;
-            $deadline_ext_history->start_date = $updateGoal->goal_start_date;
-            $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
-            $deadline_ext_history->duration = $updateGoal->duration;
-            $deadline_ext_history->description = $updateGoal->extended_admin_cmnt;
-            $deadline_ext_history->goal_status = $updateGoal->goal_status;
-            $deadline_ext_history->extended_admin_cmnt = $request->is_any_negligence;
-            $deadline_ext_history->extension_req_on = $updateGoal->extension_req_on;
-            $deadline_ext_history->extension_req_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
-            $deadline_ext_history->extension_req_auth_on = Carbon::now(); 
-            $deadline_ext_history->extension_req_auth_for = Carbon::parse($updateGoal->extended_goal_end_day)->addDay($request->extended_day);
-            $deadline_ext_history->authorization_by = Auth::user()->id; 
-            $deadline_ext_history->auth_status = 2;
-            $deadline_ext_history->save();
+            $actions = PendingAction::where('code','PMER')->where('past_status',0)->where('goal_id',$updateGoal->id)->get();
+            if($actions != null)
+            {
+                foreach ($actions as $key => $action)
+                {
+                    $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
+                    $project= Project::where('id',$pm_goal->project_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    // $project_manager= User::where('id',$pm_goal->pm_id)->first();
+                    // $client= User::where('id',$pm_goal->client_id)->first();
+                    // $authorize_by= User::where('id',$action->authorized_by)->first();
+                    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $action->message = 'Goal deadline extension request!';
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->goal_id = $action->goal_id;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->save();
+                }
+            }
+            \DB::commit();
+        } catch (\Throwable $th) {
+            \DB::rollback();
         }
         return response()->json(['status'=>200]);
     }

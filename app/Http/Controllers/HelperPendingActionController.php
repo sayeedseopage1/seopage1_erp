@@ -1769,7 +1769,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'PMGE'.'x0';
                 $action->item_name= 'Goal expire in 24 hours';
                 $action->heading= 'Goal expire in 24 hours!';
-                $action->message = 'Goal '.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in 24 hours!';
+                $action->message = 'Goal ('.$goal->goal_name.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in 24 hours!';
                 $action->timeframe= 24;
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
@@ -1802,8 +1802,8 @@ class HelperPendingActionController extends AccountBaseController
                 $action = new PendingAction();
                 $action->code = 'PMGM';
                 $action->serial = 'PMGM'.'x0';
-                $action->item_name= 'Goal Miss';
-                $action->heading= 'Goal Miss!';
+                $action->item_name= 'Add explanation for your missing goal';
+                $action->heading= 'Add explanation for your missing goal!';
                 $action->message = 'Goal '.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met!';
                 $action->timeframe= 24;
                 $action->goal_id = $goal->id;
@@ -1834,8 +1834,8 @@ class HelperPendingActionController extends AccountBaseController
                 $action = new PendingAction();
                 $action->code = 'PMRE';
                 $action->serial = 'PMRE'.'x0';
-                $action->item_name= 'Review explanation';
-                $action->heading= 'Review explanation!';
+                $action->item_name= 'Review Goal missing explanation';
+                $action->heading= 'Review Goal missing explanation!';
                 $action->message = 'Review explanation given by PM on missing goal'.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
                 $action->timeframe= 24;
                 $action->goal_id = $goal->id;
@@ -1879,11 +1879,11 @@ class HelperPendingActionController extends AccountBaseController
             }
 
                 $action = new PendingAction();
-                $action->code = 'PMRE';
-                $action->serial = 'PMRE'.'x0';
-                $action->item_name= 'Goal deadline extension request by PM <a href="'.route('employess.show',$pm->id).'">'.$pm->name.'</a>';
-                $action->heading= 'Goal deadline extension request by PM <a href="'.route('employess.show',$pm->id).'">'.$pm->name.'</a>!';
-                $action->message = 'Goal ('.$goal_count.') (Name: '.$pm_goal->goal_name.') extension request has been submitted by PM <a href="'.route('employess.show',$pm->id).'">'.$pm->name.'</a> for project ( <a href="'.route('projects.show',$project->id).'">'.$project->name.'</a> ) from client ( <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>) !';
+                $action->code = 'PMER';
+                $action->serial = 'PMER'.'x0';
+                $action->item_name= 'Goal deadline extension request by PM '.$pm->name.'';
+                $action->heading= 'Goal deadline extension request by PM '.$pm->name.'!';
+                $action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request has been submitted by PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>)!';
                 $action->timeframe= 24;
                 $action->goal_id = $pm_goal->id;
                 $action->project_id = $project->id;
