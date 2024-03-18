@@ -318,6 +318,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function save(Request $req)
     {
+        // dd($req->all());
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
@@ -370,13 +371,13 @@ class SalesRiskPolicyController extends AccountBaseController
                     case "fixed":
                         $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->value;
-                        $rowData['points'] = $item->pointss;
+                        $rowData['points'] = $item->points;
                         break;
 
                     case "range":
                         $rowData['value_type'] = $item->valueType;
                         $rowData['value'] = $item->from . ', ' . $item->to;
-                        $rowData['points'] = $item->pointss;
+                        $rowData['points'] = $item->points;
                         break;
 
                     case "yesNo":
@@ -470,13 +471,49 @@ class SalesRiskPolicyController extends AccountBaseController
         try {
             $policy = SalesRiskPolicy::findOrFail($id);
 
-            $policy->update([
+            $rowData = [
                 'title' => $req->title,
-                'type' => $req->policyType,
-                'value_type' => $req->valueType,
-                'value' => $req->value,
-                'points' => $req->points
-            ]);
+                'type'  => $req->policyType,
+                'comment' => $req->comment,
+            ];
+
+            switch ($req->policyType) {
+                case "lessThan":
+                    $rowData['value_type'] = $req->valueType;
+                    $rowData['value'] = $req->value;
+                    $rowData['points'] = $req->points;
+                    break;
+                case "greaterThan":
+                    $rowData['value_type'] = $req->valueType;
+                    $rowData['value'] = $req->value;
+                    $rowData['points'] = $req->points;
+                    break;
+                case "fixed":
+                    $rowData['value_type'] = $req->valueType;
+                    $rowData['value'] = $req->value;
+                    $rowData['points'] = $req->points;
+                    break;
+
+                case "range":
+                    $rowData['value_type'] = $req->valueType;
+                    $rowData['value'] = $req->from . ', ' . $req->to;
+                    $rowData['points'] = $req->points;
+                    break;
+
+                case "yesNo":
+                    $rowData['value'] = json_encode($req->value);
+                    break;
+
+                case "list":
+                    $rowData['value_type'] = $req->valueType;
+                    if ($req->valueType == "countries") {
+                        $rowData['value'] = json_encode($req->countries);
+                    }
+                    $rowData['points'] = $req->points;
+                    break;
+            }
+
+            $policy->update($rowData);
 
         }
         catch (ModelNotFoundException $ex)
