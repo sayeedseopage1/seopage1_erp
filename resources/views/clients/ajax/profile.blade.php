@@ -106,8 +106,8 @@
     ->pluck('contract_signs.number')
     ->toArray();
     
-  $mergedEmails = array_unique(array_merge($emails, array_merge([$client->email], [$client_data->client_email])));
-  $mergedPhones = array_unique(array_merge($phones, array_merge([$client->mobile], [$client_data->client_phone])));
+  $mergedEmails = array_unique(array_merge($emails, array_merge([$client->email], [$client_data->client_email??''])));
+  $mergedPhones = array_unique(array_merge($phones, array_merge([$client->mobile], [$client_data->client_phone??''])));
   $filteredEmails = array_filter($mergedEmails, function($email) { return $email !== null; });
   $filteredPhones = array_filter($mergedPhones, function($phone) { return $phone !== null; });
   $client_emails = implode(', ', $filteredEmails);
