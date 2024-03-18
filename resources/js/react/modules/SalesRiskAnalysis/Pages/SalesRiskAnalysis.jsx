@@ -101,6 +101,8 @@ const SalesRiskAnalysis = () => {
                 limit: pageSize,
             })
         );
+    // sales risk analysis rules data
+    const salesRiskAnalysisRules = data?.data;
 
     // fetch filter options
     const { data: filterOptions, isFetching: isFilterOptionsFetching } =
@@ -335,8 +337,7 @@ const SalesRiskAnalysis = () => {
         }
     }, [salesRiskInputs, isSalesRiskInputsFetching]);
 
-    // sales risk analysis rules data
-    const salesRiskAnalysisRules = data?.data?.data;
+
 
     // handle modal open close
     const handleAddNewPolicyModal = () => {

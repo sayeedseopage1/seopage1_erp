@@ -55,7 +55,7 @@ const SalesRiskAnalysisTable = ({
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
-    const [data, setData] = React.useState(tableData || []);
+    const [data, setData] = React.useState(tableData?.data || []);
     const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
@@ -110,7 +110,7 @@ const SalesRiskAnalysisTable = ({
         });
 
     // sales risk analysis rules data
-    const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
+    const _salesRiskAnalysis = React.useMemo(() => tableData.data, [tableData?.data]);
     React.useEffect(() => {
         if (_.size(_salesRiskAnalysis) === _.size(data)) {
             setSkipPageReset(true);
@@ -147,6 +147,7 @@ const SalesRiskAnalysisTable = ({
     const [columns, setColumns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
+ 
 
     // pagination
     const pagination = React.useMemo(
