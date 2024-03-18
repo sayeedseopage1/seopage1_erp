@@ -527,6 +527,7 @@ const SalesRiskAnalysisTable = ({
                 const rule = {
                     policyType: item.policyType?.name,
                     title: item.title,
+                    id: item.id,
                 };
                 if (item.value) rule.value = item.value;
                 if (!_.isEmpty(item.valueType))
