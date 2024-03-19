@@ -43,7 +43,11 @@ const AddQuestionsModal = ({
         title: "",
         type: {},
         placeholder: "",
-        parent_question: {},
+        parent_question: {
+            id: 1,
+            title: "Test",
+            type: "yes_no",
+        },
         parent_question_for: "",
         ruleList: [],
         comment: "",
@@ -63,7 +67,7 @@ const AddQuestionsModal = ({
         isLoading: isQuestionInputFieldsLoading,
         refetch,
     } = useSinglePolicyQuestionsQuery(addQuestionsData?.id, {
-        staleTime: 0, 
+        staleTime: 0,
         refetchOnMountOrArgChange: true,
         skip: !addQuestionsData?.id,
     });
@@ -204,7 +208,6 @@ const AddQuestionsModal = ({
         }
     }, [singleQuestion]);
 
-
     console.log(singleQuestion);
     console.log(questions);
 
@@ -326,6 +329,64 @@ const AddQuestionsModal = ({
                                     </ModalSelectContainer>
                                 </div>
                             </div>
+                            <Switch.Case
+                                condition={
+                                    singleQuestion?.parent_question.type ===
+                                    "yes_no"
+                                }
+                            >
+                                <div className="row mb-4 align-items-center">
+                                    <ModalInputLabel className="col-4">
+                                        Parent Question For
+                                    </ModalInputLabel>
+                                    <div className="col-8 flex-column px-0">
+                                        <div className="d-flex">
+                                            <div className="d-flex">
+                                                <ModalInput
+                                                    type="radio"
+                                                    className="w-100"
+                                                    name="parent_question_for"
+                                                    id="parent_question_for_yes"
+                                                    value="yes"
+                                                    checked={
+                                                        singleQuestion?.parent_question_for ===
+                                                        "yes"
+                                                    }
+                                                    onChange={handleChange}
+                                                    placeholder="Write Here"
+                                                />
+                                                <ModalInputLabel
+                                                    htmlFor="parent_question_for_yes"
+                                                    className="ml-2"
+                                                >
+                                                    Yes
+                                                </ModalInputLabel>
+                                            </div>
+                                            <div className="d-flex ml-2">
+                                                <ModalInput
+                                                    type="radio"
+                                                    className="w-100"
+                                                    name="parent_question_for"
+                                                    id="parent_question_for_no"
+                                                    value="no"
+                                                    checked={
+                                                        singleQuestion?.parent_question_for ===
+                                                        "no"
+                                                    }
+                                                    onChange={handleChange}
+                                                    placeholder="Write Here"
+                                                />
+                                                <ModalInputLabel
+                                                    htmlFor="parent_question_for_no"
+                                                    className="ml-2"
+                                                >
+                                                    No
+                                                </ModalInputLabel>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Switch.Case>
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Rule List<sup>*</sup>
