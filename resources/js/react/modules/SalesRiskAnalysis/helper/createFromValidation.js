@@ -10,7 +10,7 @@ import { markEmptyFieldsValidation } from "../../../utils/stateValidation";
  * @returns {Object} The updated policy data validation object after validating the fields.
  */
 
-const getValidFields = (listFields, newPolicyDataValidation) => {
+export const getValidFields = (listFields, newPolicyDataValidation) => {
   const fieldsValidation = markEmptyFieldsValidation(listFields);
   const prevNewPolicyDataValidation = { ...newPolicyDataValidation };
   Object.entries(fieldsValidation).forEach(([key, value]) => {

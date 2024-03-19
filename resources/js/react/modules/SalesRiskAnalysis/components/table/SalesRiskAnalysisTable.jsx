@@ -55,8 +55,8 @@ const SalesRiskAnalysisTable = ({
     search,
     tableColumns,
     tableData,
-    questionInputFields,
     onPageChange,
+    refetch
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
@@ -213,6 +213,7 @@ const SalesRiskAnalysisTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditApplicableRule: (row, selectedRule, ruleType) => {
+                refetch();
                 const valueTypeConst =
                     PolicyTypeItemValuesType?.data?.regularTypes?.data;
 
@@ -282,10 +283,12 @@ const SalesRiskAnalysisTable = ({
                 setEditRuleModalOpen(true);
             },
             handleAddQuestions: (data) => {
+                refetch();
                 setAddQuestionsData(data);
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (row) => {
+                refetch();
                 setStatusActionData({
                     ...row,
                     modalType: "Policy",
@@ -293,6 +296,7 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleRuleStatus: (rule) => {
+                refetch();
                 setStatusActionData({
                     ...rule,
                     modalType: "Rule",
@@ -300,6 +304,7 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleEditPolicy: (data) => {
+                refetch();
                 // function to format data
                 const updateData = formatEditPolicyData(data);
                 setEditPolicyInputData(updateData);
@@ -315,6 +320,7 @@ const SalesRiskAnalysisTable = ({
                 setEditPolicyModalOpen(true);
             },
             handleEditCountryList: (data, selectedRule) => {
+                refetch();
                 const payload = formatEditRuleData(data, selectedRule);
                 setEditRuleData(payload);
                 setEditCountryListModalOpen(true);
@@ -800,7 +806,6 @@ const SalesRiskAnalysisTable = ({
                 open={addQuestionsModalOpen}
                 closeModal={handleCloseAddQuestionsModal}
                 addQuestionsData={addQuestionsData}
-                questionInputFields={questionInputFields}
             />
             <EditPolicyModal
                 open={editPolicyModal}
@@ -851,5 +856,6 @@ SalesRiskAnalysisTable.propTypes = {
     search: PropTypes.string,
     tableColumns: PropTypes.array,
     tableData: PropTypes.array,
-    questionInputFields: PropTypes.array,
+    onPageChange: PropTypes.func,
+    refetch: PropTypes.func,
 };

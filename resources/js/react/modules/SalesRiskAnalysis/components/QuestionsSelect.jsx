@@ -53,6 +53,7 @@ const QuestionsSelect = ({
                         <span
                             data-toggle={"tooltip"}
                             id="select-department-sal-risk"
+                            className="multiline-ellipsis text-hover-underline-color"
                         >
                             {selected?.title ? (
                                 <span>{selected?.title}</span>

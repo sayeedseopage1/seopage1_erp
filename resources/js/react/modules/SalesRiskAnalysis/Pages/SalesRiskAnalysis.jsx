@@ -118,12 +118,7 @@ const SalesRiskAnalysis = () => {
             skip: countries?.length,
         });
 
-    // question input fields
-    const {
-        data: questionInputFields,
-        isFetching: isQuestionInputFieldsFetching,
-        isLoading: isQuestionInputFieldsLoading,
-    } = useQuestionInputFieldsQuery("");
+
 
     // add sales risk analysis rule mutation
     const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
@@ -435,7 +430,7 @@ const SalesRiskAnalysis = () => {
                             tableName="SalesRiskAnalysisTable"
                             tableData={salesRiskAnalysisRules}
                             isLoading={isFetching}
-                            questionInputFields={questionInputFields}
+                            refetch={refetch}
                             onPageChange={onPageChange}
                         />
                     </div>
