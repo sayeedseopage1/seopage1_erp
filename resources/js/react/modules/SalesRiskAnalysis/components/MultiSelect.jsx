@@ -33,21 +33,19 @@ const MultiSelect = ({
         );
     }
 
-    
-
     React.useMemo(() => {
         if (!search) {
             if (selectedCountries?.length) {
                 _Options = data?.filter(
                     (item) => !selectedCountries?.includes(item)
                 );
-                console.log("_Options !search" , _Options);
+                console.log("_Options !search", _Options);
             } else {
                 _Options = data;
             }
         }
     }, [search]);
-    console.log("selectedCountries", selectedCountries);
+    console.log("selected", selected);
 
     const onSelected = (option) => {
         if (
@@ -56,11 +54,17 @@ const MultiSelect = ({
             )
         ) {
             console.log("includes");
+            console.log("option", option);
+            let newPolicyDataCopy = { ...newPolicyData };
+            let updateCountry = newPolicyDataCopy?.countries?.filter(
+                (country) => country.name !== option.name
+            );
+
+            console.log("updateCountry", updateCountry);
+
             setSelected({
-                ...newPolicyData,
-                [filedName]: newPolicyData?.countries?.filter(
-                    (p) => p !== option
-                ),
+                ...newPolicyDataCopy,
+                [filedName]: updateCountry,
             });
         } else {
             console.log("not includes");
@@ -120,11 +124,11 @@ const MultiSelect = ({
                             className="cnx_select_box_search_input"
                         />
                     </div>
-                    {_Options.map((item) => (
+                    {_Options?.map((item) => (
                         <Dropdown.Item
                             key={item?.name}
                             className={`cnx_select_box_option ${
-                                selected.some((selectedItem) =>
+                                selected?.some((selectedItem) =>
                                     _.isEqual(selectedItem, item)
                                 )
                                     ? "active"
@@ -148,7 +152,7 @@ const MultiSelect = ({
                                     />
                                     {item.name}
                                 </p>
-                                {selected.some((selectedItem) =>
+                                {selected?.some((selectedItem) =>
                                     _.isEqual(selectedItem, item)
                                 ) && <i className="fa-solid fa-check" />}
                             </div>

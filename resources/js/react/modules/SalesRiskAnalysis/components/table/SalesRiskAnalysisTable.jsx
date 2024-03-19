@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React, { useMemo, useEffect } from "react";
 
-
 import {
     useReactTable,
     getCoreRowModel,
@@ -29,7 +28,6 @@ import EditApplicableRulesModal from "../modal/EditApplicableRulesModal";
 import RuleActionConfirmationModal from "../modal/RuleActionConfirmationModal";
 import EditCountryListModal from "../modal/EditCountryListModal";
 
-
 // Api
 import {
     useEditSinglePolicySalesRiskAnalysisMutation,
@@ -41,11 +39,14 @@ import {
 import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
 
 // helper function
-import { formatEditPolicyData } from "../../helper/formatEditPolicyData";
+import {
+    formatEditPolicyData,
+    formatEditRuleData,
+    formatEditRuleDataPayload,
+} from "../../helper/formatEditPolicyData";
 import { addNewRulesValidation } from "../../helper/createFromValidation";
 import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
-
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -73,9 +74,8 @@ const SalesRiskAnalysisTable = ({
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
     const [editPolicyModal, setEditPolicyModalOpen] = React.useState(false);
-    const [editCountryListModalOpen, setEditCountryListModalOpen] = React.useState(false);
-
-
+    const [editCountryListModalOpen, setEditCountryListModalOpen] =
+        React.useState(false);
 
     // modal state data
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
@@ -119,7 +119,10 @@ const SalesRiskAnalysisTable = ({
         });
 
     // sales risk analysis rules data
-    const _salesRiskAnalysis = React.useMemo(() => tableData?.data, [tableData?.data]);
+    const _salesRiskAnalysis = React.useMemo(
+        () => tableData?.data,
+        [tableData?.data]
+    );
     React.useEffect(() => {
         if (_.size(_salesRiskAnalysis) === _.size(data)) {
             setSkipPageReset(true);
@@ -156,7 +159,6 @@ const SalesRiskAnalysisTable = ({
     const [columns, setColumns] = React.useState([...defaultColumns]);
 
     const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
- 
 
     // on pagination
     const handlePageChange = ({ selected }) => {
@@ -284,7 +286,6 @@ const SalesRiskAnalysisTable = ({
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (row) => {
-                
                 setStatusActionData({
                     ...row,
                     modalType: "Policy",
@@ -292,7 +293,6 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleRuleStatus: (rule) => {
-                
                 setStatusActionData({
                     ...rule,
                     modalType: "Rule",
@@ -314,10 +314,11 @@ const SalesRiskAnalysisTable = ({
                 });
                 setEditPolicyModalOpen(true);
             },
-            handleEditCountryList: (data) => {
-                setEditRuleData(data);
+            handleEditCountryList: (data, selectedRule) => {
+                const payload = formatEditRuleData(data, selectedRule);
+                setEditRuleData(payload);
                 setEditCountryListModalOpen(true);
-            }
+            },
         },
     });
 
@@ -339,41 +340,14 @@ const SalesRiskAnalysisTable = ({
             });
             return;
         }
-        const payload = {
-            title: editRuleData?.title,
-            policyType: editRuleData?.policyType?.name,
-            id: editRuleData?.id,
-        };
-        if (editRuleData.value) payload.value = editRuleData.value;
-        if (!_.isEmpty(editRuleData.valueType))
-            payload.valueType = editRuleData.valueType.name;
-        if (editRuleData.from) payload.from = editRuleData.from;
-        if (editRuleData.to) payload.to = editRuleData.to;
-        if (editRuleData.points) payload.points = editRuleData.points;
-        if (editRuleData.yes && editRuleData.no) {
-            payload.value = {
-                yes: {
-                    point: editRuleData.yes,
-                    comment: editRuleData.yesComment,
-                },
-                no: {
-                    point: editRuleData.no,
-                    comment: editRuleData.noComment,
-                },
-            };
-        }
-        if (editRuleData.countries?.length > 0) {
-            payload.countries = editRuleData.countries.map((country) => ({
-                [country.iso]: country.niceName,
-            }));
-        }
-        if (editRuleData.ruleComment)
-            payload.comment = editRuleData.ruleComment;
+        const payload = formatEditRuleDataPayload(editRuleData);
         try {
             const res = await submitData(payload);
             if (res.data) {
                 toast.success("Rules updated successfully");
                 handleCloseEditRuleModal();
+                handleCloseEditCountryListModal();
+                setEditRuleData({});
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -562,9 +536,6 @@ const SalesRiskAnalysisTable = ({
         }
     };
 
-
-
-
     // handle Edit Policy Update on server
     const handleEditPolicyUpdate = async () => {
         const payload = {
@@ -638,8 +609,21 @@ const SalesRiskAnalysisTable = ({
     const handleCloseEditCountryListModal = () => {
         setEditCountryListModalOpen(false);
         setEditRuleData({});
-    }
-
+        setEditPolicyDataValidation({
+            isSubmitting: false,
+            policyName: false,
+            department: false,
+            policyType: false,
+            valueType: false,
+            value: false,
+            from: false,
+            to: false,
+            yes: false,
+            no: false,
+            countries: false,
+            points: false,
+        });
+    };
 
     // auto generate title
     const autoGenerateTitle = (data) => {
@@ -702,8 +686,6 @@ const SalesRiskAnalysisTable = ({
             setEditPolicyDataValidation(validation);
         }
     }, [editPolicyData]);
-
-
 
     return (
         <React.Fragment>
@@ -827,13 +809,16 @@ const SalesRiskAnalysisTable = ({
                 handleChange={handlePolicyEditChange}
                 handleEditPolicyUpdate={handleEditPolicyUpdate}
                 setEditPolicyDeleteData={setEditPolicyDeleteData}
-                isLoading={
-                    isLoadingEditSalesRiskAnalysisPolicy
-                }
+                isLoading={isLoadingEditSalesRiskAnalysisPolicy}
             />
             <EditCountryListModal
                 open={editCountryListModalOpen}
                 closeModal={handleCloseEditCountryListModal}
+                handleMultiSelectChange={setEditRuleData}
+                editRuleData={editRuleData}
+                handleUpdateRules={handleUpdateRules}
+                editRuleDataValidation={editRuleDataValidation}
+                isLoading={isLoadingEditSalesRiskAnalysisRule}
             />
 
             {/* pagination */}

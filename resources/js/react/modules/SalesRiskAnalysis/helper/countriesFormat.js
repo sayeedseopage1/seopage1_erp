@@ -24,3 +24,4 @@ export const getYesNoValue = (ruleData, type, valueType) => {
   if (ruleData?.type !== "yesNo") return;
   return JSON?.parse(ruleData?.value)[type][valueType];
 };
+

@@ -1,20 +1,3 @@
-// policyName: "",
-//         department: {},
-//         policyType: {},
-//         title: "",
-//         valueType: {},
-//         value: "",
-//         from: "",
-//         to: "",
-//         yes: "",
-//         no: "",
-//         comment: "",
-//         yesComment: "",
-//         noComment: "",
-//         ruleComment: "",
-//         countries: [],
-//         points: "",
-
 import _ from "lodash";
 import { PolicyTypeItemValuesType, PolicyTypeItems } from "../constant";
 import { FormatJsonCountry, getYesNoValue } from "./countriesFormat";
@@ -62,4 +45,106 @@ export const formatEditPolicyData = (data) => {
 
   return policies
 
+}
+
+
+export const formatEditRuleData = (data, selectedRow) => {
+
+  const formatCountry = FormatJsonCountry(selectedRow?.value)
+  let updatedCountry = [...formatCountry]
+
+  const payload = {
+    id: selectedRow.id,
+    policyName: data.title,
+    department: data.department,
+    comment: data.comment,
+    policyType: PolicyTypeItems.data.find(
+      (item) => item?.name === selectedRow?.type
+    ),
+    title: selectedRow.title,
+    valueType: {
+      id: 1,
+      label: "Countries",
+      name: "countries",
+    },
+    comment: selectedRow?.comment,
+    from:
+      selectedRow?.type === "range"
+        ? selectedRow?.value?.split(",")[0]
+        : "",
+    to:
+      selectedRow?.type === "range"
+        ? selectedRow?.value?.split(", ")[1]?.trim()
+        : "",
+    yes:
+      selectedRow?.type === "yesNo"
+        ? getYesNoValue(selectedRow, "yes", "point")
+        : "",
+    no:
+      selectedRow?.type === "yesNo"
+        ? getYesNoValue(selectedRow, "no", "point")
+        : "",
+    value: !_.includes(
+      ["range", "yesNo", "list"],
+      selectedRow?.type
+    )
+      ? selectedRow?.value
+      : "",
+    ruleComment: selectedRow?.comment,
+    yesComment:
+      selectedRow?.type === "yesNo"
+        ? getYesNoValue(selectedRow, "yes", "comment")
+        : "",
+    noComment:
+      selectedRow?.type === "yesNo"
+        ? getYesNoValue(selectedRow, "no", "comment")
+        : "",
+    countries:
+      selectedRow?.type === "list"
+        ? [...FormatJsonCountry(selectedRow?.value)]
+        : "",
+    points: selectedRow?.points,
+  };
+
+  console.log("payload", payload)
+
+  return payload;
+}
+
+
+export const formatEditRuleDataPayload = (editRuleData) => {
+  const payload = {
+    title: editRuleData?.title,
+    policyType: editRuleData?.policyType?.name,
+    id: editRuleData?.id,
+  };
+  if (editRuleData.value) payload.value = editRuleData.value;
+  if (!_.isEmpty(editRuleData.valueType))
+    payload.valueType = editRuleData.valueType.name;
+  if (editRuleData.from) payload.from = editRuleData.from;
+  if (editRuleData.to) payload.to = editRuleData.to;
+  if (editRuleData.points) payload.points = editRuleData.points;
+  if (editRuleData.yes && editRuleData.no) {
+    payload.value = {
+      yes: {
+        point: editRuleData.yes,
+        comment: editRuleData.yesComment,
+      },
+      no: {
+        point: editRuleData.no,
+        comment: editRuleData.noComment,
+      },
+    };
+  }
+  if (editRuleData.countries?.length > 0) {
+    payload.countries = editRuleData.countries.map((country) => ({
+      [country.iso]: country.niceName,
+    }));
+  }
+  if (editRuleData.ruleComment) {
+    payload.comment = editRuleData.ruleComment;
+  }
+
+
+  return payload;
 }

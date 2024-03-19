@@ -14,7 +14,7 @@ const MultiSelectShowDropDown = ({
     className,
     multiple,
     handleEditCountryList,
-    rowDetails
+    rowDetails,
 }) => {
     const _Options = data;
     return (
@@ -52,10 +52,9 @@ const MultiSelectShowDropDown = ({
                     <div className="d-flex justify-content-between">
                         <p>Country list ({_Options?.length})</p>
                         <p
-                            onClick={() => {
-                                handleEditCountryList(rowDetails);
-                            }}
+                            onClick={handleEditCountryList}
                             className="d-flex align-items-center"
+                            style={{ cursor: "pointer" }}
                         >
                             <i class="fa-solid fa-plus mr-2 text-primary"></i>
                             Add More

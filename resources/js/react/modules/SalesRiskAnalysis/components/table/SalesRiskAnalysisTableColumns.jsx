@@ -298,7 +298,12 @@ export const SalesRiskAnalysisTableColumns = [
                                             data={countriesList}
                                             rowDetails={rule}
                                             multiple
-                                            handleEditCountryList={action.handleEditCountryList}
+                                            handleEditCountryList={() => {
+                                                action.handleEditCountryList(
+                                                    data,
+                                                    rule
+                                                );
+                                            }}
                                         />
                                     </div>
                                 </Switch.Case>
@@ -472,7 +477,6 @@ export const SalesRiskAnalysisTableColumns = [
                                                         data
                                                     );
                                             }}
-                                        
                                         >
                                             <Tooltip
                                                 text={
