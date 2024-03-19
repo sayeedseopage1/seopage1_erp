@@ -41,7 +41,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('rule-list', 'ruleList')->name('rule-list');
             Route::put('status-change/{id}/{status}', 'policyRuleStatusChange')->name('status-change');
             Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
-            Route::post('question-fields', 'policyQuestionSave')->name('question-fields.save');
+            Route::post('question-fields/save', 'policyQuestionSave')->name('question-fields.save');
         });
     }
 
@@ -662,5 +662,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionList()
     {
+
     }
 }
