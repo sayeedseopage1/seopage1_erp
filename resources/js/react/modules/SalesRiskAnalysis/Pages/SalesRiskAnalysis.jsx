@@ -100,6 +100,7 @@ const SalesRiskAnalysis = () => {
             queryString({
                 page: pageIndex + 1,
                 limit: pageSize,
+                
             })
         );
     // sales risk analysis rules data

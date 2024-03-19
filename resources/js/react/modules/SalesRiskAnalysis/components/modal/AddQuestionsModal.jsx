@@ -19,7 +19,7 @@ import { Flex } from "../../../../global/styled-component/Flex";
 import QuestionsSelect from "../QuestionsSelect";
 import Switch from "../Switch";
 import _ from "lodash";
-import { useQuestionInputFieldsQuery } from "../../../../services/api/salesRiskAnalysisSlice";
+import { useQuestionInputFieldsQuery, useSinglePolicyQuestionsQuery } from "../../../../services/api/salesRiskAnalysisSlice";
 import { getValidFields } from "../../helper/createFromValidation";
 import RuleMultiSelect from "../RuleMultiSelect";
 
@@ -30,7 +30,6 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         title: "",
         type: {},
         placeholder: "",
-        sequence: "",
         parent_question: {},
         ruleList: [],
     });
@@ -38,8 +37,6 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         title: false,
         type: false,
         placeholder: false,
-        sequence: false,
-        parent_question: false,
         ruleList: false,
         isSubmitting: false,
     });
@@ -49,7 +46,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         data: questionInputFields,
         isFetching: isQuestionInputFieldsFetching,
         isLoading: isQuestionInputFieldsLoading,
-    } = useQuestionInputFieldsQuery("");
+    } = useSinglePolicyQuestionsQuery(addQuestionsData?.id);
 
     // Handle Change
     const handleChange = (e) => {
@@ -94,6 +91,27 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
             });
             return;
         }
+
+        const isExist = questions?.find(
+            (item) => item?.id === singleQuestion?.id
+        )
+        if(isExist){
+            const updateQuestions = questions.map((item) => {
+                if (item?.id === singleQuestion?.id) {
+                    return {
+                        ...item,
+                        ...singleQuestion,
+                    };
+                }
+                return item;
+            });
+            setQuestions(updateQuestions);
+            resetQuestionForm();
+        } else {
+            setQuestions([...questions, singleQuestion]);
+            resetQuestionForm();
+        }
+
     };
 
     // Placeholder Generator
@@ -114,25 +132,27 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
 
     const handleCloseAddQuestionsModal = () => {
         closeModal();
+        resetQuestionForm();
+        setQuestions([]);
+    };
+
+    const resetQuestionForm = () => {
         setSingleQuestion({
             title: "",
-            type: "",
+            type: {},
             placeholder: "",
-            sequence: "",
-            parent_question: "",
-            ruleList: "",
+            parent_question: {},
+            ruleList: [],
         });
         setSingleQuestionValidation({
             title: false,
             type: false,
             placeholder: false,
-            sequence: false,
             parent_question: false,
             ruleList: false,
             isSubmitting: false,
         });
-        setQuestions([]);
-    };
+    }
 
     // Set Placeholder
     useEffect(() => {
@@ -142,7 +162,20 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         });
     }, [singleQuestion.type]);
 
+    useEffect(() => {
+        if (singleQuestionValidation.isSubmitting) {
+            const validation = getValidFields(
+                singleQuestion,
+                singleQuestionValidation
+            );
+            setSingleQuestionValidation({
+                ...validation,
+            });
+        }
+    }, [singleQuestion]);
+
     console.log(singleQuestion);
+    console.log(questions);
 
     return (
         <CustomModal
@@ -220,17 +253,17 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                     />
+                                    {singleQuestionValidation?.title && (
+                                        <p className="text-danger py-1">
+                                            Title is required
+                                        </p>
+                                    )}
                                 </div>
-                                {singleQuestionValidation?.title && (
-                                    <p className="text-danger py-1">
-                                        Title is required
-                                    </p>
-                                )}
                             </div>
 
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
-                                    Parent Question<sup>*</sup>
+                                    Parent Question
                                 </ModalInputLabel>
                                 <div className="col-8 px-0 flex-column">
                                     <ModalSelectContainer>
@@ -244,13 +277,6 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                                         />
                                     </ModalSelectContainer>
                                 </div>
-                                {
-                                    singleQuestionValidation?.parent_question && (
-                                        <p className="text-danger py-1">
-                                            Parent Question is required
-                                        </p>
-                                    )
-                                }
                             </div>
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
@@ -266,14 +292,12 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                                             setSelected={setSingleQuestion}
                                         />
                                     </ModalSelectContainer>
-                                </div>
-                                {
-                                    singleQuestionValidation?.ruleList && (
+                                    {singleQuestionValidation?.ruleList && (
                                         <p className="text-danger py-1">
                                             Please select at least one rule
                                         </p>
-                                    )
-                                }
+                                    )}
+                                </div>
                             </div>
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
@@ -288,36 +312,12 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                     />
-                                </div>
-                                {
-                                    singleQuestionValidation?.placeholder && (
+                                    {singleQuestionValidation?.placeholder && (
                                         <p className="text-danger py-1">
                                             Placeholder is required
                                         </p>
-                                    )
-                                }
-                            </div>
-                            <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Sequence <sup>*</sup>{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="text"
-                                        className="w-100"
-                                        name="sequence"
-                                        value={singleQuestion?.sequence}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    />
+                                    )}
                                 </div>
-                                {
-                                    singleQuestionValidation?.sequence && (
-                                        <p className="text-danger py-1">
-                                            Sequence is required
-                                        </p>
-                                    )
-                                }
                             </div>
                         </Switch.Case>
                     </Switch>
