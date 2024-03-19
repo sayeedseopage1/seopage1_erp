@@ -632,24 +632,24 @@ class SalesRiskPolicyController extends AccountBaseController
                 'type' => 'select',
                 'structure' => SalesPolicyQuestion::get(['id', 'title'])
             ],
-            [
-                'label' => 'Placeholder',
-                'name' => 'placeholder',
-                'type' => 'input'
-            ],
-            [
-                'label' => 'Sequence',
-                'name' => 'sequence',
-                'type' => 'numeric'
-            ],
-            [
-                'label' => 'Department',
-                'name' => 'department',
-                'type' => 'select',
-                'structure' => Team::with('childs')->get()->map(function ($item) {
-                    return ['id' => $item->id, 'name' => $item->team_name];
-                })
-            ],
+            // [
+            //     'label' => 'Placeholder',
+            //     'name' => 'placeholder',
+            //     'type' => 'input'
+            // ],
+            // [
+            //     'label' => 'Sequence',
+            //     'name' => 'sequence',
+            //     'type' => 'numeric'
+            // ],
+            // [
+            //     'label' => 'Department',
+            //     'name' => 'department',
+            //     'type' => 'select',
+            //     'structure' => Team::with('childs')->get()->map(function ($item) {
+            //         return ['id' => $item->id, 'name' => $item->team_name];
+            //     })
+            // ],
 
         ];
 
