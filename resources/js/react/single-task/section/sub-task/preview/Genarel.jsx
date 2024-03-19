@@ -13,7 +13,6 @@ import { useAuth } from "../../../../hooks/useAuth";
 const Genarel = ({ task, isFetching }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const auth = useAuth();
-    console.log("task revision", task?.revisions);
 
     return (
         <div className="row">
@@ -111,14 +110,14 @@ const Genarel = ({ task, isFetching }) => {
                                                 task?.assigneeTo?.getId()
                                             ) ===
                                                 Number(loggedUser?.getId()) && (
-                                                <sup
-                                                    className="rounded-pill bg-dark text-white px-1"
-                                                    style={{ fontSize: "10px" }}
-                                                >
-                                                    {" "}
-                                                    It's You{" "}
-                                                </sup>
-                                            )}
+                                                    <sup
+                                                        className="rounded-pill bg-dark text-white px-1"
+                                                        style={{ fontSize: "10px" }}
+                                                    >
+                                                        {" "}
+                                                        It's You{" "}
+                                                    </sup>
+                                                )}
                                         </span>
 
                                         <span style={{ fontSize: "12px" }}>
@@ -162,13 +161,13 @@ const Genarel = ({ task, isFetching }) => {
                                                 task?.assigneeBy?.getId()
                                             ) ===
                                                 Number(loggedUser?.getId()) && (
-                                                <sup
-                                                    className="rounded-pill bg-dark text-white px-1"
-                                                    style={{ fontSize: "10px" }}
-                                                >
-                                                    It's You
-                                                </sup>
-                                            )}
+                                                    <sup
+                                                        className="rounded-pill bg-dark text-white px-1"
+                                                        style={{ fontSize: "10px" }}
+                                                    >
+                                                        It's You
+                                                    </sup>
+                                                )}
                                         </span>
 
                                         <span style={{ fontSize: "12px" }}>
@@ -407,7 +406,7 @@ const Genarel = ({ task, isFetching }) => {
                     <Accordion
                         title={
                             task?.category?.name === "Graphic Design" ||
-                            task?.category?.name === "UI/UIX Design"
+                                task?.category?.name === "UI/UIX Design"
                                 ? "Lead Designer Revision"
                                 : _.last(task?.revisions)?.revisionStatus
                         }

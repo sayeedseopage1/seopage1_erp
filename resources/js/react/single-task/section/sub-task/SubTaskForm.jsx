@@ -355,6 +355,33 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
+        // graphics start 
+        fd.append("type_of_graphic_work_id", typeOfGraphicsCategory?.id ?? "");
+        fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
+        fd.append("brand_name", brandName ?? "");
+        fd.append("number_of_versions", numOfVersions ?? "");
+        fd.append("file_types_needed", JSON.stringify(fileTypesNeeded) ?? "");
+        fd.append("design_instruction", (illustration || others) ?? "");
+        fd.append("reference", reference ?? "");
+        fd.append("font_name", fontName ?? "");
+        fd.append("font_url", fontUrl ?? "");
+        fd.append("primary_color", primaryColor ?? "");
+        fd.append("primary_color_description", primaryColorDescription ?? "");
+        fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+
+        // Array.from(textForDesign).forEach((file) => {
+        //     fd.append("attach_text_files[]", file);
+        // });
+        // Array.from(imageForDesigner).forEach((file) => {
+        //     fd.append("workable_image_files[]", file);
+        // });
+        // Array.from(imgOrVidForWork).forEach((file) => {
+        //     fd.append("workable_image_or_video_files[]", file);
+        // });
+        // Array.from(brandGuideline).forEach((file) => {
+        //     fd.append("brand_guideline_files[]", file);
+        // });
+        // graphics end 
 
         const submit = async () => {
             if (isValid()) {

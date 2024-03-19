@@ -9521,7 +9521,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
       }, _callee);
     }))();
   }, []);
-  console.log("task", task);
+
   //   fetch submitted rtk api
   var fetchData = function fetchData(url, cb) {
     getTaskDetails("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=").concat(url)).unwrap().then(function (res) {
@@ -9548,7 +9548,6 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
             return getSubmittionInfo(taskID);
           case 4:
             data = _context2.sent;
-            // console.log({ data });
             setSubmittedWork(_toConsumableArray(data));
           case 6:
           case "end":
@@ -11219,7 +11218,7 @@ var fileInputStyle = {
   zIndex: '0'
 };
 var SubTaskForm = function SubTaskForm(_ref) {
-  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _ref4, _required_error$pageT, _required_error$pageT2, _ref7, _required_error$pageT3, _required_error$pageT4, _ref10, _ref13, _ref16, _required_error$page_, _task$category5, _required_error$page_2, _required_error$descr, _required_error$descr2;
+  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category5, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
@@ -11617,7 +11616,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
   // handle submission
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
-      var _task$boardColumn;
+      var _task$boardColumn, _typeOfGraphicsCatego, _typeOfLogo$type_name, _JSON$stringify, _ref3, _JSON$stringify2;
       var _startDate, _dueDate, fd, submit, primaryPageConfirmation, response, _error, checkViolationWord, alert;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -11654,8 +11653,35 @@ var SubTaskForm = function SubTaskForm(_ref) {
             Array.from(files).forEach(function (file) {
               fd.append("file[]", file);
             });
+            // graphics start 
+            fd.append("type_of_graphic_work_id", (_typeOfGraphicsCatego = typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) !== null && _typeOfGraphicsCatego !== void 0 ? _typeOfGraphicsCatego : "");
+            fd.append("type_of_logo", (_typeOfLogo$type_name = typeOfLogo === null || typeOfLogo === void 0 ? void 0 : typeOfLogo.type_name) !== null && _typeOfLogo$type_name !== void 0 ? _typeOfLogo$type_name : "");
+            fd.append("brand_name", brandName !== null && brandName !== void 0 ? brandName : "");
+            fd.append("number_of_versions", numOfVersions !== null && numOfVersions !== void 0 ? numOfVersions : "");
+            fd.append("file_types_needed", (_JSON$stringify = JSON.stringify(fileTypesNeeded)) !== null && _JSON$stringify !== void 0 ? _JSON$stringify : "");
+            fd.append("design_instruction", (_ref3 = illustration || others) !== null && _ref3 !== void 0 ? _ref3 : "");
+            fd.append("reference", reference !== null && reference !== void 0 ? reference : "");
+            fd.append("font_name", fontName !== null && fontName !== void 0 ? fontName : "");
+            fd.append("font_url", fontUrl !== null && fontUrl !== void 0 ? fontUrl : "");
+            fd.append("primary_color", primaryColor !== null && primaryColor !== void 0 ? primaryColor : "");
+            fd.append("primary_color_description", primaryColorDescription !== null && primaryColorDescription !== void 0 ? primaryColorDescription : "");
+            fd.append("secondary_colors", (_JSON$stringify2 = JSON.stringify(secondaryColors)) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
+
+            // Array.from(textForDesign).forEach((file) => {
+            //     fd.append("attach_text_files[]", file);
+            // });
+            // Array.from(imageForDesigner).forEach((file) => {
+            //     fd.append("workable_image_files[]", file);
+            // });
+            // Array.from(imgOrVidForWork).forEach((file) => {
+            //     fd.append("workable_image_or_video_files[]", file);
+            // });
+            // Array.from(brandGuideline).forEach((file) => {
+            //     fd.append("brand_guideline_files[]", file);
+            // });
+            // graphics end 
             submit = /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+              var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
                 return _regeneratorRuntime().wrap(function _callee$(_context) {
                   while (1) switch (_context.prev = _context.next) {
                     case 0:
@@ -11693,7 +11719,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 }, _callee);
               }));
               return function submit() {
-                return _ref3.apply(this, arguments);
+                return _ref4.apply(this, arguments);
               };
             }();
             primaryPageConfirmation = function primaryPageConfirmation() {
@@ -11721,9 +11747,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 });
               }
             }; // check violation words
-            _context2.next = 34;
+            _context2.next = 46;
             return checkRestrictedWords(task === null || task === void 0 ? void 0 : task.projectId).unwrap();
-          case 34:
+          case 46:
             response = _context2.sent;
             if (response.status === 400) {
               _error = new Object();
@@ -11763,7 +11789,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             } else {
               primaryPageConfirmation();
             }
-          case 36:
+          case 48:
           case "end":
             return _context2.stop();
         }
@@ -12305,17 +12331,17 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
-              children: (_ref4 = ["New Page Design", "Cloning Existing Design"
+              children: (_ref5 = ["New Page Design", "Cloning Existing Design"
               // "Others",
-              ]) === null || _ref4 === void 0 ? void 0 : _ref4.map(function (s, i) {
+              ]) === null || _ref5 === void 0 ? void 0 : _ref5.map(function (s, i) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref5) {
-                    var active = _ref5.active;
+                  className: function className(_ref6) {
+                    var active = _ref6.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
-                  children: function children(_ref6) {
-                    var selected = _ref6.selected;
+                  children: function children(_ref7) {
+                    var selected = _ref7.selected;
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
@@ -12362,15 +12388,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
-              children: (_ref7 = ["New Page Design", "Cloning Existing Design", "Others"]) === null || _ref7 === void 0 ? void 0 : _ref7.map(function (s, i) {
+              children: (_ref8 = ["New Page Design", "Cloning Existing Design", "Others"]) === null || _ref8 === void 0 ? void 0 : _ref8.map(function (s, i) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref8) {
-                    var active = _ref8.active;
+                  className: function className(_ref9) {
+                    var active = _ref9.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
-                  children: function children(_ref9) {
-                    var selected = _ref9.selected;
+                  children: function children(_ref10) {
+                    var selected = _ref10.selected;
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
@@ -12417,15 +12443,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
-              children: (_ref10 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref10 === void 0 ? void 0 : _ref10.map(function (s, i) {
+              children: (_ref11 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref11 === void 0 ? void 0 : _ref11.map(function (s, i) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref11) {
-                    var active = _ref11.active;
+                  className: function className(_ref12) {
+                    var active = _ref12.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
-                  children: function children(_ref12) {
-                    var selected = _ref12.selected;
+                  children: function children(_ref13) {
+                    var selected = _ref13.selected;
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
@@ -12467,15 +12493,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
               className: "sp1-select-options",
-              children: (_ref13 = ["Page Design Change", "Speed Optimization", "Fixing Issues/Bugs", "Responsiveness Issue Fixing/Making Something Responsive"]) === null || _ref13 === void 0 ? void 0 : _ref13.map(function (s, i) {
+              children: (_ref14 = ["Page Design Change", "Speed Optimization", "Fixing Issues/Bugs", "Responsiveness Issue Fixing/Making Something Responsive"]) === null || _ref14 === void 0 ? void 0 : _ref14.map(function (s, i) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref14) {
-                    var active = _ref14.active;
+                  className: function className(_ref15) {
+                    var active = _ref15.active;
                     return "sp1-select-option ".concat(active ? "active" : "");
                   },
                   value: s,
-                  children: function children(_ref15) {
-                    var selected = _ref15.selected;
+                  children: function children(_ref16) {
+                    var selected = _ref16.selected;
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
                       children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                         className: "fa-solid fa-check ml-2"
@@ -12519,15 +12545,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
                   className: "sp1-select-options",
-                  children: (_ref16 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref16 === void 0 ? void 0 : _ref16.map(function (s, i) {
+                  children: (_ref17 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref17 === void 0 ? void 0 : _ref17.map(function (s, i) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                      className: function className(_ref17) {
-                        var active = _ref17.active;
+                      className: function className(_ref18) {
+                        var active = _ref18.active;
                         return "sp1-select-option ".concat(active ? "active" : "");
                       },
                       value: s,
-                      children: function children(_ref18) {
-                        var selected = _ref18.selected;
+                      children: function children(_ref19) {
+                        var selected = _ref19.selected;
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
                           children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
                             className: "fa-solid fa-check ml-2"
@@ -14193,7 +14219,6 @@ var Genarel = function Genarel(_ref) {
     isFetching = _ref.isFetching;
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
   var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_10__.useAuth)();
-  console.log("task revision", task === null || task === void 0 ? void 0 : task.revisions);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
     className: "row",
     children: [isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_loader_GenarelLoader__WEBPACK_IMPORTED_MODULE_5__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
