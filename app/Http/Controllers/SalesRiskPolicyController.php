@@ -40,7 +40,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::post('edit-single/{id}', 'editSingle')->name('edit-single');
             Route::get('rule-list', 'ruleList')->name('rule-list');
             Route::put('status-change/{id}/{status}', 'policyRuleStatusChange')->name('status-change');
-            Route::get('question-fields', 'policyQuestionInputFields')->name('question-fields');
+            Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
         });
     }
 
@@ -591,7 +591,7 @@ class SalesRiskPolicyController extends AccountBaseController
         return $data;
     }
 
-    function policyQuestionInputFields()
+    function policyQuestionInputFields($policyId)
     {
         $fileds = [
             [
@@ -630,7 +630,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'label' => 'Parent Question',
                 'name' => 'parent_id',
                 'type' => 'select',
-                'structure' => SalesPolicyQuestion::get(['id', 'title'])
+                'structure' => SalesPolicyQuestion::where('policy_id', $policyId)->get(['id', 'title'])
             ],
             // [
             //     'label' => 'Placeholder',
