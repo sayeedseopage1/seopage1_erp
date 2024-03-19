@@ -107,6 +107,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         React.useState("");
     const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
     //state for graphic designer end
+
+    // state for ui/ux start
+    const [cms, setCms] = useState("")
+    const [themeName, setThemeName] = useState("")
+    const [themeTemplate, setThemeTemplate] = useState("")
+    // state for ui/ux end
+
     const [pageType, setPageType] = React.useState("");
     const [pageTypeOthers, setPageTypeOthers] = React.useState("");
     const [pageName, setPageName] = React.useState("");
@@ -152,8 +159,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
         setIllustration(graphicWorkDetails?.design_instruction);
         setOthers(graphicWorkDetails?.design_instruction);
-        // setBrandGuideline(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type === 4));
-    }, [task, graphicWorkDetails]);
+        setCms(taskDetails?.cms)
+        setThemeName(taskDetails?.theme_name)
+        setThemeTemplate(taskDetails?.theme_template_library_link)
+    }, [taskDetails, task, graphicWorkDetails]);
 
     React.useEffect(() => {
         getTaskDetails(`/${task?.id}/json?mode=estimation_time`).unwrap();
@@ -1074,8 +1083,48 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     </>
                 }
 
-
-
+                {
+                    // lead designer to ui/ux designer 
+                    (auth?.isHasRolePermission(13) && task?.category?.name === "UI/UIX Design") && <>
+                        {/* cms name  */}
+                        <div className="col-12 col-md-6">
+                            <Input
+                                id="cms"
+                                label="CMS"
+                                type="text"
+                                name="cms"
+                                value={cms}
+                                readOnly={true}
+                            />
+                        </div>
+                        {/* theme name */}
+                        {
+                            themeName && <div className="col-12 col-md-6">
+                                <Input
+                                    id="themeName"
+                                    label="Theme Name"
+                                    type="text"
+                                    name="themeName"
+                                    value={themeName}
+                                    readOnly={true}
+                                />
+                            </div>
+                        }
+                        {/* theme template url */}
+                        {
+                            themeTemplate && <div className="col-12 col-md-6">
+                                <Input
+                                    id="themeTemplate"
+                                    label="Theme template library link"
+                                    type="url"
+                                    name="themeTemplate"
+                                    value={themeTemplate}
+                                    readOnly={true}
+                                />
+                            </div>
+                        }
+                    </>
+                }
                 <div className="col-12 col-md-6">
                     <AssginedToSelection
                         selected={assignedTo}

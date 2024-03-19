@@ -11218,7 +11218,7 @@ var fileInputStyle = {
   zIndex: '0'
 };
 var SubTaskForm = function SubTaskForm(_ref) {
-  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category5, _required_error$page_2, _required_error$descr, _required_error$descr2;
+  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _task$category5, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category6, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
@@ -11392,6 +11392,22 @@ var SubTaskForm = function SubTaskForm(_ref) {
     secondaryColors = _React$useState10[0],
     setSecondaryColors = _React$useState10[1];
   //state for graphic designer end
+
+  // state for ui/ux start
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState58 = _slicedToArray(_useState57, 2),
+    cms = _useState58[0],
+    setCms = _useState58[1];
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState60 = _slicedToArray(_useState59, 2),
+    themeName = _useState60[0],
+    setThemeName = _useState60[1];
+  var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState62 = _slicedToArray(_useState61, 2),
+    themeTemplate = _useState62[0],
+    setThemeTemplate = _useState62[1];
+  // state for ui/ux end
+
   var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState12 = _slicedToArray(_React$useState11, 2),
     pageType = _React$useState12[0],
@@ -11424,10 +11440,10 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _React$useState26 = _slicedToArray(_React$useState25, 2),
     pageTypeName = _React$useState26[0],
     setPageTypeName = _React$useState26[1];
-  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState58 = _slicedToArray(_useState57, 2),
-    err = _useState58[0],
-    setErr = _useState58[1];
+  var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState64 = _slicedToArray(_useState63, 2),
+    err = _useState64[0],
+    setErr = _useState64[1];
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_16__.SingleTask(taskDetails);
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_17__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_25__.useParams)();
@@ -11475,8 +11491,10 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setPrimaryColorDescription(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color_description);
     setIllustration(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
     setOthers(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
-    // setBrandGuideline(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type === 4));
-  }, [task, graphicWorkDetails]);
+    setCms(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.cms);
+    setThemeName(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_name);
+    setThemeTemplate(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_template_library_link);
+  }, [taskDetails, task, graphicWorkDetails]);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     getTaskDetails("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=estimation_time")).unwrap();
   }, []);
@@ -12276,6 +12294,40 @@ var SubTaskForm = function SubTaskForm(_ref) {
             })]
           })
         })]
+      }),
+      // lead designer to ui/ux designer 
+      (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category5 = task.category) === null || _task$category5 === void 0 ? void 0 : _task$category5.name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+          className: "col-12 col-md-6",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            id: "cms",
+            label: "CMS",
+            type: "text",
+            name: "cms",
+            value: cms,
+            readOnly: true
+          })
+        }), themeName && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+          className: "col-12 col-md-6",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            id: "themeName",
+            label: "Theme Name",
+            type: "text",
+            name: "themeName",
+            value: themeName,
+            readOnly: true
+          })
+        }), themeTemplate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+          className: "col-12 col-md-6",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            id: "themeTemplate",
+            label: "Theme template library link",
+            type: "url",
+            name: "themeTemplate",
+            value: themeTemplate,
+            readOnly: true
+          })
+        })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
         className: "col-12 col-md-6",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -12569,7 +12621,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return handleChange(e, setPageName);
               }
             })
-          }), (task === null || task === void 0 || (_task$category5 = task.category) === null || _task$category5 === void 0 ? void 0 : _task$category5.name) !== "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+          }), (task === null || task === void 0 || (_task$category6 = task.category) === null || _task$category6 === void 0 ? void 0 : _task$category6.name) !== "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
               id: "page_url",
