@@ -106,7 +106,7 @@ export const formatEditRuleData = (data, selectedRow) => {
     points: selectedRow?.points,
   };
 
-  console.log("payload", payload)
+
 
   return payload;
 }

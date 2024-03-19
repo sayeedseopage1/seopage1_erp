@@ -445,12 +445,11 @@ export const SalesRiskAnalysisTableColumns = [
                                     <div className="d-flex py-3">
                                         <div
                                             onClick={() => {
-                                                data.status === "1" &&
-                                                    action.handleEditApplicableRule(
-                                                        data,
-                                                        rule,
-                                                        "no"
-                                                    );
+                                                action.handleEditApplicableRule(
+                                                    data,
+                                                    rule,
+                                                    "no"
+                                                );
                                             }}
                                             role="button"
                                             className="d-flex align-items-center"

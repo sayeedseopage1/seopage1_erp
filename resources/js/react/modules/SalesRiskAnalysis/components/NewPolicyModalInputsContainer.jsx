@@ -154,51 +154,69 @@ const NewPolicyModalInputsContainer = ({
                                             "range"
                                         }
                                     >
-                                        <div className="d-flex col-5 pr-0">
-                                            <div className="col-6 flex-column px-0">
-                                                <ModalInputLabel
-                                                    fontSize="16px"
-                                                    className="mb-2"
-                                                    color="#8F8F8F"
-                                                >
-                                                    From <sup>*</sup>{" "}
-                                                </ModalInputLabel>
-                                                <ModalInput
-                                                    type="number"
-                                                    name="from"
-                                                    value={newPolicyData?.from}
-                                                    onChange={handleChange}
-                                                    placeholder="Write ..."
-                                                    className="w-100"
-                                                />
-                                                {newPolicyDataValidation?.from && (
-                                                    <p className="text-danger py-1">
-                                                        From is required
+                                        <div className="d-flex flex-column col-5 px-0">
+                                            <div className="d-flex col-12 px-0" style={{
+                                                height: "70px",
+                                                maxHeight: "70px",
+                                            }}>
+                                                <div className="col-6 flex-column pl-1 px-0">
+                                                    <ModalInputLabel
+                                                        fontSize="16px"
+                                                        className="mb-2"
+                                                        color="#8F8F8F"
+                                                    >
+                                                        From <sup>*</sup>{" "}
+                                                    </ModalInputLabel>
+                                                    <ModalInput
+                                                        type="number"
+                                                        name="from"
+                                                        value={
+                                                            newPolicyData?.from
+                                                        }
+                                                        onChange={handleChange}
+                                                        placeholder="Write ..."
+                                                        className="w-100"
+                                                    />
+                                                </div>
+                                                <div className="col-6 flex-column pl-1 pr-0">
+                                                    <ModalInputLabel
+                                                        fontSize="16px"
+                                                        className="mb-2"
+                                                        color="#8F8F8F"
+                                                    >
+                                                        To <sup>*</sup>{" "}
+                                                    </ModalInputLabel>
+                                                    <ModalInput
+                                                        type="number"
+                                                        name="to"
+                                                        value={
+                                                            newPolicyData?.to
+                                                        }
+                                                        onChange={handleChange}
+                                                        placeholder="Write ..."
+                                                        className="w-100"
+                                                    />
+                                                </div>
+                                            </div>
+                                            {(newPolicyDataValidation?.from ||
+                                                newPolicyDataValidation?.to) && (
+                                                    <p className="text-danger py-2">
+                                                        {`${
+                                                            newPolicyDataValidation?.from
+                                                                ? "From"
+                                                                : ""
+                                                        } ${
+                                                            newPolicyDataValidation?.from &&
+                                                            newPolicyDataValidation?.to
+                                                                ? " and "
+                                                                : ""
+                                                        } ${
+                                                            newPolicyDataValidation?.to
+                                                                ? "To"
+                                                                : ""
+                                                        } are required`}
                                                     </p>
                                                 )}
-                                            </div>
-                                            <div className="col-6 flex-column pl-1 pr-0">
-                                                <ModalInputLabel
-                                                    fontSize="16px"
-                                                    className="mb-2"
-                                                    color="#8F8F8F"
-                                                >
-                                                    To <sup>*</sup>{" "}
-                                                </ModalInputLabel>
-                                                <ModalInput
-                                                    type="number"
-                                                    name="to"
-                                                    value={newPolicyData?.to}
-                                                    onChange={handleChange}
-                                                    placeholder="Write ..."
-                                                    className="w-100"
-                                                />
-                                                {newPolicyDataValidation?.to && (
-                                                    <p className="text-danger py-1">
-                                                        To is required
-                                                    </p>
-                                                )}
-                                            </div>
                                         </div>
                                     </Switch.Case>
                                 </Switch>

@@ -39,13 +39,12 @@ const MultiSelect = ({
                 _Options = data?.filter(
                     (item) => !selectedCountries?.includes(item)
                 );
-                console.log("_Options !search", _Options);
+          
             } else {
                 _Options = data;
             }
         }
     }, [search]);
-    console.log("selected", selected);
 
     const onSelected = (option) => {
         if (
@@ -54,20 +53,17 @@ const MultiSelect = ({
             )
         ) {
             console.log("includes");
-            console.log("option", option);
             let newPolicyDataCopy = { ...newPolicyData };
             let updateCountry = newPolicyDataCopy?.countries?.filter(
                 (country) => country.name !== option.name
             );
 
-            console.log("updateCountry", updateCountry);
 
             setSelected({
                 ...newPolicyDataCopy,
                 [filedName]: updateCountry,
             });
         } else {
-            console.log("not includes");
             setSelected({
                 ...newPolicyData,
                 [filedName]: [...newPolicyData?.countries, option],

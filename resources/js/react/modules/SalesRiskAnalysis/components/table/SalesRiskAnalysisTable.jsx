@@ -379,7 +379,17 @@ const SalesRiskAnalysisTable = ({
         setEditRuleData({});
         setEditRuleDataValidation({
             isSubmitting: false,
-            newRule: false,
+            policyName: false,
+            department: false,
+            policyType: false,
+            valueType: false,
+            value: false,
+            from: false,
+            to: false,
+            yes: false,
+            no: false,
+            countries: false,
+            points: false,
         });
     };
 
