@@ -11666,19 +11666,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
             fd.append("primary_color", primaryColor !== null && primaryColor !== void 0 ? primaryColor : "");
             fd.append("primary_color_description", primaryColorDescription !== null && primaryColorDescription !== void 0 ? primaryColorDescription : "");
             fd.append("secondary_colors", (_JSON$stringify2 = JSON.stringify(secondaryColors)) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
-
-            // Array.from(textForDesign).forEach((file) => {
-            //     fd.append("attach_text_files[]", file);
-            // });
-            // Array.from(imageForDesigner).forEach((file) => {
-            //     fd.append("workable_image_files[]", file);
-            // });
-            // Array.from(imgOrVidForWork).forEach((file) => {
-            //     fd.append("workable_image_or_video_files[]", file);
-            // });
-            // Array.from(brandGuideline).forEach((file) => {
-            //     fd.append("brand_guideline_files[]", file);
-            // });
             // graphics end 
             submit = /*#__PURE__*/function () {
               var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
