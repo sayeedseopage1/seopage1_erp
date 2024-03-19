@@ -4,7 +4,6 @@ import React, { useMemo, useEffect } from "react";
 import {
     useReactTable,
     getCoreRowModel,
-    getPaginationRowModel,
     getFilteredRowModel,
     getExpandedRowModel,
     getSortedRowModel,

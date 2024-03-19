@@ -19,9 +19,15 @@ import { Flex } from "../../../../global/styled-component/Flex";
 import QuestionsSelect from "../QuestionsSelect";
 import Switch from "../Switch";
 import _ from "lodash";
-import { useQuestionInputFieldsQuery, useSinglePolicyQuestionsQuery } from "../../../../services/api/salesRiskAnalysisSlice";
+import {
+    useQuestionInputFieldsQuery,
+    useSinglePolicyQuestionsQuery,
+} from "../../../../services/api/salesRiskAnalysisSlice";
 import { getValidFields } from "../../helper/createFromValidation";
 import RuleMultiSelect from "../RuleMultiSelect";
+import { generateUniqueString } from "../../../../utils/customUidGenerate";
+import QuestionsModalTable from "../table/QuestionsModalTable";
+import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
 
 const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
     const [isQuestionUpdating, setIsQuestionUpdating] = useState(false);
@@ -32,6 +38,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         placeholder: "",
         parent_question: {},
         ruleList: [],
+        comment: "",
     });
     const [singleQuestionValidation, setSingleQuestionValidation] = useState({
         title: false,
@@ -74,12 +81,11 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         data: QuestionsList?.structure,
     };
 
-    const handleAddSingleQuestionOnQuestions = () => {
+    const handleAddQuestion = async () => {
         const validation = getValidFields(
             singleQuestion,
             singleQuestionValidation
         );
-        console.log(validation);
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
@@ -92,26 +98,21 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
             return;
         }
 
-        const isExist = questions?.find(
-            (item) => item?.id === singleQuestion?.id
-        )
-        if(isExist){
-            const updateQuestions = questions.map((item) => {
-                if (item?.id === singleQuestion?.id) {
-                    return {
-                        ...item,
-                        ...singleQuestion,
-                    };
-                }
-                return item;
-            });
-            setQuestions(updateQuestions);
-            resetQuestionForm();
-        } else {
-            setQuestions([...questions, singleQuestion]);
-            resetQuestionForm();
+        const payload = {
+            policyId: addQuestionsData?.id,
+            title: singleQuestion?.title,
+            type: singleQuestion?.type?.name,
+            placeholder: singleQuestion?.placeholder,
+            ruleList: singleQuestion?.ruleList?.map((item) => item?.id),
+        }
+        if (singleQuestion?.parent_question?.id) {
+            payload.parent_question = singleQuestion?.parent_question?.id;
+        }
+        if (singleQuestion?.comment) {
+            payload.comment = singleQuestion?.comment;
         }
 
+        console.log("singleQuestion", payload);
     };
 
     // Placeholder Generator
@@ -143,16 +144,16 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
             placeholder: "",
             parent_question: {},
             ruleList: [],
+            comment: "",
         });
         setSingleQuestionValidation({
             title: false,
             type: false,
             placeholder: false,
-            parent_question: false,
             ruleList: false,
             isSubmitting: false,
         });
-    }
+    };
 
     // Set Placeholder
     useEffect(() => {
@@ -182,15 +183,16 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
             open={open}
             closeModal={handleCloseAddQuestionsModal}
             contentLabel="Add New Policy"
-            width="700px"
+            width="835px"
+            maxWidth="835px"
             height={
                 questions.length > 0 || !_.isEmpty(singleQuestion.type)
-                    ? "600px"
+                    ? "650px"
                     : "fit-content"
             }
             maxHeight={
                 questions.length > 0 || !_.isEmpty(singleQuestion.type)
-                    ? "600px"
+                    ? "650px"
                     : "fit-content"
             }
             isCloseButtonShow={true}
@@ -221,6 +223,21 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                             </ModalInputLabel>
                         </div>
                     </div>
+                    {questions?.length > 0 && (
+                        <div
+                            className="row px-0 py-4 px-2 mb-2"
+                            style={{
+                                border: "1px dotted #E5E5E5",
+                                borderRadius: "5px",
+                            }}
+                        >
+                            <QuestionsModalTable
+                                tableData={questions}
+                                tableColumns={QuestionsModalTableColumns}
+                                tableName="Questions"
+                            />
+                        </div>
+                    )}
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Type<sup>*</sup>
@@ -236,6 +253,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                             </ModalSelectContainer>
                         </div>
                     </div>
+
                     <Switch>
                         <Switch.Case
                             condition={!_.isEmpty(singleQuestion.type)}
@@ -321,34 +339,26 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                             </div>
                         </Switch.Case>
                     </Switch>
-                    <div className="d-flex justify-content-end">
-                        <button
-                            className="d-flex btn btn-success align-items-center"
-                            style={{
-                                fontSize: "13px",
-                            }}
-                            disabled={_.isEmpty(singleQuestion?.type)}
-                            onClick={handleAddSingleQuestionOnQuestions}
-                        >
-                            {isQuestionUpdating
-                                ? "Update Question"
-                                : "Create Question"}
-                        </button>
-                        <button
-                            className="d-flex btn btn-warning align-items-center text-white"
-                            style={{
-                                fontSize: "13px",
-                                marginLeft: "10px",
-                            }}
-                            disabled={_.isEmpty(singleQuestion?.type)}
-                            onClick={handleCloseAddQuestionsModal}
-                        >
-                            {isQuestionUpdating ? "Cancel Edit" : "Cancel"}
-                        </button>
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Comment 
+                        </ModalInputLabel>
+                        <div className="col-8 flex-column px-0">
+                            <ModalInput
+                                type="text"
+                                className="w-100"
+                                name="comment"
+                                value={singleQuestion?.comment}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
+                        </div>
                     </div>
                 </div>
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton width="177px">Save Question</ModalButton>
+                    <ModalButton onClick={handleAddQuestion} width="177px">
+                        Save Question
+                    </ModalButton>
                     <ModalButton
                         onClick={handleCloseAddQuestionsModal}
                         width="177px"
