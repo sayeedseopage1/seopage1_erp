@@ -1756,7 +1756,7 @@ class HelperPendingActionController extends AccountBaseController
 
         }
 /** WHEN GOAL DEADLINE EXPIRE IN NEXT 24 HOURS */
-        public function PmGoalBeforeExpireCheck($goal_check)
+        public function PmGoalBeforeExpireCheck($goal_check, $difference_in_hours)
         {
             $goal = ProjectPmGoal::where('id',$goal_check->id)->first();
             $project= Project::where('id',$goal_check->project_id)->first();
@@ -1769,8 +1769,16 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'PMGE'.'x0';
                 $action->item_name= 'Goal expire in 24 hours';
                 $action->heading= 'Goal expire in 24 hours!';
-                $action->message = 'Goal ('.$goal->goal_name.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in 24 hours!';
-                $action->timeframe= 24;
+                $action->message = 'Goal ('.$goal->goal_name.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in !';
+                if($difference_in_hours > 0)
+                {
+                 $action->timeframe= $difference_in_hours;
+
+                }else
+                {
+                 $action->timeframe= 0;
+
+                }
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
