@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 
 // ui components
@@ -20,6 +20,7 @@ import QuestionsSelect from "../QuestionsSelect";
 import Switch from "../Switch";
 import _ from "lodash";
 import {
+    useQuestionAddonPolicyMutation,
     useQuestionInputFieldsQuery,
     useSinglePolicyQuestionsQuery,
 } from "../../../../services/api/salesRiskAnalysisSlice";
@@ -28,8 +29,14 @@ import RuleMultiSelect from "../RuleMultiSelect";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
 import QuestionsModalTable from "../table/QuestionsModalTable";
 import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
+import { toast } from "react-toastify";
 
-const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
+const AddQuestionsModal = ({
+    open,
+    closeModal,
+    addQuestionsData,
+    setAddQuestionsData,
+}) => {
     const [isQuestionUpdating, setIsQuestionUpdating] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [singleQuestion, setSingleQuestion] = useState({
@@ -37,6 +44,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         type: {},
         placeholder: "",
         parent_question: {},
+        parent_question_for: "",
         ruleList: [],
         comment: "",
     });
@@ -53,7 +61,16 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         data: questionInputFields,
         isFetching: isQuestionInputFieldsFetching,
         isLoading: isQuestionInputFieldsLoading,
-    } = useSinglePolicyQuestionsQuery(addQuestionsData?.id);
+        refetch,
+    } = useSinglePolicyQuestionsQuery(addQuestionsData?.id, {
+        staleTime: 0, 
+        refetchOnMountOrArgChange: true
+    });
+
+    const [
+        submitQuestionAddonPolicy,
+        { isLoading, isFetching: isQuestionAddonPolicyFetching },
+    ] = useQuestionAddonPolicyMutation();
 
     // Handle Change
     const handleChange = (e) => {
@@ -99,20 +116,30 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         }
 
         const payload = {
-            policyId: addQuestionsData?.id,
+            policy_id: addQuestionsData?.id,
             title: singleQuestion?.title,
             type: singleQuestion?.type?.name,
             placeholder: singleQuestion?.placeholder,
             ruleList: singleQuestion?.ruleList?.map((item) => item?.id),
-        }
+        };
         if (singleQuestion?.parent_question?.id) {
-            payload.parent_question = singleQuestion?.parent_question?.id;
+            payload.parent_id = singleQuestion?.parent_question?.id;
         }
         if (singleQuestion?.comment) {
             payload.comment = singleQuestion?.comment;
         }
 
         console.log("singleQuestion", payload);
+        try {
+            const res = await submitQuestionAddonPolicy(payload).unwrap();
+            if (res.status === "success") {
+                toast.success("Question Added Successfully");
+                handleCloseAddQuestionsModal();
+            }
+        } catch (error) {
+            console.log("error", error);
+            toast.error("Something went wrong");
+        }
     };
 
     // Placeholder Generator
@@ -135,6 +162,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
         closeModal();
         resetQuestionForm();
         setQuestions([]);
+        setAddQuestionsData({});
     };
 
     const resetQuestionForm = () => {
@@ -174,6 +202,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
             });
         }
     }, [singleQuestion]);
+
 
     console.log(singleQuestion);
     console.log(questions);
@@ -341,7 +370,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                     </Switch>
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
-                            Comment 
+                            Comment
                         </ModalInputLabel>
                         <div className="col-8 flex-column px-0">
                             <ModalInput
@@ -357,7 +386,7 @@ const AddQuestionsModal = ({ open, closeModal, addQuestionsData }) => {
                 </div>
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton onClick={handleAddQuestion} width="177px">
-                        Save Question
+                        {isLoading ? "Saving" : "Save Question"}
                     </ModalButton>
                     <ModalButton
                         onClick={handleCloseAddQuestionsModal}
@@ -380,5 +409,5 @@ AddQuestionsModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     addQuestionsData: PropTypes.object,
-    questionInputFields: PropTypes.array,
+    singlePolicyQuestions: PropTypes.array,
 };

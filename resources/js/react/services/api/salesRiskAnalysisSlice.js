@@ -103,6 +103,21 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         singlePolicyQuestions: build.query({
             query: (policyId) => `/account/sales-risk-policies/question-fields/${policyId}`,
         }),
+        questionAddonPolicy: build.mutation({
+            query: (body) => ({
+                url: `account/sales-risk-policies/question-fields/save`,
+                method: "POST",
+                body,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                }
+            },
+        }),
 
     })
 });
@@ -115,5 +130,6 @@ export const {
     useSingleRuleStatusUpdateMutation,
     useEditSinglePolicySalesRiskAnalysisMutation,
     useEditSingleRuleSalesRiskAnalysisMutation,
-    useSinglePolicyQuestionsQuery
+    useSinglePolicyQuestionsQuery,
+    useQuestionAddonPolicyMutation,
 } = salesRiskAnalysisApiSlice;
