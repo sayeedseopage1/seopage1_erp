@@ -327,6 +327,13 @@ class SubTaskController extends AccountBaseController
                 $task_s->client_id = $task->client_id;
                 $task_s->client_name = $task->client_name;
             }
+
+            // Create UI Work Sub-Task Details
+            if($request->category_id == 5){
+                $task_s->cms = $request->cms??null;
+                $task_s->theme_name = $request->theme_name??null;
+                $task_s->theme_template_library_link = $request->theme_template_library_link??null;
+            }
             $task_s->save();
 
             // Create Graphic Work Sub-Task Details
