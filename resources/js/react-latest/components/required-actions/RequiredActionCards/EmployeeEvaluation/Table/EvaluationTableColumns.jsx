@@ -72,7 +72,7 @@ export const EvaluationTableColumns = [
     },
 
     {
-        header: "Action",
+        header: "Ratings",
         accessorKey: "action",
 
         cell: ({ row }) => {

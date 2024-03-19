@@ -10,7 +10,7 @@ import ReusableSection from "./ReusableSection";
 import CKEditorComponent from "../../../../../ui/ckeditor";
 import { toast } from "react-toastify";
 import { useUpdateTaskMutation } from "../../../../../services/api/EvaluationApiSlice";
-useUpdateTaskMutation;
+import { BiSolidEditAlt } from "react-icons/bi";
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
@@ -18,7 +18,6 @@ const SingleEvaluationModal = ({
 }) => {
     const [putTask] = useUpdateTaskMutation();
 
-    console.log("update task mutation", useUpdateTaskMutation());
     const [averageRating, setAverageRating] = useState(data.averageRating);
     const [formData, setFormData] = useState({
         averageRating: data?.averageRating ?? 0,
@@ -51,8 +50,6 @@ const SingleEvaluationModal = ({
             return (sum / ratings.length).toFixed(2);
         };
         setAverageRating(calculateAverageRating());
-
-        console.log(formData);
     }, [formData.rating]);
 
     const formFields = [
@@ -348,7 +345,14 @@ const SingleEvaluationModal = ({
                         className="mr-2 btn btn-primary "
                         onClick={handleSubmit}
                     >
-                        Submit Evaluation
+                        {data?.evaluationStatus === "pending" ? (
+                            <div> Submit Evaluation</div>
+                        ) : (
+                            <div>
+                                <BiSolidEditAlt />
+                                <span> Edit Rating</span>
+                            </div>
+                        )}
                     </button>
                     <Button
                         size="md"

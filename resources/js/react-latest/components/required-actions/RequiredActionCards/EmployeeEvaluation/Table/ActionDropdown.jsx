@@ -13,7 +13,10 @@ const ActionDropdown = ({ data, table }) => {
     return (
         <React.Fragment>
             <ColumnContent onClick={() => toggleSingleEvaluationModal()}>
-                <button className={ButtonStyles.sendContainer}>
+                <button
+                    className={ButtonStyles.sendContainer}
+                    disabled={data.finalSubmissionStatus}
+                >
                     {data?.evaluationStatus === "completed" ? (
                         <h4>{data?.averageRating}</h4>
                     ) : (
