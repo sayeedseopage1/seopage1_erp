@@ -45,7 +45,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // questions
             Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
             Route::post('question-fields/save', 'policyQuestionSave')->name('question-fields.save');
-            Route::get('question/list', 'questionList')->name('question.list');
+            Route::get('question-list', 'questionList')->name('question.list');
         });
     }
 
