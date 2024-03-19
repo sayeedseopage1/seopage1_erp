@@ -904,10 +904,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                 <FileUploader.Preview
                                                     key={attachment?.id}
                                                     fileName={attachment?.filename}
-                                                    // downloadAble={true}
+                                                    downloadAble={true}
                                                     deleteAble={false}
-                                                    // downloadUrl={attachment?.task_file_url}
-                                                    // previewUrl={attachment?.task_file_url}
+                                                    downloadUrl={attachment?.file_url}
+                                                    previewUrl={attachment?.file_url}
                                                     fileType={
                                                         _.includes(
                                                             ["png", "jpeg", "jpg", "svg", "webp", "gif"],
@@ -923,16 +923,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         }
                                     )}
                                 </FileUploader>
-
-                                <div>
-                                    here will be brand guideline from real api
-                                </div>
-                                {/* <div className="custom-file" style={fileInputStyle}>
-                                    <input type="file" className="custom-file-input" id="brandGuideline" error={err?.brandGuideline} onChange={(e) =>
-                                        handleChange(e, setBrandGuideline)
-                                    } multiple />
-                                    <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
-                                </div> */}
                             </div>
                         </div>
 

@@ -12144,20 +12144,16 @@ var SubTaskForm = function SubTaskForm(_ref) {
               children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.graphic_task_files, function (attachment) {
                 var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
                 return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
-                  fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename
-                  // downloadAble={true}
-                  ,
-                  deleteAble: false
-                  // downloadUrl={attachment?.task_file_url}
-                  // previewUrl={attachment?.task_file_url}
-                  ,
+                  fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                  downloadAble: true,
+                  deleteAble: false,
+                  downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                  previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
                   fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
                   classname: "comment_file",
                   ext: file_icon
                 }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-              children: "here will be brand guideline from real api"
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
