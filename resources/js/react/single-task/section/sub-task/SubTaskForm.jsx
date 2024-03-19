@@ -222,48 +222,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             count++;
         }
 
-        if (!typeOfGraphicsCategory) {
-            err.typeOfGraphicsCategory = "You have to select Type of graphic work";
-            errCount++;
-        }
-        if (!typeOfLogo) {
-            err.typeOfLogo = "You have to select Type of logo";
-            errCount++;
-        }
-
-        if (!reference) {
-            err.reference = "The reference field is required";
-            errCount++;
-        }
-        if (!textForDesign) {
-            err.textForDesign = "The text for design field is required";
-            errCount++;
-        }
-        if (!brandName) {
-            err.brandName = "The brand name field is required";
-            errCount++;
-        }
-        if (!numOfVersions) {
-            err.numOfVersions = "Number of versions is required";
-            errCount++;
-        }
-        if (!fileTypesNeeded) {
-            err.fileTypesNeeded = "File types is required";
-            errCount++;
-        }
-        if (!imageForDesigner) {
-            err.imageForDesigner = "Image is required for designer";
-            errCount++;
-        }
-        if (!imgOrVidForWork) {
-            err.imgOrVidForWork = "Images/videos is requiredn for work";
-            errCount++;
-        }
-        if (!fontName) {
-            err.fontName = "Font name is required";
-            errCount++;
-        }
-
         if (!pageType) {
             error.taskType = "You have to Select task type";
             count++;
@@ -801,7 +759,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         {
                             (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
                                 <div className="col-12 col-md-6">
-
+                                    {/* TODO: */}
+                                    Image where the designer will work
                                 </div>
                             </>
                         }
@@ -819,17 +778,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             Image where the designer will work
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        <div className="custom-file" style={fileInputStyle}>
-                                            <input type="file" className="custom-file-input" id="imageForDesigner" required={true} error={err?.imageForDesigner} onChange={(e) =>
-                                                handleChange(e, setImageForDesigner)
-                                            } />
-                                            <label className="custom-file-label" htmlFor="imageForDesigner">Choose file</label>
+                                        {/* TODO: add Image where the designer will work default file here from real api */}
+                                        <div>
+                                            here will be Images/videos from real api
                                         </div>
-                                        {err?.imageForDesigner && (
-                                            <div style={{ color: "red" }}>
-                                                {err?.imageForDesigner}
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </>
@@ -849,17 +801,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             Images/videos that will be used for the work
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        <div className="custom-file z-n1" style={fileInputStyle}>
-                                            <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={err?.imgOrVidForWork} onChange={(e) =>
-                                                handleChange(e, setImgOrVidForWork)
-                                            } multiple />
-                                            <label className="custom-file-label" htmlFor="imgOrVidForWork">Choose file</label>
+                                        {/* TODO: add Images/videos default file here from real api */}
+                                        <div>
+                                            here will be Images/videos from real api
                                         </div>
-                                        {err?.imgOrVidForWork && (
-                                            <div style={{ color: "red" }}>
-                                                {err?.imgOrVidForWork}
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </>
@@ -949,12 +894,45 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 >
                                     Brand guideline
                                 </label>
-                                <div className="custom-file" style={fileInputStyle}>
+                                <FileUploader>
+                                    {_.map(
+                                        graphicWorkDetails?.graphic_task_files,
+                                        (attachment) => {
+                                            const file_icon = attachment?.filename.split(".").pop();
+
+                                            return attachment?.filename ? (
+                                                <FileUploader.Preview
+                                                    key={attachment?.id}
+                                                    fileName={attachment?.filename}
+                                                    // downloadAble={true}
+                                                    deleteAble={false}
+                                                    // downloadUrl={attachment?.task_file_url}
+                                                    // previewUrl={attachment?.task_file_url}
+                                                    fileType={
+                                                        _.includes(
+                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                            file_icon
+                                                        )
+                                                            ? "images"
+                                                            : "others"
+                                                    }
+                                                    classname="comment_file"
+                                                    ext={file_icon}
+                                                />
+                                            ) : null;
+                                        }
+                                    )}
+                                </FileUploader>
+
+                                <div>
+                                    here will be brand guideline from real api
+                                </div>
+                                {/* <div className="custom-file" style={fileInputStyle}>
                                     <input type="file" className="custom-file-input" id="brandGuideline" error={err?.brandGuideline} onChange={(e) =>
                                         handleChange(e, setBrandGuideline)
                                     } multiple />
                                     <label className="custom-file-label" htmlFor="brandGuideline">Choose file</label>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
 
@@ -968,7 +946,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 >
                                     Color Scheme
                                 </label>
-                                {/* TODO: add color schema from real api */}
                                 <div className='mb-3 p-2 rounded' style={{ backgroundColor: "#E9ECEF" }}>
                                     <ul className='ml-0'>
                                         <li className='d-flex flex-column'>
@@ -984,12 +961,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                                         : "Secondary Color: "
                                                 }
                                             </span>
-                                            {/* {
-                                                _.map(_.toArray(secondaryColors), (color, i) => (
-                                                    <ColorItem key={i + color} color={color}
-                                                        desc={secondaryColors?.description?.[i]} />
-                                                ))
-                                            } */}
                                             {
                                                 secondaryColors?.map((color, i) => (
                                                     <ColorItem key={i + color} color={color?.color}

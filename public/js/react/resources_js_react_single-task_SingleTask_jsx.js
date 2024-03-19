@@ -11524,46 +11524,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
       react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 04 Submittable tasks."));
       count++;
     }
-    if (!typeOfGraphicsCategory) {
-      err.typeOfGraphicsCategory = "You have to select Type of graphic work";
-      errCount++;
-    }
-    if (!typeOfLogo) {
-      err.typeOfLogo = "You have to select Type of logo";
-      errCount++;
-    }
-    if (!reference) {
-      err.reference = "The reference field is required";
-      errCount++;
-    }
-    if (!textForDesign) {
-      err.textForDesign = "The text for design field is required";
-      errCount++;
-    }
-    if (!brandName) {
-      err.brandName = "The brand name field is required";
-      errCount++;
-    }
-    if (!numOfVersions) {
-      err.numOfVersions = "Number of versions is required";
-      errCount++;
-    }
-    if (!fileTypesNeeded) {
-      err.fileTypesNeeded = "File types is required";
-      errCount++;
-    }
-    if (!imageForDesigner) {
-      err.imageForDesigner = "Image is required for designer";
-      errCount++;
-    }
-    if (!imgOrVidForWork) {
-      err.imgOrVidForWork = "Images/videos is requiredn for work";
-      errCount++;
-    }
-    if (!fontName) {
-      err.fontName = "Font name is required";
-      errCount++;
-    }
     if (!pageType) {
       error.taskType = "You have to Select task type";
       count++;
@@ -12054,7 +12014,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
           })]
         }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-            className: "col-12 col-md-6"
+            className: "col-12 col-md-6",
+            children: "Image where the designer will work"
           })
         }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.type_name) === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
@@ -12069,28 +12030,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-                className: "custom-file",
-                style: fileInputStyle,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
-                  type: "file",
-                  className: "custom-file-input",
-                  id: "imageForDesigner",
-                  required: true,
-                  error: err === null || err === void 0 ? void 0 : err.imageForDesigner,
-                  onChange: function onChange(e) {
-                    return handleChange(e, setImageForDesigner);
-                  }
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
-                  className: "custom-file-label",
-                  htmlFor: "imageForDesigner",
-                  children: "Choose file"
-                })]
-              }), (err === null || err === void 0 ? void 0 : err.imageForDesigner) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-                style: {
-                  color: "red"
-                },
-                children: err === null || err === void 0 ? void 0 : err.imageForDesigner
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                children: "here will be Images/videos from real api"
               })]
             })
           })
@@ -12107,29 +12048,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-                className: "custom-file z-n1",
-                style: fileInputStyle,
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
-                  type: "file",
-                  className: "custom-file-input",
-                  id: "imgOrVidForWork",
-                  required: true,
-                  error: err === null || err === void 0 ? void 0 : err.imgOrVidForWork,
-                  onChange: function onChange(e) {
-                    return handleChange(e, setImgOrVidForWork);
-                  },
-                  multiple: true
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
-                  className: "custom-file-label",
-                  htmlFor: "imgOrVidForWork",
-                  children: "Choose file"
-                })]
-              }), (err === null || err === void 0 ? void 0 : err.imgOrVidForWork) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-                style: {
-                  color: "red"
-                },
-                children: err === null || err === void 0 ? void 0 : err.imgOrVidForWork
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                children: "here will be Images/videos from real api"
               })]
             })
           })
@@ -12220,23 +12140,24 @@ var SubTaskForm = function SubTaskForm(_ref) {
               className: "f-14 text-dark-gray mb-2",
               "data-label": "true",
               children: "Brand guideline"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-              className: "custom-file",
-              style: fileInputStyle,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
-                type: "file",
-                className: "custom-file-input",
-                id: "brandGuideline",
-                error: err === null || err === void 0 ? void 0 : err.brandGuideline,
-                onChange: function onChange(e) {
-                  return handleChange(e, setBrandGuideline);
-                },
-                multiple: true
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
-                className: "custom-file-label",
-                htmlFor: "brandGuideline",
-                children: "Choose file"
-              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
+              children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.graphic_task_files, function (attachment) {
+                var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
+                  fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename
+                  // downloadAble={true}
+                  ,
+                  deleteAble: false
+                  // downloadUrl={attachment?.task_file_url}
+                  // previewUrl={attachment?.task_file_url}
+                  ,
+                  fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                  classname: "comment_file",
+                  ext: file_icon
+                }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              children: "here will be brand guideline from real api"
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
