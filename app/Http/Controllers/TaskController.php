@@ -2125,14 +2125,20 @@ class TaskController extends AccountBaseController
                     $task->repeat_type = $request->repeat_type;
                     $task->repeat_cycles = $request->repeat_cycles;
                 }
+                
                 $task->task_status = "pending";
                 $total_hours = $request->estimate_hours * 60;
                 $total_minutes = $request->estimate_minutes;
                 $total_in_minutes = $total_hours + $total_minutes;
                 $task->estimate_time_left_minutes = $total_in_minutes;
-                $task->cms = $request->cms??null;
-                $task->theme_name = $request->theme_name??null;
-                $task->theme_template_library_link = $request->theme_template_library_link??null;
+
+                // Create UI Work Details
+                if($request->category_id == 5){
+                    $task->cms = $request->cms??null;
+                    $task->theme_name = $request->theme_name??null;
+                    $task->theme_template_library_link = $request->theme_template_library_link??null;
+                }
+
                 $task->added_by = Auth::id();
                 $task->created_by = Auth::id();
                 $task->save();
