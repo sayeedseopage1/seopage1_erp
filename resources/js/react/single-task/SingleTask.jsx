@@ -53,9 +53,6 @@ const SingleTaskPage = () => {
     const [totalTime, setTotalTime] = React.useState("");
     const taskId = task?.id;
 
-    console.log("task", task)
-    console.log("file", task?.attachments)
-
     const { data: taskForTime } = useGetTaskForTotalTimeQuery(taskId);
 
     useEffect(() => {

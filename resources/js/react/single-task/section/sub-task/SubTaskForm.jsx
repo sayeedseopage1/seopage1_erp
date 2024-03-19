@@ -53,9 +53,18 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
+    // files 
+    let defaultTextForDesign;
+    let defaultImageForDesigner;
+    let defaultImgOrVidForWork;
+    let defaultBrandGuidelineFiles;
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+        defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+        defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
+        defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
     }
 
     const dispatch = useDispatch();
@@ -85,12 +94,12 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
-    const [textForDesign, setTextForDesign] = useState('');
-    const [imageForDesigner, setImageForDesigner] = useState(null);
-    const [imgOrVidForWork, setImgOrVidForWork] = useState(null);
+    const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
+    const [imageForDesigner, setImageForDesigner] = useState(defaultImageForDesigner);
+    const [imgOrVidForWork, setImgOrVidForWork] = useState(defaultImgOrVidForWork);
     const [fontName, setFontName] = useState('');
     const [fontUrl, setFontUrl] = useState('');
-    const [brandGuideline, setBrandGuideline] = useState(null);
+    const [brandGuideline, setBrandGuideline] = useState(defaultBrandGuidelineFiles);
     const [illustration, setIllustration] = useState("");
     const [others, setOthers] = useState("");
     const [primaryColor, setPrimaryColor] = React.useState("");
@@ -111,8 +120,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
-
-
 
     const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
@@ -145,6 +152,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
         setIllustration(graphicWorkDetails?.design_instruction);
         setOthers(graphicWorkDetails?.design_instruction);
+        // setBrandGuideline(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type === 4));
     }, [task, graphicWorkDetails]);
 
     React.useEffect(() => {
@@ -163,7 +171,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         isDesignerTask &&
             setTypeOfGraphicsCategory({
                 id: graphicWorkDetails?.type_of_graphic_work_id,
-                name: graphicOptions?.find((item) => item.id === graphicWorkDetails?.type_of_graphic_work_id)?.name,
+                name: graphicOptions?.find((item) => item.id == graphicWorkDetails?.type_of_graphic_work_id)?.name,
             });
     }, [isDesignerTask, graphicWorkDetails?.type_of_graphic_work_id, graphicOptions]);
 
@@ -759,15 +767,51 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         {
                             (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
                                 <div className="col-12 col-md-6">
-                                    {/* TODO: */}
-                                    Image where the designer will work
+                                    <div className={`form-group my-3 w-100`}>
+                                        <label
+                                            htmlFor={'imageForDesigner'}
+                                            className={`f-14 text-dark-gray mb-2`}
+                                            data-label="true"
+                                        >
+                                            Attach text that will be used for the design
+                                            <sup className='f-14 mr-1'>*</sup>
+                                        </label>
+                                        <FileUploader>
+                                            {_.map(
+                                                textForDesign,
+                                                (attachment) => {
+                                                    const file_icon = attachment?.filename.split(".").pop();
+
+                                                    return attachment?.filename ? (
+                                                        <FileUploader.Preview
+                                                            key={attachment?.id}
+                                                            fileName={attachment?.filename}
+                                                            downloadAble={true}
+                                                            deleteAble={false}
+                                                            downloadUrl={attachment?.file_url}
+                                                            previewUrl={attachment?.file_url}
+                                                            fileType={
+                                                                _.includes(
+                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                    file_icon
+                                                                )
+                                                                    ? "images"
+                                                                    : "others"
+                                                            }
+                                                            classname="comment_file"
+                                                            ext={file_icon}
+                                                        />
+                                                    ) : null;
+                                                }
+                                            )}
+                                        </FileUploader>
+                                    </div>
                                 </div>
                             </>
                         }
-
                         {/* background removal or image retouching */}
                         {
-                            (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.type_name === 6) && <>
+                            (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) && <>
                                 <div className="col-12 col-md-6">
                                     <div className={`form-group my-3 w-100`}>
                                         <label
@@ -778,10 +822,35 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             Image where the designer will work
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        {/* TODO: add Image where the designer will work default file here from real api */}
-                                        <div>
-                                            here will be Images/videos from real api
-                                        </div>
+                                        <FileUploader>
+                                            {_.map(
+                                                imageForDesigner,
+                                                (attachment) => {
+                                                    const file_icon = attachment?.filename.split(".").pop();
+
+                                                    return attachment?.filename ? (
+                                                        <FileUploader.Preview
+                                                            key={attachment?.id}
+                                                            fileName={attachment?.filename}
+                                                            downloadAble={true}
+                                                            deleteAble={false}
+                                                            downloadUrl={attachment?.file_url}
+                                                            previewUrl={attachment?.file_url}
+                                                            fileType={
+                                                                _.includes(
+                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                    file_icon
+                                                                )
+                                                                    ? "images"
+                                                                    : "others"
+                                                            }
+                                                            classname="comment_file"
+                                                            ext={file_icon}
+                                                        />
+                                                    ) : null;
+                                                }
+                                            )}
+                                        </FileUploader>
                                     </div>
                                 </div>
                             </>
@@ -801,10 +870,35 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                             Images/videos that will be used for the work
                                             <sup className='f-14 mr-1'>*</sup>
                                         </label>
-                                        {/* TODO: add Images/videos default file here from real api */}
-                                        <div>
-                                            here will be Images/videos from real api
-                                        </div>
+                                        <FileUploader>
+                                            {_.map(
+                                                imgOrVidForWork,
+                                                (attachment) => {
+                                                    const file_icon = attachment?.filename.split(".").pop();
+
+                                                    return attachment?.filename ? (
+                                                        <FileUploader.Preview
+                                                            key={attachment?.id}
+                                                            fileName={attachment?.filename}
+                                                            downloadAble={true}
+                                                            deleteAble={false}
+                                                            downloadUrl={attachment?.file_url}
+                                                            previewUrl={attachment?.file_url}
+                                                            fileType={
+                                                                _.includes(
+                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                    file_icon
+                                                                )
+                                                                    ? "images"
+                                                                    : "others"
+                                                            }
+                                                            classname="comment_file"
+                                                            ext={file_icon}
+                                                        />
+                                                    ) : null;
+                                                }
+                                            )}
+                                        </FileUploader>
                                     </div>
                                 </div>
                             </>
@@ -896,7 +990,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 </label>
                                 <FileUploader>
                                     {_.map(
-                                        graphicWorkDetails?.graphic_task_files,
+                                        brandGuideline,
                                         (attachment) => {
                                             const file_icon = attachment?.filename.split(".").pop();
 
