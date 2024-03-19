@@ -33,6 +33,7 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         Route::controller(self::class)->prefix('account/sales-risk-policies')->name('account.sale-risk-policies.')->group(function () {
 
+            // policy rules
             Route::get('/', 'index')->name('index');
             Route::get('input-fields', 'riskPolicyInputFields')->name('input-fields');
             Route::post('save', 'save')->name('save');
@@ -40,8 +41,11 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::post('edit-single/{id}', 'editSingle')->name('edit-single');
             Route::get('rule-list', 'ruleList')->name('rule-list');
             Route::put('status-change/{id}/{status}', 'policyRuleStatusChange')->name('status-change');
+
+            // questions
             Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
             Route::post('question-fields/save', 'policyQuestionSave')->name('question-fields.save');
+            Route::get('question/list', 'questionList')->name('question.list');
         });
     }
 
@@ -649,6 +653,7 @@ class SalesRiskPolicyController extends AccountBaseController
             'title' => 'required',
             'type' => 'required',
             'policy_id' => 'required',
+            'rule_list' => 'required',
             'parent_id' => 'nullable',
             'placeholder' => 'nullable'
         ]);
@@ -657,11 +662,20 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
         }
 
+        SalesPolicyQuestion::create([
+            'title' => $req->title,
+            'type' => $req->type,
+            'parent_id' => $req->input('parent_id'),
+            'rule_list' => json_encode($req->rule_list),
+            'placeholder' => $req->placeholder,
+            'policy_id' => $req->policy_id,
+        ]);
+
         return response()->json(['status' => 'success', 'message' => 'Question added succesfully']);
     }
 
     function questionList()
     {
-
+        return SalesPolicyQuestion::get(['id', 'title', 'type', 'placeholder', 'rule_list', 'parent_id', 'policy_id']);
     }
 }

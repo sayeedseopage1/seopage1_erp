@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('sequence')->default('1');
             $table->bigInteger('policy_id')->unsigned();
             $table->string('placeholder')->nullable();
-            $table->string('department');
+            $table->tinyInteger('rule_list');
             $table->timestamps();
 
             $table->foreign('policy_id')->references('id')->on('sales_risk_policies')->onUpdate('no action')->onDelete('no action');
