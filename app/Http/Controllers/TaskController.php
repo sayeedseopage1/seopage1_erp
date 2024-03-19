@@ -453,10 +453,12 @@ class TaskController extends AccountBaseController
             ->orderBy('id', 'desc')
             ->get();
 
+            $sub_task_details = GraphicWorkDetails::with('graphicTaskFiles')->where('task_id', $id)->first();
+
         return response()->json([
             'status' => 200,
             'tasks' => $tasks,
-
+            'sub_task_details_graphic_work' => $sub_task_details??null
         ]);
     }
     public function get_subtasks(Request $request)
