@@ -41,6 +41,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('rule-list', 'ruleList')->name('rule-list');
             Route::put('status-change/{id}/{status}', 'policyRuleStatusChange')->name('status-change');
             Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
+            Route::post('question-fields', 'policyQuestionSave')->name('question-fields.save');
         });
     }
 
@@ -630,27 +631,13 @@ class SalesRiskPolicyController extends AccountBaseController
                 'label' => 'Parent Question',
                 'name' => 'parent_id',
                 'type' => 'select',
-                'structure' => SalesPolicyQuestion::where('policy_id', $policyId)->get(['id', 'title'])
+                'structure' => SalesPolicyQuestion::where('policy_id', $policyId)->get(['id', 'title', 'type'])
             ],
-            // [
-            //     'label' => 'Placeholder',
-            //     'name' => 'placeholder',
-            //     'type' => 'input'
-            // ],
-            // [
-            //     'label' => 'Sequence',
-            //     'name' => 'sequence',
-            //     'type' => 'numeric'
-            // ],
-            // [
-            //     'label' => 'Department',
-            //     'name' => 'department',
-            //     'type' => 'select',
-            //     'structure' => Team::with('childs')->get()->map(function ($item) {
-            //         return ['id' => $item->id, 'name' => $item->team_name];
-            //     })
-            // ],
-
+            [
+                'label' => 'Comment',
+                'name' => 'comment',
+                'type' => 'input'
+            ],
         ];
 
         return response()->json($fileds);
