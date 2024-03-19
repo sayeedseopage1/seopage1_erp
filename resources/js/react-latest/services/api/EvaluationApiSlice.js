@@ -16,8 +16,18 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["All_TASKS"],
         }),
+        finalTaskSubmissionStatus: build.mutation({
+            query: (assignToId) => ({
+                url: `http://localhost:3000/api/task/finalSubmissionStatus/${assignToId}`,
+                method: "PUT",
+            }),
+            invalidatesTags: ["All_TASKS"],
+        }),
     }),
 });
 
-export const { useGetTaskListQuery, useUpdateTaskMutation } =
-    evaluationApiSlice;
+export const {
+    useGetTaskListQuery,
+    useUpdateTaskMutation,
+    useFinalTaskSubmissionStatusMutation,
+} = evaluationApiSlice;
