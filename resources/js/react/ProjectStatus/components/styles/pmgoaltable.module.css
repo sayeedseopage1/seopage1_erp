@@ -14,3 +14,19 @@
   border-top: 1px solid #28a745;
   color: white !important;
 }
+.goalNotMeat{
+  background-color: #D30000 !important;
+}
+.goalNotMeat:hover{
+  background-color: #D30000 !important;
+
+}
+.goalNotMeat td{
+  color: white !important;
+}
+.goalNotMeat:hover td{
+  background-color: #D30000 !important;
+  border-bottom: 1px solid #D30000;
+  border-top: 1px solid #D30000;
+  color: white !important;
+}

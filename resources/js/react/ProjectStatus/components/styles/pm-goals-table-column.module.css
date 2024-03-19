@@ -10,6 +10,16 @@
     max-width: 450px;
 }
 
+.explanationSubmitted{
+    color: #e6f8ef;
+    cursor: not-allowed;
+    width: 230px;
+    padding: 4px 12px !important;
+    outline: #ffc107;
+    border-radius: 0.25rem;
+    text-align: center;
+    border: 2px solid #ffc107;
+}
 
 .action{
     /* width: fit-content; */
@@ -46,6 +56,9 @@
 }
 
 
+
+
+
 .authorize{
     padding: 6px 12px !important;
     width: 185px !important;
@@ -63,6 +76,39 @@
     cursor: not-allowed !important;
 }
 
+.awaitingDeadlineExtension{
+    cursor: not-allowed !important;
+    color: #ffc107 !important;
+    border-color: #ffc107 !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+    opacity: 1 !important;
+}
+.awaitingDeadlineExtension:hover{
+    cursor: not-allowed !important;
+    color: #ffc107  !important;
+    border-color: #ffc107 ;
+    background-color: #e6f8ef !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+    opacity: 1 !important;
+}
+.awaitingDeadlineExplanation{
+    cursor: not-allowed !important;
+    color: #1492d2  !important;
+    border-color: #1492d2  !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+}
+.awaitingDeadlineExplanation:hover{
+    cursor: not-allowed !important;
+    color: #1492d2   !important;
+    border-color: #1492d2  ;
+    background-color: #e6f8ef !important;
+    padding: 5px !important;
+    font-size: 13px !important;
+}
+
 .action.extend:hover{
     background: #00af58 !important;
     border-color: #00af58 !important;
@@ -73,3 +119,12 @@
 }
 
 
+
+
+.tableAnchor{
+    color: #007bff !important;
+    text-decoration: underline !important;
+  }
+.tableAnchor:hover{
+    text-decoration: underline !important;
+}

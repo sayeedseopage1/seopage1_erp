@@ -9,50 +9,61 @@ import {
     useGetProjectExtendImagesQuery,
 } from "../../../services/api/projectStatusApiSlice";
 import ImageViewer from "./ImageViewer";
-import RefreshButton from "../RefreshButton";
 import { toast } from "react-toastify";
-import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../utils/stateValidation";
-const ReviewExtendRequestModal = ({ 
-    projectDetails, 
-    isOpen, 
-    onClose, 
-    projectPmGoalId, 
-    refetchPmGoal, 
-    reviewExtendRequestData 
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../utils/stateValidation";
+const ReviewExtendRequestModal = ({
+    projectDetails,
+    isOpen,
+    onClose,
+    projectPmGoalId,
+    refetchPmGoal,
+    reviewExtendRequestData,
+    projectExtendImages,
 }) => {
     const [reviewExtendState, setReviewExtendState] = useState({
         extended_day: reviewExtendRequestData?.extended_day,
         comment: "",
         goal_id: reviewExtendRequestData?.id,
+        goal_extension_auth_checkbox: "",
     });
-    const [reviewExtendStateValidation, setReviewExtendStateValidation] = useState({
-        extended_day: false,
-        comment: false,
-        isSubmitting: false,
-    })
-    const { data, isFetching, refetch } = useGetProjectExtendImagesQuery(
-        reviewExtendRequestData?.id
-    );
+    const [reviewExtendStateValidation, setReviewExtendStateValidation] =
+        useState({
+            extended_day: false,
+            comment: false,
+            isSubmitting: false,
+            goal_extension_auth_checkbox: false,
+        });
+    // Submit data
     const [submitData, { isLoading }] = useCreateReviewExtendRequestMutation();
 
-    const imageData = data?.data;
+    // Get image data
+    const imageData = projectExtendImages?.data;
 
+    // Reset form
     const handleResetForm = () => {
         setReviewExtendState({
             extended_day: null,
             comment: "",
+            goal_extension_auth_checkbox: "",
         });
         setReviewExtendStateValidation({
             extended_day: false,
             comment: false,
             isSubmitting: false,
+            goal_extension_auth_checkbox: false,
         });
     };
 
+    // Accept request
     const handleAccept = async (e) => {
         e.preventDefault();
+        // Check if fields are empty using state validation
         const isEmpty = isStateAllHaveValue(reviewExtendState);
         if (isEmpty) {
+            // mark empty fields
             const validation = markEmptyFieldsValidation(reviewExtendState);
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
@@ -62,9 +73,11 @@ const ReviewExtendRequestModal = ({
             return;
         }
         const fd = new FormData();
-        fd.append("extended_day", reviewExtendState.extended_day ?? "");
-        fd.append("is_any_negligence", reviewExtendState.comment ?? "");
-        fd.append("goal_id", reviewExtendState.goal_id ?? "");
+        fd.append("extended_day", reviewExtendState?.extended_day ?? "");
+        fd.append("is_any_negligence", reviewExtendState?.comment ?? "");
+        fd.append("goal_extension_auth_checkbox", reviewExtendState?.goal_extension_auth_checkbox ?? "");
+        fd.append("goal_id", reviewExtendState?.goal_id ?? "");
+        fd.append("project_id", reviewExtendRequestData.project_id)
         fd.append("status", "1");
         fd.append(
             "_token",
@@ -89,12 +102,15 @@ const ReviewExtendRequestModal = ({
             });
     };
 
+    // Reject request
     const handleReject = async (e) => {
         e.preventDefault();
         const fd = new FormData();
         fd.append("extended_day", reviewExtendState.extended_day ?? "");
         fd.append("is_any_negligence", reviewExtendState.comment ?? "");
+        fd.append("goal_extension_auth_checkbox", reviewExtendState.goal_extension_auth_checkbox ?? "");
         fd.append("goal_id", reviewExtendState.goal_id ?? "");
+        fd.append("project_id", reviewExtendRequestData.project_id)
         fd.append("status", "0");
         fd.append(
             "_token",
@@ -118,34 +134,46 @@ const ReviewExtendRequestModal = ({
             });
     };
 
-
-
+    // Check if fields are empty
     useEffect(() => {
-        if(reviewExtendStateValidation.isSubmitting){
+        if (reviewExtendStateValidation.isSubmitting) {
             const validation = markEmptyFieldsValidation(reviewExtendState);
             setReviewExtendStateValidation({
                 ...reviewExtendStateValidation,
-                ...validation
+                ...validation,
             });
         }
     }, [reviewExtendState, reviewExtendStateValidation.isSubmitting]);
 
-
+    // reset form when modal is closed
     useEffect(() => {
-        if(!isOpen){
-            handleResetForm()
+        if (!isOpen) {
+            handleResetForm();
         }
     }, [isOpen]);
 
-
+    // set review extend state
     useEffect(() => {
-            setReviewExtendState({
-                extended_day: reviewExtendRequestData?.extended_day,
-                comment: "",
-                goal_id: reviewExtendRequestData?.id,
-            });
-        
+        setReviewExtendState({
+            extended_day: reviewExtendRequestData?.extended_day,
+            comment: "",
+            goal_id: reviewExtendRequestData?.id,
+            goal_extension_auth_checkbox: "",
+        });
     }, [reviewExtendRequestData]);
+
+    // disable keypress except 0-9, backspace, left and right arrow
+    const handleOnkeypress = (e) => {
+        const keyCode = e.keyCode || e.which;
+        if (
+            (keyCode < 48 || keyCode > 57) && // 0-9
+            keyCode !== 8 && // Backspace
+            keyCode !== 37 && // Left arrow
+            keyCode !== 39 // Right arrow
+        ) {
+            e.preventDefault();
+        }
+    };
 
     
 
@@ -153,11 +181,10 @@ const ReviewExtendRequestModal = ({
         <ReactModal
             style={customStyles}
             isOpen={isOpen}
+            ariaHideApp={false}
             onRequestClose={onClose}
         >
-            <div
-                className="d-flex justify-content-between align-items-center mb-3"
-            >
+            <div className="d-flex justify-content-between align-items-center mb-3">
                 <h6
                     style={{
                         fontSize: "25px",
@@ -177,52 +204,76 @@ const ReviewExtendRequestModal = ({
                     }}
                 >
                     <IoClose />
-                </button>    
+                </button>
                 {/* <RefreshButton onClick={refetch} isLoading={isFetching} /> */}
             </div>
 
             <section style={styles.container}>
                 <div className="w-100">
                     <div className="my-2 row">
-                        <p className="col-4"><strong>Project Name:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.project_name}</p>
+                        <p className="col-4">
+                            <strong>Project Name:</strong>{" "}
+                        </p>
+                        <p className="col-8">{projectDetails?.project_name}</p>
                     </div>
                     <div className="my-2 row">
-                        <p className="col-4"><strong>Client:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.clientName}</p>
+                        <p className="col-4">
+                            <strong>Client:</strong>{" "}
+                        </p>
+                        <p className="col-8">{projectDetails?.clientName}</p>
                     </div>
                     <div className="my-2 row">
-                        <p className="col-4"><strong>Project Manager:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails.pmName}</p>
+                        <p className="col-4">
+                            <strong>Project Manager:</strong>{" "}
+                        </p>
+                        <p className="col-8">{projectDetails?.pmName}</p>
                     </div>
                     <div className="my-2 row">
-                        <p className="col-4"><strong>Project Budget:</strong>{" "}</p>
-                        <p className="col-8">{projectDetails?.currency_symbol}{projectDetails.project_budget}</p>
+                        <p className="col-4">
+                            <strong>Project Budget:</strong>{" "}
+                        </p>
+                        <p className="col-8">
+                            {projectDetails?.currency_symbol}
+                            {projectDetails?.project_budget}
+                        </p>
                     </div>
                     <div className="my-2 row">
-                        <p className="col-4"><strong>Extended Days:</strong>{" "}</p>
+                        <p className="col-4">
+                            <strong>Extended Days:</strong>{" "}
+                        </p>
                         <div className="col-8">
-                        <input 
-                            className="p-1 rounded"
-                            defaultValue={reviewExtendState?.extended_day}
-                            placeholder="Enter extended days"
-                            type="number"
-                            min={1}
-                            onChange={(e) => setReviewExtendState({
-                                ...reviewExtendState,
-                                extended_day: e.target.value
-                            })}
-                        ></input>
-                        {reviewExtendStateValidation.extended_day && <p className="text-danger my-1">Extended days is required</p>}
+                            <input
+                                className="p-1 rounded"
+                                defaultValue={reviewExtendState?.extended_day}
+                                placeholder="Enter extended days"
+                                type="number"
+                                onKeyPress={handleOnkeypress}
+                                min={1}
+                                onChange={(e) =>
+                                    setReviewExtendState({
+                                        ...reviewExtendState,
+                                        extended_day: e.target.value,
+                                    })
+                                }
+                            ></input>
+                            {reviewExtendStateValidation.extended_day && (
+                                <p className="text-danger my-1">
+                                    Extended days is required
+                                </p>
+                            )}
                         </div>
                     </div>
                     <div className="row my-2">
-                        <p className="col-4"> <strong htmlFor="itemsPerPage">Screenshots:</strong>{" "}</p>
+                        <p className="col-4">
+                            {" "}
+                            <strong htmlFor="itemsPerPage">
+                                Screenshots:
+                            </strong>{" "}
+                        </p>
                         <div className="col-8">
-                        <ImageViewer imageData={imageData} />  
+                            <ImageViewer imageData={imageData} />
                         </div>
                     </div>
-
 
                     <div style={styles.reasonContainer}>
                         <p>
@@ -235,32 +286,101 @@ const ReviewExtendRequestModal = ({
                                 borderRadius: "5px",
                             }}
                         >
-                            <CKEditorComponent onChange={(e, editor) => setReviewExtendState({
-                                ...reviewExtendState,
-                                comment: editor.getData()
-                            })} />
+                            <CKEditorComponent
+                                onChange={(e, editor) =>
+                                    setReviewExtendState({
+                                        ...reviewExtendState,
+                                        comment: editor.getData(),
+                                    })
+                                }
+                            />
                         </div>
-                        {
-                            reviewExtendStateValidation.comment && <p className="text-danger my-1">Comment is required</p>
-                        }    
+                        {reviewExtendStateValidation.comment && (
+                            <p className="text-danger my-1">
+                                Comment is required
+                            </p>
+                        )}
                     </div>
-                    <Flex justifyContent="flex-end">
-                        <Button
-                            variant="success"
-                            style={styles.button}
-                            onClick={handleAccept}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? "Accepting..." : "Accept"}
-                        </Button>
-                        <Button
-                            variant="danger"
-                            style={styles.button}
-                            onClick={handleReject}
-                            disabled={isLoading}
-                        >
-                            {isLoading ? "Rejecting..." : "Reject"}
-                        </Button>
+                    <Flex
+                        justifyContent="space-between"
+                        align-items="center"
+                        className="mt-2"
+                    >
+                        <Flex align-items="center">
+                            <div className="d-flex align-items-center">
+                                <input
+                                    type="checkbox"
+                                    name="goal_extension_auth_checkbox"
+                                    checked={
+                                        reviewExtendState.goal_extension_auth_checkbox ===
+                                        "Apply this extension to all goals"
+                                    }
+                                    onChange={(e) =>
+                                        setReviewExtendState({
+                                            ...reviewExtendState,
+                                            goal_extension_auth_checkbox:
+                                                "Apply this extension to all goals",
+                                        })
+                                    }
+                                    id="applyThisExtensionToAllGoals"
+                                />
+                                <label className="ml-2 mb-0" htmlFor="yes">
+                                    Apply this extension to all goals
+                                </label>
+                            </div>
+                            <div className="d-flex align-items-center">
+                                <input
+                                    type="checkbox"
+                                    name="goal_extension_auth_checkbox"
+                                    id="OnlyAuthorizeForThisGoal"
+                                    onChange={(e) =>
+                                        setReviewExtendState({
+                                            ...reviewExtendState,
+                                            goal_extension_auth_checkbox:
+                                                "Only authorize for this goal",
+                                        })
+                                    }
+                                    checked={
+                                        reviewExtendState.goal_extension_auth_checkbox ===
+                                        "Only authorize for this goal"
+                                    }
+                                />
+                                <label
+                                    className="ml-2 mb-0"
+                                    htmlFor="OnlyAuthorizeForThisGoal"
+                                >
+                                    Only authorize for this goal
+                                </label>
+                            </div>
+                        </Flex>
+
+                        <Flex>
+                            <Button
+                                variant="success"
+                                style={styles.button}
+                                onClick={handleAccept}
+                                disabled={isLoading}
+                                className="mt-0"
+                            >
+                                {isLoading ? "Accepting..." : "Accept"}
+                            </Button>
+                            <Button
+                                variant="danger"
+                                style={styles.button}
+                                onClick={handleReject}
+                                disabled={isLoading}
+                                className="mt-0"
+                            >
+                                {isLoading ? "Rejecting..." : "Reject"}
+                            </Button>
+                        </Flex>
+                    </Flex>
+                    <Flex justifyContent="flex-start">
+                        {reviewExtendStateValidation?.goal_extension_auth_checkbox && (
+                            <p className="text-danger mt-1">
+                                Goal extension authorization is required
+                            </p>
+                        )}
                     </Flex>
                 </div>
             </section>
@@ -277,7 +397,7 @@ const customStyles = {
     },
     content: {
         zIndex: 99999999,
-        maxWidth: "550px",
+        maxWidth: "700px",
         height: "fit-content",
         maxHeight: "100vh",
 
