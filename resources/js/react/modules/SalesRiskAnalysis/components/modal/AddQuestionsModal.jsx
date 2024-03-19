@@ -64,7 +64,8 @@ const AddQuestionsModal = ({
         refetch,
     } = useSinglePolicyQuestionsQuery(addQuestionsData?.id, {
         staleTime: 0, 
-        refetchOnMountOrArgChange: true
+        refetchOnMountOrArgChange: true,
+        skip: !addQuestionsData?.id,
     });
 
     const [
@@ -386,7 +387,7 @@ const AddQuestionsModal = ({
                 </div>
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton onClick={handleAddQuestion} width="177px">
-                        {isLoading ? "Saving" : "Save Question"}
+                        {isLoading ? "Saving..." : "Save Question"}
                     </ModalButton>
                     <ModalButton
                         onClick={handleCloseAddQuestionsModal}

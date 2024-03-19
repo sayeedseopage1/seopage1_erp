@@ -805,6 +805,7 @@ const SalesRiskAnalysisTable = ({
                 open={addQuestionsModalOpen}
                 closeModal={handleCloseAddQuestionsModal}
                 addQuestionsData={addQuestionsData}
+                setAddQuestionsData={setAddQuestionsData}
             />
             <EditPolicyModal
                 open={editPolicyModal}
