@@ -217,7 +217,7 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
-        $user  = User::where('id',62)->first(); // It's only for admin
+        $user  = User::where('id',299)->first(); // It's only for admin
         Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
         \DB::commit();
         } catch (\Throwable $th) {
@@ -359,9 +359,9 @@ class ProjectStatusController extends AccountBaseController
                     $action->authorized_at= Carbon::now();
                     $action->past_status = 1;
                     $action->save();
-                    // $project_manager= User::where('id',$pm_goal->pm_id)->first();
-                    // $client= User::where('id',$pm_goal->client_id)->first();
-                    // $authorize_by= User::where('id',$action->authorized_by)->first();
+                    $project_manager= User::where('id',$pm_goal->pm_id)->first();
+                    $client= User::where('id',$pm_goal->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
                     
                     $past_action= new PendingActionPast();
                     $past_action->item_name = $action->item_name;
@@ -369,7 +369,11 @@ class ProjectStatusController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = 'Goal deadline extension request!';
+                    if($pm_goal->goal_status == 1){
+                        $past_action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a>  from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>  was met before the expiry time!';
+                    }else{
+                        $past_action->message = 'Goal '.$pm_goal->goal_name.' ('.$pm_goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was not met before the expiry time!';
+                    }
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;
                     $past_action->authorized_by = $action->authorized_by;
@@ -385,7 +389,7 @@ class ProjectStatusController extends AccountBaseController
 
             $helper = new HelperPendingActionController();
             $helper->PmGoalExtendRequest($goal);
-            $user  = User::where('id',62)->first(); // It's only for admin
+            $user  = User::where('id',299)->first(); // It's only for admin
             Notification::send($user, new PmGoalExtendRequestNotification($goal));
 
             \DB::commit();
@@ -421,7 +425,7 @@ class ProjectStatusController extends AccountBaseController
         \DB::beginTransaction();
             if($request->status==1){
                 if($request->goal_extension_auth_checkbox == 'Apply this extension to all goals'){
-                    $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->get();
+                    $pmGoalFinds = ProjectPmGoal::where('project_id',$request->project_id)->where('goal_status',0)->get();
                     foreach($pmGoalFinds as $item){
                         $updateGoal = ProjectPmGoal::where('id',$item->id)->first();
                         $updateGoal->extended_goal_end_day = Carbon::parse($item->goal_end_date)->addDay($request->extended_day);
@@ -438,7 +442,9 @@ class ProjectStatusController extends AccountBaseController
                 }
 
                 $deadline_ext_history = new PmGoalDeadlineExtHistory();
-                $deadline_ext_history->goal_id = $updateGoal->id;
+                if($request->goal_extension_auth_checkbox == 'Apply this extension to all goals'){
+                $deadline_ext_history->goal_id = $request->goal_id;
+                }
                 $deadline_ext_history->start_date = $updateGoal->goal_start_date;
                 $deadline_ext_history->old_deadline = $updateGoal->goal_end_date;
                 $deadline_ext_history->new_deadline = $updateGoal->extended_goal_end_day;
@@ -475,11 +481,14 @@ class ProjectStatusController extends AccountBaseController
                 $deadline_ext_history->auth_status = 2;
                 $deadline_ext_history->save();
             }
-            $actions = PendingAction::where('code','PMER')->where('past_status',0)->where('goal_id',$updateGoal->id)->get();
+            // dd($updateGoal->id);
+            $actions = PendingAction::where('code','PMER')->where('past_status',0)->where('goal_id',$request->goal_id)->get();
+            // dd($actions);
             if($actions != null)
             {
                 foreach ($actions as $key => $action)
                 {
+                    // dd($action);
                     $pm_goal= ProjectPmGoal::where('id',$action->goal_id)->first();
                     $project= Project::where('id',$pm_goal->project_id)->first();
                     $action->authorized_by= Auth::id();
@@ -510,6 +519,7 @@ class ProjectStatusController extends AccountBaseController
                 }
             }
             \DB::commit();
+            // dd('ok');
         } catch (\Throwable $th) {
             \DB::rollback();
         }

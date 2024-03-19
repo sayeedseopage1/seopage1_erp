@@ -218,11 +218,8 @@ class PMGoal extends Command
             $goal_end_date = Carbon::parse($goal_check->goal_end_date)->subDays(1);
             $goal_ext_end_date = Carbon::parse($goal_check->extended_goal_end_day)->subDays(1);
             if($goal_check->goal_end_date >= $currentTime && $goal_end_date <=$currentTime || $goal_check->extended_goal_end_day >= $currentTime && $goal_ext_end_date <=$currentTime){
-                $difference_in_hours = $current_date->diffInHours($goal_end_date);
-                $difference_in_hours = $current_date->diffInHours($goal_ext_end_date);
-                // if ($currentTime > $goal_end_date || $currentTime > $goal_ext_end_date) {
-                //     $difference_in_hours = -$difference_in_hours;
-                // }
+                $difference_in_hours = $currentTime->diffInHours($goal_end_date);
+                $difference_in_hours = $currentTime->diffInHours($goal_ext_end_date);
                 if( $difference_in_hours <= 24)
                 {
                     $helper = new HelperPendingActionController();

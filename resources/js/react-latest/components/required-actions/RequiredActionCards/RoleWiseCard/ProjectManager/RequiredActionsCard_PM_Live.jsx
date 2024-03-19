@@ -12,7 +12,7 @@ export default function RequiredActionsCard_PM_Live({data}) {
 
 
     const handleMessageShow = useCallback((type)=>{
-      if (type === "PDA" || type === "DTDA") {
+      if (type === "PDA" || type === "DTDA" || type=== "PMGE") {
         return `${data.message} ${time.h || 0} hour ${time.m || 0} minutes`;
       } else {
         return data.message;

@@ -1769,7 +1769,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->serial = 'PMGE'.'x0';
                 $action->item_name= 'Goal expire in 24 hours';
                 $action->heading= 'Goal expire in 24 hours!';
-                $action->message = 'Goal ('.$goal->goal_name.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in !';
+                $action->message = 'Goal ('.$goal->goal_name.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> will expire in ';
                 if($difference_in_hours > 0)
                 {
                  $action->timeframe= $difference_in_hours;
