@@ -105,22 +105,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         useCheckRestrictedWordsMutation();
 
     const taskData = {
-        type_of_graphic_works_id: typeOfGraphicsCategory?.id ?? "",
-        type_of_logo: typeOfLogo?.type_name ?? "",
-        brand_name: brandName ?? "",
-        number_of_versions: numOfVersions ?? "",
-        file_types_needed: fileTypesNeeded ?? "",
-        reference: reference ?? "",
-        font_name: fontName ?? "",
-        textForDesign,
-        imageForDesigner,
-        imgOrVidForWork,
-        font_url: fontUrl,
-        brandGuideline,
-        design_instruction: illustration || others,
-        primary_color: primaryColor ?? "",
-        primary_color_description: primaryColorDescription ?? "",
-        secondary_colors: secondaryColors ?? ""
+        themeType: themeType ?? "",
+        cms: cms ?? "",
+        theme_name: themeName ?? "",
+        theme_template_library_link: themeTemplate ?? "",
     }
 
     // console.log(taskData)
@@ -317,7 +305,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 errCount++;
             }
             if (!themeTemplate) {
-                err.themeTemplate = "The theme template url field is required";
+                err.themeTemplate = "You have to provide theme template URL";
+                count++;
+            } else if (!checkIsURL(themeTemplate)) {
+                err.themeTemplate = "You have to provide a valid theme template URL";
+                toast.warn("You have to provide a valid theme template URL");
                 errCount++;
             }
         }
@@ -401,6 +393,12 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         });
         // graphics end 
 
+        // ui/ux start 
+        fd.append("cms", cms ?? "");
+        fd.append("theme_name", themeName ?? "");
+        fd.append("theme_template_library_link", themeTemplate ?? "");
+        // ui/ux end 
+
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
@@ -412,7 +410,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
-        // TODO: it will be uncommented when it will be ready
         // handle form submit
         const formSubmit = async () => {
             if (isValid()) {
@@ -1428,7 +1425,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                     </> : null
                                 }
 
-
+                                {/* it will show conditionally here, when task category is UI/UIX Design  */}
                                 {
                                     taskCategory ? taskCategory?.category_name === "UI/UIX Design" && <>
                                         {/* cms name  */}
