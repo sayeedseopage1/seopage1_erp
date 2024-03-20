@@ -1,12 +1,11 @@
 //mitul work start
 
-import { RxCrossCircled } from "react-icons/rx";
 import ReactModal from "react-modal";
 
 import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
 import { useState } from "react";
-import { EvalTableTitle, FooterButtons } from "../Table/ui";
-import DataTable from "../Table/EvaluationTable";
+import { EvalTableTitle, Flex, FooterButtons } from "../Table/ui";
+
 import Button from "../../../../../ui/Button";
 import {
     useFinalTaskSubmissionStatusMutation,
@@ -15,7 +14,21 @@ import {
 import { toast } from "react-toastify";
 import { useAuth } from "../../../../../../react/hooks/useAuth";
 import CKEditorComponent from "../../../../../ui/ckeditor";
-
+import {
+    TeamLeadReviewTitle,
+    CommentBox,
+    SectionFlex,
+    HorizontalLineLeftTL,
+    HorizontalLineRightTL,
+    ReviewTitleTL,
+    ReviewContent,
+    ReviewFooter,
+    HorizontalLineLeftA,
+    ReviewTitleA,
+    HorizontalLineRightA,
+    CommentContentA,
+} from "../ui/EvaluationModal";
+import EvaluationTable from "../Table/EvaluationTable";
 const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
     const auth = useAuth();
 
@@ -53,6 +66,10 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
         e.preventDefault();
         console.log("team lead submitted");
     };
+    const handleAdminComment = async (e) => {
+        e.preventDefault();
+        console.log("Admin submitted");
+    };
     return (
         <ReactModal
             style={{
@@ -63,9 +80,10 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                 },
                 content: {
                     borderRadius: "10px",
-                    maxWidth: "90%",
-                    maxHeight: "fit-content",
+                    maxWidth: "80%",
+
                     height: "fit-content",
+                    maxHeight: "90vh",
                     margin: "auto auto",
                     padding: "20px",
                     overflowY: "auto",
@@ -78,7 +96,7 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                 <span>New Developer Evaluation :</span>
                 <span>Mitul</span>
             </EvalTableTitle>
-            <DataTable
+            <EvaluationTable
                 data={Tasks}
                 columns={[...EvaluationTableColumns]}
                 isLoading={false}
@@ -90,26 +108,64 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
             {/* //team lead comment start */}
             {auth.roleId === 8 && (
                 <div>
-                    <div
-                        style={{
-                            marginTop: "30px",
-                            fontWeight: "bold",
-                        }}
-                    >
+                    <TeamLeadReviewTitle>
                         Team Leader's Review
-                    </div>
-                    <div
-                        style={{
-                            border: "2px solid rgba(0, 0, 0, 0.2)",
-                            marginBottom: "20px",
-                            marginTop: "10px",
-                        }}
-                    >
+                    </TeamLeadReviewTitle>
+                    <CommentBox>
                         <CKEditorComponent placeholder="Write your comment here" />
-                    </div>
+                    </CommentBox>
                 </div>
             )}
             {/* //team lead comment end */}
+
+            {auth.roleId === 1 && (
+                <section>
+                    <SectionFlex>
+                        <HorizontalLineLeftTL />
+                        <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
+                        <HorizontalLineRightTL />
+                    </SectionFlex>
+
+                    <ReviewContent>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: data?.data[0]?.rating
+                                    .reporting_boss_comment,
+                            }}
+                        />
+
+                        <ReviewFooter>
+                            By{" "}
+                            <a
+                                href="www.LeadDevId.com"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {data?.data[0]?.assignByName}
+                            </a>{" "}
+                            on <span>{data?.data[0]?.updatedAt}</span>
+                        </ReviewFooter>
+                    </ReviewContent>
+                </section>
+            )}
+            {auth.roleId === 1 && (
+                <section>
+                    <SectionFlex>
+                        <HorizontalLineLeftA />
+                        <ReviewTitleA>
+                            Top Management's Authorization
+                        </ReviewTitleA>
+                        <HorizontalLineRightA />
+                    </SectionFlex>
+
+                    <CommentContentA>
+                        <CKEditorComponent placeholder="Write your comment here" />
+                    </CommentContentA>
+                </section>
+            )}
+
+            {/* Buttons start */}
+
             <FooterButtons>
                 <Button
                     onClick={() => setIsEvaluationModal(false)}
@@ -119,6 +175,7 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                     Close
                 </Button>
 
+                {/* lead dev submit button start */}
                 {auth.roleId === 6 && (
                     <Button
                         onClick={handleFinalSubmission}
@@ -137,6 +194,10 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                     </Button>
                 )}
 
+                {/* lead dev submit button end */}
+
+                {/* Team Lead submit button start */}
+
                 {auth.roleId === 8 && (
                     <Button
                         onClick={handleTeamLeadComment}
@@ -146,6 +207,31 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                         Submit Review
                     </Button>
                 )}
+
+                {/* Team Lead Submit button end */}
+
+                {/* Admin submit button start */}
+                {auth.roleId === 1 && (
+                    <Flex>
+                        <Button
+                            variant="danger"
+                            onClick={handleAdminComment}
+                            size="md"
+                            className="ml-2"
+                        >
+                            Reject
+                        </Button>
+                        <Button
+                            onClick={handleAdminComment}
+                            size="md"
+                            className="ml-2"
+                        >
+                            Authorize
+                        </Button>
+                    </Flex>
+                )}
+
+                {/* admin submit button end */}
             </FooterButtons>
         </ReactModal>
     );

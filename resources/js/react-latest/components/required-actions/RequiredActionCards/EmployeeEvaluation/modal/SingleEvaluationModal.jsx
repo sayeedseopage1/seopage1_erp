@@ -2,20 +2,23 @@ import { RxCrossCircled } from "react-icons/rx";
 import ReactModal from "react-modal";
 import styles from "./SingleEvaluation.module.css";
 import { EvalTableTitle } from "../Table/ui";
-import FractionalRating from "../../../../../../react/global/FractionalRating";
+
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+
 import Button from "../../../../../../react/global/Button";
 import ReusableSection from "./ReusableSection";
 import CKEditorComponent from "../../../../../ui/ckeditor";
 import { toast } from "react-toastify";
 import { useUpdateTaskMutation } from "../../../../../services/api/EvaluationApiSlice";
 import { BiSolidEditAlt } from "react-icons/bi";
+import { useAuth } from "../../../../../../react/hooks/useAuth";
+import ReusableSectionTeamLeadAndAdmin from "./ReusableSectionTeamLeadAndAdmin";
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
+    const auth = useAuth();
     const [putTask] = useUpdateTaskMutation();
 
     const [averageRating, setAverageRating] = useState(data.averageRating);
@@ -257,11 +260,12 @@ const SingleEvaluationModal = ({
                 },
                 content: {
                     borderRadius: "10px",
-                    maxHeight: "900px",
+                    height: "fit-content",
+                    maxHeight: "90vh",
                     maxWidth: "1000px",
                     margin: "auto auto",
                     border: "none",
-                    overflow: "hidden",
+
                     padding: "20px",
                     overflowY: "auto",
                 },
@@ -304,9 +308,17 @@ const SingleEvaluationModal = ({
 
             <div>
                 <div className={styles.rating_container}>
-                    {formFields.map((field, index) => (
-                        <ReusableSection key={index} {...field} />
-                    ))}
+                    {auth.roleId === 6 &&
+                        formFields.map((field, index) => (
+                            <ReusableSection key={index} {...field} />
+                        ))}
+                    {(auth.roleId === 8 || auth.roleId === 1) &&
+                        formFields.map((field, index) => (
+                            <ReusableSectionTeamLeadAndAdmin
+                                key={index}
+                                {...field}
+                            />
+                        ))}
                 </div>
 
                 <div
@@ -324,36 +336,78 @@ const SingleEvaluationModal = ({
                         marginTop: "10px",
                     }}
                 >
-                    <CKEditorComponent
-                        placeholder="Write your comment here"
-                        data={formData?.rating?.reporting_boss_comment}
-                        onChange={(e, editor) => {
-                            const data = editor.getData();
-                            setFormData((prev) => ({
-                                ...prev,
-                                averageRating: averageRating,
-                                rating: {
-                                    ...formData.rating,
-                                    reporting_boss_comment: data,
-                                },
-                            }));
-                        }}
-                    />
+                    {auth.roleId === 6 && (
+                        <CKEditorComponent
+                            placeholder="Write your comment here"
+                            data={formData?.rating?.reporting_boss_comment}
+                            onChange={(e, editor) => {
+                                const data = editor.getData();
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    averageRating: averageRating,
+                                    rating: {
+                                        ...formData.rating,
+                                        reporting_boss_comment: data,
+                                    },
+                                }));
+                            }}
+                        />
+                    )}
+
+                    {(auth.roleId === 8 || auth.roleId === 1) && (
+                        <section
+                            style={{
+                                height: "auto",
+                                position: "relative",
+                                width: "100%",
+                                padding: "10px",
+                                paddingBottom: "40px",
+                            }}
+                        >
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: data?.rating.reporting_boss_comment,
+                                }}
+                            ></div>
+
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    bottom: "10px",
+                                    right: "10px",
+                                    padding: "3px",
+                                    border: "1px solid grey",
+                                }}
+                            >
+                                By{" "}
+                                <a
+                                    href="www.LeadDevId.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {data?.assignByName}
+                                </a>{" "}
+                                on <span>{data?.updatedAt}</span>
+                            </div>
+                        </section>
+                    )}
                 </div>
                 <div className="d-flex justify-content-center">
-                    <button
-                        className="mr-2 btn btn-primary "
-                        onClick={handleSubmit}
-                    >
-                        {data?.evaluationStatus === "pending" ? (
-                            <div> Submit Evaluation</div>
-                        ) : (
-                            <div>
-                                <BiSolidEditAlt />
-                                <span> Edit Rating</span>
-                            </div>
-                        )}
-                    </button>
+                    {auth.roleId === 6 && (
+                        <button
+                            className="mr-2 btn btn-primary "
+                            onClick={handleSubmit}
+                        >
+                            {data?.evaluationStatus === "pending" ? (
+                                <div> Submit Evaluation</div>
+                            ) : (
+                                <div>
+                                    <BiSolidEditAlt />
+                                    <span> Edit Rating</span>
+                                </div>
+                            )}
+                        </button>
+                    )}
                     <Button
                         size="md"
                         onClick={() => toggleSingleEvaluationModal()}

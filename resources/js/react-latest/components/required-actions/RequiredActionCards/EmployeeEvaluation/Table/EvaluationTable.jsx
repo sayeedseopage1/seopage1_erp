@@ -32,7 +32,7 @@ import { useLocalStorage } from "react-use";
 import EmptyTable from "../../../../../../react/global/EmptyTable";
 import { Placeholder } from "../../../../../ui/Placeholder";
 
-const DataTable = ({
+const EvaluationTable = ({
     data,
     columns = [],
     isLoading,
@@ -166,48 +166,50 @@ const DataTable = ({
                     </Table>
                 </TableContainer>
 
-                {/* <TableFooter> */}
-                {/* <Flex>
-                        Show
-                        <Select
-                            value={pageSize}
-                            onChange={handlePageSizeChange}
-                        >
-                            <option value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </Select>
-                        Entries
-                    </Flex> */}
+                {data?.length > 10 && (
+                    <TableFooter>
+                        <Flex>
+                            Show
+                            <Select
+                                value={pageSize}
+                                onChange={handlePageSizeChange}
+                            >
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="30">30</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </Select>
+                            Entries
+                        </Flex>
 
-                {/* <Flex>
-                        <span>
-                            Showing {data?.from} to {data?.to} of {data?.total}{" "}
-                            entries
-                        </span>
+                        <Flex>
+                            <span>
+                                Showing {data?.from} to {data?.to} of{" "}
+                                {data?.total} entries
+                            </span>
 
-                        <ReactPaginate
-                            breakLabel="..."
-                            onPageChange={handlePageChange}
-                            previousLabel="Previous"
-                            nextLabel="Next"
-                            pageRangeDisplayed={3}
-                            marginPagesDisplayed={1}
-                            pageCount={data?.last_page ?? 1}
-                            renderOnZeroPageCount={null}
-                            containerClassName={styles.containerClassName}
-                            pageLinkClassName={styles.pageLinkClassName}
-                            activeLinkClassName={styles.activeLinkClassName}
-                            previousLinkClassName={styles.pageLinkClassName}
-                            nextLinkClassName={styles.pageLinkClassName}
-                        />
-                    </Flex> */}
-                {/* </TableFooter> */}
+                            <ReactPaginate
+                                breakLabel="..."
+                                onPageChange={handlePageChange}
+                                previousLabel="Previous"
+                                nextLabel="Next"
+                                pageRangeDisplayed={3}
+                                marginPagesDisplayed={1}
+                                pageCount={data?.last_page ?? 1}
+                                renderOnZeroPageCount={null}
+                                containerClassName={styles.containerClassName}
+                                pageLinkClassName={styles.pageLinkClassName}
+                                activeLinkClassName={styles.activeLinkClassName}
+                                previousLinkClassName={styles.pageLinkClassName}
+                                nextLinkClassName={styles.pageLinkClassName}
+                            />
+                        </Flex>
+                    </TableFooter>
+                )}
             </React.Fragment>
         </React.Fragment>
     );
 };
 
-export default DataTable;
+export default EvaluationTable;

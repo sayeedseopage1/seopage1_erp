@@ -172,6 +172,7 @@ const ActionsButton = ({ data }) => {
                         margin: "auto auto",
                         border: "none",
                         overflow: "hidden",
+                        padding: "0px",
                     },
                 }}
                 isOpen={viewCommentModal}

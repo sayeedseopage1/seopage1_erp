@@ -2,19 +2,12 @@ import ModalForm from "./ModalForm";
 import ModalWithBtnTemplate from "./ModalWithBtnTemplate";
 import style from "../../../../../../styles/required-action-card.module.css";
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
+import React from "react";
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
 
 // action buttons
 export default function ActionsButton({ data }) {
-    // window.location.assign();
-
-    // return (
-    //     <>
-    //         <button className={style.action_btn}>Review</button>
-    //         <button className={style.action_btn}>Approve</button>
-    //         <button className={style.action_btn}>Deny</button>
-    //         <button className={style.action_btn}>Request Modifications</button>
-    //     </>
-    // );
+    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
 
     return (
         <>
@@ -60,6 +53,20 @@ export default function ActionsButton({ data }) {
                     );
                 }
             })}
+
+            {
+                <button
+                    onClick={() => setIsEvaluationModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    Evaluate
+                </button>
+            }
+
+            <EvaluationModal
+                setIsEvaluationModal={setIsEvaluationModal}
+                isEvaluationModal={isEvaluationModal}
+            />
         </>
     );
 }
