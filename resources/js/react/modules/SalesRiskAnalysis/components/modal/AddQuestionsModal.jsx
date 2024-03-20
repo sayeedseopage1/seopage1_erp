@@ -20,6 +20,8 @@ import QuestionsSelect from "../QuestionsSelect";
 import Switch from "../Switch";
 import _ from "lodash";
 import {
+    useGetSinglePolicySalesRiskAnalysisQuery,
+    usePolicyQuestionsListQuery,
     useQuestionAddonPolicyMutation,
     useQuestionInputFieldsQuery,
     useSinglePolicyQuestionsQuery,
@@ -30,7 +32,7 @@ import { generateUniqueString } from "../../../../utils/customUidGenerate";
 import QuestionsModalTable from "../table/QuestionsModalTable";
 import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
 import { toast } from "react-toastify";
-import { formatAPIErrors, formatAPIErrorsOnData } from "../../../../utils/formatAPIErrors";
+import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
 
 const AddQuestionsModal = ({
     open,
@@ -74,6 +76,54 @@ const AddQuestionsModal = ({
         { isLoading, isFetching: isQuestionAddonPolicyFetching },
     ] = useQuestionAddonPolicyMutation();
 
+    const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
+        useGetSinglePolicySalesRiskAnalysisQuery(addQuestionsData?.id, {
+            skip: !addQuestionsData?.id,
+            staleTime: 0,
+            refetchOnMountOrArgChange: true,
+        });
+
+    const {
+        data: questionsList,
+        isFetching: isQuestionsListFetching,
+        isLoading: isQuestionsListLoading,
+    } = usePolicyQuestionsListQuery(addQuestionsData?.id, {
+        staleTime: 0,
+        refetchOnMountOrArgChange: true,
+        skip: !addQuestionsData?.id,
+    });
+
+    useEffect(() => {
+        if (questionsList?.data?.length) {
+            const formatQuestions = questionsList?.data?.map((item) => {
+                return {
+                    title: item?.title,
+                    type: QuestionsTypes.data.find(
+                        (type) => type.name === item?.type
+                    ),
+                    placeholder: item?.placeholder,
+                    parent_question: item?.parent_id
+                        ? questionsList?.data?.find(
+                              (question) => question.id === item?.parent_id
+                          )
+                        : "",
+                    parent_question_for: item?.parent_id
+                        ? questionsList?.data?.find(
+                              (question) => question.id === item?.parent_id
+                          ).type === "yesNo"
+                            ? item?.parent_question_for
+                            : ""
+                        : "",
+                    ruleList: item?.rule_list,
+                    comment: item?.comment,
+                    id: item?.id,
+                    policy_id: item?.policy_id,
+                };
+            });
+            setQuestions(formatQuestions);
+        }
+    }, [questionsList?.data]);
+
     // Handle Change
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -112,9 +162,9 @@ const AddQuestionsModal = ({
         ) {
             setSingleQuestionValidation({
                 ...validation,
-                parent_question_for:(
-                    singleQuestion.parent_question?.type === "yes_no" &&
-                    !singleQuestion.parent_question_for)
+                parent_question_for:
+                    singleQuestion.parent_question?.type === "yesNo" &&
+                    !singleQuestion.parent_question_for
                         ? true
                         : false,
                 isSubmitting: true,
@@ -144,7 +194,7 @@ const AddQuestionsModal = ({
                 handleCloseAddQuestionsModal();
             }
         } catch (error) {
-            if(error.status === 403){
+            if (error.status === 403) {
                 const errorMessages = formatAPIErrors(error?.data?.data);
                 errorMessages.forEach((errorMessage) => {
                     toast.error(errorMessage);
@@ -160,9 +210,9 @@ const AddQuestionsModal = ({
         switch (type?.name) {
             case "text":
                 return "Write here your text";
-            case "yes_no":
+            case "yesNo":
                 return "Select Yes or No";
-            case "nemeric":
+            case "numeric":
                 return "Enter Number";
             case "list":
                 return "Select from List";
@@ -218,6 +268,7 @@ const AddQuestionsModal = ({
 
     console.log(singleQuestion);
     console.log(questions);
+    console.log(singleQuestionValidation);
 
     return (
         <CustomModal
@@ -276,6 +327,8 @@ const AddQuestionsModal = ({
                                 tableData={questions}
                                 tableColumns={QuestionsModalTableColumns}
                                 tableName="Questions"
+                                isFetching={isQuestionsListFetching}
+                                isLoading={isQuestionsListLoading}
                             />
                         </div>
                     )}
@@ -340,7 +393,7 @@ const AddQuestionsModal = ({
                             <Switch.Case
                                 condition={
                                     singleQuestion?.parent_question.type ===
-                                    "yes_no"
+                                    "yesNo"
                                 }
                             >
                                 <div className="row mb-4 align-items-center">

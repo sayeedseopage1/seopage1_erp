@@ -213,7 +213,6 @@ const SalesRiskAnalysisTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditApplicableRule: (row, selectedRule, ruleType) => {
-                
                 const valueTypeConst =
                     PolicyTypeItemValuesType?.data?.regularTypes?.data;
 
@@ -284,12 +283,10 @@ const SalesRiskAnalysisTable = ({
                 setEditRuleModalOpen(true);
             },
             handleAddQuestions: (data) => {
-                
                 setAddQuestionsData(data);
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (row) => {
-                
                 setStatusActionData({
                     ...row,
                     modalType: "Policy",
@@ -297,7 +294,6 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleRuleStatus: (rule) => {
-                
                 setStatusActionData({
                     ...rule,
                     modalType: "Rule",
@@ -305,7 +301,6 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleEditPolicy: (data) => {
-                
                 // function to format data
                 const updateData = formatEditPolicyData(data);
                 setEditPolicyInputData(updateData);
@@ -321,7 +316,6 @@ const SalesRiskAnalysisTable = ({
                 setEditPolicyModalOpen(true);
             },
             handleEditCountryList: (data, selectedRule) => {
-                
                 const payload = formatEditRuleData(data, selectedRule);
                 setEditRuleData(payload);
                 setEditCountryListModalOpen(true);
@@ -750,59 +744,69 @@ const SalesRiskAnalysisTable = ({
             </div>
 
             {/* Modals */}
-            <EditApplicableRulesModal
-                open={editRuleModalOpen}
-                closeModal={handleCloseEditRuleModal}
-                editRuleData={editRuleData}
-                handleChange={handleChange}
-                handleUpdateRules={handleUpdateRules}
-                editRuleDataValidation={editRuleDataValidation}
-                handleMultiSelectChange={setEditRuleData}
-                isLoadingEditSalesRiskAnalysisRule={
-                    isLoadingEditSalesRiskAnalysisRule
-                }
-            />
-            <RuleActionConfirmationModal
-                open={ruleActionModalOpen}
-                closeModal={handleCloseStatusActionModal}
-                statusActionData={statusActionData}
-                handleStatusUpdate={handleStatusUpdate}
-                isLoading={isLoadingSingleRuleStatusUpdate}
-            />
-            <AddQuestionsModal
-                open={addQuestionsModalOpen}
-                closeModal={handleCloseAddQuestionsModal}
-                addQuestionsData={addQuestionsData}
-                setAddQuestionsData={setAddQuestionsData}
-            />
-            <EditPolicyModal
-                open={editPolicyModal}
-                closeModal={handleCloseEditPolicyModal}
-                editPolicyData={editPolicyData}
-                editPolicyDefaultData={editPolicyDefaultData}
-                setEditPolicyData={setEditPolicyData}
-                editPolicyInputData={editPolicyInputData}
-                handleAddRuleOnPolicy={handleAddRuleOnPolicy}
-                setEditPolicyInputData={setEditPolicyInputData}
-                editPolicyDataValidation={editPolicyDataValidation}
-                handleMultiSelectChange={setEditPolicyData}
-                handleCancelRuleOnPolicy={handleCancelRuleOnPolicy}
-                isRuleUpdating={isRuleUpdating}
-                setIsRuleUpdating={setIsRuleUpdating}
-                handleChange={handlePolicyEditChange}
-                handleEditPolicyUpdate={handleEditPolicyUpdate}
-                setEditPolicyDeleteData={setEditPolicyDeleteData}
-                isLoading={isLoadingEditSalesRiskAnalysisPolicy}
-            />
-            <EditCountryListModal
-                open={editCountryListModalOpen}
-                closeModal={handleCloseEditCountryListModal}
-                handleMultiSelectChange={setEditRuleData}
-                editRuleData={editRuleData}
-                handleUpdateRules={handleUpdateRules}
-                editRuleDataValidation={editRuleDataValidation}
-                isLoading={isLoadingEditSalesRiskAnalysisRule}
-            />
+            {editRuleModalOpen && (
+                <EditApplicableRulesModal
+                    open={editRuleModalOpen}
+                    closeModal={handleCloseEditRuleModal}
+                    editRuleData={editRuleData}
+                    handleChange={handleChange}
+                    handleUpdateRules={handleUpdateRules}
+                    editRuleDataValidation={editRuleDataValidation}
+                    handleMultiSelectChange={setEditRuleData}
+                    isLoadingEditSalesRiskAnalysisRule={
+                        isLoadingEditSalesRiskAnalysisRule
+                    }
+                />
+            )}
+            {ruleActionModalOpen && (
+                <RuleActionConfirmationModal
+                    open={ruleActionModalOpen}
+                    closeModal={handleCloseStatusActionModal}
+                    statusActionData={statusActionData}
+                    handleStatusUpdate={handleStatusUpdate}
+                    isLoading={isLoadingSingleRuleStatusUpdate}
+                />
+            )}
+            {addQuestionsModalOpen && (
+                <AddQuestionsModal
+                    open={addQuestionsModalOpen}
+                    closeModal={handleCloseAddQuestionsModal}
+                    addQuestionsData={addQuestionsData}
+                    setAddQuestionsData={setAddQuestionsData}
+                />
+            )}
+            {editPolicyModal && (
+                <EditPolicyModal
+                    open={editPolicyModal}
+                    closeModal={handleCloseEditPolicyModal}
+                    editPolicyData={editPolicyData}
+                    editPolicyDefaultData={editPolicyDefaultData}
+                    setEditPolicyData={setEditPolicyData}
+                    editPolicyInputData={editPolicyInputData}
+                    handleAddRuleOnPolicy={handleAddRuleOnPolicy}
+                    setEditPolicyInputData={setEditPolicyInputData}
+                    editPolicyDataValidation={editPolicyDataValidation}
+                    handleMultiSelectChange={setEditPolicyData}
+                    handleCancelRuleOnPolicy={handleCancelRuleOnPolicy}
+                    isRuleUpdating={isRuleUpdating}
+                    setIsRuleUpdating={setIsRuleUpdating}
+                    handleChange={handlePolicyEditChange}
+                    handleEditPolicyUpdate={handleEditPolicyUpdate}
+                    setEditPolicyDeleteData={setEditPolicyDeleteData}
+                    isLoading={isLoadingEditSalesRiskAnalysisPolicy}
+                />
+            )}
+            {editCountryListModalOpen && (
+                <EditCountryListModal
+                    open={editCountryListModalOpen}
+                    closeModal={handleCloseEditCountryListModal}
+                    handleMultiSelectChange={setEditRuleData}
+                    editRuleData={editRuleData}
+                    handleUpdateRules={handleUpdateRules}
+                    editRuleDataValidation={editRuleDataValidation}
+                    isLoading={isLoadingEditSalesRiskAnalysisRule}
+                />
+            )}
 
             {/* pagination */}
             <SalesRiskAnalysisTablePagination

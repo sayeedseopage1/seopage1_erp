@@ -113,12 +113,12 @@ export const QuestionsTypes = {
     {
       id: 2,
       label: "Yes/No",
-      name: "yes_no"
+      name: "yesNo"
     },
     {
       id: 3,
-      label: "Nemeric",
-      name: "nemeric"
+      label: "Numeric",
+      name: "numeric"
     },
     {
       id: 4,

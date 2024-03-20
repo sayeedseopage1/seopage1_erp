@@ -13,10 +13,9 @@ import {
 
 // ui components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
+import QuestionsModalTableLoader from "../loader/QuestionsModalTableLoader";
 
-
-
-const QuestionsModalTable = ({ tableData, tableColumns, tableName  }) => {
+const QuestionsModalTable = ({ tableData, tableColumns, tableName,isLoading }) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData || []);
@@ -132,6 +131,11 @@ const QuestionsModalTable = ({ tableData, tableColumns, tableName  }) => {
                                 </tr>
                             );
                         })}
+                        {isLoading && (
+                            <QuestionsModalTableLoader
+                                prevItemLength={data?.length}
+                            />
+                        )}
                     </tbody>
                 </table>
             </div>

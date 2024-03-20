@@ -36,6 +36,7 @@ export const QuestionsModalTableColumns = [
         accessorKey: "parent_question",
         cell: ({ row }) => {
             const data = row?.original;
+            console.log("data", data);
             return (
                 <p className="multiline-ellipsis">
                     <Tooltip
@@ -67,11 +68,11 @@ export const QuestionsModalTableColumns = [
         id: "questionType",
         header: "Type",
         accessorKey: "type",
-        cell: ({ row }) => {
+        cell: ({ row ,table}) => {
             const data = row?.original;
             const action = table.options.meta;
             return (
-                <p className="multiline-ellipsis d-flex justify-content-end flex-column align-items-end">
+                <p className="multiline-ellipsis d-flex justify-content-end align-items-end">
                     <Tooltip text={data?.type?.label} key="type-tooltip">
                         {data?.type?.label}
                     </Tooltip>
