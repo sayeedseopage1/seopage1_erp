@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->enum('type', SalesPolicyQuestion::$questionTypes);
+            $table->text('value')->nullable();
             $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->integer('sequence')->default('1');
             $table->bigInteger('policy_id')->unsigned();
