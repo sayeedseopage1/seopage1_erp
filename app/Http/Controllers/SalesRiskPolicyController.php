@@ -474,7 +474,13 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function ruleList(Request $req)
     {
-        $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->paginate($req->input('limit', 10));
+        if($req->policy_id)
+        {
+            $policy = SalesRiskPolicy::find($req->policy_id);
+            return response()->json(['data' => $policy]);
+        }
+
+        $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
 
         $itemsTransformed = $itemsPaginated
             ->getCollection()
@@ -674,8 +680,15 @@ class SalesRiskPolicyController extends AccountBaseController
         return response()->json(['status' => 'success', 'message' => 'Question added succesfully']);
     }
 
-    function questionList()
+    function questionList(Request $req)
     {
-        return SalesPolicyQuestion::get(['id', 'title', 'type', 'placeholder', 'rule_list', 'parent_id', 'policy_id']);
+
+        $list = SalesPolicyQuestion::where(function($query) use($req){
+            if($req->policy_id)
+                $query->where('policy_id', $req->policy_id);
+
+        })->get(['id', 'title', 'type', 'placeholder', 'rule_list', 'parent_id', 'policy_id']);
+
+        return response()->json(['status' => 'success', 'data' =>  $list]);
     }
 }
