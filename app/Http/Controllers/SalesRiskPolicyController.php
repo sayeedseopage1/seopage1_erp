@@ -679,6 +679,14 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyQuestionSave(Request $req)
     {
+        // temporary
+        \Illuminate\Support\Facades\Schema::table('sales_policy_questions', function(\Illuminate\Database\Schema\Blueprint $table){
+            if(! \Illuminate\Support\Facades\Schema::hasColumn('sales_policy_questions', 'value'))
+            {
+                $table->text('value')->nullable()->after('type');
+            }
+        });
+
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'type' => 'required',
@@ -695,7 +703,8 @@ class SalesRiskPolicyController extends AccountBaseController
         SalesPolicyQuestion::create([
             'title' => $req->title,
             'type' => $req->type,
-            'parent_id' => $req->input('parent_id'),
+            'value' => $req->value,
+            'parent_id' => $req->parent_id,
             'rule_list' => json_encode($req->rule_list),
             'placeholder' => $req->placeholder,
             'policy_id' => $req->policy_id,
@@ -706,7 +715,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionList(Request $req)
     {
-
         $list = SalesPolicyQuestion::where(function ($query) use ($req) {
             if ($req->policy_id)
                 $query->where('policy_id', $req->policy_id);
