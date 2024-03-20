@@ -30,6 +30,7 @@ import { generateUniqueString } from "../../../../utils/customUidGenerate";
 import QuestionsModalTable from "../table/QuestionsModalTable";
 import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
 import { toast } from "react-toastify";
+import { formatAPIErrors, formatAPIErrorsOnData } from "../../../../utils/formatAPIErrors";
 
 const AddQuestionsModal = ({
     open,
@@ -43,11 +44,7 @@ const AddQuestionsModal = ({
         title: "",
         type: {},
         placeholder: "",
-        parent_question: {
-            id: 1,
-            title: "Test",
-            type: "yes_no",
-        },
+        parent_question: {},
         parent_question_for: "",
         ruleList: [],
         comment: "",
@@ -57,7 +54,6 @@ const AddQuestionsModal = ({
         type: false,
         placeholder: false,
         ruleList: false,
-        parent_question_for: false,
         isSubmitting: false,
     });
 
@@ -105,20 +101,22 @@ const AddQuestionsModal = ({
     };
 
     const handleAddQuestion = async () => {
-        
-
-
         const validation = getValidFields(
             singleQuestion,
             singleQuestionValidation
         );
         if (
             Object.entries(validation).some(
-                ([key, value]) => key !== "isSubmitting" &&  value === true
+                ([key, value]) => key !== "isSubmitting" && value === true
             )
         ) {
             setSingleQuestionValidation({
                 ...validation,
+                parent_question_for:(
+                    singleQuestion.parent_question?.type === "yes_no" &&
+                    !singleQuestion.parent_question_for)
+                        ? true
+                        : false,
                 isSubmitting: true,
             });
             return;
@@ -129,7 +127,7 @@ const AddQuestionsModal = ({
             title: singleQuestion?.title,
             type: singleQuestion?.type?.name,
             placeholder: singleQuestion?.placeholder,
-            ruleList: singleQuestion?.ruleList?.map((item) => item?.id),
+            rule_list: singleQuestion?.ruleList?.map((item) => item?.id),
         };
         if (singleQuestion?.parent_question?.id) {
             payload.parent_id = singleQuestion?.parent_question?.id;
@@ -146,8 +144,14 @@ const AddQuestionsModal = ({
                 handleCloseAddQuestionsModal();
             }
         } catch (error) {
-            console.log("error", error);
-            toast.error("Something went wrong");
+            if(error.status === 403){
+                const errorMessages = formatAPIErrors(error?.data?.data);
+                errorMessages.forEach((errorMessage) => {
+                    toast.error(errorMessage);
+                });
+            } else {
+                toast.error("Something went wrong");
+            }
         }
     };
 

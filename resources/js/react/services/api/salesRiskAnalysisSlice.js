@@ -115,11 +115,6 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
-            invalidatesTags: (result, error, arg) => {
-                if (result && !error) {
-                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
-                }
-            },
         }),
 
     })

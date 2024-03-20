@@ -23,6 +23,7 @@ export function formatAPIErrors(errors, replaceWord = {}) {
   return errorArray;
 }
 
+
 // example usage
 const errors = {
   rating: ["The rating field is required"],
