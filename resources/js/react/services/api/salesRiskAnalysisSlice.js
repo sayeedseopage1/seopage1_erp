@@ -103,6 +103,9 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         singlePolicyQuestions: build.query({
             query: (policyId) => `/account/sales-risk-policies/question-fields/${policyId}`,
         }),
+        policyQuestionsList: build.query({
+          query: (policyId) => `account/sales-risk-policies/question-list/${policyId}`,  
+        }),
         questionAddonPolicy: build.mutation({
             query: (body) => ({
                 url: `account/sales-risk-policies/question-fields/save`,

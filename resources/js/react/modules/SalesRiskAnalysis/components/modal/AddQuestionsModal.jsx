@@ -57,6 +57,7 @@ const AddQuestionsModal = ({
         type: false,
         placeholder: false,
         ruleList: false,
+        parent_question_for: false,
         isSubmitting: false,
     });
 
@@ -104,13 +105,16 @@ const AddQuestionsModal = ({
     };
 
     const handleAddQuestion = async () => {
+        
+
+
         const validation = getValidFields(
             singleQuestion,
             singleQuestionValidation
         );
         if (
             Object.entries(validation).some(
-                ([key, value]) => key !== "isSubmitting" && value === true
+                ([key, value]) => key !== "isSubmitting" &&  value === true
             )
         ) {
             setSingleQuestionValidation({
