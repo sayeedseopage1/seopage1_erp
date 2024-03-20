@@ -36,7 +36,6 @@ export const QuestionsModalTableColumns = [
         accessorKey: "parent_question",
         cell: ({ row }) => {
             const data = row?.original;
-            console.log("data", data);
             return (
                 <p className="multiline-ellipsis">
                     <Tooltip
@@ -81,6 +80,7 @@ export const QuestionsModalTableColumns = [
                             action.editSingleQuestion(data);
                         }}
                         role="button"
+                        className="ml-2"
                     >
                         <EditIcon />
                     </div>

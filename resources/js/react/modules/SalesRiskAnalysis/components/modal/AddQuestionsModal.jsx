@@ -33,6 +33,7 @@ import QuestionsModalTable from "../table/QuestionsModalTable";
 import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
 import { toast } from "react-toastify";
 import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
+import AddQuestionTypeListInputs from "../AddQuestionTypeListInputs";
 
 const AddQuestionsModal = ({
     open,
@@ -48,6 +49,7 @@ const AddQuestionsModal = ({
         placeholder: "",
         parent_question: {},
         parent_question_for: "",
+        listItem: [],
         ruleList: [],
         comment: "",
     });
@@ -111,7 +113,7 @@ const AddQuestionsModal = ({
                         ? questionsList?.data?.find(
                               (question) => question.id === item?.parent_id
                           ).type === "yesNo"
-                            ? item?.parent_question_for
+                            ? item?.value
                             : ""
                         : "",
                     ruleList: item?.rule_list,
@@ -128,12 +130,26 @@ const AddQuestionsModal = ({
     const handleChange = (e) => {
         const { name, value } = e.target;
         if (name === "type") {
-            setSingleQuestion({
-                ...singleQuestion,
-                placeholder: "",
-                [name]: value,
-            });
-            return;
+            if (value.name === "list") {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    placeholder: "",
+                    listItem: [
+                        {
+                            id: generateUniqueString(15),
+                            title: "",
+                        },
+                    ],
+                    [name]: value,
+                });
+            } else {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    placeholder: "",
+                    listItem: [],
+                    [name]: value,
+                });
+            }
         } else {
             setSingleQuestion({ ...singleQuestion, [name]: value });
         }
@@ -155,6 +171,7 @@ const AddQuestionsModal = ({
             singleQuestion,
             singleQuestionValidation
         );
+        console.log(validation);
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
@@ -162,14 +179,23 @@ const AddQuestionsModal = ({
         ) {
             setSingleQuestionValidation({
                 ...validation,
-                parent_question_for:
-                    singleQuestion.parent_question?.type === "yesNo" &&
-                    !singleQuestion.parent_question_for
-                        ? true
-                        : false,
                 isSubmitting: true,
             });
             return;
+        }
+        if (singleQuestion.type.name === "list") {
+            const list = singleQuestion.listItem.map((item) => item.title);
+            if (list.includes("")) {
+                toast.error("List Item Can't be Empty");
+                return;
+            }
+        }
+
+        if (singleQuestion?.parent_question?.type === "yesNo") {
+            if (singleQuestion?.parent_question_for === "") {
+                toast.error("Parent Question For is required");
+                return;
+            }
         }
 
         const payload = {
@@ -185,8 +211,19 @@ const AddQuestionsModal = ({
         if (singleQuestion?.comment) {
             payload.comment = singleQuestion?.comment;
         }
+        if (singleQuestion?.parent_question?.type === "yesNo") {
+            payload.value = singleQuestion?.parent_question_for;
+        }
+        if (singleQuestion?.type?.name === "list") {
+            const updateId = singleQuestion?.listItem?.map((item, index) => {
+                return{
+                    id: `${addQuestionsData?.id}_${index+1}`,
+                    title: item?.title,
+                }
+            });
+            payload.value = JSON.stringify(updateId);
+        }
 
-        console.log("singleQuestion", payload);
         try {
             const res = await submitQuestionAddonPolicy(payload).unwrap();
             if (res.status === "success") {
@@ -372,6 +409,14 @@ const AddQuestionsModal = ({
                                     )}
                                 </div>
                             </div>
+                            <Switch.Case
+                                condition={singleQuestion.type.name === "list"}
+                            >
+                                <AddQuestionTypeListInputs
+                                    singleQuestion={singleQuestion}
+                                    setSingleQuestion={setSingleQuestion}
+                                />
+                            </Switch.Case>
 
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">

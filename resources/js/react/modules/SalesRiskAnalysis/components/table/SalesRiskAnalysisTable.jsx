@@ -827,7 +827,7 @@ SalesRiskAnalysisTable.propTypes = {
     tableName: PropTypes.string,
     search: PropTypes.string,
     tableColumns: PropTypes.array,
-    tableData: PropTypes.array,
+    tableData: PropTypes.object,
     onPageChange: PropTypes.func,
     refetch: PropTypes.func,
 };
