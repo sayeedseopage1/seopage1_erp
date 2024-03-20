@@ -48,12 +48,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         isWorkingEnvironmentSubmit,
     } = useSelector((s) => s.subTask);
 
-    // graphic task details 
+
+    // graphic task details
     const graphicWorkDetails = new Object(taskDetails?.graphic_work_detail);
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
-    // files 
+    // files
     let defaultTextForDesign;
     let defaultImageForDesigner;
     let defaultImgOrVidForWork;
@@ -191,7 +192,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             });
     }, [isDesignerTask, graphicWorkDetails?.type_of_logo]);
 
-
     // if task for designer select category default
     React.useEffect(() => {
         isDesignerTask &&
@@ -320,9 +320,12 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         return !count;
     };
 
-    // TODO: hide fields conditionally by this condition 
+    // TODO: hide fields conditionally by this condition
     // console.log("task", task?.category?.name)
     // console.log("task1", task)
+    console.log({
+        cms, themeName, themeTemplate
+    })
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -364,7 +367,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
-        // graphics start 
+        // graphics start
         fd.append("type_of_graphic_work_id", typeOfGraphicsCategory?.id ?? "");
         fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
         fd.append("brand_name", brandName ?? "");
@@ -377,7 +380,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         fd.append("primary_color", primaryColor ?? "");
         fd.append("primary_color_description", primaryColorDescription ?? "");
         fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
-        // graphics end 
+        // graphics end
+
+        // ui/ux start
+        fd.append("cms", cms ?? "");
+        fd.append("theme_name", themeName ?? "");
+        fd.append("theme_template_library_link", themeTemplate ?? "");
+        // ui/ux end
 
         const submit = async () => {
             if (isValid()) {
@@ -459,7 +468,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     "edit",
                 ];
                 const violationRegex = new RegExp(
-                    `\\b(${violationWords.join("|")})\\b`,
+                    `\\\\b(${violationWords.join("|")})\\\\b`,
                     "i"
                 );
                 return violationRegex.test(_.toLower(text));
@@ -543,7 +552,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setPageTypePriority("");
         setPageTypeName("");
     }, [pageType]);
-
 
     return (
         <form onSubmit={handleSubmit}>
@@ -707,7 +715,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                 </div>
 
                 {
-                    // lead designer to graphic designer 
+                    // lead designer to graphic designer
                     (auth?.isHasRolePermission(13) && task?.category?.name === "Graphic Design") && <>
                         {/* Type Of Graphics Work */}
                         <div className="col-12 col-md-6">
@@ -878,7 +886,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 </div>
                             </>
                         }
-
 
                         {/* motion graphics */}
                         {
@@ -1084,7 +1091,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                 }
 
                 {
-                    // lead designer to ui/ux designer 
+                    // lead designer to ui/ux designer
                     (auth?.isHasRolePermission(13) && task?.category?.name === "UI/UIX Design") && <>
                         {/* cms name  */}
                         <div className="col-12 col-md-6">
@@ -1145,13 +1152,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     )}
                 </div>
                 {/*
-        <div className="col-6">
-            <TaskObserverSelection />
-        </div> */}
+    <div className="col-6">
+        <TaskObserverSelection />
+    </div> */}
 
                 {/* <div className="col-12 col-md-6">
-                    <StatusSelection />
-                </div> */}
+                <StatusSelection />
+            </div> */}
 
                 {/* Page Type  */}
 
@@ -1502,7 +1509,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                         />
                                     </div>
                                 }
-
 
                             </>
                         )}

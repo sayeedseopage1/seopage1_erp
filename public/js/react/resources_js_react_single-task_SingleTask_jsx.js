@@ -7743,7 +7743,7 @@ var HistorySection = function HistorySection() {
       toggle: modalRefButton
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
       className: "sp1_task_right_card--body",
-      children: !isFetching ? histories ? histories.map(function (history) {
+      children: !isFetching ? histories ? histories.map(function (history, ind) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
             fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
@@ -7754,7 +7754,7 @@ var HistorySection = function HistorySection() {
               history: history
             })
           })
-        }, history.id);
+        }, ind);
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
         className: "d-flex align-items-center justify-content-center",
         style: {
@@ -11185,11 +11185,11 @@ var SubTaskForm = function SubTaskForm(_ref) {
     subTask = _useSelector.subTask,
     isWorkingEnvironmentSubmit = _useSelector.isWorkingEnvironmentSubmit;
 
-  // graphic task details 
+  // graphic task details
   var graphicWorkDetails = new Object(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.graphic_work_detail);
   var defaultSecondaryColors;
   var defaultFileTypesNeeded;
-  // files 
+  // files
   var defaultTextForDesign;
   var defaultImageForDesigner;
   var defaultImgOrVidForWork;
@@ -11584,9 +11584,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
     return !count;
   };
 
-  // TODO: hide fields conditionally by this condition 
+  // TODO: hide fields conditionally by this condition
   // console.log("task", task?.category?.name)
   // console.log("task1", task)
+  console.log({
+    cms: cms,
+    themeName: themeName,
+    themeTemplate: themeTemplate
+  });
 
   // handle submission
   var handleSubmit = /*#__PURE__*/function () {
@@ -11628,7 +11633,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             Array.from(files).forEach(function (file) {
               fd.append("file[]", file);
             });
-            // graphics start 
+            // graphics start
             fd.append("type_of_graphic_work_id", (_typeOfGraphicsCatego = typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) !== null && _typeOfGraphicsCatego !== void 0 ? _typeOfGraphicsCatego : "");
             fd.append("type_of_logo", (_typeOfLogo$type_name = typeOfLogo === null || typeOfLogo === void 0 ? void 0 : typeOfLogo.type_name) !== null && _typeOfLogo$type_name !== void 0 ? _typeOfLogo$type_name : "");
             fd.append("brand_name", brandName !== null && brandName !== void 0 ? brandName : "");
@@ -11641,7 +11646,13 @@ var SubTaskForm = function SubTaskForm(_ref) {
             fd.append("primary_color", primaryColor !== null && primaryColor !== void 0 ? primaryColor : "");
             fd.append("primary_color_description", primaryColorDescription !== null && primaryColorDescription !== void 0 ? primaryColorDescription : "");
             fd.append("secondary_colors", (_JSON$stringify2 = JSON.stringify(secondaryColors)) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
-            // graphics end 
+            // graphics end
+
+            // ui/ux start
+            fd.append("cms", cms !== null && cms !== void 0 ? cms : "");
+            fd.append("theme_name", themeName !== null && themeName !== void 0 ? themeName : "");
+            fd.append("theme_template_library_link", themeTemplate !== null && themeTemplate !== void 0 ? themeTemplate : "");
+            // ui/ux end
             submit = /*#__PURE__*/function () {
               var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
                 return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -11709,15 +11720,15 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 });
               }
             }; // check violation words
-            _context2.next = 46;
+            _context2.next = 49;
             return checkRestrictedWords(task === null || task === void 0 ? void 0 : task.projectId).unwrap();
-          case 46:
+          case 49:
             response = _context2.sent;
             if (response.status === 400) {
               _error = new Object();
               checkViolationWord = function checkViolationWord(text) {
                 var violationWords = ["revision", "fix", "modify", "fixing", "revise", "edit"];
-                var violationRegex = new RegExp("\\b(".concat(violationWords.join("|"), ")\\b"), "i");
+                var violationRegex = new RegExp("\\\\b(".concat(violationWords.join("|"), ")\\\\b"), "i");
                 return violationRegex.test(lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(text));
               };
               alert = function alert() {
@@ -11751,7 +11762,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             } else {
               primaryPageConfirmation();
             }
-          case 48:
+          case 51:
           case "end":
             return _context2.stop();
         }
@@ -11942,7 +11953,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           children: err === null || err === void 0 ? void 0 : err.taskCategory
         })]
       }),
-      // lead designer to graphic designer 
+      // lead designer to graphic designer
       (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category4 = task.category) === null || _task$category4 === void 0 ? void 0 : _task$category4.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "col-12 col-md-6",
@@ -12252,7 +12263,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           })
         })]
       }),
-      // lead designer to ui/ux designer 
+      // lead designer to ui/ux designer
       (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category5 = task.category) === null || _task$category5 === void 0 ? void 0 : _task$category5.name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",

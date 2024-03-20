@@ -19,6 +19,9 @@ import { convertTime } from '../../utils/converTime';
 import { CompareDate } from "../../utils/dateController";
 import { User } from "../../utils/user-details";
 import AssignedToSelection from "./AssignedToSelection";
+import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
+import { checkIsURL } from "../../utils/check-is-url";
+import { toast } from "react-toastify";
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
     const { tasks, filter } = useSelector(s => s.tasks);
@@ -40,6 +43,29 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [files, setFiles] = React.useState([]);
     const [attachedFiles, setAttachedFiles] = React.useState([]);
 
+    // state for ui/ux start
+    const [cms, setCms] = useState("")
+    const [themeType, setThemeType] = useState("")
+    const [themeName, setThemeName] = useState("")
+    const [themeTemplate, setThemeTemplate] = useState("")
+    // state for ui/ux end
+
+    useEffect(() => {
+        if (isOpen) {
+            if (themeName || themeTemplate) {
+                setThemeType({
+                    "id": 2,
+                    "type_name": "Need to use a specific theme"
+                })
+            } else {
+                setThemeType({
+                    "id": 1,
+                    "type_name": "No specific theme"
+                })
+            }
+        }
+    }, [isOpen]);
+
     const [formError, setFormError] = React.useState(null);
 
     // const task = new SingleTask(taskDetails);
@@ -47,7 +73,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 
     const params = useParams();
     const [updateTask, { isLoading, error }] = useUpdateTaskMutation();
-    const [getTasks, {isFetching: taskFetching}] = useLazyGetTasksQuery();
+    const [getTasks, { isFetching: taskFetching }] = useLazyGetTasksQuery();
 
     const required_error = error?.status === 422 ? error?.data : null;
 
@@ -55,25 +81,25 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [
         getMilestoneDetails,
         {
-            data:projectInfo ,
+            data: projectInfo,
             isFetching: milestoneDataIsFetching
         }
     ] = useLazyGetMilestoneDetailsQuery();
 
     // handle change
     React.useEffect(() => {
-        if(isOpen){
+        if (isOpen) {
             getMilestoneDetails(params?.projectId).unwrap()
-            .then(res => {
-                let project = _.head(res?.milestones);
-                setProject(project?.project_name ?? '')
-            })
+                .then(res => {
+                    let project = _.head(res?.milestones);
+                    setProject(project?.project_name ?? '')
+                })
         }
     }, [isOpen]);
 
     const clearForm = () => {
         setTitle("");
-        setMilestone( null);
+        setMilestone(null);
         setTaskCategory("");
         setProject("");
         setStartDate(null);
@@ -88,24 +114,28 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 
     // initial default data
     useEffect(() => {
-        if(row){
-           setTitle(row?.heading);
-           setMilestone({
+        if (row) {
+            // console.log("row", row);
+            setTitle(row?.heading);
+            setMilestone({
                 id: row.milestone_id,
                 milestone_title: row.milestone_title,
                 deliverable_type: row.deliverable_id,
                 deliverable_title: row.deliverable_title
-           });
-           setTaskCategory({id: row.task_category_id, category_name: row.category_name});
-           setProject(row?.project_name);
-           setStartDate(dayjs.dayjs(row.startDate).toDate());
-           setDueDate(dayjs.dayjs(row?.dueDate).toDate());
-           setAssignedTo({id: row.assigned_to_id, name: row?.assigned_to_name })
-           setPriority(_.startCase(row?.priority));
-           setEstimateTimeHour(row.estimate_hours);
-           setEstimateTimeMin(row.estimate_minutes);
-           setAttachedFiles(row?.files);
-           setDescription(row?.description);
+            });
+            setTaskCategory({ id: row.task_category_id, category_name: row.category_name });
+            setProject(row?.project_name);
+            setStartDate(dayjs.dayjs(row.startDate).toDate());
+            setDueDate(dayjs.dayjs(row?.dueDate).toDate());
+            setAssignedTo({ id: row.assigned_to_id, name: row?.assigned_to_name })
+            setPriority(_.startCase(row?.priority));
+            setEstimateTimeHour(row.estimate_hours);
+            setEstimateTimeMin(row.estimate_minutes);
+            setAttachedFiles(row?.files);
+            setDescription(row?.description);
+            setCms(row?.cms);
+            setThemeName(row?.theme_name);
+            setThemeTemplate(row?.theme_template_library_link);
         }
     }, [isOpen])
 
@@ -121,48 +151,71 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         let err = new Object();
         let errCount = 0;
 
-        if(title === ''){
+        if (title === '') {
             err.title = "This field is required!",
-            errCount++;
+                errCount++;
         }
 
-        if(taskCategory === ''){
+        if (taskCategory === '') {
             err.taskCategory = "Select a category";
             errCount++;
         }
 
-        if(milestone === null){
+        if (milestone === null) {
             err.milestone = "Select a milestone";
             errCount++;
         }
 
-        if(!startDate){
+        if (!startDate) {
             err.startDate = "Start date is required";
             errCount++;
         }
 
-        if(!dueDate){
+        if (!dueDate) {
             err.dueDate = "Due date is required",
-            errCount++;
+                errCount++;
         }
 
-        if(!assignedTo?.id){
+        if (!assignedTo?.id) {
             err.assignedTo = "Select a user.";
             errCount++;
         }
 
-        if(description === ''){
+        if (description === '') {
             err.description = 'Write a Description';
             errCount++;
+        }
+
+        if (taskCategory?.category_name === "UI/UIX Design") {
+            if (!cms) {
+                err.cms = "The CMS name field is required";
+                errCount++;
+            }
+            if (!themeType) {
+                err.themeType = "You have to select Theme";
+                errCount++;
+            }
+
+            if (themeType?.id === 2) {
+                if (themeName === null) {
+                    err.themeName = "The theme name field is required";
+                    errCount++;
+                }
+                if (themeTemplate === null) {
+                    err.themeTemplate = "You have to provide theme template URL";
+                    count++;
+                } else if (!checkIsURL(themeTemplate)) {
+                    err.themeTemplate = "You have to provide a valid theme template URL";
+                    toast.warn("You have to provide a valid theme template URL");
+                    errCount++;
+                }
+            }
         }
 
         setFormError(err);
         return !errCount;
 
     }
-
-
-
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -187,6 +240,14 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         fd.append("milestone_id", milestone?.id ?? '');
         fd.append("user_id", assignedTo?.id ?? '');
 
+        // ui/ux start 
+        fd.append("cms", cms ?? "");
+        if (themeType?.id == 2) {
+            fd.append("theme_name", themeName ?? "");
+            fd.append("theme_template_library_link", themeTemplate ?? "");
+        }
+        // ui/ux end 
+
 
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
@@ -199,48 +260,48 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 .getAttribute("content")
         );
 
-        if(isValid()){
+        if (isValid()) {
             await updateTask(fd)
-            .unwrap()
-            .then((res) => {
-                // close();
-                // // change on local
-                // const queryString = new URLSearchParams(filter).toString();
-                // console.log({res})
-                 dispatch(updateTasks({task: res.task}))
+                .unwrap()
+                .then((res) => {
+                    // close();
+                    // // change on local
+                    // const queryString = new URLSearchParams(filter).toString();
+                    // console.log({res})
+                    dispatch(updateTasks({ task: res.task }))
 
 
-                // // fetch updated tasks
-                // getTasks(`?${queryString}`)
-                //     .unwrap()
-                //     .then(response => {
-                //         console.log({response})
-                //         const data = _.orderBy(response?.tasks, 'due_date', 'desc');
-                //         dispatch(storeTasks({tasks: data}))
-                //     })
-                //     .catch(err => console.log(err))
+                    // // fetch updated tasks
+                    // getTasks(`?${queryString}`)
+                    //     .unwrap()
+                    //     .then(response => {
+                    //         console.log({response})
+                    //         const data = _.orderBy(response?.tasks, 'due_date', 'desc');
+                    //         dispatch(storeTasks({tasks: data}))
+                    //     })
+                    //     .catch(err => console.log(err))
 
-                clearForm();
-                // alert update successful
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: res.message,
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-            })
-            .catch((err) => {
-                if (err?.status === 422) {
+                    clearForm();
+                    // alert update successful
                     Swal.fire({
                         position: "center",
-                        icon: "error",
-                        title: "Please fill out all required fields",
-                        showConfirmButton: true,
+                        icon: "success",
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 2500,
                     });
-                }
-            });
-        }else {
+                })
+                .catch((err) => {
+                    if (err?.status === 422) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Please fill out all required fields",
+                            showConfirmButton: true,
+                        });
+                    }
+                });
+        } else {
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -277,13 +338,13 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     };
 
 
-    const [deleteUplaodedFile, {isLoading: deletingUploadedFile}] = useDeleteUplaodedFileMutation()
+    const [deleteUplaodedFile, { isLoading: deletingUploadedFile }] = useDeleteUplaodedFileMutation()
     const handleDeleteUploadedFile = (e, file) => {
         deleteUplaodedFile(file?.id).unwrap();
         // delete form ui
         let previousFile = [...attachedFiles];
         let index = previousFile?.indexOf(file);
-        previousFile.splice(index,1);
+        previousFile.splice(index, 1);
         setAttachedFiles(previousFile);
     }
 
@@ -334,9 +395,9 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     selected={taskCategory}
                                     onSelect={setTaskCategory}
                                 />
-                                {formError?.taskCategory  && (
+                                {formError?.taskCategory && (
                                     <div style={{ color: "red" }}>
-                                        {formError?.taskCategory }
+                                        {formError?.taskCategory}
                                     </div>
                                 )}
                             </div>
@@ -369,16 +430,16 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                             Milestone
                                         </label>
                                         <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                        <span className="singleline-ellipsis" >{milestone?.milestone_title ?? '--'}</span>
+                                            <span className="singleline-ellipsis" >{milestone?.milestone_title ?? '--'}</span>
                                             <div className='__icon'>
                                                 <i className="fa-solid fa-sort"></i>
                                             </div>
                                         </Listbox.Button>
-                                        <Listbox.Options  className="sp1-select-options">
+                                        <Listbox.Options className="sp1-select-options">
                                             {_.map(projectInfo?.milestones, (milestone) => (
                                                 <Listbox.Option
                                                     key={milestone.id}
-                                                    className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                    className={({ active }) => `sp1-select-option ${active ? 'active' : ''}`}
                                                     value={milestone}
                                                 > {milestone?.milestone_title} </Listbox.Option>
                                             ))}
@@ -479,6 +540,76 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                 </div>
                             </div>
 
+                            {
+                                taskCategory ? taskCategory?.category_name === "UI/UIX Design" && <>
+                                    {/* cms name  */}
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="cms"
+                                            label="CMS"
+                                            type="text"
+                                            placeholder="Enter a CMS"
+                                            name="cms"
+                                            required={true}
+                                            value={cms}
+                                            error={formError?.cms}
+                                            onChange={(e) =>
+                                                handleChange(e, setCms)
+                                            }
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <ThemeTypeSelect
+                                            selected={themeType}
+                                            onSelect={setThemeType}
+                                        />
+                                        {formError?.themeType && (
+                                            <div style={{ color: "red" }}>
+                                                {formError?.themeType}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {
+                                        themeType?.id === 2 && <>
+                                            {/* theme name */}
+                                            <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="themeName"
+                                                    label="Theme Name"
+                                                    type="text"
+                                                    placeholder="Enter a theme name"
+                                                    name="themeName"
+                                                    required={true}
+                                                    value={themeName}
+                                                    error={formError?.themeName}
+                                                    onChange={(e) =>
+                                                        handleChange(e, setThemeName)
+                                                    }
+                                                />
+                                            </div>
+                                            {/* theme template url */}
+                                            <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="themeTemplate"
+                                                    label="Theme template library link"
+                                                    type="url"
+                                                    placeholder="Enter a template library link"
+                                                    name="themeTemplate"
+                                                    required={true}
+                                                    value={themeTemplate}
+                                                    error={formError?.themeTemplate}
+                                                    onChange={(e) =>
+                                                        handleChange(e, setThemeTemplate)
+                                                    }
+                                                />
+                                            </div>
+                                        </>
+                                    }
+
+                                </> : null
+                            }
+
                             {/* assignee to */}
                             <div className="col-12 col-md-6">
                                 <AssignedToSelection
@@ -543,7 +674,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     </div>
                                     <div style={{ color: "red" }}>
                                         Estimation time can't exceed{" "}
-                                        {convertTime((Number(projectInfo?.minutes_left) + row.estimate_minutes + (row.estimate_hours* 60)) - (Number(estimateTimeMin) + (Number(estimateTimeHour) * 60)))}
+                                        {convertTime((Number(projectInfo?.minutes_left) + row.estimate_minutes + (row.estimate_hours * 60)) - (Number(estimateTimeMin) + (Number(estimateTimeHour) * 60)))}
                                     </div>
                                 </div>
                             </div>
