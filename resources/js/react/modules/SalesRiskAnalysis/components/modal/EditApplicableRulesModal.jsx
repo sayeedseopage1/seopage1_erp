@@ -15,7 +15,7 @@ import _ from "lodash";
 import CustomDropDown from "../CustomDropDown";
 import { PolicyTypeItems } from "../../constant";
 import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
-import { useSelector } from "react-redux";
+import { useGetSinglePolicySalesRiskAnalysisQuery } from "../../../../services/api/salesRiskAnalysisSlice";
 
 const EditApplicableRulesModal = ({
     open,
@@ -28,6 +28,14 @@ const EditApplicableRulesModal = ({
     editRuleDataValidation,
     ...props
 }) => {
+    const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
+        useGetSinglePolicySalesRiskAnalysisQuery(editRuleData?.policyId, {
+            skip: !editRuleData?.policyId,
+            staleTime: 0,
+            refetchOnMountOrArgChange: true,
+        });
+
+    console.log("singlePolicyData", singlePolicyData);
 
     return (
         <CustomModal
@@ -60,7 +68,7 @@ const EditApplicableRulesModal = ({
                             {editRuleData?.department?.name}
                         </ModalInputLabel>
                     </div>
-                
+
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Policy Type<sup>*</sup>{" "}

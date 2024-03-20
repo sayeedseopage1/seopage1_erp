@@ -40,6 +40,7 @@ import { PolicyTypeItemValuesType, PolicyTypeItems } from "../../constant";
 // helper function
 import {
     formatEditPolicyData,
+    formatEditPolicyDataPayload,
     formatEditRuleData,
     formatEditRuleDataPayload,
 } from "../../helper/formatEditPolicyData";
@@ -55,7 +56,7 @@ const SalesRiskAnalysisTable = ({
     tableColumns,
     tableData,
     onPageChange,
-    refetch
+    refetch,
 }) => {
     // Table State
     const [sorting, setSorting] = React.useState([]);
@@ -212,7 +213,7 @@ const SalesRiskAnalysisTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditApplicableRule: (row, selectedRule, ruleType) => {
-                refetch();
+                
                 const valueTypeConst =
                     PolicyTypeItemValuesType?.data?.regularTypes?.data;
 
@@ -234,6 +235,7 @@ const SalesRiskAnalysisTable = ({
                 const payload = {
                     id: selectedRule.id,
                     policyName: row.title,
+                    policyId: row.id,
                     department: row.department,
                     policyType: PolicyTypeItems.data.find(
                         (item) => item?.name === selectedRule?.type
@@ -282,12 +284,12 @@ const SalesRiskAnalysisTable = ({
                 setEditRuleModalOpen(true);
             },
             handleAddQuestions: (data) => {
-                refetch();
+                
                 setAddQuestionsData(data);
                 setAddQuestionsModalOpen(true);
             },
             handlePolicyStatus: (row) => {
-                refetch();
+                
                 setStatusActionData({
                     ...row,
                     modalType: "Policy",
@@ -295,7 +297,7 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleRuleStatus: (rule) => {
-                refetch();
+                
                 setStatusActionData({
                     ...rule,
                     modalType: "Rule",
@@ -303,7 +305,7 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleEditPolicy: (data) => {
-                refetch();
+                
                 // function to format data
                 const updateData = formatEditPolicyData(data);
                 setEditPolicyInputData(updateData);
@@ -319,7 +321,7 @@ const SalesRiskAnalysisTable = ({
                 setEditPolicyModalOpen(true);
             },
             handleEditCountryList: (data, selectedRule) => {
-                refetch();
+                
                 const payload = formatEditRuleData(data, selectedRule);
                 setEditRuleData(payload);
                 setEditCountryListModalOpen(true);
@@ -553,45 +555,11 @@ const SalesRiskAnalysisTable = ({
 
     // handle Edit Policy Update on server
     const handleEditPolicyUpdate = async () => {
-        const payload = {
-            id: editPolicyDefaultData?.id,
-            title: editPolicyDefaultData?.policyName,
-            department: editPolicyDefaultData?.department?.id,
-            comment: editPolicyDefaultData?.comment,
-            deletedRuleIds: editPolicyDeleteData,
-            ruleList: editPolicyInputData.map((item) => {
-                const rule = {
-                    policyType: item.policyType?.name,
-                    title: item.title,
-                    id: item?.id?.length > 13 ? "newRule" : item.id,
-                };
-                if (item.value) rule.value = item.value;
-                if (!_.isEmpty(item.valueType))
-                    rule.valueType = item.valueType.name;
-                if (item.from) rule.from = item.from;
-                if (item.to) rule.to = item.to;
-                if (item.points) rule.points = item.points;
-                if (item.yes && item.no) {
-                    rule.value = {
-                        yes: {
-                            point: item.yes,
-                            comment: item.yesComment,
-                        },
-                        no: {
-                            point: item.no,
-                            comment: item.noComment,
-                        },
-                    };
-                }
-                if (item.countries?.length > 0) {
-                    rule.countries = item.countries.map((country) => ({
-                        [country.iso]: country.niceName,
-                    }));
-                }
-                if (item.ruleComment) rule.comment = item.ruleComment;
-                return rule;
-            }),
-        };
+        const payload = formatEditPolicyDataPayload(
+            editPolicyDefaultData,
+            editPolicyInputData,
+            editPolicyDeleteData
+        );
         try {
             const res = await submitPolicyData(payload);
             if (res.data) {

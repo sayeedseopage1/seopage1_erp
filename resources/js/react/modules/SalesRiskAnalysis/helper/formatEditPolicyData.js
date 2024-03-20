@@ -148,3 +148,46 @@ export const formatEditRuleDataPayload = (editRuleData) => {
 
   return payload;
 }
+
+export const formatEditPolicyDataPayload = (editPolicyDefaultData, editPolicyInputData, editPolicyDeleteData) => {
+  const payload = {
+    id: editPolicyDefaultData?.id,
+    title: editPolicyDefaultData?.policyName,
+    department: editPolicyDefaultData?.department?.id,
+    comment: editPolicyDefaultData?.comment,
+    deletedRuleIds: editPolicyDeleteData,
+    ruleList: editPolicyInputData.map((item) => {
+      const rule = {
+        policyType: item.policyType?.name,
+        title: item.title,
+        id: item?.id?.length > 13 ? "newRule" : item.id,
+      };
+      if (item.value) rule.value = item.value;
+      if (!_.isEmpty(item.valueType))
+        rule.valueType = item.valueType.name;
+      if (item.from) rule.from = item.from;
+      if (item.to) rule.to = item.to;
+      if (item.points) rule.points = item.points;
+      if (item.yes && item.no) {
+        rule.value = {
+          yes: {
+            point: item.yes,
+            comment: item.yesComment,
+          },
+          no: {
+            point: item.no,
+            comment: item.noComment,
+          },
+        };
+      }
+      if (item.countries?.length > 0) {
+        rule.countries = item.countries.map((country) => ({
+          [country.iso]: country.niceName,
+        }));
+      }
+      if (item.ruleComment) rule.comment = item.ruleComment;
+      return rule;
+    }),
+  };
+  return payload;
+}
