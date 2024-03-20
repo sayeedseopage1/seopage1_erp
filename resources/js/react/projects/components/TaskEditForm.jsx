@@ -43,6 +43,29 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [files, setFiles] = React.useState([]);
     const [attachedFiles, setAttachedFiles] = React.useState([]);
 
+    console.log(taskCategory)
+
+    //state for graphic designer start
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
+    // const [typeOfLogo, setTypeOfLogo] = useState("");
+    // const [brandName, setBrandName] = useState("");
+    // const [numOfVersions, setNumOfVersions] = useState(null);
+    // const [reference, setReference] = useState("");
+    // const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
+    // const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
+    // const [imageForDesigner, setImageForDesigner] = useState(defaultImageForDesigner);
+    // const [imgOrVidForWork, setImgOrVidForWork] = useState(defaultImgOrVidForWork);
+    // const [fontName, setFontName] = useState('');
+    // const [fontUrl, setFontUrl] = useState('');
+    // const [brandGuideline, setBrandGuideline] = useState(defaultBrandGuidelineFiles);
+    // const [illustration, setIllustration] = useState("");
+    // const [others, setOthers] = useState("");
+    // const [primaryColor, setPrimaryColor] = React.useState("");
+    // const [primaryColorDescription, setPrimaryColorDescription] =
+    //     React.useState("");
+    // const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
+    //state for graphic designer end
+
     // state for ui/ux start
     const [cms, setCms] = useState("")
     const [themeType, setThemeType] = useState("")
@@ -115,7 +138,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     // initial default data
     useEffect(() => {
         if (row) {
-            // console.log("row", row);
+            console.log("row", row);
             setTitle(row?.heading);
             setMilestone({
                 id: row.milestone_id,
@@ -136,6 +159,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             setCms(row?.cms);
             setThemeName(row?.theme_name);
             setThemeTemplate(row?.theme_template_library_link);
+            // graphics 
+            // setTypeOfGraphicsCategory()
         }
     }, [isOpen])
 
