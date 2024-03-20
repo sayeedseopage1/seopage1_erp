@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\SalesPolicyQuestion;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration
         Schema::create('sales_policy_questions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->enum('type', ['yesNo','numeric','list','text','longText']);
+            $table->enum('type', SalesPolicyQuestion::$questionTypes);
             $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->integer('sequence')->default('1');
             $table->bigInteger('policy_id')->unsigned();
