@@ -9,6 +9,8 @@ class SalesPolicyQuestion extends Model
 {
     use HasFactory;
 
+    static $questionTypes = ['yesNo', 'numeric', 'list', 'text', 'longText'];
+
     protected $fillable = [
         'title',
         'type',

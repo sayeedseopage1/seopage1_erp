@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Validator;
 
 class SalesRiskPolicyController extends AccountBaseController
 {
-    protected $questionTypes = ['yesNo', 'numeric', 'list', 'text', 'longText'];
 
     public function __construct()
     {
@@ -432,7 +431,6 @@ class SalesRiskPolicyController extends AccountBaseController
                 'status' => 'success',
                 'message' => 'Policy edited successfully.',
             ]);
-
         } catch (\Throwable $th) {
             // throw $th;
             DB::rollBack();
@@ -474,15 +472,34 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function ruleList(Request $req)
     {
-        if($req->policy_id)
-        {
-            $policy = SalesRiskPolicy::find($req->policy_id);
-            return response()->json(['data' => $policy]);
-        }
+        try {
+            if ($req->policy_id) {
+                // check if policy is parent or not
+                if (SalesRiskPolicy::findOrFail($req->policy_id)->parent_id == null) {
 
-        $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
+                    $data = SalesRiskPolicy::where('id', $req->policy_id)->get()->map(function($item){
+                        return [
+                            'id' => $item->id,
+                            'title' => $item->title,
+                            'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
+                            'department' => [
+                                'id' => $item->department,
+                                'name' => Team::with('childs')->find($item->department)->team_name
+                            ],
+                            'status' => $item->status,
+                            'comment' => $item->comment
+                        ];
+                    });
 
-        $itemsTransformed = $itemsPaginated
+                    return response()->json(['status' => 'success', 'data' => $data]);
+                } else {
+                    return response()->json(['status' => 'success', 'data' => SalesRiskPolicy::find($req->policy_id)]);
+                }
+            }
+
+
+            $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
+            $itemsTransformed = $itemsPaginated
             ->getCollection()
             ->map(function ($item) {
                 return [
@@ -512,6 +529,13 @@ class SalesRiskPolicyController extends AccountBaseController
         );
 
         return response()->json(['data' => $data]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Applicatoin error'
+            ], 500);
+        }
     }
 
     function policyRuleStatusChange($id, $status)
@@ -683,11 +707,21 @@ class SalesRiskPolicyController extends AccountBaseController
     function questionList(Request $req)
     {
 
-        $list = SalesPolicyQuestion::where(function($query) use($req){
-            if($req->policy_id)
+        $list = SalesPolicyQuestion::where(function ($query) use ($req) {
+            if ($req->policy_id)
                 $query->where('policy_id', $req->policy_id);
-
-        })->get(['id', 'title', 'type', 'placeholder', 'rule_list', 'parent_id', 'policy_id']);
+        })->get()
+        ->map(function($item){
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'type' => $item->type,
+                'placeholder' => $item->placeholder,
+                'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
+                'parent_id' => $item->parent_id,
+                'policy_id' => $item->policy_id
+            ];
+        });
 
         return response()->json(['status' => 'success', 'data' =>  $list]);
     }
