@@ -217,8 +217,10 @@ class ProjectStatusController extends AccountBaseController
         /** WHEN EXPLANATION PM THEN  */
         $helper = new HelperPendingActionController();
         $helper->PmGoalReviewExplanation($ppg);
-        $user  = User::where('id',62)->first(); // It's only for admin
-        Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
+        $users  = User::where('role_id',1)->get(); 
+        foreach($users as $user){
+            Notification::send($user, new PmGoalReviewExplanationNotification($ppg));
+        }
         \DB::commit();
         } catch (\Throwable $th) {
             \DB::rollback();
@@ -389,8 +391,10 @@ class ProjectStatusController extends AccountBaseController
 
             $helper = new HelperPendingActionController();
             $helper->PmGoalExtendRequest($goal);
-            $user  = User::where('id',62)->first(); // It's only for admin
-            Notification::send($user, new PmGoalExtendRequestNotification($goal));
+            $users  = User::where('role_id',1)->get(); 
+            foreach($users as $user){
+                Notification::send($user, new PmGoalExtendRequestNotification($goal));
+            }
 
             \DB::commit();
         } catch (\Throwable $th) {

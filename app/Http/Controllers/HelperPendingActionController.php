@@ -1837,11 +1837,11 @@ class HelperPendingActionController extends AccountBaseController
             $goal = ProjectPmGoal::where('id',$ppg->id)->first();
             $project= Project::where('id',$ppg->project_id)->first();
             $client= User::where('id',$project->client_id)->first();
-            // $admin = User::where('role_id',1)->first();
-
+            $authorizers= User::where('role_id',1)->get();
+            foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'PMRE';
-                $action->serial = 'PMRE'.'x0';
+                $action->serial = 'PMRE'.'x'.$key;
                 $action->item_name= 'Review Goal missing explanation';
                 $action->heading= 'Review Goal missing explanation!';
                 $action->message = 'Review explanation given by PM on missing goal'.$goal->goal_name.' ('.$goal->description.') for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> !';
@@ -1849,7 +1849,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->goal_id = $goal->id;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
-                $action->authorization_for= 229; //IT'S ONLY FOR ADMIN NOT FOR ROLE ID =1 (INDIVIDUAL USER ONLY)
+                $action->authorization_for= $authorizer->id; 
                 $button = [
                     [
                         'button_name' => 'Review explanation and add your ratings!',
@@ -1861,6 +1861,7 @@ class HelperPendingActionController extends AccountBaseController
                 ];
                 $action->button = json_encode($button);
                 $action->save();
+            }
 
         }
 
@@ -1870,7 +1871,7 @@ class HelperPendingActionController extends AccountBaseController
             $project= Project::where('id',$goal->project_id)->first();
             $client= User::where('id',$project->client_id)->first();
             $pm = User::where('id',$pm_goal->pm_id)->first();
-            // $admin = User::where('role_id',1)->first();
+            $authorizers= User::where('role_id',1)->get();
             $goal_count = '';
             if($pm_goal->duration ==3){
                 $goal_count = '1st';
@@ -1885,10 +1886,10 @@ class HelperPendingActionController extends AccountBaseController
             }else{
                 $goal_count = '6th';
             }
-
+            foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'PMER';
-                $action->serial = 'PMER'.'x0';
+                $action->serial = 'PMER'.'x'.$key;
                 $action->item_name= 'Goal deadline extension request by PM '.$pm->name.'';
                 $action->heading= 'Goal deadline extension request by PM '.$pm->name.'!';
                 $action->message = 'Goal ('. $goal_count .') (Name: '. $pm_goal->goal_name .') extension request has been submitted by PM <a href="'. route('employees.show', $pm->id) .'">'. $pm->name .'</a> for project (<a href="'. route('projects.show', $project->id) .'">'. $project->project_name .'</a>) from client (<a href="'. route('clients.show', $client->id) .'">'. $client->name .'</a>)!';
@@ -1896,7 +1897,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->goal_id = $pm_goal->id;
                 $action->project_id = $project->id;
                 $action->client_id = $client->id;
-                $action->authorization_for= 229; //IT'S ONLY FOR ADMIN NOT FOR ROLE ID =1 (INDIVIDUAL USER ONLY)
+                $action->authorization_for= $authorizer->id; 
                 $button = [
                     [
                         'button_name' => 'Review explanation and add your ratings!',
@@ -1908,6 +1909,7 @@ class HelperPendingActionController extends AccountBaseController
                 ];
                 $action->button = json_encode($button);
                 $action->save();
+            }
 
         }
 
