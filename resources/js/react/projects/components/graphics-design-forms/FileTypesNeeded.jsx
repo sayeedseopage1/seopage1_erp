@@ -33,13 +33,12 @@ const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOn
     return (
         <React.Fragment>
             <Dropdown disabled={readOnly} className="cnx_select_box_dd">
-                {/* FIXME: Style height is not working */}
                 <Dropdown.Toggle className={`${style.cnx_select_box_custom}`}>
                     <div className="flex-wrap d-flex"
                         style={{
                             gap: "5px",
                         }}>
-                        {fileTypesNeeded.length > 0 ? fileTypesNeeded.map(p => (
+                        {fileTypesNeeded?.length > 0 ? fileTypesNeeded.map(p => (
                             <div key={`${p}-${Math.random()}`} className="cnx_select_box_tag">
                                 {!readOnly && <button aria-label='removeTag' onMouseDown={() => remove(p)}>
                                     <i className="fa-solid fa-xmark" />
@@ -57,11 +56,11 @@ const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOn
                     <div className='cnx_select_box_search'>
                         <SearchBox autoFocus={true} value={search} onChange={setSearch} className="cnx_select_box_search_input" />
                     </div>
-                    {options()?.filter(f => f.includes(search)).map(option => (
+                    {options()?.filter(f => f?.includes(search))?.map(option => (
                         <Dropdown.Item key={`${option}-${Math.random()}`}
                             onClick={() => onSelected(option)}
-                            className={`cnx_select_box_option ${multiple ? fileTypesNeeded.includes(option) && 'active' : fileTypesNeeded === option ? 'active' : ''}`}> {option}
-                            {fileTypesNeeded.includes(option) &&
+                            className={`cnx_select_box_option ${multiple ? fileTypesNeeded?.includes(option) && 'active' : fileTypesNeeded === option ? 'active' : ''}`}> {option}
+                            {fileTypesNeeded?.includes(option) &&
                                 <i className="fa-solid fa-check" />}
                         </Dropdown.Item>
                     ))}
