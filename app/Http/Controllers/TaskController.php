@@ -156,7 +156,7 @@ class TaskController extends AccountBaseController
 
 
 
-        $tasks = Task::select(
+        $tasks = Task::with('graphicWorkDetail.graphicTaskFiles')->select(
             'tasks.*',
             'tasks.heading as task_name',
             'projects.project_name',
