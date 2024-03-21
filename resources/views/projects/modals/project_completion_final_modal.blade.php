@@ -663,7 +663,7 @@
                                         <td>
                                             @if ($project_portfolio->plugin_list)
 
-                                                @foreach ( json_decode($project_portfolio->plugin_list) as $item)
+                                                @foreach ( json_decode($project_portfolio->plugin_list ?? []) as $item)
                                                     @php
                                                         $website_plugin = App\Models\ProjectWebsitePlugin::find($item);
                                                     @endphp
