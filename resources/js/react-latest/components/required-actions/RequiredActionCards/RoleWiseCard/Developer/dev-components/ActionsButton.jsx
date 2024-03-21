@@ -3,7 +3,7 @@ import ModalWithBtnTemplate from "./ModalWithBtnTemplate";
 import style from "../../../../../../styles/required-action-card.module.css";
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
 import CommentCancellation from "./CommentCancellation";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
 
@@ -11,25 +11,28 @@ import CommentSubmission from "./CommentSubmission";
 import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import { useWindowSize } from "react-use";
-import ReactModal from "react-modal";
 import RelevantModal from "./RelevantModal";
-import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+
 import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
+import { useCommentStore } from "../../../../zustand/store";
 
 const ActionsButton = ({ data }) => {
     const [fullScreenView, setFullScreenView] = React.useState(false);
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
-    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
-
+    const { refetchComment, increaseRefetchComment } = useCommentStore();
     const {
         data: comments,
         isFetching,
         isLoading,
         refetch,
     } = useGetCommentsQuery(taskId);
+
+    useEffect(() => {
+        refetch();
+    }, [refetchComment]);
 
     const height = "89vh";
     //mitul work end
@@ -150,14 +153,7 @@ const ActionsButton = ({ data }) => {
                     Not Relevant to me
                 </button>
             )}
-            {data?.task_id && (
-                <button
-                    onClick={() => setIsEvaluationModal((prev) => !prev)}
-                    className={`${style.action_btn}`}
-                >
-                    Evaluate
-                </button>
-            )}
+
             {/* <ReactModal
                 style={{
                     overlay: {
@@ -204,6 +200,7 @@ const ActionsButton = ({ data }) => {
                 width={width}
             >
                 <CommentsBody
+                    increaseRefetchComment={increaseRefetchComment}
                     fullScreenView={fullScreenView}
                     setFullScreenView={setFullScreenView}
                     isOpen={viewCommentModal}
@@ -223,11 +220,6 @@ const ActionsButton = ({ data }) => {
             <RelevantModal
                 setIsRelevantModal={setIsRelevantModal}
                 isRelevantModal={isRelevantModal}
-            />
-
-            <EvaluationModal
-                setIsEvaluationModal={setIsEvaluationModal}
-                isEvaluationModal={isEvaluationModal}
             />
         </>
     );
