@@ -120,49 +120,50 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
 
             {/* admin view section start */}
             {auth.roleId === 1 && (
-                <section>
-                    <SectionFlex>
-                        <HorizontalLineLeftTL />
-                        <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
-                        <HorizontalLineRightTL />
-                    </SectionFlex>
+                <div>
+                    <section>
+                        <SectionFlex>
+                            <HorizontalLineLeftTL />
+                            <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
+                            <HorizontalLineRightTL />
+                        </SectionFlex>
 
-                    <ReviewContent>
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: data?.data[0]?.rating
-                                    .reporting_boss_comment,
-                            }}
-                        />
+                        <ReviewContent>
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: data?.data[0]?.rating
+                                        .reporting_boss_comment,
+                                }}
+                            />
 
-                        <ReviewFooter>
-                            By{" "}
-                            <a
-                                href="www.LeadDevId.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {data?.data[0]?.assignByName}
-                            </a>{" "}
-                            on <span>{data?.data[0]?.updatedAt}</span>
-                        </ReviewFooter>
-                    </ReviewContent>
-                </section>
-            )}
-            {auth.roleId === 1 && (
-                <section>
-                    <SectionFlex>
-                        <HorizontalLineLeftA />
-                        <ReviewTitleA>
-                            Top Management's Authorization
-                        </ReviewTitleA>
-                        <HorizontalLineRightA />
-                    </SectionFlex>
+                            <ReviewFooter>
+                                By{" "}
+                                <a
+                                    href="www.LeadDevId.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {data?.data[0]?.assignByName}
+                                </a>{" "}
+                                on <span>{data?.data[0]?.updatedAt}</span>
+                            </ReviewFooter>
+                        </ReviewContent>
+                    </section>
 
-                    <CommentContentA>
-                        <CKEditorComponent placeholder="Write your comment here" />
-                    </CommentContentA>
-                </section>
+                    <section>
+                        <SectionFlex>
+                            <HorizontalLineLeftA />
+                            <ReviewTitleA>
+                                Top Management's Authorization
+                            </ReviewTitleA>
+                            <HorizontalLineRightA />
+                        </SectionFlex>
+
+                        <CommentContentA>
+                            <CKEditorComponent placeholder="Write your comment here" />
+                        </CommentContentA>
+                    </section>
+                </div>
             )}
 
             {/* admin view section end */}
