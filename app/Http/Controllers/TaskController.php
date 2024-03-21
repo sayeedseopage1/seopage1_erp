@@ -7525,5 +7525,29 @@ class TaskController extends AccountBaseController
         ]);
     }
     
+    public function deleteGraphicTaskFile($id)
+    {
+        try {
+            $graphicTaskFile = GraphicTaskFile::find($id);
+            if($graphicTaskFile){
+                $graphicTaskFile->delete();
+                return response()->json([
+                    'data' => 'The graphic task file deleted successfully',
+                    'status'=>200
+                ]);
+            }else{
+                return response()->json([
+                    'data' => 'Data not found!',
+                    'status'=>400
+                ]);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json([
+                'data' => 'Something went wrong!',
+                'status'=>400
+            ]);
+        }
+    }
 
 }
