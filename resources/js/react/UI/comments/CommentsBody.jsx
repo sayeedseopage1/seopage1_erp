@@ -65,6 +65,7 @@ export function useCommentContext() {
 }
 
 const CommentsBody = ({
+    increaseRefetchComment,
     fullScreenView,
     setFullScreenView,
     isOpen,
@@ -862,6 +863,7 @@ const CommentsBody = ({
                 }) ? (
                     <footer className={`${style.commentsBody_inputField}`}>
                         <Sendbox
+                            increaseRefetchComment={increaseRefetchComment}
                             onSubmit={onSubmit}
                             taskId={taskId}
                             setScroll={setScroll}
