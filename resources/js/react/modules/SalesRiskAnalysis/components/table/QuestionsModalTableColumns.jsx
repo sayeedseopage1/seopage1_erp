@@ -1,7 +1,25 @@
+// table columns
+import { ExpandTask } from "../ExpandTable";
+
+// ui components
 import Tooltip from "../Tooltip";
 import EditIcon from "../ui/EditIcon";
+import Popover from "../Popover";
+import Switch from "../Switch";
+
+// styles
+import style from "../styles/questionModalTableColumns.module.css";
+import popoverStyle from "../popover.module.css";
 
 export const QuestionsModalTableColumns = [
+    {
+        id: "expend",
+        header: "",
+        cell: ({ row, table }) => {
+            const { pageIndex } = table.getState();
+            return <ExpandTask row={row} table={table} pageIndex={pageIndex} />;
+        },
+    },
     {
         id: "title",
         header: "Title",
@@ -24,27 +42,23 @@ export const QuestionsModalTableColumns = [
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <p className="">
-                    {data?.ruleList?.map((item) => item.title).join(", ")}
-                </p>
-            );
-        },
-    },
-    {
-        id: "parent_question",
-        header: "Parent Question",
-        accessorKey: "parent_question",
-        cell: ({ row }) => {
-            const data = row?.original;
-            return (
-                <p className="multiline-ellipsis">
-                    <Tooltip
-                        text={data?.parent_question?.title}
-                        key="placeholder-tooltip"
-                    >
-                        {data?.parent_question?.title ?? "N/A"}
-                    </Tooltip>
-                </p>
+                <div
+                    className="d-flex flex-wrap "
+                    style={{
+                        width: "fit-content",
+                    }}
+                >
+                    {data.ruleList.map((item, index) => (
+                        <span
+                            className={`${style?.ruleItem} ${
+                                index !== 0 ? "ml-1" : ""
+                            } mb-1`}
+                            key={item.id}
+                        >
+                            {item?.title}
+                        </span>
+                    ))}
+                </div>
             );
         },
     },
@@ -67,14 +81,48 @@ export const QuestionsModalTableColumns = [
         id: "questionType",
         header: "Type",
         accessorKey: "type",
-        cell: ({ row ,table}) => {
+        cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
             return (
-                <p className="multiline-ellipsis d-flex justify-content-end align-items-end">
-                    <Tooltip text={data?.type?.label} key="type-tooltip">
-                        {data?.type?.label}
-                    </Tooltip>
+                <div className="multiline-ellipsis d-flex justify-content-end align-items-end">
+                    <Switch>
+                        <Switch.Case condition={data?.type?.name !== "list"}>
+                            <Tooltip
+                                text={data?.type?.label}
+                                key="type-tooltip"
+                            >
+                                {data?.type?.label}
+                            </Tooltip>
+                        </Switch.Case>
+                        <Switch.Case condition={data?.type?.name === "list"}>
+                            <Popover>
+                                <Popover.Button>
+                                    <div
+                                        className={`${popoverStyle.questionModal_popover_button}`}
+                                    >
+                                        <p>{data?.type?.label}</p>
+                                    </div>
+                                </Popover.Button>
+                                {data?.listItem?.length > 0 && (
+                                    <Popover.Panel placement="bottom-start">
+                                        <div
+                                            className={`${popoverStyle.questionModal_popover_panel}`}
+                                        >
+                                            <ol className="d-flex flex-column justify-content-start align-items-start">
+                                                {data?.listItem?.map((item, index) => (
+                                                    <li
+                                                      key={item.id}>
+                                                        {index + 1}. {item?.title}
+                                                    </li>
+                                                ))}
+                                            </ol>
+                                        </div>
+                                    </Popover.Panel>
+                                )}
+                            </Popover>
+                        </Switch.Case>
+                    </Switch>
                     <div
                         onClick={() => {
                             action.editSingleQuestion(data);
@@ -84,7 +132,7 @@ export const QuestionsModalTableColumns = [
                     >
                         <EditIcon />
                     </div>
-                </p>
+                </div>
             );
         },
     },

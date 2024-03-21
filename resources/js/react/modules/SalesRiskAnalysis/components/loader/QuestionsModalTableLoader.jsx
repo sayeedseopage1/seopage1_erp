@@ -13,7 +13,7 @@ export default function QuestionsModalTableLoader({prevItemLength = 5,tableCol})
                 </td> 
                 <td className="sp1_tasks_td pl-2">
                     <Placeholder width="80px" height="13px" className="mb-1"/>
-                </td> 
+                </td>  
                 <td className="sp1_tasks_td pl-2">
                     <Placeholder width="80px" height="13px" className="mb-1"/>
                 </td> 

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { PolicyTypeItemValuesType, PolicyTypeItems } from "../constant";
+import { PolicyTypeItemValuesType, PolicyTypeItems, QuestionsTypes } from "../constant";
 import { FormatJsonCountry, getYesNoValue } from "./countriesFormat";
 
 export const formatEditPolicyData = (data) => {
@@ -191,3 +191,97 @@ export const formatEditPolicyDataPayload = (editPolicyDefaultData, editPolicyInp
   };
   return payload;
 }
+
+
+const flattened = [];
+/**
+ * Flattens the nested questions in the provided array.
+ * @param {Array} questions - The array of questions to flatten.
+ * @returns {Array} - The flattened array of questions.
+ */
+const flattenQuestions = (questions) => {
+  const flatten = (question) => {
+    flattened.push(question);
+    if (question.questions && question.questions.length > 0) {
+      question.questions.forEach(flatten);
+    }
+  };
+  questions.forEach(flatten);
+  return flattened;
+};
+
+
+const helperSingleQuestions = (item) => {
+
+  return {
+    title: item?.title,
+    type: item?.type,
+    placeholder: item?.placeholder,
+    parent_question: null,
+    parent_question_for: 
+    item?.type === "yesNo" ? item?.value : "",
+    parent_id: item?.parent_id,
+    ruleList: item?.rule_list,
+    comment: item?.comment,
+    id: item?.id,
+    policy_id: item?.policy_id,
+    listItem: item?.type === "list" ? item?.value : "",
+  };
+
+}
+
+/**
+ * Formats a single question item by setting its parent question and other properties.
+ * @param {Object} item - The question item to format.
+ * @param {Array} questionsList - The array of questions to search for parent question.
+ * @returns {Object} - The formatted question item.
+ */
+const formatSingleQuestions = (item ) => {
+  // Find the parent question in the flattened array
+  const parentQuestion = item?.parent_id
+    ? flattened?.find((question) => question?.id === item?.parent_id)
+    : null;
+  // Return the formatted question item
+  return {
+    title: item?.title,
+    type: QuestionsTypes.data.find((type) => type?.name === item?.type),
+    placeholder: item?.placeholder,
+    parent_question: _.isEmpty(parentQuestion) ? null : helperSingleQuestions(parentQuestion),
+    parent_question_for:
+      parentQuestion?.type === "yesNo" ? item?.value : "",
+    parent_id: item?.parent_id,
+    ruleList: item?.rule_list,
+    comment: item?.comment,
+    id: item?.id,
+    policy_id: item?.policy_id,
+    listItem: item?.type === "list" ? item?.value : "",
+  };
+};
+
+
+/**
+ * Recursively retrieves and formats child questions for a given array of questions.
+ * @param {Array} questions - The array of questions to retrieve child questions for.
+ * @returns {Array} - The formatted array of child questions.
+ */
+
+const getChildQuestions = (questions) => {
+  return questions.map((question) => ({
+    ...formatSingleQuestions(question, questions),
+    questions: question.questions.length > 0 ? getChildQuestions(question.questions) : [],
+  }));
+};
+
+/**
+ * Formats the question data by setting parent questions and flattening nested questions.
+ * @param {Array} questionsList - The array of questions to format.
+ * @returns {Array} - The formatted array of questions.
+ */
+
+export const formatQuestionData = (questionsList) => {
+  flattenQuestions(questionsList);
+  return questionsList.map((item) => ({
+    ...formatSingleQuestions(item, questionsList),
+    questions: item.questions.length > 0 ? getChildQuestions(item.questions) : [],
+  })).filter((item) => !item.parent_id);
+};

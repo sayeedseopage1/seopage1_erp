@@ -14,6 +14,7 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
+            const question = 5;
             return (
                 <div className="d-flex flex-column">
                     <div className="d-flex align-items-center mb-2">
@@ -68,6 +69,7 @@ export const SalesRiskAnalysisTableColumns = [
                             className="mx-2"
                             style={{
                                 cursor: "pointer",
+                                position: "relative",
                             }}
                         >
                             <Tooltip
@@ -81,6 +83,20 @@ export const SalesRiskAnalysisTableColumns = [
                                         cursor: "pointer",
                                     }}
                                 ></i>
+                                <span
+                                    className="badge badge-success"
+                                    style={{
+                                        display: "inline-block",
+                                        position: "absolute",
+                                        top: "-15px",
+                                        right: "-5px",
+                                        fontSize: "10px",
+                                        borderRadius: "50%",
+                                        backgroundColor: "#1967f8",
+                                    }}
+                                >
+                                    {question}
+                                </span>
                             </Tooltip>
                         </div>
                         <span
@@ -105,19 +121,6 @@ export const SalesRiskAnalysisTableColumns = [
                             )}
                         </span>
                     </div>
-                    {/* <button
-                        onClick={() => {
-                            action.handleAddQuestions(data);
-                        }}
-                        style={{
-                            fontSize: "12px",
-                            padding: "3px 12px",
-                            width: "25%",
-                        }}
-                        className="btn btn-info"
-                    >
-                        Questions
-                    </button> */}
                 </div>
             );
         },
@@ -338,27 +341,6 @@ export const SalesRiskAnalysisTableColumns = [
                             </Switch>
                         );
                     })}
-                    {/* <div className="">
-                        <button
-                            style={{
-                                fontSize: "12px",
-                                padding: "3px 12px",
-                            }}
-                            className="btn btn-info"
-                            onClick={() => {
-                                action.handleEditPolicy(data);
-                            }}
-                        >
-                            <i
-                                className="fa fa-edit mr-2"
-                                aria-hidden="true"
-                                style={{
-                                    fontSize: "12px",
-                                }}
-                            ></i>{" "}
-                            Edit Policy
-                        </button>
-                    </div> */}
                 </div>
             );
         },

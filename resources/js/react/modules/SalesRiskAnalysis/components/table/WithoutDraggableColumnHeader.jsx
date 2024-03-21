@@ -20,9 +20,28 @@ const WithoutDraggableColumnHeader = ({
             <th
                 colSpan={header.colSpan}
                 style={{
-                    minWidth: column.id === "id"? "50px" : column.id === "questionType" ? "90px" : "auto",
-                    width: column.id === "id"? "50px" : column.id === "questionType" ? "90px" : "auto",
-                    maxWidth: column.id === "id"? "50px" : column.id === "questionType" ? "90px" : "auto",
+                    minWidth:
+                        column.id === "id"
+                            ? "50px"
+                            : column.id === "questionType"
+                            ? "90px"
+                            : "auto",
+                    width:
+                        column.id === "id"
+                            ? "50px"
+                            : column.id === "questionType"
+                            ? "90px"
+                            : column.id === "ruleList"
+                            ? "300px"
+                            : "auto",
+                    maxWidth:
+                        column.id === "id"
+                            ? "50px"
+                            : column.id === "questionType"
+                            ? "90px"
+                            : column.id === "ruleList"
+                            ? "300px"
+                            : "auto",
                     padding: "15px 0",
                 }}
                 className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
@@ -37,7 +56,9 @@ const WithoutDraggableColumnHeader = ({
                                     : "center"
                                 : column.id === "applicable_points"
                                 ? "end"
-                                : column.id === "questionType" ? "end" : column.id === "department_name"
+                                : column.id === "questionType"
+                                ? "end"
+                                : column.id === "department_name"
                                 ? "center"
                                 : "flex-start",
                         paddingRight:

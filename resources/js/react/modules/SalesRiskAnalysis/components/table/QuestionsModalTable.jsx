@@ -14,8 +14,16 @@ import {
 // ui components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import QuestionsModalTableLoader from "../loader/QuestionsModalTableLoader";
+import EmptyTable from "../../../../global/EmptyTable";
 
-const QuestionsModalTable = ({ tableData, tableColumns, tableName,isLoading }) => {
+const QuestionsModalTable = ({
+    tableData,
+    tableColumns,
+    tableName,
+    isLoading,
+    setIsQuestionUpdating,
+    setSingleQuestion,
+}) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
     const [data, setData] = React.useState(tableData || []);
@@ -52,7 +60,7 @@ const QuestionsModalTable = ({ tableData, tableColumns, tableName,isLoading }) =
         autoResetPageIndex: !skipPageReset,
         onSortingChange: setSorting,
         onExpandedChange: setExpanded,
-        getSubRows: (row) => row.subtasks,
+        getSubRows: (row) => row.questions,
         onColumnOrderChange: setColumnOrder,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -61,7 +69,8 @@ const QuestionsModalTable = ({ tableData, tableColumns, tableName,isLoading }) =
         getSortedRowModel: getSortedRowModel(),
         meta: {
             editSingleQuestion: (row) => {
-                console.log("row", row);
+                setIsQuestionUpdating(true)
+                setSingleQuestion(row);
             },
         },
     });
@@ -138,6 +147,9 @@ const QuestionsModalTable = ({ tableData, tableColumns, tableName,isLoading }) =
                         )}
                     </tbody>
                 </table>
+                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
+                    <EmptyTable height="18vh" />
+                )}
             </div>
         </React.Fragment>
     );
