@@ -145,6 +145,7 @@ const SingleTaskPage = () => {
 
     if (!task) return null;
 
+
     return (
         <div className="position-relative">
             <div className="mb-3">
@@ -841,16 +842,16 @@ const SingleTaskPage = () => {
                                         expendable={false}
                                         title="Task Descriptions"
                                     >
+
                                         <Guideline
                                             text={task?.description}
                                             task={task}
+                                            singleTask={Task}
                                             type="TASK_DESCRIPTION"
                                         />
                                         {_.size(task?.attachments) > 0 ? (
                                             <div className="mt-3">
-                                                <h4 className="mb-2">
-                                                    Task Attachments:{" "}
-                                                </h4>
+                                                <h6 className="mb-2">Task Attachments:</h6>
                                                 <FileUploader>
                                                     {_.map(
                                                         task?.attachments,

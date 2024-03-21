@@ -1803,12 +1803,13 @@ var SingleTaskPage = function SingleTaskPage() {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_12__["default"], {
                   text: task === null || task === void 0 ? void 0 : task.description,
                   task: task,
+                  singleTask: Task,
                   type: "TASK_DESCRIPTION"
                 }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(task === null || task === void 0 ? void 0 : task.attachments) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsxs)("div", {
                   className: "mt-3",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsxs)("h4", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)("h6", {
                     className: "mb-2",
-                    children: ["Task Attachments:", " "]
+                    children: "Task Attachments:"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
                     children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(task === null || task === void 0 ? void 0 : task.attachments, function (attachment) {
                       return attachment !== null && attachment !== void 0 && attachment.task_file_name ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
@@ -2422,12 +2423,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Modal */ "./resources/js/react/single-task/components/Modal.jsx");
-/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _PMGuideline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PMGuideline */ "./resources/js/react/single-task/components/PMGuideline.jsx");
 /* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
+/* harmony import */ var _styles_guideline_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./styles/guideline.css */ "./resources/js/react/single-task/components/styles/guideline.css");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -2443,13 +2446,18 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
 var Guideline = function Guideline(_ref) {
+  var _graphicOptions$find, _singleTask$category, _defaultBrandGuidelin, _defaultSecondaryColo, _defaultSecondaryColo2, _singleTask$category2, _singleTask$category3, _singleTask$category4, _singleTask$category5, _defaultBrandGuidelin2, _defaultSecondaryColo3, _defaultSecondaryColo4, _singleTask$category6, _singleTask$category7, _singleTask$category8;
   var text = _ref.text,
     task = _ref.task,
     _ref$type = _ref.type,
     type = _ref$type === void 0 ? "" : _ref$type,
     editorContainerClass = _ref.editorContainerClass,
-    workEnv = _ref.workEnv;
+    workEnv = _ref.workEnv,
+    singleTask = _ref.singleTask;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     expend = _useState2[0],
@@ -2457,125 +2465,707 @@ var Guideline = function Guideline(_ref) {
   var isLong = (text === null || text === void 0 ? void 0 : text.length) > 400;
   var showText = isLong ? text.slice(0, 400) + '...' : text;
   var ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  var _useGetTypesOfGraphic = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useGetTypesOfGraphicWorksQuery)(""),
+    graphicOptions = _useGetTypesOfGraphic.data,
+    isFetching = _useGetTypesOfGraphic.isFetching;
 
-  // console.log("15", showText)
+  // console.log("TaskCategory", singleTask?.category?.category_name)
 
+  var graphicWorkDetails = new Object(singleTask === null || singleTask === void 0 ? void 0 : singleTask.graphic_work_detail);
+  var typeOfGraphicsCategoryName = graphicOptions === null || graphicOptions === void 0 || (_graphicOptions$find = graphicOptions.find(function (item) {
+    return (graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === (item === null || item === void 0 ? void 0 : item.id);
+  })) === null || _graphicOptions$find === void 0 ? void 0 : _graphicOptions$find.name;
+  var brand_name = graphicWorkDetails.brand_name,
+    created_at = graphicWorkDetails.created_at,
+    design_instruction = graphicWorkDetails.design_instruction,
+    file_types_needed = graphicWorkDetails.file_types_needed,
+    font_name = graphicWorkDetails.font_name,
+    font_url = graphicWorkDetails.font_url,
+    graphic_task_files = graphicWorkDetails.graphic_task_files,
+    id = graphicWorkDetails.id,
+    number_of_versions = graphicWorkDetails.number_of_versions,
+    primary_color = graphicWorkDetails.primary_color,
+    primary_color_description = graphicWorkDetails.primary_color_description,
+    reference = graphicWorkDetails.reference,
+    secondary_colors = graphicWorkDetails.secondary_colors,
+    task_id = graphicWorkDetails.task_id,
+    type_of_graphic_work_id = graphicWorkDetails.type_of_graphic_work_id,
+    type_of_logo = graphicWorkDetails.type_of_logo,
+    updated_at = graphicWorkDetails.updated_at;
+  var _ref2 = singleTask || {},
+    cms = _ref2.cms,
+    theme_name = _ref2.theme_name,
+    theme_template_library_link = _ref2.theme_template_library_link;
+  var defaultSecondaryColors;
+  var defaultFileTypesNeeded;
+  // files
+  var defaultTextForDesign;
+  var defaultImageForDesigner;
+  var defaultImgOrVidForWork;
+  var defaultBrandGuidelineFiles;
+  if (secondary_colors || file_types_needed || graphic_task_files) {
+    defaultSecondaryColors = JSON.parse(secondary_colors);
+    defaultFileTypesNeeded = JSON.parse(file_types_needed);
+    defaultTextForDesign = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
+    });
+    defaultImageForDesigner = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 2;
+    });
+    defaultImgOrVidForWork = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 3;
+    });
+    defaultBrandGuidelineFiles = graphic_task_files === null || graphic_task_files === void 0 ? void 0 : graphic_task_files.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 4;
+    });
+  }
   var handleExpend = function handleExpend(e) {
     e.preventDefault();
     setExpend(!expend);
   };
-  (0,react_use__WEBPACK_IMPORTED_MODULE_6__["default"])(ref, function () {
+  (0,react_use__WEBPACK_IMPORTED_MODULE_8__["default"])(ref, function () {
     setExpend(false);
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_card--sub-card",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-      className: "sp1_ck_content sp1_guideline_text ".concat(editorContainerClass),
-      dangerouslySetInnerHTML: {
-        __html: showText
-      }
-    }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
-      href: "#",
-      onClick: handleExpend,
-      className: "",
-      children: " View more "
-    }) : '', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    children: [(singleTask === null || singleTask === void 0 || (_singleTask$category = singleTask.category) === null || _singleTask$category === void 0 ? void 0 : _singleTask$category.category_name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      className: "px-4 py-3",
+      style: {
+        background: '#F3F5F9'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+        className: "mb-2",
+        children: "Graphic Work Details"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        className: "row",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "Type Of Graphics Work"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", typeOfGraphicsCategoryName]
+          })
+        }), type_of_graphic_work_id === 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "Type of Logo"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", type_of_logo]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "Brand Name"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", brand_name]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "Number of Versions"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", number_of_versions]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "File Types Needed"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", defaultFileTypesNeeded]
+            })
+          })]
+        }), (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "Attach text that will be used for the design"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultTextForDesign, function (attachment) {
+                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                    downloadAble: true,
+                    deleteAble: false,
+                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                    classname: "comment_file",
+                    ext: file_icon
+                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                })
+              })]
+            })
+          })
+        }), (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "Image where the designer will work"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImageForDesigner, function (attachment) {
+                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                    downloadAble: true,
+                    deleteAble: false,
+                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                    classname: "comment_file",
+                    ext: file_icon
+                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                })
+              })]
+            })
+          })
+        }), type_of_graphic_work_id === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "Images/videos that will be used for the work"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImgOrVidForWork, function (attachment) {
+                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                    downloadAble: true,
+                    deleteAble: false,
+                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                    classname: "comment_file",
+                    ext: file_icon
+                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                })
+              })]
+            })
+          })
+        }), (type_of_graphic_work_id === 7 || type_of_graphic_work_id === 9) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: "Name of the illustration work"
+              }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "sp1_ck_content sp1_guideline_text px-2 py-2 rounded",
+                style: {
+                  backgroundColor: "#E9ECEF"
+                },
+                dangerouslySetInnerHTML: {
+                  __html: design_instruction
+                }
+              })]
+            })
+          })
+        }), font_name && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "Font Name"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", font_name]
+          })
+        }), reference && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "Reference"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", reference]
+          })
+        }), font_url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "Font Url"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
+              target: "__blank",
+              href: font_url,
+              children: font_url
+            })]
+          })
+        }), ((_defaultBrandGuidelin = defaultBrandGuidelineFiles) === null || _defaultBrandGuidelin === void 0 ? void 0 : _defaultBrandGuidelin.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "Brand Guideline"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultBrandGuidelineFiles, function (attachment) {
+                var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                  fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                  downloadAble: true,
+                  deleteAble: false,
+                  downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                  previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                  fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                  classname: "comment_file",
+                  ext: file_icon
+                }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+              })
+            })]
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        className: "col-12 col-md-6 px-0",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          className: "form-group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "mb-2 f-16",
+            style: {
+              color: '#878E97'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "Color Scheme: "
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            className: "mb-3 rounded",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("ol", {
+              style: {
+                marginLeft: "0px"
+              },
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
+                className: "d-flex flex-column",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                  className: "font-weight-bold mr-2 mb-2",
+                  children: "Primary Color: "
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__.ColorItem, {
+                  color: primary_color,
+                  desc: primary_color_description
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
+                className: "d-flex flex-column",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                  className: "font-weight-bold mr-2 mb-2",
+                  children: ((_defaultSecondaryColo = defaultSecondaryColors) === null || _defaultSecondaryColo === void 0 ? void 0 : _defaultSecondaryColo.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
+                }), (_defaultSecondaryColo2 = defaultSecondaryColors) === null || _defaultSecondaryColo2 === void 0 ? void 0 : _defaultSecondaryColo2.map(function (color, i) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__.ColorItem, {
+                    color: color === null || color === void 0 ? void 0 : color.color,
+                    desc: color === null || color === void 0 ? void 0 : color.description
+                  }, i + color);
+                })]
+              })]
+            })
+          })]
+        })
+      })]
+    }), (singleTask === null || singleTask === void 0 || (_singleTask$category2 = singleTask.category) === null || _singleTask$category2 === void 0 ? void 0 : _singleTask$category2.category_name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), (singleTask === null || singleTask === void 0 || (_singleTask$category3 = singleTask.category) === null || _singleTask$category3 === void 0 ? void 0 : _singleTask$category3.category_name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      className: "px-4 py-3",
+      style: {
+        background: '#F3F5F9'
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+        className: "mb-2",
+        children: "UI/UIX Work Details"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        className: "row",
+        children: [cms && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "CMS"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", cms]
+          })
+        }), theme_name && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "Theme Name"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", theme_name]
+          })
+        }), theme_template_library_link && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+              children: "CMS"
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
+              target: "__blank",
+              href: theme_template_library_link,
+              children: theme_template_library_link
+            })]
+          })
+        })]
+      })]
+    }), (singleTask === null || singleTask === void 0 || (_singleTask$category4 = singleTask.category) === null || _singleTask$category4 === void 0 ? void 0 : _singleTask$category4.category_name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+        className: "mb-2",
+        children: "General Description:"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        className: "sp1_ck_content sp1_guideline_text ".concat(editorContainerClass),
+        dangerouslySetInnerHTML: {
+          __html: showText
+        }
+      }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
+        href: "#",
+        onClick: handleExpend,
+        className: "",
+        children: " View more "
+      }) : '']
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: "sp1_task_card--sub-card-modal",
       isOpen: expend,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         ref: ref,
         className: "sp1_task_card--sub-card-modal-content",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
           className: "d-flex align-items-center justify-content-between __header",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
             onClick: function onClick() {
               return setExpend(false);
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
               className: "fa-solid fa-xmark"
             })
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "__content",
-          children: [task !== null && task !== void 0 && task.hasProjectManagerGuideline && type !== "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          children: [task !== null && task !== void 0 && task.hasProjectManagerGuideline && type !== "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
             className: "mb-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h1", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h1", {
               children: "Project Manager Guideline"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
               guideline: task === null || task === void 0 ? void 0 : task.PMTaskGuideline
             })]
-          }) : null, !lodash__WEBPACK_IMPORTED_MODULE_2___default().isEmpty(workEnv) && type !== "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          }) : null, !lodash__WEBPACK_IMPORTED_MODULE_2___default().isEmpty(workEnv) && type !== "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
             className: "sp1_task_card--sub-card m-4",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
               className: "px-4 py-3",
               style: {
                 background: '#F3F5F9'
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h6", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
                 className: "mb-2",
                 children: "Working Environment"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
                 className: "row",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
                       children: "Working/Staging Site's URL"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
                       target: "__blank",
                       href: workEnv === null || workEnv === void 0 ? void 0 : workEnv.site_url,
                       children: "View on new tab"
                     })]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
                       children: "Frontend Password"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}), " ", workEnv === null || workEnv === void 0 ? void 0 : workEnv.frontend_password]
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", workEnv === null || workEnv === void 0 ? void 0 : workEnv.frontend_password]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
                       children: "Working/Staging Site's Login URL"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
                       target: "__blank",
                       href: workEnv === null || workEnv === void 0 ? void 0 : workEnv.login_url,
                       children: "View on new tab"
                     }), " "]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
                       children: "Working/Staging Site's Username/Email"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}), " ", workEnv === null || workEnv === void 0 ? void 0 : workEnv.email]
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", workEnv === null || workEnv === void 0 ? void 0 : workEnv.email]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
                       children: "Password"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("br", {}), " ", workEnv === null || workEnv === void 0 ? void 0 : workEnv.password]
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", workEnv === null || workEnv === void 0 ? void 0 : workEnv.password]
                   })
                 })]
               })]
             })
-          }) : null, type === "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h5", {
+          }) : null, type === "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h5", {
             children: "Task Description"
-          }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "sp1_ck_content word-break ".concat(editorContainerClass),
-            dangerouslySetInnerHTML: {
-              __html: text
-            }
-          }), lodash__WEBPACK_IMPORTED_MODULE_2___default().size(task === null || task === void 0 ? void 0 : task.attachments) > 0 && type === "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          }) : null, (singleTask === null || singleTask === void 0 || (_singleTask$category5 = singleTask.category) === null || _singleTask$category5 === void 0 ? void 0 : _singleTask$category5.category_name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "px-4 py-3",
+            style: {
+              background: '#F3F5F9'
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+              className: "mb-2",
+              children: "Graphic Work Details"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "row",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Type Of Graphics Work"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", typeOfGraphicsCategoryName]
+                })
+              }), type_of_graphic_work_id === 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "Type of Logo"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", type_of_logo]
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "Brand Name"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", brand_name]
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "Number of Versions"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", number_of_versions]
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "File Types Needed"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", defaultFileTypesNeeded]
+                  })
+                })]
+              }), (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "Attach text that will be used for the design"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                      children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultTextForDesign, function (attachment) {
+                        var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                        return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                          fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                          downloadAble: true,
+                          deleteAble: false,
+                          downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                          previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                          fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                          classname: "comment_file",
+                          ext: file_icon
+                        }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                      })
+                    })]
+                  })
+                })
+              }), (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "Image where the designer will work"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                      children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImageForDesigner, function (attachment) {
+                        var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                        return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                          fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                          downloadAble: true,
+                          deleteAble: false,
+                          downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                          previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                          fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                          classname: "comment_file",
+                          ext: file_icon
+                        }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                      })
+                    })]
+                  })
+                })
+              }), type_of_graphic_work_id === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "Images/videos that will be used for the work"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                      children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultImgOrVidForWork, function (attachment) {
+                        var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                        return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                          fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                          downloadAble: true,
+                          deleteAble: false,
+                          downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                          previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                          fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                          classname: "comment_file",
+                          ext: file_icon
+                        }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                      })
+                    })]
+                  })
+                })
+              }), (type_of_graphic_work_id === 7 || type_of_graphic_work_id === 9) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.Fragment, {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                      children: "Name of the illustration work"
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                      className: "sp1_ck_content sp1_guideline_text px-2 py-2 rounded",
+                      style: {
+                        backgroundColor: "#E9ECEF"
+                      },
+                      dangerouslySetInnerHTML: {
+                        __html: design_instruction
+                      }
+                    })]
+                  })
+                })
+              }), font_name && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Font Name"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", font_name]
+                })
+              }), reference && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Reference"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", reference]
+                })
+              }), font_url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Font Url"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
+                    target: "__blank",
+                    href: font_url,
+                    children: font_url
+                  })]
+                })
+              }), ((_defaultBrandGuidelin2 = defaultBrandGuidelineFiles) === null || _defaultBrandGuidelin2 === void 0 ? void 0 : _defaultBrandGuidelin2.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Brand Guideline"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                    children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(defaultBrandGuidelineFiles, function (attachment) {
+                      var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                      return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                        fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                        downloadAble: true,
+                        deleteAble: false,
+                        downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                        classname: "comment_file",
+                        ext: file_icon
+                      }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                    })
+                  })]
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+              className: "col-12 col-md-6 px-0",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "mb-2 f-16",
+                  style: {
+                    color: '#878E97'
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Color Scheme: "
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                  className: "mb-3 rounded",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("ol", {
+                    style: {
+                      marginLeft: "0px"
+                    },
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
+                      className: "d-flex flex-column",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                        className: "font-weight-bold mr-2 mb-2",
+                        children: "Primary Color: "
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__.ColorItem, {
+                        color: primary_color,
+                        desc: primary_color_description
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
+                      className: "d-flex flex-column",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                        className: "font-weight-bold mr-2 mb-2",
+                        children: ((_defaultSecondaryColo3 = defaultSecondaryColors) === null || _defaultSecondaryColo3 === void 0 ? void 0 : _defaultSecondaryColo3.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
+                      }), (_defaultSecondaryColo4 = defaultSecondaryColors) === null || _defaultSecondaryColo4 === void 0 ? void 0 : _defaultSecondaryColo4.map(function (color, i) {
+                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__.ColorItem, {
+                          color: color === null || color === void 0 ? void 0 : color.color,
+                          desc: color === null || color === void 0 ? void 0 : color.description
+                        }, i + color);
+                      })]
+                    })]
+                  })
+                })]
+              })
+            })]
+          }), (singleTask === null || singleTask === void 0 || (_singleTask$category6 = singleTask.category) === null || _singleTask$category6 === void 0 ? void 0 : _singleTask$category6.category_name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), (singleTask === null || singleTask === void 0 || (_singleTask$category7 = singleTask.category) === null || _singleTask$category7 === void 0 ? void 0 : _singleTask$category7.category_name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "px-4 py-3",
+            style: {
+              background: '#F3F5F9'
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+              className: "mb-2",
+              children: "UI/UIX Work Details"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "row",
+              children: [cms && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "CMS"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", cms]
+                })
+              }), theme_name && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Theme Name"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", theme_name]
+                })
+              }), theme_template_library_link && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "CMS"
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
+                    target: "__blank",
+                    href: theme_template_library_link,
+                    children: theme_template_library_link
+                  })]
+                })
+              })]
+            })]
+          }), (singleTask === null || singleTask === void 0 || (_singleTask$category8 = singleTask.category) === null || _singleTask$category8 === void 0 ? void 0 : _singleTask$category8.category_name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+              className: "mb-2",
+              children: "General Description:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+              className: "sp1_ck_content word-break ".concat(editorContainerClass),
+              dangerouslySetInnerHTML: {
+                __html: text
+              }
+            })]
+          }), lodash__WEBPACK_IMPORTED_MODULE_2___default().size(task === null || task === void 0 ? void 0 : task.attachments) > 0 && type === "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
             className: "mt-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h4", {
-              children: "Task Attachments: "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+              className: "mb-2",
+              children: "Task Attachments:"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"], {
               children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(task === null || task === void 0 ? void 0 : task.attachments, function (attachment) {
-                return attachment !== null && attachment !== void 0 && attachment.task_file_name ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
+                return attachment !== null && attachment !== void 0 && attachment.task_file_name ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_4__["default"].Preview, {
                   fileName: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_name,
                   downloadAble: true,
                   deleteAble: false,
@@ -2588,9 +3178,9 @@ var Guideline = function Guideline(_ref) {
               })
             })]
           }) : null]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
           className: " __footer",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("button", {
             className: "btn btn-sm py-1 btn-primary ml-auto",
             onClick: function onClick() {
               return setExpend(false);
@@ -21091,6 +21681,32 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/single-task/components/styles/guideline.css":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/single-task/components/styles/guideline.css ***!
+  \**********************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, ".gl_card_wrapper {\r\n    display: grid;\r\n    grid-template-columns: repeat(3, 1fr);\r\n    gap: 10px;\r\n}\r\n\r\n.gl_small_card {\r\n    background: #F7F8FA !important;\r\n    padding: 10px !important;\r\n    border-radius: 5px !important;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/single-task/components/styles/guideline.css"],"names":[],"mappings":"AAAA;IACI,aAAa;IACb,qCAAqC;IACrC,SAAS;AACb;;AAEA;IACI,8BAA8B;IAC9B,wBAAwB;IACxB,6BAA6B;AACjC","sourcesContent":[".gl_card_wrapper {\r\n    display: grid;\r\n    grid-template-columns: repeat(3, 1fr);\r\n    gap: 10px;\r\n}\r\n\r\n.gl_small_card {\r\n    background: #F7F8FA !important;\r\n    padding: 10px !important;\r\n    border-radius: 5px !important;\r\n}"],"sourceRoot":""}]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/single-task/section/daily-submission/styles/DataTable.css":
 /*!************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/single-task/section/daily-submission/styles/DataTable.css ***!
@@ -21203,6 +21819,35 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_AvatarGroup_module_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./resources/js/react/single-task/components/styles/guideline.css":
+/*!************************************************************************!*\
+  !*** ./resources/js/react/single-task/components/styles/guideline.css ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_guideline_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./guideline.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/single-task/components/styles/guideline.css");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_guideline_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_guideline_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
