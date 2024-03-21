@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 // ui components
@@ -44,6 +44,7 @@ const AddQuestionsModal = ({
     addQuestionsData,
     setAddQuestionsData,
 }) => {
+    const modalRef = useRef(null);
     const [isQuestionUpdating, setIsQuestionUpdating] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [isListEmpty, setIsListEmpty] = useState(false);
@@ -306,8 +307,23 @@ const AddQuestionsModal = ({
         }
     }, [singleQuestion]);
 
+    useEffect(() => {
+        if (isQuestionUpdating && modalRef?.current) {
+            console.log("scrolling", modalRef?.current?.scrollHeight);
+            console.log("scrolling", modalRef?.current);
+            console.log("scrolling", modalRef);
+            debugger
+            modalRef?.current?.scrollTo({
+                top: modalRef.current.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }, [isQuestionUpdating]);
+
     return (
         <CustomModal
+            id="addQuestionsModal"
+            scroLlBottom={isQuestionUpdating}
             open={open}
             closeModal={handleCloseAddQuestionsModal}
             contentLabel="Add New Policy"
@@ -351,7 +367,14 @@ const AddQuestionsModal = ({
                             </ModalInputLabel>
                         </div>
                     </div>
-
+                </div>
+                <div
+                    className="d-flex flex-column mb-4 px-4  w-100"
+                    style={{
+                        height:questions.length > 0 ? "365px" : "265px",
+                        overflowY: "scroll",
+                    }}
+                >
                     <div
                         className="row px-0 py-4 px-2 mb-2"
                         style={{
@@ -619,25 +642,25 @@ const AddQuestionsModal = ({
                             />
                         </div>
                     </div>
+                    <Flex gap="10px" justifyContent="center">
+                        <ModalButton onClick={handleAddQuestion} width="200px">
+                            {(isLoading || isEditSinglePolicySalesRiskAnalysisLoading)
+                                ? "Saving..."
+                                : isQuestionUpdating
+                                ? "Update Question"
+                                : "Save Question"}
+                        </ModalButton>
+                        <ModalButton
+                            onClick={handleCloseAddQuestionsModal}
+                            width="200px"
+                            color="white"
+                            border="1px solid #1492E6"
+                            textColor="#1492E6"
+                        >
+                            Do it latter
+                        </ModalButton>
+                    </Flex>
                 </div>
-                <Flex gap="10px" justifyContent="center">
-                    <ModalButton onClick={handleAddQuestion} width="177px">
-                        {isLoading
-                            ? "Saving..."
-                            : isQuestionUpdating
-                            ? "Update Question"
-                            : "Save Question"}
-                    </ModalButton>
-                    <ModalButton
-                        onClick={handleCloseAddQuestionsModal}
-                        width="177px"
-                        color="white"
-                        border="1px solid #1492E6"
-                        textColor="#1492E6"
-                    >
-                        Do it latter
-                    </ModalButton>
-                </Flex>
             </div>
         </CustomModal>
     );

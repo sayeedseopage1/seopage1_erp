@@ -2,6 +2,7 @@ import ReactModal from "react-modal";
 import PropTypes from "prop-types";
 import { ModalCloseButton } from "../Styles/ui";
 import { IoClose } from "react-icons/io5";
+import { useEffect, useRef } from "react";
 
 const CustomModal = ({
     open,
@@ -10,19 +11,31 @@ const CustomModal = ({
     contentLabel,
     width,
     isCloseButtonShow = false,
+    scroLlBottom = false,
     ...props
 }) => {
+    const modalContentRef = useRef(null);
+
+    useEffect(() => {
+        if (scroLlBottom && modalContentRef.current) {
+            modalContentRef.current.scrollTo(
+                0,
+                modalContentRef.current.scrollHeight
+            );
+        }
+    }, [scroLlBottom]);
+
     return (
         <ReactModal
             style={{
-              customStyles,
-              content:{
-                ...customStyles.content,
-                width: width || "600px",
-                maxWidth: width || "600px",
-                height: props.height || "fit-content",
-                maxHeight: props.maxHeight || "fit-content",
-              }
+                customStyles,
+                content: {
+                    ...customStyles.content,
+                    width: width || "600px",
+                    maxWidth: width || "600px",
+                    height: props.height || "fit-content",
+                    maxHeight: props.maxHeight || "fit-content",
+                },
             }}
             isOpen={open}
             ariaHideApp={false}
@@ -39,7 +52,7 @@ const CustomModal = ({
                 </div>
             )}
             {/* Modal Content */}
-            {children}
+            <div ref={modalContentRef}>{children}</div>
         </ReactModal>
     );
 };
@@ -63,11 +76,9 @@ const customStyles = {
         borderRadius: "20px",
         border: "none",
         boxShadow: "0px 0px 10px 0px rgba(0, 0, 0, 0.2)",
-        blur: "5px"
+        blur: "5px",
     },
 };
-
-
 
 CustomModal.propTypes = {
     open: PropTypes.bool.isRequired,
@@ -78,4 +89,4 @@ CustomModal.propTypes = {
     isCloseButtonShow: PropTypes.bool,
     height: PropTypes.string,
     maxHeight: PropTypes.string,
-}
+};

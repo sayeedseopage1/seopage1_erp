@@ -95,7 +95,7 @@ export const SalesRiskAnalysisTableColumns = [
                                         backgroundColor: "#1967f8",
                                     }}
                                 >
-                                    {question}
+                                    {data?.questionCount}
                                 </span>
                             </Tooltip>
                         </div>
