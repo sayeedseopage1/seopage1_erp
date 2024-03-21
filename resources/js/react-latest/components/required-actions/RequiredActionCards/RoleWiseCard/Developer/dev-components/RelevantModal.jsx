@@ -1,5 +1,5 @@
 //mitul work start
-
+import RelevantBg from "../../../../../../../react/UI/comments/media/comments_body_bg.svg";
 import WarningIcon from "../../../../../../assest/warning.svg";
 import { RxCrossCircled } from "react-icons/rx";
 import ReactModal from "react-modal";
@@ -12,7 +12,7 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
         <ReactModal
             style={{
                 overlay: {
-                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    backgroundColor: "rgba(0, 0, 0, 0.3)",
                     margin: "auto auto",
                     zIndex: 100,
                 },
@@ -24,6 +24,9 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
                     border: "none",
                     overflow: "hidden",
                     padding: "10px",
+                    backgroundImage: `url(${RelevantBg})`,
+                    backgroundSize: "cover",
+                    border: "1px solid #85CBFF",
                 },
             }}
             isOpen={isRelevantModal}
