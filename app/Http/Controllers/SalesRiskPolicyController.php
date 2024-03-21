@@ -724,7 +724,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'id' => $item->id,
                 'title' => $item->title,
                 'type' => $item->type,
-                'value' => json_decode($item->value),
+                'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
                 'placeholder' => $item->placeholder,
                 'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
                 'parent_id' => $item->parent_id,
