@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import CKEditorComponent from "../../ckeditor";
 import UploadFilesInLine from "../../file-upload/UploadFilesInLine";
-import { useDeleteUplaodedFileMutation, useGetTypesOfGraphicWorksQuery } from "../../services/api/SingleTaskPageApi";
+import { useDeleteGraphicsTaskFileMutation, useDeleteUplaodedFileMutation, useGetTypesOfGraphicWorksQuery } from "../../services/api/SingleTaskPageApi";
 import { useLazyGetMilestoneDetailsQuery } from "../../services/api/projectApiSlice";
 import { useLazyGetTasksQuery, useUpdateTaskMutation } from "../../services/api/tasksApiSlice";
 import { updateTasks } from "../../services/features/tasksSlice";
@@ -545,6 +545,16 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     }
 
     // TODO: delete files for graphics design section here
+    const [deleteGraphicsTaskFile] = useDeleteGraphicsTaskFileMutation()
+
+    const handleDeleteBrandFile = (e, file) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        let previousFile = [...defaultBrandGuidelineFiles];
+        let index = previousFile?.indexOf(file);
+        previousFile.splice(index, 1);
+        defaultBrandGuidelineFiles = previousFile
+    }
 
 
     // add secondary color
@@ -1093,6 +1103,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 files={brandGuideline}
                                                 setFiles={setBrandGuideline}
                                                 previous={defaultBrandGuidelineFiles}
+                                                onPreviousFileDelete={handleDeleteBrandFile}
                                             />
                                         </div>
                                     </div>
