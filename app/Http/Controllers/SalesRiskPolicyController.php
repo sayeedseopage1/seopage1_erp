@@ -477,7 +477,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 // check if policy is parent or not
                 if (SalesRiskPolicy::findOrFail($req->policy_id)->parent_id == null) {
 
-                    $data = SalesRiskPolicy::where('id', $req->policy_id)->get()->map(function($item){
+                    $data = SalesRiskPolicy::where('id', $req->policy_id)->get()->map(function ($item) {
                         return [
                             'id' => $item->id,
                             'title' => $item->title,
@@ -500,35 +500,35 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
             $itemsTransformed = $itemsPaginated
-            ->getCollection()
-            ->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
-                    'department' => [
-                        'id' => $item->department,
-                        'name' => Team::with('childs')->find($item->department)->team_name
-                    ],
-                    'status' => $item->status,
-                    'comment' => $item->comment
-                ];
-            })->toArray();
+                ->getCollection()
+                ->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'title' => $item->title,
+                        'ruleList' => SalesRiskPolicy::where('parent_id', $item->id)->get(['id', 'title',  'type', 'parent_id', 'value_type', 'value', 'points', 'status', 'comment']),
+                        'department' => [
+                            'id' => $item->department,
+                            'name' => Team::with('childs')->find($item->department)->team_name
+                        ],
+                        'status' => $item->status,
+                        'comment' => $item->comment
+                    ];
+                })->toArray();
 
-        $data = new \Illuminate\Pagination\LengthAwarePaginator(
-            $itemsTransformed,
-            $itemsPaginated->total(),
-            $itemsPaginated->perPage(),
-            $itemsPaginated->currentPage(),
-            [
-                'path' => FacadesRequest::url(),
-                'query' => [
-                    'page' => $itemsPaginated->currentPage()
+            $data = new \Illuminate\Pagination\LengthAwarePaginator(
+                $itemsTransformed,
+                $itemsPaginated->total(),
+                $itemsPaginated->perPage(),
+                $itemsPaginated->currentPage(),
+                [
+                    'path' => FacadesRequest::url(),
+                    'query' => [
+                        'page' => $itemsPaginated->currentPage()
+                    ]
                 ]
-            ]
-        );
+            );
 
-        return response()->json(['data' => $data]);
+            return response()->json(['data' => $data]);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json([
@@ -680,9 +680,8 @@ class SalesRiskPolicyController extends AccountBaseController
     function policyQuestionSave(Request $req)
     {
         // temporary
-        \Illuminate\Support\Facades\Schema::table('sales_policy_questions', function(\Illuminate\Database\Schema\Blueprint $table){
-            if(! \Illuminate\Support\Facades\Schema::hasColumn('sales_policy_questions', 'value'))
-            {
+        \Illuminate\Support\Facades\Schema::table('sales_policy_questions', function (\Illuminate\Database\Schema\Blueprint $table) {
+            if (!\Illuminate\Support\Facades\Schema::hasColumn('sales_policy_questions', 'value')) {
                 $table->text('value')->nullable()->after('type');
             }
         });
@@ -715,23 +714,47 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionList(Request $req)
     {
-        $list = SalesPolicyQuestion::where(function ($query) use ($req) {
-            if ($req->policy_id)
-                $query->where('policy_id', $req->policy_id);
-        })->get()
-        ->map(function($item){
-            return [
-                'id' => $item->id,
-                'title' => $item->title,
-                'type' => $item->type,
-                'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                'placeholder' => $item->placeholder,
-                'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
-                'parent_id' => $item->parent_id,
-                'policy_id' => $item->policy_id
-            ];
-        });
+        $list = SalesPolicyQuestion::whereNull('parent_id')
+            ->where(function ($query) use ($req) {
+                if ($req->policy_id)
+                    $query->where('policy_id', $req->policy_id);
+            })->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'type' => $item->type,
+                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                    'placeholder' => $item->placeholder,
+                    'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
+                    'parent_id' => $item->parent_id,
+                    'policy_id' => $item->policy_id,
+                    'questions' => self::questionListChild($item->id)
+                ];
+            });
 
         return response()->json(['status' => 'success', 'data' =>  $list]);
+    }
+
+    function questionListChild($parentId)
+    {
+        $list = SalesPolicyQuestion::where('parent_id', $parentId)->get();
+
+        if (count($list)) {
+            $list = $list->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'type' => $item->type,
+                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                    'placeholder' => $item->placeholder,
+                    'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
+                    'parent_id' => $item->parent_id,
+                    'policy_id' => $item->policy_id,
+                    'questions' => self::questionListChild($item->id)
+                ];
+            });
+        }
+        return $list;
     }
 }
