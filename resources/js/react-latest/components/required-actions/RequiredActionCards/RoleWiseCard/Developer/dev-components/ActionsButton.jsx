@@ -14,6 +14,7 @@ import { useWindowSize } from "react-use";
 import ReactModal from "react-modal";
 import RelevantModal from "./RelevantModal";
 import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
 
 const ActionsButton = ({ data }) => {
     const [fullScreenView, setFullScreenView] = React.useState(false);
@@ -30,8 +31,8 @@ const ActionsButton = ({ data }) => {
         refetch,
     } = useGetCommentsQuery(taskId);
 
+    const height = "89vh";
     //mitul work end
-
     const handleModalWidth = useCallback(
         (btn) => {
             if (data?.code === "TCOA" && btn?.modal_form) {
@@ -157,7 +158,7 @@ const ActionsButton = ({ data }) => {
                     Evaluate
                 </button>
             )}
-            <ReactModal
+            {/* <ReactModal
                 style={{
                     overlay: {
                         backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -171,17 +172,21 @@ const ActionsButton = ({ data }) => {
                         margin: "auto auto",
                         border: "none",
                         overflow: "hidden",
+                        padding: "0px",
                     },
                 }}
                 isOpen={viewCommentModal}
                 onRequestClose={() => setViewCommentModal(false)}
             >
+
+           
+
                 <CommentsBody
                     fullScreenView={fullScreenView}
                     setFullScreenView={setFullScreenView}
                     isOpen={viewCommentModal}
                     close={() => setViewCommentModal(false)}
-                    comments={comments?.slice(data?.length - 3)}
+                    comments={comments}
                     loading={isLoading}
                     fetching={isFetching}
                     refetch={refetch}
@@ -191,7 +196,30 @@ const ActionsButton = ({ data }) => {
                     showCommentEditor={true}
                     showSearchBtn={true}
                 />
-            </ReactModal>
+            </ReactModal> */}
+
+            <CommentContainerDecider
+                fullScreenView={fullScreenView}
+                isOpen={viewCommentModal}
+                width={width}
+            >
+                <CommentsBody
+                    fullScreenView={fullScreenView}
+                    setFullScreenView={setFullScreenView}
+                    isOpen={viewCommentModal}
+                    close={() => setViewCommentModal(false)}
+                    comments={comments}
+                    loading={isLoading}
+                    fetching={isFetching}
+                    refetch={refetch}
+                    taskId={taskId}
+                    showFullScreenBtn={width <= 991 ? false : true}
+                    height={height}
+                    showCommentEditor={true}
+                    showSearchBtn={true}
+                />
+            </CommentContainerDecider>
+
             <RelevantModal
                 setIsRelevantModal={setIsRelevantModal}
                 isRelevantModal={isRelevantModal}
