@@ -510,9 +510,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         deleteGraphicsTaskFile: build.mutation({
             query: (fileId) => ({
                 url: `/account/graphic-task-file/delete/${fileId}`,
-                method: "DELETE",
+                method: "GET",
             }),
-            // invalidatesTags: ["TASKS", "SUB_TASKS", "AUTHORIZE_PARENT_TASK"],
+            // invalidatesTags: ["TASKS"],
         }),
     }),
 });

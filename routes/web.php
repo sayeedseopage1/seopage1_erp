@@ -404,6 +404,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
     Route::post('/developer/daily-minimum-track-hours-log/acknowledgement',[DashboardController::class,'developerDailytrackHoursLog']);
     Route::put('check-out-status', [DashboardController::class, 'clockOutStatus']);
+
     /** DEVELOPER CHECK IN CHECK OUT START*/
 
     /* Setting menu routes starts from here */
@@ -1539,6 +1540,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
+
+    // Graphic task files delete
+    Route::get('graphic-task-file/delete/{id}', [TaskController::class, 'deleteGraphicTaskFile'])->name('graphic.task.file.delete');
 });
 
 //custom route for seopage1
@@ -1825,3 +1829,4 @@ Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 Route::group(['middleware' => 'auth'], function () {
     Route::get('type-of-graphic-works', TypeOfGraphicWorkController::class)->name('typeof.graphic.works');
 });
+

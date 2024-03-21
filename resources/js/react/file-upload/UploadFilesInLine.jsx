@@ -169,7 +169,7 @@ const UploadFilesInLine = ({ onPreviousFileDelete, previous, files, setFiles, mo
           {
             mode !== 'preview' &&
             <Button
-              onClick={(e) => onPreviousFileDelete(e, file)}
+              onClick={(e) => onPreviousFileDelete(e, file, previous)}
               className='__remove--btn'
             >
               <i className="fa-regular fa-trash-can"></i>

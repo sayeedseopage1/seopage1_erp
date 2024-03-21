@@ -51,16 +51,20 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
+
     // files
-    let defaultImgOrVidForWork;
-    let defaultBrandGuidelineFiles;
+    const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
+
+    const [defaultImgOrVidForWork, setDefaultImgOrVidForWork] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3))
+
+
     if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
         // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
         // defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-        defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
-        defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
+        // defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
+        // setDefaultBrandGuidelineFiles(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
     }
 
     //state for graphic designer start
@@ -92,17 +96,29 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [themeTemplate, setThemeTemplate] = useState("")
     // state for ui/ux end
 
-    let defaultTextForDesignBanner;
-    let defaultTextForDesignBrochure;
-    let defaultTextForDesignCompanyProfile;
-    let defaultImageForDesignerRetouching;
-    let defaultImageForDesignerBgRemoval;
+    // let defaultTextForDesignBanner;
+    const [defaultTextForDesignBanner, setDefaultTextForDesignBanner] = useState(graphicWorkDetails?.type_of_graphic_work_id === 2 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1))
+
+    // let defaultTextForDesignBrochure;
+    const [defaultTextForDesignBrochure, setDefaultTextForDesignBrochure] = useState(graphicWorkDetails?.type_of_graphic_work_id === 3 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1))
+
+    // let defaultTextForDesignCompanyProfile;
+    const [defaultTextForDesignCompanyProfile, setFefaultTextForDesignCompanyProfile] = useState(graphicWorkDetails?.type_of_graphic_work_id === 4 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1))
+
+    // let defaultImageForDesignerRetouching;
+    const [defaultImageForDesignerRetouching, setDefaultImageForDesignerRetouching] = useState(graphicWorkDetails?.type_of_graphic_work_id === 5 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2))
+
+    // let defaultImageForDesignerBgRemoval;
+    const [defaultImageForDesignerBgRemoval, setDefaultImageForDesignerBgRemoval] = useState(graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2))
+
     if (graphicWorkDetails) {
-        defaultTextForDesignBanner = graphicWorkDetails?.type_of_graphic_work_id === 2 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        defaultTextForDesignBrochure = graphicWorkDetails?.type_of_graphic_work_id === 3 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        defaultTextForDesignCompanyProfile = graphicWorkDetails?.type_of_graphic_work_id === 4 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        defaultImageForDesignerRetouching = graphicWorkDetails?.type_of_graphic_work_id === 5 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
-        defaultImageForDesignerBgRemoval = graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+        // defaultTextForDesignBanner = graphicWorkDetails?.type_of_graphic_work_id === 2 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        // defaultTextForDesignBrochure = graphicWorkDetails?.type_of_graphic_work_id === 3 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        // defaultTextForDesignCompanyProfile = graphicWorkDetails?.type_of_graphic_work_id === 4 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+
+        // defaultImageForDesignerRetouching = graphicWorkDetails?.type_of_graphic_work_id === 5 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+
+        // defaultImageForDesignerBgRemoval = graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
     }
 
     useEffect(() => {
@@ -465,6 +481,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                     // // change on local
                     // const queryString = new URLSearchParams(filter).toString();
                     dispatch(updateTasks({ task: res.task }))
+                    // window.location.reload();
 
 
                     // // fetch updated tasks
@@ -547,15 +564,52 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     // TODO: delete files for graphics design section here
     const [deleteGraphicsTaskFile] = useDeleteGraphicsTaskFileMutation()
 
-    const handleDeleteBrandFile = (e, file) => {
+    const handleDeleteBrandFile = (e, file, prev) => {
         deleteGraphicsTaskFile(file?.id).unwrap();
         // delete form ui
-        let previousFile = [...defaultBrandGuidelineFiles];
-        let index = previousFile?.indexOf(file);
-        previousFile.splice(index, 1);
-        defaultBrandGuidelineFiles = previousFile
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultBrandGuidelineFiles(prev)
+    }
+    const handleDeletedefaultImgOrVidForWorkFile = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultImgOrVidForWork(prev)
+    }
+    const handleDeleteTextForDesignBanner = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultTextForDesignBanner(prev)
     }
 
+    const handleDeleteTextForDesignBrochure = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultTextForDesignBrochure(prev)
+    }
+
+    const handleDeleteTextForDesignCompanyProfile = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setFefaultTextForDesignCompanyProfile(prev)
+    }
+
+    const handleDeleteImgForDesigner = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultImageForDesignerRetouching(prev)
+    }
+
+    const handleDeleteImgBgForDesigner = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultImageForDesignerBgRemoval(prev)
+    }
 
     // add secondary color
     const addSecondaryColor = (e) => {
@@ -894,6 +948,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             files={textForDesign}
                                                             setFiles={setTextForDesign}
                                                             {...(defaultTextForDesignBanner && { previous: defaultTextForDesignBanner })}
+                                                            onPreviousFileDelete={handleDeleteTextForDesignBanner}
                                                         />
                                                     }
                                                     {
@@ -901,6 +956,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             files={textForDesign}
                                                             setFiles={setTextForDesign}
                                                             {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
+                                                            onPreviousFileDelete={handleDeleteTextForDesignBrochure}
                                                         />
                                                     }
                                                     {
@@ -908,6 +964,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             files={textForDesign}
                                                             setFiles={setTextForDesign}
                                                             {...(defaultTextForDesignCompanyProfile && { previous: defaultTextForDesignCompanyProfile })}
+                                                            onPreviousFileDelete={handleDeleteTextForDesignCompanyProfile}
                                                         />
                                                     }
 
@@ -934,6 +991,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             files={imageForDesigner}
                                                             setFiles={setImageForDesigner}
                                                             {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
+                                                            onPreviousFileDelete={handleDeleteImgForDesigner}
                                                         />
                                                     }
                                                     {
@@ -941,6 +999,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             files={imageForDesigner}
                                                             setFiles={setImageForDesigner}
                                                             {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
+                                                            onPreviousFileDelete={handleDeleteImgBgForDesigner}
                                                         />
                                                     }
                                                 </div>
@@ -965,6 +1024,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         files={imgOrVidForWork}
                                                         setFiles={setImgOrVidForWork}
                                                         previous={defaultImgOrVidForWork}
+                                                        onPreviousFileDelete={handleDeletedefaultImgOrVidForWorkFile}
                                                     />
                                                 </div>
                                             </div>
