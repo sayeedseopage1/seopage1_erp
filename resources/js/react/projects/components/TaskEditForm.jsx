@@ -52,15 +52,13 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
     // files
-    let defaultTextForDesign;
-    let defaultImageForDesigner;
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
     if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
-        defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
-        defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+        // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        // defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
         defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
         defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
     }
@@ -93,6 +91,19 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [themeName, setThemeName] = useState("")
     const [themeTemplate, setThemeTemplate] = useState("")
     // state for ui/ux end
+
+    let defaultTextForDesignBanner;
+    let defaultTextForDesignBrochure;
+    let defaultTextForDesignCompanyProfile;
+    let defaultImageForDesignerRetouching;
+    let defaultImageForDesignerBgRemoval;
+    if (graphicWorkDetails) {
+        defaultTextForDesignBanner = graphicWorkDetails?.type_of_graphic_work_id === 2 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        defaultTextForDesignBrochure = graphicWorkDetails?.type_of_graphic_work_id === 3 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        defaultTextForDesignCompanyProfile = graphicWorkDetails?.type_of_graphic_work_id === 4 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        defaultImageForDesignerRetouching = graphicWorkDetails?.type_of_graphic_work_id === 5 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+        defaultImageForDesignerBgRemoval = graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+    }
 
     useEffect(() => {
         if (isOpen) {
@@ -856,7 +867,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                         </>
                                     }
                                     {/* for Banner, Brochure or company profile */}
-                                    {/* TODO: same file render for all 3  */}
                                     {
                                         (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
                                             <div className="col-12 col-md-6">
@@ -869,11 +879,28 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Attach text that will be used for the design
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
-                                                    <UploadFilesInLine
-                                                        files={textForDesign}
-                                                        setFiles={setTextForDesign}
-                                                        previous={defaultTextForDesign}
-                                                    />
+                                                    {
+                                                        typeOfGraphicsCategory?.id === 2 && <UploadFilesInLine
+                                                            files={textForDesign}
+                                                            setFiles={setTextForDesign}
+                                                            {...(defaultTextForDesignBanner && { previous: defaultTextForDesignBanner })}
+                                                        />
+                                                    }
+                                                    {
+                                                        typeOfGraphicsCategory?.id === 3 && <UploadFilesInLine
+                                                            files={textForDesign}
+                                                            setFiles={setTextForDesign}
+                                                            {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
+                                                        />
+                                                    }
+                                                    {
+                                                        typeOfGraphicsCategory?.id === 4 && <UploadFilesInLine
+                                                            files={textForDesign}
+                                                            setFiles={setTextForDesign}
+                                                            {...(defaultTextForDesignCompanyProfile && { previous: defaultTextForDesignCompanyProfile })}
+                                                        />
+                                                    }
+
                                                 </div>
                                             </div>
                                         </>
@@ -892,11 +919,20 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Image where the designer will work
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
-                                                    <UploadFilesInLine
-                                                        files={imageForDesigner}
-                                                        setFiles={setImageForDesigner}
-                                                        previous={defaultImageForDesigner}
-                                                    />
+                                                    {
+                                                        typeOfGraphicsCategory?.id === 5 && <UploadFilesInLine
+                                                            files={imageForDesigner}
+                                                            setFiles={setImageForDesigner}
+                                                            {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
+                                                        />
+                                                    }
+                                                    {
+                                                        typeOfGraphicsCategory?.id === 6 && <UploadFilesInLine
+                                                            files={imageForDesigner}
+                                                            setFiles={setImageForDesigner}
+                                                            {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
+                                                        />
+                                                    }
                                                 </div>
                                             </div>
                                         </>

@@ -27,7 +27,7 @@ const taskApiSlice = apiSlice.injectEndpoints({
                 formData: true,
             }),
 
-            invalidatesTags: ["TASKS", "SUB_TASKS"],
+            invalidatesTags: ["TASKS", "SUB_TASKS", "AUTHORIZE_PARENT_TASK"],
         }),
 
         getSubTasks: build.query({
