@@ -118,6 +118,7 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
             )}
             {/* //team lead comment end */}
 
+            {/* admin view section start */}
             {auth.roleId === 1 && (
                 <section>
                     <SectionFlex>
@@ -163,6 +164,8 @@ const EvaluationModal = ({ isEvaluationModal, setIsEvaluationModal }) => {
                     </CommentContentA>
                 </section>
             )}
+
+            {/* admin view section end */}
 
             {/* Buttons start */}
 
