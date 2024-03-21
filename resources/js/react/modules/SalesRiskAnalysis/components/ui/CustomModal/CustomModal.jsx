@@ -2,7 +2,7 @@ import ReactModal from "react-modal";
 import PropTypes from "prop-types";
 import { ModalCloseButton } from "../Styles/ui";
 import { IoClose } from "react-icons/io5";
-import { useEffect, useRef } from "react";
+
 
 const CustomModal = ({
     open,
@@ -14,17 +14,7 @@ const CustomModal = ({
     scroLlBottom = false,
     ...props
 }) => {
-    const modalContentRef = useRef(null);
-
-    useEffect(() => {
-        if (scroLlBottom && modalContentRef.current) {
-            modalContentRef.current.scrollTo(
-                0,
-                modalContentRef.current.scrollHeight
-            );
-        }
-    }, [scroLlBottom]);
-
+    
     return (
         <ReactModal
             style={{
@@ -52,7 +42,7 @@ const CustomModal = ({
                 </div>
             )}
             {/* Modal Content */}
-            <div ref={modalContentRef}>{children}</div>
+            {children}
         </ReactModal>
     );
 };

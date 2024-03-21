@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 
 // ui components
@@ -320,6 +320,18 @@ const AddQuestionsModal = ({
         }
     }, [isQuestionUpdating]);
 
+    const modalContentRef = useRef(null);
+
+    useEffect(() => {
+        if (isQuestionUpdating && modalContentRef.current) {
+            modalContentRef.current.scrollTo(
+                0,
+                modalContentRef.current.scrollHeight - 100
+            );
+        }
+    }, [isQuestionUpdating]);
+
+
     return (
         <CustomModal
             id="addQuestionsModal"
@@ -374,6 +386,7 @@ const AddQuestionsModal = ({
                         height:questions.length > 0 ? "365px" : "265px",
                         overflowY: "scroll",
                     }}
+                    ref={modalContentRef}
                 >
                     <div
                         className="row px-0 py-4 px-2 mb-2"
