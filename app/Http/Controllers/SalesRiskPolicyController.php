@@ -44,6 +44,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // questions
             Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
             Route::post('question-fields/save', 'policyQuestionSave')->name('question-fields.save');
+            Route::post('question-fields/edit/{id}', 'policyQuestionEdit')->name('question-fields.edit');
             Route::get('question-list', 'questionList')->name('question.list');
         });
     }
@@ -487,7 +488,8 @@ class SalesRiskPolicyController extends AccountBaseController
                                 'name' => Team::with('childs')->find($item->department)->team_name
                             ],
                             'status' => $item->status,
-                            'comment' => $item->comment
+                            'comment' => $item->comment,
+                            'questionCount' => SalesPolicyQuestion::where('policy_id', $item->id)->count()
                         ];
                     });
 
@@ -511,7 +513,8 @@ class SalesRiskPolicyController extends AccountBaseController
                             'name' => Team::with('childs')->find($item->department)->team_name
                         ],
                         'status' => $item->status,
-                        'comment' => $item->comment
+                        'comment' => $item->comment,
+                        'questionCount' => SalesPolicyQuestion::where('policy_id', $item->id)->count()
                     ];
                 })->toArray();
 
@@ -566,7 +569,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'success', 'message' => 'Policy status changed.']);
         } catch (\Throwable $th) {
             // throw $th;
-            return response()->json(['status' => 'error', 'message' => 'Data not save correctly.']);
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
         }
     }
 
@@ -679,13 +682,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyQuestionSave(Request $req)
     {
-        // temporary
-        \Illuminate\Support\Facades\Schema::table('sales_policy_questions', function (\Illuminate\Database\Schema\Blueprint $table) {
-            if (!\Illuminate\Support\Facades\Schema::hasColumn('sales_policy_questions', 'value')) {
-                $table->text('value')->nullable()->after('type');
-            }
-        });
-
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'type' => 'required',
@@ -699,17 +695,56 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
         }
 
-        SalesPolicyQuestion::create([
-            'title' => $req->title,
-            'type' => $req->type,
-            'value' => $req->value,
-            'parent_id' => $req->parent_id,
-            'rule_list' => json_encode($req->rule_list),
-            'placeholder' => $req->placeholder,
-            'policy_id' => $req->policy_id,
-        ]);
+        try {
+            SalesPolicyQuestion::create([
+                'title' => $req->title,
+                'type' => $req->type,
+                'value' => $req->value,
+                'parent_id' => $req->parent_id,
+                'rule_list' => json_encode($req->rule_list),
+                'placeholder' => $req->placeholder,
+                'policy_id' => $req->policy_id,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
+        }
 
         return response()->json(['status' => 'success', 'message' => 'Question added succesfully']);
+    }
+
+    function policyQuestionEdit(Request $req, $id)
+    {
+        $validator = Validator::make($req->all(), [
+            'title' => 'required',
+            'type' => 'required',
+            'policy_id' => 'required',
+            'rule_list' => 'required',
+            'parent_id' => 'nullable',
+            'placeholder' => 'nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
+        }
+
+        try {
+            $question = SalesPolicyQuestion::findOrFail($id);
+
+            $question->update([
+                'title' => $req->title,
+                'type' => $req->type,
+                'value' => $req->value,
+                'parent_id' => $req->parent_id,
+                'rule_list' => json_encode($req->rule_list),
+                'placeholder' => $req->placeholder,
+                'policy_id' => $req->policy_id,
+            ]);
+
+            return response()->json(['status' => 'success', 'message' => 'Question Edited succesfully']);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
+        }
     }
 
     function questionList(Request $req)
