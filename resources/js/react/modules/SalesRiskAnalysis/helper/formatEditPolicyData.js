@@ -193,6 +193,78 @@ export const formatEditPolicyDataPayload = (editPolicyDefaultData, editPolicyInp
 }
 
 
+export const formatSingleRuleData = (row, selectedRule) => {
+  const valueTypeConst =
+    PolicyTypeItemValuesType?.data?.regularTypes?.data;
+
+  const getVueType = (type) => {
+    if (!_.includes(["yesNo", "list"], type)) {
+      return valueTypeConst.find(
+        (item) => item?.name === selectedRule?.value_type
+      );
+    } else if (type === "list") {
+      return {
+        id: 1,
+        label: "Countries",
+        name: "countries",
+      };
+    } else {
+      return "";
+    }
+  };
+  const payload = {
+    id: selectedRule.id,
+    policyName: row.title,
+    policyId: row.id,
+    department: row.department,
+    policyType: PolicyTypeItems.data.find(
+      (item) => item?.name === selectedRule?.type
+    ),
+    title: selectedRule.title,
+    valueType: getVueType(selectedRule?.type),
+    comment: row?.comment,
+    from:
+      selectedRule?.type === "range"
+        ? selectedRule?.value?.split(",")[0]
+        : "",
+    to:
+      selectedRule?.type === "range"
+        ? selectedRule?.value?.split(", ")[1]?.trim()
+        : "",
+    yes:
+      selectedRule?.type === "yesNo"
+        ? getYesNoValue(selectedRule, "yes", "point")
+        : "",
+    no:
+      selectedRule?.type === "yesNo"
+        ? getYesNoValue(selectedRule, "no", "point")
+        : "",
+    value: !_.includes(
+      ["range", "yesNo", "list"],
+      selectedRule?.type
+    )
+      ? selectedRule?.value
+      : "",
+    ruleComment: selectedRule?.comment,
+    yesComment:
+      selectedRule?.type === "yesNo"
+        ? getYesNoValue(selectedRule, "yes", "comment")
+        : "",
+    noComment:
+      selectedRule?.type === "yesNo"
+        ? getYesNoValue(selectedRule, "no", "comment")
+        : "",
+    countries:
+      selectedRule?.type === "list"
+        ? FormatJsonCountry(selectedRule?.value)
+        : "",
+    points: selectedRule?.points,
+  };
+
+  return payload;
+}
+
+
 const flattened = [];
 /**
  * Flattens the nested questions in the provided array.

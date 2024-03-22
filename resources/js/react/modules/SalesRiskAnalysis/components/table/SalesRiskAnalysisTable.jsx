@@ -43,6 +43,7 @@ import {
     formatEditPolicyDataPayload,
     formatEditRuleData,
     formatEditRuleDataPayload,
+    formatSingleRuleData,
 } from "../../helper/formatEditPolicyData";
 import { addNewRulesValidation } from "../../helper/createFromValidation";
 import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
@@ -231,54 +232,7 @@ const SalesRiskAnalysisTable = ({
                         return "";
                     }
                 };
-                const payload = {
-                    id: selectedRule.id,
-                    policyName: row.title,
-                    policyId: row.id,
-                    department: row.department,
-                    policyType: PolicyTypeItems.data.find(
-                        (item) => item?.name === selectedRule?.type
-                    ),
-                    title: selectedRule.title,
-                    valueType: getVueType(selectedRule?.type),
-                    comment: row?.comment,
-                    from:
-                        selectedRule?.type === "range"
-                            ? selectedRule?.value?.split(",")[0]
-                            : "",
-                    to:
-                        selectedRule?.type === "range"
-                            ? selectedRule?.value?.split(", ")[1]?.trim()
-                            : "",
-                    yes:
-                        selectedRule?.type === "yesNo"
-                            ? getYesNoValue(selectedRule, "yes", "point")
-                            : "",
-                    no:
-                        selectedRule?.type === "yesNo"
-                            ? getYesNoValue(selectedRule, "no", "point")
-                            : "",
-                    value: !_.includes(
-                        ["range", "yesNo", "list"],
-                        selectedRule?.type
-                    )
-                        ? selectedRule?.value
-                        : "",
-                    ruleComment: selectedRule?.comment,
-                    yesComment:
-                        selectedRule?.type === "yesNo"
-                            ? getYesNoValue(selectedRule, "yes", "comment")
-                            : "",
-                    noComment:
-                        selectedRule?.type === "yesNo"
-                            ? getYesNoValue(selectedRule, "no", "comment")
-                            : "",
-                    countries:
-                        selectedRule?.type === "list"
-                            ? FormatJsonCountry(selectedRule?.value)
-                            : "",
-                    points: selectedRule?.points,
-                };
+                const payload =  formatSingleRuleData(row, selectedRule)
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -749,6 +703,7 @@ const SalesRiskAnalysisTable = ({
                     open={editRuleModalOpen}
                     closeModal={handleCloseEditRuleModal}
                     editRuleData={editRuleData}
+                    setEditRuleData={setEditRuleData}
                     handleChange={handleChange}
                     handleUpdateRules={handleUpdateRules}
                     editRuleDataValidation={editRuleDataValidation}

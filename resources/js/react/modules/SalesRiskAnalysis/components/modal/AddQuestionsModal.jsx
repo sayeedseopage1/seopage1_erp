@@ -43,7 +43,7 @@ const AddQuestionsModal = ({
     closeModal,
     addQuestionsData,
     setAddQuestionsData,
-    refetchSaleRiskAnalysis
+    refetchSaleRiskAnalysis,
 }) => {
     const modalRef = useRef(null);
     const [isQuestionUpdating, setIsQuestionUpdating] = useState(false);
@@ -166,7 +166,6 @@ const AddQuestionsModal = ({
         }
     };
 
-
     // Formatting dta for dropdown reuse component
     const QuestionsList =
         questionInputFields?.length > 0 &&
@@ -178,6 +177,7 @@ const AddQuestionsModal = ({
         data: QuestionsList?.structure,
     };
 
+    // Add Question or Update Question Handler Function on Submit
     const handleAddQuestion = async () => {
         const validation = getValidFields(
             singleQuestion,
@@ -215,6 +215,7 @@ const AddQuestionsModal = ({
             }
         }
 
+        // Payload for Add Question
         const payload = {
             policy_id: addQuestionsData?.id,
             title: singleQuestion?.title,
@@ -251,6 +252,7 @@ const AddQuestionsModal = ({
         // console.log(payload);
 
         try {
+            // Condition for Update Question
             if (isQuestionUpdating) {
                 const res = await editSinglePolicySalesRiskAnalysis(
                     payload
@@ -265,7 +267,7 @@ const AddQuestionsModal = ({
                 if (res.status === "success") {
                     toast.success("Question Added Successfully");
                     handleCloseAddQuestionsModal();
-                    refetchSaleRiskAnalysis()
+                    refetchSaleRiskAnalysis();
                 }
             }
         } catch (error) {
@@ -280,6 +282,7 @@ const AddQuestionsModal = ({
         }
     };
 
+    // Scroll to Bottom
     const handleScrollToBottom = () => {
         const scrollTarget = document.getElementById("scrollTarget");
         if (scrollTarget) {
@@ -307,6 +310,7 @@ const AddQuestionsModal = ({
         }
     };
 
+    // Close Modal
     const handleCloseAddQuestionsModal = () => {
         closeModal();
         resetQuestionForm();
@@ -315,6 +319,7 @@ const AddQuestionsModal = ({
         setAllQuestions([]);
     };
 
+    // Reset Question Form
     const resetQuestionForm = () => {
         setSingleQuestion({
             title: "",
@@ -341,6 +346,7 @@ const AddQuestionsModal = ({
         });
     }, [singleQuestion?.type]);
 
+    // Set Validation on Submit
     useEffect(() => {
         if (singleQuestionValidation.isSubmitting) {
             const validation = getValidFields(
@@ -353,6 +359,7 @@ const AddQuestionsModal = ({
         }
     }, [singleQuestion]);
 
+    // Scroll to Bottom on Question Update
     useEffect(() => {
         if (isQuestionUpdating && modalRef?.current) {
             modalRef?.current?.scrollTo({
@@ -362,6 +369,7 @@ const AddQuestionsModal = ({
         }
     }, [isQuestionUpdating]);
 
+    // Set Data on Edit
     useEffect(() => {
         if (singlePolicyData?.data?.length) {
             setAddQuestionsData((prev) => ({
@@ -370,10 +378,7 @@ const AddQuestionsModal = ({
                 ruleList: singlePolicyData?.data[0].ruleList,
             }));
         }
-
     }, [isLoadingSinglePolicyData]);
-    
-    console.log("list", singlePolicyData);
 
     return (
         <CustomModal
@@ -423,6 +428,9 @@ const AddQuestionsModal = ({
                         </div>
                     </div>
                 </div>
+                {/* 
+                Questions Table
+                */}
                 <div
                     className="d-flex flex-column mb-4 px-4  w-100"
                     style={{
@@ -470,6 +478,9 @@ const AddQuestionsModal = ({
                         </div>
                     </div>
 
+                    {/* 
+                    Add Question Form
+                    */}
                     <Switch>
                         <Switch.Case
                             condition={!_.isEmpty(singleQuestion?.type)}

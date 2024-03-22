@@ -16,11 +16,13 @@ import CustomDropDown from "../CustomDropDown";
 import { PolicyTypeItems } from "../../constant";
 import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
 import { useGetSinglePolicySalesRiskAnalysisQuery } from "../../../../services/api/salesRiskAnalysisSlice";
+import { formatSingleRuleData } from "../../helper/formatEditPolicyData";
 
 const EditApplicableRulesModal = ({
     open,
     closeModal,
     editRuleData,
+    setEditRuleData,
     handleChange,
     handleUpdateRules,
     handleMultiSelectChange,
@@ -35,7 +37,14 @@ const EditApplicableRulesModal = ({
             refetchOnMountOrArgChange: true,
         });
 
-    console.log("singlePolicyData", singlePolicyData);
+    React.useEffect(() => {
+        if (singlePolicyData?.data?.length) {
+            const getSingleRule = singlePolicyData?.data[0].ruleList.find(
+                (item) => item.id === editRuleData?.id
+            );
+            setEditRuleData(formatSingleRuleData(singlePolicyData?.data[0], getSingleRule));
+        }
+    }, [singlePolicyData]);
 
     return (
         <CustomModal
