@@ -55,8 +55,7 @@ use App\Notifications\DealAuthorizationSendNotification;
 use Notification;
 use App\Models\GoalSetting;;
 use App\Models\RoleUser;
-
-
+use Illuminate\Support\Facades\Route;
 
 class DealController extends AccountBaseController
 {
@@ -68,6 +67,13 @@ class DealController extends AccountBaseController
         $this->middleware(function ($request, $next) {
             abort_403(!in_array('contracts', $this->user->modules));
             return $next($request);
+        });
+    }
+
+    static function Routes()
+    {
+        Route::controller(self::class)->prefix('deals')->name('deals.')->group(function () {
+            Route::get('/risk-analysic', 'salesPolicyQuestionRender')->name('risk-analysic');
         });
     }
 
@@ -227,7 +233,7 @@ class DealController extends AccountBaseController
             }
             // Always use an array of user IDs, even if $goal->user_id is set
             if (isset($goal->user_id) || isset($user_data)) {
-        
+
                 $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
 
 
@@ -260,7 +266,7 @@ class DealController extends AccountBaseController
                         $dealStage_amount2 = $dealStage->get();
                         $dealStage_amount = $dealStage->sum('deal_stages.amount');
                         $dealStage_count = $dealStage->count();
-                        
+
                         if ($goal->trackingType == 'value') {
                             $deal_amount = $dealStage_amount;
                         } else {
@@ -422,7 +428,7 @@ class DealController extends AccountBaseController
 
     public function update(Request $request)
     {
-    //    dd($request->all()); 
+    //    dd($request->all());
         // $request->validate([
         //     'client_name' => 'required',
         //     'client_username' => 'required',
@@ -1130,5 +1136,11 @@ class DealController extends AccountBaseController
             'status'=>200,
             'data'=>$countries
         ]);
+    }
+
+
+    function salesPolicyQuestionRender()
+    {
+        return view('deals.sales-questions-render', $this->data);
     }
 }
