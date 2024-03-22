@@ -4823,10 +4823,10 @@ class TaskController extends AccountBaseController
 
             $data->save();
             //need pedning action
-            // $helper = new HelperPendingActionController();
+            $helper = new HelperPendingActionController();
 
 
-            // $helper->NewCommentAdded($data->task_id,$data->user_id);
+            $helper->NewCommentAdded($data->task_id,$data->user_id);
 
             //need pending action
             $taskID = Task::where('id', $request->task_id)->first();
