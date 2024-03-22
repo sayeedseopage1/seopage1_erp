@@ -28,8 +28,9 @@ const CustomModal = ({
                 },
             }}
             isOpen={open}
-            ariaHideApp={false}
+            ariaHideApp={true}
             onRequestClose={closeModal}
+            shouldCloseOnOverlayClick={false}
             contentLabel={contentLabel}
             {...props}
         >

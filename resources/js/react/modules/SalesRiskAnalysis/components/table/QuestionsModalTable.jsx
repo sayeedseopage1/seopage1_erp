@@ -23,11 +23,12 @@ const QuestionsModalTable = ({
     tableColumns,
     tableName,
     isLoading,
+    isFetching,
     handleScrollToBottom,
     setAllQuestions,
     allQuestions,
     setSingleQuestion,
-    setIsQuestionUpdating
+    setIsQuestionUpdating,
 }) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -77,10 +78,13 @@ const QuestionsModalTable = ({
                 handleScrollToBottom();
                 setAllQuestions([]);
                 setIsQuestionUpdating(true);
-                if(row?.parent_question?.type === "list") {
+                if (row?.parent_question?.type === "list") {
                     setSingleQuestion({
                         ...row,
-                        listItem: allQuestions.find((question) => question?.id === row?.id)?.listItem || [],
+                        listItem:
+                            allQuestions.find(
+                                (question) => question?.id === row?.id
+                            )?.listItem || [],
                         parent_question_for: row?.parent_question_for,
                     });
                 }
@@ -89,7 +93,7 @@ const QuestionsModalTable = ({
         },
     });
 
-    console.log("table", isLoading);
+
 
     return (
         <React.Fragment>
@@ -126,46 +130,49 @@ const QuestionsModalTable = ({
                     </thead>
                     {/* table Body */}
                     <tbody className="sp1_tasks_tbody">
-                        {table.getRowModel().rows.map((row) => {
-                            return (
-                                <tr
-                                    className={`sp1_tasks_tr ${
-                                        row.parentId !== undefined
-                                            ? "expended_row"
-                                            : ""
-                                    } ${
-                                        row.getIsExpanded()
-                                            ? "expended_parent_row"
-                                            : ""
-                                    }`}
-                                    key={row.id}
-                                >
-                                    {row.getVisibleCells().map((cell) => {
-                                        return (
-                                            <td
-                                                key={cell.id}
-                                                className="px-2 sp1_tasks_td"
-                                            >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
-                                            </td>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })}
-                        {isLoading && (
+                        {(isLoading || isFetching) ? (
                             <QuestionsModalTableLoader
-                                prevItemLength={data?.length}
+                                prevItemLength={tableData?.length}
                             />
+                        ) : (
+                            table.getRowModel().rows.map((row) => {
+                                return (
+                                    <tr
+                                        className={`sp1_tasks_tr ${
+                                            row.parentId !== undefined
+                                                ? "expended_row"
+                                                : ""
+                                        } ${
+                                            row.getIsExpanded()
+                                                ? "expended_parent_row"
+                                                : ""
+                                        }`}
+                                        key={row.id}
+                                    >
+                                        {row.getVisibleCells().map((cell) => {
+                                            return (
+                                                <td
+                                                    key={cell.id}
+                                                    className="px-2 sp1_tasks_td"
+                                                >
+                                                    {flexRender(
+                                                        cell.column.columnDef
+                                                            .cell,
+                                                        cell.getContext()
+                                                    )}
+                                                </td>
+                                            );
+                                        })}
+                                    </tr>
+                                );
+                            })
                         )}
                     </tbody>
                 </table>
-                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                    <EmptyTable height="18vh" />
-                )}
+                {(!isLoading || !isFetching) &&
+                    _.size(table.getRowModel().rows) === 0 && (
+                        <EmptyTable height="18vh" />
+                    )}
             </div>
         </React.Fragment>
     );

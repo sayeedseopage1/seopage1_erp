@@ -258,6 +258,7 @@ const SalesRiskAnalysis = () => {
         resetFormState();
     };
 
+    
     // handle add new policy  with rules data to the server
     const handlePolicyAdded = async () => {
         if (newPolicyInputData?.length === 0) {

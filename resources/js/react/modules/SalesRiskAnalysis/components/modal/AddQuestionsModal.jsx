@@ -121,7 +121,6 @@ const AddQuestionsModal = ({
     // Handle Change
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(name, value);
         if (name === "type") {
             if (value.name === "list") {
                 setSingleQuestion({
@@ -167,7 +166,6 @@ const AddQuestionsModal = ({
         }
     };
 
-    console.log(singleQuestion);
 
     // Formatting dta for dropdown reuse component
     const QuestionsList =
@@ -250,7 +248,7 @@ const AddQuestionsModal = ({
             payload.value = JSON.stringify(updateId);
         }
 
-        console.log(payload);
+        // console.log(payload);
 
         try {
             if (isQuestionUpdating) {
@@ -279,6 +277,17 @@ const AddQuestionsModal = ({
             } else {
                 toast.error("Something went wrong");
             }
+        }
+    };
+
+    const handleScrollToBottom = () => {
+        const scrollTarget = document.getElementById("scrollTarget");
+        if (scrollTarget) {
+            scrollTarget.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest",
+            });
         }
     };
 
@@ -346,9 +355,6 @@ const AddQuestionsModal = ({
 
     useEffect(() => {
         if (isQuestionUpdating && modalRef?.current) {
-            console.log("scrolling", modalRef?.current?.scrollHeight);
-            console.log("scrolling", modalRef?.current);
-            console.log("scrolling", modalRef);
             modalRef?.current?.scrollTo({
                 top: modalRef.current.scrollHeight,
                 behavior: "smooth",
@@ -356,22 +362,19 @@ const AddQuestionsModal = ({
         }
     }, [isQuestionUpdating]);
 
-    const modalContentRef = useRef(null);
-
-    const handleScrollToBottom = () => {
-        console.log("scrolling");
-        const scrollTarget = document.getElementById("scrollTarget");
-        if (scrollTarget) {
-            scrollTarget.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-                inline: "nearest",
-            });
+    useEffect(() => {
+        if (singlePolicyData?.data?.length) {
+            setAddQuestionsData((prev) => ({
+                ...prev,
+                department: singlePolicyData?.data[0].department,
+                ruleList: singlePolicyData?.data[0].ruleList,
+            }));
         }
-    };
 
-    console.log(singleQuestion);
-    console.log(allQuestions);
+    }, [isLoadingSinglePolicyData]);
+    
+    console.log("list", singlePolicyData);
+
     return (
         <CustomModal
             id="addQuestionsModal"
