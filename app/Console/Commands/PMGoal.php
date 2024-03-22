@@ -238,10 +238,12 @@ class PMGoal extends Command
                 $goal_end_date = Carbon::parse($goal_check->extended_goal_end_day)->addHours(24);
             }
             if($goal_check->goal_status ==0 && $goal_check->goal_end_date <= $current_date){
-            $helper = new HelperPendingActionController();
-            $helper->PmGoalDeadlineCheck(ProjectPmGoal::where('id',$goal->id)->first());
-            $user = User::where('id',$goal_check->pm_id)->get();
-                Notification::send($user, new PmGoalMissNotification($goal_check));
+                if($goal_check->mail_status == 1 || $goal_check->mail_status == 0){
+                    $helper = new HelperPendingActionController();
+                    $helper->PmGoalDeadlineCheck(ProjectPmGoal::where('id',$goal->id)->first());
+                    $user = User::where('id',$goal_check->pm_id)->get();
+                    Notification::send($user, new PmGoalMissNotification($goal_check));
+                }
             }
             
         }

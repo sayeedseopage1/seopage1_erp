@@ -101,7 +101,7 @@ class PmGoalExtendRequestNotification extends Notification
         '<p>
             <b style="color: black">' . __('Reason for extension') . ': '.'</b>' . '<span>'.$goal->extended_reason.'</span>'. '
         </p>';
-        $goal->mail_status = 1;
+        $goal->mail_status = 4;
         $goal->save();
 
           return (new MailMessage)
