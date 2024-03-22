@@ -14,6 +14,7 @@ import "./react/single-independent-task/index";
 import "./react/single-task/index";
 import "./react/tasks/index";
 import "./react/ProjectStatus/main";
+import "./react/employee-evaluation/main";
 // headless features
 import "./react/headless-features/main";
 import "./react/modules/main";
