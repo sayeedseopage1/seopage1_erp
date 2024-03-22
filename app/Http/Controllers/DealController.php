@@ -72,8 +72,8 @@ class DealController extends AccountBaseController
 
     static function Routes()
     {
-        Route::controller(self::class)->prefix('deals')->name('deals.')->group(function () {
-            Route::get('/risk-analysic', 'salesPolicyQuestionRender')->name('risk-analysic');
+        Route::controller(self::class)->prefix('account/deals')->name('account.deals.')->group(function () {
+            Route::get('/risk-analysis/{id}', 'salesPolicyQuestionRender')->name('risk-analysis');
         });
     }
 
@@ -1139,8 +1139,9 @@ class DealController extends AccountBaseController
     }
 
 
-    function salesPolicyQuestionRender()
+    function salesPolicyQuestionRender($id)
     {
+        // Note: big form route : route('dealDetails', $deal->id)
         return view('deals.sales-questions-render', $this->data);
     }
 }
