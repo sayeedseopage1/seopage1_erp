@@ -222,10 +222,12 @@ class PMGoal extends Command
                 $difference_in_hours = $currentTime->diffInHours($goal_ext_end_date);
                 if( $difference_in_hours <= 24)
                 {
-                    $helper = new HelperPendingActionController();
-                    $helper->PmGoalBeforeExpireCheck($goal_check, $difference_in_hours);
-                    $user  = User::where('id',$goal_check->pm_id)->first();
-                    Notification::send($user, new PmGoalBeforeExpireNotification($goal_check));
+                    if($goal_check->mail_status == 0){
+                        $helper = new HelperPendingActionController();
+                        $helper->PmGoalBeforeExpireCheck($goal_check, $difference_in_hours);
+                        $user  = User::where('id',$goal_check->pm_id)->first();
+                        Notification::send($user, new PmGoalBeforeExpireNotification($goal_check));
+                    }
                 }
             }
             /**WHEN GOAL DEADLINE OVER*/
