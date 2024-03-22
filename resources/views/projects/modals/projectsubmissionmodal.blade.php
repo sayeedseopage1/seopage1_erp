@@ -586,7 +586,7 @@
                                       </td>
                                       <td>
                                           @if ($project_portfolio != null)
-                                              @if (is_numeric($project_portfolio->theme_id))
+                                              @if ($project_portfolio->theme_id)
                                                   @php
                                                   $website_theme = App\Models\ProjectWebsiteTheme::find($project_portfolio->theme_id);
                                                   @endphp
@@ -595,13 +595,6 @@
                                                   </p>
                                                   <p class="fw-normal mb-1">
                                                       {{ $website_theme->theme_url }}
-                                                  </p>
-                                              @else
-                                                  <p class="fw-normal mb-1">
-                                                      {{ $project_portfolio->theme_name }}
-                                                  </p>
-                                                  <p class="fw-normal mb-1">
-                                                      {{ $project_portfolio->theme_url }}
                                                   </p>
                                                @endif
                                           @else
@@ -655,24 +648,22 @@
                                           </div>
                                       </td>
                                       <td>
-                                        @if($project_portfolio != null)
-                                              {{-- @if (is_numeric($project_portfolio->plugin_name))
-                                                  @php
-                                                      $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
-                                                  @endphp
+                                        @if($project_portfolio != null && $project_portfolio->plugin_list)
+                                            @php
+                                              $website_plugin = App\Models\ProjectWebsitePlugin::whereIn('id', json_decode($project_portfolio->plugin_list))->get();
+                                            @endphp
+                                            @foreach ($website_plugin as $item)
 
-                                                  <p class="fw-normal mb-1">
-                                                      {{ $website_plugin->plugin_name }}
-                                                  </p>
-                                                  <p class="fw-normal mb-1">
-                                                      {{ $website_plugin->plugin_url }}
-                                                  </p>
-                                              @else
-                                               <p>--</p>
-                                              @endif --}}
-                                          @else
-                                          <p class="fw-normal mb-1">--</p>
-                                          @endif
+                                            <p class="fw-normal mb-1 font-weight-bold">
+                                                {{ $item->plugin_name }}
+                                            </p>
+                                            <p class="fw-normal mb-1">
+                                                {{ $item->plugin_url }}
+                                            </p>
+                                            @endforeach
+                                        @else
+                                        <p class="fw-normal mb-1">--</p>
+                                        @endif
 
                                       </td>
 

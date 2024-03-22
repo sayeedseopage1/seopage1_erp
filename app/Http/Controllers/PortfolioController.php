@@ -287,32 +287,35 @@ class PortfolioController extends AccountBaseController
 
 
 
-        $data = DB::table('project_portfolios')
-            ->where('portfolio_link', '!=', null)
-            ->whereNotIn('portfolio_link',["n/a", "N/A","null", "na", "NA"])
+        $data = DB::table('project_portfolios as pp')
+            ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
+            ->select('pp.*')
+            ->where('pp.portfolio_link', '!=', null)
+            ->whereNotIn('pp.portfolio_link',["n/a", "N/A","null", "na", "NA"])
+            ->where('ps.status', 'accepted')
             ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
                 if ($cms) {
-                    $query->where('cms_category', $cms);
+                    $query->where('pp.cms_category', $cms);
                 }
 
                 if ($website_type) {
-                    $query->where('website_type', $website_type);
+                    $query->where('pp.website_type', $website_type);
                 }
 
                 if ($website_category) {
-                    $query->where('niche', $website_category);
+                    $query->where('pp.niche', $website_category);
                 }
 
                 if ($website_sub_category) {
-                    $query->where('sub_niche', $website_sub_category);
+                    $query->where('pp.sub_niche', $website_sub_category);
                 }
 
                 if ($theme_id) {
-                    $query->where('theme_id', $theme_id);
+                    $query->where('pp.theme_id', $theme_id);
                 }
 
                 if ($plugin_id) {
-                    $query->whereJsonContains('plugin_list', [$plugin_id]);
+                    $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
                 }
 
             })

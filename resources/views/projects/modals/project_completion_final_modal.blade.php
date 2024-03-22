@@ -661,14 +661,14 @@
                                             </div>
                                         </td>
                                         <td>
-                                            @if ($project_portfolio->plugin_list)
+                                            @if ($project_portfolio && $project_portfolio->plugin_list)
 
                                                 @foreach ( json_decode($project_portfolio->plugin_list ?? []) as $item)
                                                     @php
                                                         $website_plugin = App\Models\ProjectWebsitePlugin::find($item);
                                                     @endphp
 
-                                                    <p class="fw-normal mb-1">
+                                                    <p class="fw-normal mb-1 font-weight-bold">
                                                         {{ $website_plugin->plugin_name ?? '' }}
                                                     </p>
                                                     <p class="fw-normal mb-1">
