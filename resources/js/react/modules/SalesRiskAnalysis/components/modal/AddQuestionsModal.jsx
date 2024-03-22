@@ -43,12 +43,14 @@ const AddQuestionsModal = ({
     closeModal,
     addQuestionsData,
     setAddQuestionsData,
+    refetchSaleRiskAnalysis
 }) => {
     const modalRef = useRef(null);
     const [isQuestionUpdating, setIsQuestionUpdating] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [isListEmpty, setIsListEmpty] = useState(false);
     const [yesNoValueEmpty, setYesNoValueEmpty] = useState(false);
+    const [allQuestions, setAllQuestions] = useState([]);
     const [singleQuestion, setSingleQuestion] = useState({
         title: "",
         type: {},
@@ -108,7 +110,10 @@ const AddQuestionsModal = ({
 
     useEffect(() => {
         if (questionsList?.data?.length) {
-            const formatQuestionsList = formatQuestionData(questionsList?.data);
+            const formatQuestionsList = formatQuestionData(
+                questionsList?.data,
+                setAllQuestions
+            );
             setQuestions(formatQuestionsList);
         }
     }, [questionsList?.data]);
@@ -116,6 +121,7 @@ const AddQuestionsModal = ({
     // Handle Change
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(name, value);
         if (name === "type") {
             if (value.name === "list") {
                 setSingleQuestion({
@@ -137,10 +143,31 @@ const AddQuestionsModal = ({
                     [name]: value,
                 });
             }
+        } else if (name === "parent_question") {
+            if (value?.type === "list") {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    parent_question: {
+                        ...value,
+                        listItem: allQuestions?.find(
+                            (item) => item?.id === value?.id
+                        )?.value,
+                    },
+                    parent_question_for: "",
+                });
+            } else {
+                setSingleQuestion({
+                    ...singleQuestion,
+                    parent_question: value,
+                    parent_question_for: "",
+                });
+            }
         } else {
             setSingleQuestion({ ...singleQuestion, [name]: value });
         }
     };
+
+    console.log(singleQuestion);
 
     // Formatting dta for dropdown reuse component
     const QuestionsList =
@@ -164,6 +191,7 @@ const AddQuestionsModal = ({
             if (list.includes("")) {
                 setIsListEmpty(true);
                 toast.error("List Item Can't be Empty");
+                return;
             }
         }
         if (
@@ -178,7 +206,10 @@ const AddQuestionsModal = ({
             return;
         }
 
-        if (singleQuestion?.parent_question?.type === "yesNo") {
+        if (
+            singleQuestion?.parent_question?.type === "yesNo" ||
+            singleQuestion?.parent_question?.type === "list"
+        ) {
             if (singleQuestion?.parent_question_for === "") {
                 setYesNoValueEmpty(true);
                 toast.error("Parent Question For is required");
@@ -203,7 +234,10 @@ const AddQuestionsModal = ({
         if (singleQuestion?.comment) {
             payload.comment = singleQuestion?.comment;
         }
-        if (singleQuestion?.parent_question?.type === "yesNo") {
+        if (
+            singleQuestion?.parent_question?.type === "yesNo" ||
+            singleQuestion?.parent_question?.type === "list"
+        ) {
             payload.value = singleQuestion?.parent_question_for;
         }
         if (singleQuestion?.type?.name === "list") {
@@ -226,12 +260,14 @@ const AddQuestionsModal = ({
                 if (res.status === "success") {
                     toast.success("Question Updated Successfully");
                     handleCloseAddQuestionsModal();
+                    refetchSaleRiskAnalysis();
                 }
             } else {
                 const res = await submitQuestionAddonPolicy(payload).unwrap();
                 if (res.status === "success") {
                     toast.success("Question Added Successfully");
                     handleCloseAddQuestionsModal();
+                    refetchSaleRiskAnalysis()
                 }
             }
         } catch (error) {
@@ -267,6 +303,7 @@ const AddQuestionsModal = ({
         resetQuestionForm();
         setQuestions([]);
         setAddQuestionsData({});
+        setAllQuestions([]);
     };
 
     const resetQuestionForm = () => {
@@ -312,7 +349,6 @@ const AddQuestionsModal = ({
             console.log("scrolling", modalRef?.current?.scrollHeight);
             console.log("scrolling", modalRef?.current);
             console.log("scrolling", modalRef);
-            debugger
             modalRef?.current?.scrollTo({
                 top: modalRef.current.scrollHeight,
                 behavior: "smooth",
@@ -322,16 +358,20 @@ const AddQuestionsModal = ({
 
     const modalContentRef = useRef(null);
 
-    useEffect(() => {
-        if (isQuestionUpdating && modalContentRef.current) {
-            modalContentRef.current.scrollTo(
-                0,
-                modalContentRef.current.scrollHeight - 100
-            );
+    const handleScrollToBottom = () => {
+        console.log("scrolling");
+        const scrollTarget = document.getElementById("scrollTarget");
+        if (scrollTarget) {
+            scrollTarget.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest",
+            });
         }
-    }, [isQuestionUpdating]);
+    };
 
-
+    console.log(singleQuestion);
+    console.log(allQuestions);
     return (
         <CustomModal
             id="addQuestionsModal"
@@ -383,10 +423,9 @@ const AddQuestionsModal = ({
                 <div
                     className="d-flex flex-column mb-4 px-4  w-100"
                     style={{
-                        height:questions.length > 0 ? "365px" : "265px",
+                        height: questions.length > 0 ? "365px" : "265px",
                         overflowY: "scroll",
                     }}
-                    ref={modalContentRef}
                 >
                     <div
                         className="row px-0 py-4 px-2 mb-2"
@@ -400,13 +439,19 @@ const AddQuestionsModal = ({
                             tableColumns={QuestionsModalTableColumns}
                             tableName="Questions"
                             setSingleQuestion={setSingleQuestion}
+                            setIsQuestionUpdating={setIsQuestionUpdating}
                             isFetching={isQuestionsListFetching}
                             isLoading={isQuestionsListLoading}
-                            setIsQuestionUpdating={setIsQuestionUpdating}
+                            setAllQuestions={setAllQuestions}
+                            allQuestions={allQuestions}
+                            handleScrollToBottom={handleScrollToBottom}
                         />
                     </div>
 
-                    <div className="row mb-4 align-items-center">
+                    <div
+                        id="scrollTarget"
+                        className="row mb-4 align-items-center"
+                    >
                         <ModalInputLabel className="col-4">
                             Type<sup>*</sup>
                         </ModalInputLabel>
@@ -545,55 +590,50 @@ const AddQuestionsModal = ({
                                     "list"
                                 }
                             >
-                                <div className="row mb-4 align-items-center">
+                                <div className="row mb-4 align-items-start">
                                     <ModalInputLabel className="col-4">
                                         Parent Question For
                                     </ModalInputLabel>
                                     <div className="col-8 flex-column px-0">
                                         <div className="d-flex flex-column justify-content-start">
-                                            <div className="d-flex justify-content-start align-items-center">
-                                                <ModalInput
-                                                    type="radio"
-                                                    className="ml-2"
-                                                    name="parent_question_for"
-                                                    id="parent_question_for_yes"
-                                                    value="yes"
-                                                    checked={
-                                                        singleQuestion?.parent_question_for ===
-                                                        "yes"
-                                                    }
-                                                    onChange={handleChange}
-                                                    placeholder="Write Here"
-                                                />
-                                                <ModalInputLabel
-                                                    htmlFor="parent_question_for_yes"
-                                                    className="ml-2"
-                                                >
-                                                    Yes
-                                                </ModalInputLabel>
-                                            </div>
-                                            <div className="d-flex">
-                                                <ModalInput
-                                                    type="radio"
-                                                    className="ml-2"
-                                                    name="parent_question_for"
-                                                    id="parent_question_for_no"
-                                                    value="no"
-                                                    checked={
-                                                        singleQuestion?.parent_question_for ===
-                                                        "no"
-                                                    }
-                                                    onChange={handleChange}
-                                                    placeholder="Write Here"
-                                                />
-                                                <ModalInputLabel
-                                                    htmlFor="parent_question_for_no"
-                                                    className="ml-2"
-                                                >
-                                                    No
-                                                </ModalInputLabel>
-                                            </div>
+                                            {singleQuestion?.parent_question?.listItem?.map(
+                                                (list) => (
+                                                    <div
+                                                        className="d-flex justify-content-start align-items-center mb-2"
+                                                        key={list.id}
+                                                    >
+                                                        <ModalInput
+                                                            type="radio"
+                                                            className="ml-2"
+                                                            name="parent_question_for"
+                                                            id={`parent_question_for_${list.id}`}
+                                                            value={list.id}
+                                                            checked={
+                                                                singleQuestion?.parent_question_for ===
+                                                                list?.id
+                                                            }
+                                                            onChange={
+                                                                handleChange
+                                                            }
+                                                            placeholder="Write Here"
+                                                        />
+                                                        <ModalInputLabel
+                                                            htmlFor={`parent_question_for_${list?.id}`}
+                                                            className="ml-2"
+                                                        >
+                                                            {list?.title}
+                                                        </ModalInputLabel>
+                                                    </div>
+                                                )
+                                            )}
                                         </div>
+                                        {yesNoValueEmpty &&
+                                            !singleQuestion?.parent_question_for && (
+                                                <p className="text-danger py-1">
+                                                    Parent Question For is
+                                                    required
+                                                </p>
+                                            )}
                                     </div>
                                 </div>
                             </Switch.Case>
@@ -657,7 +697,8 @@ const AddQuestionsModal = ({
                     </div>
                     <Flex gap="10px" justifyContent="center">
                         <ModalButton onClick={handleAddQuestion} width="200px">
-                            {(isLoading || isEditSinglePolicySalesRiskAnalysisLoading)
+                            {isLoading ||
+                            isEditSinglePolicySalesRiskAnalysisLoading
                                 ? "Saving..."
                                 : isQuestionUpdating
                                 ? "Update Question"

@@ -11,17 +11,15 @@ const AddQuestionTypeListInputs = ({
     setSingleQuestion,
     isListEmpty,
 }) => {
-    const list = [...singleQuestion?.listItem];
-
+    let list = [...singleQuestion?.listItem];
 
     console.log("list", list);
 
     return (
-        <div className="row mb-4 align-items-center">
+        <div className="row mb-4 align-items-start">
             <ModalInputLabel className="col-4">
                 List Item <sup>*</sup>{" "}
             </ModalInputLabel>
-
             <div className="col-8 flex-column px-0">
                 {singleQuestion?.listItem?.map((item, index) => (
                     <div
@@ -37,11 +35,17 @@ const AddQuestionTypeListInputs = ({
                                     className="w-100"
                                     name="title"
                                     onChange={(e) => {
-                                        list[index].title = e.target.value;
-                                        setSingleQuestion({
-                                            ...singleQuestion,
-                                            listItem: list,
-                                        });
+                                        if (list[index] && e.target) {
+                                            const newList = [...list]; // Create a copy of the list array
+                                            newList[index] = {
+                                                ...newList[index],
+                                                title: e.target.value,
+                                            }; // Update the specific item in the copied array
+                                            setSingleQuestion({
+                                                ...singleQuestion,
+                                                listItem: newList,
+                                            });
+                                        }
                                     }}
                                     value={item?.title}
                                     placeholder="Write Here"

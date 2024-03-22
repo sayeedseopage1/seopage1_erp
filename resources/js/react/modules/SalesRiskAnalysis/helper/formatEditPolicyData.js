@@ -201,11 +201,17 @@ const flattened = [];
  */
 const flattenQuestions = (questions) => {
   const flatten = (question) => {
+    const existingIndex = flattened.findIndex(item => item.id === question.id);
+    if (existingIndex !== -1) {
+      flattened.splice(existingIndex, 1); // Remove existing question with the same id
+    }
     flattened.push(question);
     if (question.questions && question.questions.length > 0) {
       question.questions.forEach(flatten);
     }
   };
+
+
   questions.forEach(flatten);
   return flattened;
 };
@@ -218,14 +224,14 @@ const helperSingleQuestions = (item) => {
     type: item?.type,
     placeholder: item?.placeholder,
     parent_question: null,
-    parent_question_for: 
-    item?.type === "yesNo" ? item?.value : "",
+    parent_question_for:
+      item?.type === "yesNo" ? item?.value : "",
     parent_id: item?.parent_id,
     ruleList: item?.rule_list,
     comment: item?.comment,
     id: item?.id,
     policy_id: item?.policy_id,
-    listItem: item?.type === "list" ? item?.value : "",
+    listItem: item?.type === "list" ? item?.value : [],
   };
 
 }
@@ -236,7 +242,7 @@ const helperSingleQuestions = (item) => {
  * @param {Array} questionsList - The array of questions to search for parent question.
  * @returns {Object} - The formatted question item.
  */
-const formatSingleQuestions = (item ) => {
+const formatSingleQuestions = (item) => {
   // Find the parent question in the flattened array
   const parentQuestion = item?.parent_id
     ? flattened?.find((question) => question?.id === item?.parent_id)
@@ -254,7 +260,7 @@ const formatSingleQuestions = (item ) => {
     comment: item?.comment,
     id: item?.id,
     policy_id: item?.policy_id,
-    listItem: item?.type === "list" ? item?.value : "",
+    listItem: item?.type === "list" ? item?.value : [],
   };
 };
 
@@ -278,8 +284,10 @@ const getChildQuestions = (questions) => {
  * @returns {Array} - The formatted array of questions.
  */
 
-export const formatQuestionData = (questionsList) => {
+export const formatQuestionData = (questionsList, setAllQuestions) => {
+  setAllQuestions([]);
   flattenQuestions(questionsList);
+  setAllQuestions(flattened);
   return questionsList.map((item) => ({
     ...formatSingleQuestions(item, questionsList),
     questions: item.questions.length > 0 ? getChildQuestions(item.questions) : [],

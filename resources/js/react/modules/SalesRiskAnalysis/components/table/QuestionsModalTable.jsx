@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import _ from "lodash";
 import PropTypes from "prop-types";
 import {
@@ -14,6 +14,8 @@ import {
 // ui components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import QuestionsModalTableLoader from "../loader/QuestionsModalTableLoader";
+
+// Table components
 import EmptyTable from "../../../../global/EmptyTable";
 
 const QuestionsModalTable = ({
@@ -21,8 +23,11 @@ const QuestionsModalTable = ({
     tableColumns,
     tableName,
     isLoading,
-    setIsQuestionUpdating,
+    handleScrollToBottom,
+    setAllQuestions,
+    allQuestions,
     setSingleQuestion,
+    setIsQuestionUpdating
 }) => {
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -69,11 +74,22 @@ const QuestionsModalTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             editSingleQuestion: (row) => {
-                setIsQuestionUpdating(true)
+                handleScrollToBottom();
+                setAllQuestions([]);
+                setIsQuestionUpdating(true);
+                if(row?.parent_question?.type === "list") {
+                    setSingleQuestion({
+                        ...row,
+                        listItem: allQuestions.find((question) => question?.id === row?.id)?.listItem || [],
+                        parent_question_for: row?.parent_question_for,
+                    });
+                }
                 setSingleQuestion(row);
             },
         },
     });
+
+    console.log("table", isLoading);
 
     return (
         <React.Fragment>
@@ -154,5 +170,13 @@ const QuestionsModalTable = ({
         </React.Fragment>
     );
 };
-
 export default QuestionsModalTable;
+
+QuestionsModalTable.propTypes = {
+    tableData: PropTypes.array,
+    tableColumns: PropTypes.array,
+    tableName: PropTypes.string,
+    isLoading: PropTypes.bool,
+    handleScrollToTop: PropTypes.func,
+    setSingleQuestion: PropTypes.func,
+};

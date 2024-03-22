@@ -773,6 +773,7 @@ const SalesRiskAnalysisTable = ({
                     closeModal={handleCloseAddQuestionsModal}
                     addQuestionsData={addQuestionsData}
                     setAddQuestionsData={setAddQuestionsData}
+                    refetchSaleRiskAnalysis={refetch}
                 />
             )}
             {editPolicyModal && (
