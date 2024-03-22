@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import CKEditorComponent from "../../../ckeditor";
 import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
@@ -17,18 +17,25 @@ import styles from "./task-edit-form.module.css";
 import { Listbox } from "@headlessui/react";
 import { toast } from "react-toastify";
 import {
+    useDeleteGraphicsTaskFileMutation,
     useDeleteUplaodedFileMutation,
-    useGetTaskDetailsQuery
+    useGetTaskDetailsQuery,
+    useGetTypesOfGraphicWorksQuery
 } from "../../../services/api/SingleTaskPageApi";
 import { useGetMilestoneDetailsQuery } from "../../../services/api/projectApiSlice";
 import { useUpdateTaskMutation } from "../../../services/api/tasksApiSlice";
 import { convertTime } from "../../../utils/converTime";
 import { calenderOpen } from "./helper/calender_open";
+import TypeOfGraphicsWorkSelection from "../../../projects/components/graphics-design-forms/TypeOfGraphicsWorkSelection";
+import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeOfLogo";
+import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
+import ThemeTypeSelect from "../../../projects/components/ui-ux-design-forms/ThemeTypeSelect";
+import { checkIsURL } from "../../../utils/check-is-url";
 
 const dayjs = new CompareDate();
 
 // Edit form Provider
-const EditFormProvider = ({ task }) => {
+const EditFormProvider = ({ task, singleTask }) => {
     const [searchParams] = useSearchParams(); // get search params
     const isVisible = searchParams.get("modal") === "edit"; // check has modal
     const taskId = searchParams.get("task"); // get task id
@@ -45,6 +52,7 @@ const EditFormProvider = ({ task }) => {
             if (res?.status === 200) {
                 toast.success("Task Updated successfully!");
                 close();
+                window.location.reload();
             }
         }).catch((err) => {
             if (err?.status === 422) {
@@ -70,6 +78,7 @@ const EditFormProvider = ({ task }) => {
                         {task && (
                             <TaskEditForm
                                 task={task}
+                                singleTask={singleTask}
                                 onSubmit={handleSubmission}
                                 isLoading={isLoading}
                                 onClose={close}
@@ -83,8 +92,9 @@ const EditFormProvider = ({ task }) => {
 };
 
 export default EditFormProvider;
-
-const TaskEditForm = ({ task, onSubmit, isLoading, onClose }) => {
+// TODO: implement edit form
+const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) => {
+    console.log("task in page:row ", row);
     const editDataIsFetching = !task;
     //form data
     const [title, setTitle] = useState(task.title);
@@ -112,6 +122,115 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose }) => {
     const [attachedFiles, setAttachedFiles] = useState([]);
     const [files, setFiles] = React.useState([]);
     const [error, setError] = useState(null);
+
+    // graphic task details
+    const graphicWorkDetails = new Object(row?.graphic_work_detail);
+    console.log(graphicWorkDetails)
+
+    let defaultSecondaryColors;
+    let defaultFileTypesNeeded;
+
+    // files
+    const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
+
+    const [defaultImgOrVidForWork, setDefaultImgOrVidForWork] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3))
+
+
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
+        defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
+        defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+        // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        // defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+        // defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
+        // setDefaultBrandGuidelineFiles(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
+    }
+
+    //state for graphic designer start
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
+    const [typeOfLogo, setTypeOfLogo] = useState("");
+    const [brandName, setBrandName] = useState("");
+    const [numOfVersions, setNumOfVersions] = useState(null);
+    const [reference, setReference] = useState("");
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
+    const [textForDesign, setTextForDesign] = useState([]);
+    const [imageForDesigner, setImageForDesigner] = useState([]);
+    const [imgOrVidForWork, setImgOrVidForWork] = useState([]);
+    const [fontName, setFontName] = useState('');
+    const [fontUrl, setFontUrl] = useState('');
+    const [brandGuideline, setBrandGuideline] = useState([]);
+    const [illustration, setIllustration] = useState("");
+    const [others, setOthers] = useState("");
+    const [primaryColor, setPrimaryColor] = React.useState("");
+    const [primaryColorDescription, setPrimaryColorDescription] =
+        React.useState("");
+    const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
+    const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
+    //state for graphic designer end
+
+    // state for ui/ux start
+    const [cms, setCms] = useState("")
+    const [themeType, setThemeType] = useState("")
+    const [themeName, setThemeName] = useState("")
+    const [themeTemplate, setThemeTemplate] = useState("")
+    // state for ui/ux end
+
+    // let defaultTextForDesignBanner;
+    const [defaultTextForDesignBanner, setDefaultTextForDesignBanner] = useState(graphicWorkDetails?.type_of_graphic_work_id === 2 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1))
+
+    // let defaultTextForDesignBrochure;
+    const [defaultTextForDesignBrochure, setDefaultTextForDesignBrochure] = useState(graphicWorkDetails?.type_of_graphic_work_id === 3 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1))
+
+    // let defaultTextForDesignCompanyProfile;
+    const [defaultTextForDesignCompanyProfile, setFefaultTextForDesignCompanyProfile] = useState(graphicWorkDetails?.type_of_graphic_work_id === 4 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1))
+
+    // let defaultImageForDesignerRetouching;
+    const [defaultImageForDesignerRetouching, setDefaultImageForDesignerRetouching] = useState(graphicWorkDetails?.type_of_graphic_work_id === 5 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2))
+
+    // let defaultImageForDesignerBgRemoval;
+    const [defaultImageForDesignerBgRemoval, setDefaultImageForDesignerBgRemoval] = useState(graphicWorkDetails?.type_of_graphic_work_id === 6 && graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2))
+
+    useEffect(() => {
+        if (themeName || themeTemplate) {
+            setThemeType({
+                "id": 2,
+                "type_name": "Need to use a specific theme"
+            })
+        } else {
+            setThemeType({
+                "id": 1,
+                "type_name": "No specific theme"
+            })
+        }
+    }, [themeName, themeTemplate])
+
+    // initial default data
+    useEffect(() => {
+        if (row) {
+            setCms(row?.cms);
+            setThemeName(row?.theme_name);
+            setThemeTemplate(row?.theme_template_library_link);
+            // graphics 
+            setTypeOfGraphicsCategory({
+                id: row?.graphic_work_detail?.type_of_graphic_work_id,
+                name: graphicOptions?.find((item) => item.id == row?.graphic_work_detail?.type_of_graphic_work_id)?.name,
+            });
+            setTypeOfLogo({
+                type_name: graphicWorkDetails?.type_of_logo,
+            });
+
+            setBrandName(graphicWorkDetails?.brand_name)
+            setNumOfVersions(graphicWorkDetails?.number_of_versions);
+            setReference(graphicWorkDetails?.reference);
+            setFontName(graphicWorkDetails?.font_name);
+            setFontUrl(graphicWorkDetails?.font_url);
+            setPrimaryColor(graphicWorkDetails?.primary_color);
+            setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
+            setIllustration(graphicWorkDetails?.design_instruction);
+            setOthers(graphicWorkDetails?.design_instruction);
+            setPrimaryColor(graphicWorkDetails?.primary_color);
+            setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
+        }
+    }, [row, graphicWorkDetails, graphicOptions])
 
     const { data: estimation, isFetching } = useGetTaskDetailsQuery(
         `/${task.id}/json?mode=estimation_time`
@@ -178,6 +297,114 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose }) => {
 
         if (!description) showError('description');
 
+        // graphics design fields validation
+        if (taskCategory?.category_name === "Graphic Design") {
+            if (!typeOfGraphicsCategory) {
+                err.typeOfGraphicsCategory = "You have to select Type of graphic work";
+                count++;
+            }
+            if (!reference) {
+                err.reference = "The reference field is required";
+                count++;
+            }
+            if (!fontName) {
+                err.fontName = "Font name is required";
+                count++;
+            }
+            if (!fontUrl) {
+                err.fontUrl = "You have to provide font URL";
+                count++;
+            } else if (!checkIsURL(fontUrl)) {
+                err.fontUrl = "You have to provide a valid font URL";
+                toast.warn("You have to provide a valid font URL");
+                count++;
+            }
+            if (!brandGuideline) {
+                err.brandGuideline = "Brand guideline is required";
+                count++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 1) {
+            if (!typeOfLogo) {
+                err.typeOfLogo = "You have to select Type of logo";
+                count++;
+            }
+            if (!brandName) {
+                err.brandName = "The brand name field is required";
+                count++;
+            }
+            if (!numOfVersions) {
+                err.numOfVersions = "Number of versions is required";
+                count++;
+            }
+            if (!fileTypesNeeded) {
+                err.fileTypesNeeded = "File types is required";
+                count++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+            if (!textForDesign) {
+                err.textForDesign = "The text for design field is required";
+                count++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+            if (!imageForDesigner) {
+                err.imageForDesigner = "Image is required for designer";
+                count++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 8) {
+            if (!imgOrVidForWork) {
+                err.imgOrVidForWork = "Images/videos is requiredn for work";
+                count++;
+            }
+        }
+
+        if (typeOfGraphicsCategory?.id === 7) {
+            if (illustration === "") {
+                err.others = "Write Name of the illustration design work";
+                count++;
+            }
+        }
+        if (typeOfGraphicsCategory?.id === 9) {
+            if (others === "") {
+                err.others = "Write Name of the graphic design work";
+                count++;
+            }
+        }
+
+        // ui/ux design fields validation
+        if (taskCategory?.category_name === "UI/UIX Design") {
+            if (!cms) {
+                err.cms = "The CMS name field is required";
+                count++;
+            }
+            if (!themeType) {
+                err.themeType = "You have to select Theme";
+                count++;
+            }
+
+            if (themeType?.id === 2) {
+                if (themeName === null) {
+                    err.themeName = "The theme name field is required";
+                    count++;
+                }
+                if (themeTemplate === null) {
+                    err.themeTemplate = "You have to provide theme template URL";
+                    count++;
+                } else if (!checkIsURL(themeTemplate)) {
+                    err.themeTemplate = "You have to provide a valid theme template URL";
+                    toast.warn("You have to provide a valid theme template URL");
+                    count++;
+                }
+            }
+        }
+
         setError(error);
         return count === 0;
 
@@ -207,6 +434,59 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose }) => {
         fd.append("deliverable_id", milestone?.deliverable_type ?? '');
         fd.append("image_url", null);
         fd.append("addedFiles", null);
+
+
+        // graphics start 
+        fd.append("type_of_graphic_work_id", typeOfGraphicsCategory?.id ?? "");
+        if (typeOfGraphicsCategory?.id == 1) {
+            fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
+            fd.append("brand_name", brandName ?? "");
+            fd.append("number_of_versions", numOfVersions ?? "");
+            fd.append("file_types_needed", JSON.stringify(fileTypesNeeded) ?? "");
+        }
+        if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
+            Array.from(textForDesign).forEach((file) => {
+                fd.append("attach_text_files[]", file);
+            });
+        }
+        if (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) {
+            Array.from(imageForDesigner).forEach((file) => {
+                fd.append("workable_image_files[]", file);
+            });
+        }
+        if (typeOfGraphicsCategory?.id === 7) {
+            fd.append("design_instruction", illustration ?? "");
+        }
+        if (typeOfGraphicsCategory?.id === 9) {
+            fd.append("design_instruction", others ?? "");
+        }
+        if ((typeOfGraphicsCategory?.id === 8)) {
+            Array.from(imgOrVidForWork).forEach((file) => {
+                fd.append("workable_image_or_video_files[]", file);
+            });
+        }
+
+        fd.append("reference", reference ?? "");
+        fd.append("font_name", fontName ?? "");
+        fd.append("font_url", fontUrl ?? "");
+        fd.append("primary_color", primaryColor ?? "");
+        fd.append("primary_color_description", primaryColorDescription ?? "");
+        fd.append("secondary_colors", JSON.stringify(secondaryColors) ?? "");
+        Array.from(brandGuideline).forEach((file) => {
+            fd.append("brand_guideline_files[]", file);
+        });
+        // graphics end 
+
+        // ui/ux start 
+        fd.append("cms", cms ?? "");
+        if (themeType?.id == 2) {
+            fd.append("theme_name", themeName ?? "");
+            fd.append("theme_template_library_link", themeTemplate ?? "");
+        }
+        // ui/ux end 
+
+
+
         fd.append("_method", "POST");
         fd.append(
             "_token",
@@ -266,6 +546,99 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose }) => {
         if (hoursErr) errText += hoursErr;
         if (minErr) errText += minErr;
         return errText;
+    };
+
+    // TODO: delete files for graphics design section here
+    const [deleteGraphicsTaskFile] = useDeleteGraphicsTaskFileMutation()
+
+    const handleDeleteBrandFile = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultBrandGuidelineFiles(prev)
+    }
+    const handleDeletedefaultImgOrVidForWorkFile = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultImgOrVidForWork(prev)
+    }
+    const handleDeleteTextForDesignBanner = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultTextForDesignBanner(prev)
+    }
+
+    const handleDeleteTextForDesignBrochure = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultTextForDesignBrochure(prev)
+    }
+
+    const handleDeleteTextForDesignCompanyProfile = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setFefaultTextForDesignCompanyProfile(prev)
+    }
+
+    const handleDeleteImgForDesigner = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultImageForDesignerRetouching(prev)
+    }
+
+    const handleDeleteImgBgForDesigner = (e, file, prev) => {
+        deleteGraphicsTaskFile(file?.id).unwrap();
+        // delete form ui
+        prev = prev?.filter(item => item?.id !== file?.id);
+        setDefaultImageForDesignerBgRemoval(prev)
+    }
+
+    // add secondary color
+    const addSecondaryColor = (e) => {
+        e.stopPropagation();
+        setSecondaryColors((prev) => [
+            ...prev,
+            {
+                id: (Math.random() + 1).toString(36).substring(7),
+                color: "#1D82F5",
+                description: "",
+            },
+        ]);
+    };
+
+    // handle secondary color change
+    const handleSecondaryColorChange = (e, id) => {
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id
+                ? { id, color: e.target.value, description: "" }
+                : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // handle secondary color description change
+    const handleSecondaryColorDescriptionChange = (e, editor, id) => {
+        let text = editor.getData();
+        let newColors = _.map(secondaryColors, (item) =>
+            item.id === id ? { ...item, description: text } : item
+        );
+        setSecondaryColors([...newColors]);
+    };
+
+    // remove secondary color
+    const removeSecondaryColor = (e, id) => {
+        let newColors = _.filter(secondaryColors, (item) => item.id !== id);
+        setSecondaryColors([...newColors]);
+    };
+
+    // color schema
+    const onChange = (e, setState) => {
+        setState(e.target.value);
     };
 
     return (
@@ -475,6 +848,695 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose }) => {
                             }}
                         />
                     </div>
+
+
+                    {
+                        taskCategory ? taskCategory?.category_name === "Graphic Design" && <>
+                            {/* Type Of Graphics Work */}
+                            <div className="col-12 col-md-6">
+                                <TypeOfGraphicsWorkSelection
+                                    selected={typeOfGraphicsCategory}
+                                    onSelect={setTypeOfGraphicsCategory}
+
+                                />
+                                {error?.typeOfGraphicsCategory && (
+                                    <div style={{ color: "red" }}>
+                                        {error?.typeOfGraphicsCategory}
+                                    </div>
+                                )}
+                            </div>
+                            {/* for logo  */}
+                            {
+                                typeOfGraphicsCategory?.id === 1 && <>
+                                    <div className="col-12 col-md-6">
+                                        <TypeOfLogo
+                                            selected={typeOfLogo}
+                                            onSelect={setTypeOfLogo}
+                                        />
+                                        {error?.typeOfLogo && (
+                                            <div style={{ color: "red" }}>
+                                                {error?.typeOfLogo}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="brandName"
+                                            label="Brand Name"
+                                            type="text"
+                                            placeholder="Enter brand name"
+                                            name="brandName"
+                                            required={true}
+                                            value={brandName}
+                                            error={error?.brandName}
+                                            onChange={(e) =>
+                                                handleChange(e, setBrandName)
+                                            }
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="numOfVersions"
+                                            label="Number of Versions"
+                                            type="number"
+                                            placeholder="Enter Number of versions"
+                                            name="numOfVersions"
+                                            required={true}
+                                            value={numOfVersions}
+                                            error={error?.numOfVersions}
+                                            onChange={(e) =>
+                                                handleChange(e, setNumOfVersions)
+                                            }
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'fileTypesNeeded'}
+                                                className={`f-14 text-dark-gray mb-1`}
+                                                data-label="true"
+                                            >
+                                                File Types Needed
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            <FileTypesNeeded
+                                                className={`form-control height-35 w-100 f-14`}
+                                                id='fileTypesNeeded'
+                                                fileTypesNeeded={fileTypesNeeded}
+                                                setFileTypesNeeded={setFileTypesNeeded}
+                                                multiple
+                                            />
+                                            {error?.fileTypesNeeded && (
+                                                <div style={{ color: "red" }}>
+                                                    {error?.fileTypesNeeded}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
+                            }
+                            {/* for Banner, Brochure or company profile */}
+                            {
+                                (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'textForDesign'}
+                                                className={`f-14 text-dark-gray mb-2`}
+                                                data-label="true"
+                                            >
+                                                Attach text that will be used for the design
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            {
+                                                typeOfGraphicsCategory?.id === 2 && <UploadFilesInLine
+                                                    files={textForDesign}
+                                                    setFiles={setTextForDesign}
+                                                    {...(defaultTextForDesignBanner && { previous: defaultTextForDesignBanner })}
+                                                    onPreviousFileDelete={handleDeleteTextForDesignBanner}
+                                                />
+                                            }
+                                            {
+                                                typeOfGraphicsCategory?.id === 3 && <UploadFilesInLine
+                                                    files={textForDesign}
+                                                    setFiles={setTextForDesign}
+                                                    {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
+                                                    onPreviousFileDelete={handleDeleteTextForDesignBrochure}
+                                                />
+                                            }
+                                            {
+                                                typeOfGraphicsCategory?.id === 4 && <UploadFilesInLine
+                                                    files={textForDesign}
+                                                    setFiles={setTextForDesign}
+                                                    {...(defaultTextForDesignCompanyProfile && { previous: defaultTextForDesignCompanyProfile })}
+                                                    onPreviousFileDelete={handleDeleteTextForDesignCompanyProfile}
+                                                />
+                                            }
+
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* background removal or image retouching */}
+                            {
+                                (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) && <>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'imageForDesigner'}
+                                                className={`f-14 text-dark-gray mb-2`}
+                                                data-label="true"
+                                            >
+                                                Image where the designer will work
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            {
+                                                typeOfGraphicsCategory?.id === 5 && <UploadFilesInLine
+                                                    files={imageForDesigner}
+                                                    setFiles={setImageForDesigner}
+                                                    {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
+                                                    onPreviousFileDelete={handleDeleteImgForDesigner}
+                                                />
+                                            }
+                                            {
+                                                typeOfGraphicsCategory?.id === 6 && <UploadFilesInLine
+                                                    files={imageForDesigner}
+                                                    setFiles={setImageForDesigner}
+                                                    {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
+                                                    onPreviousFileDelete={handleDeleteImgBgForDesigner}
+                                                />
+                                            }
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* motion graphics */}
+                            {
+                                typeOfGraphicsCategory?.id === 8 && <>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'imgOrVidForWork'}
+                                                className={`f-14 text-dark-gray mb-2`}
+                                                data-label="true"
+                                            >
+                                                Images/videos that will be used for the work
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            <UploadFilesInLine
+                                                files={imgOrVidForWork}
+                                                setFiles={setImgOrVidForWork}
+                                                previous={defaultImgOrVidForWork}
+                                                onPreviousFileDelete={handleDeletedefaultImgOrVidForWorkFile}
+                                            />
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* Illustration */}
+                            {
+                                typeOfGraphicsCategory?.id === 7 && <>
+                                    <div className="col-12">
+                                        <div className="form-group my-3">
+                                            <label htmlFor="">
+                                                {" "}
+                                                Name of the illustration work!<sup>*</sup>{" "}
+                                            </label>
+                                            <div
+                                                className="ck-editor-holder"
+                                                style={{ minHeight: "50px" }}
+                                            >
+                                                <CKEditorComponent
+                                                    data={illustration}
+                                                    onChange={(
+                                                        e,
+                                                        editor
+                                                    ) =>
+                                                        setIllustration(
+                                                            editor.getData()
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                            {error?.illustration && (
+                                                <div style={{ color: "red" }}>
+                                                    {error?.illustration}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
+                            }
+                            {/* Others */}
+                            {
+                                typeOfGraphicsCategory?.id === 9 && <>
+                                    <div className="col-12">
+                                        <div className="form-group my-3">
+                                            <label htmlFor="">
+                                                {" "}
+                                                Name of the graphic design work!<sup>*</sup>{" "}
+                                            </label>
+                                            <div
+                                                className="ck-editor-holder"
+                                                style={{ minHeight: "50px" }}
+                                            >
+                                                <CKEditorComponent
+                                                    data={others}
+                                                    onChange={(
+                                                        e,
+                                                        editor
+                                                    ) =>
+                                                        setOthers(
+                                                            editor.getData()
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                            {error?.others && (
+                                                <div style={{ color: "red" }}>
+                                                    {error?.others}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* Reference */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="reference"
+                                    label="Reference"
+                                    type="text"
+                                    placeholder="Enter a task reference"
+                                    name="reference"
+                                    required={true}
+                                    value={reference}
+                                    error={error?.reference}
+                                    onChange={(e) =>
+                                        handleChange(e, setReference)
+                                    }
+                                />
+                            </div>
+
+                            {/* Font name */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="fontName"
+                                    label="Font Name"
+                                    type="text"
+                                    placeholder="Enter a font name"
+                                    name="fontName"
+                                    required={true}
+                                    value={fontName}
+                                    error={error?.fontName}
+                                    onChange={(e) =>
+                                        handleChange(e, setFontName)
+                                    }
+                                />
+                            </div>
+
+                            {/* font url  */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="fontUrl"
+                                    label="Font Url"
+                                    type="url"
+                                    placeholder="Enter font url"
+                                    name="fontUrl"
+                                    value={fontUrl}
+                                    error={error?.fontUrl}
+                                    onChange={(e) =>
+                                        handleChange(e, setFontUrl)
+                                    }
+                                />
+                            </div>
+                            {/* Brand guideline */}
+                            <div className="col-12 col-md-6">
+                                <div className={`form-group my-3 w-100`}>
+                                    <label
+                                        htmlFor={'brandGuideline'}
+                                        className={`f-14 text-dark-gray mb-2`}
+                                        data-label="true"
+                                    >
+                                        Brand guideline
+                                    </label>
+                                    <UploadFilesInLine
+                                        files={brandGuideline}
+                                        setFiles={setBrandGuideline}
+                                        previous={defaultBrandGuidelineFiles}
+                                        onPreviousFileDelete={handleDeleteBrandFile}
+                                    />
+                                </div>
+                            </div>
+
+
+                            {/* color schema */}
+                            <div className="col-12">
+                                <div className="form-group">
+                                    <label
+                                        htmlFor=""
+                                        className={`f-14 text-dark-gray mb-2`}
+                                        data-label="true"
+                                    >
+                                        Color Schema
+                                    </label>
+                                    <React.Fragment>
+                                        {/* primary color */}
+                                        <div
+                                            className="mt-3 mx-3 p-3"
+                                            style={{
+                                                background: "#F9F9F9",
+                                                borderRadius: "10px",
+                                            }}
+                                        >
+                                            <div className="form-group">
+                                                <label
+                                                    htmlFor=""
+                                                    className="mb-2"
+                                                    style={{
+                                                        fontWeight: 600,
+                                                        color: "#777",
+                                                    }}
+                                                >
+                                                    1. Primary Color{" "}
+                                                    <sup>*</sup>{" "}
+                                                </label>
+
+                                                <div className="form-group px-2">
+                                                    <label htmlFor="">
+                                                        Choose Color:
+                                                    </label>
+                                                    <div className="input-group mb-3 col-12 col-md-6">
+                                                        <input
+                                                            type="text"
+                                                            className="form-control"
+                                                            placeholder="Recipient's username"
+                                                            aria-label="Recipient's username"
+                                                            aria-describedby="basic-addon2"
+                                                            value={
+                                                                primaryColor
+                                                            }
+                                                            onChange={(e) =>
+                                                                onChange(
+                                                                    e,
+                                                                    setPrimaryColor
+                                                                )
+                                                            }
+                                                        />
+                                                        <div className="input-group-append">
+                                                            <span
+                                                                className="input-group-text px-1 border-0"
+                                                                id="basic-addon2"
+                                                            >
+                                                                <input
+                                                                    type="color"
+                                                                    value={
+                                                                        primaryColor
+                                                                    }
+                                                                    onChange={(
+                                                                        e
+                                                                    ) =>
+                                                                        onChange(
+                                                                            e,
+                                                                            setPrimaryColor
+                                                                        )
+                                                                    }
+                                                                    style={{
+                                                                        width: "32px",
+                                                                        border: "none",
+                                                                    }}
+                                                                />
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="form-group pl-2">
+                                                    <label htmlFor="">
+                                                        Where Should
+                                                        Designer Use this
+                                                        Color <sup>*</sup>
+                                                    </label>
+                                                    <div className="ck-editor-holder">
+                                                        <CKEditorComponent
+                                                            data={primaryColorDescription}
+                                                            onChange={(
+                                                                e,
+                                                                editor
+                                                            ) =>
+                                                                setPrimaryColorDescription(
+                                                                    editor.getData()
+                                                                )
+                                                            }
+                                                        />
+                                                    </div>
+
+                                                    {error?.pColorDesc && (
+                                                        <div
+                                                            className=""
+                                                            style={{
+                                                                color: "red",
+                                                            }}
+                                                        >
+                                                            {" "}
+                                                            {
+                                                                error?.pColorDesc
+                                                            }{" "}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* secondary color */}
+                                        <div
+                                            className="mt-3 mx-3 p-3"
+                                            style={{
+                                                background: "#F9F9F9",
+                                                borderRadius: "10px",
+                                            }}
+                                        >
+                                            <div className="form-group">
+                                                <label
+                                                    htmlFor=""
+                                                    className="mb-2"
+                                                    style={{
+                                                        fontWeight: 600,
+                                                        color: "#777",
+                                                    }}
+                                                >
+                                                    2. Secondary Color{" "}
+                                                    <sup>*</sup>{" "}
+                                                </label>
+
+                                                {_.map(
+                                                    secondaryColors,
+                                                    (item, index) => (
+                                                        <div
+                                                            className="p-3"
+                                                            key={item.id}
+                                                        >
+                                                            <div className="form-group">
+                                                                <label htmlFor="">
+                                                                    <b>
+                                                                        {index +
+                                                                            1}
+                                                                        .
+                                                                    </b>{" "}
+                                                                    Choose
+                                                                    Color:
+                                                                </label>
+                                                                <div className="d-flex align-items-center">
+                                                                    <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                                        <input
+                                                                            type="text"
+                                                                            className="form-control"
+                                                                            placeholder="Recipient's username"
+                                                                            aria-label="Recipient's username"
+                                                                            aria-describedby="basic-addon2"
+                                                                            value={
+                                                                                item.color
+                                                                            }
+                                                                            onChange={(
+                                                                                e
+                                                                            ) =>
+                                                                                handleSecondaryColorChange(
+                                                                                    e,
+                                                                                    item.id
+                                                                                )
+                                                                            }
+                                                                        />
+
+                                                                        <div className="input-group-append">
+                                                                            <span
+                                                                                className="input-group-text px-1 border-0"
+                                                                                id="basic-addon2"
+                                                                            >
+                                                                                <input
+                                                                                    type="color"
+                                                                                    value={
+                                                                                        item.color
+                                                                                    }
+                                                                                    onChange={(
+                                                                                        e
+                                                                                    ) =>
+                                                                                        handleSecondaryColorChange(
+                                                                                            e,
+                                                                                            item.id
+                                                                                        )
+                                                                                    }
+                                                                                    style={{
+                                                                                        width: "32px",
+                                                                                        border: "none",
+                                                                                    }}
+                                                                                />
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {_.size(
+                                                                        secondaryColors
+                                                                    ) >
+                                                                        1 && (
+                                                                            <button
+                                                                                aria-label="remove"
+                                                                                onClick={(
+                                                                                    e
+                                                                                ) =>
+                                                                                    removeSecondaryColor(
+                                                                                        e,
+                                                                                        item.id
+                                                                                    )
+                                                                                }
+                                                                                className="py-2 px-3 ml-auto rounded color_remove_btn"
+                                                                            >
+                                                                                <i className="fa-solid fa-trash-can" />
+                                                                            </button>
+                                                                        )}
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="form-group pl-3">
+                                                                <label htmlFor="">
+                                                                    Where
+                                                                    Should
+                                                                    Designer
+                                                                    Use this
+                                                                    Color{" "}
+                                                                    <sup>
+                                                                        *
+                                                                    </sup>
+                                                                </label>
+                                                                <div className="ck-editor-holder">
+                                                                    <CKEditorComponent
+                                                                        data={item?.description}
+                                                                        onChange={(
+                                                                            e,
+                                                                            editor
+                                                                        ) =>
+                                                                            handleSecondaryColorDescriptionChange(
+                                                                                e,
+                                                                                editor,
+                                                                                item.id
+                                                                            )
+                                                                        }
+                                                                    />
+                                                                </div>
+
+                                                                {error?.sDescription && (
+                                                                    <div
+                                                                        className=""
+                                                                        style={{
+                                                                            color: "red",
+                                                                        }}
+                                                                    >
+                                                                        {" "}
+                                                                        {
+                                                                            error?.sDescription
+                                                                        }{" "}
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                )}
+
+                                                <div className="d-flex align-items-center px-3">
+                                                    <button
+                                                        type="button"
+                                                        onClick={
+                                                            addSecondaryColor
+                                                        }
+                                                        className="bg-transparent text-primary hover-underline ml-auto"
+                                                    >
+                                                        + Another Color
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </React.Fragment>
+
+                                </div>
+                            </div>
+                            {/* end color schema */}
+
+                        </> : null
+                    }
+
+                    {
+                        taskCategory ? taskCategory?.category_name === "UI/UIX Design" && <>
+                            {/* cms name  */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="cms"
+                                    label="CMS"
+                                    type="text"
+                                    placeholder="Enter a CMS"
+                                    name="cms"
+                                    required={true}
+                                    value={cms}
+                                    error={error?.cms}
+                                    onChange={(e) =>
+                                        handleChange(e, setCms)
+                                    }
+                                />
+                            </div>
+                            <div className="col-12 col-md-6">
+                                <ThemeTypeSelect
+                                    selected={themeType}
+                                    onSelect={setThemeType}
+                                />
+                                {error?.themeType && (
+                                    <div style={{ color: "red" }}>
+                                        {error?.themeType}
+                                    </div>
+                                )}
+                            </div>
+
+                            {
+                                themeType?.id === 2 && <>
+                                    {/* theme name */}
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="themeName"
+                                            label="Theme Name"
+                                            type="text"
+                                            placeholder="Enter a theme name"
+                                            name="themeName"
+                                            required={true}
+                                            value={themeName}
+                                            error={error?.themeName}
+                                            onChange={(e) =>
+                                                handleChange(e, setThemeName)
+                                            }
+                                        />
+                                    </div>
+                                    {/* theme template url */}
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="themeTemplate"
+                                            label="Theme template library link"
+                                            type="url"
+                                            placeholder="Enter a template library link"
+                                            name="themeTemplate"
+                                            required={true}
+                                            value={themeTemplate}
+                                            error={error?.themeTemplate}
+                                            onChange={(e) =>
+                                                handleChange(e, setThemeTemplate)
+                                            }
+                                        />
+                                    </div>
+                                </>
+                            }
+
+                        </> : null
+                    }
+
 
                     <div className="col-6">
                         <AssignedToSelection

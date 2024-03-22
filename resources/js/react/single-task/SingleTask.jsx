@@ -240,7 +240,6 @@ const SingleTaskPage = () => {
                                             <div className="sp1_st-list-item-head">
                                                 Project Manager:{" "}
                                             </div>
-                                            {/* TODO: if user profile pic is unavailable then set first letter of name */}
                                             <div className="sp1_st-list-item-value">
                                                 <SingleTaskPerson
                                                     avatar={task?.projectManagerAvatar}
@@ -1023,14 +1022,14 @@ const SingleTaskPage = () => {
                 </div>
             </div>
 
-            <ShowEditModals task={task} auth={loggedUser} />
+            <ShowEditModals task={task} singleTask={Task} auth={loggedUser} />
         </div>
     );
 };
 
 export default SingleTaskPage;
 
-const ShowEditModals = ({ auth, task }) => {
+const ShowEditModals = ({ auth, task, singleTask }) => {
     let hasAccess = false;
 
     let time = task.isSubtask ? task?.parentTaskTimeLog : task?.totalTimeLog;
@@ -1048,7 +1047,7 @@ const ShowEditModals = ({ auth, task }) => {
         if (task.isSubtask) {
             return <SubTaskEditModal task={task} />;
         } else {
-            return <TaskEditForm task={task} />;
+            return <TaskEditForm task={task} singleTask={singleTask} />;
         }
     }
 

@@ -10,7 +10,7 @@ const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOn
     const onSelected = (option) => {
         if (!readOnly) {
             if (multiple) {
-                if (fileTypesNeeded.includes(option)) {
+                if (fileTypesNeeded?.includes(option)) {
                     setFileTypesNeeded(fileTypesNeeded.filter(p => p !== option));
                 } else {
                     setFileTypesNeeded([...fileTypesNeeded, option]);
@@ -38,7 +38,7 @@ const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOn
                         style={{
                             gap: "5px",
                         }}>
-                        {fileTypesNeeded?.length > 0 ? fileTypesNeeded.map(p => (
+                        {fileTypesNeeded?.length > 0 ? fileTypesNeeded?.map(p => (
                             <div key={`${p}-${Math.random()}`} className="cnx_select_box_tag">
                                 {!readOnly && <button aria-label='removeTag' onMouseDown={() => remove(p)}>
                                     <i className="fa-solid fa-xmark" />
