@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState, useRef } from 'react';
 import Modal from './Modal';
 import { useClickAway } from 'react-use';
@@ -7,6 +7,7 @@ import PMGuideline, { ColorItem } from './PMGuideline';
 import FileUploader from '../../file-upload/FileUploader';
 import { useGetTypesOfGraphicWorksQuery } from '../../services/api/SingleTaskPageApi';
 import './styles/guideline.css'
+import { useGetSubTasksQuery } from '../../services/api/tasksApiSlice';
 
 const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask }) => {
     const [expend, setExpend] = useState(false);
@@ -15,13 +16,20 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     const ref = useRef();
     const { data: graphicOptions, isFetching } = useGetTypesOfGraphicWorksQuery("")
 
-    // console.log("TaskCategory", singleTask?.category?.category_name)
+    // sub task details start
+    const isSubTask = singleTask?.dependent_task_id
+    const { data: subTasks } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
+        skip: !isSubTask
+    })
+    const graphicSubTaskDetails = new Object(subTasks?.sub_task_details_graphic_work)
 
-    // TODO: show subtask 
+    console.log('graphicSubTask', graphicSubTaskDetails)
 
     const graphicWorkDetails = new Object(singleTask?.graphic_work_detail);
 
-    const typeOfGraphicsCategoryName = graphicOptions?.find((item) => graphicWorkDetails?.type_of_graphic_work_id === item?.id)?.name
+    const commonGraphicWorkDetails = _.isEmpty(graphicWorkDetails) ? graphicSubTaskDetails : graphicWorkDetails
+
+    const typeOfGraphicsCategoryName = graphicOptions?.find((item) => commonGraphicWorkDetails?.type_of_graphic_work_id === item?.id)?.name
 
     const {
         brand_name,
@@ -41,7 +49,9 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         type_of_graphic_work_id,
         type_of_logo,
         updated_at
-    } = graphicWorkDetails;
+    } = commonGraphicWorkDetails;
+
+
 
     const { cms, theme_name, theme_template_library_link } = singleTask || {}
 
@@ -61,8 +71,6 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         defaultBrandGuidelineFiles = graphic_task_files?.filter((item) => item?.file_type == 4)
     }
 
-
-
     const handleExpend = (e) => {
         e.preventDefault();
         setExpend(!expend);
@@ -80,9 +88,11 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                     <h6 className="mb-2">Graphic Work Details</h6>
                     <hr />
                     <div className="row">
-                        <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                            <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
-                        </div>
+                        {
+                            commonGraphicWorkDetails && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
+                            </div>
+                        }
                         {
                             type_of_graphic_work_id === 1 && <>
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
@@ -95,7 +105,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     <span><strong>Number of Versions</strong>: <br /> {number_of_versions}</span>
                                 </div>
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded}</span>
+                                    <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded.join(", ")}</span>
                                 </div>
                             </>
                         }
@@ -304,7 +314,10 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                     {/* end color schema */}
                 </div>
             }
+
+
             {singleTask?.category?.category_name === "Graphic Design" && <hr />}
+
             {
                 singleTask?.category?.category_name === "UI/UIX Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
                     <h6 className="mb-2">UI/UIX Work Details</h6>
@@ -406,7 +419,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                                 <span><strong>Number of Versions</strong>: <br /> {number_of_versions}</span>
                                             </div>
                                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded}</span>
+                                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded.join(", ")}</span>
                                             </div>
                                         </>
                                     }

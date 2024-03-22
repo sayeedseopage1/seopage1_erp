@@ -31,8 +31,12 @@ const taskApiSlice = apiSlice.injectEndpoints({
         }),
 
         getSubTasks: build.query({
-            query: ({ taskId, query }) =>
-                `/account/tasks/get-tasks-subtasks/${taskId}?${query}`,
+            query: ({ taskId, query }) => {
+                const queryParam = query ? `${taskId}?${query}` : `${taskId}`;
+                return {
+                    url: `/account/tasks/get-tasks-subtasks/${queryParam}`,
+                };
+            },
         }),
         getTaskForTotalTime: build.query({
             query: (taskId) => `/account/task/${taskId}/json?mode=basic`,

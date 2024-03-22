@@ -32,17 +32,17 @@ const EditFormProvider = ({ task }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const close = () => navigate(location.pathname, {replace: true});
+    const close = () => navigate(location.pathname, { replace: true });
 
 
-    const [   editSubtask, { isLoading, error } ] = useEditSubtaskMutation();
+    const [editSubtask, { isLoading, error }] = useEditSubtaskMutation();
     // handle submission
     const handleSubmission = (formData) => {
-        editSubtask({data: formData, id: task?.id}).unwrap().then(res => {
+        editSubtask({ data: formData, id: task?.id }).unwrap().then(res => {
             toast.success("Task Updated successfully!");
             close();
         }).catch((err) => {
-            if(err?.status === 422){
+            if (err?.status === 422) {
                 toast.warn("Please fill out all required fields")
             }
         })
@@ -54,10 +54,10 @@ const EditFormProvider = ({ task }) => {
         <Modal isOpen={isVisible}>
             <Card className={styles.form_card}>
                 <Card.Head
-                  onClose={close}
-                  className={styles.form_card_head}
+                    onClose={close}
+                    className={styles.form_card_head}
                 >
-                    <h6> Edit Task # {taskId} </h6>
+                    <h6> Edit Task # {taskId} ss</h6>
                 </Card.Head>
 
                 <Card.Body className={styles.form_card_body}>
@@ -79,11 +79,11 @@ const EditFormProvider = ({ task }) => {
 
 export default EditFormProvider;
 
-const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
+const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose }) => {
     const editDataIsFetching = !task;
     //form data
     const [title, setTitle] = useState(task.title);
-    const [milestone, setMilestone] = useState({id: task.milestoneID, milestone_title: task.milestoneTitle});
+    const [milestone, setMilestone] = useState({ id: task.milestoneID, milestone_title: task.milestoneTitle });
     const [parentTask, setParentTask] = useState(task.parentTaskTitle);
     const [startDate, setStateDate] = useState(new Date(task.startDate));
     const [dueDate, setDueDate] = useState(new Date(task.dueDate));
@@ -113,21 +113,21 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
     );
 
     const required_error = error?.status === 422 ? error?.data : null;
-// attach files
-React.useEffect(() => {
-    const attachments = [];
+    // attach files
+    React.useEffect(() => {
+        const attachments = [];
 
-    _.forEach(task?.attachments, file => (
-        file.task_file_name && attachments.push({
-            id: file.task_file_id,
-            name: file.task_file_name,
-            icon: _.includes(['png','jpeg', 'jpg', 'svg', 'gif', 'webp'] , file.task_file_icon) ? 'images' : 'others',
-            file_url: file.task_file_url,
-        })
-    ))
+        _.forEach(task?.attachments, file => (
+            file.task_file_name && attachments.push({
+                id: file.task_file_id,
+                name: file.task_file_name,
+                icon: _.includes(['png', 'jpeg', 'jpg', 'svg', 'gif', 'webp'], file.task_file_icon) ? 'images' : 'others',
+                file_url: file.task_file_url,
+            })
+        ))
 
-    setAttachedFiles(attachments)
-}, [])
+        setAttachedFiles(attachments)
+    }, [])
     // handle onchange
     const handleChange = (e, setState) => {
         e.preventDefault();
@@ -137,90 +137,89 @@ React.useEffect(() => {
 
     // check validation
     const isValid = () => {
-      let count = 0;
-      const err = new Object();
+        let count = 0;
+        const err = new Object();
 
-      const errorMessages = {
-        requiredField: 'This field is required.',
-        startDate: 'Please select a start date.',
-        dueDate: 'Please select a due date.',
-        taskCategory: 'Please select a task category.',
-        assignedTo: 'Please select a user.',
-        overloadedUser: (name, gender) =>
-          `You cannot assign this task to ${name} because ${
-            gender === 'male' ? 'he ' : 'she '
-          } has more than 4 submittable tasks.`,
-        description: 'This field is required.',
-      };
+        const errorMessages = {
+            requiredField: 'This field is required.',
+            startDate: 'Please select a start date.',
+            dueDate: 'Please select a due date.',
+            taskCategory: 'Please select a task category.',
+            assignedTo: 'Please select a user.',
+            overloadedUser: (name, gender) =>
+                `You cannot assign this task to ${name} because ${gender === 'male' ? 'he ' : 'she '
+                } has more than 4 submittable tasks.`,
+            description: 'This field is required.',
+        };
 
-      const showError = (field) => {
-        err[field] = errorMessages[field];
-        count++;
-      }
+        const showError = (field) => {
+            err[field] = errorMessages[field];
+            count++;
+        }
 
 
-      if(!title) showError('title');
-      if(!startDate) showError('startDate');
-      if(!dueDate) showError('dueDate');
-      if(!taskCategory) showError('taskCategory');
-      if(!assignedTo) showError('assignedTo');
+        if (!title) showError('title');
+        if (!startDate) showError('startDate');
+        if (!dueDate) showError('dueDate');
+        if (!taskCategory) showError('taskCategory');
+        if (!assignedTo) showError('assignedTo');
 
-      if (assignedTo && assignedTo?.isOverloaded) {
-        err.assignedTo = overloadedUser(assignedTo.name, genderPronoun);
-        count++;
-      }
+        if (assignedTo && assignedTo?.isOverloaded) {
+            err.assignedTo = overloadedUser(assignedTo.name, genderPronoun);
+            count++;
+        }
 
-      if(!description) showError('description');
+        if (!description) showError('description');
 
-      setError(error);
-      return count === 0;
+        setError(error);
+        return count === 0;
 
     }
 
     const handleSubmit = () => {
-         //form data
-         const _startDate = dayjs.dayjs(startDate).format("DD-MM-YYYY");
-         const _dueDate = dayjs.dayjs(dueDate).format("DD-MM-YYYY");
+        //form data
+        const _startDate = dayjs.dayjs(startDate).format("DD-MM-YYYY");
+        const _dueDate = dayjs.dayjs(dueDate).format("DD-MM-YYYY");
 
-         const fd = new FormData();
-         fd.append("milestone_id", task?.milestoneID);
-         fd.append("task_id", task?.parentTaskId);
-         fd.append("title", title);
-         fd.append("start_date", _startDate);
-         fd.append("due_date", _dueDate);
-         fd.append("project_id", task?.projectId);
-         fd.append("task_category_id", taskCategory?.id);
-         fd.append("user_id", assignedTo?.id);
-         fd.append("description", description);
-         fd.append("board_column_id", task?.boardColumn.id);
-         fd.append("priority", _.lowerCase(priority));
-         fd.append("estimate_hours", estimateTimeHour);
-         fd.append("estimate_minutes", estimateTimeMin);
-         fd.append("deliverable_id", milestone?.deliverable_type ?? '');
-         fd.append("image_url", null);
-         fd.append("addedFiles", null);
-         fd.append('subTaskID', task?.subtaskId);
-         fd.append("_method", "PUT");
-         fd.append(
-             "_token",
-             document
-                 .querySelector("meta[name='csrf-token']")
-                 .getAttribute("content")
-         );
-         Array.from(files).forEach((file) => {
-             fd.append("file[]", file);
-         });
+        const fd = new FormData();
+        fd.append("milestone_id", task?.milestoneID);
+        fd.append("task_id", task?.parentTaskId);
+        fd.append("title", title);
+        fd.append("start_date", _startDate);
+        fd.append("due_date", _dueDate);
+        fd.append("project_id", task?.projectId);
+        fd.append("task_category_id", taskCategory?.id);
+        fd.append("user_id", assignedTo?.id);
+        fd.append("description", description);
+        fd.append("board_column_id", task?.boardColumn.id);
+        fd.append("priority", _.lowerCase(priority));
+        fd.append("estimate_hours", estimateTimeHour);
+        fd.append("estimate_minutes", estimateTimeMin);
+        fd.append("deliverable_id", milestone?.deliverable_type ?? '');
+        fd.append("image_url", null);
+        fd.append("addedFiles", null);
+        fd.append('subTaskID', task?.subtaskId);
+        fd.append("_method", "PUT");
+        fd.append(
+            "_token",
+            document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content")
+        );
+        Array.from(files).forEach((file) => {
+            fd.append("file[]", file);
+        });
 
-        if(isValid()){
-         onSubmit(fd);
-        }else{
-         toast.warn('Please fill out all required fields!');
+        if (isValid()) {
+            onSubmit(fd);
+        } else {
+            toast.warn('Please fill out all required fields!');
         }
 
     };
 
 
-      const {data: projects, isFetching: isFetchingMilestone} = useGetMilestoneDetailsQuery(task?.projectId)
+    const { data: projects, isFetching: isFetchingMilestone } = useGetMilestoneDetailsQuery(task?.projectId)
 
 
 
@@ -508,8 +507,8 @@ React.useEffect(() => {
 
 
                             <Button
-                              onClick={handleSubmit}
-                              isLoading={isLoading}
+                                onClick={handleSubmit}
+                                isLoading={isLoading}
                             >
                                 <i className="fa-regular fa-paper-plane"></i>
                                 Update
