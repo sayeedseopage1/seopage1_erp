@@ -18,6 +18,7 @@ import { useSingleTask } from "../../../hooks/useSingleTask";
 import Loader from "../../components/Loader";
 import CommentsBody from "../../../UI/comments/CommentsBody";
 import { useGetCommentsQuery } from "../../../services/api/commentsApiSlice";
+import { useSelector } from "react-redux";
 
 const PreviewSubtask = ({ parentTask, subTask }) => {
     const [task, setTask] = React.useState(null);
@@ -28,6 +29,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
     const [histories, setHistories] = React.useState([]);
     const [comments, setComments] = React.useState([]);
     const [isCommentShow, setIsCommentShow] = React.useState(false);
+    const { task: singleTask } = useSelector((s) => s.subTask);
 
     const {
         getTaskById,
@@ -222,6 +224,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                             isFetching={taskDetailsIsFetching}
                             taskID={taskID}
                             task={task}
+                            singleTask={singleTask}
                         />
                     </div>
                 </div>

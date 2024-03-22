@@ -92,9 +92,8 @@ const EditFormProvider = ({ task, singleTask }) => {
 };
 
 export default EditFormProvider;
-// TODO: implement edit form
+
 const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) => {
-    console.log("task in page:row ", row);
     const editDataIsFetching = !task;
     //form data
     const [title, setTitle] = useState(task.title);

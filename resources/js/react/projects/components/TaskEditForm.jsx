@@ -27,7 +27,6 @@ import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
-    console.log("task in table", row);
     const { tasks, filter } = useSelector(s => s.tasks);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();

@@ -798,6 +798,7 @@ const SingleTaskPage = () => {
                                             text={task?.guidelines}
                                             task={task}
                                             workEnv={task?.workEnvData}
+                                            singleTask={Task}
                                         />
                                     </Accordion>
 

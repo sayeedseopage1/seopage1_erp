@@ -10,7 +10,7 @@ import PMGuideline from "../../../components/PMGuideline";
 import FileUploader from "../../../../file-upload/FileUploader";
 import { useAuth } from "../../../../hooks/useAuth";
 
-const Genarel = ({ task, isFetching }) => {
+const Genarel = ({ task, isFetching, singleTask }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const auth = useAuth();
 
@@ -397,6 +397,7 @@ const Genarel = ({ task, isFetching }) => {
                                 task={task}
                                 workEnv={task?.workEnvData}
                                 editorContainerClass="modal-guideline-editor-text"
+                                singleTask={singleTask}
                             />
                         </>
                     )}
@@ -437,10 +438,11 @@ const Genarel = ({ task, isFetching }) => {
                         text={task?.description}
                         task={task}
                         type="TASK_DESCRIPTION"
+                        singleTask={singleTask}
                     />
                     {_.size(task?.attachments) > 0 ? (
                         <div className="mt-3">
-                            <h4 className="mb-2">Task Attachments: </h4>
+                            <h6 className="mb-2">Task Attachments: </h6>
                             <FileUploader>
                                 {_.map(task?.attachments, (attachment) =>
                                     attachment?.task_file_name ? (

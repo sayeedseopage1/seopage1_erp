@@ -14,17 +14,18 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     let isLong = text?.length > 400;
     const showText = isLong ? text.slice(0, 400) + '...' : text;
     const ref = useRef();
-    const { data: graphicOptions, isFetching } = useGetTypesOfGraphicWorksQuery("")
+    const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
 
-    // sub task details start
+    // **************sub task details start**********
     const isSubTask = singleTask?.dependent_task_id
-    const { data: subTasks } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
+    const { data: subTasks, isFetching } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
         skip: !isSubTask
     })
+    // sub task details 
     const graphicSubTaskDetails = new Object(subTasks?.sub_task_details_graphic_work)
+    // **************sub task details end**********
 
-    console.log('graphicSubTask', graphicSubTaskDetails)
-
+    // parent task details 
     const graphicWorkDetails = new Object(singleTask?.graphic_work_detail);
 
     const commonGraphicWorkDetails = _.isEmpty(graphicWorkDetails) ? graphicSubTaskDetails : graphicWorkDetails
@@ -89,7 +90,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                     <hr />
                     <div className="row">
                         {
-                            commonGraphicWorkDetails && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            typeOfGraphicsCategoryName && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                 <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
                             </div>
                         }
@@ -282,42 +283,41 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         }
                     </div>
                     {/* color schema */}
-                    <div className="row">
-                        <div className="col-12">
-                            <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
-                            <div className='mb-3 rounded'>
-                                <div className='row' style={{ marginLeft: "0px" }}>
-                                    <div className='col-12 col-md-6 px-0'>
-                                        <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
-                                        <ColorItem color={primary_color} desc={primary_color_description} />
-                                    </div>
+                    {
+                        (primary_color || defaultSecondaryColors) && <div className="row">
+                            <div className="col-12">
+                                <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
+                                <div className='mb-3 rounded'>
+                                    <div className='row' style={{ marginLeft: "0px" }}>
+                                        <div className='col-12 col-md-6 px-0'>
+                                            <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
+                                            <ColorItem color={primary_color} desc={primary_color_description} />
+                                        </div>
 
-                                    <div className='col-12 col-md-6 px-0'>
-                                        <p className='font-weight-bold mr-2 mb-2'>
+                                        <div className='col-12 col-md-6 px-0'>
+                                            <p className='font-weight-bold mr-2 mb-2'>
+                                                {
+                                                    defaultSecondaryColors?.length > 1
+                                                        ? "Secondary Colors: "
+                                                        : "Secondary Color: "
+                                                }
+                                            </p>
                                             {
-                                                defaultSecondaryColors?.length > 1
-                                                    ? "Secondary Colors: "
-                                                    : "Secondary Color: "
+                                                defaultSecondaryColors?.map((color, i) => (
+                                                    <ColorItem key={i + color} color={color?.color}
+                                                        desc={color?.description} />
+                                                ))
                                             }
-                                        </p>
-                                        {
-                                            defaultSecondaryColors?.map((color, i) => (
-                                                <ColorItem key={i + color} color={color?.color}
-                                                    desc={color?.description} />
-                                            ))
-                                        }
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                     {/* end color schema */}
                 </div>
             }
-
-
             {singleTask?.category?.category_name === "Graphic Design" && <hr />}
-
             {
                 singleTask?.category?.category_name === "UI/UIX Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
                     <h6 className="mb-2">UI/UIX Work Details</h6>
@@ -404,9 +404,11 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                 <h6 className="mb-2">Graphic Work Details</h6>
                                 <hr />
                                 <div className="row">
-                                    <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                        <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
-                                    </div>
+                                    {
+                                        typeOfGraphicsCategoryName && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                            <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
+                                        </div>
+                                    }
                                     {
                                         type_of_graphic_work_id === 1 && <>
                                             <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
@@ -596,35 +598,37 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     }
                                 </div>
                                 {/* color schema */}
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
-                                        <div className='mb-3 rounded'>
-                                            <div className='row' style={{ marginLeft: "0px" }}>
-                                                <div className='col-12 col-md-6 px-0'>
-                                                    <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
-                                                    <ColorItem color={primary_color} desc={primary_color_description} />
-                                                </div>
+                                {
+                                    (primary_color || defaultSecondaryColors) && <div className="row">
+                                        <div className="col-12">
+                                            <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
+                                            <div className='mb-3 rounded'>
+                                                <div className='row' style={{ marginLeft: "0px" }}>
+                                                    <div className='col-12 col-md-6 px-0'>
+                                                        <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
+                                                        <ColorItem color={primary_color} desc={primary_color_description} />
+                                                    </div>
 
-                                                <div className='col-12 col-md-6 px-0'>
-                                                    <p className='font-weight-bold mr-2 mb-2'>
+                                                    <div className='col-12 col-md-6 px-0'>
+                                                        <p className='font-weight-bold mr-2 mb-2'>
+                                                            {
+                                                                defaultSecondaryColors?.length > 1
+                                                                    ? "Secondary Colors: "
+                                                                    : "Secondary Color: "
+                                                            }
+                                                        </p>
                                                         {
-                                                            defaultSecondaryColors?.length > 1
-                                                                ? "Secondary Colors: "
-                                                                : "Secondary Color: "
+                                                            defaultSecondaryColors?.map((color, i) => (
+                                                                <ColorItem key={i + color} color={color?.color}
+                                                                    desc={color?.description} />
+                                                            ))
                                                         }
-                                                    </p>
-                                                    {
-                                                        defaultSecondaryColors?.map((color, i) => (
-                                                            <ColorItem key={i + color} color={color?.color}
-                                                                desc={color?.description} />
-                                                        ))
-                                                    }
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                                 {/* end color schema */}
                             </div>
                         }

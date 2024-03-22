@@ -1782,7 +1782,8 @@ var SingleTaskPage = function SingleTaskPage() {
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_12__["default"], {
                   text: task === null || task === void 0 ? void 0 : task.guidelines,
                   task: task,
-                  workEnv: task === null || task === void 0 ? void 0 : task.workEnvData
+                  workEnv: task === null || task === void 0 ? void 0 : task.workEnvData,
+                  singleTask: Task
                 })]
               }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_11__["default"], {
                 title: (_$last = lodash__WEBPACK_IMPORTED_MODULE_0___default().last(task === null || task === void 0 ? void 0 : task.revisions)) === null || _$last === void 0 ? void 0 : _$last.revisionStatus,
@@ -2472,19 +2473,22 @@ var Guideline = function Guideline(_ref) {
   var showText = isLong ? text.slice(0, 400) + '...' : text;
   var ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
   var _useGetTypesOfGraphic = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useGetTypesOfGraphicWorksQuery)(""),
-    graphicOptions = _useGetTypesOfGraphic.data,
-    isFetching = _useGetTypesOfGraphic.isFetching;
+    graphicOptions = _useGetTypesOfGraphic.data;
 
-  // sub task details start
+  // **************sub task details start**********
   var isSubTask = singleTask === null || singleTask === void 0 ? void 0 : singleTask.dependent_task_id;
   var _useGetSubTasksQuery = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_7__.useGetSubTasksQuery)({
       taskId: singleTask === null || singleTask === void 0 ? void 0 : singleTask.dependent_task_id
     }, {
       skip: !isSubTask
     }),
-    subTasks = _useGetSubTasksQuery.data;
+    subTasks = _useGetSubTasksQuery.data,
+    isFetching = _useGetSubTasksQuery.isFetching;
+  // sub task details 
   var graphicSubTaskDetails = new Object(subTasks === null || subTasks === void 0 ? void 0 : subTasks.sub_task_details_graphic_work);
-  console.log('graphicSubTask', graphicSubTaskDetails);
+  // **************sub task details end**********
+
+  // parent task details 
   var graphicWorkDetails = new Object(singleTask === null || singleTask === void 0 ? void 0 : singleTask.graphic_work_detail);
   var commonGraphicWorkDetails = lodash__WEBPACK_IMPORTED_MODULE_2___default().isEmpty(graphicWorkDetails) ? graphicSubTaskDetails : graphicWorkDetails;
   var typeOfGraphicsCategoryName = graphicOptions === null || graphicOptions === void 0 || (_graphicOptions$find = graphicOptions.find(function (item) {
@@ -2553,7 +2557,7 @@ var Guideline = function Guideline(_ref) {
         children: "Graphic Work Details"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "row",
-        children: [commonGraphicWorkDetails && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        children: [typeOfGraphicsCategoryName && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
@@ -2723,7 +2727,7 @@ var Guideline = function Guideline(_ref) {
             })]
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      }), (primary_color || defaultSecondaryColors) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
         className: "row",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "col-12",
@@ -2914,7 +2918,7 @@ var Guideline = function Guideline(_ref) {
               children: "Graphic Work Details"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
               className: "row",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+              children: [typeOfGraphicsCategoryName && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                 className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
@@ -3084,7 +3088,7 @@ var Guideline = function Guideline(_ref) {
                   })]
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+            }), (primary_color || defaultSecondaryColors) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
               className: "row",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                 className: "col-12",
@@ -9981,7 +9985,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Loader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../components/Loader */ "./resources/js/react/single-task/components/Loader.jsx");
 /* harmony import */ var _UI_comments_CommentsBody__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../UI/comments/CommentsBody */ "./resources/js/react/UI/comments/CommentsBody.jsx");
 /* harmony import */ var _services_api_commentsApiSlice__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../services/api/commentsApiSlice */ "./resources/js/react/services/api/commentsApiSlice.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -10011,6 +10016,7 @@ var Comments = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.lazy(function () 
 }, {
   ssr: false
 });
+
 
 
 
@@ -10050,6 +10056,10 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
     _React$useState14 = _slicedToArray(_React$useState13, 2),
     isCommentShow = _React$useState14[0],
     setIsCommentShow = _React$useState14[1];
+  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_13__.useSelector)(function (s) {
+      return s.subTask;
+    }),
+    singleTask = _useSelector.task;
   var _useSingleTask = (0,_hooks_useSingleTask__WEBPACK_IMPORTED_MODULE_9__.useSingleTask)(),
     getTaskById = _useSingleTask.getTaskById,
     getSubmittionInfo = _useSingleTask.getSubmittionInfo,
@@ -10156,13 +10166,13 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
     _comments.unshift(comment);
     setComments(_comments);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
       className: "nav flex-column nav-pills sp1-subtask-modal-sidebar",
       id: "v-pills-tab",
       role: "tablist",
       "aria-orientation": "vertical",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
         className: "nav-link active",
         id: "v-pills-general-tab",
         "data-toggle": "pill",
@@ -10174,7 +10184,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
           return setIsCommentShow(false);
         },
         children: "General"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-submitted-work-tab",
         "data-toggle": "pill",
@@ -10187,7 +10197,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
           setIsCommentShow(false);
         },
         children: "Submitted Works"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-comments-tab",
         "data-toggle": "pill",
@@ -10200,7 +10210,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
           setIsCommentShow(true);
         },
         children: "Comment"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-time-log-work-tab",
         "data-toggle": "pill",
@@ -10213,7 +10223,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
           setIsCommentShow(false);
         },
         children: "Time Logs"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-history-tab",
         "data-toggle": "pill",
@@ -10226,7 +10236,7 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
           setIsCommentShow(false);
         },
         children: "History"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("a", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
         className: "nav-link",
         id: "v-pills-task-review-work-tab",
         "data-toggle": "pill",
@@ -10240,41 +10250,42 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
         },
         children: "Task Review"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
       className: "tab-content ".concat(isCommentShow ? "p-0" : "p-3", " sp1-subtask-modal-tab-content"),
       id: "v-pills-tabContent",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "tab-pane fade show active sp1_st_tab_panel",
         id: "v-pills-home",
         role: "tabpanel",
         "aria-labelledby": "v-pills-general-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_Genarel__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_preview_Genarel__WEBPACK_IMPORTED_MODULE_1__["default"], {
             isFetching: taskDetailsIsFetching,
             taskID: taskID,
-            task: task
+            task: task,
+            singleTask: singleTask
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-submitted-work",
         role: "tabpanel",
         "aria-labelledby": "v-pills-submitted-work-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_SubmittedWork__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_preview_SubmittedWork__WEBPACK_IMPORTED_MODULE_4__["default"], {
             task: task,
             submittedWork: submittedWork,
             loading: submittionInfoIsFetching
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-comments",
         role: "tabpanel",
         "aria-labelledby": "v-pills-comments-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_UI_comments_CommentsBody__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_UI_comments_CommentsBody__WEBPACK_IMPORTED_MODULE_11__["default"], {
           close: function close() {},
           comments: subTaskComments,
           loading: commentsLoading,
@@ -10289,37 +10300,37 @@ var PreviewSubtask = function PreviewSubtask(_ref) {
           taskId: subTask === null || subTask === void 0 ? void 0 : subTask.id,
           showCloseBtn: false
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-time-log-work",
         role: "tabpanel",
         "aria-labelledby": "v-pills-time-log-work-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_TimeLog__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_preview_TimeLog__WEBPACK_IMPORTED_MODULE_5__["default"], {
             task: task,
             timeLog: timeLog,
             isLoading: detailFetchingStateLoading
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-history",
         role: "tabpanel",
         "aria-labelledby": "v-pills-history-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
           className: "mr-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_History__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_preview_History__WEBPACK_IMPORTED_MODULE_7__["default"], {
             histories: histories,
             isLoading: detailFetchingStateLoading
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
         className: "tab-pane fade",
         id: "v-pills-task-review-work",
         role: "tabpanel",
         "aria-labelledby": "v-pills-task-review-work-tab",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_preview_TaskReview__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_preview_TaskReview__WEBPACK_IMPORTED_MODULE_6__["default"], {
           review: review,
           isLoading: detailFetchingStateLoading
         })
@@ -14005,7 +14016,6 @@ var EditFormProvider = function EditFormProvider(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFormProvider);
-// TODO: implement edit form
 var TaskEditForm = function TaskEditForm(_ref2) {
   var _graphicWorkDetails$g, _graphicWorkDetails$g2, _graphicWorkDetails$g3, _graphicWorkDetails$g4, _graphicWorkDetails$g5, _graphicWorkDetails$g6, _graphicWorkDetails$g7, _required_error$title, _milestone$milestone_, _$find, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2;
   var task = _ref2.task,
@@ -14013,7 +14023,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     onSubmit = _ref2.onSubmit,
     isLoading = _ref2.isLoading,
     onClose = _ref2.onClose;
-  console.log("task in page:row ", row);
   var editDataIsFetching = !task;
   //form data
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.title),
@@ -15867,7 +15876,8 @@ __webpack_require__.r(__webpack_exports__);
 var Genarel = function Genarel(_ref) {
   var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category, _task$boardColumn, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _task$category2, _task$category3, _$last;
   var task = _ref.task,
-    isFetching = _ref.isFetching;
+    isFetching = _ref.isFetching,
+    singleTask = _ref.singleTask;
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
   var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_10__.useAuth)();
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
@@ -16170,7 +16180,8 @@ var Genarel = function Genarel(_ref) {
             text: task === null || task === void 0 ? void 0 : task.guidelines,
             task: task,
             workEnv: task === null || task === void 0 ? void 0 : task.workEnvData,
-            editorContainerClass: "modal-guideline-editor-text"
+            editorContainerClass: "modal-guideline-editor-text",
+            singleTask: singleTask
           })]
         })
       }), _.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -16194,10 +16205,11 @@ var Genarel = function Genarel(_ref) {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
           text: task === null || task === void 0 ? void 0 : task.description,
           task: task,
-          type: "TASK_DESCRIPTION"
+          type: "TASK_DESCRIPTION",
+          singleTask: singleTask
         }), _.size(task === null || task === void 0 ? void 0 : task.attachments) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
           className: "mt-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h4", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("h6", {
             className: "mb-2",
             children: "Task Attachments: "
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_9__["default"], {
