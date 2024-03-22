@@ -284,9 +284,6 @@ class PortfolioController extends AccountBaseController
         $page_size = $request->page_size ?? 10;
 
 
-
-
-
         $data = DB::table('project_portfolios as pp')
             ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
             ->select('pp.*')
@@ -319,8 +316,11 @@ class PortfolioController extends AccountBaseController
                 }
 
             })
+            ->distinct()
             ->paginate($page_size);
+            // ->get();
 
+        // dd($data->count());
         return response()->json($data, 200);
     }
 }
