@@ -17,6 +17,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
     // console.log("TaskCategory", singleTask?.category?.category_name)
 
+    // TODO: show subtask 
+
     const graphicWorkDetails = new Object(singleTask?.graphic_work_detail);
 
     const typeOfGraphicsCategoryName = graphicOptions?.find((item) => graphicWorkDetails?.type_of_graphic_work_id === item?.id)?.name
@@ -270,32 +272,32 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         }
                     </div>
                     {/* color schema */}
-                    <div className="col-12 col-md-6 px-0">
-                        <div className="form-group">
+                    <div className="row">
+                        <div className="col-12">
                             <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
                             <div className='mb-3 rounded'>
-                                <ol style={{ marginLeft: "0px" }}>
-                                    <li className='d-flex flex-column'>
-                                        <span className='font-weight-bold mr-2 mb-2'>Primary Color: </span>
+                                <div className='row' style={{ marginLeft: "0px" }}>
+                                    <div className='col-12 col-md-6 px-0'>
+                                        <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
                                         <ColorItem color={primary_color} desc={primary_color_description} />
-                                    </li>
+                                    </div>
 
-                                    <li className='d-flex flex-column'>
-                                        <span className='font-weight-bold mr-2 mb-2'>
+                                    <div className='col-12 col-md-6 px-0'>
+                                        <p className='font-weight-bold mr-2 mb-2'>
                                             {
                                                 defaultSecondaryColors?.length > 1
                                                     ? "Secondary Colors: "
                                                     : "Secondary Color: "
                                             }
-                                        </span>
+                                        </p>
                                         {
                                             defaultSecondaryColors?.map((color, i) => (
                                                 <ColorItem key={i + color} color={color?.color}
                                                     desc={color?.description} />
                                             ))
                                         }
-                                    </li>
-                                </ol>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -581,32 +583,32 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     }
                                 </div>
                                 {/* color schema */}
-                                <div className="col-12 col-md-6 px-0">
-                                    <div className="form-group">
+                                <div className="row">
+                                    <div className="col-12">
                                         <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
                                         <div className='mb-3 rounded'>
-                                            <ol style={{ marginLeft: "0px" }}>
-                                                <li className='d-flex flex-column'>
-                                                    <span className='font-weight-bold mr-2 mb-2'>Primary Color: </span>
+                                            <div className='row' style={{ marginLeft: "0px" }}>
+                                                <div className='col-12 col-md-6 px-0'>
+                                                    <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
                                                     <ColorItem color={primary_color} desc={primary_color_description} />
-                                                </li>
+                                                </div>
 
-                                                <li className='d-flex flex-column'>
-                                                    <span className='font-weight-bold mr-2 mb-2'>
+                                                <div className='col-12 col-md-6 px-0'>
+                                                    <p className='font-weight-bold mr-2 mb-2'>
                                                         {
                                                             defaultSecondaryColors?.length > 1
                                                                 ? "Secondary Colors: "
                                                                 : "Secondary Color: "
                                                         }
-                                                    </span>
+                                                    </p>
                                                     {
                                                         defaultSecondaryColors?.map((color, i) => (
                                                             <ColorItem key={i + color} color={color?.color}
                                                                 desc={color?.description} />
                                                         ))
                                                     }
-                                                </li>
-                                            </ol>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

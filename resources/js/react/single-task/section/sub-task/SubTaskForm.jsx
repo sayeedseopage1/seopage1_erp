@@ -323,9 +323,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     // TODO: hide fields conditionally by this condition
     // console.log("task", task?.category?.name)
     // console.log("task1", task)
-    console.log({
-        cms, themeName, themeTemplate
-    })
 
     // handle submission
     const handleSubmit = async (e) => {
@@ -1051,38 +1048,32 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         </div>
 
                         {/* color schema */}
-                        <div className="col-12 col-md-6">
-                            <div className="form-group">
-                                <label
-                                    htmlFor={'brandGuideline'}
-                                    className={`f-14 text-dark-gray mb-2`}
-                                    data-label="true"
-                                >
-                                    Color Scheme
-                                </label>
-                                <div className='mb-3 p-2 rounded' style={{ backgroundColor: "#E9ECEF" }}>
-                                    <ul className='ml-0'>
-                                        <li className='d-flex flex-column'>
-                                            <span className='font-weight-bold mr-2 mb-2'>Primary Color: </span>
+                        <div className="row">
+                            <div className="col-12">
+                                <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
+                                <div className='mb-3 rounded'>
+                                    <div className='row' style={{ marginLeft: "0px" }}>
+                                        <div className='col-12 col-md-6 px-0'>
+                                            <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
                                             <ColorItem color={primaryColor} desc={primaryColorDescription} />
-                                        </li>
+                                        </div>
 
-                                        <li className='d-flex flex-column'>
-                                            <span className='font-weight-bold mr-2 mb-2'>
+                                        <div className='col-12 col-md-6 px-0'>
+                                            <p className='font-weight-bold mr-2 mb-2'>
                                                 {
-                                                    secondaryColors?.length > 1
+                                                    defaultSecondaryColors?.length > 1
                                                         ? "Secondary Colors: "
                                                         : "Secondary Color: "
                                                 }
-                                            </span>
+                                            </p>
                                             {
-                                                secondaryColors?.map((color, i) => (
+                                                defaultSecondaryColors?.map((color, i) => (
                                                     <ColorItem key={i + color} color={color?.color}
                                                         desc={color?.description} />
                                                 ))
                                             }
-                                        </li>
-                                    </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

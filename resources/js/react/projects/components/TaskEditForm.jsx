@@ -1537,6 +1537,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                 <AssignedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
+                                    taskCategory={taskCategory}
                                 />
 
                                 {formError?.assignedTo && (

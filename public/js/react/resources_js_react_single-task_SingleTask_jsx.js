@@ -2471,6 +2471,8 @@ var Guideline = function Guideline(_ref) {
 
   // console.log("TaskCategory", singleTask?.category?.category_name)
 
+  // TODO: show subtask 
+
   var graphicWorkDetails = new Object(singleTask === null || singleTask === void 0 ? void 0 : singleTask.graphic_work_detail);
   var typeOfGraphicsCategoryName = graphicOptions === null || graphicOptions === void 0 || (_graphicOptions$find = graphicOptions.find(function (item) {
     return (graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === (item === null || item === void 0 ? void 0 : item.id);
@@ -2709,9 +2711,9 @@ var Guideline = function Guideline(_ref) {
           })
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        className: "col-12 col-md-6 px-0",
+        className: "row",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-          className: "form-group",
+          className: "col-12",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
             className: "mb-2 f-16",
             style: {
@@ -2722,22 +2724,23 @@ var Guideline = function Guideline(_ref) {
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
             className: "mb-3 rounded",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("ol", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "row",
               style: {
                 marginLeft: "0px"
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
-                className: "d-flex flex-column",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                className: "col-12 col-md-6 px-0",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
                   className: "font-weight-bold mr-2 mb-2",
                   children: "Primary Color: "
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__.ColorItem, {
                   color: primary_color,
                   desc: primary_color_description
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
-                className: "d-flex flex-column",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                className: "col-12 col-md-6 px-0",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
                   className: "font-weight-bold mr-2 mb-2",
                   children: ((_defaultSecondaryColo = defaultSecondaryColors) === null || _defaultSecondaryColo === void 0 ? void 0 : _defaultSecondaryColo.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
                 }), (_defaultSecondaryColo2 = defaultSecondaryColors) === null || _defaultSecondaryColo2 === void 0 ? void 0 : _defaultSecondaryColo2.map(function (color, i) {
@@ -3069,9 +3072,9 @@ var Guideline = function Guideline(_ref) {
                 })
               })]
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-              className: "col-12 col-md-6 px-0",
+              className: "row",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-                className: "form-group",
+                className: "col-12",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "mb-2 f-16",
                   style: {
@@ -3082,22 +3085,23 @@ var Guideline = function Guideline(_ref) {
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
                   className: "mb-3 rounded",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("ol", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                    className: "row",
                     style: {
                       marginLeft: "0px"
                     },
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
-                      className: "d-flex flex-column",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                      className: "col-12 col-md-6 px-0",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
                         className: "font-weight-bold mr-2 mb-2",
                         children: "Primary Color: "
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_PMGuideline__WEBPACK_IMPORTED_MODULE_3__.ColorItem, {
                         color: primary_color,
                         desc: primary_color_description
                       })]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("li", {
-                      className: "d-flex flex-column",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                      className: "col-12 col-md-6 px-0",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
                         className: "font-weight-bold mr-2 mb-2",
                         children: ((_defaultSecondaryColo3 = defaultSecondaryColors) === null || _defaultSecondaryColo3 === void 0 ? void 0 : _defaultSecondaryColo3.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
                       }), (_defaultSecondaryColo4 = defaultSecondaryColors) === null || _defaultSecondaryColo4 === void 0 ? void 0 : _defaultSecondaryColo4.map(function (color, i) {
@@ -11765,7 +11769,7 @@ var fileInputStyle = {
   zIndex: '0'
 };
 var SubTaskForm = function SubTaskForm(_ref) {
-  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _task$category5, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category6, _required_error$page_2, _required_error$descr, _required_error$descr2;
+  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category5, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category6, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
@@ -12177,11 +12181,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
   // TODO: hide fields conditionally by this condition
   // console.log("task", task?.category?.name)
   // console.log("task1", task)
-  console.log({
-    cms: cms,
-    themeName: themeName,
-    themeTemplate: themeTemplate
-  });
 
   // handle submission
   var handleSubmit = /*#__PURE__*/function () {
@@ -12812,36 +12811,39 @@ var SubTaskForm = function SubTaskForm(_ref) {
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          className: "col-12 col-md-6",
+          className: "row",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-            className: "form-group",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("label", {
-              htmlFor: 'brandGuideline',
-              className: "f-14 text-dark-gray mb-2",
-              "data-label": "true",
-              children: "Color Scheme"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-              className: "mb-3 p-2 rounded",
+            className: "col-12",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              className: "mb-2 f-16",
               style: {
-                backgroundColor: "#E9ECEF"
+                color: '#878E97'
               },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("ul", {
-                className: "ml-0",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("li", {
-                  className: "d-flex flex-column",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("strong", {
+                children: "Color Scheme: "
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              className: "mb-3 rounded",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                className: "row",
+                style: {
+                  marginLeft: "0px"
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "col-12 col-md-6 px-0",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("p", {
                     className: "font-weight-bold mr-2 mb-2",
                     children: "Primary Color: "
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__.ColorItem, {
                     color: primaryColor,
                     desc: primaryColorDescription
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("li", {
-                  className: "d-flex flex-column",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "col-12 col-md-6 px-0",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("p", {
                     className: "font-weight-bold mr-2 mb-2",
-                    children: (secondaryColors === null || secondaryColors === void 0 ? void 0 : secondaryColors.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
-                  }), secondaryColors === null || secondaryColors === void 0 ? void 0 : secondaryColors.map(function (color, i) {
+                    children: ((_defaultSecondaryColo = defaultSecondaryColors) === null || _defaultSecondaryColo === void 0 ? void 0 : _defaultSecondaryColo.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
+                  }), (_defaultSecondaryColo2 = defaultSecondaryColors) === null || _defaultSecondaryColo2 === void 0 ? void 0 : _defaultSecondaryColo2.map(function (color, i) {
                     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_22__.ColorItem, {
                       color: color === null || color === void 0 ? void 0 : color.color,
                       desc: color === null || color === void 0 ? void 0 : color.description
@@ -13952,7 +13954,7 @@ var EditFormProvider = function EditFormProvider(_ref) {
         onClose: close,
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_head,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("h6", {
-          children: [" Edit Task # ", taskId, " "]
+          children: [" Edit Task # ", taskId]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"].Body, {
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_body,
