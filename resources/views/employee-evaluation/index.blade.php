@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('filter')
-<div id="employeeEvaluation"/>
+<div id="evaluationTableFilterContainer"/>
 @endsection
 @section('content')
 <div id="employeeEvaluation"/>
