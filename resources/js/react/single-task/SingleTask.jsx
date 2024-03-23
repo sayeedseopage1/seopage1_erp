@@ -841,6 +841,7 @@ const SingleTaskPage = () => {
                                     <Accordion
                                         expendable={false}
                                         title="Task Descriptions"
+                                        className="sp1_single_page_task--description"
                                     >
 
                                         <Guideline

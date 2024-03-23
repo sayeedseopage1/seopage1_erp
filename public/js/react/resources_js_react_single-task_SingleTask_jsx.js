@@ -1801,6 +1801,7 @@ var SingleTaskPage = function SingleTaskPage() {
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsxs)(_components_Accordion__WEBPACK_IMPORTED_MODULE_11__["default"], {
                 expendable: false,
                 title: "Task Descriptions",
+                className: "sp1_single_page_task--description",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_12__["default"], {
                   text: task === null || task === void 0 ? void 0 : task.description,
                   task: task,
