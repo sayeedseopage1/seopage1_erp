@@ -86,8 +86,6 @@ const EditFormProvider = ({ task, singleTask }) => {
 
 export default EditFormProvider;
 
-// TODO:
-// FIXME: useEffect render Maximum update depth exceeded.
 const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, onClose }) => {
     const editDataIsFetching = !task;
 
@@ -104,8 +102,8 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
     const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
 
-    // console.log("file_types_needed", graphicWorkDetails?.file_types_needed)
 
+    // set default value for files and colors for graphic design start
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
     // files
@@ -121,6 +119,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
         defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
     }
+    // set default value for files and colors for graphic design end
 
     //form data
     const [title, setTitle] = useState(task.title);
@@ -176,10 +175,8 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [themeTemplate, setThemeTemplate] = useState("")
     // state for ui/ux end
 
-    const { data: estimation, isFetching } = useGetTaskDetailsQuery(
-        `/${task.id}/json?mode=estimation_time`
-    );
 
+    // set state data default value from graphic designer start
     useEffect(() => {
         setBrandName(graphicWorkDetails?.brand_name)
         setNumOfVersions(graphicWorkDetails?.number_of_versions);
@@ -193,13 +190,6 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         setCms(taskDetails?.cms)
         setThemeName(taskDetails?.theme_name)
         setThemeTemplate(taskDetails?.theme_template_library_link)
-        // setTypeOfGraphicsCategory({
-        //     id: graphicWorkDetails?.type_of_graphic_work_id,
-        //     name: graphicOptions?.find((item) => item.id == graphicWorkDetails?.type_of_graphic_work_id)?.name,
-        // });
-        // setTypeOfLogo({
-        //     type_name: graphicWorkDetails?.type_of_logo,
-        // });
     }, [taskDetails, graphicWorkDetails]);
 
 
@@ -217,6 +207,11 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         }
     }, [graphicOptions, graphicWorkDetails]);
 
+    // set state data default value from graphic designer end
+
+    const { data: estimation, isFetching } = useGetTaskDetailsQuery(
+        `/${task.id}/json?mode=estimation_time`
+    );
 
     const required_error = error?.status === 422 ? error?.data : null;
     // attach files

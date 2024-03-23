@@ -11268,9 +11268,6 @@ var EditFormProvider = function EditFormProvider(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFormProvider);
-
-// TODO:
-// FIXME: useEffect render Maximum update depth exceeded.
 var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   var _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category2;
   var task = _ref2.task,
@@ -11297,8 +11294,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   var _useGetTypesOfGraphic = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTypesOfGraphicWorksQuery)(""),
     graphicOptions = _useGetTypesOfGraphic.data;
 
-  // console.log("file_types_needed", graphicWorkDetails?.file_types_needed)
-
+  // set default value for files and colors for graphic design start
   var defaultSecondaryColors;
   var defaultFileTypesNeeded;
   // files
@@ -11323,6 +11319,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 4;
     });
   }
+  // set default value for files and colors for graphic design end
 
   //form data
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.title),
@@ -11481,9 +11478,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     setThemeTemplate = _useState60[1];
   // state for ui/ux end
 
-  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(task.id, "/json?mode=estimation_time")),
-    estimation = _useGetTaskDetailsQue.data,
-    isFetching = _useGetTaskDetailsQue.isFetching;
+  // set state data default value from graphic designer start
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     setBrandName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.brand_name);
     setNumOfVersions(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.number_of_versions);
@@ -11497,13 +11492,6 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     setCms(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.cms);
     setThemeName(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_name);
     setThemeTemplate(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_template_library_link);
-    // setTypeOfGraphicsCategory({
-    //     id: graphicWorkDetails?.type_of_graphic_work_id,
-    //     name: graphicOptions?.find((item) => item.id == graphicWorkDetails?.type_of_graphic_work_id)?.name,
-    // });
-    // setTypeOfLogo({
-    //     type_name: graphicWorkDetails?.type_of_logo,
-    // });
   }, [taskDetails, graphicWorkDetails]);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.type_of_graphic_work_id) {
@@ -11521,6 +11509,12 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
       });
     }
   }, [graphicOptions, graphicWorkDetails]);
+
+  // set state data default value from graphic designer end
+
+  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(task.id, "/json?mode=estimation_time")),
+    estimation = _useGetTaskDetailsQue.data,
+    isFetching = _useGetTaskDetailsQue.isFetching;
   var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;
   // attach files
   react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(function () {
