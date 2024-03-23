@@ -28,7 +28,7 @@ const CustomModal = ({
                 },
             }}
             isOpen={open}
-            ariaHideApp={true}
+            ariaHideApp={false}
             onRequestClose={closeModal}
             shouldCloseOnOverlayClick={false}
             contentLabel={contentLabel}

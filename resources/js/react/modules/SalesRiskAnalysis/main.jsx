@@ -9,16 +9,15 @@ import Toaster from "../../global/Toaster";
 import { store } from "../../services/store";
 // components
 import SalesRiskAnalysis from "./Pages/SalesRiskAnalysis";
-
-
+import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
 
 const Content = () => {
-  return (
-      <React.Fragment>
-          <Outlet />
-          <Toaster />
-      </React.Fragment>
-  );
+    return (
+        <React.Fragment>
+            <Outlet />
+            <Toaster />
+        </React.Fragment>
+    );
 };
 
 const container = document.getElementById("salesRiskPolicies");
@@ -26,13 +25,35 @@ if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>
             <Provider store={store}>
-                  <BrowserRouter basename="/account/sales-risk-policies">
-                      <Routes>
+                <BrowserRouter basename="/account/sales-risk-policies">
+                    <Routes>
                         <Route path="/" element={<Content />}>
-                          <Route index element={<SalesRiskAnalysis />} />
+                            <Route index element={<SalesRiskAnalysis />} />
                         </Route>
-                      </Routes>
-                  </BrowserRouter>
+                    </Routes>
+                </BrowserRouter>
+            </Provider>
+        </React.StrictMode>
+    );
+}
+
+const containerSalePolicyQuestion =
+    document.getElementById("salePolicyQuestion");
+
+if (containerSalePolicyQuestion) {
+    ReactDOM.createRoot(containerSalePolicyQuestion).render(
+        <React.StrictMode>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Content />}>
+                            <Route
+                                path="account/deals/risk-analysis/:deal_id"
+                                element={<SalesRiskQuestions />}
+                            />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
             </Provider>
         </React.StrictMode>
     );

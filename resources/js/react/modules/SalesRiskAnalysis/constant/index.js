@@ -102,7 +102,7 @@ export const PolicyTypeItemValuesType = {
 
 export const QuestionsTypes = {
   label: 'Questions Type',
-  emptyOptionsLabel: 'Select Questions Type',
+  emptyOptionsLabel: 'Select Answer Type',
   id: 'questionsType',
   data: [
     {
@@ -128,7 +128,7 @@ export const QuestionsTypes = {
     {
       id: 5,
       label: "Long Text",
-      name: "long_text"
+      name: "longText"
     }
 
   ]

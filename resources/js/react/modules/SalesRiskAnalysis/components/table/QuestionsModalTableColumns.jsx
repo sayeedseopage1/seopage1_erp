@@ -22,7 +22,7 @@ export const QuestionsModalTableColumns = [
     },
     {
         id: "title",
-        header: "Title",
+        header: "Question Title",
         accessorKey: "title",
         cell: ({ row }) => {
             const data = row?.original;

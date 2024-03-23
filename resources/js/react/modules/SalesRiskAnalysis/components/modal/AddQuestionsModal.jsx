@@ -305,7 +305,7 @@ const AddQuestionsModal = ({
                 return "Enter Number";
             case "list":
                 return "Select from List";
-            case "long_text":
+            case "longText":
                 return "Describe Here";
         }
     };
@@ -464,7 +464,7 @@ const AddQuestionsModal = ({
                         className="row mb-4 align-items-center"
                     >
                         <ModalInputLabel className="col-4">
-                            Type<sup>*</sup>
+                           Answer Type<sup>*</sup>
                         </ModalInputLabel>
                         <div className="col-8 px-0 flex-column">
                             <ModalSelectContainer>
@@ -487,7 +487,7 @@ const AddQuestionsModal = ({
                         >
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
-                                    Title <sup>*</sup>{" "}
+                                   Question Title <sup>*</sup>{" "}
                                 </ModalInputLabel>
                                 <div className="col-8 flex-column px-0">
                                     <ModalInput
