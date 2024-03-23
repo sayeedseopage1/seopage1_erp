@@ -11937,7 +11937,6 @@ var SubTaskSection = function SubTaskSection(_ref) {
   // },[data])
 
   var Task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_12__.SingleTask(task);
-  console.log("Task", Task);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
     className: "sp1_task_right_card mb-3",
     ref: setSubtaskModalToggleRef,

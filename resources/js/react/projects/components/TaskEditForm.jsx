@@ -481,9 +481,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                     // // change on local
                     // const queryString = new URLSearchParams(filter).toString();
                     dispatch(updateTasks({ task: res.task }))
-                    // window.location.reload();
-
-
                     // // fetch updated tasks
                     // getTasks(`?${queryString}`)
                     //     .unwrap()
@@ -503,6 +500,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                         showConfirmButton: false,
                         timer: 2500,
                     });
+                    window.location.reload();
                 })
                 .catch((err) => {
                     if (err?.status === 422) {

@@ -1935,7 +1935,8 @@ var ShowEditModals = function ShowEditModals(_ref) {
     if (task.isSubtask) {
       // TODO: need to work here 
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_section_sub_task_SubTaskEditModal__WEBPACK_IMPORTED_MODULE_22__["default"], {
-        task: task
+        task: task,
+        singleTask: singleTask
       });
     } else {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_section_sub_task_TaskEditForm__WEBPACK_IMPORTED_MODULE_24__["default"], {
@@ -11141,8 +11142,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
 /* harmony import */ var _file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../file-upload/UploadFilesInLine */ "./resources/js/react/file-upload/UploadFilesInLine.jsx");
 /* harmony import */ var _global_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../global/Button */ "./resources/js/react/global/Button.jsx");
@@ -11158,7 +11159,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 /* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
 /* harmony import */ var _services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../../services/api/projectApiSlice */ "./resources/js/react/services/api/projectApiSlice.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_PMGuideline__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../components/PMGuideline */ "./resources/js/react/single-task/components/PMGuideline.jsx");
+/* harmony import */ var _projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../../projects/components/graphics-design-forms/FileTypesNeeded */ "./resources/js/react/projects/components/graphics-design-forms/FileTypesNeeded.jsx");
+/* harmony import */ var _projects_components_graphics_design_forms_TypeOfLogo__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../../../projects/components/graphics-design-forms/TypeOfLogo */ "./resources/js/react/projects/components/graphics-design-forms/TypeOfLogo.jsx");
+/* harmony import */ var _projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../../../projects/components/graphics-design-forms/TypeOfGraphicsWorkSelection */ "./resources/js/react/projects/components/graphics-design-forms/TypeOfGraphicsWorkSelection.jsx");
+/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
+/* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -11189,18 +11196,26 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
+
+
+
+
 var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_6__.CompareDate();
 
 // Edit form Provider
 var EditFormProvider = function EditFormProvider(_ref) {
-  var task = _ref.task;
-  var _useSearchParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_18__.useSearchParams)(),
+  var task = _ref.task,
+    singleTask = _ref.singleTask;
+  var _useSearchParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_24__.useSearchParams)(),
     _useSearchParams2 = _slicedToArray(_useSearchParams, 1),
     searchParams = _useSearchParams2[0]; // get search params
   var isVisible = searchParams.get("modal") === "edit"; // check has modal
   var taskId = searchParams.get("task"); // get task id
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_19__.useNavigate)();
-  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_19__.useLocation)();
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_25__.useNavigate)();
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_25__.useLocation)();
   var close = function close() {
     return navigate(location.pathname, {
       replace: true
@@ -11226,22 +11241,23 @@ var EditFormProvider = function EditFormProvider(_ref) {
       }
     });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_7__["default"], {
     isOpen: isVisible,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"], {
       className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"].Head, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"].Head, {
         onClose: close,
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_head,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("h6", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("h6", {
           children: [" Edit Task # ", taskId, " ss"]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"].Body, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"].Body, {
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_body,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "",
-          children: task && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(SubTaskEditModal, {
+          children: task && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(SubTaskEditModal, {
             task: task,
+            singleTask: singleTask,
             onSubmit: handleSubmission,
             isLoading: isLoading,
             onClose: close
@@ -11252,13 +11268,62 @@ var EditFormProvider = function EditFormProvider(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFormProvider);
+
+// TODO:
+// FIXME: useEffect render Maximum update depth exceeded.
 var SubTaskEditModal = function SubTaskEditModal(_ref2) {
-  var _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2;
+  var _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category2;
   var task = _ref2.task,
+    taskDetails = _ref2.singleTask,
     onSubmit = _ref2.onSubmit,
     isLoading = _ref2.isLoading,
     onClose = _ref2.onClose;
   var editDataIsFetching = !task;
+
+  // graphic task details
+
+  // **************sub task details start**********
+  var isSubTask = taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.dependent_task_id;
+  var _useGetSubTasksQuery = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_22__.useGetSubTasksQuery)({
+      taskId: taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.dependent_task_id
+    }, {
+      skip: !isSubTask
+    }),
+    subTasks = _useGetSubTasksQuery.data;
+  // sub task details 
+  var graphicWorkDetails = new Object(subTasks === null || subTasks === void 0 ? void 0 : subTasks.sub_task_details_graphic_work);
+  // **************sub task details end**********
+
+  var _useGetTypesOfGraphic = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTypesOfGraphicWorksQuery)(""),
+    graphicOptions = _useGetTypesOfGraphic.data;
+
+  // console.log("file_types_needed", graphicWorkDetails?.file_types_needed)
+
+  var defaultSecondaryColors;
+  var defaultFileTypesNeeded;
+  // files
+  var defaultTextForDesign;
+  var defaultImageForDesigner;
+  var defaultImgOrVidForWork;
+  var defaultBrandGuidelineFiles;
+  if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.graphic_task_files) {
+    var _graphicWorkDetails$g, _graphicWorkDetails$g2, _graphicWorkDetails$g3, _graphicWorkDetails$g4;
+    defaultSecondaryColors = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors);
+    defaultFileTypesNeeded = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed);
+    defaultTextForDesign = graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g === void 0 ? void 0 : _graphicWorkDetails$g.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
+    });
+    defaultImageForDesigner = graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g2 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g2 === void 0 ? void 0 : _graphicWorkDetails$g2.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 2;
+    });
+    defaultImgOrVidForWork = graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g3 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g3 === void 0 ? void 0 : _graphicWorkDetails$g3.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 3;
+    });
+    defaultBrandGuidelineFiles = graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g4 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g4 === void 0 ? void 0 : _graphicWorkDetails$g4.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 4;
+    });
+  }
+
   //form data
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(task.title),
     _useState2 = _slicedToArray(_useState, 2),
@@ -11329,9 +11394,133 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     _useState28 = _slicedToArray(_useState27, 2),
     error = _useState28[0],
     setError = _useState28[1];
+
+  //state for graphic designer start
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState30 = _slicedToArray(_useState29, 2),
+    typeOfGraphicsCategory = _useState30[0],
+    setTypeOfGraphicsCategory = _useState30[1];
+  var _useState31 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState32 = _slicedToArray(_useState31, 2),
+    typeOfLogo = _useState32[0],
+    setTypeOfLogo = _useState32[1];
+  var _useState33 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState34 = _slicedToArray(_useState33, 2),
+    brandName = _useState34[0],
+    setBrandName = _useState34[1];
+  var _useState35 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
+    _useState36 = _slicedToArray(_useState35, 2),
+    numOfVersions = _useState36[0],
+    setNumOfVersions = _useState36[1];
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState38 = _slicedToArray(_useState37, 2),
+    reference = _useState38[0],
+    setReference = _useState38[1];
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(defaultFileTypesNeeded),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    fileTypesNeeded = _React$useState4[0],
+    setFileTypesNeeded = _React$useState4[1];
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultTextForDesign),
+    _useState40 = _slicedToArray(_useState39, 2),
+    textForDesign = _useState40[0],
+    setTextForDesign = _useState40[1];
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultImageForDesigner),
+    _useState42 = _slicedToArray(_useState41, 2),
+    imageForDesigner = _useState42[0],
+    setImageForDesigner = _useState42[1];
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultImgOrVidForWork),
+    _useState44 = _slicedToArray(_useState43, 2),
+    imgOrVidForWork = _useState44[0],
+    setImgOrVidForWork = _useState44[1];
+  var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+    _useState46 = _slicedToArray(_useState45, 2),
+    fontName = _useState46[0],
+    setFontName = _useState46[1];
+  var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+    _useState48 = _slicedToArray(_useState47, 2),
+    fontUrl = _useState48[0],
+    setFontUrl = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultBrandGuidelineFiles),
+    _useState50 = _slicedToArray(_useState49, 2),
+    brandGuideline = _useState50[0],
+    setBrandGuideline = _useState50[1];
+  var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState52 = _slicedToArray(_useState51, 2),
+    illustration = _useState52[0],
+    setIllustration = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState54 = _slicedToArray(_useState53, 2),
+    others = _useState54[0],
+    setOthers = _useState54[1];
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    primaryColor = _React$useState6[0],
+    setPrimaryColor = _React$useState6[1];
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
+    _React$useState8 = _slicedToArray(_React$useState7, 2),
+    primaryColorDescription = _React$useState8[0],
+    setPrimaryColorDescription = _React$useState8[1];
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(defaultSecondaryColors),
+    _React$useState10 = _slicedToArray(_React$useState9, 2),
+    secondaryColors = _React$useState10[0],
+    setSecondaryColors = _React$useState10[1];
+  //state for graphic designer end
+
+  // state for ui/ux start
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState56 = _slicedToArray(_useState55, 2),
+    cms = _useState56[0],
+    setCms = _useState56[1];
+  var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState58 = _slicedToArray(_useState57, 2),
+    themeName = _useState58[0],
+    setThemeName = _useState58[1];
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState60 = _slicedToArray(_useState59, 2),
+    themeTemplate = _useState60[0],
+    setThemeTemplate = _useState60[1];
+  // state for ui/ux end
+
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(task.id, "/json?mode=estimation_time")),
     estimation = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    setBrandName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.brand_name);
+    setNumOfVersions(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.number_of_versions);
+    setReference(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference);
+    setFontName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_name);
+    setFontUrl(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_url);
+    setPrimaryColor(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color);
+    setPrimaryColorDescription(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color_description);
+    setIllustration(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
+    setOthers(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
+    setCms(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.cms);
+    setThemeName(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_name);
+    setThemeTemplate(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_template_library_link);
+    // setTypeOfGraphicsCategory({
+    //     id: graphicWorkDetails?.type_of_graphic_work_id,
+    //     name: graphicOptions?.find((item) => item.id == graphicWorkDetails?.type_of_graphic_work_id)?.name,
+    // });
+    // setTypeOfLogo({
+    //     type_name: graphicWorkDetails?.type_of_logo,
+    // });
+  }, [taskDetails, graphicWorkDetails]);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.type_of_graphic_work_id) {
+      var _graphicOptions$find;
+      setTypeOfGraphicsCategory({
+        id: graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id,
+        name: graphicOptions === null || graphicOptions === void 0 || (_graphicOptions$find = graphicOptions.find(function (item) {
+          return item.id == (graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id);
+        })) === null || _graphicOptions$find === void 0 ? void 0 : _graphicOptions$find.name
+      });
+    }
+    if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.type_of_logo) {
+      setTypeOfLogo({
+        type_name: graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_logo
+      });
+    }
+  }, [graphicOptions, graphicWorkDetails]);
   var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;
   // attach files
   react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(function () {
@@ -11461,10 +11650,10 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     if (minErr) errText += minErr;
     return errText;
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel-body position-relative",
-      children: [editDataIsFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+      children: [editDataIsFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
         className: "w-100",
         style: {
           width: "100%",
@@ -11474,11 +11663,11 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
           left: 0,
           zIndex: 1
         }
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
         className: "sp1-subtask-form --form row",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
             id: "title",
             label: "Title",
             type: "text",
@@ -11491,132 +11680,463 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               return handleChange(e, setTitle);
             }
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
               className: "f-14 text-dark-gray mb-1",
               "data-label": "true",
               children: "Project"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
               className: "form-control height-35 f-14",
               readOnly: true,
               defaultValue: project
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
               className: "f-14 text-dark-gray mb-1",
               "data-label": "true",
               children: "Milestone"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
               className: "form-control height-35 f-14",
               readOnly: true,
               defaultValue: milestone === null || milestone === void 0 ? void 0 : milestone.milestone_title
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
               className: "f-14 text-dark-gray mb-1",
               "data-label": "true",
               children: "Parent Task"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
               className: "form-control height-35 f-14",
               readOnly: true,
               defaultValue: task === null || task === void 0 ? void 0 : task.parentTaskTitle
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
               htmlFor: "",
-              children: ["Start Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("sup", {
+              children: ["Start Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
                 className: "f-14",
                 children: "*"
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
               className: "form-control height-35 f-14",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_9__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_9__["default"], {
                 placeholderText: "Ex: ".concat(dayjs.dayjs().format("DD-MM-YYYY")),
                 minDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.start_date).toDate(),
                 maxDate: dueDate || dayjs.dayjs(task === null || task === void 0 ? void 0 : task.due_date).toDate(),
                 date: startDate,
                 setDate: setStateDate
               })
-            }), (required_error === null || required_error === void 0 || (_required_error$start = required_error.start_date) === null || _required_error$start === void 0 ? void 0 : _required_error$start[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            }), (required_error === null || required_error === void 0 || (_required_error$start = required_error.start_date) === null || _required_error$start === void 0 ? void 0 : _required_error$start[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
               style: {
                 color: "red"
               },
               children: required_error === null || required_error === void 0 || (_required_error$start2 = required_error.start_date) === null || _required_error$start2 === void 0 ? void 0 : _required_error$start2[0]
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
               htmlFor: "",
-              children: ["Due Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("sup", {
+              children: ["Due Date ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
                 className: "f-14",
                 children: "*"
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
               className: "form-control height-35 f-14",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_9__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_9__["default"], {
                 placeholderText: "Ex: ".concat(dayjs.dayjs().format("DD-MM-YYYY")),
                 minDate: startDate || dayjs.dayjs(task === null || task === void 0 ? void 0 : task.start_date).toDate(),
                 maxDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.due_date).toDate(),
                 date: dueDate,
                 setDate: setDueDate
               })
-            }), (required_error === null || required_error === void 0 || (_required_error$due_d = required_error.due_date) === null || _required_error$due_d === void 0 ? void 0 : _required_error$due_d[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            }), (required_error === null || required_error === void 0 || (_required_error$due_d = required_error.due_date) === null || _required_error$due_d === void 0 ? void 0 : _required_error$due_d[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
               style: {
                 color: "red"
               },
               children: required_error === null || required_error === void 0 || (_required_error$due_d2 = required_error.due_date) === null || _required_error$due_d2 === void 0 ? void 0 : _required_error$due_d2[0]
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_12__["default"], {
             selected: taskCategory,
             onSelect: setTaskCategory
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }),
+        // lead designer to graphic designer
+        (task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_20__["default"], {
+              selected: typeOfGraphicsCategory,
+              onSelect: setTypeOfGraphicsCategory,
+              isDesignerTask: true
+            })
+          }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_projects_components_graphics_design_forms_TypeOfLogo__WEBPACK_IMPORTED_MODULE_19__["default"], {
+                selected: typeOfLogo,
+                onSelect: setTypeOfLogo,
+                isDesignerTask: true
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                id: "brandName",
+                label: "Brand Name",
+                type: "text",
+                placeholder: "Enter brand name",
+                name: "brandName",
+                defaultValue: brandName,
+                readOnly: true
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                id: "numOfVersions",
+                label: "Number of Versions",
+                type: "number",
+                placeholder: "Enter Number of versions",
+                name: "numOfVersions",
+                defaultValue: numOfVersions,
+                readOnly: true
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                className: "form-group my-3 w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                  htmlFor: 'fileTypesNeeded',
+                  className: "f-14 text-dark-gray mb-1",
+                  "data-label": "true",
+                  children: ["File Types Needed", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                    className: "f-14 mr-1",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_18__["default"], {
+                    className: "form-control height-35 w-100 f-14",
+                    id: "fileTypesNeeded",
+                    fileTypesNeeded: fileTypesNeeded,
+                    setFileTypesNeeded: setFileTypesNeeded,
+                    multiple: true,
+                    readOnly: true
+                  })
+                })]
+              })
+            })]
+          }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                className: "form-group my-3 w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                  htmlFor: 'imageForDesigner',
+                  className: "f-14 text-dark-gray mb-2",
+                  "data-label": "true",
+                  children: ["Attach text that will be used for the design", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                    className: "f-14 mr-1",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(textForDesign, function (attachment) {
+                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                      downloadAble: true,
+                      deleteAble: false,
+                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                      classname: "comment_file",
+                      ext: file_icon
+                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                  })
+                })]
+              })
+            })
+          }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                className: "form-group my-3 w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                  htmlFor: 'imageForDesigner',
+                  className: "f-14 text-dark-gray mb-2",
+                  "data-label": "true",
+                  children: ["Image where the designer will work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                    className: "f-14 mr-1",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(imageForDesigner, function (attachment) {
+                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                      downloadAble: true,
+                      deleteAble: false,
+                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                      classname: "comment_file",
+                      ext: file_icon
+                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                  })
+                })]
+              })
+            })
+          }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                className: "form-group my-3 w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                  htmlFor: 'imgOrVidForWork',
+                  className: "f-14 text-dark-gray mb-2",
+                  "data-label": "true",
+                  children: ["Images/videos that will be used for the work", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                    className: "f-14 mr-1",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(imgOrVidForWork, function (attachment) {
+                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                      downloadAble: true,
+                      deleteAble: false,
+                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                      classname: "comment_file",
+                      ext: file_icon
+                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                  })
+                })]
+              })
+            })
+          }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 7 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                className: "form-group my-3",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                  htmlFor: "",
+                  children: [" ", "Name of the illustration work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                    children: "*"
+                  }), " "]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                  className: "sp1_ck_content sp1_guideline_text px-2 py-2 rounded",
+                  style: {
+                    backgroundColor: "#E9ECEF"
+                  },
+                  dangerouslySetInnerHTML: {
+                    __html: illustration
+                  }
+                })]
+              })
+            })
+          }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 9 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "col-12",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                className: "form-group my-3",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                  htmlFor: "",
+                  children: [" ", "Name of the graphic design work!", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                    children: "*"
+                  }), " "]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                  className: "sp1_ck_content sp1_guideline_text px-2 py-2 rounded",
+                  style: {
+                    backgroundColor: "#E9ECEF"
+                  },
+                  dangerouslySetInnerHTML: {
+                    __html: others
+                  }
+                })]
+              })
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              id: "reference",
+              label: "Reference",
+              type: "text",
+              placeholder: "Enter a task reference",
+              name: "reference",
+              value: reference,
+              readOnly: true
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              id: "fontName",
+              label: "Font Name",
+              type: "text",
+              placeholder: "Enter a font name",
+              name: "fontName",
+              required: true,
+              value: fontName,
+              readOnly: true
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              id: "fontUrl",
+              label: "Font Url",
+              type: "url",
+              placeholder: "Enter font url",
+              name: "fontUrl",
+              value: fontUrl,
+              readOnly: true
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+              className: "form-group my-3 w-100",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
+                htmlFor: 'brandGuideline',
+                className: "f-14 text-dark-gray mb-2",
+                "data-label": "true",
+                children: "Brand guideline"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(brandGuideline, function (attachment) {
+                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                    downloadAble: true,
+                    deleteAble: false,
+                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                    classname: "comment_file",
+                    ext: file_icon
+                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                })
+              })]
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+            className: "col-12",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "mb-2 f-16",
+              style: {
+                color: '#878E97'
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("strong", {
+                children: "Color Scheme: "
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+              className: "mb-3 rounded",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                className: "row",
+                style: {
+                  marginLeft: "0px"
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                  className: "col-12 col-md-6 px-0",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("p", {
+                    className: "font-weight-bold mr-2 mb-2",
+                    children: "Primary Color: "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_17__.ColorItem, {
+                    color: primaryColor,
+                    desc: primaryColorDescription
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+                  className: "col-12 col-md-6 px-0",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("p", {
+                    className: "font-weight-bold mr-2 mb-2",
+                    children: ((_defaultSecondaryColo = defaultSecondaryColors) === null || _defaultSecondaryColo === void 0 ? void 0 : _defaultSecondaryColo.length) > 1 ? "Secondary Colors: " : "Secondary Color: "
+                  }), (_defaultSecondaryColo2 = defaultSecondaryColors) === null || _defaultSecondaryColo2 === void 0 ? void 0 : _defaultSecondaryColo2.map(function (color, i) {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_17__.ColorItem, {
+                      color: color === null || color === void 0 ? void 0 : color.color,
+                      desc: color === null || color === void 0 ? void 0 : color.description
+                    }, i + color);
+                  })]
+                })]
+              })
+            })]
+          })]
+        }),
+        // lead designer to ui/ux designer
+        (task === null || task === void 0 || (_task$category2 = task.category) === null || _task$category2 === void 0 ? void 0 : _task$category2.name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              id: "cms",
+              label: "CMS",
+              type: "text",
+              name: "cms",
+              value: cms,
+              readOnly: true
+            })
+          }), themeName && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              id: "themeName",
+              label: "Theme Name",
+              type: "text",
+              name: "themeName",
+              value: themeName,
+              readOnly: true
+            })
+          }), themeTemplate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+            className: "col-12 col-md-6",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
+              id: "themeTemplate",
+              label: "Theme template library link",
+              type: "url",
+              name: "themeTemplate",
+              value: themeTemplate,
+              readOnly: true
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_10__["default"], {
             selected: assignedTo,
-            onSelect: setAssignedTo
+            onSelect: setAssignedTo,
+            taskCategory: taskCategory
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_PrioritySelection__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_PrioritySelection__WEBPACK_IMPORTED_MODULE_11__["default"], {
             selected: priority,
             setSelected: setPriority
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
               htmlFor: "",
               className: "f-14 text-dark-gray",
-              children: ["Set Estimate Time", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("sup", {
+              children: ["Set Estimate Time", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
                 className: "f-14",
                 children: " * "
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
               className: "d-flex align-items-center",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("input", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
                 type: "number",
                 onWheel: function onWheel(e) {
                   return e.currentTarget.blur();
@@ -11626,7 +12146,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                 onChange: function onChange(e) {
                   return handleChange(e, setEstimateTimeHour);
                 }
-              }), " ", "hrs", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("input", {
+              }), " ", "hrs", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
                 type: "number",
                 onWheel: function onWheel(e) {
                   return e.currentTarget.blur();
@@ -11637,57 +12157,57 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                   return handleChange(e, setEstimateTimeMin);
                 }
               }), " ", "min"]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
               style: {
                 color: "red"
               },
               children: estimateError(required_error)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
               style: {
                 color: "red"
               },
               children: ["Estimation time can't exceed", " ", estimation === null || estimation === void 0 ? void 0 : estimation.hours_left, " hours", " ", estimation === null || estimation === void 0 ? void 0 : estimation.minutes_left, " minutes"]
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
               htmlFor: "",
               children: " Description "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
               className: "sp1_st_write_comment_editor",
               style: {
                 minHeight: "100px"
               },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
                 data: description,
                 onChange: handleEditorChange
               })
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
             onPreviousFileDelete: handleFileDelete,
             previous: attachedFiles,
             files: files,
             setFiles: setFiles
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 mt-3 mb-5",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "d-flex align-items-center justify-content-end",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
               variant: "secondary",
               className: "mr-2",
               onClick: onClose,
               children: "Cancel"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
               onClick: handleSubmit,
               isLoading: isLoading,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("i", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("i", {
                 className: "fa-regular fa-paper-plane"
               }), "Update"]
             })]
@@ -16180,8 +16700,8 @@ var Genarel = function Genarel(_ref) {
             text: task === null || task === void 0 ? void 0 : task.guidelines,
             task: task,
             workEnv: task === null || task === void 0 ? void 0 : task.workEnvData,
-            editorContainerClass: "modal-guideline-editor-text",
-            singleTask: singleTask
+            editorContainerClass: "modal-guideline-editor-text"
+            // singleTask={singleTask}
           })]
         })
       }), _.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {

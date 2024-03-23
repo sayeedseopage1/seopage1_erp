@@ -397,7 +397,7 @@ const Genarel = ({ task, isFetching, singleTask }) => {
                                 task={task}
                                 workEnv={task?.workEnvData}
                                 editorContainerClass="modal-guideline-editor-text"
-                                singleTask={singleTask}
+                            // singleTask={singleTask}
                             />
                         </>
                     )}

@@ -1047,7 +1047,7 @@ const ShowEditModals = ({ auth, task, singleTask }) => {
     if (hasAccess) {
         if (task.isSubtask) {
             // TODO: need to work here 
-            return <SubTaskEditModal task={task} />;
+            return <SubTaskEditModal task={task} singleTask={singleTask} />;
         } else {
             return <TaskEditForm task={task} singleTask={singleTask} />;
         }

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import CKEditorComponent from "../../../ckeditor";
 import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
@@ -19,13 +19,20 @@ import {
     useDeleteUplaodedFileMutation,
     useEditSubtaskMutation,
     useGetTaskDetailsQuery,
+    useGetTypesOfGraphicWorksQuery,
 } from "../../../services/api/SingleTaskPageApi";
 import { useGetMilestoneDetailsQuery } from "../../../services/api/projectApiSlice";
+import { ColorItem } from "../../components/PMGuideline";
+import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
+import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeOfLogo";
+import TypeOfGraphicsWorkSelection from "../../../projects/components/graphics-design-forms/TypeOfGraphicsWorkSelection";
+import FileUploader from "../../../file-upload/FileUploader";
+import { useGetSubTasksQuery } from "../../../services/api/tasksApiSlice";
 
 const dayjs = new CompareDate();
 
 // Edit form Provider
-const EditFormProvider = ({ task }) => {
+const EditFormProvider = ({ task, singleTask }) => {
     const [searchParams] = useSearchParams(); // get search params
     const isVisible = searchParams.get("modal") === "edit"; // check has modal
     const taskId = searchParams.get("task"); // get task id
@@ -33,7 +40,6 @@ const EditFormProvider = ({ task }) => {
     const location = useLocation();
 
     const close = () => navigate(location.pathname, { replace: true });
-
 
     const [editSubtask, { isLoading, error }] = useEditSubtaskMutation();
     // handle submission
@@ -65,6 +71,7 @@ const EditFormProvider = ({ task }) => {
                         {task && (
                             <SubTaskEditModal
                                 task={task}
+                                singleTask={singleTask}
                                 onSubmit={handleSubmission}
                                 isLoading={isLoading}
                                 onClose={close}
@@ -79,8 +86,42 @@ const EditFormProvider = ({ task }) => {
 
 export default EditFormProvider;
 
-const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose }) => {
+// TODO:
+// FIXME: useEffect render Maximum update depth exceeded.
+const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, onClose }) => {
     const editDataIsFetching = !task;
+
+    // graphic task details
+
+    // **************sub task details start**********
+    const isSubTask = taskDetails?.dependent_task_id
+    const { data: subTasks } = useGetSubTasksQuery({ taskId: taskDetails?.dependent_task_id }, {
+        skip: !isSubTask
+    })
+    // sub task details 
+    const graphicWorkDetails = new Object(subTasks?.sub_task_details_graphic_work)
+    // **************sub task details end**********
+
+    const { data: graphicOptions } = useGetTypesOfGraphicWorksQuery("")
+
+    // console.log("file_types_needed", graphicWorkDetails?.file_types_needed)
+
+    let defaultSecondaryColors;
+    let defaultFileTypesNeeded;
+    // files
+    let defaultTextForDesign;
+    let defaultImageForDesigner;
+    let defaultImgOrVidForWork;
+    let defaultBrandGuidelineFiles;
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
+        defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
+        defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+        defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
+        defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
+        defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
+        defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
+    }
+
     //form data
     const [title, setTitle] = useState(task.title);
     const [milestone, setMilestone] = useState({ id: task.milestoneID, milestone_title: task.milestoneTitle });
@@ -108,9 +149,74 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose }) => {
     const [files, setFiles] = React.useState([]);
     const [error, setError] = useState(null);
 
+    //state for graphic designer start
+    const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
+    const [typeOfLogo, setTypeOfLogo] = useState("");
+    const [brandName, setBrandName] = useState("");
+    const [numOfVersions, setNumOfVersions] = useState(null);
+    const [reference, setReference] = useState("");
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
+    const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
+    const [imageForDesigner, setImageForDesigner] = useState(defaultImageForDesigner);
+    const [imgOrVidForWork, setImgOrVidForWork] = useState(defaultImgOrVidForWork);
+    const [fontName, setFontName] = useState('');
+    const [fontUrl, setFontUrl] = useState('');
+    const [brandGuideline, setBrandGuideline] = useState(defaultBrandGuidelineFiles);
+    const [illustration, setIllustration] = useState("");
+    const [others, setOthers] = useState("");
+    const [primaryColor, setPrimaryColor] = React.useState("");
+    const [primaryColorDescription, setPrimaryColorDescription] =
+        React.useState("");
+    const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
+    //state for graphic designer end
+
+    // state for ui/ux start
+    const [cms, setCms] = useState("")
+    const [themeName, setThemeName] = useState("")
+    const [themeTemplate, setThemeTemplate] = useState("")
+    // state for ui/ux end
+
     const { data: estimation, isFetching } = useGetTaskDetailsQuery(
         `/${task.id}/json?mode=estimation_time`
     );
+
+    useEffect(() => {
+        setBrandName(graphicWorkDetails?.brand_name)
+        setNumOfVersions(graphicWorkDetails?.number_of_versions);
+        setReference(graphicWorkDetails?.reference);
+        setFontName(graphicWorkDetails?.font_name);
+        setFontUrl(graphicWorkDetails?.font_url);
+        setPrimaryColor(graphicWorkDetails?.primary_color);
+        setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
+        setIllustration(graphicWorkDetails?.design_instruction);
+        setOthers(graphicWorkDetails?.design_instruction);
+        setCms(taskDetails?.cms)
+        setThemeName(taskDetails?.theme_name)
+        setThemeTemplate(taskDetails?.theme_template_library_link)
+        // setTypeOfGraphicsCategory({
+        //     id: graphicWorkDetails?.type_of_graphic_work_id,
+        //     name: graphicOptions?.find((item) => item.id == graphicWorkDetails?.type_of_graphic_work_id)?.name,
+        // });
+        // setTypeOfLogo({
+        //     type_name: graphicWorkDetails?.type_of_logo,
+        // });
+    }, [taskDetails, graphicWorkDetails]);
+
+
+    useEffect(() => {
+        if (graphicWorkDetails?.type_of_graphic_work_id) {
+            setTypeOfGraphicsCategory({
+                id: graphicWorkDetails?.type_of_graphic_work_id,
+                name: graphicOptions?.find((item) => item.id == graphicWorkDetails?.type_of_graphic_work_id)?.name,
+            });
+        }
+        if (graphicWorkDetails?.type_of_logo) {
+            setTypeOfLogo({
+                type_name: graphicWorkDetails?.type_of_logo,
+            });
+        }
+    }, [graphicOptions, graphicWorkDetails]);
+
 
     const required_error = error?.status === 422 ? error?.data : null;
     // attach files
@@ -409,10 +515,410 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose }) => {
                         />
                     </div>
 
+                    {
+                        // lead designer to graphic designer
+                        (task?.category?.name === "Graphic Design") && <>
+                            {/* Type Of Graphics Work */}
+                            <div className="col-12 col-md-6">
+                                <TypeOfGraphicsWorkSelection
+                                    selected={typeOfGraphicsCategory}
+                                    onSelect={setTypeOfGraphicsCategory}
+                                    isDesignerTask={true}
+                                />
+                            </div>
+                            {/* for logo  */}
+                            {
+                                typeOfGraphicsCategory?.id === 1 && <>
+                                    <div className="col-12 col-md-6">
+                                        <TypeOfLogo
+                                            selected={typeOfLogo}
+                                            onSelect={setTypeOfLogo}
+                                            isDesignerTask={true}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="brandName"
+                                            label="Brand Name"
+                                            type="text"
+                                            placeholder="Enter brand name"
+                                            name="brandName"
+                                            defaultValue={brandName}
+                                            readOnly={true}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <Input
+                                            id="numOfVersions"
+                                            label="Number of Versions"
+                                            type="number"
+                                            placeholder="Enter Number of versions"
+                                            name="numOfVersions"
+                                            defaultValue={numOfVersions}
+                                            readOnly={true}
+                                        />
+                                    </div>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'fileTypesNeeded'}
+                                                className={`f-14 text-dark-gray mb-1`}
+                                                data-label="true"
+                                            >
+                                                File Types Needed
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            <div>
+                                                <FileTypesNeeded
+                                                    className={`form-control height-35 w-100 f-14`}
+                                                    id='fileTypesNeeded'
+                                                    fileTypesNeeded={fileTypesNeeded}
+                                                    setFileTypesNeeded={setFileTypesNeeded}
+                                                    multiple
+                                                    readOnly={true}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* for Banner, brochure or company profile */}
+                            {
+                                (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) && <>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'imageForDesigner'}
+                                                className={`f-14 text-dark-gray mb-2`}
+                                                data-label="true"
+                                            >
+                                                Attach text that will be used for the design
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            <FileUploader>
+                                                {_.map(
+                                                    textForDesign,
+                                                    (attachment) => {
+                                                        const file_icon = attachment?.filename.split(".").pop();
+
+                                                        return attachment?.filename ? (
+                                                            <FileUploader.Preview
+                                                                key={attachment?.id}
+                                                                fileName={attachment?.filename}
+                                                                downloadAble={true}
+                                                                deleteAble={false}
+                                                                downloadUrl={attachment?.file_url}
+                                                                previewUrl={attachment?.file_url}
+                                                                fileType={
+                                                                    _.includes(
+                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                        file_icon
+                                                                    )
+                                                                        ? "images"
+                                                                        : "others"
+                                                                }
+                                                                classname="comment_file"
+                                                                ext={file_icon}
+                                                            />
+                                                        ) : null;
+                                                    }
+                                                )}
+                                            </FileUploader>
+                                        </div>
+                                    </div>
+                                </>
+                            }
+                            {/* background removal or image retouching */}
+                            {
+                                (typeOfGraphicsCategory?.id === 5 || typeOfGraphicsCategory?.id === 6) && <>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'imageForDesigner'}
+                                                className={`f-14 text-dark-gray mb-2`}
+                                                data-label="true"
+                                            >
+                                                Image where the designer will work
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            <FileUploader>
+                                                {_.map(
+                                                    imageForDesigner,
+                                                    (attachment) => {
+                                                        const file_icon = attachment?.filename.split(".").pop();
+
+                                                        return attachment?.filename ? (
+                                                            <FileUploader.Preview
+                                                                key={attachment?.id}
+                                                                fileName={attachment?.filename}
+                                                                downloadAble={true}
+                                                                deleteAble={false}
+                                                                downloadUrl={attachment?.file_url}
+                                                                previewUrl={attachment?.file_url}
+                                                                fileType={
+                                                                    _.includes(
+                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                        file_icon
+                                                                    )
+                                                                        ? "images"
+                                                                        : "others"
+                                                                }
+                                                                classname="comment_file"
+                                                                ext={file_icon}
+                                                            />
+                                                        ) : null;
+                                                    }
+                                                )}
+                                            </FileUploader>
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* motion graphics */}
+                            {
+                                typeOfGraphicsCategory?.id === 8 && <>
+                                    <div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor={'imgOrVidForWork'}
+                                                className={`f-14 text-dark-gray mb-2`}
+                                                data-label="true"
+                                            >
+                                                Images/videos that will be used for the work
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            <FileUploader>
+                                                {_.map(
+                                                    imgOrVidForWork,
+                                                    (attachment) => {
+                                                        const file_icon = attachment?.filename.split(".").pop();
+
+                                                        return attachment?.filename ? (
+                                                            <FileUploader.Preview
+                                                                key={attachment?.id}
+                                                                fileName={attachment?.filename}
+                                                                downloadAble={true}
+                                                                deleteAble={false}
+                                                                downloadUrl={attachment?.file_url}
+                                                                previewUrl={attachment?.file_url}
+                                                                fileType={
+                                                                    _.includes(
+                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                        file_icon
+                                                                    )
+                                                                        ? "images"
+                                                                        : "others"
+                                                                }
+                                                                classname="comment_file"
+                                                                ext={file_icon}
+                                                            />
+                                                        ) : null;
+                                                    }
+                                                )}
+                                            </FileUploader>
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* Illustration */}
+                            {
+
+                                typeOfGraphicsCategory?.id === 7 && <>
+                                    <div className="col-12">
+                                        <div className="form-group my-3">
+                                            <label htmlFor="">
+                                                {" "}
+                                                Name of the illustration work!<sup>*</sup>{" "}
+                                            </label>
+                                            <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: illustration }}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            }
+                            {/* Others */}
+                            {
+                                typeOfGraphicsCategory?.id === 9 && <>
+                                    <div className="col-12">
+                                        <div className="form-group my-3">
+                                            <label htmlFor="">
+                                                {" "}
+                                                Name of the graphic design work!<sup>*</sup>{" "}
+                                            </label>
+                                            <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: others }}>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            }
+
+                            {/* Reference */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="reference"
+                                    label="Reference"
+                                    type="text"
+                                    placeholder="Enter a task reference"
+                                    name="reference"
+                                    value={reference}
+                                    readOnly={true}
+                                />
+                            </div>
+
+                            {/* Font name */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="fontName"
+                                    label="Font Name"
+                                    type="text"
+                                    placeholder="Enter a font name"
+                                    name="fontName"
+                                    required={true}
+                                    value={fontName}
+                                    readOnly={true}
+                                />
+                            </div>
+
+                            {/* font url  */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="fontUrl"
+                                    label="Font Url"
+                                    type="url"
+                                    placeholder="Enter font url"
+                                    name="fontUrl"
+                                    value={fontUrl}
+                                    readOnly={true}
+                                />
+                            </div>
+
+                            {/* Brand guideline */}
+                            <div className="col-12 col-md-6">
+                                <div className={`form-group my-3 w-100`}>
+                                    <label
+                                        htmlFor={'brandGuideline'}
+                                        className={`f-14 text-dark-gray mb-2`}
+                                        data-label="true"
+                                    >
+                                        Brand guideline
+                                    </label>
+                                    <FileUploader>
+                                        {_.map(
+                                            brandGuideline,
+                                            (attachment) => {
+                                                const file_icon = attachment?.filename.split(".").pop();
+
+                                                return attachment?.filename ? (
+                                                    <FileUploader.Preview
+                                                        key={attachment?.id}
+                                                        fileName={attachment?.filename}
+                                                        downloadAble={true}
+                                                        deleteAble={false}
+                                                        downloadUrl={attachment?.file_url}
+                                                        previewUrl={attachment?.file_url}
+                                                        fileType={
+                                                            _.includes(
+                                                                ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                file_icon
+                                                            )
+                                                                ? "images"
+                                                                : "others"
+                                                        }
+                                                        classname="comment_file"
+                                                        ext={file_icon}
+                                                    />
+                                                ) : null;
+                                            }
+                                        )}
+                                    </FileUploader>
+                                </div>
+                            </div>
+
+                            {/* color schema */}
+                            <div className="col-12">
+                                <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
+                                <div className='mb-3 rounded'>
+                                    <div className='row' style={{ marginLeft: "0px" }}>
+                                        <div className='col-12 col-md-6 px-0'>
+                                            <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
+                                            <ColorItem color={primaryColor} desc={primaryColorDescription} />
+                                        </div>
+
+                                        <div className='col-12 col-md-6 px-0'>
+                                            <p className='font-weight-bold mr-2 mb-2'>
+                                                {
+                                                    defaultSecondaryColors?.length > 1
+                                                        ? "Secondary Colors: "
+                                                        : "Secondary Color: "
+                                                }
+                                            </p>
+                                            {
+                                                defaultSecondaryColors?.map((color, i) => (
+                                                    <ColorItem key={i + color} color={color?.color}
+                                                        desc={color?.description} />
+                                                ))
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* end color schema */}
+                        </>
+                    }
+
+                    {
+                        // lead designer to ui/ux designer
+                        (task?.category?.name === "UI/UIX Design") && <>
+                            {/* cms name  */}
+                            <div className="col-12 col-md-6">
+                                <Input
+                                    id="cms"
+                                    label="CMS"
+                                    type="text"
+                                    name="cms"
+                                    value={cms}
+                                    readOnly={true}
+                                />
+                            </div>
+                            {/* theme name */}
+                            {
+                                themeName && <div className="col-12 col-md-6">
+                                    <Input
+                                        id="themeName"
+                                        label="Theme Name"
+                                        type="text"
+                                        name="themeName"
+                                        value={themeName}
+                                        readOnly={true}
+                                    />
+                                </div>
+                            }
+                            {/* theme template url */}
+                            {
+                                themeTemplate && <div className="col-12 col-md-6">
+                                    <Input
+                                        id="themeTemplate"
+                                        label="Theme template library link"
+                                        type="url"
+                                        name="themeTemplate"
+                                        value={themeTemplate}
+                                        readOnly={true}
+                                    />
+                                </div>
+                            }
+                        </>
+                    }
+
+
                     <div className="col-12 col-md-6">
                         <AssignedToSelection
                             selected={assignedTo}
                             onSelect={setAssignedTo}
+                            taskCategory={taskCategory}
                         />
                     </div>
                     {/*
