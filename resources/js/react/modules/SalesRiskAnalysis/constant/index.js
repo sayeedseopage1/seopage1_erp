@@ -133,3 +133,69 @@ export const QuestionsTypes = {
 
   ]
 }
+
+
+export const DummyQuestions = [
+  {
+    id: 1,
+    question: "How many hours of other works will be needed here? Functional works you have input the hours count depending on the difficulties involved",
+    type: "text",
+    questions: [
+      {
+        id: 1,
+        question: "How many hours of other works will be needed here? Functional works you have input the hours count depending on the difficulties involved",
+        type: "text",
+        questions: [
+          {
+            id: 1,
+            question: "How many hours of other works will be needed here? Functional works you have input the hours count depending on the difficulties involved",
+            type: "text",
+            questions: []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    question: "Did the client fund full milestone?",
+    type: "yesNo",
+    questions: []
+  },
+  {
+    id: 3,
+    question: "How many hours of other works will be needed here? Functional works you have input the hours count depending on the difficulties involved",
+    type: "numeric",
+    questions: []
+  },
+  {
+    id: 4,
+    question: "How many hours of other works will be needed here? Functional works you have input the hours count depending on the difficulties involved",
+    type: "list",
+    value: [
+      {
+        id: 1,
+        name: "A. The client's bank is rejecting his card after creating 2-3 milestones. He will do the rest tomorrow"
+      },
+      {
+        id: 2,
+        name: "B. The client is getting error from the system after creating 1-3 milestones. He will try again in a few hours or so"
+      },
+      {
+        id: 3,
+        name: "C. The client will create the milestones as we complete the previous milestones work"
+      },
+      {
+        id: 4,
+        name: "D. The client doesn't have enough money now. He will create the rest of the milestones next week or after a few days after having money again"
+      }
+    ],
+    questions: []
+  },
+  {
+    id: 5,
+    question: "How many hours of other works will be needed here? Functional works you have input the hours count depending on the difficulties involved",
+    type: "longText",
+    questions: []
+  }
+]

@@ -128,12 +128,27 @@ export const SalesRiskAnalysisQuestionWrapper = styled.section`
 
 export const SalesRiskAnalysisQuestionContainer = styled.div`
     background: #fff;
-    padding: 66px;
+    padding: 30px;
     padding-bottom: 0;
     border-radius: 16px;
     overflow-y: auto;
     box-shadow: 0 0 10px rgb(0 0 0 / 10%);
 `;
+
+export const SalesRiskAnalysisQuestionTitleContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #b1b1b1;
+
+    h5 {
+        font-size: 24px;
+        font-family: "Poppins", sans-serif;
+        color: #000000;
+        margin-bottom: 12px;
+    }
+`
 
 export const CustomInputsTextArea = styled.textarea`
     border-radius: 9px;
@@ -148,6 +163,9 @@ export const CustomInputsTextArea = styled.textarea`
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    &::placeholder {
+        color: ${(props) => (props.value ? "#000000" : "#B1B1B1")};
+    }
 `;
 
 export const CustomInputsInput = styled.input`
@@ -174,4 +192,19 @@ export const CustomInputsLabel = styled.label`
     font-weight: 500;
     margin-bottom: 12px;
     line-height: normal;
+`;
+
+export const CustomInputCheckbox = styled.input`
+    margin-top: 7px;
+    margin-right: 10px;
+    transform: scale(1.2);
+    border-radius: 4px; /* Optional: Add some border-radius for a rounded look */
+
+    &:not(:checked) {
+        border-color: #1492E6; /* Change border color when not checked */
+    }
+
+    &:checked {
+        border-color: green; /* Change border color when checked */
+    }
 `;

@@ -12,12 +12,22 @@ const QuestionConfirmModal = ({ open, closeModal }) => {
             width="600px"
             maxWidth="600px"
             isCloseButtonShow={true}
-            height="402px"
-            maxHeight="402px"
+            height="fit-content"
+            maxHeight="fit-content"
         >
             <div className="d-flex align-items-center justify-content-center flex-column py-4 px-5">
                 <InfoIcon />
-                <p className="text-center py-4">
+                <p
+                    className="text-center py-4"
+                    style={{
+                        textAlign: "center",
+                        fontFamily: "Poppins",
+                        fontSize: "16px",
+                        fontStyle: "normal",
+                        fontWeight: 400,
+                        lineHeight: "normal",
+                    }}
+                >
                     This won deal has a negative risk analysis score hence it
                     has to be authorized by the top management. You can still
                     submit the larger form and it will be assigned to a project
