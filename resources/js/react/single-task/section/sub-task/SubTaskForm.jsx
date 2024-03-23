@@ -68,6 +68,8 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
     }
 
+    // const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
+
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
     const [showEnvForm, setShowEnvForm] = useState(false);
@@ -409,6 +411,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 showConfirmButton: false,
                                 timer: 2500,
                             });
+                            window.location.reload();
                         }
                     })
                     .catch((err) => {
@@ -935,7 +938,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         {
 
                             typeOfGraphicsCategory?.id === 7 && <>
-                                <div className="col-12">
+                                <div className="col-12 col-md-6">
                                     <div className="form-group my-3">
                                         <label htmlFor="">
                                             {" "}
@@ -950,7 +953,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         {/* Others */}
                         {
                             typeOfGraphicsCategory?.id === 9 && <>
-                                <div className="col-12">
+                                <div className="col-12 col-md-6">
                                     <div className="form-group my-3">
                                         <label htmlFor="">
                                             {" "}
@@ -993,86 +996,90 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                         </div>
 
                         {/* font url  */}
-                        <div className="col-12 col-md-6">
-                            <Input
-                                id="fontUrl"
-                                label="Font Url"
-                                type="url"
-                                placeholder="Enter font url"
-                                name="fontUrl"
-                                value={fontUrl}
-                                readOnly={true}
-                            />
-                        </div>
+                        {
+                            fontUrl && <div className="col-12 col-md-6">
+                                <Input
+                                    id="fontUrl"
+                                    label="Font Url"
+                                    type="url"
+                                    placeholder="Enter font url"
+                                    name="fontUrl"
+                                    value={fontUrl}
+                                    readOnly={true}
+                                />
+                            </div>
+                        }
+
 
                         {/* Brand guideline */}
-                        <div className="col-12 col-md-6">
-                            <div className={`form-group my-3 w-100`}>
-                                <label
-                                    htmlFor={'brandGuideline'}
-                                    className={`f-14 text-dark-gray mb-2`}
-                                    data-label="true"
-                                >
-                                    Brand guideline
-                                </label>
-                                <FileUploader>
-                                    {_.map(
-                                        brandGuideline,
-                                        (attachment) => {
-                                            const file_icon = attachment?.filename.split(".").pop();
+                        {
+                            !_.isEmpty(brandGuideline) && <div className="col-12 col-md-6">
+                                <div className={`form-group my-3 w-100`}>
+                                    <label
+                                        htmlFor={'brandGuideline'}
+                                        className={`f-14 text-dark-gray mb-2`}
+                                        data-label="true"
+                                    >
+                                        Brand guideline
+                                    </label>
+                                    <FileUploader>
+                                        {_.map(
+                                            brandGuideline,
+                                            (attachment) => {
+                                                const file_icon = attachment?.filename.split(".").pop();
 
-                                            return attachment?.filename ? (
-                                                <FileUploader.Preview
-                                                    key={attachment?.id}
-                                                    fileName={attachment?.filename}
-                                                    downloadAble={true}
-                                                    deleteAble={false}
-                                                    downloadUrl={attachment?.file_url}
-                                                    previewUrl={attachment?.file_url}
-                                                    fileType={
-                                                        _.includes(
-                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                            file_icon
-                                                        )
-                                                            ? "images"
-                                                            : "others"
-                                                    }
-                                                    classname="comment_file"
-                                                    ext={file_icon}
-                                                />
-                                            ) : null;
-                                        }
-                                    )}
-                                </FileUploader>
+                                                return attachment?.filename ? (
+                                                    <FileUploader.Preview
+                                                        key={attachment?.id}
+                                                        fileName={attachment?.filename}
+                                                        downloadAble={true}
+                                                        deleteAble={false}
+                                                        downloadUrl={attachment?.file_url}
+                                                        previewUrl={attachment?.file_url}
+                                                        fileType={
+                                                            _.includes(
+                                                                ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                file_icon
+                                                            )
+                                                                ? "images"
+                                                                : "others"
+                                                        }
+                                                        classname="comment_file"
+                                                        ext={file_icon}
+                                                    />
+                                                ) : null;
+                                            }
+                                        )}
+                                    </FileUploader>
+                                </div>
                             </div>
-                        </div>
+                        }
+
 
                         {/* color schema */}
-                        <div className="row">
-                            <div className="col-12">
-                                <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
-                                <div className='mb-3 rounded'>
-                                    <div className='row' style={{ marginLeft: "0px" }}>
-                                        <div className='col-12 col-md-6 px-0'>
-                                            <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
-                                            <ColorItem color={primaryColor} desc={primaryColorDescription} />
-                                        </div>
+                        <div className="col-12">
+                            <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
+                            <div className='mb-3 rounded'>
+                                <div className='row' style={{ marginLeft: "0px" }}>
+                                    <div className='col-12 col-md-6 px-0'>
+                                        <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
+                                        <ColorItem color={primaryColor} desc={primaryColorDescription} />
+                                    </div>
 
-                                        <div className='col-12 col-md-6 px-0'>
-                                            <p className='font-weight-bold mr-2 mb-2'>
-                                                {
-                                                    defaultSecondaryColors?.length > 1
-                                                        ? "Secondary Colors: "
-                                                        : "Secondary Color: "
-                                                }
-                                            </p>
+                                    <div className='col-12 col-md-6 px-0'>
+                                        <p className='font-weight-bold mr-2 mb-2'>
                                             {
-                                                defaultSecondaryColors?.map((color, i) => (
-                                                    <ColorItem key={i + color} color={color?.color}
-                                                        desc={color?.description} />
-                                                ))
+                                                defaultSecondaryColors?.length > 1
+                                                    ? "Secondary Colors: "
+                                                    : "Secondary Color: "
                                             }
-                                        </div>
+                                        </p>
+                                        {
+                                            defaultSecondaryColors?.map((color, i) => (
+                                                <ColorItem key={i + color} color={color?.color}
+                                                    desc={color?.description} />
+                                            ))
+                                        }
                                     </div>
                                 </div>
                             </div>

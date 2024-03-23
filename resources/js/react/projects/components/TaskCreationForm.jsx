@@ -223,7 +223,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             }
             if (!fontUrl) {
                 err.fontUrl = "You have to provide font URL";
-                count++;
+                errCount++;
             } else if (!checkIsURL(fontUrl)) {
                 err.fontUrl = "You have to provide a valid font URL";
                 toast.warn("You have to provide a valid font URL");
@@ -306,7 +306,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             }
             if (!themeTemplate) {
                 err.themeTemplate = "You have to provide theme template URL";
-                count++;
+                errCount++;
             } else if (!checkIsURL(themeTemplate)) {
                 err.themeTemplate = "You have to provide a valid theme template URL";
                 toast.warn("You have to provide a valid theme template URL");

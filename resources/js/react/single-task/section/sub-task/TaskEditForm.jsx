@@ -124,7 +124,6 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
     // graphic task details
     const graphicWorkDetails = new Object(row?.graphic_work_detail);
-    console.log(graphicWorkDetails)
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
