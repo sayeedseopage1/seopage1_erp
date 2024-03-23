@@ -24,7 +24,7 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["All_TASKS", "All_EVALUATION"],
         }),
         getEvaluationList: build.query({
-            query: () => `http://localhost:3000/api/evaluation//get-evaluation`,
+            query: () => `http://localhost:3000/api/evaluation/get-evaluation`,
             providesTags: ["All_EVALUATION"],
         }),
     }),
