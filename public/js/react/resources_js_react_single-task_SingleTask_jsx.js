@@ -1782,8 +1782,8 @@ var SingleTaskPage = function SingleTaskPage() {
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_12__["default"], {
                   text: task === null || task === void 0 ? void 0 : task.guidelines,
                   task: task,
-                  workEnv: task === null || task === void 0 ? void 0 : task.workEnvData,
-                  singleTask: Task
+                  workEnv: task === null || task === void 0 ? void 0 : task.workEnvData
+                  // singleTask={Task}
                 })]
               }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_32__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_11__["default"], {
                 title: (_$last = lodash__WEBPACK_IMPORTED_MODULE_0___default().last(task === null || task === void 0 ? void 0 : task.revisions)) === null || _$last === void 0 ? void 0 : _$last.revisionStatus,
