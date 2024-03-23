@@ -11303,10 +11303,12 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   var defaultImageForDesigner;
   var defaultImgOrVidForWork;
   var defaultBrandGuidelineFiles;
-  if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.graphic_task_files) {
-    var _graphicWorkDetails$g, _graphicWorkDetails$g2, _graphicWorkDetails$g3, _graphicWorkDetails$g4;
+  if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed) {
     defaultSecondaryColors = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors);
     defaultFileTypesNeeded = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed);
+  }
+  if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.graphic_task_files) {
+    var _graphicWorkDetails$g, _graphicWorkDetails$g2, _graphicWorkDetails$g3, _graphicWorkDetails$g4;
     defaultTextForDesign = graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g === void 0 ? void 0 : _graphicWorkDetails$g.filter(function (item) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
     });
@@ -11320,6 +11322,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 4;
     });
   }
+
   // set default value for files and colors for graphic design end
 
   //form data

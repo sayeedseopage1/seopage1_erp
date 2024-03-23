@@ -111,14 +111,18 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     let defaultImageForDesigner;
     let defaultImgOrVidForWork;
     let defaultBrandGuidelineFiles;
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
+
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
+    }
+    if (graphicWorkDetails?.graphic_task_files) {
         defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
         defaultImageForDesigner = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 2)
         defaultImgOrVidForWork = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3)
         defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
     }
+
     // set default value for files and colors for graphic design end
 
     //form data
