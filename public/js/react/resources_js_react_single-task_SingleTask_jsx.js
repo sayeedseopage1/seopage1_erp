@@ -11250,7 +11250,7 @@ var EditFormProvider = function EditFormProvider(_ref) {
         onClose: close,
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_head,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("h6", {
-          children: [" Edit Task # ", taskId, " ss"]
+          children: [" Edit Task # ", taskId]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"].Body, {
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_body,

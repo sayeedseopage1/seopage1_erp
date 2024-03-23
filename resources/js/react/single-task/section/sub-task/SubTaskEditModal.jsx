@@ -63,7 +63,7 @@ const EditFormProvider = ({ task, singleTask }) => {
                     onClose={close}
                     className={styles.form_card_head}
                 >
-                    <h6> Edit Task # {taskId} ss</h6>
+                    <h6> Edit Task # {taskId}</h6>
                 </Card.Head>
 
                 <Card.Body className={styles.form_card_body}>
