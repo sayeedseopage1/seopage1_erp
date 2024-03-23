@@ -11773,7 +11773,8 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
           className: "col-12 col-md-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_12__["default"], {
             selected: taskCategory,
-            onSelect: setTaskCategory
+            onSelect: setTaskCategory,
+            isDesignerTask: true
           })
         }),
         // lead designer to graphic designer

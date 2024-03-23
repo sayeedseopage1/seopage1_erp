@@ -507,6 +507,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                         <TaskCategorySelectionBox
                             selected={taskCategory}
                             onSelect={setTaskCategory}
+                            isDesignerTask={true}
                         />
                     </div>
 
