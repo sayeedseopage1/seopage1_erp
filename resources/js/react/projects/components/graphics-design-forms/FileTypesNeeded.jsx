@@ -7,13 +7,15 @@ import style from "./multiselect.module.css";
 const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOnly }) => {
     const [search, setSearch] = React.useState('');
 
+    const options = () => (["Favicon", "Only icon", "Logo with icon", "Logo without icon"]);
+
     const onSelected = (option) => {
         if (!readOnly) {
             if (multiple) {
-                if (fileTypesNeeded?.includes(option)) {
+                if (fileTypesNeeded && fileTypesNeeded.includes(option)) {
                     setFileTypesNeeded(fileTypesNeeded.filter(p => p !== option));
                 } else {
-                    setFileTypesNeeded([...fileTypesNeeded, option]);
+                    setFileTypesNeeded([...(fileTypesNeeded || []), option]);
                 }
             } else {
                 setFileTypesNeeded([option]);
@@ -23,12 +25,10 @@ const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOn
 
     // remove tag
     const remove = (option) => {
-        if (!readOnly) {
+        if (!readOnly && fileTypesNeeded) { // Check if fileTypesNeeded is not null
             setFileTypesNeeded(fileTypesNeeded.filter(p => p !== option));
         }
     }
-
-    const options = () => (["Favicon", "Only icon", "Logo with icon", "Logo without icon"])
 
     return (
         <React.Fragment>
