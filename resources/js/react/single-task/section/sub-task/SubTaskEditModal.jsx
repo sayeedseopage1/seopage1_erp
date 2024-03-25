@@ -63,7 +63,7 @@ const EditFormProvider = ({ task, singleTask }) => {
                     onClose={close}
                     className={styles.form_card_head}
                 >
-                    <h6> Edit Task # {taskId} mmm</h6>
+                    <h6> Edit Task # {taskId}</h6>
                 </Card.Head>
 
                 <Card.Body className={styles.form_card_body}>
@@ -426,7 +426,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                 className={`f-14 text-dark-gray mb-1`}
                                 data-label="true"
                             >
-                                Milestone mm
+                                Milestone
                             </label>
                             <input
                                 className={`form-control height-35 f-14`}
