@@ -14,7 +14,7 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["All_TASKS", "All_EVALUATION"],
+            invalidatesTags: ["All_TASKS"],
         }),
         finalTaskSubmissionStatus: build.mutation({
             query: (assignToId) => ({

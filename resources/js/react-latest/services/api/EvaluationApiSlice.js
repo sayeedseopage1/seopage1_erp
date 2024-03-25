@@ -14,14 +14,18 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["All_TASKS"],
+            invalidatesTags: ["All_TASKS", "All_EVALUATION"],
         }),
         finalTaskSubmissionStatus: build.mutation({
             query: (assignToId) => ({
                 url: `http://localhost:3000/api/task/finalSubmissionStatus/${assignToId}`,
                 method: "PUT",
             }),
-            invalidatesTags: ["All_TASKS"],
+            invalidatesTags: ["All_TASKS", "All_EVALUATION"],
+        }),
+        getEvaluationList: build.query({
+            query: () => `http://localhost:3000/api/evaluation/get-evaluation`,
+            providesTags: ["All_EVALUATION"],
         }),
     }),
 });
@@ -30,4 +34,5 @@ export const {
     useGetTaskListQuery,
     useUpdateTaskMutation,
     useFinalTaskSubmissionStatusMutation,
+    useGetEvaluationListQuery,
 } = evaluationApiSlice;

@@ -13,6 +13,7 @@ export const apiSlice = createApi({
         "REVISIONS",
         "COMMENTS",
         "All_TASKS",
+        "All_EVALUATION",
         // "TASK_REPORT"
     ],
     endpoints: () => ({}),
