@@ -4,12 +4,17 @@ import { useGetEvaluationListQuery } from "../../services/api/EvaluationApiSlice
 import { DataTableColumns } from "../components/Table/DataTableColumns";
 import DataTable from "../components/Table/DataTable";
 import Button from "../../global/Button";
-
+import styles from "./EmployeeEvaluation.module.css";
 import EvaluationTableFilterBar from "../components/EvaluationTableFilterBar";
 
 import { Flex } from "../components/Table/ui";
 import RefreshButton from "../components/RefreshButton";
+import { Link, useSearchParams } from "react-router-dom";
+import _ from "lodash";
+import Card from "../../global/Card";
+
 const EmployeeEvaluation = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10,
@@ -36,6 +41,49 @@ const EmployeeEvaluation = () => {
 
     const Evaluations = data?.data;
 
+    // filter data
+    const getData = (type) => {
+        let _data = _.orderBy(Evaluations, "authorization_status", "asc");
+        switch (type) {
+            case "all":
+                return _data;
+            case "pending":
+                return _.filter(
+                    _data,
+                    (d) => d.authorization_status === "pending"
+                );
+            case "denied":
+                return _.filter(
+                    _data,
+                    (d) => d.authorization_status === "denied"
+                );
+            case "authorized":
+                return _.filter(
+                    _data,
+                    (d) => d.authorization_status === "authorized"
+                );
+            default:
+                return _data;
+        }
+    };
+
+    const _data = {
+        all: getData("all"),
+        pending: getData("pending"),
+        denied: getData("denied"),
+        authorized: getData("authorized"),
+    };
+
+    const tableData = (type) => {
+        if (type) {
+            return _.orderBy(
+                _data[type],
+                ["authorization_status", "updated_at"],
+                ["asc", "desc"]
+            );
+        } else return [];
+    };
+
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
@@ -43,33 +91,20 @@ const EmployeeEvaluation = () => {
     return (
         <>
             <EvaluationTableFilterBar setFilter={setFilter} />
-            <div
-                style={{
-                    borderRadius: "10px",
-                    padding: "20px",
-                    margin: "10px",
-                    backgroundColor: "white",
-                    boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                }}
-            >
-                <Flex justifyContent="space-between" marginBottom="10px">
-                    <Flex>
-                        <Button>Live</Button>
-                        <Button variant="success">Accepted</Button>
-                        <Button variant="danger">Rejected</Button>
-                    </Flex>
 
-                    <Flex>
-                        <RefreshButton
-                            onClick={refetch}
-                            isLoading={isFetching}
-                            className="font-weight-normal"
-                        />
-                    </Flex>
+            <Card className={styles.card}>
+                <Flex justifyContent="space-between" marginBottom="10px">
+                    <Tabs data={_data} />
+
+                    <RefreshButton
+                        onClick={refetch}
+                        isLoading={isFetching}
+                        className="font-weight-normal"
+                    />
                 </Flex>
 
                 <DataTable
-                    data={Evaluations}
+                    data={tableData(searchParams.get("show"))}
                     columns={[...DataTableColumns]}
                     isLoading={false}
                     onPageChange={onPageChange}
@@ -77,9 +112,80 @@ const EmployeeEvaluation = () => {
                     tableName="Evaluation Table"
                     setSorting={setSorting}
                 />
-            </div>
+            </Card>
         </>
     );
 };
 
 export default EmployeeEvaluation;
+
+const Tabs = (props) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const data = props.data;
+    const handleRouteChange = (e, params) => {
+        e.preventDefault();
+        for (const [key, value] of Object.entries(params)) {
+            searchParams.set(key, value);
+        }
+        setSearchParams(searchParams);
+    };
+
+    const badge = (type) => {
+        return _.size(data[type]);
+    };
+    return (
+        <ul className={styles.tabs}>
+            <li>
+                <Link
+                    to="#"
+                    data-type="all"
+                    onClick={(e) => handleRouteChange(e, { show: "all" })}
+                    data-active={searchParams.get("show") === "all"}
+                >
+                    All{" "}
+                    <span className="badge badge-light">{badge("all")}</span>
+                </Link>
+            </li>
+
+            <li>
+                <Link
+                    to="#"
+                    data-type="pending"
+                    onClick={(e) => handleRouteChange(e, { show: "pending" })}
+                    data-active={searchParams.get("show") === "pending"}
+                >
+                    Pending{" "}
+                    <span className="badge badge-light">
+                        {badge("pending")}
+                    </span>
+                </Link>
+            </li>
+
+            <li>
+                <Link
+                    to="#"
+                    data-type="authorized"
+                    onClick={(e) => handleRouteChange(e, { show: "accepted" })}
+                    data-active={searchParams.get("show") === "accepted"}
+                >
+                    Accepted{" "}
+                    <span className="badge badge-light">
+                        {badge("authorized")}
+                    </span>
+                </Link>
+            </li>
+
+            <li>
+                <Link
+                    to="#"
+                    data-type="denied"
+                    onClick={(e) => handleRouteChange(e, { show: "denied" })}
+                    data-active={searchParams.get("show") === "denied"}
+                >
+                    Denied{" "}
+                    <span className="badge badge-light">{badge("denied")}</span>
+                </Link>
+            </li>
+        </ul>
+    );
+};

@@ -10,7 +10,7 @@ export const EvaluationTableColumns = [
     //     },
     // },
     {
-        header: "Individual Task Name",
+        header: "Task Name",
         accessorKey: "taskName",
         cell: ({ row }) => {
             const data = row.original;
@@ -35,7 +35,7 @@ export const EvaluationTableColumns = [
         },
     },
     {
-        header: "Link to the Completed Work",
+        header: "Completed Work Link",
         accessorKey: "completedWorkLink",
         cell: ({ row }) => {
             const data = row.original;
@@ -58,7 +58,7 @@ export const EvaluationTableColumns = [
     },
 
     {
-        header: "Number of Revision Needed",
+        header: "Revisions Needed",
         accessorKey: "numberOfRevisions",
         cell: ({ row }) => {
             const data = row.original;

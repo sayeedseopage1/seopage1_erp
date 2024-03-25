@@ -22,14 +22,20 @@ import {
     CommentContentA,
 } from "../ui/EvaluationModal";
 import EvaluationTable from "../Table/EvaluationTable";
-import Button from "../../../global/Button";
+
 import { useAuth } from "../../../hooks/useAuth";
 import CKEditorComponent from "../../../ckeditor";
+// import {
+//     useFinalTaskSubmissionStatusMutation,
+//     useGetTaskListQuery,
+// } from "../../../services/api/EvaluationApiSlice";
+
+import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
+import Button from "../Button";
 import {
     useFinalTaskSubmissionStatusMutation,
     useGetTaskListQuery,
-} from "../../../services/api/EvaluationApiSlice";
-import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
+} from "../../../../react-latest/services/api/EvaluationApiSlice";
 const EvaluationModal = ({
     isEvaluationModal,
     setIsEvaluationModal,
@@ -45,7 +51,6 @@ const EvaluationModal = ({
 
     const Tasks = data?.data;
 
-    console.log(Tasks);
     const [sorting, setSorting] = useState([]);
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -71,11 +76,9 @@ const EvaluationModal = ({
 
     const handleTeamLeadComment = async (e) => {
         e.preventDefault();
-        console.log("team lead submitted");
     };
     const handleAdminComment = async (e) => {
         e.preventDefault();
-        console.log("Admin submitted");
     };
     return (
         <ReactModal
@@ -88,7 +91,7 @@ const EvaluationModal = ({
                 content: {
                     borderRadius: "10px",
                     maxWidth: "80%",
-
+                    fontSize: "12px",
                     height: "fit-content",
                     maxHeight: "90vh",
                     margin: "auto auto",

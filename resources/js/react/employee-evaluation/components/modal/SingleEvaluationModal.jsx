@@ -14,16 +14,18 @@ import { BiSolidEditAlt } from "react-icons/bi";
 import ReusableSectionTeamLeadAndAdmin from "./ReusableSectionTeamLeadAndAdmin";
 import Button from "../../../global/Button";
 import CKEditorComponent from "../../../ckeditor";
-import { useUpdateTaskMutation } from "../../../services/api/EvaluationApiSlice";
+
 import { useAuth } from "../../../hooks/useAuth";
+import { useUpdateTaskMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
+
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
     const auth = useAuth();
-    const [putTask] = useUpdateTaskMutation();
 
+    const [updateTask] = useUpdateTaskMutation();
     const [averageRating, setAverageRating] = useState(data.averageRating);
     const [formData, setFormData] = useState({
         averageRating: data?.averageRating ?? 0,
@@ -182,7 +184,8 @@ const SingleEvaluationModal = ({
         },
     ];
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         const requiredFields = [
             {
                 key: "work_quality_first_chance_rating",
@@ -242,13 +245,14 @@ const SingleEvaluationModal = ({
             fd.append(`rating[${key}]`, value);
         });
 
-        putTask({ taskId: data._id, data: fd })
+        const response = await updateTask({ taskId: data._id, data: fd })
             .unwrap()
             .then((response) => {
                 toast.success("Rating submitted");
                 toggleSingleEvaluationModal();
             })
             .catch((error) => {
+                console.error("Error submitting rating:", error);
                 toast.error("Rating not submitted");
             });
     };
@@ -264,8 +268,8 @@ const SingleEvaluationModal = ({
                 content: {
                     borderRadius: "10px",
                     height: "fit-content",
-                    maxHeight: "90vh",
-                    maxWidth: "1000px",
+                    maxHeight: "95vh",
+                    maxWidth: "1200px",
                     margin: "auto auto",
                     border: "none",
 
@@ -284,12 +288,12 @@ const SingleEvaluationModal = ({
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th>Individual task name</th>
+                            <th>Task name</th>
                             <th>Assign data</th>
                             <th>Submission Date</th>
                             <th>Total hours tracked</th>
-                            <th>Link to the completed work</th>
-                            <th>Number of Revisions needed</th>
+                            <th>Completed work link</th>
+                            <th>Revisions needed</th>
                             <th>Average Rating</th>
                         </tr>
                     </thead>
