@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('criteria_id')->constrained();
             $table->string('title');
+            
             $table->unsignedTinyInteger('point_type')->default(1)->comment('1 = Static, 2 = Percentage');
             $table->decimal('points');
-            // $table->string('poi')
+            $table->string('point_depend_on_model')->nullable()->comment('The point depend on this model');
+            $table->string('point_depend_on_field')->nullable()->comment('The point depend on this field of defined model');
             $table->timestamps();
         });
     }
