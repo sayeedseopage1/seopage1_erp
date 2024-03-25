@@ -1641,7 +1641,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     {!isLoading ? (
                                         <Button onClick={handleSubmit}>
                                             <i className="fa-regular fa-paper-plane"></i>
-                                            Create
+                                            Update
                                         </Button>
                                     ) : (
                                         <Button className="cursor-processing">
