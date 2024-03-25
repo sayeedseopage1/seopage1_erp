@@ -749,7 +749,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionList(Request $req)
     {
-        $list = SalesPolicyQuestion::whereNull('parent_id')
+        $list = SalesPolicyQuestion::parent()
             ->where(function ($query) use ($req) {
                 if ($req->policy_id)
                     $query->where('policy_id', $req->policy_id);
