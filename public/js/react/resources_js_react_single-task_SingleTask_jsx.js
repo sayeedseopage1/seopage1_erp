@@ -11302,8 +11302,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   var defaultTextForDesign;
   var defaultImageForDesigner;
   var defaultImgOrVidForWork;
-  // let defaultBrandGuidelineFiles;
-
+  var defaultBrandGuidelineFiles;
   if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed) {
     defaultSecondaryColors = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors);
     defaultFileTypesNeeded = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed);

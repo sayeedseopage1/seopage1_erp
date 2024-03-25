@@ -110,7 +110,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     let defaultTextForDesign;
     let defaultImageForDesigner;
     let defaultImgOrVidForWork;
-    // let defaultBrandGuidelineFiles;
+    let defaultBrandGuidelineFiles;
 
     if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
