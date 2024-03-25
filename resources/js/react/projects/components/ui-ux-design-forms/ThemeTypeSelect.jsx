@@ -7,7 +7,6 @@ import { Combobox } from '@headlessui/react';
 // import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
 // import Loader from '../../../single-task/components/Loader';
 
-// FIXME: it will be replace with api data in future
 const themeOptions = [
     { id: 1, type_name: 'No specific theme' },
     { id: 2, type_name: 'Need to use a specific theme' },
@@ -26,7 +25,7 @@ const ThemeTypeSelect = ({ selected, onSelect, taskId, isDesignerTask }) => {
     const filteredData =
         query === ''
             ? theme_type_list
-            : logos_list?.filter((lType) => {
+            : theme_type_list?.filter((lType) => {
                 return lType?.type_name.toLowerCase().includes(query.toLowerCase())
             })
 

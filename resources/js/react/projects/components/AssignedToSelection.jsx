@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { User } from '../../utils/user-details';
 
 
-const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
+const AssginedToSelection = ({ selected, onSelect, taskCategory, isDesignerTask }) => {
     const [query, setQuery] = React.useState('');
     const { users, usersIsFetching: isFetching } = useUsers();
     const auth = useAuth();
@@ -38,7 +38,7 @@ const AssginedToSelection = ({ selected, onSelect, taskCategory }) => {
             })
 
     return (
-        <Combobox value={selected} onChange={onSelect}>
+        <Combobox value={selected} onChange={onSelect} disabled={isDesignerTask}>
             <div className="form-group position-relative my-3">
                 <label className='f-14 text-dark-gray mb-1' htmlFor="">Assigned To <sup>*</sup></label>
                 <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">

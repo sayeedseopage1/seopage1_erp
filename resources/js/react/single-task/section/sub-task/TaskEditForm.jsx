@@ -844,6 +844,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                 setTaskCategory(value);
                                 setAssignedTo(null);
                             }}
+                            isDesignerTask={taskCategory?.category_name === "Graphic Design" || taskCategory?.category_name === "UI/UIX Design"}
                         />
                     </div>
 

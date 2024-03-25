@@ -696,6 +696,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                 <TaskCategorySelectionBox
                                     selected={taskCategory}
                                     onSelect={setTaskCategory}
+                                    isDesignerTask={taskCategory?.category_name === "Graphic Design" || taskCategory?.category_name === "UI/UIX Design"}
                                 />
                                 {formError?.taskCategory && (
                                     <div style={{ color: "red" }}>
@@ -849,7 +850,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                         <TypeOfGraphicsWorkSelection
                                             selected={typeOfGraphicsCategory}
                                             onSelect={setTypeOfGraphicsCategory}
-                                            taskId={params?.projectId}
+                                            isDesignerTask={taskCategory?.category_name === "Graphic Design" || taskCategory?.category_name === "UI/UIX Design"}
                                         />
                                         {formError?.typeOfGraphicsCategory && (
                                             <div style={{ color: "red" }}>
@@ -864,7 +865,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 <TypeOfLogo
                                                     selected={typeOfLogo}
                                                     onSelect={setTypeOfLogo}
-                                                    taskId={params?.projectId}
                                                 />
                                                 {formError?.typeOfLogo && (
                                                     <div style={{ color: "red" }}>
@@ -1536,6 +1536,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
                                     taskCategory={taskCategory}
+                                    isDesignerTask={taskCategory?.category_name === "Graphic Design" || taskCategory?.category_name === "UI/UIX Design"}
                                 />
 
                                 {formError?.assignedTo && (

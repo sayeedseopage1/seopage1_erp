@@ -15397,7 +15397,8 @@ var TaskEditForm = function TaskEditForm(_ref2) {
             onSelect: function onSelect(value) {
               setTaskCategory(value);
               setAssignedTo(null);
-            }
+            },
+            isDesignerTask: (taskCategory === null || taskCategory === void 0 ? void 0 : taskCategory.category_name) === "Graphic Design" || (taskCategory === null || taskCategory === void 0 ? void 0 : taskCategory.category_name) === "UI/UIX Design"
           })
         }), taskCategory ? (taskCategory === null || taskCategory === void 0 ? void 0 : taskCategory.category_name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.Fragment, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("div", {
