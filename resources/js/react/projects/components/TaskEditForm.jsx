@@ -224,8 +224,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
             setIllustration(graphicWorkDetails?.design_instruction);
             setOthers(graphicWorkDetails?.design_instruction);
-            setPrimaryColor(graphicWorkDetails?.primary_color);
-            setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
         }
     }, [isOpen])
 

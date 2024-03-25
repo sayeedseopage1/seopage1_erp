@@ -9691,7 +9691,8 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
   var _employees;
   var selected = _ref.selected,
     onSelect = _ref.onSelect,
-    taskCategory = _ref.taskCategory;
+    taskCategory = _ref.taskCategory,
+    isDesignerTask = _ref.isDesignerTask;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(""),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     query = _React$useState2[0],
@@ -9720,6 +9721,7 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Combobox, {
     value: selected,
     onChange: onSelect,
+    disabled: isDesignerTask,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "form-group position-relative my-3",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("label", {
@@ -14635,7 +14637,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     _useState32 = _slicedToArray(_useState31, 2),
     defaultImgOrVidForWork = _useState32[0],
     setDefaultImgOrVidForWork = _useState32[1];
-  if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed) {
+  if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.secondary_colors || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.file_types_needed || graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.graphic_task_files) {
     defaultSecondaryColors = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.secondary_colors);
     defaultFileTypesNeeded = JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.file_types_needed);
     // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
@@ -14816,8 +14818,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       setPrimaryColorDescription(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color_description);
       setIllustration(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
       setOthers(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
-      setPrimaryColor(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color);
-      setPrimaryColorDescription(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color_description);
     }
   }, [row, graphicWorkDetails, graphicOptions]);
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(task.id, "/json?mode=estimation_time")),
@@ -15200,13 +15200,17 @@ var TaskEditForm = function TaskEditForm(_ref2) {
 
   // handle secondary color description change
   var handleSecondaryColorDescriptionChange = function handleSecondaryColorDescriptionChange(e, editor, id) {
-    var text = editor.getData();
-    var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
-      return item.id === id ? _objectSpread(_objectSpread({}, item), {}, {
-        description: text
-      }) : item;
-    });
-    setSecondaryColors(_toConsumableArray(newColors));
+    if (editor) {
+      var text = editor.getData();
+      var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
+        return item.id === id ? _objectSpread(_objectSpread({}, item), {}, {
+          description: text
+        }) : item;
+      });
+      setSecondaryColors(newColors);
+    } else {
+      console.error("Editor is undefined");
+    }
   };
 
   // remove secondary color
@@ -15765,12 +15769,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                             return setPrimaryColorDescription(editor.getData());
                           }
                         })
-                      }), (error === null || error === void 0 ? void 0 : error.pColorDesc) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("div", {
-                        className: "",
-                        style: {
-                          color: "red"
-                        },
-                        children: [" ", error === null || error === void 0 ? void 0 : error.pColorDesc, " "]
                       })]
                     })]
                   })
@@ -15812,9 +15810,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                                 placeholder: "Recipient's username",
                                 "aria-label": "Recipient's username",
                                 "aria-describedby": "basic-addon2",
-                                value: item.color,
+                                value: item === null || item === void 0 ? void 0 : item.color,
                                 onChange: function onChange(e) {
-                                  return handleSecondaryColorChange(e, item.id);
+                                  return handleSecondaryColorChange(e, item === null || item === void 0 ? void 0 : item.id);
                                 }
                               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
                                 className: "input-group-append",
@@ -15855,20 +15853,14 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
                             className: "ck-editor-holder",
                             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                              data: item === null || item === void 0 ? void 0 : item.description,
+                              data: item.description || "",
                               onChange: function onChange(e, editor) {
-                                return handleSecondaryColorDescriptionChange(e, editor, item.id);
+                                return handleSecondaryColorDescriptionChange(e, editor, item === null || item === void 0 ? void 0 : item.id);
                               }
                             })
-                          }), (error === null || error === void 0 ? void 0 : error.sDescription) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("div", {
-                            className: "",
-                            style: {
-                              color: "red"
-                            },
-                            children: [" ", error === null || error === void 0 ? void 0 : error.sDescription, " "]
                           })]
                         })]
-                      }, item.id);
+                      }, item === null || item === void 0 ? void 0 : item.id);
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
                       className: "d-flex align-items-center px-3",
                       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("button", {
@@ -15948,7 +15940,8 @@ var TaskEditForm = function TaskEditForm(_ref2) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_AssignedToSelection__WEBPACK_IMPORTED_MODULE_10__["default"], {
             selected: assignedTo,
             onSelect: setAssignedTo,
-            taskCategory: taskCategory
+            taskCategory: taskCategory,
+            isDesignerTask: (taskCategory === null || taskCategory === void 0 ? void 0 : taskCategory.category_name) === "Graphic Design" || (taskCategory === null || taskCategory === void 0 ? void 0 : taskCategory.category_name) === "UI/UIX Design"
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
           className: "col-6",

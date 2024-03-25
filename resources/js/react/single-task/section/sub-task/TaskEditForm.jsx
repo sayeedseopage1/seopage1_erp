@@ -133,8 +133,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
     const [defaultImgOrVidForWork, setDefaultImgOrVidForWork] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3))
 
-
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
         // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
@@ -225,8 +224,6 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
             setIllustration(graphicWorkDetails?.design_instruction);
             setOthers(graphicWorkDetails?.design_instruction);
-            setPrimaryColor(graphicWorkDetails?.primary_color);
-            setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
         }
     }, [row, graphicWorkDetails, graphicOptions])
 
@@ -621,11 +618,15 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
     // handle secondary color description change
     const handleSecondaryColorDescriptionChange = (e, editor, id) => {
-        let text = editor.getData();
-        let newColors = _.map(secondaryColors, (item) =>
-            item.id === id ? { ...item, description: text } : item
-        );
-        setSecondaryColors([...newColors]);
+        if (editor) {
+            let text = editor.getData();
+            let newColors = _.map(secondaryColors, (item) =>
+                item.id === id ? { ...item, description: text } : item
+            );
+            setSecondaryColors(newColors);
+        } else {
+            console.error("Editor is undefined");
+        }
     };
 
     // remove secondary color
@@ -1184,7 +1185,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                         Color Schema
                                     </label>
                                     <React.Fragment>
-                                        {/* primary color */}
+
                                         <div
                                             className="mt-3 mx-3 p-3"
                                             style={{
@@ -1263,35 +1264,15 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                     <div className="ck-editor-holder">
                                                         <CKEditorComponent
                                                             data={primaryColorDescription}
-                                                            onChange={(
-                                                                e,
-                                                                editor
-                                                            ) =>
-                                                                setPrimaryColorDescription(
-                                                                    editor.getData()
-                                                                )
-                                                            }
+                                                            onChange={(e, editor) => (
+                                                                setPrimaryColorDescription(editor.getData())
+                                                            )}
                                                         />
                                                     </div>
-
-                                                    {error?.pColorDesc && (
-                                                        <div
-                                                            className=""
-                                                            style={{
-                                                                color: "red",
-                                                            }}
-                                                        >
-                                                            {" "}
-                                                            {
-                                                                error?.pColorDesc
-                                                            }{" "}
-                                                        </div>
-                                                    )}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* secondary color */}
                                         <div
                                             className="mt-3 mx-3 p-3"
                                             style={{
@@ -1317,7 +1298,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                     (item, index) => (
                                                         <div
                                                             className="p-3"
-                                                            key={item.id}
+                                                            key={item?.id}
                                                         >
                                                             <div className="form-group">
                                                                 <label htmlFor="">
@@ -1338,14 +1319,14 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                                             aria-label="Recipient's username"
                                                                             aria-describedby="basic-addon2"
                                                                             value={
-                                                                                item.color
+                                                                                item?.color
                                                                             }
                                                                             onChange={(
                                                                                 e
                                                                             ) =>
                                                                                 handleSecondaryColorChange(
                                                                                     e,
-                                                                                    item.id
+                                                                                    item?.id
                                                                                 )
                                                                             }
                                                                         />
@@ -1412,7 +1393,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                                 </label>
                                                                 <div className="ck-editor-holder">
                                                                     <CKEditorComponent
-                                                                        data={item?.description}
+                                                                        data={item.description || ""}
                                                                         onChange={(
                                                                             e,
                                                                             editor
@@ -1420,25 +1401,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                                             handleSecondaryColorDescriptionChange(
                                                                                 e,
                                                                                 editor,
-                                                                                item.id
+                                                                                item?.id
                                                                             )
                                                                         }
                                                                     />
                                                                 </div>
-
-                                                                {error?.sDescription && (
-                                                                    <div
-                                                                        className=""
-                                                                        style={{
-                                                                            color: "red",
-                                                                        }}
-                                                                    >
-                                                                        {" "}
-                                                                        {
-                                                                            error?.sDescription
-                                                                        }{" "}
-                                                                    </div>
-                                                                )}
                                                             </div>
                                                         </div>
                                                     )
@@ -1542,6 +1509,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                             selected={assignedTo}
                             onSelect={setAssignedTo}
                             taskCategory={taskCategory}
+                            isDesignerTask={taskCategory?.category_name === "Graphic Design" || taskCategory?.category_name === "UI/UIX Design"}
                         />
                     </div>
                     {/*
