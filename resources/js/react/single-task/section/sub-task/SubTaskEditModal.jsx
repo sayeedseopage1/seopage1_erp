@@ -63,7 +63,7 @@ const EditFormProvider = ({ task, singleTask }) => {
                     onClose={close}
                     className={styles.form_card_head}
                 >
-                    <h6> Edit Task # {taskId}</h6>
+                    <h6> Edit Task # {taskId} mmm</h6>
                 </Card.Head>
 
                 <Card.Body className={styles.form_card_body}>
@@ -123,8 +123,6 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         defaultBrandGuidelineFiles = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4)
     }
 
-    // const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
-
     // set default value for files and colors for graphic design end
 
     //form data
@@ -160,19 +158,19 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
-    const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
-    const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
-    const [imageForDesigner, setImageForDesigner] = useState(defaultImageForDesigner);
-    const [imgOrVidForWork, setImgOrVidForWork] = useState(defaultImgOrVidForWork);
+    const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
+    const [textForDesign, setTextForDesign] = useState([]);
+    const [imageForDesigner, setImageForDesigner] = useState([]);
+    const [imgOrVidForWork, setImgOrVidForWork] = useState([]);
     const [fontName, setFontName] = useState('');
     const [fontUrl, setFontUrl] = useState('');
-    const [brandGuideline, setBrandGuideline] = useState(defaultBrandGuidelineFiles);
+    const [brandGuideline, setBrandGuideline] = useState([]);
     const [illustration, setIllustration] = useState("");
     const [others, setOthers] = useState("");
     const [primaryColor, setPrimaryColor] = React.useState("");
     const [primaryColorDescription, setPrimaryColorDescription] =
         React.useState("");
-    const [secondaryColors, setSecondaryColors] = React.useState(defaultSecondaryColors);
+    const [secondaryColors, setSecondaryColors] = React.useState([]);
     //state for graphic designer end
 
     // state for ui/ux start
@@ -196,6 +194,12 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         setCms(taskDetails?.cms)
         setThemeName(taskDetails?.theme_name)
         setThemeTemplate(taskDetails?.theme_template_library_link)
+        setFileTypesNeeded(defaultFileTypesNeeded)
+        setBrandGuideline(defaultBrandGuidelineFiles)
+        setTextForDesign(defaultTextForDesign)
+        setImageForDesigner(defaultImageForDesigner)
+        setImgOrVidForWork(defaultImgOrVidForWork)
+        setSecondaryColors(defaultSecondaryColors)
     }, [taskDetails, graphicWorkDetails]);
 
 
@@ -422,7 +426,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                 className={`f-14 text-dark-gray mb-1`}
                                 data-label="true"
                             >
-                                Milestone
+                                Milestone mm
                             </label>
                             <input
                                 className={`form-control height-35 f-14`}

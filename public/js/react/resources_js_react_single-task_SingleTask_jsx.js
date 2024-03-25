@@ -11252,7 +11252,7 @@ var EditFormProvider = function EditFormProvider(_ref) {
         onClose: close,
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_head,
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("h6", {
-          children: [" Edit Task # ", taskId]
+          children: [" Edit Task # ", taskId, " mmm"]
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_global_Card__WEBPACK_IMPORTED_MODULE_5__["default"].Body, {
         className: _task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_13__["default"].form_card_body,
@@ -11324,8 +11324,6 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 4;
     });
   }
-
-  // const [defaultBrandGuidelineFiles, setDefaultBrandGuidelineFiles] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 4))
 
   // set default value for files and colors for graphic design end
 
@@ -11421,19 +11419,19 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     _useState38 = _slicedToArray(_useState37, 2),
     reference = _useState38[0],
     setReference = _useState38[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(defaultFileTypesNeeded),
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([]),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     fileTypesNeeded = _React$useState4[0],
     setFileTypesNeeded = _React$useState4[1];
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultTextForDesign),
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState40 = _slicedToArray(_useState39, 2),
     textForDesign = _useState40[0],
     setTextForDesign = _useState40[1];
-  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultImageForDesigner),
+  var _useState41 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState42 = _slicedToArray(_useState41, 2),
     imageForDesigner = _useState42[0],
     setImageForDesigner = _useState42[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultImgOrVidForWork),
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState44 = _slicedToArray(_useState43, 2),
     imgOrVidForWork = _useState44[0],
     setImgOrVidForWork = _useState44[1];
@@ -11445,7 +11443,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     _useState48 = _slicedToArray(_useState47, 2),
     fontUrl = _useState48[0],
     setFontUrl = _useState48[1];
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(defaultBrandGuidelineFiles),
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState50 = _slicedToArray(_useState49, 2),
     brandGuideline = _useState50[0],
     setBrandGuideline = _useState50[1];
@@ -11465,7 +11463,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     primaryColorDescription = _React$useState8[0],
     setPrimaryColorDescription = _React$useState8[1];
-  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(defaultSecondaryColors),
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([]),
     _React$useState10 = _slicedToArray(_React$useState9, 2),
     secondaryColors = _React$useState10[0],
     setSecondaryColors = _React$useState10[1];
@@ -11500,6 +11498,12 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     setCms(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.cms);
     setThemeName(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_name);
     setThemeTemplate(taskDetails === null || taskDetails === void 0 ? void 0 : taskDetails.theme_template_library_link);
+    setFileTypesNeeded(defaultFileTypesNeeded);
+    setBrandGuideline(defaultBrandGuidelineFiles);
+    setTextForDesign(defaultTextForDesign);
+    setImageForDesigner(defaultImageForDesigner);
+    setImgOrVidForWork(defaultImgOrVidForWork);
+    setSecondaryColors(defaultSecondaryColors);
   }, [taskDetails, graphicWorkDetails]);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.type_of_graphic_work_id) {
@@ -11703,7 +11707,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
               className: "f-14 text-dark-gray mb-1",
               "data-label": "true",
-              children: "Milestone"
+              children: "Milestone mm"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
               className: "form-control height-35 f-14",
               readOnly: true,
