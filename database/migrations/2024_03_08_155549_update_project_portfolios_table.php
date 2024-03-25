@@ -29,7 +29,7 @@ return new class extends Migration
                             $table->bigInteger('theme_id')->unsigned()->after('sub_niche');
                             break;
                         case 'plugin_list':
-                            $table->json('plugin_list')->after('plugin_information');
+                            $table->json('plugin_list')->nullable()->after('plugin_information');
                             break;
                     }
                 }

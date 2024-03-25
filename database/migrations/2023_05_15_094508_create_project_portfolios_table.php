@@ -20,11 +20,9 @@ return new class extends Migration
             $table->integer('website_type')->nullable();
             $table->integer('niche')->nullable();
             $table->integer('sub_niche')->nullable();
-            $table->string('theme_name')->nullable();
-            $table->text('theme_url')->nullable();
+            $table->bigInteger('theme_id')->unsigned();
             $table->tinyInteger('plugin_information')->default(0);
-            $table->text('plugin_name')->nullable();
-            $table->string('plugin_url')->nullable();
+            $table->json('plugin_list')->nullable();
             $table->string('main_page_number')->nullable();
             $table->string('main_page_name')->nullable();
             $table->string('secondary_page_number')->nullable();
