@@ -411,7 +411,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 showConfirmButton: false,
                                 timer: 2500,
                             });
-                            window.location.reload();
+                            // window.location.reload();
                         }
                     })
                     .catch((err) => {
@@ -1602,7 +1602,13 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                 <div className="col-12">
                     <div className="form-group my-3">
-                        <label htmlFor=""> Description </label>
+                        <label
+                            htmlFor=""
+                            className={`f-14 text-dark-gray mb-2`}
+                        >
+                            Description
+                            <sup className='f-14 mr-1'>*</sup>
+                        </label>
                         <div
                             className="sp1_st_write_comment_editor"
                             style={{ minHeight: "100px" }}

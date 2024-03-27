@@ -96,6 +96,13 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const { data: subTasks } = useGetSubTasksQuery({ taskId: taskDetails?.dependent_task_id }, {
         skip: !isSubTask
     })
+
+    const { data: mainTask } = useGetTaskDetailsQuery(
+        `/${isSubTask}/json?mode=basic`,
+        { refetchOnMountOrArgChange: true }
+    );
+
+    const uiUixDetails = new Object(mainTask?.task)
     // sub task details 
     const graphicWorkDetails = new Object(subTasks?.sub_task_details_graphic_work)
     // **************sub task details end**********
@@ -191,9 +198,6 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
         setIllustration(graphicWorkDetails?.design_instruction);
         setOthers(graphicWorkDetails?.design_instruction);
-        setCms(taskDetails?.cms)
-        setThemeName(taskDetails?.theme_name)
-        setThemeTemplate(taskDetails?.theme_template_library_link)
         setFileTypesNeeded(defaultFileTypesNeeded)
         setBrandGuideline(defaultBrandGuidelineFiles)
         setTextForDesign(defaultTextForDesign)
@@ -201,6 +205,12 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
         setImgOrVidForWork(defaultImgOrVidForWork)
         setSecondaryColors(defaultSecondaryColors)
     }, [taskDetails, graphicWorkDetails]);
+
+    useEffect(() => {
+        setCms(uiUixDetails?.cms)
+        setThemeName(uiUixDetails?.theme_name)
+        setThemeTemplate(uiUixDetails?.theme_template_library_link)
+    }, [uiUixDetails])
 
 
     useEffect(() => {
@@ -985,7 +995,13 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
                     <div className="col-12">
                         <div className="form-group my-3">
-                            <label htmlFor=""> Description </label>
+                            <label
+                                htmlFor=""
+                                className={`f-14 text-dark-gray mb-2`}
+                            >
+                                Description
+                                <sup className='f-14 mr-1'>*</sup>
+                            </label>
                             <div
                                 className="sp1_st_write_comment_editor"
                                 style={{ minHeight: "100px" }}

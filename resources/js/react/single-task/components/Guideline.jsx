@@ -5,9 +5,10 @@ import { useClickAway } from 'react-use';
 import _ from 'lodash';
 import PMGuideline, { ColorItem } from './PMGuideline';
 import FileUploader from '../../file-upload/FileUploader';
-import { useGetTypesOfGraphicWorksQuery } from '../../services/api/SingleTaskPageApi';
+import { useGetTaskDetailsQuery, useGetTypesOfGraphicWorksQuery } from '../../services/api/SingleTaskPageApi';
 import './styles/guideline.css'
 import { useGetSubTasksQuery } from '../../services/api/tasksApiSlice';
+import { de } from '@faker-js/faker';
 
 const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask }) => {
     const [expend, setExpend] = useState(false);
@@ -21,8 +22,17 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     const { data: subTasks, isFetching } = useGetSubTasksQuery({ taskId: singleTask?.dependent_task_id }, {
         skip: !isSubTask
     })
-    // sub task details 
+    // sub task details graphic
     const graphicSubTaskDetails = new Object(subTasks?.sub_task_details_graphic_work)
+    // sub task details ui/uix 
+    const { data: mainTask } = useGetTaskDetailsQuery(
+        `/${isSubTask}/json?mode=basic`,
+        { refetchOnMountOrArgChange: true }
+    );
+
+    const subUiUixDetails = new Object(mainTask?.task)
+
+    console.log("uiUixDetails", subUiUixDetails)
     // **************sub task details end**********
 
     // parent task details 
@@ -52,9 +62,9 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         updated_at
     } = commonGraphicWorkDetails;
 
+    const commonUiUixWorkDetails = singleTask?.cms !== null ? singleTask : subUiUixDetails
 
-
-    const { cms, theme_name, theme_template_library_link } = singleTask || {}
+    const { cms, theme_name, theme_template_library_link } = commonUiUixWorkDetails || {}
 
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
