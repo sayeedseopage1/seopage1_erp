@@ -201,6 +201,42 @@ use App\Http\Controllers\ProjectTemplateMemberController;
 use App\Http\Controllers\ProjectTemplateSubTaskController;
 use App\Http\Controllers\PaymentGatewayCredentialController;
 use App\Http\Controllers\EmployeeShiftChangeRequestController;
+use App\Http\Controllers\DealController;
+use App\Http\Controllers\DealBoardController;
+use App\Http\Controllers\ProjectBoardController;
+use App\Http\Controllers\ReportIssueController;
+use App\Http\Controllers\SuggestionController;
+use App\Http\Controllers\SoftwareProjectController;
+use App\Http\Controllers\InsightsController;
+use App\Http\Controllers\Seopage1TeamController;
+use App\Http\Controllers\KpiSettingController;
+use App\Http\Controllers\IncentiveSettingController;
+use App\Http\Controllers\PointsController;
+use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\ProjectCredential;
+use App\Http\Controllers\IncentiveController;
+use App\Http\Controllers\PolicyController;
+use App\Http\Controllers\ReportCentralController;
+use App\Http\Controllers\MonthlyIncentiveController;
+use App\Http\Controllers\QualifiedSalesController;
+use App\Http\Controllers\PendingActionController;
+use App\Http\Controllers\NonCashPointSettingsController;
+use App\Http\Controllers\ClientReviewController;
+use App\Http\Controllers\CriteriaController;
+use App\Http\Controllers\CrossDeptWork;
+use App\Http\Controllers\DisputeController;
+use App\Http\Controllers\FilterController;
+use App\Http\Controllers\DMContractController;
+use App\Http\Controllers\DMDealController;
+use App\Http\Controllers\DMLeadController;
+use App\Http\Controllers\IndependentTaskController;
+
+use App\Http\Controllers\RevisionCalculatorController;
+use App\Http\Controllers\PmPaymentReleaseHistory;
+use App\Http\Controllers\RevisionController;
+use App\Http\Controllers\IssuedTaskReportController;
+use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\ProjectStatusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1539,6 +1575,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
+    Route::get('project-manager-point-factors', [CriteriaController::class, 'index'])->name('project.manager.point.factors');
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 
     // Graphic task files delete
