@@ -18,6 +18,9 @@ const Button = ({
     onClick,
     isLoading = false,
     loaderTitle = "Loading...",
+    dataTip,
+    toolTipId,
+    dataTooltipHidden,
 
     ...props
 }) => {
@@ -44,6 +47,10 @@ const Button = ({
 
     return (
         <button
+            data-tooltip-id={toolTipId ?? ""}
+            data-tooltip-content={dataTip ?? ""}
+            data-tooltip-place="top"
+            data-tooltip-hidden={dataTooltipHidden ?? true}
             type={type}
             style={{ fontSize: "12px" }}
             className={`${classes} ${isLoading ? styles.cnx__btn_loading : ""}`}
