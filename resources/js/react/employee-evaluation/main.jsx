@@ -4,10 +4,9 @@ import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store } from "../services/store";
-
-import Toaster from "../global/Toaster";
 import EmployeeEvaluation from "./pages/EmployeeEvaluation";
+import { store } from "../services/store";
+import Toaster from "../global/Toaster";
 
 // custom drag layer
 const DragLayer = () => {
