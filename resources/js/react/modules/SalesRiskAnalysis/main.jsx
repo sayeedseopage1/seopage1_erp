@@ -10,6 +10,7 @@ import { store } from "../../services/store";
 // components
 import SalesRiskAnalysis from "./Pages/SalesRiskAnalysis";
 import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
+import SalesRiskAuthorize from "./Pages/SalesRiskAuthorize";
 
 const Content = () => {
     return (
@@ -49,7 +50,7 @@ if (containerSalePolicyQuestion) {
                         <Route path="/" element={<Content />}>
                             <Route
                                 path="account/deals/risk-analysis/:deal_id"
-                                element={<SalesRiskQuestions />}
+                                element={<SalesRiskAuthorize />}
                             />
                         </Route>
                     </Routes>

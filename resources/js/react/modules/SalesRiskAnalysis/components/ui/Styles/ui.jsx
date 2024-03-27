@@ -154,7 +154,7 @@ export const SalesRiskAnalysisQuestionTitleContainer = styled.div`
             font-size: 20px;
         }
     }
-`
+`;
 
 export const CustomInputsTextArea = styled.textarea`
     border-radius: 9px;
@@ -219,12 +219,59 @@ export const CustomInputCheckbox = styled.input`
     margin-right: 10px;
     transform: scale(1.2);
     border-radius: 4px; /* Optional: Add some border-radius for a rounded look */
-
     &:not(:checked) {
-        border-color: #1492E6; /* Change border color when not checked */
+        border-color: #1492e6; /* Change border color when not checked */
     }
-
     &:checked {
         border-color: green; /* Change border color when checked */
     }
+`;
+
+// Sale Risk Analysis Authorize Styles
+
+export const SaleRiskAuthorizeHeaderWrapper = styled.div`
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 16px;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #000;
+        font-family: Poppins;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: normal;
+        border-right: 1px solid #b1b1b1;
+        span {
+            color: #1492e6;
+        }
+    }
+    div:first-child {
+        justify-content: flex-start;
+    }
+    div:last-child {
+        border-right: none;
+    }
+`;
+
+export const SaleRiskAuthorizeHeaderButton = styled.button`
+    display: flex;
+    width: 100%;
+    padding: 25px 40px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    background: #1492e6;
+    color: #fff;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 `;

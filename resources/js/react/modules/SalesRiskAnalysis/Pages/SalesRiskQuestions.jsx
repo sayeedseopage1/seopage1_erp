@@ -197,7 +197,6 @@ const SalesRiskQuestions = () => {
         return setInputsData(addSelectValue);
     };
 
-    console.log("inputsData", inputsData);
     return (
         <SalesRiskAnalysisQuestionWrapper>
             <SalesRiskAnalysisQuestionContainer>
