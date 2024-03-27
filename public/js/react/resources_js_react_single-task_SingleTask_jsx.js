@@ -12842,7 +12842,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                             showConfirmButton: false,
                             timer: 2500
                           });
-                          // window.location.reload();
+                          window.location.reload();
                         }
                       })["catch"](function (err) {
                         if ((err === null || err === void 0 ? void 0 : err.status) === 422) {

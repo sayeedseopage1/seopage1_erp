@@ -411,7 +411,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                                 showConfirmButton: false,
                                 timer: 2500,
                             });
-                            // window.location.reload();
+                            window.location.reload();
                         }
                     })
                     .catch((err) => {
