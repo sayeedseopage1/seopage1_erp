@@ -31,8 +31,6 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
     );
 
     const subUiUixDetails = new Object(mainTask?.task)
-
-    console.log("uiUixDetails", subUiUixDetails)
     // **************sub task details end**********
 
     // parent task details 

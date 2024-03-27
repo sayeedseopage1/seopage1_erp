@@ -2496,7 +2496,6 @@ var Guideline = function Guideline(_ref) {
     }),
     mainTask = _useGetTaskDetailsQue.data;
   var subUiUixDetails = new Object(mainTask === null || mainTask === void 0 ? void 0 : mainTask.task);
-  console.log("uiUixDetails", subUiUixDetails);
   // **************sub task details end**********
 
   // parent task details 
