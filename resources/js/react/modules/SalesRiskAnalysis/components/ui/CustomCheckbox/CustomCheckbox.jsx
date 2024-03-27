@@ -1,10 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+// Ui components
 import { CustomInputCheckbox, CustomInputsLabel } from "../Styles/ui";
 
-const CustomCheckbox = () => {
+const CustomCheckbox = ({ isChecked, setIsChecked }) => {
     return (
-        <div className="d-flex align-items-start">
-            <CustomInputCheckbox type="checkbox"/>
+        <div className="d-flex align-items-start my-3">
+            <CustomInputCheckbox
+                type="checkbox"
+                checked={isChecked}
+                onChange={() => setIsChecked(!isChecked)}
+            />
             <CustomInputsLabel>
                 I hereby confirm that all provided information is accurate. Any
                 future discrepancies in the above-mentioned information will
@@ -16,3 +23,8 @@ const CustomCheckbox = () => {
 };
 
 export default CustomCheckbox;
+
+CustomCheckbox.propTypes = {
+    isChecked: PropTypes.bool,
+    setIsChecked: PropTypes.func,
+}

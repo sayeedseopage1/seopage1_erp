@@ -9,13 +9,12 @@ const QuestionConfirmModal = ({ open, closeModal }) => {
             open={open}
             closeModal={closeModal}
             contentLabel="Question Confirm Modal"
-            width="600px"
             maxWidth="600px"
             isCloseButtonShow={true}
             height="fit-content"
             maxHeight="fit-content"
         >
-            <div className="d-flex align-items-center justify-content-center flex-column py-4 px-5">
+            <div className="d-flex align-items-center justify-content-center flex-column py-4 px-3 px-md-5">
                 <InfoIcon />
                 <p
                     className="text-center py-4"

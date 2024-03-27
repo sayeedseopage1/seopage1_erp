@@ -33,6 +33,8 @@ const WithoutDraggableColumnHeader = ({
                             ? "90px"
                             : column.id === "ruleList"
                             ? "300px"
+                            : column.id === "question_title"
+                            ? "300px"
                             : "auto",
                     maxWidth:
                         column.id === "id"
@@ -40,6 +42,8 @@ const WithoutDraggableColumnHeader = ({
                             : column.id === "questionType"
                             ? "90px"
                             : column.id === "ruleList"
+                            ? "300px"
+                            : column.id === "question_title"
                             ? "300px"
                             : "auto",
                     padding: "15px 0",

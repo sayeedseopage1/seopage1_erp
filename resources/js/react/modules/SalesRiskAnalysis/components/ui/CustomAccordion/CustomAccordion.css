@@ -70,3 +70,10 @@
 .activeItem {
   background-color: #e1ebff !important;
 }
+
+@media screen and (max-width: 768px) {
+  .customAccordionWrapper {
+    width: 100%;
+  }
+  
+}
