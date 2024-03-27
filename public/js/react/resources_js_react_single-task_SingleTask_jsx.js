@@ -15437,7 +15437,8 @@ var TaskEditForm = function TaskEditForm(_ref2) {
             className: "col-12 col-md-6",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_20__["default"], {
               selected: typeOfGraphicsCategory,
-              onSelect: setTypeOfGraphicsCategory
+              onSelect: setTypeOfGraphicsCategory,
+              isDesignerTask: (taskCategory === null || taskCategory === void 0 ? void 0 : taskCategory.category_name) === "Graphic Design"
             }), (error === null || error === void 0 ? void 0 : error.typeOfGraphicsCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
               style: {
                 color: "red"

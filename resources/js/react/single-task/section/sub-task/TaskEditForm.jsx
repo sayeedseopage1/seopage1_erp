@@ -857,6 +857,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                 <TypeOfGraphicsWorkSelection
                                     selected={typeOfGraphicsCategory}
                                     onSelect={setTypeOfGraphicsCategory}
+                                    isDesignerTask={taskCategory?.category_name === "Graphic Design"}
 
                                 />
                                 {error?.typeOfGraphicsCategory && (

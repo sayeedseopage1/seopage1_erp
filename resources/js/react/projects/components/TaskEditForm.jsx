@@ -848,7 +848,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                         <TypeOfGraphicsWorkSelection
                                             selected={typeOfGraphicsCategory}
                                             onSelect={setTypeOfGraphicsCategory}
-                                            isDesignerTask={taskCategory?.category_name === "Graphic Design" || taskCategory?.category_name === "UI/UIX Design"}
+                                            isDesignerTask={taskCategory?.category_name === "Graphic Design"}
                                         />
                                         {formError?.typeOfGraphicsCategory && (
                                             <div style={{ color: "red" }}>
