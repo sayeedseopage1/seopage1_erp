@@ -13,6 +13,7 @@ export const DataTableColumns = [
     //     },
     // },
     {
+        id: "employeeName",
         header: "Employee Name",
         accessorKey: "employeeName",
         cell: ({ row }) => {
@@ -30,6 +31,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "joiningDate",
         header: "Joining Date",
         accessorKey: "joiningDate",
         cell: ({ row }) => {
@@ -38,6 +40,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "firstTaskAssignedOn",
         header: "First Task Assigned On",
         accessorKey: "firstTaskAssignedOn",
         cell: ({ row }) => {
@@ -46,6 +49,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "startedWorkingOn",
         header: "Started Working On",
         accessorKey: "startedWorkingOn",
         cell: ({ row }) => {
@@ -54,6 +58,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "totalTaskSubmitted",
         header: "Total Task Submitted",
         accessorKey: "totalTaskSubmitted",
         cell: ({ row }) => {
@@ -62,6 +67,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "totalHoursTracked",
         header: "Total Hours Tracked",
         accessorKey: "totalHoursTracked",
         cell: ({ row }) => {
@@ -70,6 +76,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "totalNoOfRevision",
         header: "Total Number of Revisions",
         accessorKey: "totalNoOfRevision",
         cell: ({ row }) => {
@@ -78,6 +85,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "averageRatingByLeadDev",
         header: "Lead Developer Average Rating",
         accessorKey: "averageRatingByLeadDev",
         cell: ({ row }) => {
@@ -86,6 +94,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "teamLeadsComment",
         header: "Team Lead Comment",
         accessorKey: "teamLeadsComment",
         cell: ({ row }) => {
@@ -100,6 +109,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "managementsComment",
         header: "Managements Comment",
         accessorKey: "managementsComment",
         cell: ({ row }) => {
@@ -114,6 +124,7 @@ export const DataTableColumns = [
         },
     },
     {
+        id: "acceptedOrRejectedOn",
         header: "Accepted/Rejected Date",
         accessorKey: "acceptedOrRejectedOn",
         cell: ({ row }) => {
@@ -129,6 +140,7 @@ export const DataTableColumns = [
     },
 
     {
+        id: "action",
         header: "Evaluation",
         accessorKey: "action",
 

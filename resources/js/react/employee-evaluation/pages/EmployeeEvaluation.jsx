@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useGetEvaluationListQuery } from "../../services/api/EvaluationApiSlice";
 import { DataTableColumns } from "../components/Table/DataTableColumns";
@@ -122,6 +122,11 @@ export default EmployeeEvaluation;
 const Tabs = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const data = props.data;
+
+    useEffect(() => {
+        setSearchParams({ show: "pending" });
+    }, []);
+
     const handleRouteChange = (e, params) => {
         e.preventDefault();
         for (const [key, value] of Object.entries(params)) {
@@ -135,18 +140,6 @@ const Tabs = (props) => {
     };
     return (
         <ul className={styles.tabs}>
-            <li>
-                <Link
-                    to="#"
-                    data-type="all"
-                    onClick={(e) => handleRouteChange(e, { show: "all" })}
-                    data-active={searchParams.get("show") === "all"}
-                >
-                    All{" "}
-                    <span className="badge badge-light">{badge("all")}</span>
-                </Link>
-            </li>
-
             <li>
                 <Link
                     to="#"
@@ -165,8 +158,10 @@ const Tabs = (props) => {
                 <Link
                     to="#"
                     data-type="authorized"
-                    onClick={(e) => handleRouteChange(e, { show: "accepted" })}
-                    data-active={searchParams.get("show") === "accepted"}
+                    onClick={(e) =>
+                        handleRouteChange(e, { show: "authorized" })
+                    }
+                    data-active={searchParams.get("show") === "authorized"}
                 >
                     Accepted{" "}
                     <span className="badge badge-light">
@@ -184,6 +179,17 @@ const Tabs = (props) => {
                 >
                     Denied{" "}
                     <span className="badge badge-light">{badge("denied")}</span>
+                </Link>
+            </li>
+            <li>
+                <Link
+                    to="#"
+                    data-type="all"
+                    onClick={(e) => handleRouteChange(e, { show: "all" })}
+                    data-active={searchParams.get("show") === "all"}
+                >
+                    All{" "}
+                    <span className="badge badge-light">{badge("all")}</span>
                 </Link>
             </li>
         </ul>
