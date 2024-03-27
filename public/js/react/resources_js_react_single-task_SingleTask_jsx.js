@@ -11707,7 +11707,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("label", {
               className: "f-14 text-dark-gray mb-1",
               "data-label": "true",
-              children: "Milestone mm"
+              children: "Milestone"
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
               className: "form-control height-35 f-14",
               readOnly: true,
