@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\PolicyQuestionValue;
 use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
 use App\Models\Team;
@@ -46,7 +47,11 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::post('question-fields/save', 'policyQuestionSave')->name('question-fields.save');
             Route::post('question-fields/edit/{id}', 'policyQuestionEdit')->name('question-fields.edit');
             Route::get('question-list', 'questionList')->name('question.list');
+
+            Route::post('question-value/save', 'questionValueSave')->name('question-value.save');
         });
+
+        Route::get('account/deals/risk-analysis/{id}', [ self::class, 'salesPolicyQuestionRender'])->name('risk-analysis');
     }
 
     function index()
@@ -791,5 +796,36 @@ class SalesRiskPolicyController extends AccountBaseController
             });
         }
         return $list;
+    }
+
+    function salesPolicyQuestionRender(Request $req, $id)
+    {
+        $req->session()->put('deal_id', $id);
+        // Note: big form route : route('dealDetails', $deal->id)
+        return view('deals.sales-questions-render', $this->data);
+    }
+
+    function questionValueSave(Request $req) : JsonResponse
+    {
+        $validator = Validator::make($req->all, [
+            'id' => 'required|exists:'.(new SalesPolicyQuestion)->getTable(). ', id',
+            'value' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
+        }
+
+        if ($req->session()->get('deal_id') == null) {
+            return response()->json(['status' => 'error', 'message' => 'Deal is not valid.'], 500);
+        }
+
+        PolicyQuestionValue::create([
+            'question_id' => $req->id,
+            'value' => $req->value,
+            'deal_id' => $req->session()->get('deal_id')
+        ]);
+
+        return response()->json(['status' => 'error', 'message' => 'Questons values stored successfully.']);
     }
 }
