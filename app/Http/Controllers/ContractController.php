@@ -1272,6 +1272,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
+        if(!$request->is_drafted){
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
@@ -1422,51 +1423,36 @@ class ContractController extends AccountBaseController
                 }
             }
 
-
             $deal_pm_id = Deal::where('id', $request->id)->first();
-
             $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
-
             $project_admin_update = Project::find($project_id->id);
             $project_admin_update->added_by = $project_id->pm_id;
             $project_admin_update->project_admin = $project_id->pm_id;
             $project_admin_update->save();
 
-
-            //qualified sales start from here
             $qualified_sale = new QualifiedSale();
             $qualified_sale->project_name = $deal->project_name;
 
             $qualified_sale->deal_id = $deal->id;
-
             $qualified_sale->project_id = $project->id;
             $qualified_sale->deal_short_code = $deal->deal_id;
-
             $qualified_sale->date = Carbon::now();
-
             $qualified_sale->client_id = $deal->client_id;
-
             $qualified_sale->client_name = $deal->client_name;
             $qualified_sale->pm_id = $project_id->pm_id;
-
             $qualified_sale->pm_name = $project_id->pm_name->name;
-
             // $actual_currency= Currency::where('id',$deal->currency_id)->first();
 
             $qualified_sale->amount = $deal->amount;
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
+            
             $qualified_sale->save();
-        //  /   dd($qualified_sale);
             $helper = new HelperPendingActionController();
 
 
             $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
 
 
-
-
-
-            //qualified sales start from here
 
             $user = User::where('id', $deal_pm_id->pm_id)->first();
             $this->triggerPusher('notification-channel', 'notification', [
@@ -1524,11 +1510,7 @@ class ContractController extends AccountBaseController
             // //dd($clientdetail);
             // $clientdetail->company_name= $request->organization;
             // $clientdetail->save();
-            $deal = Deal::find($deal->id);
-            $deal->authorization_status = $request->is_drafted ? 0 : 2;
-            $deal->is_drafted = $request->is_drafted;
-            $deal->released_at = $request->is_drafted ? null : Carbon::now();
-            $deal->save();
+            
 
             $sender = User::where('id', Auth::id())->first();
 
@@ -1561,6 +1543,14 @@ class ContractController extends AccountBaseController
                     'redirectUrl' => route('deals.show', $project_id->deal_id)
                 ]);
             }
+
+        }
+
+        $deal = Deal::find($deal->id);
+        $deal->authorization_status = $request->is_drafted ? 0 : 2;
+        $deal->is_drafted = $request->is_drafted;
+        $deal->released_at = $request->is_drafted ? null : Carbon::now();
+        $deal->save();
            
           //  dd($project);
             //need pending action
@@ -1820,7 +1810,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
-            if ($deal->pm_id == null) {
+            if ($deal->pm_id == null && ($deal->is_drafted && !$request->is_drafted)) {
                 $lead_developer_id = RoleUser::where('role_id', 6)->get();
                 //dd($lead_developer_id);
                 foreach ($lead_developer_id as $lead) {
