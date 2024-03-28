@@ -15,9 +15,12 @@ import CustomDropDown from "../CustomDropDown";
 // Constants
 import { PolicyTypeItems } from "../../constant";
 // Components
-import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
+
+
+// Table
 import NewRulesModalTable from "../table/NewRulesModalTable";
 import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumns";
+import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
 const AddNewPolicyModal = ({
     open,

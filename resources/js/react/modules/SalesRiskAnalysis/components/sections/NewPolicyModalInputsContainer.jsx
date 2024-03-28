@@ -1,19 +1,19 @@
-import React, { useEffect } from "react";
 import _ from "lodash";
+import React from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 // ui components
 import {
     ModalSelectContainer,
     ModalInput,
     ModalInputLabel,
-} from "./ui/Styles/ui";
-import CustomDropDown from "./CustomDropDown";
-import Switch from "./Switch";
+} from "../ui/Styles/ui";
+import CustomDropDown from "../CustomDropDown";
+import Switch from "../Switch";
+import MultiSelect from "../MultiSelect";
 
 // Constants
-import { PolicyTypeItemValuesType } from "../constant";
-import MultiSelect from "./MultiSelect";
-import { useSelector } from "react-redux";
+import { PolicyTypeItemValuesType } from "../../constant";
 
 const NewPolicyModalInputsContainer = ({
     newPolicyData,

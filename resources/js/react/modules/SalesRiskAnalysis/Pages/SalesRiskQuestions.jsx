@@ -13,18 +13,19 @@ import { Flex } from "../../../global/styled-component/Flex";
 import Tooltip from "../components/Tooltip";
 import Switch from "../components/Switch";
 
-// Dummy data
-// import { DummyQuestions } from "../constant";
+// Loader
+import SaleRiskAnalysisQuestionsLoader from "../components/loader/SaleRiskAnalysisQuestionsLoader";
 
 // Components
-import SaleRiskQuestionsInputContainer from "../components/SaleRiskQuestionsInputContainer";
+import SaleRiskQuestionsInputContainer from "../components/sections/SaleRiskQuestionsInputContainer";
+
 
 // Utils
 import { isArrayObjectEmpty } from "../../../utils/stateValidation";
 
 // Api
 import { usePolicyQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
-import SaleRiskAnalysisQuestionsLoader from "../components/loader/SaleRiskAnalysisQuestionsLoader";
+
 
 const SalesRiskQuestions = () => {
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
@@ -103,7 +104,7 @@ const SalesRiskQuestions = () => {
             const payload = inputsData.map((item) => {
                 return {
                     id: item.id,
-                    [`question_${item.id}`]: item[`question_${item.id}`],
+                    value: item[`question_${item.id}`],
                 };
             });
 

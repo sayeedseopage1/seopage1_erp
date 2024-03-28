@@ -1,6 +1,7 @@
+import _ from "lodash";
 import React from "react";
 import PropTypes from "prop-types";
-import _ from "lodash";
+import { useSelector } from "react-redux";
 
 // Custom Components
 import CustomModal from "../ui/CustomModal/CustomModal";
@@ -21,9 +22,11 @@ import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumn
 // Constants
 import { PolicyTypeItems } from "../../constant";
 
-// components
-import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
-import { useSelector } from "react-redux";
+// Sections
+import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
+
+
+
 
 const EditPolicyModal = ({
     open,

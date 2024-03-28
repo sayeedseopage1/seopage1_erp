@@ -1,22 +1,30 @@
+import _ from "lodash";
 import React from "react";
 import PropTypes from "prop-types";
 
 // ui components
 import {
     ModalButton,
-    ModalInput,
     ModalInputLabel,
     ModalSelectContainer,
     ModalTitle,
 } from "../ui/Styles/ui";
 import CustomModal from "../ui/CustomModal/CustomModal";
 import { Flex } from "../../../../global/styled-component/Flex";
-import _ from "lodash";
 import CustomDropDown from "../CustomDropDown";
+
+// constants
 import { PolicyTypeItems } from "../../constant";
-import NewPolicyModalInputsContainer from "../NewPolicyModalInputsContainer";
+
+// sections
+
+
+// Api services
 import { useGetSinglePolicySalesRiskAnalysisQuery } from "../../../../services/api/salesRiskAnalysisSlice";
+
+// helper
 import { formatSingleRuleData } from "../../helper/formatEditPolicyData";
+import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
 const EditApplicableRulesModal = ({
     open,

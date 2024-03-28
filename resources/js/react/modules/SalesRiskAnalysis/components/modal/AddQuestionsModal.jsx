@@ -34,9 +34,9 @@ import QuestionsModalTable from "../table/QuestionsModalTable";
 import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
 import { toast } from "react-toastify";
 import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
-import AddQuestionTypeListInputs from "../AddQuestionTypeListInputs";
 import { formatQuestionData } from "../../helper/formatEditPolicyData";
 import { number } from "zod";
+import AddQuestionTypeListInputs from "../sections/AddQuestionTypeListInputs";
 
 const AddQuestionsModal = ({
     open,

@@ -3,11 +3,10 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Ui components
-import CustomInputs from "./ui/CustomInputs/CustomInputs";
-import CustomAccordion from "./ui/CustomAccordion/CustomAccordion";
-import CustomCheckbox from "./ui/CustomCheckbox/CustomCheckbox";
-import CustomButtons from "./ui/CustomButtons/CustomButtons";
-import Switch from "./Switch";
+import Switch from "../Switch";
+import CustomInputs from "../ui/CustomInputs/CustomInputs";
+import CustomButtons from "../ui/CustomButtons/CustomButtons";
+import CustomAccordion from "../ui/CustomAccordion/CustomAccordion";
 
 const SaleRiskQuestionsInputContainer = ({
     questions,

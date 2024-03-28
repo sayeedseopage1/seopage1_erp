@@ -1,5 +1,8 @@
 import React from "react";
-import { SaleRiskAuthorizeHeaderWrapper } from "./ui/Styles/ui";
+import { SaleRiskAuthorizeHeaderWrapper } from "../ui/Styles/ui";
+
+// Ui components
+
 
 const SaleRiskAuthorizeHeaderForUser = () => {
     return (
@@ -10,16 +13,16 @@ const SaleRiskAuthorizeHeaderForUser = () => {
             }}
         >
             <SaleRiskAuthorizeHeaderWrapper className="col-12 d-flex">
-                <div className="col-4 px-0">
+                <div className="col-3 px-0">
                     Sales Person :{" "}
                     <span className="ml-1">Shah Waliullah Shanto</span>
                 </div>
-                <div className="col-4 px-0">
+                <div className="col-3 px-0">
                     Authorize By :{" "}
                     <span className="ml-1">A.Khalid</span>
                 </div>
-                <div className="col-2 px-0">Deadline: 05 days</div>
-                <div className="col-2 px-0">Clients Name : Patricia F.</div>
+                <div className="col-3 px-0">Deadline: 05 days</div>
+                <div className="col-3 px-0">Clients Name : Patricia F.</div>
             </SaleRiskAuthorizeHeaderWrapper>
         </div>
     );

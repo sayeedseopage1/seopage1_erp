@@ -1,3 +1,4 @@
+import { color } from "framer-motion";
 import styled from "styled-components";
 
 export const SalesRiskAnalysisContainer = styled.section`
@@ -208,7 +209,6 @@ export const CustomInputsLabel = styled.label`
     display: flex;
     margin-bottom: 12px;
     line-height: normal;
-
     @media (max-width: 768px) {
         font-size: 16px;
     }
@@ -275,3 +275,5 @@ export const SaleRiskAuthorizeHeaderButton = styled.button`
     font-weight: 500;
     line-height: normal;
 `;
+
+

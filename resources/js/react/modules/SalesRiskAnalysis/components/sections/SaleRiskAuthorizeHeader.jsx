@@ -1,17 +1,11 @@
 import React from "react";
+import { SaleRiskAuthorizeHeaderButton, SaleRiskAuthorizeHeaderWrapper } from "../ui/Styles/ui";
 
 // Ui components
-import {
-    SaleRiskAuthorizeHeaderButton,
-    SaleRiskAuthorizeHeaderWrapper,
-} from "./ui/Styles/ui";
 
 // hooks
-import { useAuth } from "../../../hooks/useAuth";
 
 const SaleRiskAuthorizeHeader = () => {
-    const auth = useAuth();
-    console.log(auth.getRoleId());
     return (
         <div
             className="row d-flex align-items-center"
@@ -38,8 +32,8 @@ const SaleRiskAuthorizeHeader = () => {
                 <div className="col-2 px-0">Deadline: 05 days</div>
                 <div className="col-2 px-0">Clients Name : Patricia F.</div>
             </SaleRiskAuthorizeHeaderWrapper>
-            <div className="col-2">
-                <SaleRiskAuthorizeHeaderButton>
+            <div className="col-2 pr-0">
+                <SaleRiskAuthorizeHeaderButton >
                     Modify points
                 </SaleRiskAuthorizeHeaderButton>
             </div>

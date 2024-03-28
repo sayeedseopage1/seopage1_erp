@@ -2,9 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // ui components
-import Switch from "./Switch";
-import { ModalInput, ModalInputLabel } from "./ui/Styles/ui";
-import { generateUniqueString } from "../../../utils/customUidGenerate";
+import { ModalInput, ModalInputLabel } from "../ui/Styles/ui";
+import Switch from "../Switch";
+
+// utils
+import { generateUniqueString } from "../../../../utils/customUidGenerate";
+
 
 const AddQuestionTypeListInputs = ({
     singleQuestion,
@@ -12,8 +15,6 @@ const AddQuestionTypeListInputs = ({
     isListEmpty,
 }) => {
     let list = [...singleQuestion?.listItem];
-
-    console.log("list", list);
 
     return (
         <div className="row mb-4 align-items-start">
