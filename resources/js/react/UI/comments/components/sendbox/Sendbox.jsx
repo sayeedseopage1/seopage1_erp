@@ -258,7 +258,7 @@ const EditorComponent = ({
                 setEditorState(() => EditorState.createEmpty());
                 setMentionedComment(null);
             }
-
+            increaseRefetchComment();
             clearFiles();
             setEditorState(() => EditorState.createEmpty());
             setMentionedComment(null);

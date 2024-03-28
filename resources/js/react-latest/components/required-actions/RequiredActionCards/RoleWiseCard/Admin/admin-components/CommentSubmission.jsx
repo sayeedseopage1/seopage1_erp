@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
+
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import Swal from "sweetalert2";
 import axios from "axios";
+import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";
 
 const CommentSubmission = ({
     setIsOpen,
@@ -15,7 +16,7 @@ const CommentSubmission = ({
 
     return (
         <div>
-            <CommentsBody
+            <CommentBodyForPendingActions
                 close={() => setIsOpen(false)}
                 comments={data?.slice(data?.length - 3)}
                 fetching={isFetching}

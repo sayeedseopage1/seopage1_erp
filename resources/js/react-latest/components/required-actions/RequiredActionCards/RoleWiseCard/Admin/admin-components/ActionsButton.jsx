@@ -5,7 +5,8 @@ import handleBtnDisable from "../../../../utils/handleBtnDisable";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentCancellation from "./CommentCancellation";
 import CommentSubmission from "./CommentSubmission";
-import { useCallback } from "react";
+import React, { useCallback } from "react";
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
 
 // action buttons
 export default function ActionsButton({ data }) {
