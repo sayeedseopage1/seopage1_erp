@@ -125,16 +125,29 @@ const RevisionText = ({ index, revision }) => {
                 </span>
             </div>
             <div className="px-3">
-                {/* {revision?.revisionAcknowledgement ?
-                <span className='d-block mb-2'>
-                    <span className='font-weight-bold text-danger'> <strong>Reason: </strong>  </span>
-                    {revision?.revisionAcknowledgement}
-                    {revision?.isDeny ? <span className='badge badge-danger'>Rejected By Developer</span> : null}
-                    {revision?.isAccept ? <span className='badge badge-success'>Accepted By Developer</span> : null}
-                </span>
-            : null} */}
+                {revision?.revisionAcknowledgement ? (
+                    <span className="d-block mb-2">
+                        <span className="font-weight-bold text-danger">
+                            {" "}
+                            <strong>Reason: </strong>{" "}
+                        </span>
+                        {revision?.revisionAcknowledgement}
+                        {revision?.isDeny ? (
+                            <span className="badge badge-danger">
+                                Rejected By Developer
+                            </span>
+                        ) : null}
+                        {revision?.isAccept ? (
+                            <span className="badge badge-success">
+                                Accepted By Developer
+                            </span>
+                        ) : null}
+                    </span>
+                ) : null}
                 <div>
-                    {/* <span className='font-weight-bold text-success'>Statement:</span> */}
+                    <span className="font-weight-bold text-success">
+                        Statement:
+                    </span>
                     <div
                         className="sp1_ck_content"
                         dangerouslySetInnerHTML={{ __html: showText }}

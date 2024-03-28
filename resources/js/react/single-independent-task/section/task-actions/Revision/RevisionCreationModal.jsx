@@ -18,7 +18,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     const {
         getLeadDeveloperAcknowladgementOptions,
         getProjectManagerAcknowladgementOptions,
-    } = useRevision();
+    } = useRevision(task);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     // console.log({pathname});
@@ -26,7 +26,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     const role = auth.getRoleId();
 
     const revisionOptions =
-        (role === 1 || role === 4 || role === 8)
+        role === 1 || role === 4 || role === 8
             ? getProjectManagerAcknowladgementOptions()
             : getLeadDeveloperAcknowladgementOptions();
 

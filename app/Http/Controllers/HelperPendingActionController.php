@@ -1108,120 +1108,174 @@ class HelperPendingActionController extends AccountBaseController
     if($task->independent_task_status == 0)
     {
         $project= Project::where('id',$task->project_id)->first();
-    $client= User::where('id',$project->client_id)->first();
+        $client= User::where('id',$project->client_id)->first();
+        $commentor= User::where('id',$commentor)->first();
+        $task_user= Taskuser::where('task_id',$task->id)->first();
+        $top_managements = User::where('role_id',1)->orWhere('role_id',8)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $pm = User::where('id',$project->pm_id)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $assigned_by = User::where('id',$task->added_by)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $assigned_to = User::where('id',$task_user->user_id)->where('id', '!=', Auth::id())->pluck('id')->toArray();
+        $allUsers = '';
+        if($task->subtask_id ==null){
+            $allUsers = array_unique(array_merge($top_managements, $pm, $assigned_by, $assigned_to));
+        }else{
+            $allUsers = array_unique(array_merge($top_managements, $assigned_by, $assigned_to));
+        }
 
-    $commentor= User::where('id',$commentor)->first();
+        $pending_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->count();
+// dd($pending_action);
+        if(! $pending_action){
+        foreach ($allUsers as $key => $authorizer) {
+            $action = new PendingAction();
+            $action->code = 'TCOA';
+            $action->serial = 'TCOA'.'x'.$key;
+            $action->item_name= 'New comment';
+            $action->heading= 'A new comment has been added!';      
+            $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            $action->timeframe= 12;
+            $action->project_id = $project->id;
+            $action->client_id = $client->id;
+            $action->task_id = $task->id;
+            $action->authorization_for= $authorizer;
+            $button = [
+                [
+                    'button_name' => 'View and Reply',
+                    'button_color' => 'primary',
+                    'button_type' => 'modal',
+                    'button_url' => '',
+                    'modal_form'=> false,
+                ],
+                [
+                    'button_name' => 'Not relevant to me',
+                    'button_color' => 'primary',
+                    'button_type' => 'modal',
+                    'button_url' => '',
+                    'modal_form'=> true,
+                    'form'=> [
+                        [
+                            'type'=> 'textarea',
+                            'label'=>'Are you sure this comment is not relevant to you?',
+                            'name'=>'confirmation',
+                            'required'=> true,
+                        ],
+                        [
+                            'type'=> 'hidden',
+                            'value'=> $task->id,
+                            'readonly'=> true,
 
-        $authorizers= ProjectMember::where('project_id',$task->project_id)->where('user_id','!=',Auth::id())->groupBy('user_id')->get();
-       // dd($authorizers);
+                            'name'=>'project_id',
+                            'required'=> true,
+                        ],
+                        [
+                            'type'=> 'hidden',
+                            'value'=> $action->id,
+                            'readonly'=> true,
 
+                            'name'=>'authorization_id',
 
-   // dd($authorizers);
+                            'required'=> true,
 
+                        ],
 
-    foreach ($authorizers as $key => $authorizer) {
-     $action = new PendingAction();
-     $action->code = 'TCOA';
-     $action->serial = 'TCOA'.'x'.$key;
-     $action->item_name= 'New comment';
-     $action->heading= 'A new comment has been added!';
-     $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
-     $action->timeframe= 12;
-     $action->project_id = $project->id;
-     $action->client_id = $client->id;
-     $action->task_id = $task->id;
-     $action->authorization_for= $authorizer->user_id;
-     $button = [
-         [
-             'button_name' => 'View and Reply',
-             'button_color' => 'primary',
-             'button_type' => 'modal',
-             'button_url' => '',
-             'modal_form'=> false,
-            //  'form'=> [
-            //      [
-            //          'type'=> 'textarea',
-            //          'label'=>'Write a reply',
-            //          'name'=>'reply',
-            //          'required'=> true,
-            //      ],
-            //      [
-            //          'type'=> 'hidden',
-            //           'value'=> $task->id,
-            //           'readonly'=> true,
+                    ],
+                    'form_action'=> [
+                        [
+                            'type'=> 'button',
+                            'method'=>'POST',
+                            'label'=> 'Confirm',
+                            'color'=> 'success',
+                            'url'=> '',
 
-            //          'name'=>'project_id',
-            //          'required'=> true,
-            //      ],
-            //       [
-            //          'type'=> 'hidden',
-            //          'value'=> $action->id,
-            //          'readonly'=> true,
-
-            //          'name'=>'authorization_id',
-
-            //          'required'=> true,
-
-            //      ],
-
-            //  ],
-
-         ],
-         [
-            'button_name' => 'Not relevant to me',
-            'button_color' => 'primary',
-            'button_type' => 'modal',
-             'button_url' => '',
-             'modal_form'=> true,
-             'form'=> [
-                 [
-                     'type'=> 'textarea',
-                     'label'=>'Are you sure this comment is not relevant to you?',
-                     'name'=>'confirmation',
-                     'required'=> true,
-                 ],
-                 [
-                     'type'=> 'hidden',
-                      'value'=> $task->id,
-                      'readonly'=> true,
-
-                     'name'=>'project_id',
-                     'required'=> true,
-                 ],
-                  [
-                     'type'=> 'hidden',
-                     'value'=> $action->id,
-                     'readonly'=> true,
-
-                     'name'=>'authorization_id',
-
-                     'required'=> true,
-
-                 ],
-
-             ],
-             'form_action'=> [
-                 [
-                     'type'=> 'button',
-                     'method'=>'POST',
-                     'label'=> 'Confirm',
-                     'color'=> 'success',
-                     'url'=> '',
-
-                 ],
+                        ],
 
 
-             ]
-        ],
+                    ]
+                ],
 
-     ];
-     $action->button = json_encode($button);
-     $action->save();
-    //dd($action);
-//    dd(json_decode($action->button));
-
-    }
-
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+            }
+        }else{
+            foreach ($allUsers as $key => $authorizer) {
+                $active_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->where('authorization_for', $authorizer)->where('past_status',0)->first();
+                if($active_action){ 
+                    $active_action->created_at = Carbon::now();
+                    $active_action->updated_at = Carbon::now();
+                    $active_action->save();
+                }else{
+                    $action = new PendingAction();
+                    $action->code = 'TCOA';
+                    $action->serial = 'TCOA'.'x'.$key;
+                    $action->item_name= 'New comment';
+                    $action->heading= 'A new comment has been added!';      
+                    $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+                    $action->timeframe= 12;
+                    $action->project_id = $project->id;
+                    $action->client_id = $client->id;
+                    $action->task_id = $task->id;
+                    $action->authorization_for= $authorizer;
+                    $button = [
+                        [
+                            'button_name' => 'View and Reply',
+                            'button_color' => 'primary',
+                            'button_type' => 'modal',
+                            'button_url' => '',
+                            'modal_form'=> false,
+                        ],
+                        [
+                            'button_name' => 'Not relevant to me',
+                            'button_color' => 'primary',
+                            'button_type' => 'modal',
+                            'button_url' => '',
+                            'modal_form'=> true,
+                            'form'=> [
+                                [
+                                    'type'=> 'textarea',
+                                    'label'=>'Are you sure this comment is not relevant to you?',
+                                    'name'=>'confirmation',
+                                    'required'=> true,
+                                ],
+                                [
+                                    'type'=> 'hidden',
+                                    'value'=> $task->id,
+                                    'readonly'=> true,
+        
+                                    'name'=>'project_id',
+                                    'required'=> true,
+                                ],
+                                [
+                                    'type'=> 'hidden',
+                                    'value'=> $action->id,
+                                    'readonly'=> true,
+        
+                                    'name'=>'authorization_id',
+        
+                                    'required'=> true,
+        
+                                ],
+        
+                            ],
+                            'form_action'=> [
+                                [
+                                    'type'=> 'button',
+                                    'method'=>'POST',
+                                    'label'=> 'Confirm',
+                                    'color'=> 'success',
+                                    'url'=> '',
+        
+                                ],
+        
+        
+                            ]
+                        ],
+        
+                    ];
+                    $action->button = json_encode($button);
+                    $action->save();
+                }
+            }
+        }
     }
 
    }

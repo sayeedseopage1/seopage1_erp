@@ -49,6 +49,7 @@ use App\Models\LanguageSetting;
 use App\Models\Payment;
 use Google\Service\Dfareporting\Resource\Languages;
 use Google\Service\Gmail\LanguageSettings;
+use Auth;
 
 class ClientController extends AccountBaseController
 {
@@ -74,6 +75,9 @@ class ClientController extends AccountBaseController
         $this->addClientPermission = user()->permission('add_clients');
 
         abort_403(!in_array($viewPermission, ['all', 'added', 'both']));
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
 
         if (!request()->ajax()) {
             $this->clients = User::allClients();
@@ -83,6 +87,9 @@ class ClientController extends AccountBaseController
             $this->contracts = ContractType::all();
             $this->countries = countries();
             $this->totalClients = count($this->clients);
+        }
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(404);
         }
 
         return $dataTable->render('clients.index', $this->data);
@@ -412,12 +419,18 @@ class ClientController extends AccountBaseController
      */
     public function show($id)
     {
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(404);
+        }
         $this->client = User::withoutGlobalScope('active')->with('clientDetails')->findOrFail($id);
         $this->clientLanguage = LanguageSetting::where('language_code', $this->client->locale)->first();
         $this->viewPermission = user()->permission('view_clients');
 
         if (!$this->client->hasRole('client')) {
             abort(404);
+        }
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
         }
 
         abort_403 (!($this->viewPermission == 'all'

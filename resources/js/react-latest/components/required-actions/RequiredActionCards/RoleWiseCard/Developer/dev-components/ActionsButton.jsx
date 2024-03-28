@@ -82,7 +82,7 @@ const ActionsButton = ({ data }) => {
                             modal_heading={data.heading}
                             showCloseBtn={false}
                             maxWidth={handleModalWidth(btn)}
-                            btn_Disable={handleBtnDisable(6)}
+                            // btn_Disable={handleBtnDisable(6)}
                         >
                             {(setIsOpen, isOpen) => {
                                 if (btn?.modal_form) {
