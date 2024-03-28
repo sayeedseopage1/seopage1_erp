@@ -1,52 +1,295 @@
-import React from "react";
+import _ from "lodash";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// Ui components
 import CustomInputs from "./ui/CustomInputs/CustomInputs";
 import CustomAccordion from "./ui/CustomAccordion/CustomAccordion";
 import CustomCheckbox from "./ui/CustomCheckbox/CustomCheckbox";
 import CustomButtons from "./ui/CustomButtons/CustomButtons";
 import Switch from "./Switch";
 
-const SaleRiskQuestionsInputContainer = ({ questions }) => {
+const SaleRiskQuestionsInputContainer = ({
+    questions,
+    isChild = false,
+    inputsData,
+    setInputsData,
+    isSubmitting,
+    allQuestions,
+    focusedQuestion,
+    handleQuestionFocus,
+    getItsFocused,
+    handleListYesNoQuestion
+}) => {
+    const [yesNoValue, setYesNoValue] = useState(null);
+    const [listItem, setListItem] = useState(null);
+
+    const getInputValue = (questionId) => {
+        if (inputsData?.length) {
+            const data = inputsData?.find((item) => item.id === questionId);
+            if (!_.isEmpty(data)) {
+                return data[`question_${questionId}`];
+            } else {
+                return "";
+            }
+        } else {
+            return "";
+        }
+    };
+
     return (
-        <React.Fragment>
-            {questions.map((question, index) => {
-                return (
-                    <Switch key={question.id}>
-                        <Switch.Case condition={question.type === "text"}>
-                            <CustomInputs
-                                type={"text"}
-                                placeholder={"Please Enter Text Here"}
-                                label={`${index + 1}. ${question.question}`}
-                            />
-                        </Switch.Case>
-                        <Switch.Case condition={question.type === "yesNo"}>
-                            <CustomButtons
-                                label={`${index + 1}. ${question.question}`}
-                            />
-                        </Switch.Case>
-                        <Switch.Case condition={question.type === "numeric"}>
-                            <CustomInputs
-                                type={"numeric"}
-                                placeholder={"Please Enter Number"}
-                                label={`${index + 1}. ${question.question}`}
-                            />
-                        </Switch.Case>
-                        <Switch.Case condition={question.type === "list"}>
-                            <CustomAccordion
-                                label={`${index + 1}. ${question.question}`}
-                                accordionData={question.value}
-                            />
-                        </Switch.Case>
-                        <Switch.Case condition={question.type === "longText"}>
-                            <CustomInputs
-                                type={"longText"}
-                                placeholder={"Please Enter Text Here"}
-                                label={`${index + 1}. ${question.question}`}
-                            />
-                        </Switch.Case>
-                    </Switch>
-                );
-            })}
-        </React.Fragment>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+        >
+            <React.Fragment>
+                {questions?.map((question, index) => {
+                    return (
+                        <Switch key={question?.id}>
+                            <Switch.Case condition={question.type === "text"}>
+                                <CustomInputs
+                                    type={"text"}
+                                    isChild={isChild}
+                                    placeholder={question?.placeholder}
+                                    label={`${isChild ? "" : `${index + 1}. `}${
+                                        question?.title
+                                    }`}
+                                    isSubmitting={isSubmitting}
+                                    value={getInputValue(question.id)}
+                                    onChange={(e) => {
+                                        setInputsData((prev) => {
+                                            return prev?.map((item) => {
+                                                if (item.id === question.id) {
+                                                    return {
+                                                        ...item,
+                                                        [`question_${question.id}`]:
+                                                            e?.target?.value,
+                                                    };
+                                                }
+                                                return item;
+                                            });
+                                        });
+                                    }}
+                                    comment={question.comment}
+                                    onFocus={() => {
+                                        handleQuestionFocus(question);
+                                    }}
+                                />
+                                <Switch.Case
+                                    condition={
+                                        getItsFocused(question) &&
+                                        question.questions?.length
+                                    }
+                                >
+                                    <SaleRiskQuestionsInputContainer
+                                        questions={question.questions}
+                                        isChild={true}
+                                        inputsData={inputsData}
+                                        setInputsData={setInputsData}
+                                        isSubmitting={isSubmitting}
+                                        allQuestions={allQuestions}
+                                        handleQuestionFocus={
+                                            handleQuestionFocus
+                                        }
+                                        focusedQuestion={focusedQuestion}
+                                        getItsFocused={getItsFocused}
+                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                    />
+                                </Switch.Case>
+                            </Switch.Case>
+                            <Switch.Case condition={question.type === "yesNo"}>
+                                <CustomButtons
+                                    label={`${isChild ? "" : `${index + 1}. `}${
+                                        question.title
+                                    }`}
+                                    isChild={isChild}
+                                    comment={question.comment}
+                                    onChange={(value) => {
+                                        setYesNoValue(value);
+                                        handleListYesNoQuestion(question, value, "yesNo");
+                                    }}
+                                    isSubmitting={isSubmitting}
+                                    value={getInputValue(question.id)}
+                                />
+                                <Switch.Case
+                                    condition={
+                                        yesNoValue && question.questions?.length
+                                    }
+                                >
+                                    <SaleRiskQuestionsInputContainer
+                                        questions={question?.questions?.filter(
+                                            (item) => item?.value === yesNoValue
+                                        )}
+                                        inputsData={inputsData}
+                                        setInputsData={setInputsData}
+                                        isChild={true}
+                                        isSubmitting={isSubmitting}
+                                        allQuestions={allQuestions}
+                                        handleQuestionFocus={
+                                            handleQuestionFocus
+                                        }
+                                        focusedQuestion={focusedQuestion}
+                                        getItsFocused={getItsFocused}
+                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                    />
+                                </Switch.Case>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={question?.type === "numeric"}
+                            >
+                                <CustomInputs
+                                    type={"numeric"}
+                                    isChild={isChild}
+                                    comment={question.comment}
+                                    isSubmitting={isSubmitting}
+                                    value={getInputValue(question.id)}
+                                    placeholder={question?.placeholder}
+                                    label={`${isChild ? "" : `${index + 1}. `}${
+                                        question.title
+                                    }`}
+                                    onFocus={() => {
+                                        handleQuestionFocus(question);
+                                    }}
+                                    onChange={(e) => {
+                                                         setInputsData((prev) => {
+                                            return prev?.map((item) => {
+                                                if (item.id === question.id) {
+                                                    return {
+                                                        ...item,
+                                                        [`question_${question.id}`]:
+                                                            e?.target?.value,
+                                                    };
+                                                }
+                                                return item;
+                                            });
+                                        });
+                                    }}
+                                />
+                                <Switch.Case
+                                    condition={
+                                        getItsFocused(question) &&
+                                        question.questions?.length
+                                    }
+                                >
+                                    <SaleRiskQuestionsInputContainer
+                                        questions={question.questions}
+                                        isChild={true}
+                                        inputsData={inputsData}
+                                        setInputsData={setInputsData}
+                                        isSubmitting={isSubmitting}
+                                        allQuestions={allQuestions}
+                                        handleQuestionFocus={
+                                            handleQuestionFocus
+                                        }
+                                        focusedQuestion={focusedQuestion}
+                                        getItsFocused={getItsFocused}
+                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                    />
+                                </Switch.Case>
+                            </Switch.Case>
+
+                            <Switch.Case condition={question.type === "list"}>
+                                <CustomAccordion
+                                    label={`${isChild ? "" : `${index + 1}. `}${
+                                        question.title
+                                    }`}
+                                    comment={question.comment}
+                                    isChild={isChild}
+                                    accordionData={question.value}
+                                    placeholder={question?.placeholder}
+                                    onChange={(value) => {
+                                        setListItem(value);
+                                        handleListYesNoQuestion(question, value, "list");
+                                    }}
+                                    isSubmitting={isSubmitting}
+                                    value={getInputValue(question.id)}
+                                />
+
+                                <Switch.Case
+                                    condition={
+                                        !_.isEmpty(listItem) &&
+                                        question.questions?.length
+                                    }
+                                >
+                                    <SaleRiskQuestionsInputContainer
+                                        questions={question?.questions?.filter(
+                                            (item) =>
+                                                item?.value === listItem?.id
+                                        )}
+                                        isChild={true}
+                                        inputsData={inputsData}
+                                        setInputsData={setInputsData}
+                                        isSubmitting={isSubmitting}
+                                        allQuestions={allQuestions}
+                                        handleQuestionFocus={
+                                            handleQuestionFocus
+                                        }
+                                        focusedQuestion={focusedQuestion}
+                                        getItsFocused={getItsFocused}
+                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                    />
+                                </Switch.Case>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={question.type === "longText"}
+                            >
+                                <CustomInputs
+                                    isChild={isChild}
+                                    type={"longText"}
+                                    comment={question.comment}
+                                    isSubmitting={isSubmitting}
+                                    value={getInputValue(question.id)}
+                                    placeholder={question?.placeholder}
+                                    label={`${isChild ? "" : `${index + 1}. `}${
+                                        question.title
+                                    }`}
+                                    onFocus={() => {
+                                        handleQuestionFocus(question);
+                                    }}
+                                    onChange={(e) => {
+                                        setInputsData((prev) => {
+                                            return prev.map((item) => {
+                                                if (item.id === question.id) {
+                                                    return {
+                                                        ...item,
+                                                        [`question_${question.id}`]:
+                                                            e?.target?.value,
+                                                    };
+                                                }
+                                                return item;
+                                            });
+                                        });
+                                    }}
+                                />
+                                <Switch.Case
+                                    condition={
+                                        getItsFocused(question) &&
+                                        question.questions?.length
+                                    }
+                                >
+                                    <SaleRiskQuestionsInputContainer
+                                        questions={question.questions}
+                                        isChild={true}
+                                        inputsData={inputsData}
+                                        setInputsData={setInputsData}
+                                        isSubmitting={isSubmitting}
+                                        allQuestions={allQuestions}
+                                        handleQuestionFocus={
+                                            handleQuestionFocus
+                                        }
+                                        focusedQuestion={focusedQuestion}
+                                        getItsFocused={getItsFocused}
+                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                    />
+                                </Switch.Case>
+                            </Switch.Case>
+                        </Switch>
+                    );
+                })}
+            </React.Fragment>
+        </motion.div>
     );
 };
 

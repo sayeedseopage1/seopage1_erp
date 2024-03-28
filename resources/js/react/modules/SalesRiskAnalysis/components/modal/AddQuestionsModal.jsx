@@ -22,7 +22,7 @@ import _ from "lodash";
 import {
     useEditQuestionSalesRiskAnalysisMutation,
     useGetSinglePolicySalesRiskAnalysisQuery,
-    usePolicyQuestionsListQuery,
+    usePolicyQuestionsListByPolicyIdQuery,
     useQuestionAddonPolicyMutation,
     useQuestionInputFieldsQuery,
     useSinglePolicyQuestionsQuery,
@@ -102,7 +102,7 @@ const AddQuestionsModal = ({
         data: questionsList,
         isFetching: isQuestionsListFetching,
         isLoading: isQuestionsListLoading,
-    } = usePolicyQuestionsListQuery(addQuestionsData?.id, {
+    } = usePolicyQuestionsListByPolicyIdQuery(addQuestionsData?.id, {
         staleTime: 0,
         refetchOnMountOrArgChange: true,
         skip: !addQuestionsData?.id,

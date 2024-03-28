@@ -19,9 +19,19 @@
   color: #1492E6;
 }
 
+.customBtn_primary_active {
+  background-color: #1492E6 !important;
+  color: #fff !important;
+}
+
 .customBtn_secondary {
   border: 1px solid #F66;
   color: #F66;
+}
+
+.customBtn_secondary_active {
+  background-color: #F66 !important;
+  color: #fff !important;
 }
 
 .customBtn_primary:hover {

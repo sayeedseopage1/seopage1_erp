@@ -15,33 +15,39 @@ const WithoutDraggableColumnHeader = ({
     const { column } = header;
     const { tableName } = table.getState();
 
+    // Define column styles
+    const columnStyles = {
+        id: { minWidth: "50px", width: "50px", maxWidth: "50px" },
+        questionType: { minWidth: "90px", width: "90px", maxWidth: "90px" },
+        ruleList: { minWidth: "300px", width: "300px", maxWidth: "300px" },
+        question_title: {
+            minWidth: "300px",
+            width: "300px",
+            maxWidth: "300px",
+        },
+    };
+
+    // Define column justify content
+    const columnJustifyContent = {
+        policy_rules: isNewRuleModal ? "flex-start" : "center",
+        applicable_points: "end",
+        questionType: "end",
+        department_name: "center",
+        answered_sales_person: "center",
+        authorize_points: "end",
+        default: "flex-start",
+    };
+
+    const columnStyle = columnStyles[column.id] || {};
+    const justifyContent =
+        columnJustifyContent[column.id] || columnJustifyContent.default;
+
     return (
         <>
             <th
                 colSpan={header.colSpan}
                 style={{
-                    minWidth:
-                        column.id === "id"
-                            ? "50px"
-                            : column.id === "questionType"
-                            ? "90px"
-                            : "auto",
-                    width:
-                        column.id === "id"
-                            ? "50px"
-                            : column.id === "questionType"
-                            ? "90px"
-                            : column.id === "ruleList"
-                            ? "300px"
-                            : "auto",
-                    maxWidth:
-                        column.id === "id"
-                            ? "50px"
-                            : column.id === "questionType"
-                            ? "90px"
-                            : column.id === "ruleList"
-                            ? "300px"
-                            : "auto",
+                    ...columnStyle,
                     padding: "15px 0",
                 }}
                 className={`sp1_tasks_th sp1_tasks_th--${column.id} ${className}`}
@@ -49,24 +55,12 @@ const WithoutDraggableColumnHeader = ({
             >
                 <div
                     style={{
-                        justifyContent:
-                            column.id === "policy_rules"
-                                ? isNewRuleModal
-                                    ? "flex-start"
-                                    : "center"
-                                : column.id === "applicable_points"
-                                ? "end"
-                                : column.id === "questionType"
-                                ? "end"
-                                : column.id === "department_name"
-                                ? "center"
-                                : "flex-start",
+                        justifyContent,
                         paddingRight:
                             column.id === "applicable_points" ? "10px" : "0",
                         paddingLeft:
-                            column.id === "policy_name"
-                                ? "10px"
-                                : column.id === "policy_rules" && isNewRuleModal
+                            column.id === "policy_name" ||
+                            (column.id === "policy_rules" && isNewRuleModal)
                                 ? "10px"
                                 : "0",
                     }}

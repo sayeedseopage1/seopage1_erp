@@ -10,6 +10,7 @@ import { store } from "../../services/store";
 // components
 import SalesRiskAnalysis from "./Pages/SalesRiskAnalysis";
 import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
+import SalesRiskAuthorize from "./Pages/SalesRiskAuthorize";
 
 const Content = () => {
     return (

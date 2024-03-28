@@ -1,6 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+// Ui components
 import Switch from "../../Switch";
-import { CustomInputsInput, CustomInputsTextArea, CustomInputsLabel } from "../Styles/ui";
+import {
+    CustomInputsInput,
+    CustomInputsTextArea,
+    CustomInputsLabel,
+} from "../Styles/ui";
+import Tooltip from "../../Tooltip";
 
 const CustomInputs = ({
     label,
@@ -16,6 +24,8 @@ const CustomInputs = ({
     className,
     style,
     id,
+    isChild,
+    isSubmitting,
     ...props
 }) => {
     const handleOnkeypress = (e) => {
@@ -32,8 +42,21 @@ const CustomInputs = ({
 
     return (
         <div className="d-flex flex-column mb-4">
-            <CustomInputsLabel>
-                {label}
+            <CustomInputsLabel color={isChild ? "#b1b1b1" : "#000000"}>
+                {label}{" "}
+                {props?.comment && (
+                    <span className="ml-2">
+                        <Tooltip text={props?.comment}>
+                            {" "}
+                            <i
+                                className="fa-solid fa-circle-info "
+                                style={{
+                                    color: "#8F8F8F",
+                                }}
+                            ></i>
+                        </Tooltip>
+                    </span>
+                )}
             </CustomInputsLabel>
             <Switch>
                 <Switch.Case condition={type === "longText"}>
@@ -51,7 +74,7 @@ const CustomInputs = ({
                         className={className}
                         style={style}
                         {...props}
-                    />  
+                    />
                 </Switch.Case>
                 <Switch.Case condition={type === "text"}>
                     <CustomInputsInput
@@ -87,9 +110,31 @@ const CustomInputs = ({
                     />
                 </Switch.Case>
             </Switch>
-            {error && <p className="text-danger py-1">Title is required</p>}
+            {isSubmitting && !value && (
+                <span style={{ color: "red", fontSize: "14px" , marginTop: "8px" }}>
+                    This field is required
+                </span>
+            )}
         </div>
     );
 };
 
 export default CustomInputs;
+
+CustomInputs.propTypes = {
+    label: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+    error: PropTypes.bool,
+    type: PropTypes.string,
+    placeholder: PropTypes.string,
+    name: PropTypes.string,
+    disabled: PropTypes.bool,
+    readOnly: PropTypes.bool,
+    required: PropTypes.bool,
+    className: PropTypes.string,
+    style: PropTypes.object,
+    id: PropTypes.string,
+    isChild: PropTypes.bool,
+    comment: PropTypes.string,
+};

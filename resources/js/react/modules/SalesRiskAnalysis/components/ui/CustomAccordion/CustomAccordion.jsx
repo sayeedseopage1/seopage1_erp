@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import "./CustomAccordion.css";
 import _ from "lodash";
 import { CustomInputsLabel } from "../Styles/ui";
+import Tooltip from "../../Tooltip";
 
 const dummyData = [
     { id: 1, name: "John" },
@@ -18,6 +19,11 @@ const CustomAccordion = ({
     accordionData,
     headingClass,
     headingStyle,
+    isChild,
+    onChange,
+    value,
+    isSubmitting,
+    ...props
 }) => {
     const [expend, setExpend] = React.useState(false);
     const [active, setActive] = React.useState({});
@@ -26,17 +32,36 @@ const CustomAccordion = ({
     };
 
     const init = expendable ? 0 : 300;
+
+    const getAlphabeticIndex = (index) => {
+        return String.fromCharCode(65 + index); // Convert index to alphabetic character
+    };
+
     return (
         <div className="d-flex flex-column">
-            <CustomInputsLabel className="mb-2">
-                {label}
+            <CustomInputsLabel
+                className="mb-2"
+                color={isChild ? "#b1b1b1" : "#000000"}
+            >
+                {label}{" "}
+                {props?.comment && (
+                    <span className="ml-2">
+                        <Tooltip text={props?.comment}>
+                            {" "}
+                            <i
+                                className="fa-solid fa-circle-info "
+                                style={{
+                                    color: "#8F8F8F",
+                                }}
+                            ></i>
+                        </Tooltip>
+                    </span>
+                )}
             </CustomInputsLabel>
-            <div className="sp1_task_card mb-4 customAccordionWrapper">
+            <div className="sp1_task_card customAccordionWrapper mb-3">
                 <div
                     className={`sp1_task_card--head customAccordionCardHead ${
-                        expend
-                            ? ""
-                            : "customAccordionCardHeadInactive"
+                        expend ? "" : "customAccordionCardHeadInactive"
                     } ${headingClass}`}
                     onClick={() => (expendable ? toggle() : null)}
                     style={{
@@ -50,7 +75,7 @@ const CustomAccordion = ({
                         }`}
                     >
                         {" "}
-                        {!_.isEmpty(active) ? active?.name : "Testing"}
+                        {!_.isEmpty(active) ? active?.title : props?.placeholder}
                         {expendable ? (
                             expend ? (
                                 <span className="__icon customAccordion__Icon">
@@ -80,10 +105,12 @@ const CustomAccordion = ({
                                             key={item.id}
                                             onClick={() => {
                                                 setActive(item);
+                                                onChange(item);
                                                 toggle();
                                             }}
                                             className={`${
-                                                index !== accordionData.length - 1
+                                                index !==
+                                                accordionData.length - 1
                                                     ? "activeBorder"
                                                     : ""
                                             } ${
@@ -92,7 +119,9 @@ const CustomAccordion = ({
                                                     : ""
                                             }`}
                                         >
-                                            {item.name}
+                                            {`${getAlphabeticIndex(index)}. ${
+                                                item.title
+                                            }`}
                                         </li>
                                     ))}
                                 </ul>
@@ -103,6 +132,13 @@ const CustomAccordion = ({
                     )}
                 </AnimatePresence>
             </div>
+            {isSubmitting && !value && (
+                <span
+                    style={{ color: "red", fontSize: "14px", marginTop: "8px" }}
+                >
+                    Please select an option
+                </span>
+            )}
         </div>
     );
 };
