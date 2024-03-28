@@ -1145,29 +1145,6 @@ class HelperPendingActionController extends AccountBaseController
                     'button_url' => '',
                     'modal_form'=> false,
                 ],
-                // [
-                //     'button_name' => 'Done Commenting',
-                //     'button_color' => 'primary',
-                //     'button_type' => 'modal',
-                //     'button_url' => '',
-                //     'modal_form'=> true,
-                //     'form'=> [
-                //         [
-                //             'type'=> 'textarea',
-                //             'label'=>'Are you sure this comment is not relevant to you?',
-                //             'name'=>'confirmation',
-                //             'required'=> true,
-                //         ],
-                //         [
-                //             'type'=> 'hidden',
-                //             'value'=> $task->id,
-                //             'readonly'=> true,
-
-                //             'name'=>'project_id',
-                //             'required'=> true,
-                //         ],
-                //     ],
-                // ],
                 [
                     'button_name' => 'Not relevant to me',
                     'button_color' => 'primary',
