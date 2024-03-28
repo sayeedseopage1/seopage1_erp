@@ -780,8 +780,8 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-
-        // / DB::beginTransaction();
+        // dd($request->all());
+        //  DB::beginTransaction();
         $validator = Validator::make($request->input(), [
             'link' => 'required|array',
             'link.*' => 'required|url|min:1',
@@ -936,6 +936,10 @@ class TaskController extends AccountBaseController
 
         //need pending action
 
+        /**EMPLOYEE EVALUATION START */
+
+        /**EMPLOYEE EVALUATION END */
+
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
         if($task->independent_task_status == 0)
@@ -949,7 +953,6 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name . ' mark task complete',
             'redirectUrl' => route('tasks.show', $task->id)
         ]);
-        //dd("hdbjasdbjasd");
 
         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
 
@@ -967,7 +970,6 @@ class TaskController extends AccountBaseController
 
     public function TaskApprove(Request $request)
     {
-        //  dd($request);
         $request->validate([
             'rating' => 'required',
             'rating2' => 'required',
@@ -4966,7 +4968,6 @@ class TaskController extends AccountBaseController
     }
     public function DeveloperStopTask(Request $request)
     {
-
         $currentDateTime = Carbon::now();
         $desiredTime = Carbon::createFromTime(16, 45, 0); // 4:29 PM
         $current_day = Carbon::now();
