@@ -137,6 +137,16 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                 }
             },
         }),
+        saleRiskQuestionAnswerSave: build.mutation({
+            query: (body) => ({
+                url: `account/sales-risk-policies/question-value/save`,
+                method: "POST",
+                body,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+        }),
 
     })
 });
@@ -155,4 +165,5 @@ export const {
     usePolicyQuestionsListByPolicyIdQuery,
     usePolicyQuestionsListQuery,
     useEditQuestionSalesRiskAnalysisMutation,
+    useSaleRiskQuestionAnswerSaveMutation,
 } = salesRiskAnalysisApiSlice;

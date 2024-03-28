@@ -19,29 +19,32 @@ import SaleRiskAnalysisQuestionsLoader from "../components/loader/SaleRiskAnalys
 // Components
 import SaleRiskQuestionsInputContainer from "../components/sections/SaleRiskQuestionsInputContainer";
 
-
 // Utils
 import { isArrayObjectEmpty } from "../../../utils/stateValidation";
 
 // Api
 import { usePolicyQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
-
+import { toast } from "react-toastify";
 
 const SalesRiskQuestions = () => {
+    const params = useParams();
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
-    const [isSubmitting, setIsSubmitting] = React.useState(false);
     const [inputsData, setInputsData] = React.useState([]);
     const [allQuestions, setAllQuestions] = React.useState([]);
     const [isChecked, setIsChecked] = React.useState(false);
+    const [isSubmitting, setIsSubmitting] = React.useState(false);
+
     // modal open close state
     const [questionModalOpen, setQuestionModalOpen] = React.useState(false);
-    const params = useParams();
 
+    // fetch policy questions
     const { data, isLoading, isFetching, refetch } =
         usePolicyQuestionsListQuery(null);
 
-    const questions = data?.data;
+    const [saveSaleRiskQuestionAnswer, { isLoading: isSaving }] =
+        useSaleRiskQuestionAnswerSaveMutation();
 
+    const questions = data?.data;
 
     React.useEffect(() => {
         const flattenArray = (arr) =>
@@ -101,6 +104,12 @@ const SalesRiskQuestions = () => {
             setIsSubmitting(true);
             return;
         } else {
+            setQuestionModalOpen(true);
+        }
+    };
+
+    const handleSaveQuestionAnswer = async () => {
+        try {
             const payload = inputsData.map((item) => {
                 return {
                     id: item.id,
@@ -108,9 +117,13 @@ const SalesRiskQuestions = () => {
                 };
             });
 
-            console.log("payload", payload);
-
-            setQuestionModalOpen(true);
+            const res = await saveSaleRiskQuestionAnswer(payload);
+            if (res.status === 200) {
+                setIsSubmitting(false);
+                toast.success("Successfully saved");
+            }
+        } catch (error) {
+            toast.error("Something went wrong");
         }
     };
 
@@ -199,7 +212,7 @@ const SalesRiskQuestions = () => {
     };
 
     return (
-        <SalesRiskAnalysisQuestionWrapper>
+        <section>
             <SalesRiskAnalysisQuestionContainer>
                 <SalesRiskAnalysisQuestionTitleContainer>
                     <h5>Sale Risk Analysis</h5>
@@ -227,6 +240,8 @@ const SalesRiskQuestions = () => {
                     closeModal={() => {
                         setQuestionModalOpen(false);
                     }}
+                    handleSaveQuestionAnswer={handleSaveQuestionAnswer}
+                    isLoading={isSaving}
                 />
                 <CustomCheckbox
                     isChecked={isChecked}
@@ -256,7 +271,7 @@ const SalesRiskQuestions = () => {
                     </button>
                 </Flex>
             </SalesRiskAnalysisQuestionContainer>
-        </SalesRiskAnalysisQuestionWrapper>
+        </section>
     );
 };
 

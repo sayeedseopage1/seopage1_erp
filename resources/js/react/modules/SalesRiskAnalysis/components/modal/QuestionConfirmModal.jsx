@@ -1,8 +1,17 @@
 import React from "react";
+import PropTypes from "prop-types";
+
+// icons
 import InfoIcon from "../ui/InfoIcon";
+// components
 import CustomModal from "../ui/CustomModal/CustomModal";
 
-const QuestionConfirmModal = ({ open, closeModal }) => {
+const QuestionConfirmModal = ({
+    open,
+    closeModal,
+    saveSaleRiskQuestionAnswer,
+    isLoading,
+}) => {
     return (
         <CustomModal
             id="addQuestionsModal"
@@ -37,8 +46,10 @@ const QuestionConfirmModal = ({ open, closeModal }) => {
                     style={{
                         width: "250px",
                     }}
+                    onClick={saveSaleRiskQuestionAnswer}
+                    disabled={isLoading}
                 >
-                    Continue
+                    {isLoading ? "Saving..." : "Continue"}
                 </button>
             </div>
         </CustomModal>
@@ -46,3 +57,10 @@ const QuestionConfirmModal = ({ open, closeModal }) => {
 };
 
 export default QuestionConfirmModal;
+
+QuestionConfirmModal.propTypes = {
+    open: PropTypes.bool,
+    closeModal: PropTypes.func,
+    saveSaleRiskQuestionAnswer: PropTypes.func,
+    isLoading: PropTypes.bool,
+};

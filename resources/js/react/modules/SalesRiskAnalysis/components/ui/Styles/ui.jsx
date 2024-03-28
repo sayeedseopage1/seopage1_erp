@@ -246,16 +246,34 @@ export const SaleRiskAuthorizeHeaderWrapper = styled.div`
         font-style: normal;
         font-weight: 500;
         line-height: normal;
+        text-align: center;
         border-right: 1px solid #b1b1b1;
         span {
             color: #1492e6;
         }
+
+        @media screen and (max-width: 768px) {
+            border-right: none;
+            border-bottom: 1px solid #b1b1b1;
+            padding: 10px 0;
+        }
     }
     div:first-child {
         justify-content: flex-start;
+        text-align: left;
+        @media screen and (max-width: 768px) {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
     }
     div:last-child {
         border-right: none;
+        @media screen and (max-width: 768px) {
+            border-right: none;
+            border-bottom: none;
+            padding: 10px 0;
+        }
     }
 `;
 
@@ -274,6 +292,55 @@ export const SaleRiskAuthorizeHeaderButton = styled.button`
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+
+    @media (min-width: 1201px) and (max-width: 1440px) {
+        padding: 25px 20px;
+    }
+    @media (min-width: 991px) and (max-width: 1200px){
+        padding: 16px 20px;
+    }
 `;
 
+export const SaleRiskAuthorizeTotalPointContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    width: 100%;
+    background: ${(props) => props.background || "#fff"};
+    p {
+        color: #000;
+        font-family: Poppins;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+        @media screen and (max-width: 768px) {
+            font-size: 16px;
+        }
+    }
+    span {
+        color: ${(props) => props.textColor || "#000"};
+        font-family: Poppins;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        @media screen and (max-width: 768px) {
+            font-size: 16px;
+        }
+    }
+`;
 
+export const SaleRiskAuthorizeButton = styled.button`
+    background-color: ${(props) => props.color || "transparent"};
+    color: ${(props) => props.textColor || "#ffffff"};
+    border-radius: 8px;
+    width: 254px;
+    padding: 13px 20px;
+    border: ${(props) => props.border || "none"};
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+`;

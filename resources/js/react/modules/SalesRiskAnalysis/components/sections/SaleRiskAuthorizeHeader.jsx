@@ -1,39 +1,74 @@
 import React from "react";
-import { SaleRiskAuthorizeHeaderButton, SaleRiskAuthorizeHeaderWrapper } from "../ui/Styles/ui";
+import PropTypes from "prop-types";
 
 // Ui components
+import {
+    SaleRiskAuthorizeHeaderButton,
+    SaleRiskAuthorizeHeaderWrapper,
+} from "../ui/Styles/ui";
+import Tooltip from "../Tooltip";
+import { Placeholder } from "../../../../global/Placeholder";
 
 // hooks
 
-const SaleRiskAuthorizeHeader = () => {
+const SaleRiskAuthorizeHeader = ({ headerData, isLoading }) => {
     return (
         <div
-            className="row d-flex align-items-center"
+            className="row d-flex flex-column flex-md-row align-items-center"
             style={{
                 margin: "20px 0",
             }}
         >
-            <SaleRiskAuthorizeHeaderWrapper className="col-10 d-flex">
-                <div className="col-4 px-0 ">
-                    <p className="singleline-ellipsis">
+            <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-10 d-flex flex-column flex-md-row mb-3 mb-md-3 mb-lg-0">
+                <div className="col-12 col-md-4 col-lg-4 px-0 ">
+                    <p className="singleline-ellipsis d-flex align-items-center">
                         Project name:{" "}
-                        <span className="ml-1">
-                            {" "}
-                            Design a website for a digital printing company
-                            sdffdfjl;ksfdkjl fejilksdflklkfdslhk
-                            lhsdfljkdsflfsdklhfsdhlk
-                        </span>
+                        {isLoading ? (
+                            <Placeholder height="20px" width="80px" className="ml-1" />
+                        ) : (
+                            <span className="ml-1">
+                                {" "}
+                                <Tooltip text={headerData?.project_name}>
+                                    {headerData?.project_name}
+                                </Tooltip>
+                            </span>
+                        )}
                     </p>
                 </div>
-                <div className="col-4 px-0">
-                    Sales Person :{" "}
-                    <span className="ml-1">Shah Waliullah Shanto</span>
+                <div className="col-12 col-md-4 px-0 ">
+                    <p className="singleline-ellipsis d-flex align-items-center">
+                        Sales Person :{" "}
+                        {isLoading ? (
+                            <Placeholder height="20px" width="50px" className="ml-1" />
+                        ) : (
+                            <span className="ml-1">{headerData.person}</span>
+                        )}
+                    </p>
                 </div>
-                <div className="col-2 px-0">Deadline: 05 days</div>
-                <div className="col-2 px-0">Clients Name : Patricia F.</div>
+                <div className="col-12 col-md-2 px-0 singleline-ellipsis">
+                    <p className="singleline-ellipsis d-flex align-items-center">
+                        {" "}
+                        Deadline:{" "}
+                        {isLoading ? (
+                            <Placeholder height="20px" width="50px" className="ml-1" />
+                        ) : (
+                            headerData.deadline
+                        )}
+                    </p>
+                </div>
+                <div className="col-12 col-md-2 px-0 ">
+                    <p className="singleline-ellipsis d-flex align-items-center">
+                        Clients Name :{" "}
+                        {isLoading ? (
+                            <Placeholder height="20px" width="50px" className="ml-1" />
+                        ) : (
+                            headerData.clients_name
+                        )}
+                    </p>
+                </div>
             </SaleRiskAuthorizeHeaderWrapper>
-            <div className="col-2 pr-0">
-                <SaleRiskAuthorizeHeaderButton >
+            <div className="col-12 ol-md-2 col-lg-2 px-0 pl-md-0 pl-lg-3 pr-md-0">
+                <SaleRiskAuthorizeHeaderButton>
                     Modify points
                 </SaleRiskAuthorizeHeaderButton>
             </div>
@@ -42,3 +77,8 @@ const SaleRiskAuthorizeHeader = () => {
 };
 
 export default SaleRiskAuthorizeHeader;
+
+SaleRiskAuthorizeHeader.propTypes = {
+    headerData: PropTypes.object,
+    isLoading: PropTypes.bool,
+};

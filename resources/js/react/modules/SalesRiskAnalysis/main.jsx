@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Routes, Outlet } from "react-router-dom";
 import Toaster from "../../global/Toaster";
 // redux store
 import { store } from "../../services/store";
-// components
+// Page components
 import SalesRiskAnalysis from "./Pages/SalesRiskAnalysis";
 import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
 import SalesRiskAuthorize from "./Pages/SalesRiskAuthorize";

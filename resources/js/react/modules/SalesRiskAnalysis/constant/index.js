@@ -357,3 +357,13 @@ export const DummyQuestions = [
     comment: "This is a long text comment"
   }
 ]
+
+
+
+export const DummyHeaderData = {
+  project_name: "Design a website for a digital printi",
+  person: "Shah Waliullah Shanto",
+  deadline: "05 days",
+  clients_name: "Patricia F.",
+  authorizer: "A.Khalid"
+}
