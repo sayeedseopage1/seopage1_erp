@@ -9,7 +9,7 @@ import CustomModal from "../ui/CustomModal/CustomModal";
 const QuestionConfirmModal = ({
     open,
     closeModal,
-    saveSaleRiskQuestionAnswer,
+    handleSaveQuestionAnswer,
     isLoading,
 }) => {
     return (
@@ -46,7 +46,7 @@ const QuestionConfirmModal = ({
                     style={{
                         width: "250px",
                     }}
-                    onClick={saveSaleRiskQuestionAnswer}
+                    onClick={handleSaveQuestionAnswer}
                     disabled={isLoading}
                 >
                     {isLoading ? "Saving..." : "Continue"}
@@ -61,6 +61,6 @@ export default QuestionConfirmModal;
 QuestionConfirmModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
-    saveSaleRiskQuestionAnswer: PropTypes.func,
+    handleSaveQuestionAnswer: PropTypes.func,
     isLoading: PropTypes.bool,
 };

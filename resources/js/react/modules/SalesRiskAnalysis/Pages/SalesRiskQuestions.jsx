@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 // Ui components
 import {
@@ -23,8 +24,10 @@ import SaleRiskQuestionsInputContainer from "../components/sections/SaleRiskQues
 import { isArrayObjectEmpty } from "../../../utils/stateValidation";
 
 // Api
-import { usePolicyQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
-import { toast } from "react-toastify";
+import {
+    usePolicyQuestionsListQuery,
+    useSaleRiskQuestionAnswerSaveMutation,
+} from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskQuestions = () => {
     const params = useParams();
@@ -116,6 +119,7 @@ const SalesRiskQuestions = () => {
                     value: item[`question_${item.id}`],
                 };
             });
+            console.log(payload);
 
             const res = await saveSaleRiskQuestionAnswer(payload);
             if (res.status === 200) {
