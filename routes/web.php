@@ -200,6 +200,7 @@ use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
 use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\ProjectManagerPointController;
 use App\Http\Controllers\ProjectStatusController;
 
 /*
@@ -1539,6 +1540,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
     Route::get('project-manager-point-factors', [CriteriaController::class, 'index'])->name('project.manager.point.factors');
+    Route::get('project-manager-points', [ProjectManagerPointController::class, 'index'])->name('project.manager.points');
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
 

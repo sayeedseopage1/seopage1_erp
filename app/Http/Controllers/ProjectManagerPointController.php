@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\AccountBaseController;
 
-class CriteriaController extends AccountBaseController
+class ProjectManagerPointController extends AccountBaseController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->pageTitle = 'app.menu.factor';
+        $this->pageTitle = 'app.menu.point';
     }
 
     public function index(){
-        return view('criteria.index', $this->data);
+        return view('project-manager-point.index', $this->data);
     }
 }
