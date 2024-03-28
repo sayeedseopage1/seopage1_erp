@@ -2,20 +2,12 @@ import React, { createContext, useContext, useEffect } from "react";
 import style from "./styles/comments.module.css";
 import "./editor.style.css";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
-import {
-    IoIosArrowDown,
-    IoIosArrowUp,
-    IoMdCloseCircle,
-    IoCustomRefresh,
-} from "react-icons/io";
-import commentRefresh from "./media/comment_refresh.svg";
-import commentSearch from "./media/comment_search.svg";
-// import commentClose from './media/comment_close.svg';
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
 import commentBg from "./media/comments_body_bg.svg";
-import commentBgPng from "./media/comments_body_bg.png";
-import { GiCancel } from "react-icons/gi";
+
 import SingleChat from "./components/SingleChat";
-import ChatInput from "./components/ChatInput";
+
 import { useState } from "react";
 import { useRef } from "react";
 import { useCallback } from "react";
@@ -43,6 +35,8 @@ import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteC
 import Sendbox from "./components/sendbox/Sendbox";
 import axios from "axios";
 import { useCommentStore } from "./zustand/store";
+import SendboxForPendingActions from "./components/sendbox/SendboxForPendingActions";
+import SingleChatForPendingActions from "./components/SIngleChatForPendingActions";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -65,7 +59,6 @@ export function useCommentContext() {
 }
 
 const CommentBodyForPendingActions = ({
-    increaseRefetchComment,
     fullScreenView,
     setFullScreenView,
     isOpen,
@@ -122,7 +115,7 @@ const CommentBodyForPendingActions = ({
         setAllComments(comments);
     }, [comments]);
 
-    const hnadleSelectComment = useCallback(() => {
+    const handleSelectComment = useCallback(() => {
         setSecletedComments((prev) => ({
             ...prev,
             [contextHolder.id]: contextHolder,
@@ -141,7 +134,7 @@ const CommentBodyForPendingActions = ({
             </ContextMenuItem>
             <ContextMenuItem
                 onSelect={() => {
-                    hnadleSelectComment();
+                    handleSelectComment();
                 }}
             >
                 <TbMessage2Check className={`context_icons`} />
@@ -799,7 +792,7 @@ const CommentBodyForPendingActions = ({
                         <>
                             {allComments?.map((comment, i) => {
                                 return (
-                                    <SingleChat
+                                    <SingleChatForPendingActions
                                         idMatch={
                                             comment?.id ===
                                             searchIndexes[
@@ -862,8 +855,7 @@ const CommentBodyForPendingActions = ({
                     assignBy: thisTask?.create_by,
                 }) ? (
                     <footer className={`${style.commentsBody_inputField}`}>
-                        <Sendbox
-                            increaseRefetchComment={increaseRefetchComment}
+                        <SendboxForPendingActions
                             onSubmit={onSubmit}
                             taskId={taskId}
                             setScroll={setScroll}
