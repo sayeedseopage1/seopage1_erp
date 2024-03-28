@@ -1548,7 +1548,6 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
-DealController::Routes();
 
 /*=========================> DIGITAL MERKTING DEALS DETAILS START <===========================*/
 Route::get('/dm-deals/details/{id}', [DMContractController::class, 'dmDealDetails'])->name('dm-dealDetails');
@@ -1821,5 +1820,4 @@ Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGu
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
 // sale risk policies
-
 SalesRiskPolicyController::Routes();

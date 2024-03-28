@@ -70,14 +70,6 @@ class DealController extends AccountBaseController
         });
     }
 
-    static function Routes()
-    {
-        Route::controller(self::class)->prefix('account/deals')->name('account.deals.')->group(function () {
-            Route::get('/risk-analysis/{id}', 'salesPolicyQuestionRender')->name('risk-analysis');
-        });
-    }
-
-
     public function index()
     {
       //  abort_403(user()->permission('view_deal') == 'none');
@@ -1138,10 +1130,4 @@ class DealController extends AccountBaseController
         ]);
     }
 
-
-    function salesPolicyQuestionRender($id)
-    {
-        // Note: big form route : route('dealDetails', $deal->id)
-        return view('deals.sales-questions-render', $this->data);
-    }
 }
