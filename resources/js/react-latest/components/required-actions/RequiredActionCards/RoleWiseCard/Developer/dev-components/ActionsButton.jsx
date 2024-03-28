@@ -3,23 +3,39 @@ import ModalWithBtnTemplate from "./ModalWithBtnTemplate";
 import style from "../../../../../../styles/required-action-card.module.css";
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
 import CommentCancellation from "./CommentCancellation";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
 
-// action buttons
+//mitul work start
+import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
+import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
+import { useWindowSize } from "react-use";
+import RelevantModal from "./RelevantModal";
+
+import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
+import { useCommentStore } from "../../../../zustand/store";
+
 const ActionsButton = ({ data }) => {
-    // window.location.assign();
+    const [fullScreenView, setFullScreenView] = React.useState(false);
+    const [viewCommentModal, setViewCommentModal] = React.useState(false);
+    const [isRelevantModal, setIsRelevantModal] = React.useState(false);
+    const { width } = useWindowSize();
+    const taskId = data?.task_id;
+    const { refetchComment, increaseRefetchComment } = useCommentStore();
+    const {
+        data: comments,
+        isFetching,
+        isLoading,
+        refetch,
+    } = useGetCommentsQuery(taskId);
 
-    // return (
-    //     <>
-    //         <button className={style.action_btn}>Review</button>
-    //         <button className={style.action_btn}>Approve</button>
-    //         <button className={style.action_btn}>Deny</button>
-    //         <button className={style.action_btn}>Request Modifications</button>
-    //     </>
-    // );
+    useEffect(() => {
+        refetch();
+    }, [refetchComment]);
 
+    const height = "89vh";
+    //mitul work end
     const handleModalWidth = useCallback(
         (btn) => {
             if (data?.code === "TCOA" && btn?.modal_form) {
@@ -66,7 +82,7 @@ const ActionsButton = ({ data }) => {
                             modal_heading={data.heading}
                             showCloseBtn={false}
                             maxWidth={handleModalWidth(btn)}
-                            btn_Disable={handleBtnDisable(6)}
+                            // btn_Disable={handleBtnDisable(6)}
                         >
                             {(setIsOpen, isOpen) => {
                                 if (btn?.modal_form) {
@@ -118,8 +134,96 @@ const ActionsButton = ({ data }) => {
                     );
                 }
             })}
+
+            {/* mitul work start */}
+
+            {data?.task_id && (
+                <button
+                    onClick={() => setViewCommentModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    {data?.expired_status === 0 ? "View & Reply" : "View"}
+                </button>
+            )}
+            {data?.task_id && (
+                <button
+                    onClick={() => setIsRelevantModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    Not Relevant to me
+                </button>
+            )}
+
+            {/* <ReactModal
+                style={{
+                    overlay: {
+                        backgroundColor: "rgba(0, 0, 0, 0.6)",
+                        margin: "auto auto",
+                        zIndex: 100,
+                    },
+                    content: {
+                        borderRadius: "10px",
+                        maxWidth: fullScreenView ? "100vw" : "1020px",
+                        height: fullScreenView ? "100vh" : "550px",
+                        margin: "auto auto",
+                        border: "none",
+                        overflow: "hidden",
+                        padding: "0px",
+                    },
+                }}
+                isOpen={viewCommentModal}
+                onRequestClose={() => setViewCommentModal(false)}
+            >
+
+           
+
+                <CommentsBody
+                    fullScreenView={fullScreenView}
+                    setFullScreenView={setFullScreenView}
+                    isOpen={viewCommentModal}
+                    close={() => setViewCommentModal(false)}
+                    comments={comments}
+                    loading={isLoading}
+                    fetching={isFetching}
+                    refetch={refetch}
+                    taskId={taskId}
+                    showFullScreenBtn={width <= 991 ? false : true}
+                    height={"520px"}
+                    showCommentEditor={true}
+                    showSearchBtn={true}
+                />
+            </ReactModal> */}
+
+            <CommentContainerDecider
+                fullScreenView={fullScreenView}
+                isOpen={viewCommentModal}
+                width={width}
+            >
+                <CommentsBody
+                    increaseRefetchComment={increaseRefetchComment}
+                    fullScreenView={fullScreenView}
+                    setFullScreenView={setFullScreenView}
+                    isOpen={viewCommentModal}
+                    close={() => setViewCommentModal(false)}
+                    comments={comments}
+                    loading={isLoading}
+                    fetching={isFetching}
+                    refetch={refetch}
+                    taskId={taskId}
+                    showFullScreenBtn={width <= 991 ? false : true}
+                    height={height}
+                    showCommentEditor={true}
+                    showSearchBtn={true}
+                />
+            </CommentContainerDecider>
+
+            <RelevantModal
+                setIsRelevantModal={setIsRelevantModal}
+                isRelevantModal={isRelevantModal}
+            />
         </>
     );
 };
 
+//mitul work end
 export default React.memo(ActionsButton);

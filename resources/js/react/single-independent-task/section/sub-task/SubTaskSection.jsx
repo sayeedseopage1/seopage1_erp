@@ -124,8 +124,6 @@ const SubTaskSection = ({ status }) => {
 
     const Task = new SingleTask(task);
 
-    console.log("Task", Task);
-
     return (
         <div
             className="sp1_task_right_card mb-3"

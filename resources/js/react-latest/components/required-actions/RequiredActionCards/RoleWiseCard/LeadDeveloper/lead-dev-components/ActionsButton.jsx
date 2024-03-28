@@ -3,38 +3,44 @@ import ModalWithBtnTemplate from "./ModalWithBtnTemplate";
 import style from "../../../../../../styles/required-action-card.module.css";
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
 import CommentCancellation from "./CommentCancellation";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
 
-// action buttons
+//mitul work start
+import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
+import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
+import { useWindowSize } from "react-use";
+useCommentStore;
+
+import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+import RelevantModal from "../../Developer/dev-components/RelevantModal";
+import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";
+import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
+import { useCommentStore } from "../../../../zustand/store";
+
 const ActionsButton = ({ data }) => {
-    // window.location.assign();
+    const { refetchComment, increaseRefetchComment } = useCommentStore();
+    const [fullScreenView, setFullScreenView] = React.useState(false);
+    const [viewCommentModal, setViewCommentModal] = React.useState(false);
+    const [isRelevantModal, setIsRelevantModal] = React.useState(false);
+    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
+    const { width } = useWindowSize();
+    const taskId = data?.task_id;
 
-    // return (
-    //     <>
-    //         <button className={style.action_btn}>Review</button>
-    //         <button className={style.action_btn}>Approve</button>
-    //         <button className={style.action_btn}>Deny</button>
-    //         <button className={style.action_btn}>Request Modifications</button>
-    //     </>
-    // );
+    const {
+        data: comments,
+        isFetching,
+        isLoading,
+        refetch,
+    } = useGetCommentsQuery(taskId);
 
-    const handleModalWidth = useCallback(
-        (btn) => {
-            if (data?.code === "TCOA" && btn?.modal_form) {
-                // modal width for comment cancellation
-                return "816px";
-            } else if (data?.code === "TCOA" && !btn?.modal_form) {
-                // modal width for comment
-                return "1036px";
-            } else {
-                // modal width for others
-                return "35rem";
-            }
-        },
-        [data]
-    );
+    useEffect(() => {
+        refetch();
+    }, [refetchComment]);
+
+    console.log(refetchComment);
+    //mitul work end
 
     return (
         <>
@@ -59,38 +65,29 @@ const ActionsButton = ({ data }) => {
                     data?.code === "TCOA"
                 ) {
                     return (
-                        <ModalForCommentWithBtn
-                            key={i}
-                            btn_color={btn.button_color}
-                            btn_name={btn.button_name}
-                            modal_heading={data.heading}
-                            showCloseBtn={false}
-                            maxWidth={handleModalWidth(btn)}
-                            btn_Disable={handleBtnDisable(6)}
-                        >
-                            {(setIsOpen, isOpen) => {
-                                if (btn?.modal_form) {
-                                    return (
-                                        <CommentCancellation
-                                            setIsOpen={setIsOpen}
-                                            modal_data={btn}
-                                            data={data}
-                                        />
-                                    );
-                                } else if (!btn?.modal_data) {
-                                    return isOpen ? (
-                                        <CommentSubmission
-                                            setIsOpen={setIsOpen}
-                                            task_id={data?.task_id}
-                                            btn_data={btn}
-                                            authorization_id={data?.id}
-                                        />
-                                    ) : (
-                                        <></>
-                                    );
-                                }
-                            }}
-                        </ModalForCommentWithBtn>
+                        <div>
+                            {btn.button_name === "View and Reply" && (
+                                <button
+                                    onClick={() =>
+                                        setViewCommentModal((prev) => !prev)
+                                    }
+                                    className={`${style.action_btn}`}
+                                >
+                                    View & Reply
+                                </button>
+                            )}
+
+                            {btn.button_name === "Not relevant to me" && (
+                                <button
+                                    onClick={() =>
+                                        setIsRelevantModal((prev) => !prev)
+                                    }
+                                    className={`${style.action_btn}`}
+                                >
+                                    Not Relevant to me
+                                </button>
+                            )}
+                        </div>
                     );
                 } else if (btn.button_type === "modal") {
                     return (
@@ -118,6 +115,49 @@ const ActionsButton = ({ data }) => {
                     );
                 }
             })}
+
+            {/* mitul work start */}
+
+            {data?.task_id && (
+                <button
+                    onClick={() => setIsEvaluationModal((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    Evaluate
+                </button>
+            )}
+
+            <CommentContainerDecider
+                fullScreenView={fullScreenView}
+                isOpen={viewCommentModal}
+                width={width}
+            >
+                <CommentsBody
+                    increaseRefetchComment={increaseRefetchComment}
+                    fullScreenView={fullScreenView}
+                    setFullScreenView={setFullScreenView}
+                    isOpen={viewCommentModal}
+                    close={() => setViewCommentModal(false)}
+                    comments={comments}
+                    loading={isLoading}
+                    fetching={isFetching}
+                    refetch={refetch}
+                    taskId={taskId}
+                    showFullScreenBtn={width <= 991 ? false : true}
+                    height={"89vh"}
+                    showCommentEditor={true}
+                    showSearchBtn={true}
+                />
+            </CommentContainerDecider>
+            <RelevantModal
+                setIsRelevantModal={setIsRelevantModal}
+                isRelevantModal={isRelevantModal}
+            />
+
+            <EvaluationModal
+                setIsEvaluationModal={setIsEvaluationModal}
+                isEvaluationModal={isEvaluationModal}
+            />
         </>
     );
 };

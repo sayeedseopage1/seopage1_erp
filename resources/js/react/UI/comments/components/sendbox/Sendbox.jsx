@@ -60,7 +60,13 @@ import EditIcon from "../../_Data/editor.svg";
 import InputIcon from "../../_Data/input.svg";
 import UploadIcon from "../../_Data/upload.svg";
 
-const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
+const EditorComponent = ({
+    increaseRefetchComment,
+    setScroll,
+    taskId,
+    setIsLoading,
+    onSubmit,
+}) => {
     const [editorState, setEditorState] = React.useState(() =>
         EditorState.createEmpty()
     );
@@ -243,6 +249,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             );
 
             if (response.status === 200) {
+                increaseRefetchComment();
                 setCommentState();
                 setRefetchType("");
                 setIsFetching(false);
@@ -251,7 +258,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                 setEditorState(() => EditorState.createEmpty());
                 setMentionedComment(null);
             }
-
+            increaseRefetchComment();
             clearFiles();
             setEditorState(() => EditorState.createEmpty());
             setMentionedComment(null);
@@ -293,13 +300,13 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
             <EditorWrapperWithImageAndToolbar>
                 {mentionedComment && <MentionedComment />}
 
-                {/* mitul progressbar add */}
+                {/* mitul progress bar add start */}
 
                 {files?.length > 0 ? (
                     <FilesContainer>
                         {files?.map((file, index) => (
                             <FileItem key={index}>
-                                {/* not clickble when loading */}
+                                {/* not clickable when loading */}
                                 {isFetching ? (
                                     <div
                                         style={{
@@ -374,7 +381,7 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
                         )}
                     </FilesContainer>
                 ) : null}
-                {/* mitul progressbar add */}
+                {/* tanvir mitul progress bar add end*/}
 
                 {/* toolbar container */}
                 {expend ? (
@@ -544,10 +551,17 @@ const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
 };
 
 // export component with service providers
-export default function Sendbox({ setScroll, taskId, setIsLoading, onSubmit }) {
+export default function Sendbox({
+    increaseRefetchComment,
+    setScroll,
+    taskId,
+    setIsLoading,
+    onSubmit,
+}) {
     return (
         <ServiceProvider>
             <EditorComponent
+                increaseRefetchComment={increaseRefetchComment}
                 onSubmit={onSubmit}
                 taskId={taskId}
                 setScroll={setScroll}
