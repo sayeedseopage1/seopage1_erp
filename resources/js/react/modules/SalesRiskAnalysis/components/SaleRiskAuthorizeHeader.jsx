@@ -6,7 +6,12 @@ import {
     SaleRiskAuthorizeHeaderWrapper,
 } from "./ui/Styles/ui";
 
+// hooks
+import { useAuth } from "../../../hooks/useAuth";
+
 const SaleRiskAuthorizeHeader = () => {
+    const auth = useAuth();
+    console.log(auth.getRoleId());
     return (
         <div
             className="row d-flex align-items-center"

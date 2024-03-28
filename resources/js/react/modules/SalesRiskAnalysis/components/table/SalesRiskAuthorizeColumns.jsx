@@ -14,9 +14,9 @@ export const SalesRiskAuthorizeColumns = [
 
   },
   {
-      id: "points",
+      id: "authorize_points",
       header: "Points",
-      accessorKey: "points",
+      accessorKey: "authorize_points",
       
   },
 ];
