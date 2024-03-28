@@ -715,7 +715,26 @@ const CommentBodyForPendingActions = ({
                                 if (setFullScreenView) {
                                     setFullScreenView(false);
                                 }
-                                close();
+                                // close();
+
+                                Swal.fire({
+                                    icon: "warning",
+                                    title: "Would you like to add any more comments?",
+                                    text: "If you click on No, This Pending action will go to past. If you click on no, You can add more comment .",
+
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Yes",
+                                    showDenyButton: true,
+                                    denyButtonText: "No",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    },
+                                }).then((res) => {
+                                    if (!res.isConfirmed) {
+                                        close();
+                                        window.location.reload();
+                                    }
+                                });
                             }}
                             className={`${style.commentsBody_header_btn}`}
                         >
