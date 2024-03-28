@@ -805,27 +805,41 @@ class SalesRiskPolicyController extends AccountBaseController
         return view('deals.sales-questions-render', $this->data);
     }
 
-    function questionValueSave(Request $req) : JsonResponse
+    function questionValueSave(Request $req)
     {
-        $validator = Validator::make($req->all, [
-            'id' => 'required|exists:'.(new SalesPolicyQuestion)->getTable(). ', id',
-            'value' => 'required'
+        $validator = Validator::make($req->all(), [
+            '*.id' => 'required|exists:sales_policy_questions,id',
+            '*.value' => 'required'
         ]);
 
         if ($validator->fails()) {
             return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
         }
 
-        if ($req->session()->get('deal_id') == null) {
+        if ($req->session()->get('deal_id', null) == null) {
             return response()->json(['status' => 'error', 'message' => 'Deal is not valid.'], 500);
         }
 
-        PolicyQuestionValue::create([
-            'question_id' => $req->id,
-            'value' => $req->value,
-            'deal_id' => $req->session()->get('deal_id')
-        ]);
+        DB::beginTransaction();
+        try {
+            foreach ($req->all() as $item) {
+                $item = (object) $item;
 
-        return response()->json(['status' => 'error', 'message' => 'Questons values stored successfully.']);
+                PolicyQuestionValue::create([
+                    'question_id' => $item->id,
+                    'value' => $item->value,
+                    'deal_id' => $req->session()->get('deal_id')
+                ]);
+
+            }
+            DB::commit();
+
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            // throw $th;
+            return response()->json(['status' => 'error', 'message' => 'Data did not stroed successfully.'], 500);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Questons values stored successfully.']);
     }
 }
