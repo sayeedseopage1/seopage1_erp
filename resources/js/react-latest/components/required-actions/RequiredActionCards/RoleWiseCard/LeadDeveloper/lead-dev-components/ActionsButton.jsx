@@ -8,19 +8,17 @@ import ModalForCommentWithBtn from "./ModalForCommentWithBtn";
 import CommentSubmission from "./CommentSubmission";
 
 //mitul work start
-import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import { useWindowSize } from "react-use";
-useCommentStore;
-
 import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
 import RelevantModal from "../../Developer/dev-components/RelevantModal";
+import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
 import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";
 import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
-import { useCommentStore } from "../../../../zustand/store";
+import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 
 const ActionsButton = ({ data }) => {
-    const { refetchComment, increaseRefetchComment } = useCommentStore();
+    const { commentState } = useCommentStore();
     const [fullScreenView, setFullScreenView] = React.useState(false);
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
@@ -35,11 +33,11 @@ const ActionsButton = ({ data }) => {
         refetch,
     } = useGetCommentsQuery(taskId);
 
+    // useEffect hook to call refetch when commentState changes
     useEffect(() => {
         refetch();
-    }, [refetchComment]);
+    }, [commentState]);
 
-    console.log(refetchComment);
     //mitul work end
 
     return (
@@ -132,8 +130,7 @@ const ActionsButton = ({ data }) => {
                 isOpen={viewCommentModal}
                 width={width}
             >
-                <CommentsBody
-                    increaseRefetchComment={increaseRefetchComment}
+                <CommentBodyForPendingActions
                     fullScreenView={fullScreenView}
                     setFullScreenView={setFullScreenView}
                     isOpen={viewCommentModal}
