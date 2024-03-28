@@ -715,12 +715,11 @@ const CommentBodyForPendingActions = ({
                                 if (setFullScreenView) {
                                     setFullScreenView(false);
                                 }
-                                // close();
 
                                 Swal.fire({
                                     icon: "warning",
                                     title: "Would you like to add any more comments?",
-                                    text: "If you click on No, This Pending action will go to past. If you click on no, You can add more comment .",
+                                    text: "If you click on No, This Pending action will go to past. If you click on Yes, You can add more comment .",
 
                                     showConfirmButton: true,
                                     confirmButtonText: "Yes",
