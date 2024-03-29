@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EvaluationController extends AccountBaseController
 {
@@ -89,4 +91,35 @@ class EvaluationController extends AccountBaseController
     {
         //
     }
+    public function getAllEvaluation()
+    {                                                  
+        $data = Task::select(
+                'tasks.*',
+                'users.name as employee_name',
+                'users.created_at as joining_date',
+                'tasks.created_at as first_task_assigned',
+                'project_time_logs.start_time as started_working_on',
+                DB::raw('COUNT(task_users.user_id) as total_task_assigned'),
+                DB::raw('COUNT(task_submissions.user_id) as total_task_submitted'),
+                DB::raw('SUM(project_time_logs.total_hours) as total_task_hours'),
+                DB::raw('SUM(project_time_logs.total_minutes) as total_task_minutes'),
+                DB::raw('COUNT(task_revisions.task_id) as total_task_revision')
+            )
+            ->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
+            ->leftJoin('users', 'task_users.user_id', '=', 'users.id')
+            ->leftJoin('project_time_logs', 'tasks.id', '=', 'project_time_logs.task_id')
+            ->leftJoin('task_submissions', 'users.id', '=', 'task_submissions.user_id')
+            ->leftJoin('task_revisions', 'tasks.id', '=', 'task_revisions.task_id')
+            ->where('users.role_id', 14) 
+            ->whereNull('tasks.u_id') 
+            ->where('tasks.independent_task_status', 1) 
+            ->groupBy('tasks.id') 
+            ->get();
+
+        return response()->json([
+            'data' => $data,
+            'status' => 200
+        ]);
+    }
+
 }

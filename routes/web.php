@@ -557,6 +557,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
         Route::resource('employee-shifts', EmployeeShiftController::class);
         Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
+        Route::post('past-pending-action-comment', [PendingActionController::class, 'pastAction']);
         Route::resource('pending-action', PendingActionController::class);
 
 
@@ -1144,6 +1145,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
     
     Route::resource('employee-evaluation', EvaluationController::class);
+    Route::get('get-all-evaluation', [EvaluationController::class,'getAllEvaluation']);
     //Pm goal Settings
     Route::resource('pm-goal-setting', PmGoalSetingController::class);
     Route::post('pm-goal-setting-update',[PmGoalSetingController::class,'pmGoalUpdate'])->name('pm-goal-setting-update');
