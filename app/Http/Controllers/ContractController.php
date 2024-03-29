@@ -2322,6 +2322,9 @@ class ContractController extends AccountBaseController
             case 'renew':
                 $this->view = 'contracts.ajax.renew';
                 break;
+            case 'sales-analysis-report':
+                $this->view = 'contracts.ajax.salesAnalysisReport'; 
+                break;
             default:
                 $this->view = 'contracts.ajax.summary';
                 break;
