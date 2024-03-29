@@ -16,7 +16,8 @@ import Button from "../../../global/Button";
 import CKEditorComponent from "../../../ckeditor";
 
 import { useAuth } from "../../../hooks/useAuth";
-import { useUpdateTaskMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
+import { useUpdateSingleTaskMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
+useUpdateSingleTaskMutation;
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
@@ -25,7 +26,7 @@ const SingleEvaluationModal = ({
 }) => {
     const auth = useAuth();
 
-    const [updateTask] = useUpdateTaskMutation();
+    const [updateTask] = useUpdateSingleTaskMutation();
     const [averageRating, setAverageRating] = useState(data.averageRating);
     const [formData, setFormData] = useState({
         averageRating: data?.averageRating ?? 0,
