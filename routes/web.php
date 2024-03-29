@@ -556,8 +556,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
         Route::post('employee-shifts/set-default', [EmployeeShiftController::class, 'setDefaultShift'])->name('employee-shifts.set_default');
         Route::resource('employee-shifts', EmployeeShiftController::class);
-        Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::post('past-pending-action-comment', [PendingActionController::class, 'pastAction']);
+        Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::resource('pending-action', PendingActionController::class);
 
 
