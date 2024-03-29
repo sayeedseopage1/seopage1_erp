@@ -30,7 +30,7 @@ import FormatDate from "../../../../../../react/UI/comments/utils/FormatDate";
 import useEmployeeEvaluation from "../../../../../../react/zustand/store";
 
 import ActionDropdown from "../Table/ActionDropdown";
-import useCounterStore from "../../../../Zustand/store";
+import useCounterStore from "../../../../../Zustand/store";
 
 import { toast } from "react-toastify";
 import { useAcknowledgePendingActionsPastMutation } from "../../../../../services/api/pendingActionsApiSlice";

@@ -21,7 +21,7 @@ import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
 import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
-import { usePendingActionStore } from "../../../../../Zustand/store";
+import { usePendingActionStore } from "../../../../../../Zustand/store";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();

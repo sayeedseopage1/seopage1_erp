@@ -8,7 +8,6 @@ const useCounterStore = create((set) => ({
     },
 }));
 
-<<<<<<< HEAD:resources/js/react-latest/components/Zustand/store.js
 export const usePendingActionStore = create((set) => ({
     pendingAction: {},
     setPendingAction: (obj) => {
@@ -17,10 +16,8 @@ export const usePendingActionStore = create((set) => ({
     },
 }));
 
-=======
 export const useUserStore = create((set) => ({
     user: null,
     setUser: (userData) => set({ user: userData }),
 }));
->>>>>>> 0573b9797f70c89cd4c14893270cdb4623738f52:resources/js/react-latest/Zustand/store.js
 export default useCounterStore;
