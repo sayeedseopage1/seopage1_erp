@@ -201,6 +201,8 @@ use App\Http\Controllers\IssuedTaskReportController;
 use App\Http\Controllers\PmGoalSetingController;
 use App\Http\Controllers\PmPointFactorController;
 use App\Http\Controllers\PmPointFactorViewController;
+use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
+use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
 use App\Http\Controllers\ProjectManagerPointController;
 use App\Http\Controllers\ProjectStatusController;
 
@@ -1543,6 +1545,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('pm-point-factors', PmPointFactorViewController::class)->name('project.manager.point.factors');
     Route::resource('pm-point-factor', PmPointFactorController::class)->only(['index','store','show','edit','update']);
     Route::get('project-manager-points', [ProjectManagerPointController::class, 'index'])->name('project.manager.points');
+    Route::get('get-criteria-wise-factor/{id}', GetCriteriaWiseFactorController::class)->name('get.criteria.wise.factor');
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
 
