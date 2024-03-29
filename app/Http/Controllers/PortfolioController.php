@@ -14,6 +14,8 @@ use App\Models\ProjectWebsiteType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+
 use function Google\Auth\Cache\get;
 use function Symfony\Component\HttpClient\Response\select;
 
@@ -274,53 +276,101 @@ class PortfolioController extends AccountBaseController
 
     // get portfolio data
     public function get_portfolio_data(Request $request){
-        // dd($request->all());
+
         $cms = $request->cms ?? null;
         $website_type = $request->website_type ?? null;
         $website_category = $request->website_category ?? null;
         $website_sub_category = $request->website_sub_category ?? null;
         $theme_id = $request->theme_id ?? null;
         $plugin_id = $request->plugin_id ?? null;
-        $page_size = $request->page_size ?? 10;
+        $limit = $request->page_size ?? 30;
 
+        // $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
+        $rawData1 = DB::table('project_portfolios as pp')
+        ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
+        ->select('pp.*')
+        ->where('pp.portfolio_link', '!=', null)
+        ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
+        ->where('ps.status', 'accepted')
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+            if ($cms) {
+                $query->where('pp.cms_category', $cms);
+            }
 
-        $data = DB::table('project_portfolios as pp')
-            ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
-            ->select('pp.*')
-            ->where('pp.portfolio_link', '!=', null)
-            ->whereNotIn('pp.portfolio_link',["n/a", "N/A","null", "na", "NA"])
-            ->where('ps.status', 'accepted')
-            ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
-                if ($cms) {
-                    $query->where('pp.cms_category', $cms);
-                }
+            if ($website_type) {
+                $query->where('pp.website_type', $website_type);
+            }
 
-                if ($website_type) {
-                    $query->where('pp.website_type', $website_type);
-                }
+            if ($website_category) {
+                $query->where('pp.niche', $website_category);
+            }
 
-                if ($website_category) {
-                    $query->where('pp.niche', $website_category);
-                }
+            if ($website_sub_category) {
+                $query->where('pp.sub_niche', $website_sub_category);
+            }
 
-                if ($website_sub_category) {
-                    $query->where('pp.sub_niche', $website_sub_category);
-                }
+            if ($theme_id) {
+                $query->where('pp.theme_id', $theme_id);
+            }
 
-                if ($theme_id) {
-                    $query->where('pp.theme_id', $theme_id);
-                }
+            if ($plugin_id) {
+                $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
+            }
 
-                if ($plugin_id) {
-                    $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
-                }
+        })
+        ->distinct();
 
-            })
-            ->distinct()
-            ->paginate($page_size);
-            // ->get();
+        $rawData2 = DB::table('project_portfolios as pp')
+        ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
+        ->select('pp.*')
+        ->where('pp.portfolio_link', '!=', null)
+        ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
+        ->where('ps.status', 'accepted')
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+            if ($cms) {
+                $query->where('pp.cms_category', $cms);
+            }
 
-        // dd($data->count());
+            if ($website_type) {
+                $query->where('pp.website_type', $website_type);
+            }
+
+            if ($website_category) {
+                $query->where('pp.niche', $website_category);
+            }
+
+            if ($website_sub_category) {
+                $query->where('pp.sub_niche', $website_sub_category);
+            }
+
+            if ($theme_id) {
+                $query->where('pp.theme_id', $theme_id);
+            }
+
+            if ($plugin_id) {
+                $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
+            }
+
+        })
+        ->distinct();
+
+        $totalRow = $rawData1->get()->count();
+        $itemsPaginated = $rawData1->paginate($limit);
+        $itemsTransformed = $rawData2->limit($limit)->offset($limit * ($request->input('page',1) -1))->get()->toArray();
+
+        $data = new \Illuminate\Pagination\LengthAwarePaginator(
+            $itemsTransformed,
+            $totalRow,
+            $itemsPaginated->perPage(),
+            $itemsPaginated->currentPage(),
+            [
+                'path' => FacadesRequest::url(),
+                'query' => [
+                    'page' => $itemsPaginated->currentPage()
+                ]
+            ]
+        );
+
         return response()->json($data, 200);
     }
 }
