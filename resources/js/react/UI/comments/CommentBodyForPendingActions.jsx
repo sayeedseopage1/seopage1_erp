@@ -6,8 +6,6 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import commentBg from "./media/comments_body_bg.svg";
 
-import SingleChat from "./components/SingleChat";
-
 import { useState } from "react";
 import { useRef } from "react";
 import { useCallback } from "react";
@@ -32,11 +30,14 @@ import { useDeleteCommentsMutation } from "../../services/api/commentsApiSlice";
 import { useParams } from "react-router-dom";
 import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
-import Sendbox from "./components/sendbox/Sendbox";
+
 import axios from "axios";
 import { useCommentStore } from "./zustand/store";
 import SendboxForPendingActions from "./components/sendbox/SendboxForPendingActions";
 import SingleChatForPendingActions from "./components/SIngleChatForPendingActions";
+import { useSelector } from "react-redux";
+import { usePendingActionsIdMutation } from "../../../react-latest/services/api/pendingActionsApiSlice";
+import useCounterStore from "../../../react-latest/components/Zustand/store";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -76,6 +77,12 @@ const CommentBodyForPendingActions = ({
     showSearchBtn = true,
     onSubmit = async () => null,
 }) => {
+    const { increaseCount } = useCounterStore();
+    const pendingActionId = useSelector(
+        (state) => state.pendingActions.pendingActionId
+    );
+
+    const [updatePendingAction] = usePendingActionsIdMutation();
     const { allComments, setAllComments } = useCommentStore();
     const param = useParams();
     const [deleteComments, { isLoading: deleteLoading }] =
@@ -720,6 +727,7 @@ const CommentBodyForPendingActions = ({
                                     icon: "warning",
                                     title: "Would you like to add any more comments?",
                                     text: "If you click on Yes, you can add more comments. If you click on No, this pending action will move to the past.",
+                                    allowOutsideClick: false,
 
                                     showConfirmButton: true,
                                     confirmButtonText: "Yes",
@@ -730,8 +738,17 @@ const CommentBodyForPendingActions = ({
                                     },
                                 }).then((res) => {
                                     if (!res.isConfirmed) {
-                                        close();
-                                        window.location.reload();
+                                        updatePendingAction({
+                                            id: pendingActionId,
+                                        })
+                                            .unwrap()
+                                            .then((res) => {
+                                                close();
+                                                increaseCount();
+                                            })
+                                            .catch((err) => {
+                                                console.log(err);
+                                            });
                                     }
                                 });
                             }}
