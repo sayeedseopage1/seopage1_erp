@@ -24,7 +24,7 @@ const CustomModal = ({
                     // width: width || "600px",
                     maxWidth: width || "600px",
                     height: props.height || "fit-content",
-                    maxHeight: props.maxHeight || "fit-content",
+                    maxHeight: props.maxHeight || "600px",
                 },
             }}
             isOpen={open}

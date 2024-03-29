@@ -367,3 +367,175 @@ export const DummyHeaderData = {
   clients_name: "Patricia F.",
   authorizer: "A.Khalid"
 }
+
+
+export const DummyQuestionsPoints = [
+  {
+    id: 1,
+    policy_id: 1,
+    questions:[
+      {
+        id: 1,
+        question: "Do we need to create a homepage",
+        answer: "Yes (2:00 Hours)",
+        parent_id: null,
+      },
+      {
+        id: 2,
+        question: "How many other primary pages do we need to create?",
+        answer: "3 pages (2:00 Hours)",
+        parent_id: null,
+      },
+      {
+        id: 3,
+        question: "How many secondary pages will be there?",
+        answer: "2 pages (2:00 Hours)",
+        parent_id: null,
+      },
+      {
+        id: 3,
+        question: "How many hours of other works will be needed here Functional works you have input the hours count depending on the difficulties involved",
+        answer: "3:30 Hours",
+        parent_id: null,
+      }
+    ],
+    points: "-01($30/hours)"
+  },
+  {
+    id: 2,
+    policy_id: 2,
+    questions:[
+      {
+        id: 1,
+        question: "Did the client fund full milestone?",
+        answer: "No",
+        parent_id: null,
+      },
+      {
+        id: 2,
+        question: "What amount of milestone did he create?",
+        answer: "$300",
+        parent_id: 1,
+      },
+      {
+        id: 3,
+        question: "Why did he create xxx% of milestone?",
+        answer: "The client's bank is rejecting his card after creating 2-3 milestones. He will do the rest tomorrow",
+        parent_id: 1,
+      }
+    ],
+    points: "0"
+  },
+  {
+    id: 3,
+    policy_id: 3,
+    questions:[
+      {
+        id: 1,
+        question: "Did the client mention anything like he tried to get this done by someone else before and he failed?",
+        answer: "Yes",
+      },
+    ],
+    points: "-01"
+  },
+  {
+    id: 4,
+    policy_id: 4,
+    questions:[
+      {
+        id: 1,
+        question: "Did the client mention anything like he tried to get this  done by someone else before and he failed?",
+        answer: "yes",
+        parent_id: null,
+      },
+      {
+        id: 2,
+        question: "Was it due to the technical challenge",
+        answer: "yes",
+        parent_id: 1,
+      },
+      {
+        id: 3,
+        question: "What did he exactly say?",
+        answer: "Clients needs to custom options for shipping",
+        parent_id: 1,
+      }
+    ],
+    points: "-01"
+  },
+  {
+    id: 5,
+    policy_id: 5,
+    questions:[
+      {
+        id: 1,
+        question: "Did the client mention anything like he tried to get this done by someone else before and he failed?",
+        answer: "yes",
+        parent_id: null,
+      },
+      {
+        id: 2,
+        question: "Was it due to the technical challenge",
+        answer: "yes",
+        parent_id: 1,
+      },
+      {
+        id: 3,
+        question: "What did he exactly say?",
+        answer: "Clients needs to custom options for shipping",
+        parent_id: 1,
+      }
+    ],
+    points: "-01"
+  },
+  {
+    id: 6,
+    policy_id: 6,
+    questions:[
+      {
+        id: 1,
+        question: "Did the client mention anything like he tried to get this done by someone else before and he failed?",
+        answer: "yes",
+        parent_id: null,
+      },
+      {
+        id: 2,
+        question: "Was it due to the technical challenge",
+        answer: "yes",
+        parent_id: 1,
+      },
+      {
+        id: 3,
+        question: "What did he exactly say?",
+        answer: "Clients needs to custom options for shipping",
+        parent_id: 1,
+      }
+    ],
+    points: "-01"
+  },
+  {
+    id: 7,
+    policy_id: 7,
+    questions:[
+      {
+        id: 1,
+        question: "Did the client mention anything like he tried to get this done by someone else before and he failed?",
+        answer: "yes",
+        parent_id: null,
+      },
+      {
+        id: 2,
+        question: "Was it due to the technical challenge",
+        answer: "yes",
+        parent_id: 1,
+      },
+      {
+        id: 3,
+        question: "What did he exactly say?",
+        answer: "Clients needs to custom options for shipping",
+        parent_id: 1,
+      }
+    ],
+    points: "-01"
+  }
+]

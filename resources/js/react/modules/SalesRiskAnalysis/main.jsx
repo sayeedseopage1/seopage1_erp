@@ -50,7 +50,7 @@ if (containerSalePolicyQuestion) {
                         <Route path="/" element={<Content />}>
                             <Route
                                 path="account/deals/risk-analysis/:deal_id"
-                                element={<SalesRiskQuestions />}
+                                element={<SalesRiskAuthorize />}
                             />
                         </Route>
                     </Routes>

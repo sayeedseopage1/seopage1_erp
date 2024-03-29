@@ -21,7 +21,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import Switch from "../components/Switch";
 
 // constants
-import { DummyHeaderData } from "../constant";
+import { DummyHeaderData, DummyQuestionsPoints } from "../constant";
 
 const SalesRiskAuthorize = () => {
     const auth = useAuth();
@@ -48,7 +48,7 @@ const SalesRiskAuthorize = () => {
                     <SalesRiskAuthorizeTable
                         tableColumns={SalesRiskAuthorizeColumns}
                         tableName="SalesRiskAuthorizeTable"
-                        tableData={[]}
+                        tableData={DummyQuestionsPoints}
                     />
                     <SaleRiskAuthorizeTotalPointContainer
                         className="mb-4"
