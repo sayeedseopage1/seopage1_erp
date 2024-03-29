@@ -57,7 +57,7 @@ $projectArchived = $project->trashed();
                             ajax="false" />
                         </li>
                         <li>
-                            <x-tab :href="route('projects.show', $project->id).'?tab=sales-analysis-report'" :text="__('app.menu.sales-analysis-report')" />
+                            <x-tab :href="route('projects.show', $project->id).'?tab=sales-analysis-report'" :text="__('app.menu.sales-analysis-report')" ajax="false" />
                         </li>
 
                         @if (!$projectArchived)

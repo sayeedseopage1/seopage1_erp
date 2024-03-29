@@ -51,6 +51,8 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::post('question-value/save', 'questionValueSave')->name('question-value.save');
 
             Route::get('question-value/report/{deal_id}', 'questionValueReport')->name('question-value.report');
+
+            Route::get('report-list', 'salesRiskReport')->name('report-list');
         });
 
         Route::get('account/deals/risk-analysis/{deal_id}', [ self::class, 'salesPolicyQuestionRender'])->name('risk-analysis');
@@ -859,10 +861,15 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         // get all deals questions vaule
         $questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->get();
-        
+
     }
 
     function questionValueReport($deal_id)
+    {
+
+    }
+
+    function salesRiskReport($deal_id)
     {
 
     }
