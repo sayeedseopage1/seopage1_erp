@@ -186,7 +186,6 @@ use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\PendingActionController;
 use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\ClientReviewController;
-use App\Http\Controllers\CriteriaController;
 use App\Http\Controllers\CrossDeptWork;
 use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\FilterController;
@@ -200,6 +199,9 @@ use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
 use App\Http\Controllers\PmGoalSetingController;
+use App\Http\Controllers\PmPointFactorController;
+use App\Http\Controllers\PmPointFactorViewController;
+use App\Http\Controllers\ProjectManagerPointController;
 use App\Http\Controllers\ProjectStatusController;
 
 /*
@@ -1538,7 +1540,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
-    Route::get('project-manager-point-factors', [CriteriaController::class, 'index'])->name('project.manager.point.factors');
+    Route::get('pm-point-factors', PmPointFactorViewController::class)->name('project.manager.point.factors');
+    Route::resource('pm-point-factor', PmPointFactorController::class)->only(['index','store','show','edit','update']);
+    Route::get('project-manager-points', [ProjectManagerPointController::class, 'index'])->name('project.manager.points');
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
 

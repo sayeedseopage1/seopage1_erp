@@ -20,7 +20,7 @@ if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>
             <Provider store={store}>
-                <BrowserRouter basename="/account/project-manager-point-factors">
+                <BrowserRouter basename="/account/pm-point-factors">
                     <Routes>
                         <Route path="/" element={<Content />}>
                             <Route index element={<PointFactors />} />

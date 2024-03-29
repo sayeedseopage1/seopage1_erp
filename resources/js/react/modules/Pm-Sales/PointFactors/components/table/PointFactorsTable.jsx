@@ -47,7 +47,7 @@ const PointFactorsTable = ({
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
-    const [data, setData] = React.useState(tableData?.data || []);
+    const [data, setData] = React.useState(tableData || []);
     const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
@@ -55,10 +55,12 @@ const PointFactorsTable = ({
         pageSize: 10,
     });
 
+    console.log(tableData)
+
     // point factors data
     const _pointFactors = React.useMemo(
-        () => tableData?.data,
-        [tableData?.data]
+        () => tableData,
+        [tableData]
     );
     React.useEffect(() => {
         if (_.size(_pointFactors) === _.size(data)) {
@@ -264,12 +266,12 @@ const PointFactorsTable = ({
             {/* Modals */}
 
             {/* pagination */}
-            <PointFactorsTablePagination
+            {/* <PointFactorsTablePagination
                 tableData={tableData}
                 handlePageSizeChange={handlePageSizeChange}
                 handlePageChange={handlePageChange}
                 pageSize={pageSize}
-            />
+            /> */}
 
         </React.Fragment>
     );
@@ -283,7 +285,7 @@ PointFactorsTable.propTypes = {
     tableName: PropTypes.string,
     search: PropTypes.string,
     tableColumns: PropTypes.array,
-    tableData: PropTypes.object,
+    tableData: PropTypes.array,
     onPageChange: PropTypes.func,
     refetch: PropTypes.func,
 };

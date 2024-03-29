@@ -4,6 +4,7 @@ import { PointFactorsColumns } from '../components/table/PointFactorsColumns';
 import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
+import { useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
@@ -40,6 +41,26 @@ const PointFactors = () => {
             categories: false,
             points: false,
         });
+
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
+    // get sales risk analysis rules
+    const { data, isFetching, isLoading, refetch } =
+        useGetPmPointFactorsQuery(
+            queryString({
+                page: pageIndex + 1,
+                limit: pageSize,
+
+            })
+        );
+    // sales risk analysis rules data
+    const pmPointFactorsData = data?.data;
+
+    console.log(pmPointFactorsData)
 
     const resetFormState = () => {
         setNewFactorData({
@@ -175,7 +196,7 @@ const PointFactors = () => {
                         tableColumns={tableHeaderFilterByTab}
                         tableName="PointFactorsTable"
                         // tab={tab}
-                        // tableData={salesRiskAnalysisRules}
+                        tableData={pmPointFactorsData}
                         // isLoading={isFetching}
                         // refetch={refetch}
                         onPageChange={onPageChange}

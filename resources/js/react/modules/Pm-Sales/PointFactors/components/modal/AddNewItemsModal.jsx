@@ -6,7 +6,6 @@ import CustomModal from "../Styles/ui/CustomModal/CustomModal";
 import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelectContainer, ModalTitle, StyledInput, StyledLabel } from "../Styles/ui/ui";
 import CustomDropDown from "../CustomDropdown";
 import { LimitConditions, LimitUnits } from "../../constant";
-// import { Categories } from "../../constant";
 
 const AddNewItemsModal = ({
     open,
@@ -17,8 +16,6 @@ const AddNewItemsModal = ({
     handleFactorsAdded,
     isLoadingAddPointFactors,
 }) => {
-
-
     return (
         <CustomModal
             open={open}

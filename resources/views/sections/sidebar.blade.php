@@ -393,6 +393,7 @@
                     <div class="accordionItemContent pb-2">
                         <!-- NAV ITEM - CUSTOMERS COLLAPASE MENU -->
                         <x-sub-menu-item :link="route('project.manager.point.factors')" :text="'Point Factors'" />
+                        <x-sub-menu-item :link="route('project.manager.points')" :text="'Points'" />
                     </div>
                 </x-menu-item>
 
