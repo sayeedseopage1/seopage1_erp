@@ -1,32 +1,55 @@
-export const Categories = {
-    label: "Categories",
-    emptyOptionsLabel: "Select Categories",
-    id: "categories",
+export const LimitConditions = {
+    label: "LimitConditions",
+    emptyOptionsLabel: "--",
+    id: "limitConditions",
     data: [
         {
             id: 1,
             label: "Less than",
-            name: "lessThan",
+            name: "<",
         },
         {
             id: 2,
             label: "Greater Than",
-            name: "greaterThan",
+            name: ">",
         },
         {
             id: 3,
             label: "Equal to",
-            name: "===",
+            name: "==",
         },
         {
             id: 4,
-            label: "Numeric in general",
-            name: "greaterThan",
+            label: "Less than Equal",
+            name: "<=",
         },
         {
             id: 5,
-            label: "Yes/No",
-            name: "yesNo",
+            label: "Greater than Equal",
+            name: ">=",
+        },
+        {
+            id: 6,
+            label: "Not Equal",
+            name: "!=",
+        },
+    ],
+};
+
+export const LimitUnits = {
+    label: "LimitUnits",
+    emptyOptionsLabel: "Select Limit Unit",
+    id: "limitUnits",
+    data: [
+        {
+            id: 1,
+            label: "Days",
+            name: "1",
+        },
+        {
+            id: 2,
+            label: "Hours",
+            name: "2",
         },
     ],
 };

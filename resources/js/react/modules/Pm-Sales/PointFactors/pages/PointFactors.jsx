@@ -15,24 +15,50 @@ const PointFactors = () => {
         React.useState(false);
     // modal state data
     const [newFactorData, setNewFactorData] = React.useState({
-        projectType: "",
-        projectTypeText: "",
-        criteria: "",
-        factors: "",
-        categories: {},
-        points: "",
+        criteria: "", // input select
+        title: "",  // input text
+        projectType: "", // input checkbox
+        lowerLimit: "", // input number
+        upperLimit: "", // input number
+        limitType: "", // input checkbox
+        limitUnit: {}, // input //input select
+        lowerLimitCondition: {}, //input select
+        upperLimitCondition: {}, //input select
+        pointType: "", // input checkbox
+        points: "", // input number
+        pointDependOnModel: "", //input string (optional)
+        pointDependOnField: "", //input string (optional)
+        status: "" //input number (optional)
     });
 
     console.log(newFactorData)
     // modal state validation
     const [newPolicyDataValidation, setNewPolicyDataValidation] =
         React.useState({
-
             criteria: false,
             factors: false,
             categories: false,
             points: false,
         });
+
+    const resetFormState = () => {
+        setNewFactorData({
+            criteria: "",
+            title: "",
+            projectType: "",
+            lowerLimit: "",
+            upperLimit: "",
+            limitType: "",
+            limitUnit: {},
+            lowerLimitCondition: {},
+            upperLimitCondition: {},
+            pointType: "",
+            points: "",
+            pointDependOnModel: "",
+            pointDependOnField: "",
+            status: ""
+        })
+    }
 
     // handle input change
     const handleChange = (e) => {
@@ -62,7 +88,7 @@ const PointFactors = () => {
     // handle modal open close
     const handleAddNewItemModal = () => {
         setAddNewItemModalOpen(!addNewItemModalOpen);
-        // resetFormState("all");
+        resetFormState();
         // setNewPolicyInputData([]);
     };
 
