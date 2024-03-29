@@ -22,10 +22,11 @@ import Switch from "../components/Switch";
 
 // constants
 import { DummyHeaderData, DummyQuestionsPoints } from "../constant";
+import { Placeholder } from "../../../global/Placeholder";
 
 const SalesRiskAuthorize = () => {
     const auth = useAuth();
-    const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(true);
     return (
         <section>
             <Switch>
@@ -49,13 +50,26 @@ const SalesRiskAuthorize = () => {
                         tableColumns={SalesRiskAuthorizeColumns}
                         tableName="SalesRiskAuthorizeTable"
                         tableData={DummyQuestionsPoints}
+                        isLoading={isLoading}
                     />
                     <SaleRiskAuthorizeTotalPointContainer
                         className="mb-4"
                         background="#FFDCDC"
                     >
                         <p>Total Points Achieved :</p>
-                        <span>-0.2</span>
+                        <span>
+                            {isLoading ? (
+                                <div className="d-flex justify-content-end flex-column align-items-end mr-2">
+                                    <Placeholder
+                                        width="50px"
+                                        height="15px"
+                                        className="mb-1"
+                                    />
+                                </div>
+                            ) : (
+                                "-0.2"
+                            )}
+                        </span>
                     </SaleRiskAuthorizeTotalPointContainer>
 
                     {/* Sale risk authorize button */}

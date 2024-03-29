@@ -7,9 +7,11 @@ import {
     getSortedRowModel,
     flexRender,
 } from "@tanstack/react-table";
+
+// table components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import EmptyTable from "../../../../global/EmptyTable";
-import SaleRiskAuthorizeLoader from "../loader/SaleRiskAuthorizeLoader";
+import SalesRiskAuthorizeTableLoader from "../loader/SalesRiskAuthorizeTableLoader";
 
 const SalesRiskAuthorizeTable = ({
     tableColumns,
@@ -140,7 +142,7 @@ const SalesRiskAuthorizeTable = ({
                             })}
                         {/* Loading Table */}
                         {isLoading && (
-                            <SaleRiskAuthorizeLoader
+                            <SalesRiskAuthorizeTableLoader
                                 prevItemLength={data?.length}
                             />
                         )}
