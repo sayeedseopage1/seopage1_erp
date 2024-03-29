@@ -1541,7 +1541,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
     Route::get('pm-point-factors', PmPointFactorViewController::class)->name('project.manager.point.factors');
-    Route::resource('pm-point-factor', PmPointFactorController::class);
+    Route::resource('pm-point-factor', PmPointFactorController::class)->only(['index','store','show','edit','update']);
     Route::get('project-manager-points', [ProjectManagerPointController::class, 'index'])->name('project.manager.points');
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
