@@ -194,14 +194,14 @@ class ProjectController extends AccountBaseController
         //             }else{
         //                 $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
         //             }
-        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) { 
-        //                 return view('projects.ajax.goale_alert', $this->data); 
+        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+        //                 return view('projects.ajax.goale_alert', $this->data);
         //             }
         //         }
         //     }
         // }
         /** PROJECT MANAGER GOAL FUNCTION END */
-        
+
         return $dataTable->render('projects.index', $this->data);
     }
     public function ProjectOverviewFilter(Request $request)
@@ -801,7 +801,6 @@ class ProjectController extends AccountBaseController
 
         $helper->DisputeFormAuthorization($project);
 
-       
         $project->save();
         $users = User::where('role_id', 1)->get();
         foreach ($users as $user) {
@@ -2161,12 +2160,12 @@ class ProjectController extends AccountBaseController
                     $pmGoalSetting = PmGoalSetting::where('initial_value', '<=', $request->project_budget)
                                 ->where('end_value', '>=', $request->project_budget)
                                 ->first();
-                                
+
                     if($pmGoalSetting !=null){
                         $project_status_helper = new HelperPmProjectStatusController();
                         $project_status_helper->ProjectPmGoalCreation($pmGoalSetting, $findDeal, $findProject);
                     }
-                }else{                                
+                }else{
                     // if($findDeal->project_type !=null){
                         $project_status_helper = new HelperPmProjectStatusController();
                         $project_status_helper->HourlyProjectPmGoalCreation($findDeal, $findProject);
@@ -2211,7 +2210,7 @@ class ProjectController extends AccountBaseController
            //     $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
 
-               
+
 
 
         }
@@ -2223,10 +2222,9 @@ class ProjectController extends AccountBaseController
 
 
         $helper->ProjectDeliverableCreation($project->id);
-    
 
     }
-   
+
         if($project->status == 'not started'){
             if ($request->project_challenge != 'No Challenge') {
                 $project_update = Project::find($request->project_id);
@@ -2441,7 +2439,7 @@ class ProjectController extends AccountBaseController
                 ));
                 $this->view = 'projects.ajax.members';
                 break;
-               
+
                     case 'milestones':
                         if(Auth::user()->role_id != 6)
                         {
@@ -2451,8 +2449,6 @@ class ProjectController extends AccountBaseController
                     }
                         break;
 
-               
-           
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
                 break;
@@ -2463,6 +2459,10 @@ class ProjectController extends AccountBaseController
             case 'tasks':
                 $this->taskBoardStatus = TaskboardColumn::all();
                 return (!$this->project->trashed()) ? $this->tasks($this->project->project_admin == user()->id) : $this->archivedTasks($this->project->project_admin == user()->id);
+
+            case 'sales-analysis-report':
+                $this->view = 'projects.ajax.salesAnalysisReport';
+                break;
             case 'gantt':
                 $this->taskBoardStatus = TaskboardColumn::all();
                 $this->view = 'projects.ajax.gantt';
@@ -2533,8 +2533,8 @@ class ProjectController extends AccountBaseController
         //             }else{
         //                 $goal_end_date = Carbon::parse($item->goal_end_date)->addHours(24);
         //             }
-        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) { 
-        //                 return view('projects.ajax.goale_alert', $this->data); 
+        //             if (Auth::user()->id == $item->pm_id && $current_date->gte($goal_end_date) && $item->goal_status == 0 && $item->reason == null) {
+        //                 return view('projects.ajax.goale_alert', $this->data);
         //             }
         //         }
         //     }
@@ -3239,9 +3239,6 @@ class ProjectController extends AccountBaseController
 
         $sign->signature = $imageName;
         $sign->save();
-
-      
-
 
 
         event(new ProjectSignedEvent($this->project, $sign));
@@ -5735,7 +5732,7 @@ public function updatePmBasicSEO(Request $request){
 
             $qc_submission = QcSubmission::find($request->id);
             $qc_submission->delete();
-         
+
         } else {
             $milestone = ProjectMilestone::where('id', $project->milestone_id)->first();
             // dd($milestone);
@@ -5749,8 +5746,6 @@ public function updatePmBasicSEO(Request $request){
         }
 
         $project_id = Project::where('id', $project->project_id)->first();
-
-       
 
         Toastr::success('Project Q&C Request Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
@@ -5907,7 +5902,7 @@ public function updatePmBasicSEO(Request $request){
         //need pending action
 
         $users = User::where('role_id', 1)->get();
-        foreach ($users as $user) { 
+        foreach ($users as $user) {
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
                 'role_id' => 1,
@@ -6390,7 +6385,7 @@ public function updatePmBasicSEO(Request $request){
             'extension.required' => 'This filed is required!',
             'description.required' => 'This filed is required!',
         ]);
-        
+
         $oldDeadline = Carbon::parse($request->old_deadline);
         $newDeadline = Carbon::parse($request->new_deadline);
         $dayDifference = $newDeadline->diffInDays($oldDeadline);
@@ -6410,7 +6405,7 @@ public function updatePmBasicSEO(Request $request){
         $project_F = Project::where('id',$request->project_id)->first();
         $project_F->deadline_auth_status = 1;
         $project_F->save();
-        
+
         return response()->json([
             'status'=>200
         ]);
@@ -6431,7 +6426,7 @@ public function updatePmBasicSEO(Request $request){
         $oldDeadline = Carbon::parse($request->old_deadline);
         $newDeadline = Carbon::parse($request->new_deadline);
         $dayDifference = $newDeadline->diffInDays($oldDeadline);
-        
+
 
         if($request->type =='accept'){
             $pde = ProjectDeadlineExtension::where('id',$request->pde_id)->first();

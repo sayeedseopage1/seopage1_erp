@@ -49,9 +49,11 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('question-list', 'questionList')->name('question.list');
 
             Route::post('question-value/save', 'questionValueSave')->name('question-value.save');
+
+            Route::get('question-value/report/{deal_id}', 'questionValueReport')->name('question-value.report');
         });
 
-        Route::get('account/deals/risk-analysis/{id}', [ self::class, 'salesPolicyQuestionRender'])->name('risk-analysis');
+        Route::get('account/deals/risk-analysis/{deal_id}', [ self::class, 'salesPolicyQuestionRender'])->name('risk-analysis');
     }
 
     function index()
@@ -798,9 +800,9 @@ class SalesRiskPolicyController extends AccountBaseController
         return $list;
     }
 
-    function salesPolicyQuestionRender(Request $req, $id)
+    function salesPolicyQuestionRender(Request $req, $deal_id)
     {
-        $req->session()->put('deal_id', $id);
+        $req->session()->put('deal_id', $deal_id);
         // Note: big form route : route('dealDetails', $deal->id)
         return view('deals.sales-questions-render', $this->data);
     }
@@ -832,6 +834,16 @@ class SalesRiskPolicyController extends AccountBaseController
                 ]);
 
             }
+
+            // TODO: change deals > status to "analysis"
+
+            /**
+             * calculate point
+             * redirect accordingly
+            */
+
+            // calculate point
+
             DB::commit();
 
         } catch (\Throwable $th) {
@@ -842,4 +854,17 @@ class SalesRiskPolicyController extends AccountBaseController
 
         return response()->json(['status' => 'success', 'message' => 'Questons values stored successfully.']);
     }
+
+    function calculatePolicyPoint($deal_id)
+    {
+        // get all deals questions vaule
+        $questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->get();
+        
+    }
+
+    function questionValueReport($deal_id)
+    {
+
+    }
+
 }
