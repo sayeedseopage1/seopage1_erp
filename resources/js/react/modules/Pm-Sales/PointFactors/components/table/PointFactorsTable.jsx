@@ -33,6 +33,7 @@ import WithoutDraggableColumnHeader from "./WithoutColumnHeader";
 // helper function
 import PointFactorsTablePagination from "./PointFactorsTablePagination";
 import { useState } from "react";
+import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 
 const PointFactorsTable = ({
     isLoading,
@@ -250,11 +251,11 @@ const PointFactorsTable = ({
                             })}
                         {/* Loading Table */}
                         {/* TODO: Implement Loading Table later  */}
-                        {/* {isLoading && (
-                            <SalesRiskAnalysisTableLoader
-                                prevItemLength={data?.length}
+                        {isLoading && (
+                            <PmPointFactorsTableLoader
+                            // prevItemLength={data?.length}
                             />
-                        )} */}
+                        )}
                     </tbody>
                 </table>
                 {/* Table for empty */}

@@ -197,8 +197,8 @@ const PointFactors = () => {
                         tableName="PointFactorsTable"
                         // tab={tab}
                         tableData={pmPointFactorsData}
-                        // isLoading={isFetching}
-                        // refetch={refetch}
+                        isLoading={isFetching}
+                        refetch={refetch}
                         onPageChange={onPageChange}
                     />
 
