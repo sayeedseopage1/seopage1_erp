@@ -10,4 +10,9 @@ class Criteria extends Model
     use HasFactory;
 
     protected $fillable = ['title','criteria_id'];
+
+    public function factors()
+    {
+        return $this->hasMany(Factor::class, 'criteria_id');
+    }
 }
