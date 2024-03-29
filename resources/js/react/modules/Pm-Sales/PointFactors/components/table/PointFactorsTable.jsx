@@ -250,7 +250,6 @@ const PointFactorsTable = ({
                                 );
                             })}
                         {/* Loading Table */}
-                        {/* TODO: Implement Loading Table later  */}
                         {isLoading && (
                             <PmPointFactorsTableLoader
                             // prevItemLength={data?.length}

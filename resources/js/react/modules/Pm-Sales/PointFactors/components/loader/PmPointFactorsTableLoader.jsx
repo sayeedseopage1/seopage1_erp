@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Placeholder } from "../../../../../global/Placeholder";
 
 
-export default function PmPointFactorsTableLoader({ prevItemLength = 5, tableCol }) {
+export default function PmPointFactorsTableLoader({ prevItemLength = 3, tableCol }) {
     const updateItemLength = prevItemLength === 0 ? 5 : prevItemLength;
     return (
         _.times(updateItemLength, item => (

@@ -4,17 +4,18 @@ export const PointFactorsColumns = [
         header: "Criteria",
         accessorKey: "criteria",
         cell: ({ row }) => {
-            // const data = row?.original;
+            const data = row?.original;
+            console.log("data", data);
             return (
                 <div className="d-flex justify-content-start align-items-center">
                     <span
                         style={{
-                            color: "#8F8F8F",
+                            color: "#000",
                             fontSize: "14px",
                             fontFamily: "Poppins",
                         }}
                     >
-                        Criteria
+                        {data?.title}
                     </span>
                 </div>
             );
@@ -26,7 +27,7 @@ export const PointFactorsColumns = [
         accessorKey: "factors",
         cell: ({ row, table }) => {
             return (
-                <div className="d-flex justify-content-center align-items-center">
+                <div className="d-flex justify-content-start align-items-center">
                     <span
                         style={{
                             color: "#8F8F8F",
