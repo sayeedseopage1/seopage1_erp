@@ -82,6 +82,34 @@ export const ModalTitle = styled.h6`
     font-family: "Poppins", sans-serif;
 `;
 
+export const ModalInputLabel = styled.label`
+    font-size: ${(props) => props.fontSize || "18px"};
+    font-family: "Poppins", sans-serif;
+    color: ${(props) => props.color || "#000000"};
+    margin-bottom: 0px;
+    padding: 0px !important;
+`;
+
+export const ModalInput = styled.input`
+    padding: 13px 18px;
+    border-radius: 8px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    background-color: #f8f8f8;
+    color: ${(props) => (props.value ? "#000000" : "#8F8F8F")};
+    outline: none;
+    border: 1px solid #b1b1b1;
+    border-radius: 9px;
+    width: ${(props) => props.width || "auto"};
+
+    &:disabled {
+        cursor: not-allowed;
+    }
+`;
+
 export const ModalButton = styled.button`
     padding: 13px 20px;
     border-radius: 8px;
@@ -96,4 +124,81 @@ export const ModalButton = styled.button`
     border: ${(props) => props.border || "none"};
     cursor: pointer;
     width: ${(props) => props.width || "auto"};
+`;
+
+export const ModalSelectContainer = styled.div`
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    color: #8f8f8f;
+    outline: none;
+    width: auto;
+
+    #select-department-sal-risk {
+        font-family: Poppins;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        span {
+            color: #000000;
+        }
+    }
+    .cnx_dropdown__dd__toggle {
+        padding: 11px 18px;
+        border-radius: 8px;
+        background-color: #f8f8f8;
+        border: 1px solid #b1b1b1;
+        border-radius: 9px;
+    }
+`;
+
+export const ModalSelect = styled.select`
+    padding: 13px 18px;
+    border-radius: 8px;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    background-color: #f8f8f8;
+    color: #8f8f8f;
+    outline: none;
+    border: 1px solid #b1b1b1;
+    border-radius: 9px;
+    width: ${(props) => props.width || "auto"};
+`;
+
+// Define the styled component
+export const CheckboxContainer = styled.div`
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+`;
+
+// Define the styled input component
+export const StyledInput = styled.input`
+    width:20px;
+    height:20px;
+    /* outline: 1px solid #1492E6; */
+    border-radius: 4px;
+    /* appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #1492E6;
+    border-radius: 4px; */
+`;
+
+export const StyledLabel = styled.label`
+    color: #8F8F8F;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 0px;
 `;

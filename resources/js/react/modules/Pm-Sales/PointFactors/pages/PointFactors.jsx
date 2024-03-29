@@ -4,6 +4,7 @@ import { PointFactorsColumns } from '../components/table/PointFactorsColumns';
 import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
+// import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
     // top section states 
@@ -12,6 +13,41 @@ const PointFactors = () => {
     // modal open close state
     const [addNewItemModalOpen, setAddNewItemModalOpen] =
         React.useState(false);
+    // modal state data
+    const [newFactorData, setNewFactorData] = React.useState({
+        projectType: "",
+        projectTypeText: "",
+        criteria: "",
+        factors: "",
+        categories: {},
+        points: "",
+    });
+
+    console.log(newFactorData)
+    // modal state validation
+    const [newPolicyDataValidation, setNewPolicyDataValidation] =
+        React.useState({
+
+            criteria: false,
+            factors: false,
+            categories: false,
+            points: false,
+        });
+
+    // handle input change
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (newFactorData[name] === value) {
+            // If yes, clear the value from the state
+            setNewFactorData({ ...newFactorData, [name]: "" });
+        } else {
+            // Otherwise, set the clicked checkbox's value in the state
+            setNewFactorData({ ...newFactorData, [name]: value });
+        }
+        console.log(newFactorData)
+        console.log(newFactorData[name] === value)
+
+    }
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -29,8 +65,6 @@ const PointFactors = () => {
         // resetFormState("all");
         // setNewPolicyInputData([]);
     };
-
-
 
     const handleFactorsAdded = async () => {
         // if (newPolicyInputData?.length === 0) {
@@ -93,17 +127,28 @@ const PointFactors = () => {
         // }
     };
 
+    // console.log(tab)
+
+
+    const tableHeaderFilterByTab = PointFactorsColumns.filter(item => {
+        if (tab === "hourly") {
+            return item.accessorKey !== 'criteria';
+        }
+        return true
+    });
+
+    // console.log(tableHeaderFilterByTab)
 
     return (
-
         <section>
             <TopSection tab={tab} setTab={setTab} search={search} setSearch={setSearch} />
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container mx-0 py-3">
-                    {/* sales risk analysis table */}
+                    {/* point factor table */}
                     <PointFactorsTable
-                        tableColumns={PointFactorsColumns}
+                        tableColumns={tableHeaderFilterByTab}
                         tableName="PointFactorsTable"
+                        // tab={tab}
                         // tableData={salesRiskAnalysisRules}
                         // isLoading={isFetching}
                         // refetch={refetch}
@@ -116,12 +161,12 @@ const PointFactors = () => {
                     </AddNewSectionCointainer>
 
 
-                    {/* Add new Policy Modal */}
+                    {/* Add new factor item Modal */}
                     <AddNewItemsModal
-
-                        // handleChange={handleChange}
+                        handleChange={handleChange}
                         open={addNewItemModalOpen}
-                        // setNewPolicyData={setNewPolicyData}
+                        newFactorData={newFactorData}
+                        setNewFactorData={setNewFactorData}
                         closeModal={handleAddNewItemModal}
                         handleFactorsAdded={handleFactorsAdded}
                         // newPolicyInputData={newPolicyInputData}

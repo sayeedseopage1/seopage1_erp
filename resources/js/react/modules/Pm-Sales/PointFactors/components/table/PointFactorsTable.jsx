@@ -32,6 +32,7 @@ import WithoutDraggableColumnHeader from "./WithoutColumnHeader";
 
 // helper function
 import PointFactorsTablePagination from "./PointFactorsTablePagination";
+import { useState } from "react";
 
 const PointFactorsTable = ({
     isLoading,
@@ -54,8 +55,7 @@ const PointFactorsTable = ({
         pageSize: 10,
     });
 
-
-    // sales risk analysis rules data
+    // point factors data
     const _pointFactors = React.useMemo(
         () => tableData?.data,
         [tableData?.data]
@@ -70,19 +70,21 @@ const PointFactorsTable = ({
     }, [_pointFactors]);
 
     // clear skipPageReset
-    React.useEffect(() => {
+    useEffect(() => {
         if (skipPageReset) {
             setSkipPageReset(false);
         }
     }, [data]);
 
     // default columns
-    const defaultColumns = React.useMemo(() => [...tableColumns]);
+    const defaultColumns = useMemo(() => [...tableColumns]);
+    // console.log("80", defaultColumns)
 
     // columns
-    const [columns, setColumns] = React.useState([...defaultColumns]);
+    const [columns, setColumns] = useState([...defaultColumns]);
+    // console.log("84", columns)
 
-    const [columnOrder, setColumnOrder] = React.useState(_.map(columns, "id"));
+    const [columnOrder, setColumnOrder] = useState(_.map(columns, "id"));
 
     // on pagination
     const handlePageChange = ({ selected }) => {
