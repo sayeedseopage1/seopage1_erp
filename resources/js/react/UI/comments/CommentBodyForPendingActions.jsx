@@ -719,7 +719,7 @@ const CommentBodyForPendingActions = ({
                                 Swal.fire({
                                     icon: "warning",
                                     title: "Would you like to add any more comments?",
-                                    text: "If you click on No, This Pending action will go to past. If you click on Yes, You can add more comment .",
+                                    text: "If you click on Yes, you can add more comments. If you click on No, this pending action will move to the past.",
 
                                     showConfirmButton: true,
                                     confirmButtonText: "Yes",
