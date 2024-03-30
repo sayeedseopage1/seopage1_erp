@@ -56,6 +56,8 @@ class SalesRiskPolicyController extends AccountBaseController
         });
 
         Route::get('account/deals/risk-analysis/{deal_id}', [ self::class, 'salesPolicyQuestionRender'])->name('risk-analysis');
+        Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReport'])->name('report-list');
+
     }
 
     function index()
@@ -710,7 +712,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'type' => $req->type,
                 'value' => $req->value,
                 'parent_id' => $req->parent_id,
-                'rule_list' => json_encode($req->rule_list),
+                'rule_list' => $req->rule_list ? json_encode($req->rule_list) : null,
                 'placeholder' => $req->placeholder,
                 'policy_id' => $req->policy_id,
             ]);
@@ -764,13 +766,14 @@ class SalesRiskPolicyController extends AccountBaseController
                     $query->where('policy_id', $req->policy_id);
             })->get()
             ->map(function ($item) {
+
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
                     'type' => $item->type,
                     'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
                     'placeholder' => $item->placeholder,
-                    'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
+                    'rule_list' => $item->rule_list ? SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']) : null,
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
                     'questions' => self::questionListChild($item->id)
