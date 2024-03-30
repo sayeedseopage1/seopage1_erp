@@ -18,6 +18,7 @@ import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
 import SalesRiskAuthorize from "./Pages/SalesRiskAuthorize";
 import SalesAnalysisReport from "./Pages/SalesAnalysisReport";
 import SaleAnalysisReportTableFilterBar from "./components/sections/SaleAnalysisReportTableFilterBar";
+import SalesRiskAnalysisProvider from "./context/SalesRiskAnalysisProvider";
 
 // custom drag layer
 const DragLayer = () => {
@@ -70,7 +71,7 @@ const Content = () => {
             <Toaster />
         </React.Fragment>
     );
-}
+};
 
 // Sales Risk Analysis
 const container = document.getElementById("salesRiskPolicies");
@@ -78,13 +79,15 @@ if (container) {
     ReactDOM.createRoot(container).render(
         <React.StrictMode>
             <Provider store={store}>
-                <BrowserRouter basename="/account/sales-risk-policies">
-                    <Routes>
-                        <Route path="/" element={<Content />}>
-                            <Route index element={<SalesRiskAnalysis />} />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
+                <SalesRiskAnalysisProvider>
+                    <BrowserRouter basename="/account/sales-risk-policies">
+                        <Routes>
+                            <Route path="/" element={<Content />}>
+                                <Route index element={<SalesRiskAnalysis />} />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </SalesRiskAnalysisProvider>
             </Provider>
         </React.StrictMode>
     );
@@ -141,8 +144,9 @@ if (containerSalesAnalysisReport) {
 
 // Sales Risk Analysis Report Table
 
-const containerSalesAnalysisReportTable =
-    document.getElementById("salesAnalysisReportTable");
+const containerSalesAnalysisReportTable = document.getElementById(
+    "salesAnalysisReportTable"
+);
 
 if (containerSalesAnalysisReportTable) {
     ReactDOM.createRoot(containerSalesAnalysisReportTable).render(
@@ -164,4 +168,3 @@ if (containerSalesAnalysisReportTable) {
         </React.StrictMode>
     );
 }
-

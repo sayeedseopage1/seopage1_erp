@@ -36,15 +36,10 @@ import { addNewRulesValidation } from "../helper/createFromValidation";
 import "../components/Styles/SalesRiskAnalysis.css";
 
 const SalesRiskAnalysis = () => {
-    const dispatch = useDispatch();
-    const { departments, countries } = useSelector(
-        (state) => state.filterOptions
-    );
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
         pageSize: 10,
     });
-    const [dept, setDept] = React.useState(null);
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
     
 
@@ -105,19 +100,6 @@ const SalesRiskAnalysis = () => {
         );
     // sales risk analysis rules data
     const salesRiskAnalysisRules = data?.data;
-
-    // fetch filter options
-    const { data: filterOptions, isFetching: isFilterOptionsFetching } =
-        useGetAllFilterOptionQuery("", {
-            refetchOnMountOrArgChange: true,
-            skip: departments?.length,
-        });
-
-    const { data: salesRiskInputs, isFetching: isSalesRiskInputsFetching } =
-        useGetSalesRiskAnalysisInputsQuery("", {
-            refetchOnMountOrArgChange: true,
-            skip: countries?.length,
-        });
 
 
 
@@ -258,6 +240,7 @@ const SalesRiskAnalysis = () => {
         resetFormState();
     };
 
+
     
     // handle add new policy  with rules data to the server
     const handlePolicyAdded = async () => {
@@ -321,19 +304,6 @@ const SalesRiskAnalysis = () => {
         }
     };
 
-    // set filter options state
-    React.useEffect(() => {
-        if (filterOptions && !isFilterOptionsFetching) {
-            setDept(filterOptions?.department);
-            dispatch(setFilterOptionsState(filterOptions));
-        }
-    }, [filterOptions, isFilterOptionsFetching]);
-
-    React.useEffect(() => {
-        if (salesRiskInputs && !isSalesRiskInputsFetching) {
-            dispatch(setFilterCountriesState(salesRiskInputs));
-        }
-    }, [salesRiskInputs, isSalesRiskInputsFetching]);
 
 
 
@@ -440,10 +410,8 @@ const SalesRiskAnalysis = () => {
 
                 {/* Add new Policy Modal */}
                 <AddNewPolicyModal
-                    departments={dept}
-                    countries={countries}
-                    handleChange={handleChange}
                     open={addNewPolicyModalOpen}
+                    handleChange={handleChange}
                     newPolicyData={newPolicyData}
                     isRuleUpdating={isRuleUpdating}
                     setNewPolicyData={setNewPolicyData}

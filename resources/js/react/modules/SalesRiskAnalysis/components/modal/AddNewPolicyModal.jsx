@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 // ui components
 import CustomModal from "../ui/CustomModal/CustomModal";
 import {
@@ -22,10 +23,10 @@ import NewRulesModalTable from "../table/NewRulesModalTable";
 import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumns";
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
+
 const AddNewPolicyModal = ({
     open,
     closeModal,
-    departments,
     newPolicyData,
     handleChange,
     handleMultiSelectChange,
@@ -40,6 +41,9 @@ const AddNewPolicyModal = ({
     setNewPolicyInputData,
     handleCancelRuleOnPolicy,
 }) => {
+    const { departments } = useSelector(
+        (state) => state.filterOptions
+    );
     let allSelectedCountries = [];
 
     newPolicyInputData.forEach((item) => {
@@ -222,7 +226,6 @@ export default AddNewPolicyModal;
 AddNewPolicyModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
-    departments: PropTypes.array,
     newPolicyData: PropTypes.object,
     handleChange: PropTypes.func,
     handleMultiSelectChange: PropTypes.func,
