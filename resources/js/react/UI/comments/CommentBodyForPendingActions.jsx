@@ -724,31 +724,44 @@ const CommentBodyForPendingActions = ({
                                 }
 
                                 Swal.fire({
-                                    icon: "warning",
+                                    icon: "question",
                                     title: "Would you like to add any more comments?",
-                                    text: "If you click on Yes, you can add more comments. If you click on No, this pending action will move to the past.",
+                                    html: `
+    <p style="margin-top: 5px; text-align: justify;">If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #007bff; color: white;">Yes</span>, you can add more comments. If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #dc3545; color: white;">No</span>, this pending action will be marked as completed and moved to the past.</p>
+     <p style="margin-top: 10px; text-align: justify;"> If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #17A2B8; color: white;">Back to Pending Action</span>, this comment window will close and you'll return to the pending action page.</p>
+  `,
                                     allowOutsideClick: false,
-
+                                    showCancelButton: true,
+                                    cancelButtonText: "Back to Pending Action",
                                     showConfirmButton: true,
                                     confirmButtonText: "Yes",
                                     showDenyButton: true,
                                     denyButtonText: "No",
                                     customClass: {
                                         confirmButton: "btn btn-primary",
+                                        cancelButton: `${style.customInfoButton}`,
                                     },
-                                }).then((res) => {
-                                    if (!res.isConfirmed) {
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        console.log("You clicked 'Yes'");
+                                    } else if (result.isDenied) {
+                                        console.log("You clicked 'No'");
                                         updatePendingAction({
                                             id: pendingActionId,
                                         })
                                             .unwrap()
                                             .then((res) => {
-                                                close();
                                                 increaseCount();
+                                                close();
                                             })
                                             .catch((err) => {
                                                 console.log(err);
                                             });
+                                    } else {
+                                        console.log(
+                                            "You clicked 'Back to Pending Action'"
+                                        );
+                                        close();
                                     }
                                 });
                             }}
