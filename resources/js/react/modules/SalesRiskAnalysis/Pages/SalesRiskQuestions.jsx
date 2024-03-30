@@ -122,7 +122,7 @@ const SalesRiskQuestions = () => {
             console.log(payload);
 
             const res = await saveSaleRiskQuestionAnswer(payload);
-            if (res.status === 200) {
+            if (res?.data?.status === "success") {
                 setIsSubmitting(false);
                 toast.success("Successfully saved");
             }

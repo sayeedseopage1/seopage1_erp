@@ -4,7 +4,7 @@
         <!-- CONTENT WRAPPER START -->
         <div class="content-wrapper">
             <!-- Task Box Start -->
-            <div class="d-flex flex-column mt-3">
+            <div class="d-flex flex-column">
                 <div id="salePolicyQuestion"></div>
             </div>
             <!-- Task Box End -->

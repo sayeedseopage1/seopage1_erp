@@ -304,6 +304,7 @@ export const SaleRiskAuthorizeHeaderButton = styled.button`
 export const SaleRiskAuthorizeTotalPointContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 20px;
     width: 100%;
     background: ${(props) => props.background || "#fff"};

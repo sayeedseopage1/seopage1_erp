@@ -65,7 +65,6 @@ const AddQuestionsModal = ({
         title: false,
         type: false,
         placeholder: false,
-        ruleList: false,
         isSubmitting: false,
     });
 
@@ -221,10 +220,14 @@ const AddQuestionsModal = ({
             title: singleQuestion?.title,
             type: singleQuestion?.type?.name,
             placeholder: singleQuestion?.placeholder,
-            rule_list: singleQuestion?.ruleList?.map((item) => item?.id),
+            
         };
         if (typeof singleQuestion?.id === "number") {
             payload.id = singleQuestion?.id;
+        }
+
+        if(singleQuestion?.ruleList?.length){
+            payload.ruleList = singleQuestion?.ruleList.map((item) => item.id);
         }
 
         if (singleQuestion?.parent_question?.id) {
@@ -333,7 +336,6 @@ const AddQuestionsModal = ({
             title: false,
             type: false,
             placeholder: false,
-            ruleList: false,
             isSubmitting: false,
         });
     };
@@ -464,7 +466,7 @@ const AddQuestionsModal = ({
                         className="row mb-4 align-items-center"
                     >
                         <ModalInputLabel className="col-4">
-                           Answer Type<sup>*</sup>
+                            Answer Type<sup>*</sup>
                         </ModalInputLabel>
                         <div className="col-8 px-0 flex-column">
                             <ModalSelectContainer>
@@ -487,7 +489,7 @@ const AddQuestionsModal = ({
                         >
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
-                                   Question Title <sup>*</sup>{" "}
+                                    Question Title <sup>*</sup>{" "}
                                 </ModalInputLabel>
                                 <div className="col-8 flex-column px-0">
                                     <ModalInput
@@ -653,7 +655,7 @@ const AddQuestionsModal = ({
                             </Switch.Case>
                             <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
-                                    Rule List<sup>*</sup>
+                                    Rule List
                                 </ModalInputLabel>
                                 <div className="col-8 px-0 flex-column">
                                     <ModalSelectContainer>
@@ -665,11 +667,6 @@ const AddQuestionsModal = ({
                                             setSelected={setSingleQuestion}
                                         />
                                     </ModalSelectContainer>
-                                    {singleQuestionValidation?.ruleList && (
-                                        <p className="text-danger py-1">
-                                            Please select at least one rule
-                                        </p>
-                                    )}
                                 </div>
                             </div>
                             <div className="row mb-4 align-items-center">

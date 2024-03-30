@@ -7,9 +7,11 @@ import {
     getSortedRowModel,
     flexRender,
 } from "@tanstack/react-table";
+
+// table components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import EmptyTable from "../../../../global/EmptyTable";
-import SaleRiskAuthorizeLoader from "../loader/SaleRiskAuthorizeLoader";
+import SalesRiskAuthorizeTableLoader from "../loader/SalesRiskAuthorizeTableLoader";
 
 const SalesRiskAuthorizeTable = ({
     tableColumns,
@@ -23,15 +25,12 @@ const SalesRiskAuthorizeTable = ({
     const [expanded, setExpanded] = React.useState({});
     const [globalFilter, setGlobalFilter] = React.useState("");
     const [skipPageReset, setSkipPageReset] = React.useState(false);
-    const [data, setData] = React.useState(tableData?.data || []);
+    const [data, setData] = React.useState(tableData || []);
     // default columns
     const defaultColumns = React.useMemo(() => [...tableColumns]);
 
     // sales risk analysis rules data
-    const _salesRiskAnalysis = React.useMemo(
-        () => tableData?.data,
-        [tableData?.data]
-    );
+    const _salesRiskAnalysis = React.useMemo(() => tableData, [tableData]);
     React.useEffect(() => {
         if (_.size(_salesRiskAnalysis) === _.size(data)) {
             setSkipPageReset(true);
@@ -73,6 +72,8 @@ const SalesRiskAuthorizeTable = ({
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
     });
+
+    console.log("table", table?.getRowModel()?.rows[0]);
 
     return (
         <div>
@@ -141,7 +142,7 @@ const SalesRiskAuthorizeTable = ({
                             })}
                         {/* Loading Table */}
                         {isLoading && (
-                            <SaleRiskAuthorizeLoader
+                            <SalesRiskAuthorizeTableLoader
                                 prevItemLength={data?.length}
                             />
                         )}

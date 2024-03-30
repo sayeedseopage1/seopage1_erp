@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 // Ui components
 import { SaleRiskAuthorizeHeaderWrapper } from "../ui/Styles/ui";
 import { Placeholder } from "../../../../global/Placeholder";
+import SaleRiskAuthorizeHeaderLoaderForUser from "../loader/SaleRiskAuthorizeHeaderLoaderForUser";
 
 const SaleRiskAuthorizeHeaderForUser = ({ headerData, isLoading }) => {
     return (
@@ -13,68 +14,38 @@ const SaleRiskAuthorizeHeaderForUser = ({ headerData, isLoading }) => {
                 margin: "20px 0",
             }}
         >
-            <SaleRiskAuthorizeHeaderWrapper className="col-12 d-flex flex-column flex-md-row">
-                <div className="col-12 col-md-3 px-0">
-                    <p className="singleline-ellipsis d-flex align-items-center">
-                        Sales Person :{" "}
-                        {isLoading ? (
-                            <Placeholder
-                                height="20px"
-                                width="80px"
-                                className="ml-1"
-                            />
-                        ) : (
+            {isLoading ? (
+                <SaleRiskAuthorizeHeaderLoaderForUser />
+            ) : (
+                <SaleRiskAuthorizeHeaderWrapper className="col-12 d-flex flex-column flex-md-row">
+                    <div className="col-12 col-md-3 px-0">
+                        <p className="singleline-ellipsis d-flex align-items-center">
+                            Sales Person :{" "}
                             <span className="ml-1">{headerData.person}</span>
-                        )}
-                    </p>
-                </div>
-                <div className="col-12 col-md-3 px-0">
-                    <p className="singleline-ellipsis d-flex align-items-center">
-                        {" "}
-                        Authorize By :{" "}
-                        {isLoading ? (
-                            <Placeholder
-                                height="20px"
-                                width="80px"
-                                className="ml-1"
-                            />
-                        ) : (
+                        </p>
+                    </div>
+                    <div className="col-12 col-md-3 px-0">
+                        <p className="singleline-ellipsis d-flex align-items-center">
+                            {" "}
+                            Authorize By :{" "}
                             <span className="ml-1">
                                 {headerData.authorizer}
                             </span>
-                        )}
-                    </p>
-                </div>
-                <div className="col-12 col-md-3 px-0">
-                    <p className="singleline-ellipsis d-flex align-items-center">
-                        {" "}
-                        Deadline:{" "}
-                        {isLoading ? (
-                            <Placeholder
-                                height="20px"
-                                width="80px"
-                                className="ml-1"
-                            />
-                        ) : (
-                            headerData.deadline
-                        )}
-                    </p>
-                </div>
-                <div className="col-12 col-md-3 px-0">
-                    <p className="singleline-ellipsis d-flex align-items-center">
-                        Clients Name :{" "}
-                        {isLoading ? (
-                            <Placeholder
-                                height="20px"
-                                width="80px"
-                                className="ml-1"
-                            />
-                        ) : (
-                            headerData.clients_name
-                        )}
-                    </p>
-                </div>
-            </SaleRiskAuthorizeHeaderWrapper>
+                        </p>
+                    </div>
+                    <div className="col-12 col-md-3 px-0">
+                        <p className="singleline-ellipsis d-flex align-items-center">
+                            {" "}
+                            Deadline: {headerData.deadline}
+                        </p>
+                    </div>
+                    <div className="col-12 col-md-3 px-0">
+                        <p className="singleline-ellipsis d-flex align-items-center">
+                            Clients Name : {headerData.clients_name}
+                        </p>
+                    </div>
+                </SaleRiskAuthorizeHeaderWrapper>
+            )}
         </div>
     );
 };
