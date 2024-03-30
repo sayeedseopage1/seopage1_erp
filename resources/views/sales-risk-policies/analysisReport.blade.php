@@ -10,7 +10,7 @@
     <div class="content-wrapper">
         <!-- Sale Risk Analysis Box Start -->
         <div class="d-flex flex-column">
-            <div id="salePolicyQuestion"></div>
+            <div id="salesAnalysisReportTable"></div>
         </div>
         <!-- Sale Risk Analysis Box End -->
     </div>
