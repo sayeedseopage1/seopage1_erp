@@ -869,7 +869,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     }
 
-    function salesRiskReport($deal_id)
+    function salesRiskReport()
     {
 
     }
