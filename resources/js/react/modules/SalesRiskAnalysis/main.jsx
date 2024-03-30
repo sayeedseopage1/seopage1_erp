@@ -157,7 +157,7 @@ if (containerSalesAnalysisReportTable) {
                         <Routes>
                             <Route path="/" element={<ContentWithDrag />}>
                                 <Route
-                                    path="account/sales-risk-policies/report-list"
+                                    path="/account/sales-analysis-reports"
                                     element={<SalesAnalysisReport />}
                                 />
                             </Route>

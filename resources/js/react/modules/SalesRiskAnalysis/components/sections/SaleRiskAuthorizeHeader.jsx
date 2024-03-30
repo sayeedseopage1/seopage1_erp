@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // Ui components
@@ -56,7 +57,11 @@ const SaleRiskAuthorizeHeader = ({ headerData, isLoading }) => {
             )}
 
             <div className="col-12 ol-md-2 col-lg-2 px-0 pl-md-0 pl-lg-3 pr-md-0">
-                <SaleRiskAuthorizeHeaderButton>
+                <SaleRiskAuthorizeHeaderButton
+                    onClick={() => {
+                        window.location.href = `/account/sales-risk-policies`;
+                    }}
+                >
                     Modify points
                 </SaleRiskAuthorizeHeaderButton>
             </div>
