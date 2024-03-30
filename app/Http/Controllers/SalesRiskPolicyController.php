@@ -871,7 +871,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function salesRiskReport()
     {
-
+        return view('sales-risk-policies.analysisReport', $this->data);
     }
 
 }
