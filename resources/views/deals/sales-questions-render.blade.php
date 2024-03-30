@@ -1,10 +1,5 @@
 @extends('layouts.app')
 
-@section('filter-section')
-    {{-- @include('leads.filters')  --}}
-    <div id="saleAnalysisReportFilterContainer"></div>
-@endsection
-
 @section('content')
         <!-- CONTENT WRAPPER START -->
         <div class="content-wrapper">

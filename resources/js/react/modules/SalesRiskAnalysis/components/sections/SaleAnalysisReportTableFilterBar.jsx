@@ -115,7 +115,7 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                 )}
             </div>
         </React.Fragment>,
-        document.getElementById("saleAnalysisReportFilterContainer")
+        document.getElementById("salesAnalysisReportTableFilter")
     );
 };
 

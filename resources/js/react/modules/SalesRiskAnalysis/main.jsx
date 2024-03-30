@@ -141,27 +141,27 @@ if (containerSalesAnalysisReport) {
 
 // Sales Risk Analysis Report Table
 
-// const containerSalesAnalysisReportTable =
-//     document.getElementById("salePolicyQuestion");
+const containerSalesAnalysisReportTable =
+    document.getElementById("salesAnalysisReportTable");
 
-// if (containerSalesAnalysisReportTable) {
-//     ReactDOM.createRoot(containerSalesAnalysisReportTable).render(
-//         <React.StrictMode>
-//             <Provider store={store}>
-//                 <DndProvider backend={HTML5Backend}>
-//                     <BrowserRouter>
-//                         <Routes>
-//                             <Route path="/" element={<ContentWithDrag />}>
-//                                 <Route
-//                                     path="account/deals/risk-analysis/:deal_id"
-//                                     element={<SalesAnalysisReport />}
-//                                 />
-//                             </Route>
-//                         </Routes>
-//                     </BrowserRouter>
-//                 </DndProvider>
-//             </Provider>
-//         </React.StrictMode>
-//     );
-// }
+if (containerSalesAnalysisReportTable) {
+    ReactDOM.createRoot(containerSalesAnalysisReportTable).render(
+        <React.StrictMode>
+            <Provider store={store}>
+                <DndProvider backend={HTML5Backend}>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<ContentWithDrag />}>
+                                <Route
+                                    path="account/sales-risk-policies/report-list"
+                                    element={<SalesAnalysisReport />}
+                                />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </DndProvider>
+            </Provider>
+        </React.StrictMode>
+    );
+}
 
