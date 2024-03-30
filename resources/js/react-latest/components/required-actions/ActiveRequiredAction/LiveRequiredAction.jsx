@@ -93,7 +93,12 @@ const LiveRequiredAction = () => {
 
     return (
         <div>
-            <FilterBar onFilter={onFilter} change={true} />
+            <FilterBar
+                onFilter={onFilter}
+                change={true}
+                setFilterData={setFilterData}
+                data={data}
+            />
             {(isLoading || isFetching) &&
                 _.fill(Array(perPageItem), "*").map((v, i) => (
                     <RequiredActionCard_Loader key={i} />
