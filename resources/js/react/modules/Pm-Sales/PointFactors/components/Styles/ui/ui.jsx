@@ -202,3 +202,18 @@ export const StyledLabel = styled.label`
     line-height: normal;
     margin-bottom: 0px;
 `;
+
+export const SalesPointsContainer = styled.div`
+    display: flex;
+    align-items: center;
+    p {
+        font-size: 16px;
+        font-family: "Poppins", sans-serif;
+        color: #000000;
+        margin-right: 10px;
+        font-weight: 500;
+    }
+    /* div {
+        cursor: pointer;
+    } */
+`;

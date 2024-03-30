@@ -32,7 +32,8 @@ const PointFactors = () => {
         status: "" //input number (optional)
     });
 
-    console.log(newFactorData)
+    // console.log(newFactorData)
+
     // modal state validation
     const [newPolicyDataValidation, setNewPolicyDataValidation] =
         React.useState({
@@ -59,8 +60,6 @@ const PointFactors = () => {
         );
     // sales risk analysis rules data
     const pmPointFactorsData = data?.data;
-
-    console.log(pmPointFactorsData)
 
     const resetFormState = () => {
         setNewFactorData({

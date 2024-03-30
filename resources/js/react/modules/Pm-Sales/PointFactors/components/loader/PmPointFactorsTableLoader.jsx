@@ -12,7 +12,7 @@ export default function PmPointFactorsTableLoader({ prevItemLength = 3, tableCol
                     <Placeholder width="80px" height="13px" className="mb-1" />
                 </td>
                 <td className="sp1_tasks_td">
-                    <div className="d-flex justify-content-center flex-column align-items-center">
+                    <div className="d-flex justify-content-center flex-column align-items-start">
                         <Placeholder width="80px" height="13px" className="my-3" />
                         <Placeholder width="80px" height="13px" className="my-3" />
                         <Placeholder width="80px" height="13px" className="my-3" />

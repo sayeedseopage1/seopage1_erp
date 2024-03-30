@@ -31,7 +31,7 @@ const WithoutDraggableColumnHeader = ({
     const columnJustifyContent = {
         criteria: "start",
         factors: "start",
-        factors_points: "end",
+        points: "end",
         default: "flex-start",
     };
 

@@ -56,7 +56,7 @@ const PointFactorsTable = ({
         pageSize: 10,
     });
 
-    console.log(tableData)
+    // console.log(tableData)
 
     // point factors data
     const _pointFactors = React.useMemo(
