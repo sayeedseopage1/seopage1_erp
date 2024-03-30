@@ -2,6 +2,7 @@ import _ from "lodash";
 import { SalesPointsContainer } from "../Styles/ui/ui";
 import Tooltip from "../Tooltip";
 import EditIcon from "../Styles/ui/EditIcon";
+import Switch from "../../../../../global/Switch";
 
 export const PointFactorsColumns = [
     {
@@ -21,6 +22,20 @@ export const PointFactorsColumns = [
                         className="py-3"
                     >
                         {data?.title}
+                    </span>
+                    <span className="ml-2">
+                        {data?.id === 12 ? (
+                            <>
+                                <Tooltip text={"lorem ipsum dolor sit amet consectetur adipisicing elit consequuntur officiis temporibus"}>
+                                    {" "}
+                                    <i style={{
+                                        fontSize: "15px",
+                                    }} className="fa-solid fa-circle-info "></i>
+                                </Tooltip>
+                            </>
+                        ) : (
+                            ""
+                        )}
                     </span>
                 </div>
             );
@@ -72,7 +87,19 @@ export const PointFactorsColumns = [
                                     className="py-3"
                                 >
                                     <div className="d-flex align-items-center justify-content-end">
-                                        <p>{factor?.points}</p>
+                                        <Switch key={factor?.id}>
+                                            <Switch.Case condition={factor?.point_type === 1}>
+                                                <p className={`${factor?.points < 0 && 'text-danger'}`}>
+                                                    {factor?.points} {factor?.points === 1 ? 'Point' : 'Points'}
+                                                </p>
+                                            </Switch.Case>
+                                            <Switch.Case condition={factor?.point_type === 2}>
+                                                <p className={`${factor?.points < 0 && 'text-danger'}`}>
+                                                    {factor?.points}% of the project budget
+                                                </p>
+                                            </Switch.Case>
+                                        </Switch>
+
                                         <div
                                             onClick={() => {
                                                 action.handleEditFactor(
