@@ -11,6 +11,7 @@ import React from "react";
 import useCounterStore from "../../../../../Zustand/store";
 
 const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
+    const { increaseCount } = useCounterStore();
     const pendingActionId = useSelector(
         (state) => state.pendingActions.pendingActionId
     );
