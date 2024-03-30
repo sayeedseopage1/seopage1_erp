@@ -5,6 +5,7 @@ import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
 import { useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
+import { useEffect } from 'react';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
@@ -32,8 +33,6 @@ const PointFactors = () => {
         status: "" //input number (optional)
     });
 
-    // console.log(newFactorData)
-
     // modal state validation
     const [newPolicyDataValidation, setNewPolicyDataValidation] =
         React.useState({
@@ -60,6 +59,49 @@ const PointFactors = () => {
         );
     // sales risk analysis rules data
     const pmPointFactorsData = data?.data;
+
+
+    // filter by fixed and hourly 
+    const [mainTableData, setMainTableData] = useState(pmPointFactorsData);
+    useEffect(() => {
+        if (tab === "fixed") {
+            const fixedData = pmPointFactorsData?.map(item => {
+                return {
+                    ...item,
+                    factors: item.factors.filter(d => d.project_type === 1)
+                }
+            })
+            setMainTableData(fixedData)
+        }
+        else if (tab === "hourly") {
+            const hourlyData = pmPointFactorsData?.map(item => {
+                return {
+                    ...item,
+                    factors: item.factors.filter(d => d.project_type === 2)
+                }
+            })
+            setMainTableData(hourlyData)
+        } else {
+            setMainTableData(pmPointFactorsData)
+        }
+    }, [pmPointFactorsData, tab])
+
+    // search function
+    useEffect(() => {
+        setMainTableData(
+            pmPointFactorsData?.filter((item) => {
+                // Check if the title in the parent object matches the search
+                const isTitleMatch = item.title.toLowerCase().includes(search.toLowerCase());
+
+                // Check if any title in factors array matches the search
+                const isFactorTitleMatch = item.factors.some(factor =>
+                    factor.title.toLowerCase().includes(search.toLowerCase())
+                );
+
+                return isTitleMatch || isFactorTitleMatch;
+            })
+        );
+    }, [search, pmPointFactorsData]);
 
     const resetFormState = () => {
         setNewFactorData({
@@ -175,13 +217,25 @@ const PointFactors = () => {
 
     // console.log(tab)
 
+    const [mainColumns, setMainColumns] = useState(PointFactorsColumns);
 
-    const tableHeaderFilterByTab = PointFactorsColumns.filter(item => {
+    useEffect(() => {
         if (tab === "hourly") {
-            return item.accessorKey !== 'criteria';
+            const hourlyColumns = PointFactorsColumns.filter(item => item.accessorKey !== 'title');
+            setMainColumns(hourlyColumns);
+        } else {
+            setMainColumns(PointFactorsColumns);
         }
-        return true
-    });
+    }, [tab, PointFactorsColumns])
+
+    console.log("columns", mainColumns)
+
+    // const tableHeaderFilterByTab = PointFactorsColumns.filter(item => {
+    //     if (tab === "hourly") {
+    //         return item.accessorKey !== 'criteria';
+    //     }
+    //     return true
+    // });
 
     // console.log(tableHeaderFilterByTab)
 
@@ -192,10 +246,10 @@ const PointFactors = () => {
                 <div className="sp1_tlr_tbl_container mx-0 py-3">
                     {/* point factor table */}
                     <PointFactorsTable
-                        tableColumns={tableHeaderFilterByTab}
+                        tableColumns={mainColumns}
                         tableName="PointFactorsTable"
                         // tab={tab}
-                        tableData={pmPointFactorsData}
+                        tableData={mainTableData}
                         isLoading={isFetching}
                         refetch={refetch}
                         onPageChange={onPageChange}
