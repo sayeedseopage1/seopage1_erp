@@ -695,7 +695,7 @@ class SalesRiskPolicyController extends AccountBaseController
             'title' => 'required',
             'type' => 'required',
             'policy_id' => 'required',
-            'rule_list' => 'required',
+            'rule_list' => 'nullable',
             'parent_id' => 'nullable',
             'placeholder' => 'nullable'
         ]);
@@ -727,7 +727,7 @@ class SalesRiskPolicyController extends AccountBaseController
             'title' => 'required',
             'type' => 'required',
             'policy_id' => 'required',
-            'rule_list' => 'required',
+            'rule_list' => 'nullable',
             'parent_id' => 'nullable',
             'placeholder' => 'nullable'
         ]);
@@ -804,7 +804,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function salesPolicyQuestionRender(Request $req, $deal_id)
     {
+        $this->pageTitle = 'Sale Risk Analysis';
+
         $req->session()->put('deal_id', $deal_id);
+
+        // self::calculatePolicyPoint($deal_id);
         // Note: big form route : route('dealDetails', $deal->id)
         return view('deals.sales-questions-render', $this->data);
     }
@@ -862,8 +866,69 @@ class SalesRiskPolicyController extends AccountBaseController
         // get all deals questions vaule
         $questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->get();
 
+        // dd($questionValues);
+        // get rules id and calculate point
 
+        $pointData = [];
+        $totalPoints = 0;
 
+        foreach ($questionValues as $item ) {
+
+            $points = 0;
+            $question = SalesPolicyQuestion::find($item->question_id);
+            $ruleList = $question->rule_list;
+
+            if (in_array($question->type, ['list', 'text', 'longText'])) {
+                continue;
+            }
+
+            foreach (json_decode($ruleList) as $ruleId) {
+                // dd($ruleId);
+                $rule = SalesRiskPolicy::find($ruleId);
+                // dd($rule);
+                switch ($rule->type) {
+                    case 'greaterThan':
+
+                        if ($item->value > $rule->value && $points < $rule->points) {
+                            $points = $rule->points;
+                        }
+                        break;
+                    case 'lessThan':
+                        if ($item->value < $rule->value && $points < $rule->points) {
+                            $points = $rule->points;
+                        }
+                        break;
+                    case 'fixed':
+                        if ($item->value == $rule->value && $points < $rule->points) {
+                            $points = $rule->points;
+                        }
+                        break;
+                    case 'range':
+                        $range = explode(',', $rule->value);
+                        if ($item->value > $range[0] &&  $item->value < $range[1]  && $points < $rule->points) {
+                            $points = $rule->points;
+                        }
+                        break;
+                    case 'yesNo':
+                        if ($item->value == 'yes') {
+                            $points = json_decode($rule->value)->yes->point;
+                        }
+                        else {
+                            $points = json_decode($rule->value)->no->point;
+                        }
+                        break;
+                    case 'list':
+                        # code...
+                        break;
+                }
+            }
+            // print_r($points);
+            $pointData[$question->id] = $points;
+
+            $totalPoints += $points;
+        }
+
+        dd($totalPoints,$pointData);
     }
 
     function questionValueReport($deal_id)
