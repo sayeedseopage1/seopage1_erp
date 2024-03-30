@@ -862,6 +862,8 @@ class SalesRiskPolicyController extends AccountBaseController
         // get all deals questions vaule
         $questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->get();
 
+
+
     }
 
     function questionValueReport($deal_id)
@@ -871,6 +873,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function salesRiskReport()
     {
+        $this->pageTitle = 'Sales Analysis Reports';
         return view('sales-risk-policies.analysisReport', $this->data);
     }
 
