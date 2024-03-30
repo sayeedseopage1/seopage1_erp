@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('sequence')->default('1');
             $table->bigInteger('policy_id')->unsigned();
             $table->string('placeholder')->nullable();
-            $table->tinyText('rule_list');
+            $table->tinyText('rule_list')->nullable();
             $table->timestamps();
 
             $table->foreign('policy_id')->references('id')->on('sales_risk_policies')->onUpdate('no action')->onDelete('no action');
