@@ -44,7 +44,7 @@ return new class extends Migration
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
                 'upper_limit_condition' => '=>',
-                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Deal::class', 'field' => 'released_at'], ['model' => 'App\Models\ContractSign::class', 'field' => 'created_at']]),
+                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Deal', 'field' => 'released_at'], ['model' => 'App\Models\ContractSign', 'field' => 'created_at']]),
                 'point_type' => 1,
                 'points' => 5,
                 'point_depend_on_model' => null,
@@ -60,7 +60,7 @@ return new class extends Migration
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
                 'upper_limit_condition' => '=>',
-                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task::class', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog::class', 'field' => 'total_hours']]),
+                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog', 'field' => 'total_hours']]),
                 'point_type' => 1,
                 'points' => 5,
                 'point_depend_on_model' => null,
@@ -76,7 +76,7 @@ return new class extends Migration
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
                 'upper_limit_condition' => '=>',
-                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task::class', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog::class', 'field' => 'total_hours']]),
+                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog', 'field' => 'total_hours']]),
                 'point_type' => 1,
                 'points' => 4,
                 'point_depend_on_model' => null,
@@ -92,7 +92,7 @@ return new class extends Migration
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
                 'upper_limit_condition' => '=>',
-                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task::class', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog::class', 'field' => 'total_hours']]),
+                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog', 'field' => 'total_hours']]),
                 'point_type' => 1,
                 'points' => 3,
                 'point_depend_on_model' => null,
@@ -108,7 +108,7 @@ return new class extends Migration
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
                 'upper_limit_condition' => '=>',
-                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task::class', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog::class', 'field' => 'total_hours']]),
+                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog', 'field' => 'total_hours']]),
                 'point_type' => 1,
                 'points' => 2,
                 'point_depend_on_model' => null,
@@ -124,7 +124,7 @@ return new class extends Migration
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
                 'upper_limit_condition' => '=>',
-                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task::class', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog::class', 'field' => 'total_hours']]),
+                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog', 'field' => 'total_hours']]),
                 'point_type' => 1,
                 'points' => 1,
                 'point_depend_on_model' => null,
@@ -140,7 +140,7 @@ return new class extends Migration
                 'limit_unit' => 1,
                 'lower_limit_condition' => '>',
                 'upper_limit_condition' => '=<',
-                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task::class', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog::class', 'field' => 'total_hours']]),
+                'limit_depend_on_models_and_fields' => json_encode([['model' => 'App\Models\Task', 'field' => 'estimate_hours'], ['model' => 'App\Models\ProjectTimeLog', 'field' => 'total_hours']]),
                 'point_type' => 1,
                 'points' => -5,
                 'point_depend_on_model' => null,
@@ -159,7 +159,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 5,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -175,7 +175,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 4,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -191,7 +191,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 3,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -207,7 +207,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 2.5,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -223,7 +223,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 2,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -239,7 +239,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 0,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -255,7 +255,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => -5,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -287,7 +287,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 1,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -303,7 +303,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 1,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [
@@ -319,7 +319,7 @@ return new class extends Migration
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 1,
-                'point_depend_on_model' => 'App\Models\Project::class',
+                'point_depend_on_model' => 'App\Models\Project',
                 'point_depend_on_field' => 'project_budget'
             ],
             [

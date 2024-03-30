@@ -27,8 +27,18 @@ class Factor extends Model
         'status'
     ];
 
+    // protected $appends = ['calculated_points'];
+
     public function criteria()
     {
         return $this->hasOne(Criteria::class, 'id', 'criteria_id');
+    }
+
+    public function getCalculatedPoints($itemId)
+    {
+        $modelClass = $this->point_depend_on_model;
+        $field_name = $this->point_depend_on_field;
+        return $modelClass::find($itemId)->$field_name;
+
     }
 }
