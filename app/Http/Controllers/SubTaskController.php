@@ -17,6 +17,7 @@ use App\Helper\Files;
 use App\Models\TaskFile;
 use Validator;
 use App\Models\AuthorizationAction;
+use App\Models\EmployeeEvaluation;
 use App\Notifications\PrimaryPageNotification;
 use Illuminate\Support\Facades\Storage;
 use Notification;
@@ -57,7 +58,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-       //  DB::beginTransaction();
+        // DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
 
@@ -423,6 +424,17 @@ class SubTaskController extends AccountBaseController
         $helper->NewTaskAssign($task_s);
         // $actions = PendingAction::where('serial','NTTAx'.$request->user_id)->where('past_status',0)->get();
         // dd($actions);
+
+
+        /**EMPLOYEE EVALUATION START */
+
+        // $evaluation = EmployeeEvaluation::where('user_id',$subTask->assigned_to)->first();
+        // if($evaluation != null)
+        // {
+        //     $evaluation->first_task_assigned_on = $subTask->created_at;
+        //     $evaluation->save();
+        // }
+        /**EMPLOYEE EVALUATION END */
 
         $task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);

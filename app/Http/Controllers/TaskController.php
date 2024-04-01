@@ -929,48 +929,40 @@ class TaskController extends AccountBaseController
         $user = User::where('id', $task->added_by)->first();
         $sender = User::where('id', $request->user_id)->first();
         // need pending action
+        if($task_id->project_id != null){
         $helper = new HelperPendingActionController();
 
 
         $helper->TaskApproveAction($task_id,$sender);
+        }
 
         //need pending action
 
         /**EMPLOYEE EVALUATION START */
-        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
-        $total_hours = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_hours')->first();
-        $total_minutes = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_minutes')->first();
-        $task_revision_count = TaskRevision::where('task_id',$taskFind->id)->count();
-        if($taskFind != null){
-            $evaluation = EmployeeEvaluation::where('task_id',$taskFind->id)->first();
-            if($evaluation !=null)
-            {
-                $evaluation->task_id = $taskFind->id; //SubTask id Not Task id
-                $evaluation->task_name = $taskFind->heading;
-                $evaluation->task_name = $taskFind->heading;
-                $evaluation->assign_date = $taskFind->created_at;
-                $evaluation->submission_date = $task_submit->created_at;
-                $evaluation->total_hours = $total_hours;
-                $evaluation->total_minutes = $total_minutes;
-                $evaluation->completed_work = json_encode($request->link);
-                $evaluation->revision_number = $task_revision_count;
-                $evaluation->status = 1;
-                $evaluation->save();
-            }else{
-                $employee_evaluation = new EmployeeEvaluation();
-                $employee_evaluation->task_id = $taskFind->id; //SubTask id Not Task id
-                $employee_evaluation->task_name = $taskFind->heading;
-                $employee_evaluation->task_name = $taskFind->heading;
-                $employee_evaluation->assign_date = $taskFind->created_at;
-                $employee_evaluation->submission_date = $task_submit->created_at;
-                $employee_evaluation->total_hours = $total_hours;
-                $employee_evaluation->total_minutes = $total_minutes;
-                $employee_evaluation->completed_work = json_encode($request->link);
-                $employee_evaluation->revision_number = $task_revision_count;
-                $employee_evaluation->status = 1;
-                $employee_evaluation->save();
-            }
-        }
+        // $user_evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
+        // if($user_evaluation !=null)
+        // {
+        //     $user_evaluation->started_working_on = $task_submit->created_at;
+        //     $user_evaluation->save();
+        // }
+
+        // $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        // $total_hours = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_hours')->first();
+        // $total_minutes = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_minutes')->first();
+        // $task_revision_count = TaskRevision::where('task_id',$taskFind->id)->count();
+        // if($taskFind != null){
+        //     $evaluation = EmployeeEvaluation::where('task_id',$taskFind->id)->first();
+        //     if($evaluation !=null)
+        //     {
+        //         $evaluation->submission_date = $task_submit->created_at;
+        //         $evaluation->total_hours = $total_hours;
+        //         $evaluation->total_minutes = $total_minutes;
+        //         $evaluation->completed_work = json_encode($request->link);
+        //         $evaluation->revision_number = $task_revision_count;
+        //         $evaluation->status = 1;
+        //         $evaluation->save();
+        //     }
+        // }
         /**EMPLOYEE EVALUATION END */
 
         $text = Auth::user()->name . ' mark task complete';

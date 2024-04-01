@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmployeeEvaluation;
+use App\Models\ProjectTimeLog;
+use App\Models\SubTask;
 use App\Models\Task;
+use App\Models\TaskRevision;
+use App\Models\TaskSubmission;
+use App\Models\TaskUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -91,33 +97,31 @@ class EvaluationController extends AccountBaseController
     {
         //
     }
-    public function getAllEvaluation()
-    {                                                  
-        $data = Task::select(
-                'tasks.*',
-                'users.name as employee_name',
-                'users.created_at as joining_date',
-                'tasks.created_at as first_task_assigned',
-                'project_time_logs.start_time as started_working_on',
-                DB::raw('COUNT(task_users.user_id) as total_task_assigned'),
-                DB::raw('COUNT(task_submissions.user_id) as total_task_submitted'),
-                DB::raw('SUM(project_time_logs.total_hours) as total_task_hours'),
-                DB::raw('SUM(project_time_logs.total_minutes) as total_task_minutes'),
-                DB::raw('COUNT(task_revisions.task_id) as total_task_revision')
-            )
-            ->leftJoin('task_users', 'tasks.id', '=', 'task_users.task_id')
-            ->leftJoin('users', 'task_users.user_id', '=', 'users.id')
-            ->leftJoin('project_time_logs', 'tasks.id', '=', 'project_time_logs.task_id')
-            ->leftJoin('task_submissions', 'users.id', '=', 'task_submissions.user_id')
-            ->leftJoin('task_revisions', 'tasks.id', '=', 'task_revisions.task_id')
-            ->where('users.role_id', 14) 
-            ->whereNull('tasks.u_id') 
-            ->where('tasks.independent_task_status', 1) 
-            ->groupBy('tasks.id') 
-            ->get();
+    public function getAllEvaluation(Request $request)
+    {
+        $employeeEvaluations = EmployeeEvaluation::select('employee_evaluations.*')
+                    ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
+                    ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
+                    ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
+                    ->selectRaw('COUNT(DISTINCT task_submissions.id) as total_task_submit')
 
+                    ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
+                    ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
+                    ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
+                    ->leftJoin('task_submissions', 'employee_evaluations.user_id', '=', 'task_submissions.user_id')
+                    ->whereNotNull('task_submissions.link')
+                    ->groupBy('employee_evaluations.id')
+                    ->get();
+
+                    foreach($employeeEvaluations as $data){
+                        $total_hours = ProjectTimeLog::where('user_id', $data->user_id)->sum('total_hours');
+                        $total_min = ProjectTimeLog::where('user_id', $data->user_id)->sum('total_minutes');
+                        $data->total_hours = $total_hours;
+                        $data->total_minutes = $total_min;
+                    }
+            
         return response()->json([
-            'data' => $data,
+            'data' => $employeeEvaluations,
             'status' => 200
         ]);
     }
