@@ -210,7 +210,6 @@ const PointFactors = () => {
                 point_depend_on_field: parseFloat(newFactorData?.pointDependOnField) ?? null,
                 status: parseFloat(newFactorData?.status) ?? null,
             }
-
             const response = await createPmPointFactor(payload);
             if (response?.data) {
                 toast.success("New item added successfully");
