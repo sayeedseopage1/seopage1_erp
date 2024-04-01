@@ -326,7 +326,7 @@ const formatSingleQuestions = (item) => {
     placeholder: item?.placeholder,
     parent_question: _.isEmpty(parentQuestion) ? null : helperSingleQuestions(parentQuestion),
     parent_question_for:
-      parentQuestion?.type === "yesNo" ? item?.value : "",
+      parentQuestion?.type === "yesNo" ? item?.value : parentQuestion?.type === "list" ? item?.value : "",
     parent_id: item?.parent_id,
     ruleList: item?.rule_list,
     comment: item?.comment,

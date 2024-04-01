@@ -4,8 +4,12 @@ import { useSelector } from "react-redux";
 
 // ui components
 import CustomModal from "../ui/CustomModal/CustomModal";
-import { ModalButton, ModalSelectContainer, ModalTitle } from "../ui/Styles/ui";
 import MultiSelect from "../MultiSelect";
+
+// local styled components
+import { ModalButton, ModalSelectContainer, ModalTitle } from "../ui/Styles/ui";
+
+// global styled components
 import { Flex } from "../../../../global/styled-component/Flex";
 
 const EditCountryListModal = ({

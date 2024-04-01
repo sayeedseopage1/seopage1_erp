@@ -48,16 +48,18 @@ export const QuestionsModalTableColumns = [
                         width: "fit-content",
                     }}
                 >
-                    {data.ruleList.map((item, index) => (
-                        <span
-                            className={`${style?.ruleItem} ${
-                                index !== 0 ? "ml-1" : ""
-                            } mb-1`}
-                            key={item.id}
-                        >
-                            {item?.title}
-                        </span>
-                    ))}
+                    {data?.ruleList?.length > 0
+                        ? data?.ruleList?.map((item, index) => (
+                              <span
+                                  className={`${style?.ruleItem} ${
+                                      index !== 0 ? "ml-1" : ""
+                                  } mb-1`}
+                                  key={item.id}
+                              >
+                                  {item?.title}
+                              </span>
+                          ))
+                        : "No Rules"}
                 </div>
             );
         },
@@ -110,12 +112,14 @@ export const QuestionsModalTableColumns = [
                                             className={`${popoverStyle.questionModal_popover_panel}`}
                                         >
                                             <ol className="d-flex flex-column justify-content-start align-items-start">
-                                                {data?.listItem?.map((item, index) => (
-                                                    <li
-                                                      key={item.id}>
-                                                        {index + 1}. {item?.title}
-                                                    </li>
-                                                ))}
+                                                {data?.listItem?.map(
+                                                    (item, index) => (
+                                                        <li key={item.id}>
+                                                            {index + 1}.{" "}
+                                                            {item?.title}
+                                                        </li>
+                                                    )
+                                                )}
                                             </ol>
                                         </div>
                                     </Popover.Panel>

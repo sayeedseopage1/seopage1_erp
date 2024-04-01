@@ -12,14 +12,18 @@ const SaleRiskQuestionsInputContainer = ({
     questions,
     isChild = false,
     inputsData,
-    setInputsData,
     isSubmitting,
     allQuestions,
     focusedQuestion,
-    handleQuestionFocus,
-    getItsFocused,
-    handleListYesNoQuestion
+    inputContainerActions,
 }) => {
+    const {
+        setInputsData,
+        handleQuestionFocus,
+        getItsFocused,
+        handleListYesNoQuestion,
+    } = inputContainerActions;
+
     const [yesNoValue, setYesNoValue] = useState(null);
     const [listItem, setListItem] = useState(null);
 
@@ -86,15 +90,15 @@ const SaleRiskQuestionsInputContainer = ({
                                         questions={question.questions}
                                         isChild={true}
                                         inputsData={inputsData}
-                                        setInputsData={setInputsData}
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
-                                        handleQuestionFocus={
-                                            handleQuestionFocus
-                                        }
                                         focusedQuestion={focusedQuestion}
-                                        getItsFocused={getItsFocused}
-                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                        inputContainerActions={{
+                                            getItsFocused,
+                                            handleQuestionFocus,
+                                            setInputsData,
+                                            handleListYesNoQuestion,
+                                        }}
                                     />
                                 </Switch.Case>
                             </Switch.Case>
@@ -107,7 +111,11 @@ const SaleRiskQuestionsInputContainer = ({
                                     comment={question.comment}
                                     onChange={(value) => {
                                         setYesNoValue(value);
-                                        handleListYesNoQuestion(question, value, "yesNo");
+                                        handleListYesNoQuestion(
+                                            question,
+                                            value,
+                                            "yesNo"
+                                        );
                                     }}
                                     isSubmitting={isSubmitting}
                                     value={getInputValue(question.id)}
@@ -122,16 +130,16 @@ const SaleRiskQuestionsInputContainer = ({
                                             (item) => item?.value === yesNoValue
                                         )}
                                         inputsData={inputsData}
-                                        setInputsData={setInputsData}
                                         isChild={true}
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
-                                        handleQuestionFocus={
-                                            handleQuestionFocus
-                                        }
                                         focusedQuestion={focusedQuestion}
-                                        getItsFocused={getItsFocused}
-                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                        inputContainerActions={{
+                                            getItsFocused,
+                                            handleQuestionFocus,
+                                            setInputsData,
+                                            handleListYesNoQuestion,
+                                        }}
                                     />
                                 </Switch.Case>
                             </Switch.Case>
@@ -152,7 +160,7 @@ const SaleRiskQuestionsInputContainer = ({
                                         handleQuestionFocus(question);
                                     }}
                                     onChange={(e) => {
-                                                         setInputsData((prev) => {
+                                        setInputsData((prev) => {
                                             return prev?.map((item) => {
                                                 if (item.id === question.id) {
                                                     return {
@@ -176,15 +184,15 @@ const SaleRiskQuestionsInputContainer = ({
                                         questions={question.questions}
                                         isChild={true}
                                         inputsData={inputsData}
-                                        setInputsData={setInputsData}
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
-                                        handleQuestionFocus={
-                                            handleQuestionFocus
-                                        }
                                         focusedQuestion={focusedQuestion}
-                                        getItsFocused={getItsFocused}
-                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                        inputContainerActions={{
+                                            getItsFocused,
+                                            handleQuestionFocus,
+                                            setInputsData,
+                                            handleListYesNoQuestion,
+                                        }}
                                     />
                                 </Switch.Case>
                             </Switch.Case>
@@ -200,7 +208,11 @@ const SaleRiskQuestionsInputContainer = ({
                                     placeholder={question?.placeholder}
                                     onChange={(value) => {
                                         setListItem(value);
-                                        handleListYesNoQuestion(question, value, "list");
+                                        handleListYesNoQuestion(
+                                            question,
+                                            value,
+                                            "list"
+                                        );
                                     }}
                                     isSubmitting={isSubmitting}
                                     value={getInputValue(question.id)}
@@ -219,15 +231,15 @@ const SaleRiskQuestionsInputContainer = ({
                                         )}
                                         isChild={true}
                                         inputsData={inputsData}
-                                        setInputsData={setInputsData}
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
-                                        handleQuestionFocus={
-                                            handleQuestionFocus
-                                        }
                                         focusedQuestion={focusedQuestion}
-                                        getItsFocused={getItsFocused}
-                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                        inputContainerActions={{
+                                            getItsFocused,
+                                            handleQuestionFocus,
+                                            setInputsData,
+                                            handleListYesNoQuestion,
+                                        }}
                                     />
                                 </Switch.Case>
                             </Switch.Case>
@@ -272,15 +284,15 @@ const SaleRiskQuestionsInputContainer = ({
                                         questions={question.questions}
                                         isChild={true}
                                         inputsData={inputsData}
-                                        setInputsData={setInputsData}
                                         isSubmitting={isSubmitting}
                                         allQuestions={allQuestions}
-                                        handleQuestionFocus={
-                                            handleQuestionFocus
-                                        }
                                         focusedQuestion={focusedQuestion}
-                                        getItsFocused={getItsFocused}
-                                        handleListYesNoQuestion={handleListYesNoQuestion}
+                                        inputContainerActions={{
+                                            getItsFocused,
+                                            handleQuestionFocus,
+                                            setInputsData,
+                                            handleListYesNoQuestion,
+                                        }}
                                     />
                                 </Switch.Case>
                             </Switch.Case>

@@ -8,7 +8,13 @@ import SearchBox from "./SearchBox";
 // styles
 import style from "./multiSelect.module.css";
 
-const RuleMultiSelect = ({ data, selected, setSelected, singleQuestion,filedName }) => {
+const RuleMultiSelect = ({
+    data,
+    selected,
+    setSelected,
+    singleQuestion,
+    filedName,
+}) => {
     const [search, setSearch] = React.useState("");
     let _Options = [];
 
@@ -30,10 +36,18 @@ const RuleMultiSelect = ({ data, selected, setSelected, singleQuestion,filedName
                 ),
             });
         } else {
-            setSelected({
-                ...singleQuestion,
-                [filedName]: [...singleQuestion?.ruleList, option],
-            });
+            
+            if (singleQuestion?.ruleList?.length) {
+                setSelected({
+                    ...singleQuestion,
+                    [filedName]: [...singleQuestion?.ruleList, option],
+                });
+            } else {
+                setSelected({
+                    ...singleQuestion,
+                    [filedName]: [option],
+                });
+            }
         }
     };
 
@@ -122,6 +136,3 @@ const RuleMultiSelect = ({ data, selected, setSelected, singleQuestion,filedName
 };
 
 export default RuleMultiSelect;
-
-
-

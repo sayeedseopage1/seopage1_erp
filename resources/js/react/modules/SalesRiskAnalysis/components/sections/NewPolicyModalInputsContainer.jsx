@@ -41,6 +41,43 @@ const NewPolicyModalInputsContainer = ({
             ? PolicyTypeItemValuesType?.data?.listTypes
             : PolicyTypeItemValuesType?.data?.regularTypes;
 
+    const handleOnkeypress = (e) => {
+        const { key, target } = e;
+        let { value } = target;
+
+        // Allow backspace
+        if (key === "Backspace") {
+            return true;
+        }
+
+        // Define regular expressions
+        const digitRegex = /[0-9]/;
+        const minusRegex = /-/;
+        const decimalRegex = /\./;
+
+        if (
+            !(
+                digitRegex.test(key) ||
+                minusRegex.test(key) ||
+                decimalRegex.test(key)
+            )
+        ) {
+            e.preventDefault();
+            return false;
+        }
+
+        if (key === "-" && value.length > 0) {
+            e.preventDefault();
+            return false;
+        }
+
+        if (key === "." && value.includes(".")) {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    };
+
     return (
         <React.Fragment>
             <Switch>
@@ -137,6 +174,7 @@ const NewPolicyModalInputsContainer = ({
                                             <ModalInput
                                                 type="number"
                                                 name="value"
+                                                onKeyPress={handleOnkeypress}
                                                 value={newPolicyData?.value}
                                                 onChange={handleChange}
                                                 placeholder="Write Here"
@@ -155,10 +193,13 @@ const NewPolicyModalInputsContainer = ({
                                         }
                                     >
                                         <div className="d-flex flex-column col-5 px-0">
-                                            <div className="d-flex col-12 px-0" style={{
-                                                height: "70px",
-                                                maxHeight: "70px",
-                                            }}>
+                                            <div
+                                                className="d-flex col-12 px-0"
+                                                style={{
+                                                    height: "70px",
+                                                    maxHeight: "70px",
+                                                }}
+                                            >
                                                 <div className="col-6 flex-column pl-1 px-0">
                                                     <ModalInputLabel
                                                         fontSize="16px"
@@ -170,6 +211,9 @@ const NewPolicyModalInputsContainer = ({
                                                     <ModalInput
                                                         type="number"
                                                         name="from"
+                                                        onKeyPress={
+                                                            handleOnkeypress
+                                                        }
                                                         value={
                                                             newPolicyData?.from
                                                         }
@@ -189,6 +233,9 @@ const NewPolicyModalInputsContainer = ({
                                                     <ModalInput
                                                         type="number"
                                                         name="to"
+                                                        onKeyPress={
+                                                            handleOnkeypress
+                                                        }
                                                         value={
                                                             newPolicyData?.to
                                                         }
@@ -200,23 +247,23 @@ const NewPolicyModalInputsContainer = ({
                                             </div>
                                             {(newPolicyDataValidation?.from ||
                                                 newPolicyDataValidation?.to) && (
-                                                    <p className="text-danger py-2">
-                                                        {`${
-                                                            newPolicyDataValidation?.from
-                                                                ? "From"
-                                                                : ""
-                                                        } ${
-                                                            newPolicyDataValidation?.from &&
-                                                            newPolicyDataValidation?.to
-                                                                ? " and "
-                                                                : ""
-                                                        } ${
-                                                            newPolicyDataValidation?.to
-                                                                ? "To"
-                                                                : ""
-                                                        } are required`}
-                                                    </p>
-                                                )}
+                                                <p className="text-danger py-2">
+                                                    {`${
+                                                        newPolicyDataValidation?.from
+                                                            ? "From"
+                                                            : ""
+                                                    } ${
+                                                        newPolicyDataValidation?.from &&
+                                                        newPolicyDataValidation?.to
+                                                            ? " and "
+                                                            : ""
+                                                    } ${
+                                                        newPolicyDataValidation?.to
+                                                            ? "To"
+                                                            : ""
+                                                    } are required`}
+                                                </p>
+                                            )}
                                         </div>
                                     </Switch.Case>
                                 </Switch>
@@ -249,6 +296,7 @@ const NewPolicyModalInputsContainer = ({
                                             name="yes"
                                             value={newPolicyData?.yes}
                                             onChange={handleChange}
+                                            onKeyPress={handleOnkeypress}
                                             placeholder="Write Here"
                                             className="w-100"
                                         />
@@ -295,6 +343,7 @@ const NewPolicyModalInputsContainer = ({
                                             name="no"
                                             value={newPolicyData?.no}
                                             onChange={handleChange}
+                                            onKeyPress={handleOnkeypress}
                                             placeholder="Write Here"
                                             className="w-100"
                                         />
@@ -412,6 +461,7 @@ const NewPolicyModalInputsContainer = ({
                                 name="points"
                                 className="w-100"
                                 value={newPolicyData?.points}
+                                onKeyPress={handleOnkeypress}
                                 onChange={handleChange}
                                 placeholder="Write Here"
                             />

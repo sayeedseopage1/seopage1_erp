@@ -1,8 +1,19 @@
-import React, { useEffect, useRef, useState } from "react";
+import _ from "lodash";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
+import React, { useEffect, useRef, useState } from "react";
 
 // ui components
+import Switch from "../Switch";
+import CustomDropDown from "../CustomDropDown";
+import QuestionsSelect from "../QuestionsSelect";
+import RuleMultiSelect from "../RuleMultiSelect";
 import CustomModal from "../ui/CustomModal/CustomModal";
+
+// sections components
+import AddQuestionTypeListInputs from "../sections/AddQuestionTypeListInputs";
+
+// local styled components
 import {
     ModalButton,
     ModalInput,
@@ -10,33 +21,34 @@ import {
     ModalInputLabel,
     ModalSelectContainer,
 } from "../ui/Styles/ui";
-import CustomDropDown from "../CustomDropDown";
-import DepartmentSelect from "../DepartmentSelect";
+
+// global styled components
+import { Flex } from "../../../../global/styled-component/Flex";
 
 // Constants
 import { QuestionsTypes } from "../../constant";
-import { Flex } from "../../../../global/styled-component/Flex";
-import QuestionsSelect from "../QuestionsSelect";
-import Switch from "../Switch";
-import _ from "lodash";
+
+
+// api services
 import {
     useEditQuestionSalesRiskAnalysisMutation,
     useGetSinglePolicySalesRiskAnalysisQuery,
     usePolicyQuestionsListByPolicyIdQuery,
     useQuestionAddonPolicyMutation,
-    useQuestionInputFieldsQuery,
     useSinglePolicyQuestionsQuery,
 } from "../../../../services/api/salesRiskAnalysisSlice";
+
+// helper functions
 import { getValidFields } from "../../helper/createFromValidation";
-import RuleMultiSelect from "../RuleMultiSelect";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
-import QuestionsModalTable from "../table/QuestionsModalTable";
-import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
-import { toast } from "react-toastify";
 import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
 import { formatQuestionData } from "../../helper/formatEditPolicyData";
-import { number } from "zod";
-import AddQuestionTypeListInputs from "../sections/AddQuestionTypeListInputs";
+
+// table components
+import QuestionsModalTable from "../table/QuestionsModalTable";
+import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
+
+
 
 const AddQuestionsModal = ({
     open,
@@ -220,13 +232,12 @@ const AddQuestionsModal = ({
             title: singleQuestion?.title,
             type: singleQuestion?.type?.name,
             placeholder: singleQuestion?.placeholder,
-            
         };
         if (typeof singleQuestion?.id === "number") {
             payload.id = singleQuestion?.id;
         }
 
-        if(singleQuestion?.ruleList?.length){
+        if (singleQuestion?.ruleList?.length) {
             payload.ruleList = singleQuestion?.ruleList.map((item) => item.id);
         }
 
