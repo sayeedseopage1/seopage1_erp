@@ -4,7 +4,7 @@ import { Placeholder } from "../../../../../global/Placeholder";
 
 
 export default function PmPointFactorsTableLoader({ prevItemLength = 3, tableCol }) {
-    const updateItemLength = prevItemLength === 0 ? 5 : prevItemLength;
+    const updateItemLength = prevItemLength === 0 ? 3 : prevItemLength;
     return (
         _.times(updateItemLength, item => (
             <tr key={item} className="sp1_tasks_tr" >

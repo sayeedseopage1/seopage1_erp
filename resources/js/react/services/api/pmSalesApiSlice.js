@@ -19,6 +19,14 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
         getFactorsFieldsByCriteria: build.query({
             query: (id) => `/account/get-criteria-wise-factor/${id}`,
         }),
+        createPmPointFactor: build.mutation({
+            query: (data) => ({
+                url: `/account/pm-point-factor`,
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["GET_PM_POINT_FACTORS"],
+        }),
     }),
 });
 
@@ -27,4 +35,5 @@ export const {
     useGetSinglePmPointFactorQuery,
     useGetAllCriteriaQuery,
     useGetFactorsFieldsByCriteriaQuery,
+    useCreatePmPointFactorMutation,
 } = pmSalesApiSlice;

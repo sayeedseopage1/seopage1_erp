@@ -4,8 +4,11 @@ import { PointFactorsColumns } from '../components/table/PointFactorsColumns';
 import TopSection from '../components/sectionComponents/TopSection';
 import { AddButton, AddNewSectionCointainer } from '../components/Styles/ui/ui';
 import AddNewItemsModal from '../components/modal/AddNewItemsModal';
-import { useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
+import { useCreatePmPointFactorMutation, useGetPmPointFactorsQuery } from '../../../../services/api/pmSalesApiSlice';
 import { useEffect } from 'react';
+import _ from 'lodash';
+import { toast } from 'react-toastify';
+import { number } from 'zod';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
@@ -34,12 +37,20 @@ const PointFactors = () => {
     });
 
     // modal state validation
-    const [newPolicyDataValidation, setNewPolicyDataValidation] =
+    const [newFactorDataValidation, setNewFactorDataValidation] =
         React.useState({
             criteria: false,
-            factors: false,
-            categories: false,
+            title: false,
+            projectType: false,
+            lowerLimit: false,
+            upperLimit: false,
+            limitType: false,
+            limitUnit: false,
+            lowerLimitCondition: false,
+            upperLimitCondition: false,
+            pointType: false,
             points: false,
+            isSubmitting: false,
         });
 
     // make query string
@@ -48,7 +59,7 @@ const PointFactors = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
-    // get sales risk analysis rules
+    // get pm point factors
     const { data, isFetching, isLoading, refetch } =
         useGetPmPointFactorsQuery(
             queryString({
@@ -57,7 +68,7 @@ const PointFactors = () => {
 
             })
         );
-    // sales risk analysis rules data
+    // pm point factors data
     const pmPointFactorsData = data?.data;
 
 
@@ -151,11 +162,44 @@ const PointFactors = () => {
         // setNewPolicyInputData([]);
     };
 
+    // console.log("newFactorData", parseInt(newFactorData?.limitUnit?.name));
+
+    // add pm point factors mutation
+    const [createPmPointFactor, { isLoading: isLoadingAddPmFactors }] = useCreatePmPointFactorMutation()
+
     const handleFactorsAdded = async () => {
-        // if (newPolicyInputData?.length === 0) {
-        //     toast.error("Please add a policy first");
-        //     return;
-        // }
+        if (_.isEmpty(newFactorData?.criteria)) {
+            toast.error("Please add a criteria first");
+            return;
+        }
+        try {
+            const payload = {
+                "criteria_id": parseInt(newFactorData?.criteria?.name),
+                "title": newFactorData?.title ?? null,
+                "project_type": newFactorData.projectType == "fixed" ? 1 : 2 ?? null,
+                "lower_limit": parseInt(newFactorData?.lowerLimit) ?? null,
+                "upper_limit": parseInt(newFactorData?.upperLimit) ?? null,
+                "limit_type": newFactorData?.limitType == "inclusive" ? 1 : 2 ?? null,
+                "limit_unit": parseInt(newFactorData?.limitUnit?.name) ?? null,
+                "lower_limit_condition": newFactorData?.lowerLimitCondition?.name ?? null,
+                "upper_limit_condition": newFactorData?.upperLimitCondition?.name ?? null,
+                "point_type": newFactorData?.pointType == "fixed" ? 1 : 2 ?? null,
+                "points": parseFloat(newFactorData?.points) ?? null,
+                "point_depend_on_model": parseFloat(newFactorData?.pointDependOnModel) ?? null,
+                "point_depend_on_field": parseFloat(newFactorData?.pointDependOnField) ?? null,
+                "status": parseFloat(newFactorData?.status) ?? null,
+            }
+
+            const response = await createPmPointFactor(payload);
+            if (response?.data) {
+                toast.success("New item added successfully");
+                handleAddNewItemModal();
+                resetFormState();
+            }
+        } catch (error) {
+            toast.error("Failed to add new item");
+        }
+
         // try {
         //     // prepare payload for api
         //     const payload = {
@@ -212,8 +256,6 @@ const PointFactors = () => {
         // }
     };
 
-    // console.log(tab)
-
     const [mainColumns, setMainColumns] = useState(PointFactorsColumns);
 
     useEffect(() => {
@@ -268,9 +310,8 @@ const PointFactors = () => {
                         handleFactorsAdded={handleFactorsAdded}
                         // newPolicyInputData={newPolicyInputData}
                         // newPolicyDataValidation={newPolicyDataValidation}
-                        // TODO: loading will come from api 
                         isLoadingAddPointFactors={
-                            false
+                            isLoadingAddPmFactors
                         }
                     />
                 </div>
