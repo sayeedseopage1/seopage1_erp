@@ -859,6 +859,8 @@ class SalesRiskPolicyController extends AccountBaseController
              */
 
             // calculate point
+            $calculation = self::calculatePolicyPoint($dealId);
+
 
             DB::commit();
         } catch (\Throwable $th) {
@@ -867,9 +869,17 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Data did not stroed successfully.'], 500);
         }
 
-        return response()->json(['status' => 'success', 'message' => 'Questons values stored successfully.', 'redirectUrl' => route('dealDetails', $dealId)]);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Questons values stored successfully.',
+            'redirectUrl' => route('dealDetails', $dealId),
+            'data' => ['point' => $calculation['points']]
+        ]);
     }
 
+    /**
+     *
+     */
     function calculatePolicyPoint($deal_id)
     {
         try {
@@ -965,7 +975,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 }
             }
 
-            return response()->json(['data' => ['points' => $totalPoints, 'pointData' => $pointData]]);
+            return ['points' => $totalPoints, 'pointData' => $pointData];
         } catch (\Throwable $th) {
             throw $th;
         }
