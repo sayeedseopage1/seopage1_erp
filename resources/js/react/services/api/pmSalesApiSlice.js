@@ -24,6 +24,9 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
                 url: `/account/pm-point-factor`,
                 method: "POST",
                 body: data,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
             }),
             invalidatesTags: ["GET_PM_POINT_FACTORS"],
         }),
