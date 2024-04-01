@@ -3853,10 +3853,7 @@ class ProjectController extends AccountBaseController
 //        $plugin_urls = json_encode($data['plugin_url']);
         $project_cms = ProjectCms::where('cms_name',$request->cms_category)->first();
 
-        $project_portfolio = ProjectPortfolio::where('project_id', $project->project_id)->first();
-        if($project_portfolio == null){
-            $project_portfolio = new ProjectPortfolio();
-        }
+        $project_portfolio = new ProjectPortfolio();
 
         $project_portfolio->project_id = $project->project_id;
         if ($project_cms) {
