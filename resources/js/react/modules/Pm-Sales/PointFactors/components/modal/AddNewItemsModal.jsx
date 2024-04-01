@@ -8,6 +8,7 @@ import CustomDropDown from "../CustomDropdown";
 import { LimitConditions, LimitUnits } from "../../constant";
 import useCriteriaList from "../../hooks/useCriteriaList";
 import { useGetFactorsFieldsByCriteriaQuery } from "../../../../../services/api/pmSalesApiSlice";
+import useActiveFactorFields from "../../hooks/useActiveFactorFields";
 
 const AddNewItemsModal = ({
     open,
@@ -18,20 +19,13 @@ const AddNewItemsModal = ({
     handleFactorsAdded,
     isLoadingAddPointFactors,
 }) => {
-    const [activeCriteria, setActiveCriteria] = React.useState(null)
+
     // criteria list data from api
     const { CriteriaConstList } = useCriteriaList()
-    //factor fields by criteria 
-    useEffect(() => {
-        setActiveCriteria(newFactorData?.criteria?.id)
-    }, [newFactorData?.criteria])
+    // get acticve factor fields from api 
+    const { activeFactorFields } = useActiveFactorFields({ newFactorData })
 
-    const { data: factorFields } = useGetFactorsFieldsByCriteriaQuery(activeCriteria, {
-        skip: !activeCriteria
-    })
-    const activeFactorFields = factorFields?.data
-
-    console.log("factorFields", activeFactorFields)
+    // console.log("factorFields", activeFactorFields)
 
     return (
         <CustomModal
@@ -325,6 +319,7 @@ const AddNewItemsModal = ({
                                 <ModalInput
                                     type="number"
                                     className="w-100"
+                                    pattern="[0-9]*"
                                     name="points"
                                     value={newFactorData?.points}
                                     onChange={handleChange}
