@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
+use App\Models\DealStage;
+use App\Models\Lead;
 use App\Models\PolicyQuestionValue;
 use App\Models\SalesPolicyQuestion;
 use App\Models\SalesRiskPolicy;
@@ -24,8 +26,11 @@ class SalesRiskPolicyController extends AccountBaseController
         $this->pageTitle = 'Sales Risk Policy';
         // $this->activeSettingMenu = 'sales_risk_policies';
         $this->middleware(function ($request, $next) {
+            if(in_array(auth()->user()->role_id , [1, 8])) /* admin and sale */
+            {
+                return $next($request);
+            }
             abort_403(user()->permission('manage_company_setting') !== 'all');
-            return $next($request);
         });
     }
 
@@ -52,12 +57,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
             Route::get('question-value/report/{deal_id}', 'questionValueReport')->name('question-value.report');
 
-            Route::get('report-list', 'salesRiskReport')->name('report-list');
         });
 
-        Route::get('account/deals/risk-analysis/{deal_id}', [ self::class, 'salesPolicyQuestionRender'])->name('risk-analysis');
-        Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReport'])->name('report-list');
-
+        Route::get('account/deals/risk-analysis/{deal_id}', [self::class, 'salesPolicyQuestionRender'])->name('account.sale-risk-policies.risk-analysis');
+        Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReport'])->name('account.sale-risk-policies.report-list');
     }
 
     function index()
@@ -809,9 +812,12 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $this->pageTitle = 'Sale Risk Analysis';
 
+        if (PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0 && auth()->user()->role_id != 1) {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+        }
+
         $req->session()->put('deal_id', $deal_id);
 
-        // self::calculatePolicyPoint($deal_id);
         // Note: big form route : route('dealDetails', $deal->id)
         return view('deals.sales-questions-render', $this->data);
     }
@@ -831,6 +837,8 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Deal is not valid.'], 500);
         }
 
+        $dealId = $req->session()->get('deal_id');
+
         DB::beginTransaction();
         try {
             foreach ($req->all() as $item) {
@@ -839,9 +847,8 @@ class SalesRiskPolicyController extends AccountBaseController
                 PolicyQuestionValue::create([
                     'question_id' => $item->id,
                     'value' => $item->value,
-                    'deal_id' => $req->session()->get('deal_id')
+                    'deal_id' => $dealId
                 ]);
-
             }
 
             // TODO: change deals > status to "analysis"
@@ -849,94 +856,123 @@ class SalesRiskPolicyController extends AccountBaseController
             /**
              * calculate point
              * redirect accordingly
-            */
+             */
 
             // calculate point
 
             DB::commit();
-
         } catch (\Throwable $th) {
             DB::rollBack();
             // throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stroed successfully.'], 500);
         }
 
-        return response()->json(['status' => 'success', 'message' => 'Questons values stored successfully.']);
+        return response()->json(['status' => 'success', 'message' => 'Questons values stored successfully.', 'redirectUrl' => route('dealDetails', $dealId)]);
     }
 
     function calculatePolicyPoint($deal_id)
     {
-        // get all deals questions vaule
-        $questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->get();
+        try {
+            // get all deals questions vaule
+            $questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->get();
 
-        // dd($questionValues);
-        // get rules id and calculate point
+            // get rules id and calculate point
 
-        $pointData = [];
-        $totalPoints = 0;
+            $pointData = [];
+            $totalPoints = 0;
 
-        foreach ($questionValues as $item ) {
+            foreach ($questionValues as $item) {
 
-            $points = 0;
-            $question = SalesPolicyQuestion::find($item->question_id);
-            $ruleList = $question->rule_list;
+                $points = 0;
+                $question = SalesPolicyQuestion::find($item->question_id);
+                if (in_array($question->type, ['list', 'text', 'longText'])) {
+                    continue;
+                }
 
-            if (in_array($question->type, ['list', 'text', 'longText'])) {
-                continue;
+                $ruleList = $question->rule_list;
+
+                if ($ruleList)
+                    foreach (json_decode($ruleList) as $ruleId) {
+
+                        $rule = SalesRiskPolicy::find($ruleId);
+
+                        switch ($rule->type) {
+                            case 'greaterThan':
+
+                                if ($item->value > $rule->value && $points < $rule->points) {
+                                    $points = $rule->points;
+                                }
+                                break;
+                            case 'lessThan':
+                                if ($item->value < $rule->value && $points < $rule->points) {
+                                    $points = $rule->points;
+                                }
+                                break;
+                            case 'fixed':
+                                if ($item->value == $rule->value && $points < $rule->points) {
+                                    $points = $rule->points;
+                                }
+                                break;
+                            case 'range':
+                                $range = explode(',', $rule->value);
+                                if ($item->value > $range[0] &&  $item->value < $range[1]  && $points < $rule->points) {
+                                    $points = $rule->points;
+                                }
+                                break;
+                            case 'yesNo':
+                                if ($item->value == 'yes') {
+                                    $points = json_decode($rule->value)->yes->point;
+                                } else {
+                                    $points = json_decode($rule->value)->no->point;
+                                }
+                                break;
+                        }
+                    }
+
+                $pointData[$question->id] = $points;
+                $totalPoints += $points;
             }
 
-            foreach (json_decode($ruleList) as $ruleId) {
-                // dd($ruleId);
-                $rule = SalesRiskPolicy::find($ruleId);
-                // dd($rule);
-                switch ($rule->type) {
-                    case 'greaterThan':
+            $department = [
+                'WD' => 1,
+                'DM' => 11
+            ];
 
-                        if ($item->value > $rule->value && $points < $rule->points) {
-                            $points = $rule->points;
+            // country list check
+            $lead_id = DealStage::find($deal_id)->lead_id;
+            $lead = Lead::find($lead_id);
+            // dd($lead);
+            // dd($lead->status);
+            $rules = SalesRiskPolicy::where([
+                'department' => $department[$lead->status],
+                'type' => 'list'
+            ])->get();
+
+            foreach ($rules as $item) {
+                switch ($item->value_type) {
+                    case 'countries':
+
+                        foreach (json_decode($item->value, true) as $value) {
+
+                            if($lead->country == $value[key($value)])
+                            {
+                                $totalPoints += $item->points;
+                                $pointData['countries'] = $item->points;
+                                break;
+                            }
                         }
-                        break;
-                    case 'lessThan':
-                        if ($item->value < $rule->value && $points < $rule->points) {
-                            $points = $rule->points;
-                        }
-                        break;
-                    case 'fixed':
-                        if ($item->value == $rule->value && $points < $rule->points) {
-                            $points = $rule->points;
-                        }
-                        break;
-                    case 'range':
-                        $range = explode(',', $rule->value);
-                        if ($item->value > $range[0] &&  $item->value < $range[1]  && $points < $rule->points) {
-                            $points = $rule->points;
-                        }
-                        break;
-                    case 'yesNo':
-                        if ($item->value == 'yes') {
-                            $points = json_decode($rule->value)->yes->point;
-                        }
-                        else {
-                            $points = json_decode($rule->value)->no->point;
-                        }
-                        break;
-                    case 'list':
-                        # code...
                         break;
                 }
             }
-            // print_r($points);
-            $pointData[$question->id] = $points;
 
-            $totalPoints += $points;
+            return response()->json(['data' => ['points' => $totalPoints, 'pointData' => $pointData]]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        dd($totalPoints,$pointData);
     }
 
     function questionValueReport($deal_id)
     {
-
     }
 
     function salesRiskReport()
@@ -944,5 +980,4 @@ class SalesRiskPolicyController extends AccountBaseController
         $this->pageTitle = 'Sales Analysis Reports';
         return view('sales-risk-policies.analysisReport', $this->data);
     }
-
 }

@@ -517,7 +517,8 @@ class ContractController extends AccountBaseController
         } else {
             $deal->deal_stage = $deal_stage->deal_stage;
             $deal->comments = $deal_stage->comments;
-            $deal->won_lost = 'Yes';
+            // $deal->won_lost = 'Yes';
+            $deal->status = 'analysis';
             $deal->save();
             //$lead_id = Lead::where('id', $request->lead_id)->first();
             if (Auth::id() != null) {
@@ -828,7 +829,7 @@ class ContractController extends AccountBaseController
 
         return response()->json([
             'status' => 'success',
-            'redirectUrl' => route('account.deals.risk-analysis', $deal->id)
+            'redirectUrl' => route('account.sale-risk-policies.risk-analysis', $deal->id)
         ]);
     }
     public function Milestone($id)
@@ -2323,7 +2324,7 @@ class ContractController extends AccountBaseController
                 $this->view = 'contracts.ajax.renew';
                 break;
             case 'sales-analysis-report':
-                $this->view = 'contracts.ajax.salesAnalysisReport'; 
+                $this->view = 'contracts.ajax.salesAnalysisReport';
                 break;
             default:
                 $this->view = 'contracts.ajax.summary';

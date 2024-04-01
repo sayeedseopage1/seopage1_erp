@@ -358,7 +358,7 @@
                                 <x-sub-menu-item :link="route('contracts.index')" :text="'Won Deals'" />
 
                                 @if ($user->role_id == 1)
-                                    <x-sub-menu-item :link="route('account.sale-risk-policies.report-list')" :text="'Sales Analysis Report'" />
+                                    <x-sub-menu-item :link="route('account.sale-risk-policies.report-list')" :text="'Sales Analysis Reports'" />
                                 @endif
 
                                 @if ($user->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
