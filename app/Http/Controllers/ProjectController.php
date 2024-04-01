@@ -3873,7 +3873,7 @@ class ProjectController extends AccountBaseController
         $project_portfolio->added_by = $data['added_by'];
         // $project_portfolio->plugin_name = $website_plugins->id;
         // $project_portfolio->plugin_url = $website_plugins->id;
-        $project_portfolio->plugin_list = json_encode($request->plugin_list);
+        $project_portfolio->plugin_list = $request->plugin_list ? json_encode($request->plugin_list) : null;
         $project_portfolio->save();
         $milestone_update = ProjectMilestone::where('id', $milestone->milestone_id)->first();
         $milestone_update->project_completion_status = 2;
