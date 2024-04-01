@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Flex } from "../../../../../global/styled-component/Flex";
 // ui components
@@ -7,6 +7,7 @@ import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelec
 import CustomDropDown from "../CustomDropdown";
 import { LimitConditions, LimitUnits } from "../../constant";
 import useCriteriaList from "../../hooks/useCriteriaList";
+import { useGetFactorsFieldsByCriteriaQuery } from "../../../../../services/api/pmSalesApiSlice";
 
 const AddNewItemsModal = ({
     open,
@@ -17,9 +18,20 @@ const AddNewItemsModal = ({
     handleFactorsAdded,
     isLoadingAddPointFactors,
 }) => {
-    // criteria list data from api start
+    const [activeCriteria, setActiveCriteria] = React.useState(null)
+    // criteria list data from api
     const { CriteriaConstList } = useCriteriaList()
-    // criteria list data from api start end
+    //factor fields by criteria 
+    useEffect(() => {
+        setActiveCriteria(newFactorData?.criteria?.id)
+    }, [newFactorData?.criteria])
+
+    const { data: factorFields } = useGetFactorsFieldsByCriteriaQuery(activeCriteria, {
+        skip: !activeCriteria
+    })
+    const activeFactorFields = factorFields?.data
+
+    console.log("factorFields", activeFactorFields)
 
     return (
         <CustomModal
@@ -60,301 +72,331 @@ const AddNewItemsModal = ({
                     </div>
 
                     {/* title  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Title <sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="text"
-                                className="w-100"
-                                name="title"
-                                value={newFactorData?.title}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                            {/* {newPolicyDataValidation?.policyName && (
+                    {
+                        activeFactorFields?.title && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Title <sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="text"
+                                    className="w-100"
+                                    name="title"
+                                    value={newFactorData?.title}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                                {/* {newPolicyDataValidation?.policyName && (
                                 <p className="text-danger">
                                     Policy name is required
                                 </p>
                             )} */}
+                            </div>
                         </div>
-                    </div>
+                    }
+
+
                     {/* Project Type  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Project Type <sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0">
-                            <CheckboxContainer className="mr-3">
-                                <StyledInput
-                                    type="checkbox"
-                                    id="fixedType"
-                                    name="projectType"
-                                    onChange={handleChange}
-                                    checked={newFactorData?.projectType === 'fixed'}
-                                    value="fixed"
-                                />
-                                <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
-                            </CheckboxContainer>
-                            <CheckboxContainer>
-                                <StyledInput
-                                    type="checkbox"
-                                    id="hourlyType"
-                                    name="projectType"
-                                    onChange={handleChange}
-                                    checked={newFactorData?.projectType === 'hourly'}
-                                    value="hourly"
-                                />
-                                <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
-                            </CheckboxContainer>
+                    {
+                        activeFactorFields?.project_type && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Project Type <sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0">
+                                <CheckboxContainer className="mr-3">
+                                    <StyledInput
+                                        type="checkbox"
+                                        id="fixedType"
+                                        name="projectType"
+                                        onChange={handleChange}
+                                        checked={newFactorData?.projectType === 'fixed'}
+                                        value="fixed"
+                                    />
+                                    <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
+                                </CheckboxContainer>
+                                <CheckboxContainer>
+                                    <StyledInput
+                                        type="checkbox"
+                                        id="hourlyType"
+                                        name="projectType"
+                                        onChange={handleChange}
+                                        checked={newFactorData?.projectType === 'hourly'}
+                                        value="hourly"
+                                    />
+                                    <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
+                                </CheckboxContainer>
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* Upper Limit  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Upper Limit <sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="number"
-                                className="w-100"
-                                name="upperLimit"
-                                value={newFactorData?.upperLimit}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                            {/* {newPolicyDataValidation?.policyName && (
+                    {
+                        activeFactorFields?.upper_limit && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Upper Limit <sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="number"
+                                    className="w-100"
+                                    name="upperLimit"
+                                    value={newFactorData?.upperLimit}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                                {/* {newPolicyDataValidation?.policyName && (
                                 <p className="text-danger">
                                     Policy name is required
                                 </p>
                             )} */}
+                            </div>
                         </div>
-                    </div>
+                    }
+
                     {/* Lower Limit  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Lower Limit <sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="number"
-                                className="w-100"
-                                name="lowerLimit"
-                                value={newFactorData?.lowerLimit}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                            {/* {newPolicyDataValidation?.policyName && (
+                    {
+                        activeFactorFields?.lower_limit && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Lower Limit <sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="number"
+                                    className="w-100"
+                                    name="lowerLimit"
+                                    value={newFactorData?.lowerLimit}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                                {/* {newPolicyDataValidation?.policyName && (
                                 <p className="text-danger">
                                     Policy name is required
                                 </p>
                             )} */}
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* limit type  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Limit Type <sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0">
-                            <CheckboxContainer className="mr-3">
-                                <StyledInput
-                                    type="checkbox"
-                                    id="inclusiveType"
-                                    name="limitType"
-                                    onChange={handleChange}
-                                    checked={newFactorData?.limitType === 'inclusive'}
-                                    value="inclusive"
-                                />
-                                <StyledLabel htmlFor="inclusiveType">Inclusive</StyledLabel>
-                            </CheckboxContainer>
-                            <CheckboxContainer>
-                                <StyledInput
-                                    type="checkbox"
-                                    id="exclusiveType"
-                                    name="limitType"
-                                    onChange={handleChange}
-                                    checked={newFactorData?.limitType === 'exclusive'}
-                                    value="exclusive"
-                                />
-                                <StyledLabel htmlFor="exclusiveType">Exclusive</StyledLabel>
-                            </CheckboxContainer>
+                    {
+                        activeFactorFields?.limit_type && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Limit Type <sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0">
+                                <CheckboxContainer className="mr-3">
+                                    <StyledInput
+                                        type="checkbox"
+                                        id="inclusiveType"
+                                        name="limitType"
+                                        onChange={handleChange}
+                                        checked={newFactorData?.limitType === 'inclusive'}
+                                        value="inclusive"
+                                    />
+                                    <StyledLabel htmlFor="inclusiveType">Inclusive</StyledLabel>
+                                </CheckboxContainer>
+                                <CheckboxContainer>
+                                    <StyledInput
+                                        type="checkbox"
+                                        id="exclusiveType"
+                                        name="limitType"
+                                        onChange={handleChange}
+                                        checked={newFactorData?.limitType === 'exclusive'}
+                                        value="exclusive"
+                                    />
+                                    <StyledLabel htmlFor="exclusiveType">Exclusive</StyledLabel>
+                                </CheckboxContainer>
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* limit unit  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Limit Unit<sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="limitUnit"
-                                    data={LimitUnits}
-                                    selected={newFactorData?.limitUnit}
-                                    setSelected={handleChange}
-                                />
-                            </ModalSelectContainer>
-                            {/* {newPolicyDataValidation?.policyType && (
+                    {
+                        activeFactorFields?.limit_unit && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Limit Unit<sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        filedName="limitUnit"
+                                        data={LimitUnits}
+                                        selected={newFactorData?.limitUnit}
+                                        setSelected={handleChange}
+                                    />
+                                </ModalSelectContainer>
+                                {/* {newPolicyDataValidation?.policyType && (
                                 <p className="text-danger">
                                     Policy type is required
                                 </p>
                             )} */}
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* Upper limit condition  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Upper Limit Condition<sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="upperLimitCondition"
-                                    data={LimitConditions}
-                                    selected={newFactorData?.upperLimitCondition}
-                                    setSelected={handleChange}
-                                />
-                            </ModalSelectContainer>
-                            {/* {newPolicyDataValidation?.policyType && (
+                    {
+                        activeFactorFields?.upper_limit_condition && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Upper Limit Condition<sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        filedName="upperLimitCondition"
+                                        data={LimitConditions}
+                                        selected={newFactorData?.upperLimitCondition}
+                                        setSelected={handleChange}
+                                    />
+                                </ModalSelectContainer>
+                                {/* {newPolicyDataValidation?.policyType && (
                                 <p className="text-danger">
                                     Policy type is required
                                 </p>
                             )} */}
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* Lower limit condition  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Lower Limit Condition<sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="lowerLimitCondition"
-                                    data={LimitConditions}
-                                    selected={newFactorData?.lowerLimitCondition}
-                                    setSelected={handleChange}
-                                />
-                            </ModalSelectContainer>
-                            {/* {newPolicyDataValidation?.policyType && (
+                    {
+                        activeFactorFields?.lower_limit_condition && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Lower Limit Condition<sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        filedName="lowerLimitCondition"
+                                        data={LimitConditions}
+                                        selected={newFactorData?.lowerLimitCondition}
+                                        setSelected={handleChange}
+                                    />
+                                </ModalSelectContainer>
+                                {/* {newPolicyDataValidation?.policyType && (
                                 <p className="text-danger">
                                     Policy type is required
                                 </p>
                             )} */}
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* point type  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Point Type <sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0">
-                            <CheckboxContainer className="mr-3">
-                                <StyledInput
-                                    type="checkbox"
-                                    id="fixedType"
-                                    name="pointType"
-                                    onChange={handleChange}
-                                    checked={newFactorData?.pointType === 'fixed'}
-                                    value="fixed"
-                                />
-                                <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
-                            </CheckboxContainer>
-                            <CheckboxContainer>
-                                <StyledInput
-                                    type="checkbox"
-                                    id="percentageType"
-                                    name="pointType"
-                                    onChange={handleChange}
-                                    checked={newFactorData?.pointType === 'percentage'}
-                                    value="percentage"
-                                />
-                                <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
-                            </CheckboxContainer>
+                    {
+                        activeFactorFields?.point_type && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Point Type <sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0">
+                                <CheckboxContainer className="mr-3">
+                                    <StyledInput
+                                        type="checkbox"
+                                        id="fixedType"
+                                        name="pointType"
+                                        onChange={handleChange}
+                                        checked={newFactorData?.pointType === 'fixed'}
+                                        value="fixed"
+                                    />
+                                    <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
+                                </CheckboxContainer>
+                                <CheckboxContainer>
+                                    <StyledInput
+                                        type="checkbox"
+                                        id="percentageType"
+                                        name="pointType"
+                                        onChange={handleChange}
+                                        checked={newFactorData?.pointType === 'percentage'}
+                                        value="percentage"
+                                    />
+                                    <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
+                                </CheckboxContainer>
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* points *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Points <sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="number"
-                                className="w-100"
-                                name="points"
-                                value={newFactorData?.points}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                            {/* {newPolicyDataValidation?.policyName && (
+                    {
+                        activeFactorFields?.points && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Points <sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="number"
+                                    className="w-100"
+                                    name="points"
+                                    value={newFactorData?.points}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                                {/* {newPolicyDataValidation?.policyName && (
                                 <p className="text-danger">
                                     Policy name is required
                                 </p>
                             )} */}
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* point depend on model *****Optional******  */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Point Depend on Model:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="text"
-                                className="w-100"
-                                name="pointDependOnModel"
-                                value={newFactorData?.pointDependOnModel}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
+                    {
+                        activeFactorFields?.point_depend_on_model && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Point Depend on Model:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="text"
+                                    className="w-100"
+                                    name="pointDependOnModel"
+                                    value={newFactorData?.pointDependOnModel}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* point depend on field *****Optional****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Point Depend on Field:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="text"
-                                className="w-100"
-                                name="pointDependOnField"
-                                value={newFactorData?.pointDependOnField}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
+                    {
+                        activeFactorFields?.point_depend_on_field && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Point Depend on Field:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="text"
+                                    className="w-100"
+                                    name="pointDependOnField"
+                                    value={newFactorData?.pointDependOnField}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                            </div>
                         </div>
-                    </div>
+                    }
 
                     {/* status *****Optional****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Status:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="number"
-                                className="w-100"
-                                name="status"
-                                value={newFactorData?.status}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
+                    {
+                        activeFactorFields?.status && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Status:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 flex-column px-0">
+                                <ModalInput
+                                    type="number"
+                                    className="w-100"
+                                    name="status"
+                                    value={newFactorData?.status}
+                                    onChange={handleChange}
+                                    placeholder="Write Here"
+                                />
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
+
                 <Flex gap="10px" justifyContent="center">
                     <ModalButton onClick={handleFactorsAdded} width="177px">
                         {isLoadingAddPointFactors

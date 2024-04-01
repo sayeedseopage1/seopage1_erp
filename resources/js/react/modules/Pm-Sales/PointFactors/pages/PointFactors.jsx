@@ -132,9 +132,6 @@ const PointFactors = () => {
             // Otherwise, set the clicked checkbox's value in the state
             setNewFactorData({ ...newFactorData, [name]: value });
         }
-        console.log(newFactorData)
-        console.log(newFactorData[name] === value)
-
     }
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
