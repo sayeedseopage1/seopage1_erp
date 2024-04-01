@@ -48,8 +48,7 @@
             <!-- CARD BODY START -->
             <div class="card-body">
                 @if($deal->submission_status == 'pending')
-                    <h5 class="d-flex justify-content-center">Link Submission for Client Data Collection</h5>
-
+                    <h5 class="d-flex justify-content-center">Sales Lead Authorization Form for {{$deal->project_name??''}}</h5>
                 @else
                     <h5>Deal Authorization</h5>
                 @endif
