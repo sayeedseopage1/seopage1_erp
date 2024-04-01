@@ -496,7 +496,6 @@
                                 <div class="form-group">
                                     <label for="theme_name">Theme Name<sup class="f-14 mr-1">*</sup></label>
                                     <select class="form-control height-35 f-14 selectpicker" name="theme_id" id="theme_id" data-live-search="true" data-size="8" onchange="$('#theme_url').val($(this).find(':selected').data('url'))">
-                                        <option value="">--</option>
                                         @foreach ($themeList as $item)
                                             <option value="{{ $item->id }}" data-url="{{ $item->theme_url }}">{{$item->theme_name}}</option>
                                         @endforeach
@@ -548,7 +547,6 @@
                                             <div class="form-group">
                                                 <label for="plugin_name">Plugin Names</label>
                                                 <select class="form-control height-35 f-14 selectpicker" name="plugin_list" id="plugin_list" data-live-search="true" multiple >
-                                                    <option value="">--</option>
                                                     @foreach ($pluginList as $item)
                                                         @php
                                                             $limit = Str::length($item->plugin_name);
