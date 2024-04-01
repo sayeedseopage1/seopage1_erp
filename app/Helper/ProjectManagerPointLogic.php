@@ -23,6 +23,10 @@ class ProjectManagerPointLogic
                 $earned_points = $factor->getCalculatedPoints($projectId);
                 $factor_id = $factor->id;
                 break;
+            }elseif($criteriaId == 2 && $factor->lower_limit_condition == '>' && $factor->upper_limit_condition == '<=' && (eval("return \$factor->lower_limit $factor->lower_limit_condition \$comparable_value;") || eval("return \$factor->upper_limit $factor->upper_limit_condition \$comparable_value;"))){
+                $earned_points = $factor->getCalculatedPoints($projectId);
+                $factor_id = $factor->id;
+                break;
             }
         }
 
