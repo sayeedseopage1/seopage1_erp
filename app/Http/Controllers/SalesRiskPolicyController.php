@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Country;
-use App\Models\DealStage;
+use App\Models\Deal;
 use App\Models\Lead;
 use App\Models\PolicyQuestionValue;
 use App\Models\SalesPolicyQuestion;
@@ -812,10 +812,6 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $this->pageTitle = 'Sale Risk Analysis';
 
-        if (PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0 && auth()->user()->role_id != 1) {
-            abort_403(user()->permission('manage_company_setting') !== 'all');
-        }
-
         $req->session()->put('deal_id', $deal_id);
 
         // Note: big form route : route('dealDetails', $deal->id)
@@ -859,13 +855,13 @@ class SalesRiskPolicyController extends AccountBaseController
              */
 
             // calculate point
-            $calculation = self::calculatePolicyPoint($dealId);
 
+            $calculation = self::calculatePolicyPoint($dealId);
 
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            // throw $th;
+            throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data did not stroed successfully.'], 500);
         }
 
@@ -949,7 +945,8 @@ class SalesRiskPolicyController extends AccountBaseController
             ];
 
             // country list check
-            $lead_id = DealStage::find($deal_id)->lead_id;
+            // dd(Deal::find($deal_id));
+            $lead_id = Deal::find($deal_id)->lead_id;
             $lead = Lead::find($lead_id);
             // dd($lead);
             // dd($lead->status);
@@ -983,6 +980,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionValueReport($deal_id)
     {
+
     }
 
     function salesRiskReport()
