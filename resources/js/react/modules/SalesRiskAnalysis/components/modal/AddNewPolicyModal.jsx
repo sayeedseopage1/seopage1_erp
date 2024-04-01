@@ -1,8 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
+
 // ui components
 import CustomModal from "../ui/CustomModal/CustomModal";
+import DepartmentSelect from "../DepartmentSelect";
+import CustomDropDown from "../CustomDropDown";
+
+// Local styled components
 import {
     ModalButton,
     ModalSelectContainer,
@@ -10,40 +15,41 @@ import {
     ModalInputLabel,
     ModalTitle,
 } from "../ui/Styles/ui";
+
+// Global styled components
 import { Flex } from "../../../../global/styled-component/Flex";
-import DepartmentSelect from "../DepartmentSelect";
-import CustomDropDown from "../CustomDropDown";
+
 // Constants
 import { PolicyTypeItems } from "../../constant";
-// Components
-
 
 // Table
 import NewRulesModalTable from "../table/NewRulesModalTable";
 import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumns";
-import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
+// sections components
+import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
 const AddNewPolicyModal = ({
     open,
     closeModal,
     newPolicyData,
-    handleChange,
-    handleMultiSelectChange,
-    handleAddRuleOnPolicy,
     newPolicyDataValidation,
     newPolicyInputData,
-    setNewPolicyData,
     isRuleUpdating,
-    setIsRuleUpdating,
-    handlePolicyAdded,
     isLoadingAddSalesRiskAnalysisRule,
-    setNewPolicyInputData,
-    handleCancelRuleOnPolicy,
+    handlerAction,
 }) => {
-    const { departments } = useSelector(
-        (state) => state.filterOptions
-    );
+    // Destructuring handlerAction
+    const {
+        handleChange,
+        setNewPolicyData,
+        setIsRuleUpdating,
+        handlePolicyAdded,
+        handleAddRuleOnPolicy,
+        setNewPolicyInputData,
+        handleCancelRuleOnPolicy,
+    } = handlerAction;
+    const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
 
     newPolicyInputData.forEach((item) => {
@@ -51,6 +57,7 @@ const AddNewPolicyModal = ({
             allSelectedCountries.push(item?.countries);
         }
     });
+
 
     return (
         <CustomModal
@@ -172,7 +179,7 @@ const AddNewPolicyModal = ({
                         newPolicyData={newPolicyData}
                         handleChange={handleChange}
                         selectedCountries={allSelectedCountries.flat()}
-                        handleMultiSelectChange={handleMultiSelectChange}
+                        handleMultiSelectChange={setNewPolicyData}
                         newPolicyDataValidation={newPolicyDataValidation}
                     />
 

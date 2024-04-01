@@ -5,7 +5,13 @@ import { useSelector } from "react-redux";
 
 // Custom Components
 import CustomModal from "../ui/CustomModal/CustomModal";
+import DepartmentSelect from "../DepartmentSelect";
+import CustomDropDown from "../CustomDropDown";
+
+// global styled components
 import { Flex } from "../../../../global/styled-component/Flex";
+
+// local styled components
 import {
     ModalButton,
     ModalInputLabel,
@@ -13,40 +19,39 @@ import {
     ModalTitle,
     ModalInput,
 } from "../ui/Styles/ui";
-import DepartmentSelect from "../DepartmentSelect";
-import CustomDropDown from "../CustomDropDown";
 
 // Table Data
 import NewRulesModalTable from "../table/NewRulesModalTable";
 import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumns";
+
 // Constants
 import { PolicyTypeItems } from "../../constant";
 
-// Sections
+// Sections Components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
-
-
-
 
 const EditPolicyModal = ({
     open,
     isLoading,
     closeModal,
-    handleChange,
     isRuleUpdating,
     editPolicyData,
-    setEditPolicyData,
-    setIsRuleUpdating,
     editPolicyInputData,
-    handleAddRuleOnPolicy,
-    setEditPolicyInputData,
     editPolicyDataValidation,
-    handleMultiSelectChange,
-    handleCancelRuleOnPolicy,
     editPolicyDefaultData,
-    handleEditPolicyUpdate,
-    setEditPolicyDeleteData
+    editPolicyAction,
 }) => {
+    const {
+        setEditPolicyData,
+        setEditPolicyInputData,
+        setEditPolicyDeleteData,
+        handleEditPolicyUpdate,
+        handleCancelRuleOnPolicy,
+        handleAddRuleOnPolicy,
+        setIsRuleUpdating,
+        handlePolicyEditChange,
+    } = editPolicyAction;
+
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
 
@@ -81,7 +86,7 @@ const EditPolicyModal = ({
                                 className="w-100"
                                 name="policyName"
                                 value={editPolicyDefaultData?.policyName}
-                                onChange={handleChange}
+                                onChange={handlePolicyEditChange}
                                 placeholder="Write Here"
                             />
                             {editPolicyDataValidation?.policyName && (
@@ -100,7 +105,7 @@ const EditPolicyModal = ({
                                 <DepartmentSelect
                                     data={departments}
                                     selected={editPolicyDefaultData?.department}
-                                    setSelectedDept={handleChange}
+                                    setSelectedDept={handlePolicyEditChange}
                                 />
                             </ModalSelectContainer>
                             {editPolicyDataValidation?.department && (
@@ -120,7 +125,7 @@ const EditPolicyModal = ({
                                 className="w-100"
                                 name="comment"
                                 value={editPolicyDefaultData?.comment}
-                                onChange={handleChange}
+                                onChange={handlePolicyEditChange}
                                 placeholder="Write Here"
                             />
                         </div>
@@ -140,7 +145,9 @@ const EditPolicyModal = ({
                                 setNewPolicyData={setEditPolicyData}
                                 setIsRuleUpdating={setIsRuleUpdating}
                                 setNewPolicyInputData={setEditPolicyInputData}
-                                setEditPolicyDeleteData={setEditPolicyDeleteData}
+                                setEditPolicyDeleteData={
+                                    setEditPolicyDeleteData
+                                }
                             />
                         </div>
                     ) : (
@@ -156,7 +163,7 @@ const EditPolicyModal = ({
                                     filedName="policyType"
                                     data={PolicyTypeItems}
                                     selected={editPolicyData?.policyType}
-                                    setSelected={handleChange}
+                                    setSelected={handlePolicyEditChange}
                                 />
                             </ModalSelectContainer>
                             {editPolicyDataValidation?.policyType && (
@@ -169,9 +176,9 @@ const EditPolicyModal = ({
                     {/* All Rules Inputs */}
                     <NewPolicyModalInputsContainer
                         newPolicyData={editPolicyData}
-                        handleChange={handleChange}
+                        handleChange={handlePolicyEditChange}
                         selectedCountries={allSelectedCountries.flat()}
-                        handleMultiSelectChange={handleMultiSelectChange}
+                        handleMultiSelectChange={setEditPolicyData}
                         newPolicyDataValidation={editPolicyDataValidation}
                     />
 
@@ -224,7 +231,6 @@ EditPolicyModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     isLoading: PropTypes.bool,
-    handleChange: PropTypes.func,
     isRuleUpdating: PropTypes.bool,
     editPolicyData: PropTypes.object,
     setEditPolicyData: PropTypes.func,

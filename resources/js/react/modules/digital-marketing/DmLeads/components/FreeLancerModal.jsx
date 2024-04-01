@@ -21,7 +21,10 @@ import Select from "../../../../global/Select";
 import { useStoreDmLeadMutation } from "../../../../services/api/dmLeadsApiSlice";
 import { toast } from "react-toastify";
 import validator from "validator";
-import { isStateAllHaveValue, markEmptyFieldsValidation } from "../../../../utils/stateValidation";
+import {
+    isStateAllHaveValue,
+    markEmptyFieldsValidation,
+} from "../../../../utils/stateValidation";
 import { formatAPIErrors } from "../../../../utils/formatAPIErrors";
 
 // initial form data
@@ -66,25 +69,26 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
         original_currency_id: "",
         country: "",
     });
-    const [freelancerInputValidation, setFreelancerInputValidation] = React.useState({
-        client_name: false,
-        country: false,
-        project_id: false,
-        isProjectIdUnique: false,
-        project_link: false,
-        deadline: false,
-        bid_value: false,
-        bid_value2: false,
-        value: false,
-        project_type: false,
-        original_currency_id: false,
-        isProjectLinkValid: false,
-        description: false,
-        cover_letter: false,
-        total_spent: false,
-        original_currency_id: false,
-        isSubmitting: false
-    });
+    const [freelancerInputValidation, setFreelancerInputValidation] =
+        React.useState({
+            client_name: false,
+            country: false,
+            project_id: false,
+            isProjectIdUnique: false,
+            project_link: false,
+            deadline: false,
+            bid_value: false,
+            bid_value2: false,
+            value: false,
+            project_type: false,
+            original_currency_id: false,
+            isProjectLinkValid: false,
+            description: false,
+            cover_letter: false,
+            total_spent: false,
+            original_currency_id: false,
+            isSubmitting: false,
+        });
     const [validationErrors, setValidationErrors] = React.useState([]);
     const [error, setError] = React.useState(initialData);
     const [currency, setCurrency] = React.useState(null);
@@ -115,7 +119,7 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
         }));
     };
 
-    const handleOnkeypress = e => {
+    const handleOnkeypress = (e) => {
         const keyCode = e.keyCode || e.which;
         if (
             (keyCode < 48 || keyCode > 57) && // 0-9
@@ -125,7 +129,7 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
         ) {
             e.preventDefault();
         }
-    }
+    };
 
     // rich editor field change
     const handleEditorDataChange = (editor, key) => {
@@ -150,14 +154,15 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
     }, [formData.project_type]);
 
     React.useEffect(() => {
-        setFormData(prev => ({...prev, project_type: "fixed"}));
+        setFormData((prev) => ({ ...prev, project_type: "fixed" }));
     }, []);
 
     // handle submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(freelancerInputData.project_type === "hourly") delete freelancerInputData.deadline;
+        if (freelancerInputData.project_type === "hourly")
+            delete freelancerInputData.deadline;
         const isEmpty = isStateAllHaveValue(freelancerInputData);
         if (isEmpty) {
             const validation = markEmptyFieldsValidation(freelancerInputData);
@@ -171,11 +176,14 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
             return;
         }
 
-        const isProjectLinkValid = validator.isURL(freelancerInputData.project_link, {
-            protocols: ['http','https','ftp'],
-        });
+        const isProjectLinkValid = validator.isURL(
+            freelancerInputData.project_link,
+            {
+                protocols: ["http", "https", "ftp"],
+            }
+        );
 
-        if(!isProjectLinkValid){
+        if (!isProjectLinkValid) {
             setFreelancerInputValidation({
                 ...freelancerInputValidation,
                 isProjectLinkValid: true,
@@ -183,16 +191,13 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
             return;
         }
 
-        
-
-
         try {
             const res = await storeDmLead({
                 ...freelancerInputData,
                 lead_source: source,
             }).unwrap();
             // console.log(res);
-             if (res?.status === 400) {
+            if (res?.status === 400) {
                 const _serverError = {};
                 const _errorMssg = { ...res?.message?.customMessages };
                 for (const key in _errorMssg) {
@@ -207,31 +212,32 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                 setStep({
                     stepCount: 1,
                     stepName: "Lead Source",
-                })
+                });
                 handleClose();
             }
         } catch (error) {
-            if(error?.status === 422){
-                const errors = formatAPIErrors(error?.data?.errors); 
+            if (error?.status === 422) {
+                const errors = formatAPIErrors(error?.data?.errors);
                 setValidationErrors(errors);
-                if(errors.includes("The project id has already been taken.")){
+                if (errors.includes("The project id has already been taken.")) {
                     setFreelancerInputValidation({
                         ...freelancerInputValidation,
                         isProjectIdUnique: true,
                     });
-                } else if(errors.includes("The project link format is invalid.")){
+                } else if (
+                    errors.includes("The project link format is invalid.")
+                ) {
                     setFreelancerInputValidation({
                         ...freelancerInputValidation,
                         isProjectLinkValid: true,
                     });
                 }
-                errors.forEach(error => {
+                errors.forEach((error) => {
                     toast.error(error);
                 });
             } else {
                 toast.error("Something went wrong");
             }
-
         }
     };
 
@@ -278,8 +284,11 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
     // filter
     const getCountries = (data, query) => {
         return data?.filter((d) =>
-            d?.name?.toLowerCase()?.includes(query?.toLowerCase())
-        );
+            d?.name
+                ?.toLowerCase()
+                ?.includes(
+                    query?.toLowerCase() 
+        ));
     };
 
     React.useEffect(() => {
@@ -295,35 +304,41 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
         }
     }, [deadline]);
 
-
     React.useEffect(() => {
-        if(freelancerInputValidation.isSubmitting){
+        if (freelancerInputValidation.isSubmitting) {
             const validation = markEmptyFieldsValidation(freelancerInputData);
             setFreelancerInputValidation({
                 ...freelancerInputValidation,
                 ...validation,
-                project_link:false,
+                project_link: false,
                 isProjectIdUnique: false,
-                isProjectLinkValid: !validator.isURL(freelancerInputData.project_link),
+                isProjectLinkValid: !validator.isURL(
+                    freelancerInputData.project_link
+                ),
             });
-            if(validationErrors?.length){
+            if (validationErrors?.length) {
                 setFreelancerInputValidation({
                     ...freelancerInputValidation,
-                    isProjectIdUnique: validationErrors?.includes("The project id has already been taken."),
-                    isProjectLinkValid: validationErrors?.includes("The project link format is invalid."),
+                    isProjectIdUnique: validationErrors?.includes(
+                        "The project id has already been taken."
+                    ),
+                    isProjectLinkValid: validationErrors?.includes(
+                        "The project link format is invalid."
+                    ),
                 });
             }
         }
-    }, [freelancerInputData, freelancerInputValidation.isSubmitting, freelancerInputValidation.isProjectLinkValid, validationErrors]);
-
-
-
+    }, [
+        freelancerInputData,
+        freelancerInputValidation.isSubmitting,
+        freelancerInputValidation.isProjectLinkValid,
+        validationErrors,
+    ]);
 
     return (
         <div>
             <form>
                 <div className="row">
-
                     {/* Source */}
                     <div className="col-md-12 mb-2">
                         <h2 className="text-center">{source}</h2>
@@ -343,10 +358,12 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                 onChange={handleInputChange}
                                 placeholder="Type project name from Freelancer.com"
                             />
-                            
-                            {
-                                freelancerInputValidation.client_name && <ErrorText>Please enter the project name!</ErrorText>
-                            }
+
+                            {freelancerInputValidation.client_name && (
+                                <ErrorText>
+                                    Please enter the project name!
+                                </ErrorText>
+                            )}
                         </InputGroup>
                     </div>
 
@@ -365,13 +382,15 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                 onChange={handleInputChange}
                                 placeholder="Type project id from Freelancer.com"
                             />
-                            
-                            {
-                                freelancerInputValidation.project_id && <ErrorText>Project Id is required</ErrorText>
-                            }
-                            {
-                                freelancerInputValidation.isProjectIdUnique && <ErrorText>Project Id has already been taken</ErrorText>
-                            }
+
+                            {freelancerInputValidation.project_id && (
+                                <ErrorText>Project Id is required</ErrorText>
+                            )}
+                            {freelancerInputValidation.isProjectIdUnique && (
+                                <ErrorText>
+                                    Project Id has already been taken
+                                </ErrorText>
+                            )}
                         </InputGroup>
                     </div>
 
@@ -389,16 +408,21 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                 onChange={handleInputChange}
                                 placeholder="Copy the project URL from the browser and paste it here."
                             />
-                            {
-                                freelancerInputValidation.project_link && <ErrorText>Please enter correct project link (freelancer.com) with http or https!</ErrorText>
-                            }
-                            {
-                                freelancerInputValidation.isProjectLinkValid && <ErrorText>Invalid URL! please add with http or https!</ErrorText>
-                            }
+                            {freelancerInputValidation.project_link && (
+                                <ErrorText>
+                                    Please enter correct project link
+                                    (freelancer.com) with http or https!
+                                </ErrorText>
+                            )}
+                            {freelancerInputValidation.isProjectLinkValid && (
+                                <ErrorText>
+                                    Invalid URL! please add with http or https!
+                                </ErrorText>
+                            )}
                         </InputGroup>
                     </div>
-                         {/* Project Type */}
-                         <div className="col-md-4">
+                    {/* Project Type */}
+                    <div className="col-md-4">
                         <InputGroup>
                             <Label>
                                 {" "}
@@ -486,10 +510,12 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                     </Select.Options>
                                 </Select>
                             </SelectionMenuWrapper>
-                           
-                            {
-                                freelancerInputValidation.original_currency_id && <ErrorText>Please select correct currency!</ErrorText>
-                            }
+
+                            {freelancerInputValidation.original_currency_id && (
+                                <ErrorText>
+                                    Please select correct currency!
+                                </ErrorText>
+                            )}
                         </InputGroup>
                     </div>
 
@@ -539,10 +565,10 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                     </Select.Options>
                                 </Select>
                             </SelectionMenuWrapper>
-                            
-                            {
-                                freelancerInputValidation.country && <ErrorText>Country is required</ErrorText>
-                            }
+
+                            {freelancerInputValidation.country && (
+                                <ErrorText>Country is required</ErrorText>
+                            )}
                         </InputGroup>
                     </div>
 
@@ -558,8 +584,8 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <Input
-                                                 min={0}
-                                                 onKeyPress={handleOnkeypress}
+                                                min={0}
+                                                onKeyPress={handleOnkeypress}
                                                 name="bid_value"
                                                 value={formData.bid_value}
                                                 onChange={handleInputChange}
@@ -573,23 +599,29 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                             ) : (
                                                 <></>
                                             )}
-                                            {
-                                                freelancerInputValidation.bid_value && <ErrorText>Minimum Hourly Rate is required</ErrorText>
-                                            }
+                                            {freelancerInputValidation.bid_value && (
+                                                <ErrorText>
+                                                    Minimum Hourly Rate is
+                                                    required
+                                                </ErrorText>
+                                            )}
                                         </div>
                                         <div className="col-md-6">
                                             <Input
-                                                 min={0}
-                                                 onKeyPress={handleOnkeypress}
+                                                min={0}
+                                                onKeyPress={handleOnkeypress}
                                                 name="bid_value2"
                                                 value={formData.bid_value2}
                                                 onChange={handleInputChange}
                                                 placeholder="Maximum"
                                             />
-                                           
-                                            {
-                                                freelancerInputValidation.bid_value2 && <ErrorText>Maximum Hourly Rate is required</ErrorText>
-                                            }
+
+                                            {freelancerInputValidation.bid_value2 && (
+                                                <ErrorText>
+                                                    Maximum Hourly Rate is
+                                                    required
+                                                </ErrorText>
+                                            )}
                                         </div>
                                     </div>
                                 </InputGroup>
@@ -621,10 +653,13 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                         }}
                                         placeholderText="dd-mm-yyyy"
                                     />
-                                    
-                                    {
-                                        freelancerInputValidation.deadline && <ErrorText>Please select project deadline from freelancer.com!</ErrorText>
-                                    }
+
+                                    {freelancerInputValidation.deadline && (
+                                        <ErrorText>
+                                            Please select project deadline from
+                                            freelancer.com!
+                                        </ErrorText>
+                                    )}
                                 </InputGroup>
                             </div>
 
@@ -638,31 +673,37 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                     <div className="row">
                                         <div className="col-md-6">
                                             <Input
-                                                 min={0}
-                                                 onKeyPress={handleOnkeypress}
+                                                min={0}
+                                                onKeyPress={handleOnkeypress}
                                                 name="bid_value"
                                                 value={formData.bid_value}
                                                 onChange={handleInputChange}
                                                 placeholder="Minimum"
                                             />
-                                            
-                                            {
-                                                freelancerInputValidation.bid_value && <ErrorText>Please enter maximum project budget!</ErrorText>
-                                            }
+
+                                            {freelancerInputValidation.bid_value && (
+                                                <ErrorText>
+                                                    Please enter maximum project
+                                                    budget!
+                                                </ErrorText>
+                                            )}
                                         </div>
                                         <div className="col-md-6">
                                             <Input
-                                                 min={0}
-                                                 onKeyPress={handleOnkeypress}
+                                                min={0}
+                                                onKeyPress={handleOnkeypress}
                                                 name="bid_value2"
                                                 value={formData.bid_value2}
                                                 onChange={handleInputChange}
                                                 placeholder="Maximum"
                                             />
-                                            
-                                            {
-                                                freelancerInputValidation.bid_value2 && <ErrorText>Please enter minimum project budget!</ErrorText>
-                                            }
+
+                                            {freelancerInputValidation.bid_value2 && (
+                                                <ErrorText>
+                                                    Please enter minimum project
+                                                    budget!
+                                                </ErrorText>
+                                            )}
                                         </div>
                                     </div>
                                 </InputGroup>
@@ -682,21 +723,19 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                 Bid value <sup>*</sup> :{" "}
                             </Label>
                             <Input
-                                 min={0}
-                                 onKeyPress={handleOnkeypress}
+                                min={0}
+                                onKeyPress={handleOnkeypress}
                                 name="value"
                                 value={formData.value}
                                 onChange={handleInputChange}
                                 placeholder="Enter Bid value"
                             />
-                            
-                            {
-                                freelancerInputValidation.value && <ErrorText>Please enter bid value!</ErrorText>
-                            }
+
+                            {freelancerInputValidation.value && (
+                                <ErrorText>Please enter bid value!</ErrorText>
+                            )}
                         </InputGroup>
                     </div>
-
-               
 
                     {/* Project Description */}
                     <div className="col-12">
@@ -716,10 +755,13 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                     }
                                 />
                             </div>
-                            
-                            {
-                                freelancerInputValidation.description && <ErrorText>Copy the project description from Freelancer.com and paste it here!</ErrorText>
-                            }
+
+                            {freelancerInputValidation.description && (
+                                <ErrorText>
+                                    Copy the project description from
+                                    Freelancer.com and paste it here!
+                                </ErrorText>
+                            )}
                         </InputGroup>
                     </div>
 
@@ -742,10 +784,13 @@ const FreeLancerModal = ({ close, source, setSource, setStep }) => {
                                 />
                             </div>
 
-                           
-                            {
-                                freelancerInputValidation.cover_letter && <ErrorText>Copy the cover letter you submitted when placing the bid and paste it here. Do not forget to format it (If needed)!</ErrorText>
-                            }
+                            {freelancerInputValidation.cover_letter && (
+                                <ErrorText>
+                                    Copy the cover letter you submitted when
+                                    placing the bid and paste it here. Do not
+                                    forget to format it (If needed)!
+                                </ErrorText>
+                            )}
                         </InputGroup>
                     </div>
 

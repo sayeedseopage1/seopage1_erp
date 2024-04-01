@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 // icons
 import InfoIcon from "../ui/InfoIcon";
-// components
+// ui components
 import CustomModal from "../ui/CustomModal/CustomModal";
 
 const QuestionConfirmModal = ({

@@ -3,27 +3,32 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // ui components
+import CustomDropDown from "../CustomDropDown";
+import CustomModal from "../ui/CustomModal/CustomModal";
+
+// local styled components
 import {
     ModalButton,
     ModalInputLabel,
     ModalSelectContainer,
     ModalTitle,
 } from "../ui/Styles/ui";
-import CustomModal from "../ui/CustomModal/CustomModal";
+
+
+
+// global styled components
 import { Flex } from "../../../../global/styled-component/Flex";
-import CustomDropDown from "../CustomDropDown";
 
 // constants
 import { PolicyTypeItems } from "../../constant";
-
-// sections
-
 
 // Api services
 import { useGetSinglePolicySalesRiskAnalysisQuery } from "../../../../services/api/salesRiskAnalysisSlice";
 
 // helper
 import { formatSingleRuleData } from "../../helper/formatEditPolicyData";
+
+// sections components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
 const EditApplicableRulesModal = ({
@@ -50,7 +55,9 @@ const EditApplicableRulesModal = ({
             const getSingleRule = singlePolicyData?.data[0].ruleList.find(
                 (item) => item.id === editRuleData?.id
             );
-            setEditRuleData(formatSingleRuleData(singlePolicyData?.data[0], getSingleRule));
+            setEditRuleData(
+                formatSingleRuleData(singlePolicyData?.data[0], getSingleRule)
+            );
         }
     }, [singlePolicyData]);
 
@@ -138,4 +145,9 @@ EditApplicableRulesModal.propTypes = {
     editRuleData: PropTypes.object,
     props: PropTypes.object,
     handleChange: PropTypes.func,
+    handleUpdateRules: PropTypes.func,
+    handleMultiSelectChange: PropTypes.func,
+    isLoadingEditSalesRiskAnalysisRule: PropTypes.bool,
+    editRuleDataValidation: PropTypes.object,
+    setEditRuleData: PropTypes.func,
 };

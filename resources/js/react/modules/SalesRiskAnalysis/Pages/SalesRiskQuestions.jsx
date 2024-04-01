@@ -101,13 +101,32 @@ const SalesRiskQuestions = () => {
         }
     }, [questions]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const isEmpty = isArrayObjectEmpty(inputsData, "parent_id");
         if (isEmpty) {
             setIsSubmitting(true);
             return;
         } else {
-            setQuestionModalOpen(true);
+            // setQuestionModalOpen(true);
+            try {
+                const payload = inputsData.map((item) => {
+                    return {
+                        id: item.id,
+                        value: item[`question_${item.id}`],
+                    };
+                });
+                console.log(payload);
+
+                const res = await saveSaleRiskQuestionAnswer(payload);
+                if (res?.data?.status === "success") {
+                    setIsSubmitting(false);
+                    toast.success("Successfully saved");
+                    setQuestionModalOpen(false);
+                    // window.location.href = res?.data?.redirect_url;
+                }
+            } catch (error) {
+                toast.error("Something went wrong");
+            }
         }
     };
 
@@ -125,6 +144,8 @@ const SalesRiskQuestions = () => {
             if (res?.data?.status === "success") {
                 setIsSubmitting(false);
                 toast.success("Successfully saved");
+                setQuestionModalOpen(false);
+                // window.location.href = res?.data?.redirect_url;
             }
         } catch (error) {
             toast.error("Something went wrong");
@@ -231,11 +252,13 @@ const SalesRiskQuestions = () => {
                             inputsData={inputsData}
                             allQuestions={allQuestions}
                             isSubmitting={isSubmitting}
-                            getItsFocused={getItsFocused}
-                            setInputsData={setInputsData}
                             focusedQuestion={focusedQuestion}
-                            handleListYesNoQuestion={handleListYesNoQuestion}
-                            handleQuestionFocus={handleQuestionFocus}
+                            inputContainerActions={{
+                                getItsFocused,
+                                handleQuestionFocus,
+                                setInputsData,
+                                handleListYesNoQuestion,
+                            }}
                         />
                     )}
                 </div>
@@ -269,7 +292,7 @@ const SalesRiskQuestions = () => {
                                 </Tooltip>
                             </Switch.Case>
                             <Switch.Case condition={isChecked}>
-                                Submit
+                                {isSaving ? "Saving..." : "Submit"}
                             </Switch.Case>
                         </Switch>
                     </button>

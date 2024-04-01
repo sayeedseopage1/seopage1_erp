@@ -213,26 +213,8 @@ const SalesRiskAnalysisTable = ({
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
         meta: {
-            handleEditApplicableRule: (row, selectedRule, ruleType) => {
-                const valueTypeConst =
-                    PolicyTypeItemValuesType?.data?.regularTypes?.data;
-
-                const getVueType = (type) => {
-                    if (!_.includes(["yesNo", "list"], type)) {
-                        return valueTypeConst.find(
-                            (item) => item?.name === selectedRule?.value_type
-                        );
-                    } else if (type === "list") {
-                        return {
-                            id: 1,
-                            label: "Countries",
-                            name: "countries",
-                        };
-                    } else {
-                        return "";
-                    }
-                };
-                const payload =  formatSingleRuleData(row, selectedRule)
+            handleEditApplicableRule: (row, selectedRule) => {
+                const payload = formatSingleRuleData(row, selectedRule);
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -737,19 +719,20 @@ const SalesRiskAnalysisTable = ({
                     closeModal={handleCloseEditPolicyModal}
                     editPolicyData={editPolicyData}
                     editPolicyDefaultData={editPolicyDefaultData}
-                    setEditPolicyData={setEditPolicyData}
                     editPolicyInputData={editPolicyInputData}
-                    handleAddRuleOnPolicy={handleAddRuleOnPolicy}
-                    setEditPolicyInputData={setEditPolicyInputData}
                     editPolicyDataValidation={editPolicyDataValidation}
-                    handleMultiSelectChange={setEditPolicyData}
-                    handleCancelRuleOnPolicy={handleCancelRuleOnPolicy}
                     isRuleUpdating={isRuleUpdating}
-                    setIsRuleUpdating={setIsRuleUpdating}
-                    handleChange={handlePolicyEditChange}
-                    handleEditPolicyUpdate={handleEditPolicyUpdate}
-                    setEditPolicyDeleteData={setEditPolicyDeleteData}
                     isLoading={isLoadingEditSalesRiskAnalysisPolicy}
+                    editPolicyAction={{
+                        setEditPolicyData,
+                        handleAddRuleOnPolicy,
+                        setEditPolicyInputData,
+                        handleCancelRuleOnPolicy,
+                        setIsRuleUpdating,
+                        handlePolicyEditChange,
+                        handleEditPolicyUpdate,
+                        setEditPolicyDeleteData,
+                    }}
                 />
             )}
             {editCountryListModalOpen && (

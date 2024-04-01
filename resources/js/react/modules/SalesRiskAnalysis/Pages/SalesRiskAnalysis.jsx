@@ -41,7 +41,6 @@ const SalesRiskAnalysis = () => {
         pageSize: 10,
     });
     const [isRuleUpdating, setIsRuleUpdating] = React.useState(false);
-    
 
     // modal open close state
     const [addNewPolicyModalOpen, setAddNewPolicyModalOpen] =
@@ -95,13 +94,10 @@ const SalesRiskAnalysis = () => {
             queryString({
                 page: pageIndex + 1,
                 limit: pageSize,
-                
             })
         );
     // sales risk analysis rules data
     const salesRiskAnalysisRules = data?.data;
-
-
 
     // add sales risk analysis rule mutation
     const [submitData, { isLoading: isLoadingAddSalesRiskAnalysisRule }] =
@@ -193,6 +189,8 @@ const SalesRiskAnalysis = () => {
         }
     };
 
+    console.log("newPolicyData", newPolicyData);
+
     // handle add rule on policy data to the state
     const handleAddRuleOnPolicy = () => {
         const validation = addNewRulesValidation(
@@ -240,8 +238,6 @@ const SalesRiskAnalysis = () => {
         resetFormState();
     };
 
-
-    
     // handle add new policy  with rules data to the server
     const handlePolicyAdded = async () => {
         if (newPolicyInputData?.length === 0) {
@@ -303,9 +299,6 @@ const SalesRiskAnalysis = () => {
             }
         }
     };
-
-
-
 
     // handle modal open close
     const handleAddNewPolicyModal = () => {
@@ -409,25 +402,28 @@ const SalesRiskAnalysis = () => {
                 </div>
 
                 {/* Add new Policy Modal */}
-                <AddNewPolicyModal
-                    open={addNewPolicyModalOpen}
-                    handleChange={handleChange}
-                    newPolicyData={newPolicyData}
-                    isRuleUpdating={isRuleUpdating}
-                    setNewPolicyData={setNewPolicyData}
-                    closeModal={handleAddNewPolicyModal}
-                    setIsRuleUpdating={setIsRuleUpdating}
-                    handlePolicyAdded={handlePolicyAdded}
-                    newPolicyInputData={newPolicyInputData}
-                    handleMultiSelectChange={setNewPolicyData}
-                    newPolicyDataValidation={newPolicyDataValidation}
-                    handleAddRuleOnPolicy={handleAddRuleOnPolicy}
-                    setNewPolicyInputData={setNewPolicyInputData}
-                    isLoadingAddSalesRiskAnalysisRule={
-                        isLoadingAddSalesRiskAnalysisRule
-                    }
-                    handleCancelRuleOnPolicy={handleCancelRuleOnPolicy}
-                />
+                {addNewPolicyModalOpen && (
+                    <AddNewPolicyModal
+                        open={addNewPolicyModalOpen}
+                        newPolicyData={newPolicyData}
+                        isRuleUpdating={isRuleUpdating}
+                        closeModal={handleAddNewPolicyModal}
+                        newPolicyInputData={newPolicyInputData}
+                        newPolicyDataValidation={newPolicyDataValidation}
+                        isLoadingAddSalesRiskAnalysisRule={
+                            isLoadingAddSalesRiskAnalysisRule
+                        }
+                        handlerAction={{
+                            handleChange,
+                            setNewPolicyData,
+                            setIsRuleUpdating,
+                            handlePolicyAdded,
+                            handleAddRuleOnPolicy,
+                            setNewPolicyInputData,
+                            handleCancelRuleOnPolicy,
+                        }}
+                    />
+                )}
             </SalesRiskAnalysisContainer>
         </React.Fragment>
     );

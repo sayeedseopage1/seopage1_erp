@@ -1,6 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+
+// ui components
 import CustomModal from "../ui/CustomModal/CustomModal";
+
+// local styled components
 import { ModalInputLabel, ModalTitle } from "../ui/Styles/ui";
 
 const RuleActionConfirmationModal = ({
