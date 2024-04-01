@@ -17,7 +17,7 @@ const PointFactors = () => {
         React.useState(false);
     // modal state data
     const [newFactorData, setNewFactorData] = React.useState({
-        criteria: "", // input select
+        criteria: {}, // input select
         title: "",  // input text
         projectType: "", // input checkbox
         lowerLimit: "", // input number
@@ -105,7 +105,7 @@ const PointFactors = () => {
 
     const resetFormState = () => {
         setNewFactorData({
-            criteria: "",
+            criteria: {},
             title: "",
             projectType: "",
             lowerLimit: "",

@@ -17,9 +17,21 @@ const AddNewItemsModal = ({
     handleFactorsAdded,
     isLoadingAddPointFactors,
 }) => {
-    // const { data: criteriaList } = useGetAllCriteriaQuery()
-    // console.log("criteriaList", criteriaList)
-
+    const { data: criterias } = useGetAllCriteriaQuery()
+    const criteriaList = criterias?.data
+    const criteriaConst = criteriaList?.map(c => {
+        return {
+            id: c?.id,
+            label: c?.title,
+            name: c?.id,
+        }
+    })
+    const CriteriaConstList = {
+        label: "CriteriaLists",
+        emptyOptionsLabel: "Select Criteria",
+        id: "CriteriaLists",
+        data: criteriaConst,
+    };
 
     return (
         <CustomModal
@@ -38,7 +50,26 @@ const AddNewItemsModal = ({
                 </div>
                 <div className="d-flex flex-column mb-4 px-3  w-100">
                     {/* criteria  *****required****** */}
-                    {/* TODO: it will be added  */}
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Criteria<sup>*</sup>:{" "}
+                        </ModalInputLabel>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    filedName="criteria"
+                                    data={CriteriaConstList}
+                                    selected={newFactorData?.criteria}
+                                    setSelected={handleChange}
+                                />
+                            </ModalSelectContainer>
+                            {/* {newPolicyDataValidation?.policyType && (
+                                <p className="text-danger">
+                                    Policy type is required
+                                </p>
+                            )} */}
+                        </div>
+                    </div>
 
                     {/* title  *****required****** */}
                     <div className="row mb-4 align-items-center">

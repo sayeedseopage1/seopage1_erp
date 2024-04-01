@@ -21,8 +21,8 @@ const CustomDropDown = ({
     return (
         <div
             className={`${sidebarItem
-                    ? `d-flex flex-column w-100 mt-2`
-                    : "d-flex align-items-center"
+                ? `d-flex flex-column w-100 mt-2`
+                : "d-flex align-items-center"
                 } ${className}`}
         >
             <Dropdown register className="w-100">
@@ -52,6 +52,7 @@ const CustomDropDown = ({
                     <div className="sp1_filter--users">
                         {_Options?.map((item) => (
                             <Dropdown.Item
+                                title={item?.label}
                                 key={item.id}
                                 className={
                                     selected?.id === item.id
@@ -67,7 +68,7 @@ const CustomDropDown = ({
                                     });
                                 }}
                             >
-                                {item?.label}
+                                {item?.label?.length > 50 ? `${item?.label?.slice(0, 50)}...` : item?.label}
                             </Dropdown.Item>
                         ))}
                     </div>
