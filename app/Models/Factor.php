@@ -36,9 +36,9 @@ class Factor extends Model
 
     public function getCalculatedPoints($itemId)
     {
+        if($this->point_type==1) return $this->points;
         $modelClass = $this->point_depend_on_model;
         $field_name = $this->point_depend_on_field;
-        return $modelClass::find($itemId)->$field_name;
-
+        return number_format(($modelClass::find($itemId)->$field_name/100)*$this->points,2);
     }
 }
