@@ -86,7 +86,7 @@ const PointFactors = () => {
         }
     }, [pmPointFactorsData, tab])
 
-    // search function
+    // search functionality
     useEffect(() => {
         setMainTableData(
             pmPointFactorsData?.filter((item) => {
@@ -228,7 +228,7 @@ const PointFactors = () => {
         }
     }, [tab, PointFactorsColumns])
 
-    console.log("columns", mainColumns)
+    // console.log("columns", mainColumns)
 
     // const tableHeaderFilterByTab = PointFactorsColumns.filter(item => {
     //     if (tab === "hourly") {

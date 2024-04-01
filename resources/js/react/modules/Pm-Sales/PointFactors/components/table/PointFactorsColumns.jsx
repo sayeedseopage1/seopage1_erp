@@ -103,7 +103,7 @@ export const PointFactorsColumns = [
                                         <div
                                             onClick={() => {
                                                 action.handleEditFactor(
-                                                    factor?.id
+                                                    factor
                                                 );
                                             }}
                                             role="button"

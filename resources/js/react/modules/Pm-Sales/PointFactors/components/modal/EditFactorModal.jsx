@@ -6,21 +6,33 @@ import CustomModal from "../Styles/ui/CustomModal/CustomModal";
 import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelectContainer, ModalTitle, StyledInput, StyledLabel } from "../Styles/ui/ui";
 import CustomDropDown from "../CustomDropdown";
 import { LimitConditions, LimitUnits } from "../../constant";
+import { useGetSinglePmPointFactorQuery } from "../../../../../services/api/pmSalesApiSlice";
 
-const AddNewItemsModal = ({
+const EditFactorModal = ({
     open,
     closeModal,
+    editFactorData,
     newFactorData,
     handleChange,
     setNewFactorData,
     handleFactorsAdded,
     isLoadingAddPointFactors,
 }) => {
+    const { data: singleFactorData, isLoading: isLoadingSingleFactorData } =
+        useGetSinglePmPointFactorQuery(editFactorData?.id, {
+            skip: !editFactorData?.id,
+            staleTime: 0,
+            refetchOnMountOrArgChange: true,
+        });
+
+    const singleDefaultFactor = singleFactorData?.data
+
+
     return (
         <CustomModal
             open={open}
             closeModal={closeModal}
-            contentLabel="Add New Item"
+            contentLabel="Edit Point Table"
             width="800px"
             height="650px"
             maxHeight="650px"
@@ -29,7 +41,7 @@ const AddNewItemsModal = ({
             {/* Modal Content */}
             <div className="d-flex flex-column">
                 <div className="d-flex justify-content-center align-items-center mb-4">
-                    <ModalTitle>Add a New Item</ModalTitle>
+                    <ModalTitle>Edit Point Table</ModalTitle>
                 </div>
                 <div className="d-flex flex-column mb-4 px-3  w-100">
                     {/* criteria  *****required****** */}
@@ -45,7 +57,7 @@ const AddNewItemsModal = ({
                                 type="text"
                                 className="w-100"
                                 name="title"
-                                value={newFactorData?.title}
+                                value={singleDefaultFactor?.title}
                                 onChange={handleChange}
                                 placeholder="Write Here"
                             />
@@ -352,9 +364,9 @@ const AddNewItemsModal = ({
     );
 };
 
-export default AddNewItemsModal;
+export default EditFactorModal;
 
-AddNewItemsModal.propTypes = {
+EditFactorModal.propTypes = {
     open: PropTypes.bool,
     closeModal: PropTypes.func,
     newFactorData: PropTypes.object,

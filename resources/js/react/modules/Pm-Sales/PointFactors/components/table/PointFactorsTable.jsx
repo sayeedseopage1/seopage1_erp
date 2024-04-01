@@ -34,6 +34,7 @@ import WithoutDraggableColumnHeader from "./WithoutColumnHeader";
 import PointFactorsTablePagination from "./PointFactorsTablePagination";
 import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
+import EditFactorModal from "../modal/EditFactorModal";
 
 const PointFactorsTable = ({
     isLoading,
@@ -57,6 +58,11 @@ const PointFactorsTable = ({
     });
 
     // console.log(tableData)
+
+    // modal open close state
+    const [editFactorModalOpen, setEditFactorModalOpen] = React.useState(false);
+    // modal state data
+    const [editFactorData, setEditFactorData] = React.useState({});
 
     // point factors data
     const _pointFactors = React.useMemo(
@@ -142,27 +148,36 @@ const PointFactorsTable = ({
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
         meta: {
-            /**
-             * Additional metadata associated with the column.
-             * This metadata can be accessed anywhere the column is available.
-             * @typedef {Object} ColumnMeta
-             * @property {Function} onClickHandler - Function triggered when a specific action, such as a click event,  occurs on the associated column.
-             * Accepts rowData as an argument representing the clicked row.
-             * Example usage: onClickHandler(rowData)
-             * This function can be accessed through table.options.meta.onClickHandler().
-             */
-            // onClickHandler: (rowData) => {
-            //     handlePmGoalModal(rowData);
-            // },
-            // onPercentOfGoalMet: (rowData) => {
-            //     handlePercentOfGoalMet(rowData);
-            // },
+            handleEditFactor: (factorData) => {
+                // const valueTypeConst =
+                //     PolicyTypeItemValuesType?.data?.regularTypes?.data;
+
+                // const getVueType = (type) => {
+                //     if (!_.includes(["yesNo", "list"], type)) {
+                //         return valueTypeConst.find(
+                //             (item) => item?.name === selectedRule?.value_type
+                //         );
+                //     } else if (type === "list") {
+                //         return {
+                //             id: 1,
+                //             label: "Countries",
+                //             name: "countries",
+                //         };
+                //     } else {
+                //         return "";
+                //     }
+                // };
+                // const payload = formatSingleRuleData(row, selectedRule)
+                setEditFactorData(factorData);
+                setEditFactorModalOpen(true);
+
+                console.log(factorData)
+            },
         }
     })
 
 
     // handle update rules
-
 
     // handle status update on rule and policy action modal server call
 
@@ -170,12 +185,25 @@ const PointFactorsTable = ({
 
     // handle change on input
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        if (editFactorData[name] === value) {
+            // If yes, clear the value from the state
+            setEditFactorData({ ...editFactorData, [name]: "" });
+        } else {
+            // Otherwise, set the clicked checkbox's value in the state
+            setEditFactorData({ ...editFactorData, [name]: value });
+        }
+    }
+
     // Edit Policy
     // handle cancel rule on policy
 
-
     // modal Close Handler
-
+    const handleCloseEditFactorModal = () => {
+        setEditFactorModalOpen(false);
+        // resetFormForRule();
+    };
 
     // auto generate title
     // const autoGenerateTitle = (data) => {
@@ -263,7 +291,38 @@ const PointFactorsTable = ({
                 )}
             </div>
 
+
+            {/* <AddNewItemsModal
+                handleChange={handleChange}
+                open={addNewItemModalOpen}
+                newFactorData={newFactorData}
+                setNewFactorData={setNewFactorData}
+                closeModal={handleAddNewItemModal}
+                handleFactorsAdded={handleFactorsAdded}
+                // newPolicyInputData={newPolicyInputData}
+                // newPolicyDataValidation={newPolicyDataValidation}
+                // TODO: loading will come from api 
+                isLoadingAddPointFactors={
+                    false
+                }
+            /> */}
+
             {/* Modals */}
+            {editFactorModalOpen && (
+                <EditFactorModal
+                    open={editFactorModalOpen}
+                    closeModal={handleCloseEditFactorModal}
+                    editFactorData={editFactorData}
+                    setEditFactorData={setEditFactorData}
+                    handleChange={handleChange}
+                // handleUpdateRules={handleUpdateRules}
+                // editRuleDataValidation={editRuleDataValidation}
+                // handleMultiSelectChange={setEditRuleData}
+                // isLoadingEditSalesRiskAnalysisRule={
+                //     isLoadingEditSalesRiskAnalysisRule
+                // }
+                />
+            )}
 
             {/* pagination */}
             {/* <PointFactorsTablePagination
