@@ -847,15 +847,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ]);
             }
 
-            // TODO: change deals > status to "analysis"
-
-            /**
-             * calculate point
-             * redirect accordingly
-             */
-
             // calculate point
-
             $calculation = self::calculatePolicyPoint($dealId);
 
             DB::commit();
@@ -980,7 +972,18 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionValueReport($deal_id)
     {
+        $calculation = self::calculatePolicyPoint($deal_id);
+        // dd($calculation);
+        $questionValues = PolicyQuestionValue::where('deal_id', $deal_id)->get()->map(function($item) use($calculation) {
+            return [
+                'title' => SalesPolicyQuestion::find($item->question_id)->title,
+                'ruleList' => SalesPolicyQuestion::find($item->question_id)->rule_list,
+                'value' => $item->value,
+                'point' => $calculation['pointData'][$item->question_id] ?? 0
+            ];
+        });
 
+        return response()->json(['data' => ['questionValue' => $questionValues, 'points' => $calculation['points']]]);
     }
 
     function salesRiskReport()
