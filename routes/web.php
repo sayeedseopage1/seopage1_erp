@@ -1835,5 +1835,5 @@ Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGu
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
 Route::get('test-point', function(){
-    return ProjectManagerPointLogic::distribute(1,1091,24);
+    return ProjectManagerPointLogic::distribute(2, 1090, 151);
 });

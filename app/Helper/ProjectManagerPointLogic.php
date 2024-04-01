@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Models\CashPoint;
 use App\Models\Criteria;
 use App\Models\Project;
 use Illuminate\Contracts\Validation\Validator;
@@ -12,18 +13,37 @@ class ProjectManagerPointLogic
     {
         $criteria = Criteria::with('factors')->find($criteriaId);
         if(!$criteria->factors->count()) return false;
-
         $project = Project::find($projectId);
         $earned_points = 0;
-        if($criteriaId==1){
-            foreach ($criteria->factors as $factor) {
-                if(eval("return \$factor->lower_limit $factor->lower_limit_condition \$comparable_value;") && eval("return \$factor->upper_limit $factor->upper_limit_condition \$comparable_value;"))
-                {
-                    $earned_points = $factor->getCalculatedPoints($projectId);
-                    break;
-                }
+        $factor_id = null;
+
+        foreach ($criteria->factors as $factor) {
+            if(eval("return \$factor->lower_limit $factor->lower_limit_condition \$comparable_value;") && eval("return \$factor->upper_limit $factor->upper_limit_condition \$comparable_value;"))
+            {
+                $earned_points = $factor->getCalculatedPoints($projectId);
+                $factor_id = $factor->id;
+                break;
             }
         }
+
         return $earned_points;
+        
+        try {
+            CashPoint::create([
+                'user_id' => $project->pm_id,
+                'project_id' => $projectId,
+                'activity' => 'null',
+                'gained_as' => 'Individual',
+                'points' => abs($earned_points),
+                'total_points_earn' => $earned_points > 0 ? $earned_points : 0,
+                'total_points_lost' => $earned_points < 0 ? abs($earned_points) : 0,
+                'factor_id' => $factor_id
+            ]);
+            return true;
+        } catch (\Throwable $th) {
+            // throw $th;
+            return false;
+        }
+        
     }
 }
