@@ -6,7 +6,7 @@ import CustomModal from "../Styles/ui/CustomModal/CustomModal";
 import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelectContainer, ModalTitle, StyledInput, StyledLabel } from "../Styles/ui/ui";
 import CustomDropDown from "../CustomDropdown";
 import { LimitConditions, LimitUnits } from "../../constant";
-import { useGetAllCriteriaQuery } from "../../../../../services/api/pmSalesApiSlice";
+import useCriteriaList from "../../hooks/useCriteriaList";
 
 const AddNewItemsModal = ({
     open,
@@ -17,21 +17,9 @@ const AddNewItemsModal = ({
     handleFactorsAdded,
     isLoadingAddPointFactors,
 }) => {
-    const { data: criterias } = useGetAllCriteriaQuery()
-    const criteriaList = criterias?.data
-    const criteriaConst = criteriaList?.map(c => {
-        return {
-            id: c?.id,
-            label: c?.title,
-            name: c?.id,
-        }
-    })
-    const CriteriaConstList = {
-        label: "CriteriaLists",
-        emptyOptionsLabel: "Select Criteria",
-        id: "CriteriaLists",
-        data: criteriaConst,
-    };
+    // criteria list data from api start
+    const { CriteriaConstList } = useCriteriaList()
+    // criteria list data from api start end
 
     return (
         <CustomModal

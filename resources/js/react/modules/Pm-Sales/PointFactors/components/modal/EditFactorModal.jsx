@@ -7,6 +7,7 @@ import { CheckboxContainer, ModalButton, ModalInput, ModalInputLabel, ModalSelec
 import CustomDropDown from "../CustomDropdown";
 import { LimitConditions, LimitUnits } from "../../constant";
 import { useGetSinglePmPointFactorQuery } from "../../../../../services/api/pmSalesApiSlice";
+import useCriteriaList from "../../hooks/useCriteriaList";
 
 const EditFactorModal = ({
     open,
@@ -27,6 +28,12 @@ const EditFactorModal = ({
 
     const singleDefaultFactor = singleFactorData?.data
 
+    console.log(singleDefaultFactor)
+
+    // criteria list data from api start
+    const { CriteriaConstList } = useCriteriaList()
+    // criteria list data from api start end
+
 
     return (
         <CustomModal
@@ -45,7 +52,26 @@ const EditFactorModal = ({
                 </div>
                 <div className="d-flex flex-column mb-4 px-3  w-100">
                     {/* criteria  *****required****** */}
-                    {/* TODO: it will be added  */}
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Criteria<sup>*</sup>:{" "}
+                        </ModalInputLabel>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    filedName="criteria"
+                                    data={CriteriaConstList}
+                                    selected={newFactorData?.criteria}
+                                    setSelected={handleChange}
+                                />
+                            </ModalSelectContainer>
+                            {/* {newPolicyDataValidation?.policyType && (
+                                <p className="text-danger">
+                                    Policy type is required
+                                </p>
+                            )} */}
+                        </div>
+                    </div>
 
                     {/* title  *****required****** */}
                     <div className="row mb-4 align-items-center">
