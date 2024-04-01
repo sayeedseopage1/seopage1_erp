@@ -144,6 +144,27 @@ const PointFactors = () => {
             setNewFactorData({ ...newFactorData, [name]: value });
         }
     }
+    useEffect(() => {
+        // Update state with only the criteria property set and other properties empty
+        setNewFactorData({
+            ...newFactorData,
+            title: "",
+            projectType: "",
+            lowerLimit: "",
+            upperLimit: "",
+            limitType: "",
+            limitUnit: {},
+            lowerLimitCondition: {},
+            upperLimitCondition: {},
+            pointType: "",
+            points: "",
+            pointDependOnModel: "",
+            pointDependOnField: "",
+            status: ""
+        });
+    }, [newFactorData?.criteria]);
+
+
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -174,20 +195,20 @@ const PointFactors = () => {
         }
         try {
             const payload = {
-                "criteria_id": parseInt(newFactorData?.criteria?.name),
-                "title": newFactorData?.title ?? null,
-                "project_type": newFactorData.projectType == "fixed" ? 1 : 2 ?? null,
-                "lower_limit": parseInt(newFactorData?.lowerLimit) ?? null,
-                "upper_limit": parseInt(newFactorData?.upperLimit) ?? null,
-                "limit_type": newFactorData?.limitType == "inclusive" ? 1 : 2 ?? null,
-                "limit_unit": parseInt(newFactorData?.limitUnit?.name) ?? null,
-                "lower_limit_condition": newFactorData?.lowerLimitCondition?.name ?? null,
-                "upper_limit_condition": newFactorData?.upperLimitCondition?.name ?? null,
-                "point_type": newFactorData?.pointType == "fixed" ? 1 : 2 ?? null,
-                "points": parseFloat(newFactorData?.points) ?? null,
-                "point_depend_on_model": parseFloat(newFactorData?.pointDependOnModel) ?? null,
-                "point_depend_on_field": parseFloat(newFactorData?.pointDependOnField) ?? null,
-                "status": parseFloat(newFactorData?.status) ?? null,
+                criteria_id: parseInt(newFactorData?.criteria?.name),
+                title: newFactorData?.title ?? null,
+                project_type: newFactorData?.projectType == "fixed" ? 1 : newFactorData?.projectType == "hourly" ? 2 : null ?? null,
+                lower_limit: parseInt(newFactorData?.lowerLimit) ?? null,
+                upper_limit: parseInt(newFactorData?.upperLimit) ?? null,
+                limit_type: newFactorData?.limitType == "inclusive" ? 1 : newFactorData?.limitType == "exclusive" ? 2 : null ?? null,
+                limit_unit: parseInt(newFactorData?.limitUnit?.name) ?? null,
+                lower_limit_condition: newFactorData?.lowerLimitCondition?.name ?? null,
+                upper_limit_condition: newFactorData?.upperLimitCondition?.name ?? null,
+                point_type: newFactorData?.pointType == "fixed" ? 1 : newFactorData?.pointType == "percentage" ? 2 : null ?? null,
+                points: parseFloat(newFactorData?.points) ?? null,
+                point_depend_on_model: parseFloat(newFactorData?.pointDependOnModel) ?? null,
+                point_depend_on_field: parseFloat(newFactorData?.pointDependOnField) ?? null,
+                status: parseFloat(newFactorData?.status) ?? null,
             }
 
             const response = await createPmPointFactor(payload);
