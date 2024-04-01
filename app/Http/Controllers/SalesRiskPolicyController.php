@@ -700,7 +700,7 @@ class SalesRiskPolicyController extends AccountBaseController
             'title' => 'required',
             'type' => 'required',
             'policy_id' => 'required',
-            'rule_list' => 'nullable',
+            'ruleList' => 'nullable',
             'parent_id' => 'nullable',
             'placeholder' => 'nullable'
         ]);
@@ -715,7 +715,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'type' => $req->type,
                 'value' => $req->value,
                 'parent_id' => $req->parent_id,
-                'rule_list' => $req->rule_list ? json_encode($req->rule_list) : null,
+                'rule_list' => $req->ruleList ? json_encode($req->ruleList) : null,
                 'placeholder' => $req->placeholder,
                 'policy_id' => $req->policy_id,
             ]);
