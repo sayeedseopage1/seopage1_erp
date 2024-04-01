@@ -595,7 +595,10 @@ class ProjectController extends AccountBaseController
             ->withTrashed()
             ->findOrFail($id)
             ->withCustomFields();
-
+        $deal = Deal::where('id', $this->project->deal_id)->first();
+        // if($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInMinutes($deal->released_at) < 180)) abort_403(true);
+        if ($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInSeconds($deal->released_at) < 10800)) abort_403(true);
+        
         $memberIds = $this->project->members->pluck('user_id')->toArray();
 
         $this->editPermission = user()->permission('edit_projects');
