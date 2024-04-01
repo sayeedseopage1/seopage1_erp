@@ -598,7 +598,7 @@ class ProjectController extends AccountBaseController
         $deal = Deal::where('id', $this->project->deal_id)->first();
         // if($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInMinutes($deal->released_at) < 180)) abort_403(true);
         if ($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInSeconds($deal->released_at) < 10800)) abort_403(true);
-        
+
         $memberIds = $this->project->members->pluck('user_id')->toArray();
 
         $this->editPermission = user()->permission('edit_projects');
@@ -3853,7 +3853,11 @@ class ProjectController extends AccountBaseController
 //        $plugin_urls = json_encode($data['plugin_url']);
         $project_cms = ProjectCms::where('cms_name',$request->cms_category)->first();
 
-        $project_portfolio = new ProjectPortfolio();
+        $project_portfolio = ProjectPortfolio::where('project_id', $project->project_id)->first();
+        if($project_portfolio == null){
+            $project_portfolio = new ProjectPortfolio();
+        }
+
         $project_portfolio->project_id = $project->project_id;
         if ($project_cms) {
             $project_portfolio->cms_category = $project_cms->id;
@@ -3876,7 +3880,14 @@ class ProjectController extends AccountBaseController
         $project_portfolio->added_by = $data['added_by'];
         // $project_portfolio->plugin_name = $website_plugins->id;
         // $project_portfolio->plugin_url = $website_plugins->id;
-        $project_portfolio->plugin_list = $request->plugin_list ? json_encode($request->plugin_list) : null;
+        if($project_portfolio->plugin_information)
+        {
+            $project_portfolio->plugin_list = $request->plugin_list ? json_encode($request->plugin_list) : null;
+        }
+        else{
+            $project_portfolio->plugin_list = null;
+        }
+
         $project_portfolio->save();
         $milestone_update = ProjectMilestone::where('id', $milestone->milestone_id)->first();
         $milestone_update->project_completion_status = 2;
