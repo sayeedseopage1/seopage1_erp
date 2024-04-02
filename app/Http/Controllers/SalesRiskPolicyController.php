@@ -38,6 +38,9 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         Route::controller(self::class)->prefix('account/sales-risk-policies')->name('account.sale-risk-policies.')->group(function () {
 
+            // question
+            Route::get('questions', 'questionIndex')->name('question.index');
+
             // policy rules
             Route::get('/', 'index')->name('index');
             Route::get('input-fields', 'riskPolicyInputFields')->name('input-fields');
@@ -61,6 +64,12 @@ class SalesRiskPolicyController extends AccountBaseController
 
         Route::get('account/deals/risk-analysis/{deal_id}', [self::class, 'salesPolicyQuestionRender'])->name('account.sale-risk-policies.risk-analysis');
         Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReport'])->name('account.sale-risk-policies.report-list');
+    }
+
+
+    function questionIndex()
+    {
+        return view('sales-risk-policies.index', $this->data);
     }
 
     function index()
