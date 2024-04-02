@@ -15,28 +15,31 @@ const ActionDropdownDataTable = ({ data, table }) => {
         setIsEvaluationModal((prev) => !prev);
     };
     React.useEffect(() => {
-        if (data?.leadDevSubmissionStatus === 0) {
+        if (data?.lead_dev_avg_rating === null) {
             setToolTipTeamLead(
-                `Currently being evaluated by ${data?.leadName}`
+                // `Currently being evaluated by ${data?.leadName}`
+                `Currently being evaluated by Hasnain Isalm`
             );
         }
     }, [data]);
 
     React.useEffect(() => {
-        if (data?.teamLeadsSubmissionStatus === 0) {
+        if (data?.team_lead_cmnt === null) {
             setToolTipAdmin(
-                `Currently being Reviewed by ${data?.teamLeadName}`
+                // `Currently being Reviewed by ${data?.teamLeadName}`
+                `Currently being Reviewed by Sayeed Ullah`
             );
         }
-        if (data?.leadDevSubmissionStatus === 0) {
-            setToolTipAdmin(`Currently being evaluated by ${data?.leadName}`);
+        if (data?.lead_dev_avg_rating === null) {
+            // setToolTipAdmin(`Currently being evaluated by ${data?.leadName}`);
+            setToolTipAdmin(`Currently being evaluated by Hasnain Islam`);
         }
     }, [data]);
 
     React.useEffect(() => {
-        if (data?.leadDevSubmissionStatus === 1) {
+        if (data?.lead_dev_avg_rating !== null) {
             setButtonVariant("success");
-        } else if (data?.leadDevSubmissionStatus === 0) {
+        } else if (data?.lead_dev_avg_rating === null) {
             setButtonVariant("primary");
         }
     }, [data]);
@@ -49,22 +52,20 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(6)}>
                         <Switch>
                             <Switch.Case
-                                condition={
-                                    data?.authorization_status === "pending"
-                                }
+                                condition={data?.accept_rejected === "pending"}
                             >
                                 <Button
                                     onClick={handleEvaluationClick}
                                     variant={buttonVariant}
                                 >
-                                    {data?.leadDevSubmissionStatus === 1
+                                    {data?.lead_dev_avg_rating !== null
                                         ? "Submitted"
                                         : "Evaluate"}
                                 </Button>
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    data?.authorization_status === "authorized"
+                                    data?.accept_rejected === "authorized"
                                 }
                             >
                                 <Button
@@ -81,29 +82,27 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(8)}>
                         <Switch>
                             <Switch.Case
-                                condition={
-                                    data?.authorization_status === "pending"
-                                }
+                                condition={data?.accept_rejected === null}
                             >
                                 <Button
                                     onClick={handleEvaluationClick}
                                     disabled={
-                                        data?.leadDevSubmissionStatus === 0
+                                        data?.lead_dev_avg_rating === null
                                     }
                                     dataTip={toolTipTeamLead}
                                     toolTipId="my-tooltip"
                                     dataTooltipHidden={
-                                        data?.leadDevSubmissionStatus === 1
+                                        data?.lead_dev_avg_rating !== null
                                     }
                                 >
-                                    {data?.leadDevSubmissionStatus === 0
+                                    {data?.lead_dev_avg_rating === null
                                         ? "Evaluating"
                                         : "Review"}
                                 </Button>
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    data?.authorization_status === "authorized"
+                                    data?.accept_rejected === "authorized"
                                 }
                             >
                                 <Button
@@ -120,48 +119,44 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(1)}>
                         <Switch>
                             <Switch.Case
-                                condition={
-                                    data?.authorization_status === "pending"
-                                }
+                                condition={data?.accept_rejected === "pending"}
                             >
                                 <Button
                                     dataTip={toolTipAdmin}
                                     toolTipId="my-tooltip"
                                     dataTooltipHidden={
-                                        data?.leadDevSubmissionStatus === 1 &&
-                                        data?.teamLeadsSubmissionStatus === 1
+                                        data?.lead_dev_avg_rating !== null &&
+                                        data?.team_lead_cmnt !== null
                                     }
                                     onClick={handleEvaluationClick}
                                     disabled={
-                                        data?.leadDevSubmissionStatus === 0 ||
-                                        data?.teamLeadsSubmissionStatus === 0
+                                        data?.lead_dev_avg_rating === null ||
+                                        data?.team_lead_cmnt === null
                                     }
                                 >
                                     <Switch>
                                         <Switch.Case
                                             condition={
-                                                data?.leadDevSubmissionStatus ===
-                                                0
+                                                data?.lead_dev_avg_rating ===
+                                                null
                                             }
                                         >
                                             Evaluating
                                         </Switch.Case>
                                         <Switch.Case
                                             condition={
-                                                data?.leadDevSubmissionStatus ===
-                                                    1 &&
-                                                data?.teamLeadsSubmissionStatus ===
-                                                    0
+                                                data?.lead_dev_avg_rating !==
+                                                    null &&
+                                                data?.team_lead_cmnt === null
                                             }
                                         >
                                             Reviewing
                                         </Switch.Case>
                                         <Switch.Case
                                             condition={
-                                                data?.leadDevSubmissionStatus ===
-                                                    1 &&
-                                                data?.teamLeadsSubmissionStatus ===
-                                                    1
+                                                data?.lead_dev_avg_rating ===
+                                                    null &&
+                                                data?.team_lead_cmnt !== null
                                             }
                                         >
                                             Authorize
@@ -171,7 +166,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    data?.authorization_status === "authorized"
+                                    data?.accept_rejected === "authorized"
                                 }
                             >
                                 <Button
