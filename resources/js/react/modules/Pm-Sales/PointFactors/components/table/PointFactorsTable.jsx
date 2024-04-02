@@ -35,6 +35,7 @@ import PointFactorsTablePagination from "./PointFactorsTablePagination";
 import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
+import { LimitConditions, LimitUnits } from "../../constant";
 
 const PointFactorsTable = ({
     isLoading,
@@ -149,26 +150,13 @@ const PointFactorsTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditFactor: (factorData) => {
-                // const valueTypeConst =
-                //     PolicyTypeItemValuesType?.data?.regularTypes?.data;
+                // find default value for dropdown options 
+                const limit_unit = LimitUnits?.data?.find(unit => unit?.name == factorData?.limit_unit)
+                const lower_limit_condition = LimitConditions?.data?.find(unit => unit?.name == factorData?.lower_limit_condition)
+                const upper_limit_condition = LimitConditions?.data?.find(unit => unit?.name == factorData?.upper_limit_condition)
 
-                // const getVueType = (type) => {
-                //     if (!_.includes(["yesNo", "list"], type)) {
-                //         return valueTypeConst.find(
-                //             (item) => item?.name === selectedRule?.value_type
-                //         );
-                //     } else if (type === "list") {
-                //         return {
-                //             id: 1,
-                //             label: "Countries",
-                //             name: "countries",
-                //         };
-                //     } else {
-                //         return "";
-                //     }
-                // };
-                // const payload = formatSingleRuleData(row, selectedRule)
-                setEditFactorData(factorData);
+                // set editor data
+                setEditFactorData({ ...factorData, limit_unit, lower_limit_condition, upper_limit_condition });
                 setEditFactorModalOpen(true);
             },
         }

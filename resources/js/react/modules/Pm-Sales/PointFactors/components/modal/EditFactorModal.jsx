@@ -205,51 +205,43 @@ const EditFactorModal = ({
                         </div>
                     }
 
-                    {/* TODO: */}
-                    {/* Upper limit condition  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Upper Limit Condition<sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="upperLimitCondition"
-                                    data={LimitConditions}
-                                    selected={newFactorData?.upperLimitCondition}
-                                    setSelected={handleChange}
-                                />
-                            </ModalSelectContainer>
-                            {/* {newPolicyDataValidation?.policyType && (
-                                <p className="text-danger">
-                                    Policy type is required
-                                </p>
-                            )} */}
-                        </div>
-                    </div>
-
-                    {/* TODO: */}
                     {/* Lower limit condition  *****required****** */}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Lower Limit Condition<sup>*</sup>:{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="lowerLimitCondition"
-                                    data={LimitConditions}
-                                    selected={newFactorData?.lowerLimitCondition}
-                                    setSelected={handleChange}
-                                />
-                            </ModalSelectContainer>
-                            {/* {newPolicyDataValidation?.policyType && (
-                                <p className="text-danger">
-                                    Policy type is required
-                                </p>
-                            )} */}
+                    {
+                        singleDefaultFactor?.lower_limit_condition && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Lower Limit Condition<sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        filedName="lower_limit_condition"
+                                        data={LimitConditions}
+                                        selected={lower_limit_condition}
+                                        setSelected={handleChange}
+                                    />
+                                </ModalSelectContainer>
+                            </div>
                         </div>
-                    </div>
+                    }
+
+                    {/* Upper limit condition  *****required****** */}
+                    {
+                        singleDefaultFactor?.upper_limit_condition && <div className="row mb-4 align-items-center">
+                            <ModalInputLabel className="col-4">
+                                Upper Limit Condition<sup>*</sup>:{" "}
+                            </ModalInputLabel>
+                            <div className="col-8 px-0 flex-column">
+                                <ModalSelectContainer>
+                                    <CustomDropDown
+                                        filedName="upper_limit_condition"
+                                        data={LimitConditions}
+                                        selected={upper_limit_condition}
+                                        setSelected={handleChange}
+                                    />
+                                </ModalSelectContainer>
+                            </div>
+                        </div>
+                    }
 
                     {/* point type  *****required****** */}
                     {
