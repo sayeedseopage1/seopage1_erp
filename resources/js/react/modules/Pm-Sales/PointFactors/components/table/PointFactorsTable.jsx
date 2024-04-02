@@ -37,6 +37,7 @@ import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
 import { LimitConditions, LimitUnits } from "../../constant";
 import { useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
+import { validationFormator } from "../../utils/validationFormator";
 
 const PointFactorsTable = ({
     isLoading,
@@ -164,11 +165,20 @@ const PointFactorsTable = ({
     })
 
 
-    // handle update rules
-
-    // handle status update on rule and policy action modal server call
-
-    // reset form for rule on close
+    const [editFactorDataValidation, setEditFactorDataValidation] =
+        useState({
+            title: false,
+            project_type: false,
+            lower_limit: false,
+            upper_limit: false,
+            limit_type: false,
+            limit_unit: false,
+            lower_limit_condition: false,
+            upper_limit_condition: false,
+            point_type: false,
+            points: false,
+            isSubmitting: false,
+        });
 
     // handle change on input
     const handleChange = (e) => {
@@ -196,19 +206,19 @@ const PointFactorsTable = ({
     const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
     const handleUpdateFactor = async () => {
-        // const validation = validationFormator(newFactorData, activeFactorFields, newFactorDataValidation)
+        const validation = validationFormator(editFactorData, editFactorData, editFactorDataValidation)
 
-        // if (
-        //     Object.entries(validation).some(
-        //         ([key, value]) => key !== "isSubmitting" && value === true
-        //     )
-        // ) {
-        //     setNewFactorDataValidation({
-        //         ...validation,
-        //         isSubmitting: true,
-        //     });
-        //     return;
-        // }
+        if (
+            Object.entries(validation).some(
+                ([key, value]) => key !== "isSubmitting" && value === true
+            )
+        ) {
+            setEditFactorDataValidation({
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
 
         try {
             const payload = {
@@ -232,12 +242,19 @@ const PointFactorsTable = ({
             if (response?.status == 200) {
                 toast.success(response.message);
                 handleCloseEditFactorModal();
-                // resetFormState();
             }
         } catch (error) {
             toast.error("Failed to update item");
         }
     };
+
+    // add new factor validation on change
+    useEffect(() => {
+        if (editFactorDataValidation?.isSubmitting) {
+            const validation = validationFormator(editFactorData, editFactorData, editFactorDataValidation)
+            setEditFactorDataValidation(validation);
+        }
+    }, [editFactorData]);
 
     return (
         <React.Fragment>
@@ -325,7 +342,7 @@ const PointFactorsTable = ({
                     setEditFactorData={setEditFactorData}
                     handleChange={handleChange}
                     handleUpdateFactor={handleUpdateFactor}
-                    // editRuleDataValidation={editRuleDataValidation}
+                    editFactorDataValidation={editFactorDataValidation}
                     isUpdatePmPointfactorLoading={isUpdatePmPointfactorLoading}
                 />
             )}

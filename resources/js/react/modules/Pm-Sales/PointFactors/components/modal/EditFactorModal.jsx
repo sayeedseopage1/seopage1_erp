@@ -16,6 +16,7 @@ const EditFactorModal = ({
     handleChange,
     handleUpdateFactor,
     isUpdatePmPointfactorLoading,
+    editFactorDataValidation
 }) => {
     const { data: singleFactorData, isLoading: isLoadingSingleFactorData } =
         useGetSinglePmPointFactorQuery(editFactorData?.id, {
@@ -71,6 +72,11 @@ const EditFactorModal = ({
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                     />
+                                    {editFactorDataValidation?.title && (
+                                        <p className="text-danger">
+                                            Title is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -104,6 +110,11 @@ const EditFactorModal = ({
                                         />
                                         <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
                                     </CheckboxContainer>
+                                    {editFactorDataValidation?.project_type && (
+                                        <p className="text-danger">
+                                            Project Type is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -123,6 +134,11 @@ const EditFactorModal = ({
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                     />
+                                    {editFactorDataValidation?.lower_limit && (
+                                        <p className="text-danger">
+                                            Lower Limit is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -143,6 +159,11 @@ const EditFactorModal = ({
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                     />
+                                    {editFactorDataValidation?.upper_limit && (
+                                        <p className="text-danger">
+                                            Upper Limit is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -176,6 +197,11 @@ const EditFactorModal = ({
                                         />
                                         <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
                                     </CheckboxContainer>
+                                    {editFactorDataValidation?.limit_type && (
+                                        <p className="text-danger">
+                                            Limit type is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -195,6 +221,11 @@ const EditFactorModal = ({
                                             setSelected={handleChange}
                                         />
                                     </ModalSelectContainer>
+                                    {editFactorDataValidation?.limit_unit && (
+                                        <p className="text-danger">
+                                            Limit unit is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -214,6 +245,11 @@ const EditFactorModal = ({
                                             setSelected={handleChange}
                                         />
                                     </ModalSelectContainer>
+                                    {editFactorDataValidation?.lower_limit_condition && (
+                                        <p className="text-danger">
+                                            Lower Limit Condition is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -233,6 +269,11 @@ const EditFactorModal = ({
                                             setSelected={handleChange}
                                         />
                                     </ModalSelectContainer>
+                                    {editFactorDataValidation?.upper_limit_condition && (
+                                        <p className="text-danger">
+                                            Upper Limit Condition is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -266,6 +307,11 @@ const EditFactorModal = ({
                                         />
                                         <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
                                     </CheckboxContainer>
+                                    {editFactorDataValidation?.point_type && (
+                                        <p className="text-danger">
+                                            Point type is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }
@@ -285,6 +331,11 @@ const EditFactorModal = ({
                                         onChange={handleChange}
                                         placeholder="Write Here"
                                     />
+                                    {editFactorDataValidation?.points && (
+                                        <p className="text-danger">
+                                            Points is required
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         }

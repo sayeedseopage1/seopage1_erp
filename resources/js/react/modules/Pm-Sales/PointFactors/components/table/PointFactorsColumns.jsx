@@ -90,7 +90,7 @@ export const PointFactorsColumns = [
                                         <Switch key={factor?.id}>
                                             <Switch.Case condition={factor?.point_type === 1}>
                                                 <p className={`${factor?.points < 0 && 'text-danger'}`}>
-                                                    {factor?.points} {factor?.points === 1 ? 'Point' : 'Points'}
+                                                    {factor?.points} {factor?.points > 1 ? 'Points' : 'Point'}
                                                 </p>
                                             </Switch.Case>
                                             <Switch.Case condition={factor?.point_type === 2}>

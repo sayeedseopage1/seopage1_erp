@@ -42,7 +42,6 @@ const PointFactors = () => {
     // modal state validation
     const [newFactorDataValidation, setNewFactorDataValidation] =
         React.useState({
-            criteria: false,
             title: false,
             project_type: false,
             lower_limit: false,
