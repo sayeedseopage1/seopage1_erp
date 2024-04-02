@@ -45,8 +45,8 @@ const EvaluationModal = ({
 
     const [updateFinalSubmissionStatus, { isError }] =
         useFinalTaskSubmissionStatusMutation();
-    const { data, isLoading } = useGetTaskListQuery(
-        singleEvaluation?.employeeId
+    const { data, isLoading, isFetching } = useGetTaskListQuery(
+        singleEvaluation?.user_id
     );
 
     const Tasks = data?.data;
@@ -109,7 +109,7 @@ const EvaluationModal = ({
             <EvaluationTable
                 data={Tasks}
                 columns={[...EvaluationTableColumns]}
-                isLoading={false}
+                isLoading={isLoading}
                 onPageChange={onPageChange}
                 sorting={sorting}
                 tableName="Evaluation Table"
