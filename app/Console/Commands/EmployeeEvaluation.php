@@ -52,7 +52,6 @@ class EmployeeEvaluation extends Command
                 }
             }
         }
-        // $user = User::where('role_id',14)->get();
         $this->info('Employee Evaluation Check Successfully');
     }
 }
