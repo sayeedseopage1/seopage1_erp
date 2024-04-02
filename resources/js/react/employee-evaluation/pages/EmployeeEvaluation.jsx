@@ -28,7 +28,7 @@ const EmployeeEvaluation = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
-    const { data, isFetching, refetch } = useGetEvaluationListQuery(
+    const { data, isLoading, isFetching, refetch } = useGetEvaluationListQuery(
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
@@ -95,7 +95,9 @@ const EmployeeEvaluation = () => {
                     <Tabs data={_data} />
 
                     <RefreshButton
-                        onClick={refetch}
+                        onClick={() => {
+                            refetch();
+                        }}
                         isLoading={isFetching}
                         className="font-weight-normal"
                     />
@@ -104,7 +106,8 @@ const EmployeeEvaluation = () => {
                 <DataTable
                     data={tableData(searchParams.get("show"))}
                     columns={[...DataTableColumns]}
-                    isLoading={false}
+                    isLoading={isLoading}
+                    isFetching={isFetching}
                     onPageChange={onPageChange}
                     sorting={sorting}
                     tableName="Evaluation Table"

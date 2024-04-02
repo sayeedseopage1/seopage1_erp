@@ -34,6 +34,7 @@ const DataTable = ({
     data,
     columns = [],
     isLoading,
+    isFetching,
     onPageChange,
     sorting,
     tableName,
@@ -139,7 +140,7 @@ const DataTable = ({
                                 ))}
 
                             {/* On loading  */}
-                            {isLoading &&
+                            {(isLoading || isFetching) &&
                                 _.times(pageSize, (item) => (
                                     <TableRow key={item}>
                                         {_.times(tableColumns.length, (col) => (
