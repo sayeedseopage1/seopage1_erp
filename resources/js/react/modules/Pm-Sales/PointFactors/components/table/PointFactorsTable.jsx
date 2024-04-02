@@ -170,8 +170,6 @@ const PointFactorsTable = ({
                 // const payload = formatSingleRuleData(row, selectedRule)
                 setEditFactorData(factorData);
                 setEditFactorModalOpen(true);
-
-                console.log(factorData)
             },
         }
     })
@@ -184,16 +182,16 @@ const PointFactorsTable = ({
     // reset form for rule on close
 
     // handle change on input
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (editFactorData[name] === value) {
-            // If yes, clear the value from the state
-            setEditFactorData({ ...editFactorData, [name]: "" });
-        } else {
-            // Otherwise, set the clicked checkbox's value in the state
-            setEditFactorData({ ...editFactorData, [name]: value });
-        }
+        setEditFactorData({ ...editFactorData, [name]: value });
+        /*  if (editFactorData[name] === value) {
+             // If yes, clear the value from the state
+             setEditFactorData({ ...editFactorData, [name]: "" });
+         } else {
+             // Otherwise, set the clicked checkbox's value in the state
+             setEditFactorData({ ...editFactorData, [name]: value });
+         } */
     }
 
     // Edit Policy

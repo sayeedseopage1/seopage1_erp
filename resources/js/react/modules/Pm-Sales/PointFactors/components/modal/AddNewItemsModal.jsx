@@ -101,8 +101,8 @@ const AddNewItemsModal = ({
                                                 id="fixedType"
                                                 name="project_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.project_type === '1'}
-                                                value="1"
+                                                checked={newFactorData?.project_type == 1}
+                                                value={1}
                                             />
                                             <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
                                         </CheckboxContainer>
@@ -112,8 +112,8 @@ const AddNewItemsModal = ({
                                                 id="hourlyType"
                                                 name="project_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.project_type === '2'}
-                                                value="2"
+                                                checked={newFactorData?.project_type == 2}
+                                                value={2}
                                             />
                                             <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
                                         </CheckboxContainer>
@@ -332,7 +332,6 @@ const AddNewItemsModal = ({
                                         <ModalInput
                                             type="number"
                                             className="w-100"
-                                            pattern="[0-9]*"
                                             name="points"
                                             value={newFactorData?.points}
                                             onChange={handleChange}
