@@ -904,7 +904,7 @@ class HelperPendingActionController extends AccountBaseController
     $project= Project::where('id',$task->project_id)->first();
     $client= User::where('id',$project->client_id)->first();
     $task_revision = TaskRevision::where('task_id',$task->id)->orderBy('id','desc')->first();
-    $project_manager= User::where('id',$project->pm_id)->first();
+    // $project_manager= User::where('id',$project->pm_id)->first();
     $authorizers= User::where('id',$task->added_by)->get();
        foreach ($authorizers as $key => $authorizer) {
         $action = new PendingAction();
@@ -915,6 +915,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->item_name= 'Revision submitted by '.$user_role->name;
             $action->heading= 'Revision submitted by '.$user_role->name;
             $action->message = 'Review the revision submitted by '.$user_role->name.': <a href="'.route('employees.show',$sender->id).'">'.$sender->name.'</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            
 
         }else
         {
@@ -1807,6 +1808,11 @@ class HelperPendingActionController extends AccountBaseController
 
             }
 
+        }
+
+        public function NewDeveloperEvaluation($user)
+        {
+            dd($user);
         }
 
 
