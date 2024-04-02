@@ -331,7 +331,7 @@ return new class extends Migration
                 'limit_type' => 1,
                 'limit_unit' => 1,
                 'lower_limit_condition' => '<',
-                'upper_limit_condition' => '>=',
+                'upper_limit_condition' => '<',
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 1,
                 'points' => -3,
