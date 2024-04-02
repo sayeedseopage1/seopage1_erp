@@ -17,8 +17,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
     React.useEffect(() => {
         if (data?.lead_dev_avg_rating === null) {
             setToolTipTeamLead(
-                // `Currently being evaluated by ${data?.leadName}`
-                `Currently being evaluated by Hasnain Isalm`
+                `Currently being evaluated by ${data?.added_by_name}`
             );
         }
     }, [data]);
@@ -52,7 +51,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(6)}>
                         <Switch>
                             <Switch.Case
-                                condition={data?.accept_rejected === "pending"}
+                                condition={data?.accept_rejected === null}
                             >
                                 <Button
                                     onClick={handleEvaluationClick}
@@ -119,7 +118,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(1)}>
                         <Switch>
                             <Switch.Case
-                                condition={data?.accept_rejected === "pending"}
+                                condition={data?.accept_rejected === null}
                             >
                                 <Button
                                     dataTip={toolTipAdmin}
