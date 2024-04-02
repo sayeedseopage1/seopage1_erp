@@ -1834,6 +1834,6 @@ Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGui
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
-Route::get('test-point', function(){
-    return ProjectManagerPointLogic::distribute(2, 1090, 145);
+Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($factorId, $projectId, $comparable_value){
+    return ProjectManagerPointLogic::distribute($factorId, $projectId, $comparable_value);
 });

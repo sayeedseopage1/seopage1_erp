@@ -30,7 +30,7 @@ class ProjectManagerPointLogic
             }
         }
 
-        return $earned_points;
+        if($earned_points==0) return false;
         
         try {
             CashPoint::create([
