@@ -34,6 +34,8 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
         // });
 
         setIsRelevantModal(false);
+
+        //increase count is rerendering pending actions page
         increaseCount();
     };
     return (
