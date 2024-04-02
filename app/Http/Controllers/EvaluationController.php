@@ -136,10 +136,13 @@ class EvaluationController extends AccountBaseController
                         ->paginate($limit);
 
                     foreach($employeeEvaluations as $data){
+                        $taskUser = TaskUser::where('user_id',$data->user_id)->first();
                         $total_hours = ProjectTimeLog::where('user_id', $data->user_id)->sum('total_hours');
                         $total_min = ProjectTimeLog::where('user_id', $data->user_id)->sum('total_minutes');
+                        $revision = TaskRevision::where('task_id', $taskUser->task_id)->count('task_id');
                         $data->total_hours = $total_hours;
                         $data->total_minutes = $total_min;
+                        $data->total_revision = $revision;
                     }
             
         return response()->json([
