@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('lower_limit')->nullable();
             $table->decimal('upper_limit')->nullable();
             $table->unsignedTinyInteger('limit_type')->nullable()->comment('1 = Static, 2 = Percentage');
-            $table->unsignedTinyInteger('limit_unit')->nullable()->comment('1 = Hour, 2 = Day, 3 = Frequency, 4 = Item, 5 = Others');
+            $table->unsignedTinyInteger('limit_unit')->nullable()->comment('1 = Hour, 2 = Day, 3 = Boolean, 4 = Item, 5 = Others');
             $table->string('lower_limit_condition')->nullable()->comment('>,<,=,=>,=<,!=');
             $table->string('upper_limit_condition')->nullable()->comment('>,<,==,=>,=<,!=');
             $table->string('limit_depend_on_models_and_fields')->nullable()->comment('The limit depend on this model and fields');
@@ -310,12 +310,12 @@ return new class extends Migration
                 'criteria_id' => 7,
                 'title' => 'If the project deadline is met',
                 'project_type' => 1,
-                'lower_limit' => null,
-                'upper_limit' => null,
-                'limit_type' => null,
-                'limit_unit' => null,
-                'lower_limit_condition' => null,
-                'upper_limit_condition' => null,
+                'lower_limit' => 1,
+                'upper_limit' => 1,
+                'limit_type' => 1,
+                'limit_unit' => 3,
+                'lower_limit_condition' => '==',
+                'upper_limit_condition' => '==',
                 'limit_depend_on_models_and_fields' => null,
                 'point_type' => 2,
                 'points' => 1,
