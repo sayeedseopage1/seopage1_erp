@@ -334,7 +334,7 @@ const PointFactors = () => {
                         handleFactorsAdded={handleFactorsAdded}
                         // newPolicyInputData={newPolicyInputData}
                         newFactorDataValidation={newFactorDataValidation}
-                        isLoadingAddPointFactors={
+                        isLoadingAddPmFactors={
                             isLoadingAddPmFactors
                         }
                         activeFactorFields={activeFactorFields}
