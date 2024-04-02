@@ -40,6 +40,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // question
             Route::get('questions', 'questionIndex')->name('question.index');
+            Route::get('questions/fields-type', 'qustionInputField')->name('question.fields-type');
 
             // policy rules
             Route::get('/', 'index')->name('index');
@@ -67,9 +68,25 @@ class SalesRiskPolicyController extends AccountBaseController
     }
 
 
+
+
     function questionIndex()
     {
-        return view('sales-risk-policies.index', $this->data);
+        $this->pageTitle = 'Sales Risk Question List';
+        return view('sales-risk-policies.questionIndex', $this->data);
+    }
+
+    function qustionInputField()
+    {
+        $qustionTypes = [
+            'hourlyRate' => 'Hourly Rate',
+            'milestore' => 'Milestone',
+            'threat' => 'Threat',
+            'doneByElse' => 'Done By Someone Else',
+            'routeWork' => 'Routine Work',
+            'availableWeekend' => 'Available During The Weekend'
+        ];
+        return response()->json(['data' => ['questionTypes' => $qustionTypes]]);
     }
 
     function index()
@@ -654,6 +671,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function policyQuestionInputFields($policyId)
     {
+
         $fileds = [
             [
                 'label' => 'Title',
