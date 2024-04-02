@@ -648,7 +648,7 @@
                                           </div>
                                       </td>
                                       <td>
-                                        @if($project_portfolio != null && $project_portfolio->plugin_list)
+                                        @if($project_portfolio != null && $project_portfolio->plugin_list != null &&  $project_portfolio->plugin_list != 'null')
                                             @php
                                               $website_plugin = App\Models\ProjectWebsitePlugin::whereIn('id', json_decode($project_portfolio->plugin_list))->get();
                                             @endphp

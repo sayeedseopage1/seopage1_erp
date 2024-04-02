@@ -9,8 +9,18 @@ const CommentFilter = ({ hideComments, setHideComments }) => {
                 id=""
                 checked={hideComments}
                 onChange={() => setHideComments(!hideComments)}
+                style={{
+                    marginRight: "5px",
+                    width: "20px",
+                    height: "20px",
+                    border: "1px solid #000",
+                    borderRadius: "3px",
+                    backgroundColor: hideComments ? "#ccc" : "#fff",
+                    cursor: "pointer",
+                }}
             />
-            <label style={{ marginLeft: "5px" }}>
+
+            <label style={{ marginLeft: "5px", fontSize: "18px" }}>
                 {hideComments
                     ? "Unmark checkbox to show comments"
                     : "Mark checkbox to hide comments"}
