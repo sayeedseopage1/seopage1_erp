@@ -30,6 +30,17 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["GET_PM_POINT_FACTORS"],
         }),
+        updatePmPointfactor: build.mutation({
+            query: ({ id, data }) => ({
+                url: `/account/pm-point-factor/${id}/update`,
+                method: "PUT",
+                body: data,
+                headers: {
+                    "X-CSRF-TOKEN": _token,
+                },
+            }),
+            invalidatesTags: ["GET_PM_POINT_FACTORS"],
+        }),
     }),
 });
 
@@ -39,4 +50,5 @@ export const {
     useGetAllCriteriaQuery,
     useGetFactorsFieldsByCriteriaQuery,
     useCreatePmPointFactorMutation,
+    useUpdatePmPointfactorMutation,
 } = pmSalesApiSlice;
