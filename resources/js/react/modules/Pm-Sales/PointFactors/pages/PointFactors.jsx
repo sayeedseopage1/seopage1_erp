@@ -8,9 +8,12 @@ import { useCreatePmPointFactorMutation, useGetPmPointFactorsQuery } from '../..
 import { useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
+import useActiveFactorFields from '../hooks/useActiveFactorFields';
+import { validationFormator } from '../utils/validationFormator';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
+
     // top section states 
     const [tab, setTab] = useState(1);
     const [search, setSearch] = useState("");
@@ -19,37 +22,37 @@ const PointFactors = () => {
         React.useState(false);
     // modal state data
     const [newFactorData, setNewFactorData] = React.useState({
-        criteria: {}, // input select
-        title: "",  // input text
-        projectType: "", // input checkbox
-        lowerLimit: "", // input number
-        upperLimit: "", // input number
-        limitType: "", // input checkbox
-        limitUnit: {}, // input //input select
-        lowerLimitCondition: {}, //input select
-        upperLimitCondition: {}, //input select
-        pointType: "", // input checkbox
-        points: "", // input number
-        pointDependOnModel: "", //input string (optional)
-        pointDependOnField: "", //input string (optional)
-        statusType: "1" //input checkbox (optional)
+        criteria: {},
+        title: "",
+        project_type: "",
+        lower_limit: "",
+        upper_limit: "",
+        limit_type: "",
+        limit_unit: {},
+        lower_limit_condition: {},
+        upper_limit_condition: {},
+        point_type: "",
+        points: "",
+        point_depend_on_model: "", //(optional)
+        point_depend_on_field: "", //(optional)
+        status: "1" //(optional)
     });
+    const { activeFactorFields } = useActiveFactorFields({ newFactorData })
 
     // modal state validation
     const [newFactorDataValidation, setNewFactorDataValidation] =
         React.useState({
             criteria: false,
             title: false,
-            projectType: false,
-            lowerLimit: false,
-            upperLimit: false,
-            limitType: false,
-            limitUnit: false,
-            lowerLimitCondition: false,
-            upperLimitCondition: false,
-            pointType: false,
+            project_type: false,
+            lower_limit: false,
+            upper_limit: false,
+            limit_type: false,
+            limit_unit: false,
+            lower_limit_condition: false,
+            upper_limit_condition: false,
+            point_type: false,
             points: false,
-            statusType: false,
             isSubmitting: false,
         });
 
@@ -126,18 +129,33 @@ const PointFactors = () => {
         setNewFactorData({
             criteria: {},
             title: "",
-            projectType: "",
-            lowerLimit: "",
-            upperLimit: "",
-            limitType: "",
-            limitUnit: {},
-            lowerLimitCondition: {},
-            upperLimitCondition: {},
-            pointType: "",
+            project_type: "",
+            lower_limit: "",
+            upper_limit: "",
+            limit_type: "",
+            limit_unit: {},
+            lower_limit_condition: {},
+            upper_limit_condition: {},
+            point_type: "",
             points: "",
-            pointDependOnModel: "",
-            pointDependOnField: "",
-            statusType: ""
+            point_depend_on_model: "",
+            point_depend_on_field: "",
+            status: "1"
+        })
+
+        // reset validation 
+        setNewFactorDataValidation({
+            title: false,
+            project_type: false,
+            lower_limit: false,
+            upper_limit: false,
+            limit_type: false,
+            limit_unit: false,
+            lower_limit_condition: false,
+            upper_limit_condition: false,
+            point_type: false,
+            points: false,
+            isSubmitting: false,
         })
     }
 
@@ -150,6 +168,22 @@ const PointFactors = () => {
         } else {
             // Otherwise, set the clicked checkbox's value in the state
             setNewFactorData({ ...newFactorData, [name]: value });
+
+            if (name === "criteria") {
+                setNewFactorDataValidation({
+                    title: false,
+                    project_type: false,
+                    lower_limit: false,
+                    upper_limit: false,
+                    limit_type: false,
+                    limit_unit: false,
+                    lower_limit_condition: false,
+                    upper_limit_condition: false,
+                    point_type: false,
+                    points: false,
+                    isSubmitting: false,
+                })
+            }
         }
     }
     useEffect(() => {
@@ -157,22 +191,21 @@ const PointFactors = () => {
         setNewFactorData({
             ...newFactorData,
             title: "",
-            projectType: "",
-            lowerLimit: "",
-            upperLimit: "",
-            limitType: "",
-            limitUnit: {},
-            lowerLimitCondition: {},
-            upperLimitCondition: {},
-            pointType: "",
+            project_type: "",
+            lower_limit: "",
+            upper_limit: "",
+            limit_type: "",
+            limit_unit: {},
+            lower_limit_condition: {},
+            upper_limit_condition: {},
+            point_type: "",
             points: "",
-            pointDependOnModel: "",
-            pointDependOnField: "",
-            // statusType: ""
+            point_depend_on_model: "",
+            point_depend_on_field: "",
+            // status: ""
         });
+
     }, [newFactorData?.criteria]);
-
-
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
         pageIndex: 0,
@@ -188,10 +221,7 @@ const PointFactors = () => {
     const handleAddNewItemModal = () => {
         setAddNewItemModalOpen(!addNewItemModalOpen);
         resetFormState();
-        // setNewPolicyInputData([]);
     };
-
-    // console.log("newFactorData", parseInt(newFactorData?.limitUnit?.name));
 
     // add pm point factors mutation
     const [createPmPointFactor, { isLoading: isLoadingAddPmFactors }] = useCreatePmPointFactorMutation()
@@ -201,22 +231,37 @@ const PointFactors = () => {
             toast.error("Please add a criteria first");
             return;
         }
+
+        const validation = validationFormator(newFactorData, activeFactorFields, newFactorDataValidation)
+
+        if (
+            Object.entries(validation).some(
+                ([key, value]) => key !== "isSubmitting" && value === true
+            )
+        ) {
+            setNewFactorDataValidation({
+                ...validation,
+                isSubmitting: true,
+            });
+            return;
+        }
+
         try {
             const payload = {
                 criteria_id: parseInt(newFactorData?.criteria?.name),
                 title: newFactorData?.title ?? null,
-                project_type: parseInt(newFactorData?.projectType) ?? null,
-                lower_limit: parseInt(newFactorData?.lowerLimit) ?? null,
-                upper_limit: parseInt(newFactorData?.upperLimit) ?? null,
-                limit_type: parseInt(newFactorData?.limitType) ?? null,
-                limit_unit: parseInt(newFactorData?.limitUnit?.name) ?? null,
-                lower_limit_condition: newFactorData?.lowerLimitCondition?.name ?? null,
-                upper_limit_condition: newFactorData?.upperLimitCondition?.name ?? null,
-                point_type: parseInt(newFactorData?.pointType) ?? null,
+                project_type: parseInt(newFactorData?.project_type) ?? null,
+                lower_limit: parseInt(newFactorData?.lower_limit) ?? null,
+                upper_limit: parseInt(newFactorData?.upper_limit) ?? null,
+                limit_type: parseInt(newFactorData?.limit_type) ?? null,
+                limit_unit: parseInt(newFactorData?.limit_unit?.name) ?? null,
+                lower_limit_condition: newFactorData?.lower_limit_condition?.name ?? null,
+                upper_limit_condition: newFactorData?.upper_limit_condition?.name ?? null,
+                point_type: parseInt(newFactorData?.point_type) ?? null,
                 points: parseFloat(newFactorData?.points) ?? null,
-                point_depend_on_model: parseFloat(newFactorData?.pointDependOnModel) ?? null,
-                point_depend_on_field: parseFloat(newFactorData?.pointDependOnField) ?? null,
-                statusType: parseInt(newFactorData?.statusType) ?? null,
+                point_depend_on_model: parseFloat(newFactorData?.point_depend_on_model) ?? null,
+                point_depend_on_field: parseFloat(newFactorData?.point_depend_on_field) ?? null,
+                status: parseInt(newFactorData?.status) ?? null,
             }
             const response = await createPmPointFactor(payload).unwrap();
             if (response?.status == 200) {
@@ -240,8 +285,6 @@ const PointFactors = () => {
         }
     }, [tab, PointFactorsColumns])
 
-    // console.log("columns", mainColumns)
-
     // const tableHeaderFilterByTab = PointFactorsColumns.filter(item => {
     //     if (tab === "hourly") {
     //         return item.accessorKey !== 'criteria';
@@ -251,7 +294,13 @@ const PointFactors = () => {
 
     // console.log(tableHeaderFilterByTab)
 
-    console.log(mainTableData)
+    // add new factor validation on change
+    useEffect(() => {
+        if (newFactorDataValidation?.isSubmitting) {
+            const validation = validationFormator(newFactorData, activeFactorFields, newFactorDataValidation)
+            setNewFactorDataValidation(validation);
+        }
+    }, [newFactorData]);
 
     return (
         <section>
@@ -284,10 +333,11 @@ const PointFactors = () => {
                         closeModal={handleAddNewItemModal}
                         handleFactorsAdded={handleFactorsAdded}
                         // newPolicyInputData={newPolicyInputData}
-                        // newPolicyDataValidation={newPolicyDataValidation}
+                        newFactorDataValidation={newFactorDataValidation}
                         isLoadingAddPointFactors={
                             isLoadingAddPmFactors
                         }
+                        activeFactorFields={activeFactorFields}
                     />
                 </div>
             </div>

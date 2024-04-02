@@ -53,7 +53,7 @@ export const LimitUnits = {
         },
         {
             id: 3,
-            label: "Frequency",
+            label: "Boolean",
             name: "3",
         },
         {

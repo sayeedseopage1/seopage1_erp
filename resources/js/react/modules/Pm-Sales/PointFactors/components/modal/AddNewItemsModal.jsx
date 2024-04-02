@@ -18,13 +18,15 @@ const AddNewItemsModal = ({
     handleChange,
     setNewFactorData,
     handleFactorsAdded,
+    newFactorDataValidation,
     isLoadingAddPmFactors,
+    activeFactorFields
 }) => {
 
     // criteria list data from api
     const { CriteriaConstList } = useCriteriaList()
     // get acticve factor fields from api 
-    const { activeFactorFields } = useActiveFactorFields({ newFactorData })
+
 
     // console.log("CriteriaConstList", newFactorData?.criteria)
 
@@ -58,11 +60,6 @@ const AddNewItemsModal = ({
                                     setSelected={handleChange}
                                 />
                             </ModalSelectContainer>
-                            {/* {newPolicyDataValidation?.policyType && (
-                                <p className="text-danger">
-                                    Policy type is required
-                                </p>
-                            )} */}
                         </div>
                     </div>
                     <Switch>
@@ -82,11 +79,11 @@ const AddNewItemsModal = ({
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                         />
-                                        {/* {newPolicyDataValidation?.policyName && (
-                                <p className="text-danger">
-                                    Policy name is required
-                                </p>
-                            )} */}
+                                        {newFactorDataValidation?.title && (
+                                            <p className="text-danger">
+                                                Title is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -102,9 +99,9 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="fixedType"
-                                                name="projectType"
+                                                name="project_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.projectType === '1'}
+                                                checked={newFactorData?.project_type === '1'}
                                                 value="1"
                                             />
                                             <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
@@ -113,37 +110,18 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="hourlyType"
-                                                name="projectType"
+                                                name="project_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.projectType === '2'}
+                                                checked={newFactorData?.project_type === '2'}
                                                 value="2"
                                             />
                                             <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
                                         </CheckboxContainer>
-                                    </div>
-                                </div>
-                            }
-
-                            {/* Upper Limit  *****required****** */}
-                            {
-                                activeFactorFields?.upper_limit && <div className="row mb-4 align-items-center">
-                                    <ModalInputLabel className="col-4">
-                                        Upper Limit <sup>*</sup>:{" "}
-                                    </ModalInputLabel>
-                                    <div className="col-8 flex-column px-0">
-                                        <ModalInput
-                                            type="number"
-                                            className="w-100"
-                                            name="upperLimit"
-                                            value={newFactorData?.upperLimit}
-                                            onChange={handleChange}
-                                            placeholder="Write Here"
-                                        />
-                                        {/* {newPolicyDataValidation?.policyName && (
-                                <p className="text-danger">
-                                    Policy name is required
-                                </p>
-                            )} */}
+                                        {newFactorDataValidation?.project_type && (
+                                            <p className="text-danger">
+                                                Project Type is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -158,16 +136,40 @@ const AddNewItemsModal = ({
                                         <ModalInput
                                             type="number"
                                             className="w-100"
-                                            name="lowerLimit"
-                                            value={newFactorData?.lowerLimit}
+                                            name="lower_limit"
+                                            value={newFactorData?.lower_limit}
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                         />
-                                        {/* {newPolicyDataValidation?.policyName && (
-                                <p className="text-danger">
-                                    Policy name is required
-                                </p>
-                            )} */}
+                                        {newFactorDataValidation?.lower_limit && (
+                                            <p className="text-danger">
+                                                Lower Limit is required
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            }
+
+                            {/* Upper Limit  *****required****** */}
+                            {
+                                activeFactorFields?.upper_limit && <div className="row mb-4 align-items-center">
+                                    <ModalInputLabel className="col-4">
+                                        Upper Limit <sup>*</sup>:{" "}
+                                    </ModalInputLabel>
+                                    <div className="col-8 flex-column px-0">
+                                        <ModalInput
+                                            type="number"
+                                            className="w-100"
+                                            name="upper_limit"
+                                            value={newFactorData?.upper_limit}
+                                            onChange={handleChange}
+                                            placeholder="Write Here"
+                                        />
+                                        {newFactorDataValidation?.upper_limit && (
+                                            <p className="text-danger">
+                                                Upper Limit is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -183,9 +185,9 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="staticType"
-                                                name="limitType"
+                                                name="limit_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.limitType === '1'}
+                                                checked={newFactorData?.limit_type === '1'}
                                                 value="1"
                                             />
                                             <StyledLabel htmlFor="staticType">Static</StyledLabel>
@@ -194,13 +196,18 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="percentageType"
-                                                name="limitType"
+                                                name="limit_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.limitType === '2'}
+                                                checked={newFactorData?.limit_type === '2'}
                                                 value="2"
                                             />
                                             <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
                                         </CheckboxContainer>
+                                        {newFactorDataValidation?.limit_type && (
+                                            <p className="text-danger">
+                                                Limit type is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -214,41 +221,17 @@ const AddNewItemsModal = ({
                                     <div className="col-8 px-0 flex-column">
                                         <ModalSelectContainer>
                                             <CustomDropDown
-                                                filedName="limitUnit"
+                                                filedName="limit_unit"
                                                 data={LimitUnits}
-                                                selected={newFactorData?.limitUnit}
+                                                selected={newFactorData?.limit_unit}
                                                 setSelected={handleChange}
                                             />
                                         </ModalSelectContainer>
-                                        {/* {newPolicyDataValidation?.policyType && (
-                                <p className="text-danger">
-                                    Policy type is required
-                                </p>
-                            )} */}
-                                    </div>
-                                </div>
-                            }
-
-                            {/* Upper limit condition  *****required****** */}
-                            {
-                                activeFactorFields?.upper_limit_condition && <div className="row mb-4 align-items-center">
-                                    <ModalInputLabel className="col-4">
-                                        Upper Limit Condition<sup>*</sup>:{" "}
-                                    </ModalInputLabel>
-                                    <div className="col-8 px-0 flex-column">
-                                        <ModalSelectContainer>
-                                            <CustomDropDown
-                                                filedName="upperLimitCondition"
-                                                data={LimitConditions}
-                                                selected={newFactorData?.upperLimitCondition}
-                                                setSelected={handleChange}
-                                            />
-                                        </ModalSelectContainer>
-                                        {/* {newPolicyDataValidation?.policyType && (
-                                <p className="text-danger">
-                                    Policy type is required
-                                </p>
-                            )} */}
+                                        {newFactorDataValidation?.limit_unit && (
+                                            <p className="text-danger">
+                                                Limit unit is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -262,17 +245,41 @@ const AddNewItemsModal = ({
                                     <div className="col-8 px-0 flex-column">
                                         <ModalSelectContainer>
                                             <CustomDropDown
-                                                filedName="lowerLimitCondition"
+                                                filedName="lower_limit_condition"
                                                 data={LimitConditions}
-                                                selected={newFactorData?.lowerLimitCondition}
+                                                selected={newFactorData?.lower_limit_condition}
                                                 setSelected={handleChange}
                                             />
                                         </ModalSelectContainer>
-                                        {/* {newPolicyDataValidation?.policyType && (
-                                <p className="text-danger">
-                                    Policy type is required
-                                </p>
-                            )} */}
+                                        {newFactorDataValidation?.lower_limit_condition && (
+                                            <p className="text-danger">
+                                                Lower Limit Condition is required
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            }
+
+                            {/* Upper limit condition  *****required****** */}
+                            {
+                                activeFactorFields?.upper_limit_condition && <div className="row mb-4 align-items-center">
+                                    <ModalInputLabel className="col-4">
+                                        Upper Limit Condition<sup>*</sup>:{" "}
+                                    </ModalInputLabel>
+                                    <div className="col-8 px-0 flex-column">
+                                        <ModalSelectContainer>
+                                            <CustomDropDown
+                                                filedName="upper_limit_condition"
+                                                data={LimitConditions}
+                                                selected={newFactorData?.upper_limit_condition}
+                                                setSelected={handleChange}
+                                            />
+                                        </ModalSelectContainer>
+                                        {newFactorDataValidation?.upper_limit_condition && (
+                                            <p className="text-danger">
+                                                Upper Limit Condition is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -288,9 +295,9 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="staticType"
-                                                name="pointType"
+                                                name="point_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.pointType === '1'}
+                                                checked={newFactorData?.point_type === '1'}
                                                 value="1"
                                             />
                                             <StyledLabel htmlFor="staticType">Static</StyledLabel>
@@ -299,13 +306,18 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="percentageType"
-                                                name="pointType"
+                                                name="point_type"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.pointType === '2'}
+                                                checked={newFactorData?.point_type === '2'}
                                                 value="2"
                                             />
                                             <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
                                         </CheckboxContainer>
+                                        {newFactorDataValidation?.point_type && (
+                                            <p className="text-danger">
+                                                Point type is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -326,11 +338,11 @@ const AddNewItemsModal = ({
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                         />
-                                        {/* {newPolicyDataValidation?.policyName && (
-                                <p className="text-danger">
-                                    Policy name is required
-                                </p>
-                            )} */}
+                                        {newFactorDataValidation?.points && (
+                                            <p className="text-danger">
+                                                Points is required
+                                            </p>
+                                        )}
                                     </div>
                                 </div>
                             }
@@ -345,8 +357,8 @@ const AddNewItemsModal = ({
                                         <ModalInput
                                             type="text"
                                             className="w-100"
-                                            name="pointDependOnModel"
-                                            value={newFactorData?.pointDependOnModel}
+                                            name="point_depend_on_model"
+                                            value={newFactorData?.point_depend_on_model}
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                         />
@@ -364,8 +376,8 @@ const AddNewItemsModal = ({
                                         <ModalInput
                                             type="text"
                                             className="w-100"
-                                            name="pointDependOnField"
-                                            value={newFactorData?.pointDependOnField}
+                                            name="point_depend_on_field"
+                                            value={newFactorData?.point_depend_on_field}
                                             onChange={handleChange}
                                             placeholder="Write Here"
                                         />
@@ -384,9 +396,9 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="activeType"
-                                                name="statusType"
+                                                name="status"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.statusType === '1'}
+                                                checked={newFactorData?.status === '1'}
                                                 value="1"
                                             />
                                             <StyledLabel htmlFor="activeType">Active</StyledLabel>
@@ -395,9 +407,9 @@ const AddNewItemsModal = ({
                                             <StyledInput
                                                 type="checkbox"
                                                 id="deactiveType"
-                                                name="statusType"
+                                                name="status"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.statusType === '0'}
+                                                checked={newFactorData?.status === '0'}
                                                 value="0"
                                             />
                                             <StyledLabel htmlFor="deactiveType">Deactive</StyledLabel>
@@ -405,23 +417,6 @@ const AddNewItemsModal = ({
                                     </div>
                                 </div>
                             }
-                            {/* {
-                                activeFactorFields?.status && <div className="row mb-4 align-items-center">
-                                    <ModalInputLabel className="col-4">
-                                        Status:{" "}
-                                    </ModalInputLabel>
-                                    <div className="col-8 flex-column px-0">
-                                        <ModalInput
-                                            type="number"
-                                            className="w-100"
-                                            name="status"
-                                            value={newFactorData?.status}
-                                            onChange={handleChange}
-                                            placeholder="Write Here"
-                                        />
-                                    </div>
-                                </div>
-                            } */}
                         </Switch.Case>
                     </Switch>
                 </div>

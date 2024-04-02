@@ -6,8 +6,8 @@ const TopSection = ({ tab, setTab, search, setSearch }) => {
     return (
         <TopSectionCointainer>
             <ButtonWrapper>
-                <ButtonComponent color={tab === "fixed" ? "#1492E6" : undefined} textColor={tab === "fixed" ? "#fff" : undefined} onClick={() => setTab("fixed")}>Fixed</ButtonComponent>
-                <ButtonComponent color={tab === "hourly" ? "#1492E6" : undefined} textColor={tab === "hourly" ? "#fff" : undefined} onClick={() => setTab("hourly")}>Hourly</ButtonComponent>
+                <ButtonComponent color={tab === 1 ? "#1492E6" : undefined} textColor={tab === 1 ? "#fff" : undefined} onClick={() => setTab(1)}>Fixed</ButtonComponent>
+                <ButtonComponent color={tab === 2 ? "#1492E6" : undefined} textColor={tab === 2 ? "#fff" : undefined} onClick={() => setTab(2)}>Hourly</ButtonComponent>
             </ButtonWrapper>
             <div style={{ width: "100%", maxWidth: "615px" }}>
                 <SearchBox
