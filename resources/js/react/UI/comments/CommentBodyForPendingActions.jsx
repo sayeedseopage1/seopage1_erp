@@ -738,8 +738,10 @@ const CommentBodyForPendingActions = ({
                                     showDenyButton: true,
                                     denyButtonText: "No",
                                     customClass: {
-                                        confirmButton: "btn btn-primary",
-                                        cancelButton: `${style.customInfoButton}`,
+                                        confirmButton: `btn btn-primary mt-3 py-2 `,
+                                        cancelButton: "btn btn-info",
+                                        denyButton: "btn btn-danger",
+                                        // cancelButton: `${style.customInfoButton}`,
                                     },
                                 }).then((result) => {
                                     if (result.isConfirmed) {
@@ -763,6 +765,8 @@ const CommentBodyForPendingActions = ({
                                         );
                                         close();
                                     }
+
+                                    close();
                                 });
                             }}
                             className={`${style.commentsBody_header_btn}`}
