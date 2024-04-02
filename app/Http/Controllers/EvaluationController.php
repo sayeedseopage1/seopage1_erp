@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\ProjectTimeLog;
 use App\Models\SubTask;
 use App\Models\Task;
@@ -103,13 +104,14 @@ class EvaluationController extends AccountBaseController
         $endDate = $request->end_date ?? null;
         $limit = $request->limit ??  10;
 
-        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*')
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*','added_by.id as added_by_id','added_by.name as added_by_name')
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
                     ->selectRaw('COUNT(DISTINCT task_submissions.id) as total_task_submit')
 
                     ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
+                    ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
                     ->leftJoin('task_submissions', 'employee_evaluations.user_id', '=', 'task_submissions.user_id')
@@ -146,52 +148,14 @@ class EvaluationController extends AccountBaseController
         ]);
     }
 
-    // public function getAllEvaluation(Request $request)
-    // {
-    //     $startDate = $request->start_date ?? null;
-    //     $endDate = $request->end_date ?? null;
-    //     $limit = $request->limit ?? 10;
+    public function getEmployeeTask($id)
+    {
+        $data = EmployeeEvaluationTask::where('user_id',$id)->get();
 
-    //     $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*')
-    //         ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
-    //         ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
-    //         ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
-    //         ->selectRaw('COUNT(DISTINCT task_submissions.id) as total_task_submit')
-    //         ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
-    //         ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
-    //         ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
-    //         ->leftJoin('task_submissions', 'employee_evaluations.user_id', '=', 'task_submissions.user_id')
-    //         ->whereNotNull('task_submissions.link')
-    //         ->groupBy('employee_evaluations.id');
+        return response()->json([
+            'data' => $data,
+            'status' => 200
+        ]);
+    }
 
-    //     if ($startDate !== null && $endDate !== null) {
-    //         $evaluationQuery->where(function ($query) use ($startDate, $endDate) {
-    //             $query->whereBetween('employee_evaluations.created_at', [$startDate, $endDate])
-    //                 ->orWhereBetween('employee_evaluations.updated_at', [$startDate, $endDate]);
-    //         });
-    //     }
-
-    //     if ($request->search != '') {
-    //         $evaluationQuery->where(function ($query) use ($request) {
-    //             $searchTerm = '%' . $request->search . '%';
-    //             $query->where('employee_evaluations.user_name', 'like', $searchTerm)
-    //                 ->orWhere('employee_evaluations.join_date', 'like', $searchTerm)
-    //                 ->orWhere('employee_evaluations.accept_rejected', 'like', $searchTerm);
-    //         });
-    //     }
-
-    //     $employeeEvaluations = $evaluationQuery->paginate($limit);
-
-    //     $employeeEvaluations->each(function ($evaluation) {
-    //         $totalHours = ProjectTimeLog::where('user_id', $evaluation->user_id)->sum('total_hours');
-    //         $totalMinutes = ProjectTimeLog::where('user_id', $evaluation->user_id)->sum('total_minutes');
-    //         $evaluation->total_hours = $totalHours;
-    //         $evaluation->total_minutes = $totalMinutes;
-    //     });
-
-    //     return response()->json([
-    //         'data' => $employeeEvaluations,
-    //         'status' => 200
-    //     ]);
-    // }
 }
