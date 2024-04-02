@@ -32,7 +32,7 @@ class PmPointFactorController extends AccountBaseController
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'criteria_id' => 'required|exist:criterias',
+            'criteria_id' => 'required|exists:criterias,id',
             'title' => 'required|string',
             'project_type' => 'required|in:1,2',
             'lower_limit' => 'required|numeric',
@@ -83,7 +83,7 @@ class PmPointFactorController extends AccountBaseController
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'criteria_id' => 'required|exist:criterias',
+            'criteria_id' => 'required|exists:criterias,id',
             'title' => 'required|string',
             'project_type' => 'required|in:1,2',
             'lower_limit' => 'required|numeric',

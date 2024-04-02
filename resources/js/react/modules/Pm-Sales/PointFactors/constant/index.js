@@ -43,13 +43,28 @@ export const LimitUnits = {
     data: [
         {
             id: 1,
-            label: "Days",
+            label: "Hour",
             name: "1",
         },
         {
             id: 2,
-            label: "Hours",
+            label: "Day",
             name: "2",
+        },
+        {
+            id: 3,
+            label: "Frequency",
+            name: "3",
+        },
+        {
+            id: 4,
+            label: "Item",
+            name: "4",
+        },
+        {
+            id: 5,
+            label: "Others",
+            name: "5",
         },
     ],
 };

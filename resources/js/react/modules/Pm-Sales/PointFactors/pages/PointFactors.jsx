@@ -8,12 +8,11 @@ import { useCreatePmPointFactorMutation, useGetPmPointFactorsQuery } from '../..
 import { useEffect } from 'react';
 import _ from 'lodash';
 import { toast } from 'react-toastify';
-import { number } from 'zod';
 // import { HourlyPointFactorsColumns } from '../components/table/HourlyPointFactorsColumns';
 
 const PointFactors = () => {
     // top section states 
-    const [tab, setTab] = useState("fixed");
+    const [tab, setTab] = useState(1);
     const [search, setSearch] = useState("");
     // modal open close state
     const [addNewItemModalOpen, setAddNewItemModalOpen] =
@@ -33,7 +32,7 @@ const PointFactors = () => {
         points: "", // input number
         pointDependOnModel: "", //input string (optional)
         pointDependOnField: "", //input string (optional)
-        status: "" //input number (optional)
+        statusType: "1" //input checkbox (optional)
     });
 
     // modal state validation
@@ -50,6 +49,7 @@ const PointFactors = () => {
             upperLimitCondition: false,
             pointType: false,
             points: false,
+            statusType: false,
             isSubmitting: false,
         });
 
@@ -71,48 +71,56 @@ const PointFactors = () => {
     // pm point factors data
     const pmPointFactorsData = data?.data;
 
-
     // filter by fixed and hourly 
-    const [mainTableData, setMainTableData] = useState(pmPointFactorsData);
+    const [mainTableData, setMainTableData] = useState([]);
+    const [fixedTableData, setFixedTableData] = useState([])
+    const [hourlyTableData, setHourlyTableData] = useState([])
     useEffect(() => {
-        if (tab === "fixed") {
+        if (tab == 1) {
             const fixedData = pmPointFactorsData?.map(item => {
                 return {
                     ...item,
-                    factors: item.factors.filter(d => d.project_type === 1)
+                    factors: item.factors.filter(d => d.project_type == 1)
                 }
             })
+            setFixedTableData(fixedData)
             setMainTableData(fixedData)
         }
-        else if (tab === "hourly") {
+        else if (tab == 2) {
             const hourlyData = pmPointFactorsData?.map(item => {
                 return {
                     ...item,
-                    factors: item.factors.filter(d => d.project_type === 2)
+                    factors: item.factors.filter(d => d.project_type == 2)
                 }
             })
+            setHourlyTableData(hourlyData)
             setMainTableData(hourlyData)
-        } else {
-            setMainTableData(pmPointFactorsData)
         }
-    }, [pmPointFactorsData, tab])
+    }, [tab, pmPointFactorsData])
 
     // search functionality
     useEffect(() => {
-        setMainTableData(
-            pmPointFactorsData?.filter((item) => {
+        const filterData = (data) => {
+            return data?.filter((item) => {
                 // Check if the title in the parent object matches the search
                 const isTitleMatch = item.title.toLowerCase().includes(search.toLowerCase());
-
                 // Check if any title in factors array matches the search
                 const isFactorTitleMatch = item.factors.some(factor =>
                     factor.title.toLowerCase().includes(search.toLowerCase())
                 );
-
                 return isTitleMatch || isFactorTitleMatch;
-            })
-        );
-    }, [search, pmPointFactorsData]);
+            });
+        };
+
+        let searchRes;
+        if (tab === 1) {
+            searchRes = filterData(fixedTableData);
+        } else if (tab === 2) {
+            searchRes = filterData(hourlyTableData);
+        }
+        setMainTableData(searchRes);
+    }, [search, fixedTableData, hourlyTableData, tab]);
+
 
     const resetFormState = () => {
         setNewFactorData({
@@ -129,7 +137,7 @@ const PointFactors = () => {
             points: "",
             pointDependOnModel: "",
             pointDependOnField: "",
-            status: ""
+            statusType: ""
         })
     }
 
@@ -160,7 +168,7 @@ const PointFactors = () => {
             points: "",
             pointDependOnModel: "",
             pointDependOnField: "",
-            status: ""
+            // statusType: ""
         });
     }, [newFactorData?.criteria]);
 
@@ -197,18 +205,18 @@ const PointFactors = () => {
             const payload = {
                 criteria_id: parseInt(newFactorData?.criteria?.name),
                 title: newFactorData?.title ?? null,
-                project_type: newFactorData?.projectType == "fixed" ? 1 : newFactorData?.projectType == "hourly" ? 2 : null ?? null,
+                project_type: parseInt(newFactorData?.projectType) ?? null,
                 lower_limit: parseInt(newFactorData?.lowerLimit) ?? null,
                 upper_limit: parseInt(newFactorData?.upperLimit) ?? null,
-                limit_type: newFactorData?.limitType == "inclusive" ? 1 : newFactorData?.limitType == "exclusive" ? 2 : null ?? null,
+                limit_type: parseInt(newFactorData?.limitType) ?? null,
                 limit_unit: parseInt(newFactorData?.limitUnit?.name) ?? null,
                 lower_limit_condition: newFactorData?.lowerLimitCondition?.name ?? null,
                 upper_limit_condition: newFactorData?.upperLimitCondition?.name ?? null,
-                point_type: newFactorData?.pointType == "fixed" ? 1 : newFactorData?.pointType == "percentage" ? 2 : null ?? null,
+                point_type: parseInt(newFactorData?.pointType) ?? null,
                 points: parseFloat(newFactorData?.points) ?? null,
                 point_depend_on_model: parseFloat(newFactorData?.pointDependOnModel) ?? null,
                 point_depend_on_field: parseFloat(newFactorData?.pointDependOnField) ?? null,
-                status: parseFloat(newFactorData?.status) ?? null,
+                statusType: parseInt(newFactorData?.statusType) ?? null,
             }
             const response = await createPmPointFactor(payload).unwrap();
             if (response?.status == 200) {
@@ -219,67 +227,12 @@ const PointFactors = () => {
         } catch (error) {
             toast.error("Failed to add new item");
         }
-
-        // try {
-        //     // prepare payload for api
-        //     const payload = {
-        //         title: newPolicyInputData[0]?.policyName,
-        //         department: newPolicyInputData[0]?.department?.id,
-        //         comment: newPolicyInputData[0]?.comment,
-        //         ruleList: newPolicyInputData.map((item) => {
-        //             const rule = {
-        //                 policyType: item.policyType?.name,
-        //                 title: item.title,
-        //             };
-        //             if (item.value) rule.value = item.value;
-        //             if (!_.isEmpty(item.valueType))
-        //                 rule.valueType = item.valueType.name;
-        //             if (item.from) rule.from = item.from;
-        //             if (item.to) rule.to = item.to;
-        //             if (item.points) rule.points = item.points;
-        //             if (item.yes && item.no) {
-        //                 rule.value = {
-        //                     yes: {
-        //                         point: item.yes,
-        //                         comment: item.yesComment,
-        //                     },
-        //                     no: {
-        //                         point: item.no,
-        //                         comment: item.noComment,
-        //                     },
-        //                 };
-        //             }
-        //             if (item.countries?.length > 0) {
-        //                 rule.countries = item.countries.map((country) => ({
-        //                     [country.iso]: country.niceName,
-        //                 }));
-        //             }
-        //             if (item.ruleComment) rule.comment = item.ruleComment;
-        //             return rule;
-        //         }),
-        //     };
-
-        //     // console.log("payload", payload);
-        //     const response = await submitData(payload);
-        //     if (response?.data) {
-        //         toast.success("New item added successfully");
-        //         handleAddNewPolicyModal();
-        //         setNewPolicyInputData([]);
-        //     }
-        // } catch (error) {
-        //     if (error?.status === 403) {
-        //         toast.error("You are not authorized to perform this action");
-        //         return;
-        //     } else {
-        //         toast.error("Failed to add new item");
-        //     }
-        // }
     };
 
     const [mainColumns, setMainColumns] = useState(PointFactorsColumns);
 
     useEffect(() => {
-        if (tab === "hourly") {
+        if (tab === "2") {
             const hourlyColumns = PointFactorsColumns.filter(item => item.accessorKey !== 'title');
             setMainColumns(hourlyColumns);
         } else {
@@ -297,6 +250,8 @@ const PointFactors = () => {
     // });
 
     // console.log(tableHeaderFilterByTab)
+
+    console.log(mainTableData)
 
     return (
         <section>

@@ -104,8 +104,8 @@ const AddNewItemsModal = ({
                                                 id="fixedType"
                                                 name="projectType"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.projectType === 'fixed'}
-                                                value="fixed"
+                                                checked={newFactorData?.projectType === '1'}
+                                                value="1"
                                             />
                                             <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
                                         </CheckboxContainer>
@@ -115,8 +115,8 @@ const AddNewItemsModal = ({
                                                 id="hourlyType"
                                                 name="projectType"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.projectType === 'hourly'}
-                                                value="hourly"
+                                                checked={newFactorData?.projectType === '2'}
+                                                value="2"
                                             />
                                             <StyledLabel htmlFor="hourlyType">Hourly</StyledLabel>
                                         </CheckboxContainer>
@@ -182,24 +182,24 @@ const AddNewItemsModal = ({
                                         <CheckboxContainer className="mr-3">
                                             <StyledInput
                                                 type="checkbox"
-                                                id="inclusiveType"
+                                                id="staticType"
                                                 name="limitType"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.limitType === 'inclusive'}
-                                                value="inclusive"
+                                                checked={newFactorData?.limitType === '1'}
+                                                value="1"
                                             />
-                                            <StyledLabel htmlFor="inclusiveType">Inclusive</StyledLabel>
+                                            <StyledLabel htmlFor="staticType">Static</StyledLabel>
                                         </CheckboxContainer>
                                         <CheckboxContainer>
                                             <StyledInput
                                                 type="checkbox"
-                                                id="exclusiveType"
+                                                id="percentageType"
                                                 name="limitType"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.limitType === 'exclusive'}
-                                                value="exclusive"
+                                                checked={newFactorData?.limitType === '2'}
+                                                value="2"
                                             />
-                                            <StyledLabel htmlFor="exclusiveType">Exclusive</StyledLabel>
+                                            <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
                                         </CheckboxContainer>
                                     </div>
                                 </div>
@@ -287,13 +287,13 @@ const AddNewItemsModal = ({
                                         <CheckboxContainer className="mr-3">
                                             <StyledInput
                                                 type="checkbox"
-                                                id="fixedType"
+                                                id="staticType"
                                                 name="pointType"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.pointType === 'fixed'}
-                                                value="fixed"
+                                                checked={newFactorData?.pointType === '1'}
+                                                value="1"
                                             />
-                                            <StyledLabel htmlFor="fixedType">Fixed</StyledLabel>
+                                            <StyledLabel htmlFor="staticType">Static</StyledLabel>
                                         </CheckboxContainer>
                                         <CheckboxContainer>
                                             <StyledInput
@@ -301,8 +301,8 @@ const AddNewItemsModal = ({
                                                 id="percentageType"
                                                 name="pointType"
                                                 onChange={handleChange}
-                                                checked={newFactorData?.pointType === 'percentage'}
-                                                value="percentage"
+                                                checked={newFactorData?.pointType === '2'}
+                                                value="2"
                                             />
                                             <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
                                         </CheckboxContainer>
@@ -377,6 +377,37 @@ const AddNewItemsModal = ({
                             {
                                 activeFactorFields?.status && <div className="row mb-4 align-items-center">
                                     <ModalInputLabel className="col-4">
+                                        Status <sup>*</sup>:{" "}
+                                    </ModalInputLabel>
+                                    <div className="col-8 px-0">
+                                        <CheckboxContainer className="mr-3">
+                                            <StyledInput
+                                                type="checkbox"
+                                                id="activeType"
+                                                name="statusType"
+                                                onChange={handleChange}
+                                                checked={newFactorData?.statusType === '1'}
+                                                value="1"
+                                            />
+                                            <StyledLabel htmlFor="activeType">Active</StyledLabel>
+                                        </CheckboxContainer>
+                                        <CheckboxContainer>
+                                            <StyledInput
+                                                type="checkbox"
+                                                id="deactiveType"
+                                                name="statusType"
+                                                onChange={handleChange}
+                                                checked={newFactorData?.statusType === '0'}
+                                                value="0"
+                                            />
+                                            <StyledLabel htmlFor="deactiveType">Deactive</StyledLabel>
+                                        </CheckboxContainer>
+                                    </div>
+                                </div>
+                            }
+                            {/* {
+                                activeFactorFields?.status && <div className="row mb-4 align-items-center">
+                                    <ModalInputLabel className="col-4">
                                         Status:{" "}
                                     </ModalInputLabel>
                                     <div className="col-8 flex-column px-0">
@@ -390,7 +421,7 @@ const AddNewItemsModal = ({
                                         />
                                     </div>
                                 </div>
-                            }
+                            } */}
                         </Switch.Case>
                     </Switch>
                 </div>
