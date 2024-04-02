@@ -31,10 +31,10 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["GET_PM_POINT_FACTORS"],
         }),
         updatePmPointfactor: build.mutation({
-            query: ({ id, data }) => ({
-                url: `/account/pm-point-factor/${id}/update`,
+            query: ({ id, payload }) => ({
+                url: `/account/pm-point-factor/${id}`,
                 method: "PUT",
-                body: data,
+                body: payload,
                 headers: {
                     "X-CSRF-TOKEN": _token,
                 },

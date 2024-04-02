@@ -259,8 +259,8 @@ const PointFactors = () => {
                 upper_limit_condition: newFactorData?.upper_limit_condition?.name ?? null,
                 point_type: parseInt(newFactorData?.point_type) ?? null,
                 points: parseFloat(newFactorData?.points) ?? null,
-                point_depend_on_model: parseFloat(newFactorData?.point_depend_on_model) ?? null,
-                point_depend_on_field: parseFloat(newFactorData?.point_depend_on_field) ?? null,
+                point_depend_on_model: newFactorData?.point_depend_on_model ?? null,
+                point_depend_on_field: newFactorData?.point_depend_on_field ?? null,
                 status: parseInt(newFactorData?.status) ?? null,
             }
             const response = await createPmPointFactor(payload).unwrap();
@@ -311,7 +311,6 @@ const PointFactors = () => {
                     <PointFactorsTable
                         tableColumns={mainColumns}
                         tableName="PointFactorsTable"
-                        // tab={tab}
                         tableData={mainTableData}
                         isLoading={isFetching}
                         refetch={refetch}

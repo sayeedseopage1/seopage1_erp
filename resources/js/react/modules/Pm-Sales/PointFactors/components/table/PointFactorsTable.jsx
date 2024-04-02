@@ -36,6 +36,7 @@ import { useState } from "react";
 import PmPointFactorsTableLoader from "../loader/PmPointFactorsTableLoader";
 import EditFactorModal from "../modal/EditFactorModal";
 import { LimitConditions, LimitUnits } from "../../constant";
+import { useUpdatePmPointfactorMutation } from "../../../../../services/api/pmSalesApiSlice";
 
 const PointFactorsTable = ({
     isLoading,
@@ -191,14 +192,52 @@ const PointFactorsTable = ({
         // resetFormForRule();
     };
 
-    // auto generate title
-    // const autoGenerateTitle = (data) => {
-    //     return `${data?.policyType?.label} ${data?.valueType?.name === "currency" ? "$" : ""
-    //         }${data?.value}${data.from}${data?.from && data?.to ? "-" : ""}${data.to
-    //         }${data?.valueType?.name === "percentage" ? "%" : ""}${data?.valueType?.name === "hourly" ? "hr" : ""
-    //         }${data?.valueType?.name === "days" ? "days" : ""}`;
-    // };
+    // submit 
+    const [updatePmPointfactor, { isLoading: isUpdatePmPointfactorLoading }] = useUpdatePmPointfactorMutation()
 
+    const handleUpdateFactor = async () => {
+        // const validation = validationFormator(newFactorData, activeFactorFields, newFactorDataValidation)
+
+        // if (
+        //     Object.entries(validation).some(
+        //         ([key, value]) => key !== "isSubmitting" && value === true
+        //     )
+        // ) {
+        //     setNewFactorDataValidation({
+        //         ...validation,
+        //         isSubmitting: true,
+        //     });
+        //     return;
+        // }
+
+        try {
+            const payload = {
+                criteria_id: parseInt(editFactorData?.criteria_id),
+                title: editFactorData?.title ?? null,
+                project_type: parseInt(editFactorData?.project_type) ?? null,
+                lower_limit: parseInt(editFactorData?.lower_limit) ?? null,
+                upper_limit: parseInt(editFactorData?.upper_limit) ?? null,
+                limit_type: parseInt(editFactorData?.limit_type) ?? null,
+                limit_unit: parseInt(editFactorData?.limit_unit?.name) ?? null,
+                lower_limit_condition: editFactorData?.lower_limit_condition?.name ?? null,
+                upper_limit_condition: editFactorData?.upper_limit_condition?.name ?? null,
+                point_type: parseInt(editFactorData?.point_type) ?? null,
+                points: parseFloat(editFactorData?.points) ?? null,
+                point_depend_on_model: editFactorData?.point_depend_on_model ?? null,
+                point_depend_on_field: editFactorData?.point_depend_on_field ?? null,
+                status: parseInt(editFactorData?.status) ?? null,
+            }
+
+            const response = await updatePmPointfactor({ id: editFactorData?.id, payload }).unwrap();
+            if (response?.status == 200) {
+                toast.success(response.message);
+                handleCloseEditFactorModal();
+                // resetFormState();
+            }
+        } catch (error) {
+            toast.error("Failed to update item");
+        }
+    };
 
     return (
         <React.Fragment>
@@ -277,22 +316,6 @@ const PointFactorsTable = ({
                 )}
             </div>
 
-
-            {/* <AddNewItemsModal
-                handleChange={handleChange}
-                open={addNewItemModalOpen}
-                newFactorData={newFactorData}
-                setNewFactorData={setNewFactorData}
-                closeModal={handleAddNewItemModal}
-                handleFactorsAdded={handleFactorsAdded}
-                // newPolicyInputData={newPolicyInputData}
-                // newPolicyDataValidation={newPolicyDataValidation}
-                // TODO: loading will come from api 
-                isLoadingAddPointFactors={
-                    false
-                }
-            /> */}
-
             {/* Modals */}
             {editFactorModalOpen && (
                 <EditFactorModal
@@ -301,12 +324,9 @@ const PointFactorsTable = ({
                     editFactorData={editFactorData}
                     setEditFactorData={setEditFactorData}
                     handleChange={handleChange}
-                // handleUpdateRules={handleUpdateRules}
-                // editRuleDataValidation={editRuleDataValidation}
-                // handleMultiSelectChange={setEditRuleData}
-                // isLoadingEditSalesRiskAnalysisRule={
-                //     isLoadingEditSalesRiskAnalysisRule
-                // }
+                    handleUpdateFactor={handleUpdateFactor}
+                    // editRuleDataValidation={editRuleDataValidation}
+                    isUpdatePmPointfactorLoading={isUpdatePmPointfactorLoading}
                 />
             )}
 

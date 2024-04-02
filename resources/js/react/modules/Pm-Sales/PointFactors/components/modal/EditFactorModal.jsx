@@ -14,8 +14,8 @@ const EditFactorModal = ({
     closeModal,
     editFactorData,
     handleChange,
-    handleFactorsAdded,
-    isLoadingAddPointFactors,
+    handleUpdateFactor,
+    isUpdatePmPointfactorLoading,
 }) => {
     const { data: singleFactorData, isLoading: isLoadingSingleFactorData } =
         useGetSinglePmPointFactorQuery(editFactorData?.id, {
@@ -363,8 +363,8 @@ const EditFactorModal = ({
                 }
 
                 <Flex gap="10px" justifyContent="center">
-                    <ModalButton onClick={handleFactorsAdded} width="177px">
-                        {isLoadingAddPointFactors
+                    <ModalButton onClick={handleUpdateFactor} width="177px">
+                        {isUpdatePmPointfactorLoading
                             ? "Loading..."
                             : "Save"}
                     </ModalButton>
