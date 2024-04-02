@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\HelperPendingActionController;
-use App\Models\EmployeeEvaluation as ModelsEmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\Task;
 use App\Models\TaskUser;
 use App\Models\User;
@@ -38,16 +38,16 @@ class EmployeeEvaluation extends Command
             $task_user = TaskUser::where('task_id',$task->id)->orderBy('id','desc')->first();
             $user = User::where('id',$task_user->user_id)->first();
             if($user->role_id == 14){
-                $employee_evaluation = ModelsEmployeeEvaluation::where('task_id',$task->id)->first();
+                $employee_task = EmployeeEvaluationTask::where('task_id',$task->id)->first();
                 $currentTime = Carbon::now();
-                $taskDate = Carbon::parse($task->created_at)->addDays(7 * ($employee_evaluation->cron_status));
+                $taskDate = Carbon::parse($task->created_at)->addDays(7 * ($employee_task->cron_status));
                 if($taskDate <= $currentTime){
-                    if($employee_evaluation->sending_status == 0){
+                    if($employee_task->sending_status == 0){
                     $helper = new HelperPendingActionController();
                     $helper->NewDeveloperEvaluation($user->id);
-                    $employee_evaluation->cron_status = $employee_evaluation->cron_status + 1;
-                    $employee_evaluation->sending_status = 1;
-                    $employee_evaluation->save();
+                    $employee_task->cron_status = $employee_task->cron_status + 1;
+                    $employee_task->sending_status = 1;
+                    $employee_task->save();
                     }
                 }
             }
