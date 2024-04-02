@@ -738,7 +738,7 @@ const CommentBodyForPendingActions = ({
                                     showDenyButton: true,
                                     denyButtonText: "No",
                                     customClass: {
-                                        confirmButton: `btn btn-primary mt-3 py-2 `,
+                                        confirmButton: `btn btn-primary mt-2 py-2 `,
                                         cancelButton: "btn btn-info",
                                         denyButton: "btn btn-danger",
                                         // cancelButton: `${style.customInfoButton}`,
