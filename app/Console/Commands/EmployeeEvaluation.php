@@ -46,7 +46,6 @@ class EmployeeEvaluation extends Command
                     $helper = new HelperPendingActionController();
                     $helper->NewDeveloperEvaluation($user->id);
                     $employee_evaluation->cron_status = $employee_evaluation->cron_status + 1;
-                    // $employee_evaluation->save();
                     $employee_evaluation->sending_status = 1;
                     $employee_evaluation->save();
                     }

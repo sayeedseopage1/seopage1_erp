@@ -99,7 +99,11 @@ class EvaluationController extends AccountBaseController
     }
     public function getAllEvaluation(Request $request)
     {
-        $employeeEvaluations = EmployeeEvaluation::select('employee_evaluations.*')
+        $startDate = $request->start_date ?? null;
+        $endDate = $request->end_date ?? null;
+        $limit = $request->limit ??  10;
+
+        $evaluationQuery = EmployeeEvaluation::select('employee_evaluations.*')
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
@@ -110,8 +114,27 @@ class EvaluationController extends AccountBaseController
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
                     ->leftJoin('task_submissions', 'employee_evaluations.user_id', '=', 'task_submissions.user_id')
                     ->whereNotNull('task_submissions.link')
-                    ->groupBy('employee_evaluations.id')
-                    ->get();
+                    ->groupBy('employee_evaluations.id');
+
+                    if ($startDate !== null && $endDate !== null) {
+                        $evaluationQuery->where(function ($query) use ($startDate, $endDate) {
+                            $query->whereBetween(DB::raw('DATE(employee_evaluations.`created_at`)'), [$startDate, $endDate]);
+                            $query->orWhereBetween(DB::raw('DATE(employee_evaluations.`updated_at`)'), [$startDate, $endDate]);
+                        });
+                    }
+                    if ($request->search != '') {
+                        $evaluationQuery->where(function ($query) {
+                            $query->where('employee_evaluations.user_name', 'like', '%' . request('search') . '%')
+                            ->orWhere('employee_evaluations.join_date', 'like', '%' . request('search') . '%')
+            
+                            ->orWhere('employee_evaluations.accept_rejected', 'like', '%' . request('search') . '%');
+                            // ->orWhere('leads.project_id', 'like', '%' . request('search') . '%')
+                            // ->orWhere('leads.actual_value', 'like', '%' . request('search') . '%')
+                            // ->orWhere('users.name', 'like', '%' . request('search') . '%');
+                        });
+                    }
+                    $employeeEvaluations = $evaluationQuery
+                        ->paginate($limit);
 
                     foreach($employeeEvaluations as $data){
                         $total_hours = ProjectTimeLog::where('user_id', $data->user_id)->sum('total_hours');
