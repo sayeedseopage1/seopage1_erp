@@ -80,6 +80,7 @@ use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
 use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
@@ -939,30 +940,23 @@ class TaskController extends AccountBaseController
         //need pending action
 
         /**EMPLOYEE EVALUATION START */
-        // $user_evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
-        // if($user_evaluation !=null)
-        // {
-        //     $user_evaluation->started_working_on = $task_submit->created_at;
-        //     $user_evaluation->save();
-        // }
-
-        // $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
-        // $total_hours = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_hours')->first();
-        // $total_minutes = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_minutes')->first();
-        // $task_revision_count = TaskRevision::where('task_id',$taskFind->id)->count();
-        // if($taskFind != null){
-        //     $evaluation = EmployeeEvaluation::where('task_id',$taskFind->id)->first();
-        //     if($evaluation !=null)
-        //     {
-        //         $evaluation->submission_date = $task_submit->created_at;
-        //         $evaluation->total_hours = $total_hours;
-        //         $evaluation->total_minutes = $total_minutes;
-        //         $evaluation->completed_work = json_encode($request->link);
-        //         $evaluation->revision_number = $task_revision_count;
-        //         $evaluation->status = 1;
-        //         $evaluation->save();
-        //     }
-        // }
+        $taskFind = Task::where('id',$request->task_id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        $total_hours = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_hours')->first();
+        $total_minutes = ProjectTimeLog::where('task_id',$taskFind->id)->pluck('total_minutes')->first();
+        $task_revision_count = TaskRevision::where('task_id',$taskFind->id)->count();
+        if($taskFind != null){
+            $evaluation = EmployeeEvaluationTask::where('task_id',$taskFind->id)->first();
+            if($evaluation !=null)
+            {
+                $evaluation->submission_date = $task_submit->created_at;
+                $evaluation->total_hours = $total_hours;
+                $evaluation->total_min = $total_minutes;
+                $evaluation->completed_work = json_encode($request->link);
+                $evaluation->revision_number = $task_revision_count;
+                $evaluation->status = 1; // IF STATUS 1 THAT MEANS EVALUTE DISPLAY
+                $evaluation->save();
+            }
+        }
         /**EMPLOYEE EVALUATION END */
 
         $text = Auth::user()->name . ' mark task complete';

@@ -24,6 +24,8 @@ return new class extends Migration
             $table->text('completed_work')->nullable();
             $table->integer('revision_number')->nullable();
             $table->integer('status')->default(0);
+            $table->integer('rating_status')->default(0);
+            $table->integer('evaluate_status')->default(0);
             $table->integer('cron_status')->default(0);
             $table->integer('sending_status')->default(0);
             $table->timestamps();

@@ -18,6 +18,7 @@ use App\Models\TaskFile;
 use Validator;
 use App\Models\AuthorizationAction;
 use App\Models\EmployeeEvaluation;
+use App\Models\EmployeeEvaluationTask;
 use App\Notifications\PrimaryPageNotification;
 use Illuminate\Support\Facades\Storage;
 use Notification;
@@ -427,13 +428,14 @@ class SubTaskController extends AccountBaseController
 
 
         /**EMPLOYEE EVALUATION START */
-
-        // $evaluation = EmployeeEvaluation::where('user_id',$subTask->assigned_to)->first();
-        // if($evaluation != null)
-        // {
-        //     $evaluation->first_task_assigned_on = $subTask->created_at;
-        //     $evaluation->save();
-        // }
+        $taskFind = Task::where('subtask_id',$subTask->id)->where('u_id',null)->where('independent_task_status',1)->first(); //Find SubTask
+        if($taskFind != null){
+            $evaluation_task = new EmployeeEvaluationTask();
+            $evaluation_task->task_id = $taskFind->id;
+            $evaluation_task->task_name = $taskFind->heading;
+            $evaluation_task->assign_date = $taskFind->created_at;
+            $evaluation_task->save();
+        }
         /**EMPLOYEE EVALUATION END */
 
         $task = $subTask->task;
