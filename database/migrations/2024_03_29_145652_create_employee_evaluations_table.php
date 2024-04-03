@@ -18,11 +18,15 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('user_name');
             $table->dateTime('join_date');
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('exp_date')->nullable();
             $table->double('lead_dev_avg_rating')->nullable();
             $table->longText('team_lead_cmnt')->nullable();
             $table->longText('managements_cmnt')->nullable();
             $table->string('management_decision')->nullable();
             $table->dateTime('accept_rejected')->nullable();
+            $table->dateTime('pending_action_sending_time')->nullable();
+            $table->integer('ld_submission_status')->default(0);
             $table->integer('status')->default(0);
             $table->timestamps();
         });
