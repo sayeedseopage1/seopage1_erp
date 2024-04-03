@@ -30,6 +30,7 @@ class SalesPolicyQuestion extends Model
 
     protected $fillable = [
         'title',
+        'key',
         'type',
         'value',
         'parent_id',
