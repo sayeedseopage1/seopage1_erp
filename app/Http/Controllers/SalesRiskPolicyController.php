@@ -39,14 +39,14 @@ class SalesRiskPolicyController extends AccountBaseController
         Route::controller(self::class)->prefix('account/sales-risk-policies')->name('account.sale-risk-policies.')->group(function () {
 
             // questions
-            Route::get('questions', 'questionIndex')->name('question.index');
-            Route::get('questions/fields-type', 'qustionInputField')->name('question.fields-type');
+            Route::get('question', 'questionIndex')->name('question.index');
+            Route::get('question/fields-type', 'qustionInputField')->name('question.fields-type');
 
-            Route::post('questions/save', 'policyQuestionSave')->name('question.save');
+            Route::post('question/save', 'policyQuestionSave')->name('question.save');
             Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
 
             Route::post('question-fields/edit/{id}', 'policyQuestionEdit')->name('question-fields.edit');
-            Route::get('question-list', 'questionList')->name('question.list');
+            Route::get('question/list', 'questionList')->name('question.list');
 
             Route::post('question-value/save', 'questionValueSave')->name('question-value.save');
 
@@ -168,10 +168,10 @@ class SalesRiskPolicyController extends AccountBaseController
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
+                    'key' => $item->key,
                     'type' => $item->type,
                     'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
                     'placeholder' => $item->placeholder,
-                    'rule_list' => ($item->rule_list != null && $item->rule_list != 'null') ? SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']) : null,
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
                     'questions' => self::questionListChild($item->id)
@@ -190,10 +190,10 @@ class SalesRiskPolicyController extends AccountBaseController
                 return [
                     'id' => $item->id,
                     'title' => $item->title,
+                    'key' => $item->key,
                     'type' => $item->type,
                     'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
                     'placeholder' => $item->placeholder,
-                    'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
                     'questions' => self::questionListChild($item->id)
