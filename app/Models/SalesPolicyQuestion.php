@@ -34,7 +34,7 @@ class SalesPolicyQuestion extends Model
         'type',
         'value',
         'parent_id',
-        'rule_list',
+        'sequence',
         'placeholder',
         'policy_id',
         'status'
