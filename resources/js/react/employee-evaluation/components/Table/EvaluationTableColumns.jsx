@@ -10,63 +10,67 @@ export const EvaluationTableColumns = [
     //     },
     // },
     {
+        id: "task_name",
         header: "Task Name",
-        accessorKey: "taskName",
+        accessorKey: "task_name",
         cell: ({ row }) => {
             const data = row.original;
 
-            return <div>{data?.taskName}</div>;
+            return <div>{data?.task_name}</div>;
         },
     },
     {
+        id: "assign_date",
         header: "Assign Date",
-        accessorKey: "assignDate",
+        accessorKey: "assign_date",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.assignDate}</div>;
+            return <div>{data?.assign_date}</div>;
         },
     },
     {
+        id: "submission_date",
         header: "Submission Date",
-        accessorKey: "submissionDate",
+        accessorKey: "submission_date",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.submissionDate}</div>;
+            return <div>{data?.submission_date}</div>;
         },
     },
     {
+        id: "completed_work",
         header: "Completed Work Link",
-        accessorKey: "completedWorkLink",
+        accessorKey: "completed_work",
         cell: ({ row }) => {
             const data = row.original;
-            return (
-                <a href={data.completedWorkLink}>{data?.completedWorkLink}</a>
-            );
+            return data?.completed_work?.map((data) => (
+                <a href={data.completed_work}>{data?.completed_work}</a>
+            ));
         },
     },
     {
+        id: "total_hours",
         header: "Total Hours Tracked",
-        accessorKey: "totalHoursTracked",
+        accessorKey: "total_hours",
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <div style={{ marginLeft: "30%" }}>
-                    {data?.totalHoursTracked}
+                <div>
+                    {`${data?.total_hours || 0} hr ${data?.total_min || 0} min`}
                 </div>
             );
         },
     },
 
     {
+        id: "revision_number",
         header: "Revisions Needed",
-        accessorKey: "numberOfRevisions",
+        accessorKey: "revision_number",
         cell: ({ row }) => {
             const data = row.original;
 
             return (
-                <div style={{ marginLeft: "30%" }}>
-                    {data?.numberOfRevisions}
-                </div>
+                <div style={{ marginLeft: "30%" }}>{data?.revision_number}</div>
             );
         },
     },
@@ -78,7 +82,8 @@ export const EvaluationTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return <ActionDropdown data={data} />;
+            // return <ActionDropdown data={data} />;
+            return <button>Button</button>;
         },
     },
 ];

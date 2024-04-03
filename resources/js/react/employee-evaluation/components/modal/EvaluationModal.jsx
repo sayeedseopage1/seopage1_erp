@@ -49,6 +49,7 @@ const EvaluationModal = ({
     );
 
     const Tasks = data?.data;
+    console.log("tasks", Tasks);
 
     const [sorting, setSorting] = useState([]);
 
@@ -90,7 +91,7 @@ const EvaluationModal = ({
                 content: {
                     borderRadius: "10px",
                     maxWidth: "80%",
-                    fontSize: "12px",
+
                     height: "fit-content",
                     maxHeight: "90vh",
                     margin: "auto auto",
@@ -111,7 +112,7 @@ const EvaluationModal = ({
                 isLoading={isLoading}
                 onPageChange={onPageChange}
                 sorting={sorting}
-                tableName="Evaluation Table"
+                tableName="Evaluation Task Table"
                 setSorting={setSorting}
             />
             {/* //team lead comment start */}

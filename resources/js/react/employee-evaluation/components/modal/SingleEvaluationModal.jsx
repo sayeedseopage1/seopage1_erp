@@ -16,8 +16,8 @@ import Button from "../../../global/Button";
 import CKEditorComponent from "../../../ckeditor";
 
 import { useAuth } from "../../../hooks/useAuth";
-import { useUpdateSingleTaskMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
-useUpdateSingleTaskMutation;
+// import { useUpdateSingleTaskMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
+// useUpdateSingleTaskMutation;
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
@@ -26,7 +26,7 @@ const SingleEvaluationModal = ({
 }) => {
     const auth = useAuth();
 
-    const [updateTask] = useUpdateSingleTaskMutation();
+    // const [updateTask] = useUpdateSingleTaskMutation();
     const [averageRating, setAverageRating] = useState(data.averageRating);
     const [formData, setFormData] = useState({
         averageRating: data?.averageRating ?? 0,
@@ -246,16 +246,16 @@ const SingleEvaluationModal = ({
             fd.append(`rating[${key}]`, value);
         });
 
-        const response = await updateTask({ taskId: data._id, data: fd })
-            .unwrap()
-            .then((response) => {
-                toast.success("Rating submitted");
-                toggleSingleEvaluationModal();
-            })
-            .catch((error) => {
-                console.error("Error submitting rating:", error);
-                toast.error("Rating not submitted");
-            });
+        // const response = await updateTask({ taskId: data._id, data: fd })
+        //     .unwrap()
+        //     .then((response) => {
+        //         toast.success("Rating submitted");
+        //         toggleSingleEvaluationModal();
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error submitting rating:", error);
+        //         toast.error("Rating not submitted");
+        //     });
     };
 
     return (

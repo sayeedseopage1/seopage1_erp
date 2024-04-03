@@ -3,7 +3,7 @@ import { apiSlice } from "./apiSlice";
 const evaluationApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getTaskList: build.query({
-            query: (userId) => `account/employee-evaluation/${userId}`,
+            query: (userId) => `account/employee-evaluation-task/${userId}`,
             providesTags: ["ALL_TASKS"],
         }),
         updateTask: build.mutation({
