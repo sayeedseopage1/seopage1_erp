@@ -114,8 +114,10 @@ class EvaluationController extends AccountBaseController
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
                     ->leftJoin('project_time_logs', 'employee_evaluations.user_id', '=', 'project_time_logs.user_id')
                     ->leftJoin('task_users', 'employee_evaluations.user_id', '=', 'task_users.user_id')
-                    ->leftJoin('task_submissions', 'employee_evaluations.user_id', '=', 'task_submissions.user_id')
-                    ->whereNotNull('task_submissions.link')
+                    ->leftJoin('task_submissions', function($join) {
+                        $join->on('employee_evaluations.user_id', '=', 'task_submissions.user_id')
+                             ->whereNotNull('task_submissions.text');
+                    })
                     ->groupBy('employee_evaluations.id');
 
                     if ($startDate !== null && $endDate !== null) {

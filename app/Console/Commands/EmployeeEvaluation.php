@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\HelperPendingActionController;
+use App\Models\EmployeeEvaluation as ModelsEmployeeEvaluation;
 use App\Models\EmployeeEvaluationTask;
 use App\Models\Task;
 use App\Models\TaskUser;
@@ -33,25 +34,22 @@ class EmployeeEvaluation extends Command
      */
     public function handle()
     {
-        $tasks = Task::where('u_id',null)->where('independent_task_status',1)->get();
-        foreach($tasks as $task){
-            $task_user = TaskUser::where('task_id',$task->id)->orderBy('id','desc')->first();
-            $user = User::where('id',$task_user->user_id)->first();
-            if($user->role_id == 14){
-                $employee_task = EmployeeEvaluationTask::where('task_id',$task->id)->first();
-                $currentTime = Carbon::now();
-                $taskDate = Carbon::parse($task->created_at)->addDays(7 * ($employee_task->cron_status));
-                if($taskDate <= $currentTime){
-                    if($employee_task->sending_status == 0){
-                    $helper = new HelperPendingActionController();
-                    $helper->NewDeveloperEvaluation($user->id);
-                    $employee_task->cron_status = $employee_task->cron_status + 1;
-                    $employee_task->sending_status = 1;
-                    $employee_task->save();
-                    }
+        $employee_evaluations = ModelsEmployeeEvaluation::where('employee_status',0)->get();
+        foreach($employee_evaluations as $data)
+        {
+            $currentTime = Carbon::now();
+            if($data->exp_date <= $currentTime)
+            {
+                if($data->pending_action_sending_time == null)
+                { 
+                $helper = new HelperPendingActionController();
+                $helper->NewDeveloperEvaluation($data->user_id);
+                $data->pending_action_sending_time = Carbon::now();
+                $data->save();
                 }
             }
         }
+
         $this->info('Employee Evaluation Check Successfully');
     }
 }

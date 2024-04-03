@@ -25,6 +25,7 @@ return new class extends Migration
             $table->longText('managements_cmnt')->nullable();
             $table->string('management_decision')->nullable();
             $table->dateTime('accept_rejected')->nullable();
+            $table->dateTime('pending_action_sending_time')->nullable();
             $table->integer('ld_submission_status')->default(0);
             $table->integer('status')->default(0);
             $table->timestamps();
