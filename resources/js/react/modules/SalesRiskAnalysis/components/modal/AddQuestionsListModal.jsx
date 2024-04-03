@@ -73,8 +73,6 @@ const AddQuestionsListModal = ({
         isSubmitting: false,
     });
 
-
-
     const [
         submitQuestionAddonPolicy,
         { isLoading, isFetching: isQuestionAddonPolicyFetching },
@@ -90,13 +88,10 @@ const AddQuestionsListModal = ({
             refetchOnMountOrArgChange: true,
         });
 
-
-
     const [
         saleAnalysisQuestionSave,
         { isLoading: isSaleAnalysisQuestionSaveLoading },
     ] = useSaleAnalysisQuestionSaveMutation();
-
 
     // Handle Change
     const handleChange = (e) => {
@@ -367,7 +362,6 @@ const AddQuestionsListModal = ({
         }
     }, [isLoadingSinglePolicyData]);
 
-
     return (
         <CustomModal
             id="addQuestionsModal"
@@ -506,7 +500,7 @@ const AddQuestionsListModal = ({
                             >
                                 <div className="row mb-4 align-items-first">
                                     <ModalInputLabel className="col-4">
-                                        Parent Question For
+                                        Parent Question <br /> For
                                     </ModalInputLabel>
                                     <div className="col-8 flex-column px-0">
                                         <div className="d-flex">
