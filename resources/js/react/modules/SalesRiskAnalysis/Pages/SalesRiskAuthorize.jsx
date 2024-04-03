@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // Section component
 import SaleRiskAuthorizeHeader from "../components/sections/SaleRiskAuthorizeHeader";
@@ -24,9 +24,21 @@ import Switch from "../components/Switch";
 import { DummyHeaderData, DummyQuestionsPoints } from "../constant";
 import { Placeholder } from "../../../global/Placeholder";
 
+// api
+import { useSaleRiskQuestionsAnswerReportQuery } from "../../../services/api/salesRiskAnalysisSlice";
+
 const SalesRiskAuthorize = () => {
+    const pathnames = window.location.pathname.split("/");
+    const deal_id = pathnames[pathnames?.length - 1];
     const auth = useAuth();
-    const [isLoading, setIsLoading] = React.useState(true);
+
+    // fetch data
+    const { data, isLoading } =
+        useSaleRiskQuestionsAnswerReportQuery(deal_id);
+
+
+    console.log("data", data);
+
     return (
         <section>
             <Switch>

@@ -28,7 +28,6 @@ import { Flex } from "../../../../global/styled-component/Flex";
 // Constants
 import { QuestionsTypes } from "../../constant";
 
-
 // api services
 import {
     useEditQuestionSalesRiskAnalysisMutation,
@@ -47,8 +46,6 @@ import { formatQuestionData } from "../../helper/formatEditPolicyData";
 // table components
 import QuestionsModalTable from "../table/QuestionsModalTable";
 import { QuestionsModalTableColumns } from "../table/QuestionsModalTableColumns";
-
-
 
 const AddQuestionsModal = ({
     open,
@@ -188,33 +185,34 @@ const AddQuestionsModal = ({
         data: QuestionsList?.structure,
     };
 
-    // Add Question or Update Question Handler Function on Submit
-    const handleAddQuestion = async () => {
-        const validation = getValidFields(
-            singleQuestion,
-            singleQuestionValidation
-        );
-
-        if (singleQuestion?.type?.name === "list") {
-            const list = singleQuestion.listItem.map((item) => item.title);
-            if (list.includes("")) {
-                setIsListEmpty(true);
-                toast.error("List Item Can't be Empty");
-                return;
-            }
-        }
+    // Check if any field is empty
+    const isHaveAnyEmpty = (validation) => {
         if (
             Object.entries(validation).some(
                 ([key, value]) => key !== "isSubmitting" && value === true
             )
         ) {
-            setSingleQuestionValidation({
-                ...validation,
-                isSubmitting: true,
-            });
-            return;
+            setSingleQuestionValidation({ ...validation, isSubmitting: true });
+            return true;
         }
+        return false;
+    };
 
+    // Check if List Item is Empty
+    const isListEmptyValidation = (singleQuestion) => {
+        if (
+            singleQuestion?.type?.name === "list" &&
+            singleQuestion.listItem.map((item) => item.title).includes("")
+        ) {
+            setIsListEmpty(true);
+            toast.error("List Item Can't be Empty");
+            return true;
+        }
+        return false;
+    };
+
+    // Check if Parent Question For is Empty
+    const isParentQuestionForEmpty = (singleQuestion) => {
         if (
             singleQuestion?.parent_question?.type === "yesNo" ||
             singleQuestion?.parent_question?.type === "list"
@@ -222,8 +220,26 @@ const AddQuestionsModal = ({
             if (singleQuestion?.parent_question_for === "") {
                 setYesNoValueEmpty(true);
                 toast.error("Parent Question For is required");
-                return;
+                return true;
             }
+        }
+        return false;
+    };
+
+    // Add Question or Update Question Handler Function on Submit
+    const handleAddQuestion = async () => {
+        const validation = getValidFields(
+            singleQuestion,
+            singleQuestionValidation
+        );
+
+        // check validation
+        if (
+            isHaveAnyEmpty(validation) ||
+            isListEmptyValidation(singleQuestion) ||
+            isParentQuestionForEmpty(singleQuestion)
+        ) {
+            return;
         }
 
         // Payload for Add Question
@@ -267,22 +283,18 @@ const AddQuestionsModal = ({
 
         try {
             // Condition for Update Question
-            if (isQuestionUpdating) {
-                const res = await editSinglePolicySalesRiskAnalysis(
-                    payload
-                ).unwrap();
-                if (res.status === "success") {
-                    toast.success("Question Updated Successfully");
-                    handleCloseAddQuestionsModal();
-                    refetchSaleRiskAnalysis();
-                }
-            } else {
-                const res = await submitQuestionAddonPolicy(payload).unwrap();
-                if (res.status === "success") {
-                    toast.success("Question Added Successfully");
-                    handleCloseAddQuestionsModal();
-                    refetchSaleRiskAnalysis();
-                }
+            const res = isQuestionUpdating
+                ? await editSinglePolicySalesRiskAnalysis(payload).unwrap()
+                : await submitQuestionAddonPolicy(payload).unwrap();
+
+            if (res.status === "success") {
+                toast.success(
+                    isQuestionUpdating
+                        ? "Question Updated Successfully"
+                        : "Question Added Successfully"
+                );
+                handleCloseAddQuestionsModal();
+                refetchSaleRiskAnalysis();
             }
         } catch (error) {
             if (error.status === 403) {
@@ -749,4 +761,7 @@ AddQuestionsModal.propTypes = {
     closeModal: PropTypes.func,
     addQuestionsData: PropTypes.object,
     singlePolicyQuestions: PropTypes.array,
+    setAddQuestionsData: PropTypes.func,
+    refetchSaleRiskAnalysis: PropTypes.func,
+    
 };

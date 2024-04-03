@@ -10,7 +10,6 @@ import {
 import PropTypes from "prop-types";
 
 
-
 // table components
 import { DraggableColumnHeader } from "./DraggableColumnHeader";
 import EmptyTable from "../../../../global/EmptyTable";
@@ -211,3 +210,15 @@ const SalesAnalysisReportTable = ({
 };
 
 export default SalesAnalysisReportTable;
+
+
+SalesAnalysisReportTable.propTypes = {
+    tableData: PropTypes.object,
+    tableColumns: PropTypes.array,
+    isLoading: PropTypes.bool,
+    tableName: PropTypes.string,
+    onPageChange: PropTypes.func,
+    filter: PropTypes.object,
+    search: PropTypes.string,
+
+}

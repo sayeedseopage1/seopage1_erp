@@ -54,4 +54,5 @@ SalesRiskAnalysisTablePagination.propTypes = {
     handlePageSizeChange: PropTypes.func,
     handlePageChange: PropTypes.func,
     tableData: PropTypes.object,
+    pageSize: PropTypes.number,
 };

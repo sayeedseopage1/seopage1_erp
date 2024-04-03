@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const LoaderSpin = ({title ="Loading..."}) => {
   return (
         <div className='d-flex align-items-center'>
@@ -17,3 +19,7 @@ const LoaderSpin = ({title ="Loading..."}) => {
 }
 
 export default LoaderSpin;
+
+LoaderSpin.propTypes = {
+    title: PropTypes.string
+}

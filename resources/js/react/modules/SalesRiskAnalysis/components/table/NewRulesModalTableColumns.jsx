@@ -38,7 +38,7 @@ export const NewRulesModalTableColumnsData = [
                                     {data?.ruleComment ? (
                                         <>
                                             <Tooltip text={data?.ruleComment}>
-                                                <i class="fa-solid fa-circle-info"></i>
+                                                <i className="fa-solid fa-circle-info"></i>
                                             </Tooltip>
                                         </>
                                     ) : (
@@ -63,7 +63,7 @@ export const NewRulesModalTableColumnsData = [
                                     {data?.ruleComment ? (
                                         <>
                                             <Tooltip text={data?.ruleComment}>
-                                                <i class="fa-solid fa-circle-info"></i>
+                                                <i className="fa-solid fa-circle-info"></i>
                                             </Tooltip>
                                         </>
                                     ) : (
@@ -84,14 +84,14 @@ export const NewRulesModalTableColumnsData = [
                                     }}
                                     className="d-flex"
                                 >
-                                    Yes
+                                    Yes{" "}
                                     <span className="ml-2">
                                         {data?.yesComment ? (
                                             <>
                                                 <Tooltip
                                                     text={data?.yesComment}
                                                 >
-                                                    <i class="fa-solid fa-circle-info"></i>
+                                                    <i className="fa-solid fa-circle-info"></i>
                                                 </Tooltip>
                                             </>
                                         ) : (
@@ -106,12 +106,12 @@ export const NewRulesModalTableColumnsData = [
                                     }}
                                     className="d-flex"
                                 >
-                                    No
+                                    No{' '}
                                     <span className="ml-2">
                                         {data?.noComment ? (
                                             <>
                                                 <Tooltip text={data?.noComment}>
-                                                    <i class="fa-solid fa-circle-info"></i>
+                                                    <i className="fa-solid fa-circle-info"></i>
                                                 </Tooltip>
                                             </>
                                         ) : (
@@ -140,7 +140,7 @@ export const NewRulesModalTableColumnsData = [
                                                 <Tooltip
                                                     text={data?.ruleComment}
                                                 >
-                                                    <i class="fa-solid fa-circle-info"></i>
+                                                    <i className="fa-solid fa-circle-info"></i>
                                                 </Tooltip>
                                             </>
                                         ) : (
@@ -161,11 +161,10 @@ export const NewRulesModalTableColumnsData = [
     },
     {
         id: "rules_type",
-        header: "Rules Type",
+        header: "Value Type",
         accessorKey: "rules_type",
         cell: ({ row }) => {
             const data = row?.original;
-            
             return (
                 <div className="d-flex justify-content-start align-items-start flex-column">
                     <Switch.Case condition={data?.policyType.name !== "yesNo"}>
@@ -338,11 +337,20 @@ export const NewRulesModalTableColumnsData = [
                                     }}
                                     className=" d-flex"
                                     role="button"
+                                    tabIndex={0}
+                                    onKeyDown={() => {
+                                        action.editSingleRules(data);
+                                    }}
                                 >
                                     <EditIcon />
                                 </div>
                                 <div
                                     onClick={() => {
+                                        action.deleteSingleRules(data);
+                                    }}
+                                    role="button"
+                                    tabIndex="0"
+                                    onKeyDown={() => {
                                         action.deleteSingleRules(data);
                                     }}
                                 >
@@ -364,6 +372,10 @@ export const NewRulesModalTableColumnsData = [
                                         onClick={() => {
                                             action.editSingleRules(data);
                                         }}
+                                        onKeyDown={() => {
+                                            action.editSingleRules(data);
+                                        }}
+                                        tabIndex="0"
                                         role="button"
                                     >
                                         <EditIcon />
@@ -372,6 +384,11 @@ export const NewRulesModalTableColumnsData = [
                                         onClick={() => {
                                             action.deleteSingleRules(data);
                                         }}
+                                        onKeyDown={() => {
+                                            action.deleteSingleRules(data);
+                                        }}
+                                        role="button"
+                                        tabIndex="0"
                                     >
                                         <i
                                             className="fa-solid fa-trash ml-2"

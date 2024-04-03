@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import ReactDOM from "react-dom";
 import styles from "./popover.module.css";
 import { usePopper } from "react-popper";
@@ -25,12 +26,11 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
     // generate random id for dropdown menu
     const [dom, setDom] = useState(null);
 
-    // let DOM = document.getElementById(id);
+
 
     React.useEffect(() => {
         const el = document.createElement("div");
         el.setAttribute("id", "sp1_popover");
-        // el.style.position = 'absolute';
         const body = document.querySelector("body");
         if (isVisible) {
             body.appendChild(el);
@@ -48,8 +48,6 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
     });
 
     if (!dom) return null;
-
-
 
     const element = isVisible && (
         <div
@@ -91,8 +89,12 @@ const Toggle = ({ children, className, ...props }) => {
             className={`${css.popover_toggle} ${className}`}
             onMouseOver={() => {
                 setIsVisible(true);
-               
             }}
+            tabIndex={0}
+            onKeyDown={() => {
+                setIsVisible(true);
+            }}
+            role="button"
             {...props}
         >
             {_.isFunction(children) ? children({ isVisible }) : children}
@@ -120,7 +122,9 @@ const Popover = ({ children }) => {
                 setArrowElement,
             }}
         >
-            <div onMouseLeave={() => setIsVisible(false)}>{children}</div>
+            <div onMouseLeave={() => setIsVisible(false)} tabIndex={0} role="button">
+                {children}
+            </div>
         </PopoverCtx.Provider>
     );
 };
@@ -129,3 +133,20 @@ Popover.Panel = Panel;
 Popover.Button = Toggle;
 
 export default Popover;
+
+
+
+Popover.propTypes = {
+    children: PropTypes.node.isRequired,
+}
+
+Panel.propTypes = {
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string,
+    placement: PropTypes.string,
+}
+
+Toggle.propTypes = {
+    children: PropTypes.node.isRequired,
+    className: PropTypes.string,
+}

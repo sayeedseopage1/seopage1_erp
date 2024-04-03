@@ -189,7 +189,6 @@ const SalesRiskAnalysisTable = ({
         () => ({ pageIndex, pageSize }),
         [pageIndex, pageSize]
     );
-
     const table = useReactTable({
         data,
         columns,
@@ -237,8 +236,10 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleEditPolicy: (data) => {
+                console.log("data", data);
                 // function to format data
                 const updateData = formatEditPolicyData(data);
+                console.log("updateData", updateData);
                 setEditPolicyInputData(updateData);
                 setEditPolicyDefaultData({
                     policyName: data.title,
@@ -252,6 +253,7 @@ const SalesRiskAnalysisTable = ({
                 setEditPolicyModalOpen(true);
             },
             handleEditCountryList: (data, selectedRule) => {
+             
                 const payload = formatEditRuleData(data, selectedRule);
                 setEditRuleData(payload);
                 setEditCountryListModalOpen(true);

@@ -137,4 +137,5 @@ CustomInputs.propTypes = {
     id: PropTypes.string,
     isChild: PropTypes.bool,
     comment: PropTypes.string,
+    isSubmitting: PropTypes.bool,
 };

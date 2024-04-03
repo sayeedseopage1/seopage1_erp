@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const LoaderUser = ({
     title = "Loading...",
     width = "16px",
@@ -23,3 +25,11 @@ const LoaderUser = ({
 };
 
 export default LoaderUser;
+
+LoaderUser.propTypes = {
+    title: PropTypes.string,
+    width: PropTypes.string,
+    height: PropTypes.string,
+    border: PropTypes.string,
+    borderRightColor: PropTypes.string,
+}

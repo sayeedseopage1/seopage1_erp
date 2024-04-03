@@ -20,6 +20,7 @@ const WithoutDraggableColumnHeader = ({
         id: { minWidth: "50px", width: "50px", maxWidth: "50px" },
         questionType: { minWidth: "90px", width: "90px", maxWidth: "90px" },
         ruleList: { minWidth: "300px", width: "300px", maxWidth: "300px" },
+        expend: { minWidth: "60px", width: "60px", maxWidth: "60px" },
         question_title: {
             minWidth: "300px",
             width: "300px",

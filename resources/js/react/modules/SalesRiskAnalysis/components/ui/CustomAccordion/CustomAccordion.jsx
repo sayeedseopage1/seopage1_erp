@@ -1,16 +1,16 @@
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import "./CustomAccordion.css";
 import _ from "lodash";
-import { CustomInputsLabel } from "../Styles/ui";
-import Tooltip from "../../Tooltip";
+import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from "prop-types";
 
-const dummyData = [
-    { id: 1, name: "John" },
-    { id: 2, name: "Jane" },
-    { id: 3, name: "Bob" },
-    { id: 4, name: "Alice" },
-];
+// style
+import "./CustomAccordion.css";
+
+// local styled ui components
+import { CustomInputsLabel } from "../Styles/ui";
+
+// ui components
+import Tooltip from "../../Tooltip";
 
 const CustomAccordion = ({
     expendable = true,
@@ -68,6 +68,10 @@ const CustomAccordion = ({
                         ...headingStyle,
                         cursor: expendable ? "pointer" : "default",
                     }}
+                    onKeyDown={() => (expendable ? toggle() : null)}
+                    role="button"
+                    tabIndex={0}
+                    
                 >
                     <div
                         className={`d-flex justify-content-between align-items-center w-100 ${
@@ -144,3 +148,18 @@ const CustomAccordion = ({
 };
 
 export default CustomAccordion;
+
+
+
+CustomAccordion.propTypes = {
+    expendable: PropTypes.bool,
+    children: PropTypes.node,
+    label: PropTypes.string,
+    accordionData: PropTypes.array,
+    headingClass: PropTypes.string,
+    headingStyle: PropTypes.object,
+    isChild: PropTypes.bool,
+    onChange: PropTypes.func,
+    value: PropTypes.object,
+    isSubmitting: PropTypes.bool,
+}

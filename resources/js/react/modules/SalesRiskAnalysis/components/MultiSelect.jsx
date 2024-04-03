@@ -39,7 +39,6 @@ const MultiSelect = ({
                 _Options = data?.filter(
                     (item) => !selectedCountries?.includes(item)
                 );
-          
             } else {
                 _Options = data;
             }
@@ -58,16 +57,22 @@ const MultiSelect = ({
                 (country) => country.name !== option.name
             );
 
-
             setSelected({
                 ...newPolicyDataCopy,
                 [filedName]: updateCountry,
             });
         } else {
-            setSelected({
-                ...newPolicyData,
-                [filedName]: [...newPolicyData?.countries, option],
-            });
+            if (newPolicyData?.countries?.length) {
+                setSelected({
+                    ...newPolicyData,
+                    [filedName]: [...newPolicyData?.countries, option],
+                });
+            } else {
+                setSelected({
+                    ...newPolicyData,
+                    [filedName]: [option],
+                });
+            }
         }
     };
 
@@ -80,83 +85,81 @@ const MultiSelect = ({
     };
 
     return (
-        <React.Fragment>
-            <Dropdown disabled={true} className="cnx_select_box_dd">
-                <Dropdown.Toggle
-                    className={`cnx_select_box_toggle ${style.cnx_select_box_toggle_multi}`}
+        <Dropdown disabled={true} className="cnx_select_box_dd">
+            <Dropdown.Toggle
+                className={`cnx_select_box_toggle ${style.cnx_select_box_toggle_multi}`}
+            >
+                <div
+                    className="flex-wrap d-flex"
+                    style={{
+                        gap: "5px",
+                    }}
                 >
-                    <div
-                        className="flex-wrap d-flex"
-                        style={{
-                            gap: "5px",
-                        }}
-                    >
-                        {selected?.length
-                            ? selected?.map((item) => (
-                                  <div
-                                      key={`${item?.name}-${Math?.random()}`}
-                                      className="cnx_select_box_tag"
+                    {selected?.length
+                        ? selected?.map((item) => (
+                              <div
+                                  key={`${item?.name}-${Math?.random()}`}
+                                  className="cnx_select_box_tag"
+                              >
+                                  <button
+                                      aria-label="removeTag"
+                                      onMouseDown={() => remove(item)}
                                   >
-                                      <button
-                                          aria-label="removeTag"
-                                          onMouseDown={() => remove(item)}
-                                      >
-                                          <i className="fa-solid fa-xmark" />
-                                      </button>
-                                      <span>{item?.name}</span>
-                                  </div>
-                              ))
-                            : "Select Country"}
-                    </div>
-                </Dropdown.Toggle>
-                <Dropdown.Menu
-                    className={`cnx_select_box_options ${style.multiSelectOptions}`}
-                >
-                    <div className="cnx_select_box_search">
-                        <SearchBox
-                            autoFocus={true}
-                            value={search}
-                            onChange={setSearch}
-                            className="cnx_select_box_search_input"
-                        />
-                    </div>
-                    {_Options?.map((item) => (
-                        <Dropdown.Item
-                            key={item?.name}
-                            className={`cnx_select_box_option ${
-                                selected?.some((selectedItem) =>
-                                    _.isEqual(selectedItem, item)
-                                )
-                                    ? "active"
-                                    : ""
-                            }`}
-                            onClick={() => {
-                                onSelected(item);
-                            }}
-                            isCloseSingle={true}
-                        >
-                            <div className="d-flex justify-content-between align-items-center w-100">
-                                <p>
-                                    <img
-                                        src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${
-                                            item.iso || "BD"
-                                        }.svg`}
-                                        height="25px"
-                                        width="25px"
-                                        className="mr-2"
-                                        alt={item?.name}
-                                    />
-                                    {item.name}
-                                </p>
-                                {selected?.some((selectedItem) =>
-                                    _.isEqual(selectedItem, item)
-                                ) && <i className="fa-solid fa-check" />}
-                            </div>
-                        </Dropdown.Item>
-                    ))}
-                </Dropdown.Menu>
-            </Dropdown>
-        </React.Fragment>
+                                      <i className="fa-solid fa-xmark" />
+                                  </button>
+                                  <span>{item?.name}</span>
+                              </div>
+                          ))
+                        : "Select Country"}
+                </div>
+            </Dropdown.Toggle>
+            <Dropdown.Menu
+                className={`cnx_select_box_options ${style.multiSelectOptions}`}
+            >
+                <div className="cnx_select_box_search">
+                    <SearchBox
+                        autoFocus={true}
+                        value={search}
+                        onChange={setSearch}
+                        className="cnx_select_box_search_input"
+                    />
+                </div>
+                {_Options?.map((item) => (
+                    <Dropdown.Item
+                        key={item?.name}
+                        className={`cnx_select_box_option ${
+                            selected?.some((selectedItem) =>
+                                _.isEqual(selectedItem, item)
+                            )
+                                ? "active"
+                                : ""
+                        }`}
+                        onClick={() => {
+                            onSelected(item);
+                        }}
+                        isCloseSingle={true}
+                    >
+                        <div className="d-flex justify-content-between align-items-center w-100">
+                            <p>
+                                <img
+                                    src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${
+                                        item.iso || "BD"
+                                    }.svg`}
+                                    height="25px"
+                                    width="25px"
+                                    className="mr-2"
+                                    alt={item?.name}
+                                />
+                                {item.name}
+                            </p>
+                            {selected?.some((selectedItem) =>
+                                _.isEqual(selectedItem, item)
+                            ) && <i className="fa-solid fa-check" />}
+                        </div>
+                    </Dropdown.Item>
+                ))}
+            </Dropdown.Menu>
+        </Dropdown>
     );
 };
 
@@ -167,4 +170,7 @@ MultiSelect.propTypes = {
     options: PropTypes.func,
     newPolicyData: PropTypes.object,
     filedName: PropTypes.string,
+    selectedCountries: PropTypes.array,
+    selected: PropTypes.array,
+    data: PropTypes.array,
 };

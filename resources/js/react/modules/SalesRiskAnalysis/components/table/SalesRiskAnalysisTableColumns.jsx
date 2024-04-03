@@ -46,6 +46,11 @@ export const SalesRiskAnalysisTableColumns = [
                                 onClick={() => {
                                     action.handlePolicyStatus(data);
                                 }}
+                                onKeyDown={() => {
+                                    action.handlePolicyStatus(data);
+                                }}
+                                role="button"
+                                tabIndex={0}
                                 style={{
                                     cursor: "pointer",
                                 }}
@@ -56,6 +61,7 @@ export const SalesRiskAnalysisTableColumns = [
                                 action.handleEditPolicy(data);
                             }}
                             role="button"
+                            tabIndex={0}
                             className="d-flex align-items-center"
                         >
                             <Tooltip text={`Edit Policy`}>
@@ -66,18 +72,20 @@ export const SalesRiskAnalysisTableColumns = [
                             onClick={() => {
                                 action.handleAddQuestions(data);
                             }}
+                            tabIndex={0}
                             className="mx-2"
                             style={{
                                 cursor: "pointer",
                                 position: "relative",
                             }}
+                            role="button"
                         >
                             <Tooltip
                                 className="d-flex align-items-center"
                                 text={`Add New Question`}
                             >
                                 <i
-                                    class="fa-solid fa-circle-question"
+                                    className="fa-solid fa-circle-question"
                                     style={{
                                         fontSize: "22px",
                                         cursor: "pointer",
@@ -153,14 +161,6 @@ export const SalesRiskAnalysisTableColumns = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table?.options?.meta;
-            const countries = data?.ruleList?.find(
-                (item) => item?.type === "list"
-            );
-            let countriesList = [];
-            if (countries?.value) {
-                // FormatJsonCountry is a function that formats the countries data
-                countriesList = FormatJsonCountry(countries?.value);
-            }
 
             const validPolicyTypes = [
                 "lessThan",
@@ -298,7 +298,13 @@ export const SalesRiskAnalysisTableColumns = [
                                             )}
                                         </p>
                                         <MultiSelectShowDropDown
-                                            data={countriesList}
+                                            data={
+                                                rule.type === "list"
+                                                    ? FormatJsonCountry(
+                                                          rule?.value
+                                                      )
+                                                    : []
+                                            }
                                             rowDetails={rule}
                                             multiple
                                             handleEditCountryList={() => {
@@ -376,6 +382,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                         rule
                                                     );
                                                 }}
+                                                tabIndex={0}
                                                 role="button"
                                             >
                                                 <Tooltip
@@ -433,6 +440,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                     "no"
                                                 );
                                             }}
+                                            tabIndex={0}
                                             role="button"
                                             className="d-flex align-items-center"
                                         >

@@ -1,10 +1,15 @@
-import React, { useState } from "react";
-import Dropdown from "./Dropdown";
 import _ from "lodash";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+
+// Components
+import Dropdown from "./Dropdown";
 import LoaderUser from "./LoaderUser";
+import SearchboxUser from "./SearchboxUser";
+
+// Utils
 import { User } from "../../../utils/user-details";
 import { useUsers } from "../../../hooks/useUsers";
-import SearchboxUser from "./SearchboxUser";
 
 const UserFilter = ({
     state,
@@ -109,3 +114,14 @@ const UserFilter = ({
 };
 
 export default UserFilter;
+
+
+UserFilter.propTypes = {
+    state: PropTypes.object,
+    setState: PropTypes.func,
+    title: PropTypes.string,
+    selectionBoxClassName: PropTypes.string,
+    roleIds: PropTypes.array,
+    disabled: PropTypes.bool,
+    sidebarIsOpen: PropTypes.bool,
+}

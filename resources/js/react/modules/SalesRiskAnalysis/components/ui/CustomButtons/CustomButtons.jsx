@@ -96,4 +96,6 @@ CustomButtons.propTypes = {
     className: PropTypes.string,
     id: PropTypes.string,
     props: PropTypes.object,
+    isSubmitting: PropTypes.bool,
+    comment: PropTypes.string,
 }

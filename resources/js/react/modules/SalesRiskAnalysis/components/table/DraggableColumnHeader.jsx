@@ -1,8 +1,9 @@
-import { flexRender } from '@tanstack/react-table';
 import React from 'react';
 import { useDrop, useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useLocalStorage } from 'react-use' 
+import { flexRender } from '@tanstack/react-table';
+import PropTypes from "prop-types";
 
 // reorder column
 const reorderColumn = (
@@ -108,4 +109,11 @@ export const DraggableColumnHeader = ({header, table, className='', ...props}) =
       </th>
     </>
   ) 
+}
+
+
+DraggableColumnHeader.propTypes ={
+  header: PropTypes.object,
+  table: PropTypes.object,
+  className: PropTypes.string,
 }

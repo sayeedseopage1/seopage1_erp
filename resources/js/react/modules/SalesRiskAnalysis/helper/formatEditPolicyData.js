@@ -57,7 +57,6 @@ export const formatEditRuleData = (data, selectedRow) => {
     id: selectedRow.id,
     policyName: data.title,
     department: data.department,
-    comment: data.comment,
     policyType: PolicyTypeItems.data.find(
       (item) => item?.name === selectedRow?.type
     ),
@@ -345,7 +344,7 @@ const formatSingleQuestions = (item) => {
 
 const getChildQuestions = (questions) => {
   return questions.map((question) => ({
-    ...formatSingleQuestions(question, questions),
+    ...formatSingleQuestions(question),
     questions: question.questions.length > 0 ? getChildQuestions(question.questions) : [],
   }));
 };
@@ -361,7 +360,7 @@ export const formatQuestionData = (questionsList, setAllQuestions) => {
   flattenQuestions(questionsList);
   setAllQuestions(flattened);
   return questionsList.map((item) => ({
-    ...formatSingleQuestions(item, questionsList),
+    ...formatSingleQuestions(item),
     questions: item.questions.length > 0 ? getChildQuestions(item.questions) : [],
   })).filter((item) => !item.parent_id);
 };

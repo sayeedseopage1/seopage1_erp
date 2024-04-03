@@ -11,7 +11,7 @@ export const SalesRiskAuthorizeColumns = [
             return (
                 <div className="d-flex flex-column justify-content-center align-items-start">
                     {data?.questions?.map((question, index) => (
-                        <Switch>
+                        <Switch key={question.id}>
                             <Switch.Case
                                 condition={question?.parent_id === null}
                             >

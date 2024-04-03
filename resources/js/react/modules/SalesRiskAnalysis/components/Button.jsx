@@ -67,6 +67,7 @@ Button.propTypes = {
     href: PropTypes.string,
     isLoading: PropTypes.bool,
     loaderTitle: PropTypes.string,
+    type: PropTypes.string,
 };
 
 export default Button;

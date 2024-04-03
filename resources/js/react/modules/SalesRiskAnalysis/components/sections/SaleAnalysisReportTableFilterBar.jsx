@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { useWindowSize } from "react-use";
+import PropTypes from "prop-types";
+
 // Ui components
 import JqueryDateRangePicker from "../../../sales/leads/components/JqueryDateRangePicker";
 import Button from "../Button";
@@ -73,7 +75,11 @@ const SaleAnalysisReportTableFilterBar = ({ setFilter }) => {
                                 className="sp1_filter_button"
                                 onClick={() => setIsOpen(true)}
                                 style={{ gap: "10px" }}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={() => setIsOpen(true)}
                             >
+
                                 <i className="fa-solid fa-filter"></i>
                                 <span>Filter</span>
                             </div>
@@ -124,3 +130,12 @@ export default SaleAnalysisReportTableFilterBar;
 const HDivider = ({ className = "" }) => {
     return <div className={`filter_divider ${className}`} />;
 };
+
+
+SaleAnalysisReportTableFilterBar.propTypes = {
+    setFilter: PropTypes.func,
+}
+
+HDivider.propTypes = {
+    className: PropTypes.string
+}

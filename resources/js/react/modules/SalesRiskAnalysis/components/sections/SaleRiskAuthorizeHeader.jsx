@@ -26,7 +26,7 @@ const SaleRiskAuthorizeHeader = ({ headerData, isLoading }) => {
             ) : (
                 <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-10 d-flex flex-column flex-md-row mb-3 mb-md-3 mb-lg-0">
                     <div className="col-12 col-md-4 col-lg-4 px-0 ">
-                        <p className="singleline-ellipsis d-flex align-items-center">
+                        <div className="singleline-ellipsis d-flex align-items-center">
                             Project name:{" "}
                             <span className="ml-1">
                                 {" "}
@@ -34,7 +34,7 @@ const SaleRiskAuthorizeHeader = ({ headerData, isLoading }) => {
                                     {headerData?.project_name}
                                 </Tooltip>
                             </span>
-                        </p>
+                        </div>
                     </div>
                     <div className="col-12 col-md-4 px-0 ">
                         <p className="singleline-ellipsis d-flex align-items-center">

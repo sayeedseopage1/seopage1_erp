@@ -1,8 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-// ui components
-import EmptyTable from "../../../../global/EmptyTable";
+
 import {
     useReactTable,
     getCoreRowModel,
@@ -168,4 +167,7 @@ NewRulesModalTable.propTypes = {
     tableName: PropTypes.string,
     tableColumns: PropTypes.array,
     setIsRuleUpdating: PropTypes.func,
+    setNewPolicyData: PropTypes.func,
+    setNewPolicyInputData: PropTypes.func,
+    setEditPolicyDeleteData: PropTypes.func,
 };

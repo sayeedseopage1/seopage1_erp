@@ -17,7 +17,9 @@ import SalesRiskAnalysis from "./Pages/SalesRiskAnalysis";
 import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
 import SalesRiskAuthorize from "./Pages/SalesRiskAuthorize";
 import SalesAnalysisReport from "./Pages/SalesAnalysisReport";
-import SaleAnalysisReportTableFilterBar from "./components/sections/SaleAnalysisReportTableFilterBar";
+import SalesRiskQuestionList from "./Pages/SalesRiskQuestionList";
+
+// Context
 import SalesRiskAnalysisProvider from "./context/SalesRiskAnalysisProvider";
 
 // custom drag layer
@@ -164,6 +166,33 @@ if (containerSalesAnalysisReportTable) {
                         </Routes>
                     </BrowserRouter>
                 </DndProvider>
+            </Provider>
+        </React.StrictMode>
+    );
+}
+
+// Sales Risk Analysis QuestionList
+
+const containerSalesRiskAnalysisQuestionList = document.getElementById(
+    "salePolicyQuestionList"
+);
+
+if (containerSalesRiskAnalysisQuestionList) {
+    ReactDOM.createRoot(containerSalesRiskAnalysisQuestionList).render(
+        <React.StrictMode>
+            <Provider store={store}>
+                <SalesRiskAnalysisProvider>
+                    <BrowserRouter>
+                        <Routes>
+                            <Route path="/" element={<Content />}>
+                                <Route
+                                    path="/account/sales-risk-policies/question"
+                                    element={<SalesRiskQuestionList />}
+                                />
+                            </Route>
+                        </Routes>
+                    </BrowserRouter>
+                </SalesRiskAnalysisProvider>
             </Provider>
         </React.StrictMode>
     );

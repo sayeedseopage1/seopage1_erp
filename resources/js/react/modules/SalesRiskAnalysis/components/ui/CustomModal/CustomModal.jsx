@@ -80,4 +80,5 @@ CustomModal.propTypes = {
     isCloseButtonShow: PropTypes.bool,
     height: PropTypes.string,
     maxHeight: PropTypes.string,
+    scroLlBottom: PropTypes.bool,
 };

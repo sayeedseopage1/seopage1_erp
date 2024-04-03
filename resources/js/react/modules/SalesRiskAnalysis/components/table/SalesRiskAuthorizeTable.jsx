@@ -7,10 +7,13 @@ import {
     getSortedRowModel,
     flexRender,
 } from "@tanstack/react-table";
+import PropTypes from "prop-types";
 
 // table components
 import WithoutDraggableColumnHeader from "./WithoutDraggableColumnHeader";
 import EmptyTable from "../../../../global/EmptyTable";
+
+// loader
 import SalesRiskAuthorizeTableLoader from "../loader/SalesRiskAuthorizeTableLoader";
 
 const SalesRiskAuthorizeTable = ({
@@ -72,8 +75,6 @@ const SalesRiskAuthorizeTable = ({
         getExpandedRowModel: getExpandedRowModel(),
         getSortedRowModel: getSortedRowModel(),
     });
-
-    console.log("table", table?.getRowModel()?.rows[0]);
 
     return (
         <div>
@@ -158,3 +159,11 @@ const SalesRiskAuthorizeTable = ({
 };
 
 export default SalesRiskAuthorizeTable;
+
+SalesRiskAuthorizeTable.propTypes = {
+    tableColumns: PropTypes.array,
+    tableData: PropTypes.array,
+    tableName: PropTypes.string,
+    search: PropTypes.string,
+    isLoading: PropTypes.bool,
+};

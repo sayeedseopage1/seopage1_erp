@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 // ui components
 import Dropdown from "./Dropdown";
@@ -9,12 +10,9 @@ import "./questionsSelect.css";
 
 const MultiSelectShowDropDown = ({
     data,
-    selected,
     sidebarItem = false,
     className,
-    multiple,
     handleEditCountryList,
-    rowDetails,
 }) => {
     const _Options = data;
     return (
@@ -55,8 +53,10 @@ const MultiSelectShowDropDown = ({
                             onClick={handleEditCountryList}
                             className="d-flex align-items-center"
                             style={{ cursor: "pointer" }}
+                            role="button"
+                            onKeyDown={handleEditCountryList}
                         >
-                            <i class="fa-solid fa-plus mr-2 text-primary"></i>
+                            <i className="fa-solid fa-plus mr-2 text-primary"></i> {' '}
                             Add More
                         </p>
                     </div>
@@ -89,3 +89,10 @@ const MultiSelectShowDropDown = ({
 };
 
 export default MultiSelectShowDropDown;
+
+MultiSelectShowDropDown.propTypes = {
+    data: PropTypes.array,
+    sidebarItem: PropTypes.bool,
+    className: PropTypes.string,
+    handleEditCountryList: PropTypes.func,
+}

@@ -1,7 +1,13 @@
 import * as React from "react";
+import PropTypes from "prop-types";
 import { Listbox } from "@headlessui/react";
-import styles from "./SalesFilter.module.css";
 import { filter, lowerCase, includes } from "lodash";
+
+
+// style
+import styles from "./SalesFilter.module.css";
+
+// Components
 import Avatar from "../../../global/Avatar";
 
 export default function SalesFilter({ value, onChange, data }) {
@@ -77,4 +83,11 @@ export default function SalesFilter({ value, onChange, data }) {
             </Listbox>
         </div>
     );
+}
+
+
+SalesFilter.propTypes = {
+    value: PropTypes.object,
+    onChange: PropTypes.func,
+    data: PropTypes.array,
 }

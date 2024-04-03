@@ -55,6 +55,9 @@ const DropdownItem = ({
             className={`cnx_dropdown__item ${
                 disabled ? "cnx_dropdown__item_disabled}" : ""
             } ${className}`}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => (disabled ? null : onClick ? onClick(e) : null)}
             {...props}
         >
             {children}
@@ -75,6 +78,9 @@ const DropdownToggle = ({
             ref={setReference}
             className={`cnx_dropdown__toggle ${className}`}
             onClick={toggle}
+            onKeyDown={toggle}
+            tabIndex={0}
+            role="button"
         >
             {children}
             {icon && (
@@ -219,6 +225,7 @@ DropdownItem.propTypes = {
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
     className: PropTypes.string,
+    isCloseSingle: PropTypes.bool,
 };
 
 DropdownToggle.propTypes = {
@@ -242,4 +249,5 @@ Dropdown.propTypes = {
     children:
         PropTypes.node.isRequired ||
         PropTypes.arrayOf(PropTypes.node).isRequired,
+    
 };

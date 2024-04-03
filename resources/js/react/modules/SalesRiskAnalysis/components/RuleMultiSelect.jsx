@@ -36,7 +36,6 @@ const RuleMultiSelect = ({
                 ),
             });
         } else {
-            
             if (singleQuestion?.ruleList?.length) {
                 setSelected({
                     ...singleQuestion,
@@ -136,3 +135,11 @@ const RuleMultiSelect = ({
 };
 
 export default RuleMultiSelect;
+
+RuleMultiSelect.propTypes = {
+    data: PropTypes.array,
+    selected: PropTypes.array,
+    setSelected: PropTypes.func,
+    singleQuestion: PropTypes.object,
+    filedName: PropTypes.string,
+}

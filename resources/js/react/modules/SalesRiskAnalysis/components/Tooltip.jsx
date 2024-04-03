@@ -125,6 +125,8 @@ const TooltipComponent = ({children, disabled, text,...props}) => {
                 onMouseLeave={() => setIsOpen(false)}
                 style={{width: 'fit-content', ...props.style}}
                 {...props}
+                role="button"
+                tabIndex={0}
             >
                 {children}
             </div>
@@ -157,12 +159,14 @@ TooltipComponent.propTypes = {
     text: PropTypes.any,
     children: PropTypes.any,
     disabled: PropTypes.bool,
+    props: PropTypes.any,
 }
 
 Tooltip.propTypes = {
     text: PropTypes.any,
     children: PropTypes.any,
     disabled: PropTypes.bool,
+    props: PropTypes.any,
 }
 
 export default Tooltip;

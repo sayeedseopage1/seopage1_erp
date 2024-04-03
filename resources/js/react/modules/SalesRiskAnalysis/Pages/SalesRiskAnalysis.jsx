@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 // ui components
@@ -9,9 +8,7 @@ import { SalesRiskAnalysisContainer } from "../components/ui/Styles/ui";
 // api
 import {
     useAddSalesRiskAnalysisRuleMutation,
-    useGetSalesRiskAnalysisInputsQuery,
     useGetSalesRiskAnalysisRulesQuery,
-    useQuestionInputFieldsQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
 // table
@@ -20,14 +17,6 @@ import { SalesRiskAnalysisTableColumns } from "../components/table/SalesRiskAnal
 
 // modal
 import AddNewPolicyModal from "../components/modal/AddNewPolicyModal";
-
-// redux actions
-import {
-    setFilterOptionsState,
-    setFilterCountriesState,
-} from "../../../services/features/filterOptionSlice";
-// Api services
-import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptionsApiSlice";
 
 // helper
 import { addNewRulesValidation } from "../helper/createFromValidation";
@@ -89,13 +78,12 @@ const SalesRiskAnalysis = () => {
     };
 
     // get sales risk analysis rules
-    const { data, isFetching, isLoading, refetch } =
-        useGetSalesRiskAnalysisRulesQuery(
-            queryString({
-                page: pageIndex + 1,
-                limit: pageSize,
-            })
-        );
+    const { data, isFetching, refetch } = useGetSalesRiskAnalysisRulesQuery(
+        queryString({
+            page: pageIndex + 1,
+            limit: pageSize,
+        })
+    );
     // sales risk analysis rules data
     const salesRiskAnalysisRules = data?.data;
 
@@ -189,8 +177,6 @@ const SalesRiskAnalysis = () => {
         }
     };
 
-    console.log("newPolicyData", newPolicyData);
-
     // handle add rule on policy data to the state
     const handleAddRuleOnPolicy = () => {
         const validation = addNewRulesValidation(
@@ -283,7 +269,6 @@ const SalesRiskAnalysis = () => {
                 }),
             };
 
-            // console.log("payload", payload);
             const response = await submitData(payload);
             if (response?.data) {
                 toast.success("New policy added successfully");
@@ -376,8 +361,8 @@ const SalesRiskAnalysis = () => {
                         onClick={handleAddNewPolicyModal}
                         className="btn btn-primary"
                     >
-                        <i className="fa fa-plus mr-2" aria-hidden="true" />
-                        Add New Policy
+                        <i className="fa fa-plus mr-2" aria-hidden="true" />{" "} Add
+                        New Policy
                     </button>
                     <RefreshButton
                         onClick={() => {
@@ -400,31 +385,30 @@ const SalesRiskAnalysis = () => {
                         />
                     </div>
                 </div>
-
-                {/* Add new Policy Modal */}
-                {addNewPolicyModalOpen && (
-                    <AddNewPolicyModal
-                        open={addNewPolicyModalOpen}
-                        newPolicyData={newPolicyData}
-                        isRuleUpdating={isRuleUpdating}
-                        closeModal={handleAddNewPolicyModal}
-                        newPolicyInputData={newPolicyInputData}
-                        newPolicyDataValidation={newPolicyDataValidation}
-                        isLoadingAddSalesRiskAnalysisRule={
-                            isLoadingAddSalesRiskAnalysisRule
-                        }
-                        handlerAction={{
-                            handleChange,
-                            setNewPolicyData,
-                            setIsRuleUpdating,
-                            handlePolicyAdded,
-                            handleAddRuleOnPolicy,
-                            setNewPolicyInputData,
-                            handleCancelRuleOnPolicy,
-                        }}
-                    />
-                )}
             </SalesRiskAnalysisContainer>
+            {/* Add new Policy Modal */}
+            {addNewPolicyModalOpen && (
+                <AddNewPolicyModal
+                    open={addNewPolicyModalOpen}
+                    newPolicyData={newPolicyData}
+                    isRuleUpdating={isRuleUpdating}
+                    closeModal={handleAddNewPolicyModal}
+                    newPolicyInputData={newPolicyInputData}
+                    newPolicyDataValidation={newPolicyDataValidation}
+                    isLoadingAddSalesRiskAnalysisRule={
+                        isLoadingAddSalesRiskAnalysisRule
+                    }
+                    handlerAction={{
+                        handleChange,
+                        setNewPolicyData,
+                        setIsRuleUpdating,
+                        handlePolicyAdded,
+                        handleAddRuleOnPolicy,
+                        setNewPolicyInputData,
+                        handleCancelRuleOnPolicy,
+                    }}
+                />
+            )}
         </React.Fragment>
     );
 };

@@ -132,7 +132,11 @@ export const QuestionsModalTableColumns = [
                             action.editSingleQuestion(data);
                         }}
                         role="button"
+                        tabIndex="0"
                         className="ml-2"
+                        onKeyDown={() => {
+                            action.editSingleQuestion(data);
+                        }}
                     >
                         <EditIcon />
                     </div>
@@ -141,3 +145,4 @@ export const QuestionsModalTableColumns = [
         },
     },
 ];
+

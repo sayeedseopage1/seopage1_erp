@@ -229,15 +229,12 @@ export default EditPolicyModal;
 
 EditPolicyModal.propTypes = {
     open: PropTypes.bool,
-    closeModal: PropTypes.func,
     isLoading: PropTypes.bool,
+    closeModal: PropTypes.func,
     isRuleUpdating: PropTypes.bool,
     editPolicyData: PropTypes.object,
-    setEditPolicyData: PropTypes.func,
     editPolicyInputData: PropTypes.array,
-    handleAddRuleOnPolicy: PropTypes.func,
-    setEditPolicyInputData: PropTypes.func,
     editPolicyDataValidation: PropTypes.object,
-    handleMultiSelectChange: PropTypes.func,
-    handleCancelRuleOnPolicy: PropTypes.func,
+    editPolicyDefaultData: PropTypes.object,
+    editPolicyAction: PropTypes.object,
 };

@@ -11,8 +11,7 @@ const CustomDropDown = ({
     setSelected,
     sidebarItem = false,
     className,
-    filedName,
-    register
+    filedName
 }) => {
     // set selected value from data (because this dropdown reused in multiple places with different data)
     const _Options = data?.data;
@@ -38,6 +37,7 @@ const CustomDropDown = ({
                         <span
                             data-toggle={"tooltip"}
                             id="select-department-sal-risk"
+                            className="multiline-ellipsis"
                         >
                             {selected?.label ? (
                                 <span>
@@ -86,5 +86,5 @@ CustomDropDown.propTypes = {
     setSelected: PropTypes.func,
     sidebarItem: PropTypes.bool,
     className: PropTypes.string,
-    filedName: PropTypes.string,
+    filedName: PropTypes.string
 };

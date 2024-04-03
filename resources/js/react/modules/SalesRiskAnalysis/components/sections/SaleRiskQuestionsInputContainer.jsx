@@ -1,6 +1,7 @@
 import _ from "lodash";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from "prop-types";
 
 // Ui components
 import Switch from "../Switch";
@@ -305,3 +306,14 @@ const SaleRiskQuestionsInputContainer = ({
 };
 
 export default SaleRiskQuestionsInputContainer;
+
+
+SaleRiskQuestionsInputContainer.propTypes = {
+    questions: PropTypes.array,
+    isChild: PropTypes.bool,
+    inputsData: PropTypes.array,
+    isSubmitting: PropTypes.bool,
+    allQuestions: PropTypes.array,
+    focusedQuestion: PropTypes.object,
+    inputContainerActions: PropTypes.object,
+}

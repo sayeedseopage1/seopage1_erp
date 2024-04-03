@@ -18,7 +18,6 @@ const SalesAnalysisReport = () => {
     const [filter, setFilter] = React.useState({});
     const [isLoading, setIsLoading] = React.useState(true);
 
-    console.log(filter);
     return (
         <div>
             <SaleAnalysisReportTableFilterBar setFilter={setFilter} />

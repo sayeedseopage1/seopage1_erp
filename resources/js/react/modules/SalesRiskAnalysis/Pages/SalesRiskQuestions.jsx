@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import {
     SalesRiskAnalysisQuestionContainer,
     SalesRiskAnalysisQuestionTitleContainer,
-    SalesRiskAnalysisQuestionWrapper,
 } from "../components/ui/Styles/ui";
 import CustomCheckbox from "../components/ui/CustomCheckbox/CustomCheckbox";
 import QuestionConfirmModal from "../components/modal/QuestionConfirmModal";
@@ -25,27 +24,31 @@ import { isArrayObjectEmpty } from "../../../utils/stateValidation";
 
 // Api
 import {
-    usePolicyQuestionsListQuery,
+    useSaleAnalysisQuestionsListQuery,
     useSaleRiskQuestionAnswerSaveMutation,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
+// icon
+import InfoIcon from "../components/ui/InfoIcon";
+
 const SalesRiskQuestions = () => {
-    const params = useParams();
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
     const [inputsData, setInputsData] = React.useState([]);
     const [allQuestions, setAllQuestions] = React.useState([]);
     const [isChecked, setIsChecked] = React.useState(false);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
+    const [redirectUrl, setRedirectUrl] = React.useState("");
 
     // modal open close state
     const [questionModalOpen, setQuestionModalOpen] = React.useState(false);
 
     // fetch policy questions
-    const { data, isLoading, isFetching, refetch } =
-        usePolicyQuestionsListQuery(null);
+    const { data, isLoading } = useSaleAnalysisQuestionsListQuery(null);
 
-    const [saveSaleRiskQuestionAnswer, { isLoading: isSaving }] =
-        useSaleRiskQuestionAnswerSaveMutation();
+    const [
+        saleAnalysisQuestionSave,
+        { isLoading: isSaving },
+    ] = useSaleRiskQuestionAnswerSaveMutation();
 
     const questions = data?.data;
 
@@ -68,7 +71,6 @@ const SalesRiskQuestions = () => {
                         type: item.type,
                         parent_id: item.parent_id,
                         placeholder: item.placeholder,
-                        questions: item?.questions,
                         [`question_${item?.id}`]: "",
                     };
                 });
@@ -88,7 +90,6 @@ const SalesRiskQuestions = () => {
                                 questions: item?.questions,
                                 type: item.type,
                                 parent_id: item.parent_id,
-                                questions: item?.questions,
                                 [`question_${item?.id}`]: "",
                             };
                         }
@@ -105,9 +106,7 @@ const SalesRiskQuestions = () => {
         const isEmpty = isArrayObjectEmpty(inputsData, "parent_id");
         if (isEmpty) {
             setIsSubmitting(true);
-            return;
         } else {
-            // setQuestionModalOpen(true);
             try {
                 const payload = inputsData.map((item) => {
                     return {
@@ -117,12 +116,18 @@ const SalesRiskQuestions = () => {
                 });
                 console.log(payload);
 
-                const res = await saveSaleRiskQuestionAnswer(payload);
+                const res = await saleAnalysisQuestionSave(payload);
                 if (res?.data?.status === "success") {
-                    setIsSubmitting(false);
                     toast.success("Successfully saved");
-                    setQuestionModalOpen(false);
-                    // window.location.href = res?.data?.redirect_url;
+                    if (res?.data?.data.point < 0) {
+                        setQuestionModalOpen(true);
+                        setIsSubmitting(false);
+                        setRedirectUrl(res?.data?.redirect_url);
+                    } else {
+                        console.log(res?.data);
+                        debugger;
+                        window.location.href = res?.data?.redirect_url;
+                    }
                 }
             } catch (error) {
                 toast.error("Something went wrong");
@@ -131,25 +136,7 @@ const SalesRiskQuestions = () => {
     };
 
     const handleSaveQuestionAnswer = async () => {
-        try {
-            const payload = inputsData.map((item) => {
-                return {
-                    id: item.id,
-                    value: item[`question_${item.id}`],
-                };
-            });
-            console.log(payload);
-
-            const res = await saveSaleRiskQuestionAnswer(payload);
-            if (res?.data?.status === "success") {
-                setIsSubmitting(false);
-                toast.success("Successfully saved");
-                setQuestionModalOpen(false);
-                // window.location.href = res?.data?.redirect_url;
-            }
-        } catch (error) {
-            toast.error("Something went wrong");
-        }
+        window.location.href = redirect;
     };
 
     const handleQuestionFocus = (question) => {
@@ -226,7 +213,6 @@ const SalesRiskQuestions = () => {
                 questions: item?.questions,
                 type: item.type,
                 parent_id: item.parent_id,
-                questions: item?.questions,
                 [`question_${item?.id}`]: "",
             }));
 
@@ -236,67 +222,109 @@ const SalesRiskQuestions = () => {
         return setInputsData(addSelectValue);
     };
 
+    console.log(inputsData);
+
     return (
         <section>
             <SalesRiskAnalysisQuestionContainer>
                 <SalesRiskAnalysisQuestionTitleContainer>
                     <h5>Sale Risk Analysis</h5>
                 </SalesRiskAnalysisQuestionTitleContainer>
-                <div>
-                    {isLoading ? (
-                        <SaleRiskAnalysisQuestionsLoader />
-                    ) : (
-                        <SaleRiskQuestionsInputContainer
-                            isChild={false}
-                            questions={questions}
-                            inputsData={inputsData}
-                            allQuestions={allQuestions}
-                            isSubmitting={isSubmitting}
-                            focusedQuestion={focusedQuestion}
-                            inputContainerActions={{
-                                getItsFocused,
-                                handleQuestionFocus,
-                                setInputsData,
-                                handleListYesNoQuestion,
-                            }}
-                        />
-                    )}
-                </div>
-                <QuestionConfirmModal
-                    open={questionModalOpen}
-                    closeModal={() => {
-                        setQuestionModalOpen(false);
-                    }}
-                    handleSaveQuestionAnswer={handleSaveQuestionAnswer}
-                    isLoading={isSaving}
-                />
-                <CustomCheckbox
-                    isChecked={isChecked}
-                    setIsChecked={setIsChecked}
-                />
-                <Flex justifyContent="center" className="my-3">
-                    <button
-                        onClick={() => {
-                            handleSubmit();
-                        }}
-                        className="btn btn-primary d-flex align-items-center justify-content-center"
-                        disabled={!isChecked}
+                {redirectUrl ? (
+                    <div
+                        className="d-flex align-items-center justify-content-center flex-column py-4 px-3 px-md-5"
                         style={{
-                            width: "250px",
+                            height: "calc(100vh - 190px)",
                         }}
                     >
-                        <Switch>
-                            <Switch.Case condition={!isChecked}>
-                                <Tooltip text="Please confirm the above statement">
-                                    Submit
-                                </Tooltip>
-                            </Switch.Case>
-                            <Switch.Case condition={isChecked}>
-                                {isSaving ? "Saving..." : "Submit"}
-                            </Switch.Case>
-                        </Switch>
-                    </button>
-                </Flex>
+                        <InfoIcon />
+                        <p
+                            className="text-center py-4"
+                            style={{
+                                textAlign: "center",
+                                fontFamily: "Poppins",
+                                fontSize: "16px",
+                                fontStyle: "normal",
+                                fontWeight: 400,
+                                lineHeight: "normal",
+                            }}
+                        >
+                            This won deal has a negative risk analysis score
+                            hence it has to be authorized by the top management.
+                            You can still submit the larger form and it will be
+                            assigned to a project manager right after it will be
+                            authorized.
+                        </p>
+                        <button
+                            className="btn btn-primary"
+                            style={{
+                                width: "250px",
+                            }}
+                            onClick={handleSaveQuestionAnswer}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? "Saving..." : "Continue"}
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <div>
+                            {isLoading ? (
+                                <SaleRiskAnalysisQuestionsLoader />
+                            ) : (
+                                <SaleRiskQuestionsInputContainer
+                                    isChild={false}
+                                    questions={questions}
+                                    inputsData={inputsData}
+                                    allQuestions={allQuestions}
+                                    isSubmitting={isSubmitting}
+                                    focusedQuestion={focusedQuestion}
+                                    inputContainerActions={{
+                                        getItsFocused,
+                                        handleQuestionFocus,
+                                        setInputsData,
+                                        handleListYesNoQuestion,
+                                    }}
+                                />
+                            )}
+                        </div>
+                        <QuestionConfirmModal
+                            open={questionModalOpen}
+                            closeModal={() => {
+                                setQuestionModalOpen(false);
+                            }}
+                            handleSaveQuestionAnswer={handleSaveQuestionAnswer}
+                            isLoading={isSaving}
+                        />
+                        <CustomCheckbox
+                            isChecked={isChecked}
+                            setIsChecked={setIsChecked}
+                        />
+                        <Flex justifyContent="center" className="my-3">
+                            <button
+                                onClick={() => {
+                                    handleSubmit();
+                                }}
+                                className="btn btn-primary d-flex align-items-center justify-content-center"
+                                disabled={!isChecked}
+                                style={{
+                                    width: "250px",
+                                }}
+                            >
+                                <Switch>
+                                    <Switch.Case condition={!isChecked}>
+                                        <Tooltip text="Please confirm the above statement">
+                                            Submit
+                                        </Tooltip>
+                                    </Switch.Case>
+                                    <Switch.Case condition={isChecked}>
+                                        {isSaving ? "Saving..." : "Submit"}
+                                    </Switch.Case>
+                                </Switch>
+                            </button>
+                        </Flex>
+                    </>
+                )}
             </SalesRiskAnalysisQuestionContainer>
         </section>
     );

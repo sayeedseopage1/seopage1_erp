@@ -1,15 +1,22 @@
-const Switch = ({children}) => {
-    return(
-       <> {children} </>
-    )
- }
+import PropTypes from "prop-types";
 
- const Case = ({children, condition}) => {
-   if(!condition) return null;
-   return (
-     <>{children}</>
-   )
- }
+const Switch = ({ children }) => {
+    return <> {children} </>;
+};
+
+const Case = ({ children, condition }) => {
+    if (!condition) return null;
+    return <>{children}</>;
+};
 
 Switch.Case = Case;
- export default Switch
+export default Switch;
+
+Switch.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
+Case.propTypes = {
+    children: PropTypes.node.isRequired,
+    condition: PropTypes.bool.isRequired,
+}
