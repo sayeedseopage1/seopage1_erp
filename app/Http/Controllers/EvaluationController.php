@@ -188,6 +188,13 @@ class EvaluationController extends AccountBaseController
         $evaluation_task->avg_rating = $average_rating;
         $evaluation_task->save();
 
+        if($request->confirm_submission == 'lead_dev_submitted')
+        {
+            $employee_evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first();
+            $employee_evaluation->ld_submission_status = 1;
+            $employee_evaluation->save();
+        }
+
         return response()->json(['status'=>200]);
     }
     public function editEmployeeTaskEvaluation($id)
