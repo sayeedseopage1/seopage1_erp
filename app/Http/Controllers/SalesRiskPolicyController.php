@@ -659,8 +659,9 @@ class SalesRiskPolicyController extends AccountBaseController
         $types = SalesPolicyQuestion::$types;
         $questionKeys = SalesPolicyQuestion::$keys;
         $policies = SalesRiskPolicy::whereNull('parent_id')->get(['id', 'title']);
+        $questionList = SalesPolicyQuestion::get(['id', 'title','key', 'type', 'value', 'parent_id', 'policy_id',]);
 
-        return response()->json(['data' => compact('types', 'questionKeys', 'policies')]);
+        return response()->json(['data' => compact('types', 'questionKeys', 'policies', 'questionList')]);
     }
 
     function policyQuestionSave(Request $req)
@@ -845,8 +846,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $req->session()->put('deal_id', $deal_id);
 
+        $data = $this->data;
+        $data['addedBefor'] = PolicyQuestionValue::where('deal_id' , $deal_id)->count() > 0 ;
         // Note: big form route : route('dealDetails', $deal->id)
-        return view('deals.sales-questions-render', $this->data);
+        return view('deals.sales-questions-render', $data);
     }
 
     function questionValueSave(Request $req)
@@ -866,6 +869,10 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $dealId = $req->session()->get('deal_id');
 
+        if (PolicyQuestionValue::where('deal_id' , $dealId)->count() > 0) {
+            return response()->json(['status' => 'error', 'message' => 'Deal question values are already added.'], 500);
+        }
+
         DB::beginTransaction();
         try {
             foreach ($req->all() as $item) {
@@ -879,7 +886,7 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
             // calculate point
-            $calculation = self::calculatePolicyPoint($dealId);
+            // $calculation = self::calculatePolicyPoint($dealId);
 
             DB::commit();
         } catch (\Throwable $th) {
@@ -892,7 +899,7 @@ class SalesRiskPolicyController extends AccountBaseController
             'status' => 'success',
             'message' => 'Questons values stored successfully.',
             'redirectUrl' => route('dealDetails', $dealId),
-            'data' => ['point' => $calculation['points']]
+            // 'data' => ['point' => $calculation['points']]
         ]);
     }
 
