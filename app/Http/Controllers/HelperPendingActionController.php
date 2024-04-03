@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deal;
+use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingAction;
 use App\Models\Project;
 use App\Models\User;
@@ -1812,35 +1813,33 @@ class HelperPendingActionController extends AccountBaseController
 
         public function NewDeveloperEvaluation($user)
         {
-            $project= Project::where('id',$task->project_id)->first();
-            $client= User::where('id',$project->client_id)->first();
-            $project_manager= User::where('id',$project->pm_id)->first();
-            $task_user= TaskUser::where('task_id',$task->id)->first();
-            $authorizer= User::where('id',$task_user->user_id)->first();
+            $new_dev = User::where('id',$user)->first(); 
+            $evaluation_task = EmployeeEvaluationTask::where('user_id',$new_dev->id)->first(); 
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',6)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'NDPE';
+                $action->serial = 'NDPE'.'x'.$key;
+                $action->item_name= 'New developer\'s performance evaluation!';
+                $action->heading= 'New developer\'s performance evaluation!';
+                $action->message = 'Fill out initial performance evaluation from for the dedeloper <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
+                $action->timeframe= 24;
+                $action->client_id = $task->id;
+               $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Evaluate',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                    ],
 
-            $action = new PendingAction();
-            $action->code = 'NSPT';
-            $action->serial = 'NSPT'.'x0';
-            $action->item_name= 'Submit work';
-            $action->heading= 'Submit task!';
-            $action->message = 'Submit task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> to project manager <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>!';
-            $action->timeframe= 24;
-            $action->project_id = $project->id;
-            $action->client_id = $client->id;
-            $action->task_id = $task->id;
-            $action->authorization_for= $authorizer->id;
-            $button = [
-                [
-                    'button_name' => 'Submit',
-                    'button_color' => 'primary',
-                    'button_type' => 'redirect_url',
-                    'button_url' => route('tasks.show', $task->id),
-                ],
-
-            ];
-            $action->button = json_encode($button);
-            $action->save();
-
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
         }
 
 
