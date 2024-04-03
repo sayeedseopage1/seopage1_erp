@@ -8,8 +8,16 @@ margin-bottom: 40px;
 display: flex;
 align-items: center;
 justify-content: space-between;
-flex-wrap: wrap;
 gap: 20px;
+
+@media (max-width: 600px) {
+    padding:16px;
+}
+
+@media (max-width: 992px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 `
 export const ButtonWrapper = styled.div`
 display: inline-flex;
@@ -17,13 +25,20 @@ align-items: flex-start;
 gap: 24px;
 `
 export const ButtonComponent = styled.button`
+width:145px;
+height: 52px;
 border-radius: 8px;
 border: 1px solid #1492E6;
 background-color: ${(props) => props.color || "transparent"};
-padding: 20px 40px;
+padding: 10px;
 font-size: 14px;
 font-weight: 500;
 color: ${(props) => props.textColor ? "#fff" : "#1492E6"};
+
+@media (max-width: 600px) {
+width:90px;
+height: 42px;
+  }
 `
 
 export const AddNewSectionCointainer = styled.div`
@@ -45,11 +60,16 @@ font-style: normal;
 font-weight: 500;
 line-height: normal;
 }
+
+@media (max-width: 600px) {
+    padding:10px 16px;
+}
 `
 
 export const AddButton = styled.button`
 display: flex;
 width: 240px;
+height: 56px;
 padding: 13px 20px;
 justify-content: center;
 align-items: center;
@@ -60,6 +80,13 @@ color: #FFF;
 font-family: Poppins;
 font-size: 20px;
 font-weight: 500;
+
+@media (max-width: 600px) {
+width:150px;
+height: 48px;
+font-size: 14px;
+font-weight: 400;
+  }
 `
 
 // modal 
