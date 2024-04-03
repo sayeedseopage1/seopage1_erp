@@ -61,15 +61,11 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('rule-list', 'ruleList')->name('rule-list');
             Route::put('status-change/{id}/{status}', 'policyRuleStatusChange')->name('status-change');
 
-
         });
 
         Route::get('account/deals/risk-analysis/{deal_id}', [self::class, 'salesPolicyQuestionRender'])->name('account.sale-risk-policies.risk-analysis');
         Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReport'])->name('account.sale-risk-policies.report-list');
     }
-
-
-
 
     function questionIndex()
     {
@@ -126,11 +122,13 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         $validator = Validator::make($req->all(), [
             'title' => 'required',
+            'key' => 'required',
             'type' => 'required',
-            'policy_id' => 'required',
-            'rule_list' => 'nullable',
+            'value' => 'nullable',
+            'policy_id' => 'nullable',
             'parent_id' => 'nullable',
-            'placeholder' => 'nullable'
+            'placeholder' => 'nullable',
+            'comment' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -142,12 +140,13 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $question->update([
                 'title' => $req->title,
+                'key' => $req->key,
                 'type' => $req->type,
                 'value' => $req->value,
                 'parent_id' => $req->parent_id,
-                'rule_list' => json_encode($req->ruleList),
-                'placeholder' => $req->placeholder,
                 'policy_id' => $req->policy_id,
+                'placeholder' => $req->placeholder,
+                'comment' => $req->comment
             ]);
 
             return response()->json(['status' => 'success', 'message' => 'Question Edited succesfully']);
