@@ -60,13 +60,7 @@ import EditIcon from "../../_Data/editor.svg";
 import InputIcon from "../../_Data/input.svg";
 import UploadIcon from "../../_Data/upload.svg";
 
-const EditorComponent = ({
-    increaseRefetchComment,
-    setScroll,
-    taskId,
-    setIsLoading,
-    onSubmit,
-}) => {
+const EditorComponent = ({ setScroll, taskId, setIsLoading, onSubmit }) => {
     const [editorState, setEditorState] = React.useState(() =>
         EditorState.createEmpty()
     );
@@ -249,7 +243,6 @@ const EditorComponent = ({
             );
 
             if (response.status === 200) {
-                increaseRefetchComment();
                 setCommentState();
                 setRefetchType("");
                 setIsFetching(false);
@@ -258,7 +251,7 @@ const EditorComponent = ({
                 setEditorState(() => EditorState.createEmpty());
                 setMentionedComment(null);
             }
-            increaseRefetchComment();
+
             clearFiles();
             setEditorState(() => EditorState.createEmpty());
             setMentionedComment(null);
@@ -551,17 +544,10 @@ const EditorComponent = ({
 };
 
 // export component with service providers
-export default function Sendbox({
-    increaseRefetchComment,
-    setScroll,
-    taskId,
-    setIsLoading,
-    onSubmit,
-}) {
+export default function Sendbox({ setScroll, taskId, setIsLoading, onSubmit }) {
     return (
         <ServiceProvider>
             <EditorComponent
-                increaseRefetchComment={increaseRefetchComment}
                 onSubmit={onSubmit}
                 taskId={taskId}
                 setScroll={setScroll}

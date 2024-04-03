@@ -1,3 +1,5 @@
+//This file is not using in the system
+
 import React, { useEffect } from "react";
 import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";

@@ -765,6 +765,7 @@ class PendingActionController extends AccountBaseController
     }
     public function pastAction(Request $request)
     {
+        // dd($request->all());
         $action = PendingAction::where('id',$request->id)->first();
         $task= Task::where('id',$action->task_id)->first();
         $project= Project::where('id',$task->project_id)->first();

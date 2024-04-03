@@ -9,17 +9,18 @@ import Button from "../../../../../../react/global/Button";
 import ReusableSection from "./ReusableSection";
 import CKEditorComponent from "../../../../../ui/ckeditor";
 import { toast } from "react-toastify";
-import { useUpdateTaskMutation } from "../../../../../services/api/EvaluationApiSlice";
+
 import { BiSolidEditAlt } from "react-icons/bi";
 import { useAuth } from "../../../../../../react/hooks/useAuth";
 import ReusableSectionTeamLeadAndAdmin from "./ReusableSectionTeamLeadAndAdmin";
+import { useUpdateSingleTaskMutation } from "../../../../../services/api/EvaluationApiSlice";
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
     const auth = useAuth();
-    const [putTask] = useUpdateTaskMutation();
+    const [putTask] = useUpdateSingleTaskMutation();
 
     const [averageRating, setAverageRating] = useState(data.averageRating);
     const [formData, setFormData] = useState({

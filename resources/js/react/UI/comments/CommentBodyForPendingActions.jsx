@@ -2,20 +2,10 @@ import React, { createContext, useContext, useEffect } from "react";
 import style from "./styles/comments.module.css";
 import "./editor.style.css";
 import { AiOutlineFullscreen, AiOutlineFullscreenExit } from "react-icons/ai";
-import {
-    IoIosArrowDown,
-    IoIosArrowUp,
-    IoMdCloseCircle,
-    IoCustomRefresh,
-} from "react-icons/io";
-import commentRefresh from "./media/comment_refresh.svg";
-import commentSearch from "./media/comment_search.svg";
-// import commentClose from './media/comment_close.svg';
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+
 import commentBg from "./media/comments_body_bg.svg";
-import commentBgPng from "./media/comments_body_bg.png";
-import { GiCancel } from "react-icons/gi";
-import SingleChat from "./components/SingleChat";
-import ChatInput from "./components/ChatInput";
+
 import { useState } from "react";
 import { useRef } from "react";
 import { useCallback } from "react";
@@ -40,9 +30,14 @@ import { useDeleteCommentsMutation } from "../../services/api/commentsApiSlice";
 import { useParams } from "react-router-dom";
 import ImageSliderModal from "./components/ImageSliderModal";
 import { isHasPermissionForWriteComment } from "./utils/isHasPermissionForWriteComment";
-import Sendbox from "./components/sendbox/Sendbox";
+
 import axios from "axios";
 import { useCommentStore } from "./zustand/store";
+import SendboxForPendingActions from "./components/sendbox/SendboxForPendingActions";
+import SingleChatForPendingActions from "./components/SIngleChatForPendingActions";
+import { useSelector } from "react-redux";
+import { usePendingActionsIdMutation } from "../../../react-latest/services/api/pendingActionsApiSlice";
+import useCounterStore from "../../../react-latest/components/Zustand/store";
 
 const CommentContext = createContext({
     setScroll: () => {},
@@ -65,7 +60,6 @@ export function useCommentContext() {
 }
 
 const CommentBodyForPendingActions = ({
-    increaseRefetchComment,
     fullScreenView,
     setFullScreenView,
     isOpen,
@@ -83,6 +77,12 @@ const CommentBodyForPendingActions = ({
     showSearchBtn = true,
     onSubmit = async () => null,
 }) => {
+    const { increaseCount } = useCounterStore();
+    const pendingActionId = useSelector(
+        (state) => state.pendingActions.pendingActionId
+    );
+
+    const [updatePendingAction] = usePendingActionsIdMutation();
     const { allComments, setAllComments } = useCommentStore();
     const param = useParams();
     const [deleteComments, { isLoading: deleteLoading }] =
@@ -122,7 +122,7 @@ const CommentBodyForPendingActions = ({
         setAllComments(comments);
     }, [comments]);
 
-    const hnadleSelectComment = useCallback(() => {
+    const handleSelectComment = useCallback(() => {
         setSecletedComments((prev) => ({
             ...prev,
             [contextHolder.id]: contextHolder,
@@ -141,7 +141,7 @@ const CommentBodyForPendingActions = ({
             </ContextMenuItem>
             <ContextMenuItem
                 onSelect={() => {
-                    hnadleSelectComment();
+                    handleSelectComment();
                 }}
             >
                 <TbMessage2Check className={`context_icons`} />
@@ -722,7 +722,48 @@ const CommentBodyForPendingActions = ({
                                 if (setFullScreenView) {
                                     setFullScreenView(false);
                                 }
-                                close();
+
+                                Swal.fire({
+                                    icon: "question",
+                                    title: "Would you like to add any more comments?",
+                                    html: `
+    <p style="margin-top: 5px; text-align: justify;">If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #007bff; color: white;">Yes</span>, you can add more comments. If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #dc3545; color: white;">No</span>, this pending action will be marked as completed and moved to the past.</p>
+     <p style="margin-top: 10px; text-align: justify;"> If you click <span style="padding: 4px;font-size:12px; border-radius: 5px; background-color: #17A2B8; color: white;">Back to Pending Action</span>, this comment window will close and you'll return to the pending action page.</p>
+  `,
+                                    allowOutsideClick: false,
+                                    showCancelButton: true,
+                                    cancelButtonText: "Back to Pending Action",
+                                    showConfirmButton: true,
+                                    confirmButtonText: "Yes",
+                                    showDenyButton: true,
+                                    denyButtonText: "No",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                        cancelButton: `${style.customInfoButton}`,
+                                    },
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        console.log("You clicked 'Yes'");
+                                    } else if (result.isDenied) {
+                                        console.log("You clicked 'No'");
+                                        updatePendingAction({
+                                            id: pendingActionId,
+                                        })
+                                            .unwrap()
+                                            .then((res) => {
+                                                increaseCount();
+                                                close();
+                                            })
+                                            .catch((err) => {
+                                                console.log(err);
+                                            });
+                                    } else {
+                                        console.log(
+                                            "You clicked 'Back to Pending Action'"
+                                        );
+                                        close();
+                                    }
+                                });
                             }}
                             className={`${style.commentsBody_header_btn}`}
                         >
@@ -799,7 +840,7 @@ const CommentBodyForPendingActions = ({
                         <>
                             {allComments?.map((comment, i) => {
                                 return (
-                                    <SingleChat
+                                    <SingleChatForPendingActions
                                         idMatch={
                                             comment?.id ===
                                             searchIndexes[
@@ -862,8 +903,7 @@ const CommentBodyForPendingActions = ({
                     assignBy: thisTask?.create_by,
                 }) ? (
                     <footer className={`${style.commentsBody_inputField}`}>
-                        <Sendbox
-                            increaseRefetchComment={increaseRefetchComment}
+                        <SendboxForPendingActions
                             onSubmit={onSubmit}
                             taskId={taskId}
                             setScroll={setScroll}

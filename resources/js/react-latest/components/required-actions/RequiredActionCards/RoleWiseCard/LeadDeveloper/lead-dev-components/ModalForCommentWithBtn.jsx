@@ -1,3 +1,5 @@
+//This file is not using in the system
+
 import React, { useState } from "react";
 import style from "../../../../../../styles/required-action-card.module.css";
 import Modal from "../../../../../../ui/Modal";
@@ -67,7 +69,7 @@ const ModalForCommentWithBtn = ({
                             style={{ overflow: "visible", padding: "0" }}
                         >
                             {/* modal body  */}
-                            {children(setIsOpen,isOpen)}
+                            {children(setIsOpen, isOpen)}
 
                             {/* {showBottomCloseBtn && (
                                 <Button

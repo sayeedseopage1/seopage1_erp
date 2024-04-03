@@ -495,14 +495,18 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="theme_name">Theme Name<sup class="f-14 mr-1">*</sup></label>
-                                    <input type="text" id="theme_name" class="form-control height-35 f-14" placeholder="Type theme name" name="theme_name"/>
+                                    <select class="form-control height-35 f-14 selectpicker" name="theme_id" id="theme_id" data-live-search="true" data-size="8" onchange="$('#theme_url').val($(this).find(':selected').data('url'))">
+                                        @foreach ($themeList as $item)
+                                            <option value="{{ $item->id }}" data-url="{{ $item->theme_url }}">{{$item->theme_name}}</option>
+                                        @endforeach
+                                    </select>
                                     <span id="theme_nameError" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="theme_link">Theme Url <sup class="f-14 mr-1">*</sup></label>
-                                    <input type="url" id="theme_url" class="form-control height-35 f-14" placeholder="Type theme url" name="theme_url"/>
+                                    <input type="url" id="theme_url" class="form-control height-35 f-14" placeholder="Theme url" disabled/>
                                     <span id="theme_urlError" class="text-danger"></span>
                                 </div>
                             </div>
@@ -539,28 +543,27 @@
                             <div class="row">
                                 <div class="col-md-10 dynamic-field" id="dynamic-field-1">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-10">
                                             <div class="form-group">
-                                                <label for="plugin_name">Plugin Name</label>
-                                                <input type="text" id="plugin_name" class="form-control height-35 f-14" placeholder="Type official plugin name" name="plugin_name[]"/>
+                                                <label for="plugin_name">Plugin Names</label>
+                                                <select class="form-control height-35 f-14 selectpicker" name="plugin_list" id="plugin_list" data-live-search="true" multiple >
+                                                    @foreach ($pluginList as $item)
+                                                        @php
+                                                            $limit = Str::length($item->plugin_name);
+                                                            $limit = ((130 - $limit) < 0) ? 0 : (120 - $limit);
+                                                        @endphp
+                                                        <option value="{{ $item->id }}">
+                                                            {{ $item->plugin_name }} - {{ Str::limit($item->plugin_url, $limit, '...') }}
+                                                        </option>
+
+                                                    @endforeach
+                                                </select>
                                                 <span id="plugin_nameError" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <div class="form-group">
-                                                <label for="plugin_url">Plugin Url</label>
-                                                <input type="url" id="plugin_url" class="form-control height-35 f-14" placeholder="Add plugin url" name="plugin_url[]"/>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-md-2 append-buttons" style="margin-top: 25px;">
-                                    <div class="clearfix">
-                                        <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                        <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12 mt-5">
@@ -758,7 +761,7 @@
                 'comments': document.getElementById("comments").value,
                 'comments2': document.getElementById("comments2").value,
                 'comments3': document.getElementById("comments3").value,
-                
+
                 'website_type': document.getElementById("website_type").value,
                 'niche': document.getElementById("niche").value,
                 'sub_niche': document.getElementById("sub_niche").value,
@@ -767,10 +770,12 @@
                 'backup_email_address': document.getElementById("backup_email_address").value,
                 'day_interval': document.getElementById("day_interval").value,
                 'website_plugin_box_information': website_plugin_box_information,
-                'plugin_name': plugin_name_values,
-                'plugin_url': plugin_url_values,
-                'theme_name': document.getElementById("theme_name").value,
-                'theme_url': document.getElementById("theme_url").value,
+                // 'plugin_name': plugin_name_values,
+                // 'plugin_url': plugin_url_values,
+                'plugin_list': $('#plugin_list').val(),
+                // 'theme_name': document.getElementById("theme_name").value,
+                // 'theme_url': document.getElementById("theme_url").value,
+                'theme_id': document.getElementById("theme_id").value,
                 'dummy_yes': document.getElementById("dummy_yes").value,
                 'dummy_information': dummy_information,
                 'dummy_link': document.getElementById("dummy_link").value,
@@ -930,16 +935,22 @@
                     }else{
                         $('#day_intervalError').text('');
                     }
-                    if(error.responseJSON.errors.theme_name){
-                        $('#theme_nameError').text(error.responseJSON.errors.theme_name);
+                    // if(error.responseJSON.errors.theme_name){
+                    //     $('#theme_nameError').text(error.responseJSON.errors.theme_name);
+                    // }else{
+                    //     $('#theme_nameError').text('');
+                    // }
+                    // if(error.responseJSON.errors.theme_url){
+                    //     $('#theme_urlError').text(error.responseJSON.errors.theme_url);
+                    // }else{
+                    //     $('#theme_urlError').text('');
+                    // }
+                    if(error.responseJSON.errors.theme_id){
+                        $('#theme_nameError').text(error.responseJSON.errors.theme_id);
                     }else{
                         $('#theme_nameError').text('');
                     }
-                    if(error.responseJSON.errors.theme_url){
-                        $('#theme_urlError').text(error.responseJSON.errors.theme_url);
-                    }else{
-                        $('#theme_urlError').text('');
-                    }
+
                     if(error.responseJSON.errors.website_plugin_box_information){
                         $('#plugin_informationError').text(error.responseJSON.errors.website_plugin_box_information);
                     }else{
@@ -1276,7 +1287,11 @@
         });
 
 
+        $('.selectpicker').selectpicker();
 
+        function changeUrl() {
+            alert('sadf');
+        }
     </script>
 
 

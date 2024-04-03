@@ -7,18 +7,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <?php
-           $project_submission= App\Models\ProjectSubmission::select('project_submissions.*','project_niches.category_name')
-       ->leftJoin('project_niches','project_niches.id','project_submissions.niche')
-      
-      ->where('project_id',$project->id)->orderBy('id','desc')->first();
+            $project_submission = App\Models\ProjectSubmission::select('project_submissions.*', 'project_niches.category_name')
+                ->leftJoin('project_niches', 'project_niches.id', 'project_submissions.niche')
+
+                ->where('project_id', $project->id)
+                ->orderBy('id', 'desc')
+                ->first();
             $project_portfolio = DB::table('project_portfolios')
                 ->leftJoin('project_cms', 'project_portfolios.cms_category', '=', 'project_cms.id')
                 ->leftJoin('project_website_types', 'project_portfolios.website_type', '=', 'project_website_types.id')
                 ->leftJoin('project_niches', 'project_portfolios.niche', '=', 'project_niches.id')
-                ->leftJoin('projects','project_portfolios.project_id','=','projects.id')
+                ->leftJoin('projects', 'project_portfolios.project_id', '=', 'projects.id')
                 ->select('project_portfolios.*', 'project_cms.cms_name', 'project_website_types.website_type', 'project_niches.category_name')
-                ->where('project_portfolios.project_id',$project->id)
-                 ->orderBy('project_portfolios.id', 'desc')
+                ->where('project_portfolios.project_id', $project->id)
+                ->orderBy('project_portfolios.id', 'desc')
                 ->first();
             ?>
             <form class="" action="{{ route('project-submit-accept') }}" method="post">
@@ -31,15 +33,15 @@
 
                         <div class="card-body ">
                             @if ($project_submission != null)
-                            @if ($project_submission->actual_link != null)
-                                <h6 class="text-center"> <strong>Actual Site Link: </strong><a
-                                        href="{{ $project_submission->actual_link }}"
-                                        target="_blank">{{ $project_submission->actual_link }}</a></h6>
-                            @else
-                                <h6 class="text-center"> <strong>Dummy Site Link: </strong><a
-                                        href="{{ $project_submission->dummy_link }}"
-                                        target="_blank">{{ $project_submission->dummy_link }}</a></h6>
-                            @endif
+                                @if ($project_submission->actual_link != null)
+                                    <h6 class="text-center"> <strong>Actual Site Link: </strong><a
+                                            href="{{ $project_submission->actual_link }}"
+                                            target="_blank">{{ $project_submission->actual_link }}</a></h6>
+                                @else
+                                    <h6 class="text-center"> <strong>Dummy Site Link: </strong><a
+                                            href="{{ $project_submission->dummy_link }}"
+                                            target="_blank">{{ $project_submission->dummy_link }}</a></h6>
+                                @endif
                             @else
                                 <h6>Link are not available</h6>
                             @endif
@@ -72,13 +74,13 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->qc_protocol == 1)
-                                                    Yes
+                                                    @if ($project_submission->qc_protocol == 1)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -102,13 +104,13 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->login_yes == 1)
-                                                    Yes
+                                                    @if ($project_submission->login_yes == 1)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -133,28 +135,28 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->login_information == 1)
-                                                    Yes
-                                                    <br>
-                                                    <br>
-                                                    @if ($project_submission->login_url != null)
-                                                        <strong>Login Url: </strong><a
-                                                            href="{{ $project_submission->login_url }}"
-                                                            target="_blank">{{ $project_submission->login_url }}</a>
+                                                    @if ($project_submission->login_information == 1)
+                                                        Yes
                                                         <br>
+                                                        <br>
+                                                        @if ($project_submission->login_url != null)
+                                                            <strong>Login Url: </strong><a
+                                                                href="{{ $project_submission->login_url }}"
+                                                                target="_blank">{{ $project_submission->login_url }}</a>
+                                                            <br>
+                                                        @endif
+                                                        <strong>Login: </strong>{{ $project_submission->login }}
+                                                        <br>
+                                                        <strong>Password: </strong>{{ $project_submission->password }}
+                                                        <br>
+                                                        <strong>Screenshot: </strong><a
+                                                            href="{{ $project_submission->screenshot }}"
+                                                            target="_blank">{{ $project_submission->screenshot }}</a>
+                                                    @else
+                                                        No
                                                     @endif
-                                                    <strong>Login: </strong>{{ $project_submission->login }}
-                                                    <br>
-                                                    <strong>Password: </strong>{{ $project_submission->password }}
-                                                    <br>
-                                                    <strong>Screenshot: </strong><a
-                                                        href="{{ $project_submission->screenshot }}"
-                                                        target="_blank">{{ $project_submission->screenshot }}</a>
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -178,13 +180,13 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->drive_yes == 1)
-                                                    Yes
+                                                    @if ($project_submission->drive_yes == 1)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -208,19 +210,19 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->drive_information == 1)
-                                                    Yes
-                                                    <br>
-                                                    <br>
-                                                    <strong>Google Drive Link: </strong><a
-                                                        href="{{ $project_submission->google_link }}"
-                                                        target="_blank">{{ $project_submission->google_link }}</a>
-                                                    <br>
+                                                    @if ($project_submission->drive_information == 1)
+                                                        Yes
+                                                        <br>
+                                                        <br>
+                                                        <strong>Google Drive Link: </strong><a
+                                                            href="{{ $project_submission->google_link }}"
+                                                            target="_blank">{{ $project_submission->google_link }}</a>
+                                                        <br>
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -243,9 +245,9 @@
                                         </td>
                                         <td>
                                             @if ($project_submission != null)
-                                            <p class="fw-normal mb-1"> {{ $project_submission->rating }}/10</p>
+                                                <p class="fw-normal mb-1"> {{ $project_submission->rating }}/10</p>
                                             @else
-                                            <p>--</p>
+                                                <p>--</p>
                                             @endif
 
                                         </td>
@@ -267,9 +269,9 @@
                                         </td>
                                         <td>
                                             @if ($project_submission != null)
-                                            <p class="fw-normal mb-1"> {{ $project_submission->comments }}</p>
+                                                <p class="fw-normal mb-1"> {{ $project_submission->comments }}</p>
                                             @else
-                                            --
+                                                --
                                             @endif
 
                                         </td>
@@ -291,9 +293,10 @@
                                         </td>
                                         <td>
                                             @if ($project_submission != null)
-                                            <p class="fw-normal mb-1"> {{ $project_submission->requirements }}/10</p>
+                                                <p class="fw-normal mb-1"> {{ $project_submission->requirements }}/10
+                                                </p>
                                             @else
-                                            <p>--</p>
+                                                <p>--</p>
                                             @endif
 
                                         </td>
@@ -315,9 +318,9 @@
                                         </td>
                                         <td>
                                             @if ($project_submission != null)
-                                            <p class="fw-normal mb-1"> {{ $project_submission->comments2 }}</p>
+                                                <p class="fw-normal mb-1"> {{ $project_submission->comments2 }}</p>
                                             @else
-                                            <p>--</p>
+                                                <p>--</p>
                                             @endif
 
                                         </td>
@@ -339,9 +342,9 @@
                                         </td>
                                         <td>
                                             @if ($project_submission != null)
-                                            <p class="fw-normal mb-1"> {{ $project_submission->price }}/10</p>
+                                                <p class="fw-normal mb-1"> {{ $project_submission->price }}/10</p>
                                             @else
-                                            <p>--</p>
+                                                <p>--</p>
                                             @endif
 
                                         </td>
@@ -363,9 +366,9 @@
                                         </td>
                                         <td>
                                             @if ($project_submission != null)
-                                            <p class="fw-normal mb-1"> {{ $project_submission->comments3 }}</p>
+                                                <p class="fw-normal mb-1"> {{ $project_submission->comments3 }}</p>
                                             @else
-                                            <p>--</p>
+                                                <p>--</p>
                                             @endif
 
                                         </td>
@@ -433,18 +436,16 @@
 
                                             </div>
                                         </td>
-                                       <td>
-                                       
-                                        @if($project_submission->niche != null)
-                                      <p class="fw-normal mb-1">{{$project_submission->category_name}}</p>
-                                       @elseif ($project_portfolio != null)
-                                            <p class="fw-normal mb-1">{{ $project_portfolio->category_name }}</p>
-                                      
-                                      
-                                      @else 
-                                            <p class="fw-normal mb-1">--</p>
-                                        @endif
-                                    </td>
+                                        <td>
+
+                                            @if ($project_submission->niche != null)
+                                                <p class="fw-normal mb-1">{{ $project_submission->category_name }}</p>
+                                            @elseif ($project_portfolio != null)
+                                                <p class="fw-normal mb-1">{{ $project_portfolio->category_name }}</p>
+                                            @else
+                                                <p class="fw-normal mb-1">--</p>
+                                            @endif
+                                        </td>
 
                                     </tr>
                                     <tr>
@@ -591,9 +592,9 @@
                                         </td>
                                         <td>
                                             @if ($project_portfolio != null)
-                                                @if (is_numeric($project_portfolio->theme_name))
+                                                @if ($project_portfolio->theme_id)
                                                     @php
-                                                    $website_theme = App\Models\ProjectWebsiteTheme::find($project_portfolio->theme_name);
+                                                        $website_theme = App\Models\ProjectWebsiteTheme::find($project_portfolio->theme_id);
                                                     @endphp
                                                     <p class="fw-normal mb-1">
                                                         {{ $website_theme->theme_name ?? '' }}
@@ -603,12 +604,12 @@
                                                     </p>
                                                 @else
                                                     <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->theme_name ?? ''}}
+                                                        {{ $project_portfolio->theme_name ?? '' }}
                                                     </p>
                                                     <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->theme_url ??  '' }}
+                                                        {{ $project_portfolio->theme_url ?? '' }}
                                                     </p>
-                                                 @endif
+                                                @endif
                                             @else
                                                 <p class="fw-normal mb-1">--</p>
                                             @endif
@@ -650,44 +651,39 @@
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 22
-                              
+
                                             </div>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 Plugin Name And Url
-                              
+
                                             </div>
                                         </td>
                                         <td>
-                                          @if($project_portfolio != null)
-                                                @if (is_numeric($project_portfolio->plugin_name))
+                                            @if ($project_portfolio && $project_portfolio->plugin_list && $project_portfolio->plugin_list != 'null')
+
+                                                @foreach ( json_decode($project_portfolio->plugin_list ?? []) as $item)
                                                     @php
-                                                        $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
+                                                        $website_plugin = App\Models\ProjectWebsitePlugin::find($item);
                                                     @endphp
-                                                   
-                                                    <p class="fw-normal mb-1">
+
+                                                    <p class="fw-normal mb-1 font-weight-bold">
                                                         {{ $website_plugin->plugin_name ?? '' }}
                                                     </p>
                                                     <p class="fw-normal mb-1">
                                                         {{ $website_plugin->plugin_url ?? '' }}
                                                     </p>
-                                                @else
-                                                 <p>--</p>
-                                                    {{-- <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->plugin_name }}
-                                                    </p>
-                                                    <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->plugin_url }}
-                                                    </p> --}}
-                                                @endif
+                                                    <br/>
+                                                @endforeach
+
                                             @else
-                                            <p class="fw-normal mb-1">--</p>
+                                                <p class="fw-normal mb-1">--</p>
                                             @endif
-                              
+
                                         </td>
-                              
-                              
+
+
                                     </tr>
                                     <tr>
                                         <td>
@@ -705,19 +701,19 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->dummy_information == 1)
-                                                    Yes
-                                                    <br>
-                                                    <br>
-                                                    <strong>Dummy/Test Site link: </strong><a
-                                                        href="{{ $project_submission->dummy_link }}"
-                                                        target="_blank">{{ $project_submission->dummy_link }}</a>
-                                                    <br>
+                                                    @if ($project_submission->dummy_information == 1)
+                                                        Yes
+                                                        <br>
+                                                        <br>
+                                                        <strong>Dummy/Test Site link: </strong><a
+                                                            href="{{ $project_submission->dummy_link }}"
+                                                            target="_blank">{{ $project_submission->dummy_link }}</a>
+                                                        <br>
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -725,7 +721,7 @@
 
 
                                     </tr>
-                                    
+
 
                                     <tr>
                                         <td>
@@ -743,13 +739,13 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->notify == 1)
-                                                    Yes
+                                                    @if ($project_submission->notify == 1)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -773,13 +769,13 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->actual_yes == 1)
-                                                    Yes
+                                                    @if ($project_submission->actual_yes == 1)
+                                                        Yes
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -803,19 +799,19 @@
                                         <td>
                                             <p class="fw-normal mb-1">
                                                 @if ($project_submission != null)
-                                                @if ($project_submission->dummy_information == 1)
-                                                    Yes
-                                                    <br>
-                                                    <br>
-                                                    <strong>Actual Site link: </strong><a
-                                                        href="{{ $project_submission->actual_link }}"
-                                                        target="_blank">{{ $project_submission->actual_link }}</a>
-                                                    <br>
+                                                    @if ($project_submission->dummy_information == 1)
+                                                        Yes
+                                                        <br>
+                                                        <br>
+                                                        <strong>Actual Site link: </strong><a
+                                                            href="{{ $project_submission->actual_link }}"
+                                                            target="_blank">{{ $project_submission->actual_link }}</a>
+                                                        <br>
+                                                    @else
+                                                        No
+                                                    @endif
                                                 @else
-                                                    No
-                                                @endif
-                                                @else
-                                                --
+                                                    --
                                                 @endif
                                             </p>
 
@@ -835,13 +831,13 @@
                                         </td>
                                         <td>
                                             @if ($project_submission != null)
-                                            @if ($project_submission->admin_comment)
-                                                <p>{!! $project_submission->admin_comment !!}</p>
+                                                @if ($project_submission->admin_comment)
+                                                    <p>{!! $project_submission->admin_comment !!}</p>
+                                                @else
+                                                    <p>--</p>
+                                                @endif
                                             @else
                                                 <p>--</p>
-                                            @endif
-                                            @else
-                                            <p>--</p>
                                             @endif
 
                                         </td>

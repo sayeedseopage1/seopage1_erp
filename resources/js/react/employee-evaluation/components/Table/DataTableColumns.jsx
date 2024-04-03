@@ -13,16 +13,16 @@ export const DataTableColumns = [
     //     },
     // },
     {
-        id: "employeeName",
+        id: "user_name",
         header: "Employee Name",
-        accessorKey: "employeeName",
+        accessorKey: "user_name",
         cell: ({ row }) => {
             const data = row.original;
 
-            return data?.employeeName ? (
+            return data?.user_name ? (
                 <Person
-                    url={`/account/employees/${data?.employeeId}`}
-                    name={data?.employeeName}
+                    url={`/account/employees/${data?.user_id}`}
+                    name={data?.user_name}
                     avatar={null}
                 />
             ) : (
@@ -31,48 +31,59 @@ export const DataTableColumns = [
         },
     },
     {
-        id: "joiningDate",
+        id: "join_date",
         header: "Joining Date",
-        accessorKey: "joiningDate",
+        accessorKey: "join_date",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.joiningDate}</div>;
+            return <div>{data?.join_date}</div>;
         },
     },
     {
-        id: "firstTaskAssignedOn",
+        id: "first_task_assign_on",
         header: "First Task Assigned On",
-        accessorKey: "firstTaskAssignedOn",
+        accessorKey: "first_task_assign_on",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.firstTaskAssignedOn}</div>;
+            return <div>{data?.first_task_assign_on}</div>;
         },
     },
     {
-        id: "startedWorkingOn",
+        id: "started_working_on",
         header: "Started Working On",
-        accessorKey: "startedWorkingOn",
+        accessorKey: "started_working_on",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.startedWorkingOn}</div>;
+            return <div>{data?.started_working_on}</div>;
         },
     },
     {
-        id: "totalTaskSubmitted",
+        id: "total_task_assigned",
+        header: "Total Task Assigned",
+        accessorKey: "total_task_assigned",
+        cell: ({ row }) => {
+            const data = row.original;
+            return <div>{data?.total_task_assigned}</div>;
+        },
+    },
+    {
+        id: "total_task_submit",
         header: "Total Task Submitted",
-        accessorKey: "totalTaskSubmitted",
+        accessorKey: "total_task_submit",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.totalTaskSubmitted}</div>;
+            return <div>{data?.total_task_submit}</div>;
         },
     },
     {
-        id: "totalHoursTracked",
+        id: "total_hours",
         header: "Total Hours Tracked",
-        accessorKey: "totalHoursTracked",
+        accessorKey: "total_hours",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.totalHoursTracked}</div>;
+            return (
+                <div>{`${data?.total_hours} hr ${data?.total_minutes}min`}</div>
+            );
         },
     },
     {
@@ -85,55 +96,53 @@ export const DataTableColumns = [
         },
     },
     {
-        id: "averageRatingByLeadDev",
+        id: "lead_dev_avg_rating",
         header: "Lead Developer Average Rating",
-        accessorKey: "averageRatingByLeadDev",
+        accessorKey: "lead_dev_avg_rating",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.averageRatingByLeadDev}</div>;
+            return <div>{data?.lead_dev_avg_rating}</div>;
         },
     },
     {
-        id: "teamLeadsComment",
+        id: "team_lead_cmnt",
         header: "Team Lead Comment",
-        accessorKey: "teamLeadsComment",
+        accessorKey: "team_lead_cmnt",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <div>
-                    {data?.teamLeadsComment === ""
-                        ? "--"
-                        : data?.teamLeadsComment}
+                    {data?.team_lead_cmnt === "" ? "--" : data?.team_lead_cmnt}
                 </div>
             );
         },
     },
     {
-        id: "managementsComment",
+        id: "managements_cmnt",
         header: "Managements Comment",
-        accessorKey: "managementsComment",
+        accessorKey: "managements_cmnt",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <div>
-                    {data?.managementsComment === ""
+                    {data?.managements_cmnt === ""
                         ? "--"
-                        : data?.managementsComment}
+                        : data?.managements_cmnt}
                 </div>
             );
         },
     },
     {
-        id: "acceptedOrRejectedOn",
+        id: "accept_rejected",
         header: "Accepted/Rejected Date",
-        accessorKey: "acceptedOrRejectedOn",
+        accessorKey: "accept_rejected",
         cell: ({ row }) => {
             const data = row.original;
             return (
                 <div>
-                    {data?.acceptedOrRejectedOn === ""
+                    {data?.accept_rejected === ""
                         ? "--"
-                        : data?.acceptedOrRejectedOn}
+                        : data?.accept_rejected}
                 </div>
             );
         },

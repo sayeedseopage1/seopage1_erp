@@ -5,6 +5,10 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: "/" }),
     keepUnusedDataFor: 60,
     tagTypes: [
+        "LIVE_ACTIONS",
+        "EXPIRED_ACTIONS",
+        "PAST_ACTIONS",
+        "All_TASKS",
         "points_page_filter_options",
         "TASK_STATUS",
         "TASKS",
@@ -12,9 +16,6 @@ export const apiSlice = createApi({
         "PMGUIDELINE",
         "REVISIONS",
         "COMMENTS",
-        "All_TASKS",
-        "All_EVALUATION",
-        // "TASK_REPORT"
     ],
     endpoints: () => ({}),
 });

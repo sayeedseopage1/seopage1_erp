@@ -3,9 +3,8 @@ import { apiSlice } from "./apiSlice";
 const evaluationApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getTaskList: build.query({
-            query: (assignToId) =>
-                `http://localhost:3000/api/task/all-tasks/assign-to/${assignToId}`,
-            providesTags: ["All_TASKS"],
+            query: (userId) => `account/employee-evaluation/${userId}`,
+            providesTags: ["ALL_TASKS"],
         }),
         updateTask: build.mutation({
             query: ({ taskId, data }) => ({
@@ -14,18 +13,18 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["All_TASKS"],
+            invalidatesTags: ["ALL_TASKS"],
         }),
         finalTaskSubmissionStatus: build.mutation({
             query: (assignToId) => ({
                 url: `http://localhost:3000/api/task/finalSubmissionStatus/${assignToId}`,
                 method: "PUT",
             }),
-            invalidatesTags: ["All_TASKS", "All_EVALUATION"],
+            invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
         }),
         getEvaluationList: build.query({
-            query: () => `http://localhost:3000/api/evaluation/get-evaluation`,
-            providesTags: ["All_EVALUATION"],
+            query: () => `/account/get-all-evaluation`,
+            providesTags: ["ALL_EVALUATION"],
         }),
     }),
 });

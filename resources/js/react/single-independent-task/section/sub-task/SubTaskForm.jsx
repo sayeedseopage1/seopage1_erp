@@ -79,7 +79,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     const [getTaskDetails, { data: estimation, isFetching }] =
         useLazyGetTaskDetailsQuery();
 
-    const [showForm, setShowForm] = React.useState(false);
+    const [showForm, setShowForm] = React.useState(true);
 
     const required_error = error?.status === 422 ? error?.data : null;
     const [containViolation, setContainViolation] = React.useState(false);
@@ -372,12 +372,12 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                     )}
                     {/* end working environment form */}
 
-                    {isWorkingEnvironmentSubmit && (
+                    {/* {isWorkingEnvironmentSubmit && (
                         <LeadConfirmationModal
                             isOpen={!showForm}
                             onConfirm={() => setShowForm(true)}
                         />
-                    )}
+                    )} */}
                     {showForm && (
                         <div className="sp1-subtask-form --form row">
                             <div className="col-12 col-md-6">
@@ -537,6 +537,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                                 <AssginedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
+                                    taskCategory={taskCategory}
                                 />
 
                                 {err?.assignedTo && (

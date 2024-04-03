@@ -3,10 +3,35 @@ import RelevantBg from "../../../../../../../react/UI/comments/media/comments_bo
 import WarningIcon from "../../../../../../assest/warning.svg";
 import { RxCrossCircled } from "react-icons/rx";
 import ReactModal from "react-modal";
+import { Flex } from "../../../EmployeeEvaluation/Table/ui";
+import { useSelector } from "react-redux";
+import { usePendingActionsIdMutation } from "../../../../../../services/api/pendingActionsApiSlice";
+import { useEffect, useState } from "react";
+import React from "react";
+import useCounterStore from "../../../../../Zustand/store";
+
 const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
+    const { increaseCount } = useCounterStore();
+    const pendingActionId = useSelector(
+        (state) => state.pendingActions.pendingActionId
+    );
+
+    const [updatePendingAction] = usePendingActionsIdMutation();
+
     const submitHandler = (e) => {
         e.preventDefault();
-        console.log(e);
+
+        updatePendingAction({
+            id: pendingActionId,
+        })
+            .unwrap()
+            .then((res) => {
+                setIsRelevantModal(false);
+                increaseCount();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
     return (
         <ReactModal
@@ -74,7 +99,19 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
                     </h3>
                 </div>
 
-                <div style={{}}>
+                <Flex>
+                    <button
+                        style={{
+                            paddingLeft: "40px",
+                            paddingRight: "40px",
+                            fontSize: "18px",
+                        }}
+                        type="button"
+                        class="btn btn-secondary"
+                        onClick={() => setIsRelevantModal(false)}
+                    >
+                        No
+                    </button>
                     <button
                         style={{
                             paddingLeft: "40px",
@@ -87,7 +124,7 @@ const RelevantModal = ({ isRelevantModal, setIsRelevantModal }) => {
                     >
                         Yes
                     </button>
-                </div>
+                </Flex>
             </div>
         </ReactModal>
     );

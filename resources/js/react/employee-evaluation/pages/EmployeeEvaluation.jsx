@@ -28,7 +28,7 @@ const EmployeeEvaluation = () => {
         return new URLSearchParams(queryObject).toString();
     };
 
-    const { data, isFetching, refetch } = useGetEvaluationListQuery(
+    const { data, isLoading, isFetching, refetch } = useGetEvaluationListQuery(
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
@@ -39,28 +39,26 @@ const EmployeeEvaluation = () => {
         { refetchOnMountOrArgChange: true, skip: !filter?.start_date }
     );
 
-    const Evaluations = data?.data;
+    const Evaluations = data?.data.data;
 
+    // console.log("evaluations", Evaluations);
     // filter data
     const getData = (type) => {
-        let _data = _.orderBy(Evaluations, "authorization_status", "asc");
+        let _data = _.orderBy(Evaluations, "management_decision", "asc");
         switch (type) {
             case "all":
                 return _data;
             case "pending":
-                return _.filter(
-                    _data,
-                    (d) => d.authorization_status === "pending"
-                );
+                return _.filter(_data, (d) => d.management_decision === null);
             case "denied":
                 return _.filter(
                     _data,
-                    (d) => d.authorization_status === "denied"
+                    (d) => d.management_decision === "denied"
                 );
             case "authorized":
                 return _.filter(
                     _data,
-                    (d) => d.authorization_status === "authorized"
+                    (d) => d.management_decision === "authorized"
                 );
             default:
                 return _data;
@@ -68,7 +66,7 @@ const EmployeeEvaluation = () => {
     };
 
     const _data = {
-        all: getData("all"),
+        all: getData(null),
         pending: getData("pending"),
         denied: getData("denied"),
         authorized: getData("authorized"),
@@ -97,7 +95,9 @@ const EmployeeEvaluation = () => {
                     <Tabs data={_data} />
 
                     <RefreshButton
-                        onClick={refetch}
+                        onClick={() => {
+                            refetch();
+                        }}
                         isLoading={isFetching}
                         className="font-weight-normal"
                     />
@@ -106,7 +106,8 @@ const EmployeeEvaluation = () => {
                 <DataTable
                     data={tableData(searchParams.get("show"))}
                     columns={[...DataTableColumns]}
-                    isLoading={false}
+                    isLoading={isLoading}
+                    isFetching={isFetching}
                     onPageChange={onPageChange}
                     sorting={sorting}
                     tableName="Evaluation Table"

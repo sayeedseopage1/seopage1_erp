@@ -3,11 +3,10 @@ import { apiSlice } from "./apiSlice";
 const evaluationApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getTaskList: build.query({
-            query: (assignToId) =>
-                `http://localhost:3000/api/task/all-tasks/assign-to/${assignToId}`,
+            query: (userId) => `account/employee-evaluation/${userId}`,
             providesTags: ["All_TASKS"],
         }),
-        updateTask: build.mutation({
+        updateSIngleTask: build.mutation({
             query: ({ taskId, data }) => ({
                 url: `http://localhost:3000/api/task/update-task/${taskId}`,
                 method: "PUT",
@@ -32,7 +31,7 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetTaskListQuery,
-    useUpdateTaskMutation,
+    useUpdateSingleTaskMutation,
     useFinalTaskSubmissionStatusMutation,
     useGetEvaluationListQuery,
 } = evaluationApiSlice;
