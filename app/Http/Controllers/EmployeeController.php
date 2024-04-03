@@ -189,7 +189,6 @@ class EmployeeController extends AccountBaseController
             $employee_evaluation->user_id = $user->id; 
             $employee_evaluation->user_name = $user->name;
             $employee_evaluation->join_date = $user->created_at;
-            $employee_evaluation->exp_date = Carbon::parse($user->created_at)->addDays(7);
             $employee_evaluation->save();
         }
         /**EMPLOYEE EVALUATION END */

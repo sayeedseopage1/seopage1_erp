@@ -108,7 +108,7 @@ class EvaluationController extends AccountBaseController
                     ->selectRaw('MIN(sub_tasks.created_at) as first_task_assign_on')
                     ->selectRaw('MIN(project_time_logs.created_at) as started_working_on')
                     ->selectRaw('COUNT(DISTINCT task_users.id) as total_task_assigned')
-                    ->selectRaw('COUNT(DISTINCT task_submissions.id) as total_task_submit')
+                    ->selectRaw('COUNT(DISTINCT task_submissions.user_id) as total_task_submit')
 
                     ->leftJoin('sub_tasks', 'employee_evaluations.user_id', '=', 'sub_tasks.assigned_to')
                     ->leftJoin('users as added_by', 'sub_tasks.added_by', '=', 'added_by.id')
