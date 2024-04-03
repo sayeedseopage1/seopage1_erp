@@ -34,6 +34,7 @@ class EmployeeEvaluation extends Command
      */
     public function handle()
     {
+        // \DB::beginTransaction();
         $employee_evaluations = ModelsEmployeeEvaluation::where('employee_status',0)->get();
         foreach($employee_evaluations as $data)
         {
