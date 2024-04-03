@@ -174,6 +174,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'placeholder' => $item->placeholder,
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
+                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
                     'questions' => self::questionListChild($item->id)
                 ];
             });
@@ -196,6 +197,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'placeholder' => $item->placeholder,
                     'parent_id' => $item->parent_id,
                     'policy_id' => $item->policy_id,
+                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
                     'questions' => self::questionListChild($item->id)
                 ];
             });
