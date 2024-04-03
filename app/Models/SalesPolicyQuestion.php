@@ -11,7 +11,7 @@ class SalesPolicyQuestion extends Model
     use HasFactory;
 
     static $types = [
-        'yesNo' => 'Yes\No',
+        'yesNo' => 'Yes/No',
         'numeric' => 'Numeric',
         'list' => 'List',
         'text' => 'Text',

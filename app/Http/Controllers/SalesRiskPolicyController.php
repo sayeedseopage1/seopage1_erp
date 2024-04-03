@@ -38,9 +38,19 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         Route::controller(self::class)->prefix('account/sales-risk-policies')->name('account.sale-risk-policies.')->group(function () {
 
-            // question
+            // questions
             Route::get('questions', 'questionIndex')->name('question.index');
             Route::get('questions/fields-type', 'qustionInputField')->name('question.fields-type');
+
+            Route::post('questions/save', 'policyQuestionSave')->name('question.save');
+            Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
+
+            Route::post('question-fields/edit/{id}', 'policyQuestionEdit')->name('question-fields.edit');
+            Route::get('question-list', 'questionList')->name('question.list');
+
+            Route::post('question-value/save', 'questionValueSave')->name('question-value.save');
+
+            Route::get('question-value/report/{deal_id}', 'questionValueReport')->name('question-value.report');
 
             // policy rules
             Route::get('/', 'index')->name('index');
@@ -51,15 +61,6 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::get('rule-list', 'ruleList')->name('rule-list');
             Route::put('status-change/{id}/{status}', 'policyRuleStatusChange')->name('status-change');
 
-            // questions
-            Route::get('question-fields/{policyId}', 'policyQuestionInputFields')->name('question-fields');
-            Route::post('question-fields/save', 'policyQuestionSave')->name('question-fields.save');
-            Route::post('question-fields/edit/{id}', 'policyQuestionEdit')->name('question-fields.edit');
-            Route::get('question-list', 'questionList')->name('question.list');
-
-            Route::post('question-value/save', 'questionValueSave')->name('question-value.save');
-
-            Route::get('question-value/report/{deal_id}', 'questionValueReport')->name('question-value.report');
 
         });
 
@@ -84,6 +85,125 @@ class SalesRiskPolicyController extends AccountBaseController
 
         return response()->json(['data' => compact('types', 'questionKeys', 'policies')]);
     }
+
+    function policyQuestionSave(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'title' => 'required',
+            'key' => 'required',
+            'type' => 'required',
+            'value' => 'nullable',
+            'policy_id' => 'nullable',
+            'parent_id' => 'nullable',
+            'placeholder' => 'nullable',
+            'comment' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
+        }
+
+        try {
+            SalesPolicyQuestion::create([
+                'title' => $req->title,
+                'key' => $req->key,
+                'type' => $req->type,
+                'value' => $req->value,
+                'parent_id' => $req->parent_id,
+                'sequence' => SalesPolicyQuestion::where('key', $req->key)->count() + 1,
+                'policy_id' => $req->policy_id,
+                'placeholder' => $req->placeholder,
+                'comment' => $req->comment
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
+        }
+
+        return response()->json(['status' => 'success', 'message' => 'Question added succesfully']);
+    }
+
+    function policyQuestionEdit(Request $req, $id)
+    {
+        $validator = Validator::make($req->all(), [
+            'title' => 'required',
+            'type' => 'required',
+            'policy_id' => 'required',
+            'rule_list' => 'nullable',
+            'parent_id' => 'nullable',
+            'placeholder' => 'nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
+        }
+
+        try {
+            $question = SalesPolicyQuestion::findOrFail($id);
+
+            $question->update([
+                'title' => $req->title,
+                'type' => $req->type,
+                'value' => $req->value,
+                'parent_id' => $req->parent_id,
+                'rule_list' => json_encode($req->ruleList),
+                'placeholder' => $req->placeholder,
+                'policy_id' => $req->policy_id,
+            ]);
+
+            return response()->json(['status' => 'success', 'message' => 'Question Edited succesfully']);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
+        }
+    }
+
+    function questionList(Request $req)
+    {
+        $list = SalesPolicyQuestion::parent()
+            ->where(function ($query) use ($req) {
+                if ($req->policy_id)
+                    $query->where('policy_id', $req->policy_id);
+            })->get()
+            ->map(function ($item) {
+
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'type' => $item->type,
+                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                    'placeholder' => $item->placeholder,
+                    'rule_list' => ($item->rule_list != null && $item->rule_list != 'null') ? SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']) : null,
+                    'parent_id' => $item->parent_id,
+                    'policy_id' => $item->policy_id,
+                    'questions' => self::questionListChild($item->id)
+                ];
+            });
+
+        return response()->json(['status' => 'success', 'data' =>  $list]);
+    }
+
+    function questionListChild($parentId)
+    {
+        $list = SalesPolicyQuestion::where('parent_id', $parentId)->get();
+
+        if (count($list)) {
+            $list = $list->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'type' => $item->type,
+                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                    'placeholder' => $item->placeholder,
+                    'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
+                    'parent_id' => $item->parent_id,
+                    'policy_id' => $item->policy_id,
+                    'questions' => self::questionListChild($item->id)
+                ];
+            });
+        }
+        return $list;
+    }
+
 
     function index()
     {
@@ -717,119 +837,6 @@ class SalesRiskPolicyController extends AccountBaseController
         return response()->json($fileds);
     }
 
-    function policyQuestionSave(Request $req)
-    {
-        $validator = Validator::make($req->all(), [
-            'title' => 'required',
-            'type' => 'required',
-            'policy_id' => 'required',
-            'ruleList' => 'nullable',
-            'parent_id' => 'nullable',
-            'placeholder' => 'nullable'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
-        }
-
-        try {
-            SalesPolicyQuestion::create([
-                'title' => $req->title,
-                'type' => $req->type,
-                'value' => $req->value,
-                'parent_id' => $req->parent_id,
-                'rule_list' => $req->ruleList ? json_encode($req->ruleList) : null,
-                'placeholder' => $req->placeholder,
-                'policy_id' => $req->policy_id,
-            ]);
-        } catch (\Throwable $th) {
-            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
-        }
-
-        return response()->json(['status' => 'success', 'message' => 'Question added succesfully']);
-    }
-
-    function policyQuestionEdit(Request $req, $id)
-    {
-        $validator = Validator::make($req->all(), [
-            'title' => 'required',
-            'type' => 'required',
-            'policy_id' => 'required',
-            'rule_list' => 'nullable',
-            'parent_id' => 'nullable',
-            'placeholder' => 'nullable'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['status' => 'error', 'message' => 'Validation Error', 'data' => $validator->errors()], 403);
-        }
-
-        try {
-            $question = SalesPolicyQuestion::findOrFail($id);
-
-            $question->update([
-                'title' => $req->title,
-                'type' => $req->type,
-                'value' => $req->value,
-                'parent_id' => $req->parent_id,
-                'rule_list' => json_encode($req->ruleList),
-                'placeholder' => $req->placeholder,
-                'policy_id' => $req->policy_id,
-            ]);
-
-            return response()->json(['status' => 'success', 'message' => 'Question Edited succesfully']);
-        } catch (\Throwable $th) {
-            //throw $th;
-            return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
-        }
-    }
-
-    function questionList(Request $req)
-    {
-        $list = SalesPolicyQuestion::parent()
-            ->where(function ($query) use ($req) {
-                if ($req->policy_id)
-                    $query->where('policy_id', $req->policy_id);
-            })->get()
-            ->map(function ($item) {
-
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                    'placeholder' => $item->placeholder,
-                    'rule_list' => ($item->rule_list != null && $item->rule_list != 'null') ? SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']) : null,
-                    'parent_id' => $item->parent_id,
-                    'policy_id' => $item->policy_id,
-                    'questions' => self::questionListChild($item->id)
-                ];
-            });
-
-        return response()->json(['status' => 'success', 'data' =>  $list]);
-    }
-
-    function questionListChild($parentId)
-    {
-        $list = SalesPolicyQuestion::where('parent_id', $parentId)->get();
-
-        if (count($list)) {
-            $list = $list->map(function ($item) {
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                    'placeholder' => $item->placeholder,
-                    'rule_list' => SalesRiskPolicy::whereIn('id', json_decode($item->rule_list))->get(['id', 'title']),
-                    'parent_id' => $item->parent_id,
-                    'policy_id' => $item->policy_id,
-                    'questions' => self::questionListChild($item->id)
-                ];
-            });
-        }
-        return $list;
-    }
 
     function salesPolicyQuestionRender(Request $req, $deal_id)
     {
