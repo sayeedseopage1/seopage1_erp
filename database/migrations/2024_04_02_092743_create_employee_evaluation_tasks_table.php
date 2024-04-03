@@ -24,9 +24,19 @@ return new class extends Migration
             $table->integer('total_min')->nullable();
             $table->text('completed_work')->nullable();
             $table->integer('revision_number')->nullable();
+            $table->float('qw_first_chance')->nullable();
+            $table->float('qw_first_revision')->nullable();
+            $table->float('qw_second_revision')->nullable();
+            $table->float('speed_of_work')->nullable();
+            $table->float('understand_instruction')->nullable();
+            $table->float('communication')->nullable();
+            $table->float('professionalism')->nullable();
+            $table->float('identiey_issues')->nullable();
+            $table->float('dedication')->nullable();
+            $table->float('obedience')->nullable();
+            $table->longText('lead_dev_cmnt')->nullable();
+            $table->integer('avg_rating')->nullable();
             $table->integer('status')->default(0);
-            $table->integer('rating_status')->default(0);
-            $table->integer('evaluate_status')->default(0);
             $table->timestamps();
         });
     }
