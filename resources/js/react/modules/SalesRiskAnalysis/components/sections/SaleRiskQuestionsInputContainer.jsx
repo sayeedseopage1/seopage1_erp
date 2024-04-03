@@ -23,6 +23,7 @@ const SaleRiskQuestionsInputContainer = ({
         handleQuestionFocus,
         getItsFocused,
         handleListYesNoQuestion,
+        getYesNoQuestionValue,
     } = inputContainerActions;
 
     const [yesNoValue, setYesNoValue] = useState(null);
@@ -99,6 +100,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
+                                            getYesNoQuestionValue
                                         }}
                                     />
                                 </Switch.Case>
@@ -123,7 +125,8 @@ const SaleRiskQuestionsInputContainer = ({
                                 />
                                 <Switch.Case
                                     condition={
-                                        yesNoValue && question.questions?.length
+                                        getYesNoQuestionValue(question) &&
+                                        question.questions?.length
                                     }
                                 >
                                     <SaleRiskQuestionsInputContainer
@@ -140,6 +143,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
+                                            getYesNoQuestionValue
                                         }}
                                     />
                                 </Switch.Case>
@@ -193,6 +197,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
+                                            getYesNoQuestionValue
                                         }}
                                     />
                                 </Switch.Case>
@@ -240,6 +245,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
+                                            getYesNoQuestionValue
                                         }}
                                     />
                                 </Switch.Case>
@@ -293,6 +299,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
+                                            getYesNoQuestionValue
                                         }}
                                     />
                                 </Switch.Case>
@@ -307,13 +314,12 @@ const SaleRiskQuestionsInputContainer = ({
 
 export default SaleRiskQuestionsInputContainer;
 
-
 SaleRiskQuestionsInputContainer.propTypes = {
     questions: PropTypes.array,
     isChild: PropTypes.bool,
     inputsData: PropTypes.array,
     isSubmitting: PropTypes.bool,
     allQuestions: PropTypes.array,
-    focusedQuestion: PropTypes.object,
+    focusedQuestion: PropTypes.array,
     inputContainerActions: PropTypes.object,
-}
+};

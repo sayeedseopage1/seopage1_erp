@@ -59,13 +59,12 @@ const AddQuestionsListModal = ({
     isQuestionUpdating,
 }) => {
     const modalRef = useRef(null);
-    const { questionsAnswerType, policies } = useContext(
+    const { questionsAnswerType, policies, allQuestions } = useContext(
         SalesRiskAnalysisContext
     );
     const [questions, setQuestions] = useState([]);
     const [isListEmpty, setIsListEmpty] = useState(false);
     const [yesNoValueEmpty, setYesNoValueEmpty] = useState(false);
-    const [allQuestions, setAllQuestions] = useState([]);
     const [singleQuestionValidation, setSingleQuestionValidation] = useState({
         title: false,
         type: false,
@@ -74,17 +73,7 @@ const AddQuestionsListModal = ({
         isSubmitting: false,
     });
 
-    // question input fields
-    const {
-        data: questionInputFields,
-        isFetching: isQuestionInputFieldsFetching,
-        isLoading: isQuestionInputFieldsLoading,
-        refetch,
-    } = useSinglePolicyQuestionsQuery(addQuestionsData?.id, {
-        staleTime: 0,
-        refetchOnMountOrArgChange: true,
-        skip: !addQuestionsData?.id,
-    });
+
 
     const [
         submitQuestionAddonPolicy,
@@ -101,30 +90,13 @@ const AddQuestionsListModal = ({
             refetchOnMountOrArgChange: true,
         });
 
-    const {
-        data: questionsList,
-        isFetching: isQuestionsListFetching,
-        isLoading: isQuestionsListLoading,
-    } = usePolicyQuestionsListByPolicyIdQuery(addQuestionsData?.id, {
-        staleTime: 0,
-        refetchOnMountOrArgChange: true,
-        skip: !addQuestionsData?.id,
-    });
+
 
     const [
         saleAnalysisQuestionSave,
         { isLoading: isSaleAnalysisQuestionSaveLoading },
     ] = useSaleAnalysisQuestionSaveMutation();
 
-    useEffect(() => {
-        if (questionsList?.data?.length) {
-            const formatQuestionsList = formatQuestionData(
-                questionsList?.data,
-                setAllQuestions
-            );
-            setQuestions(formatQuestionsList);
-        }
-    }, [questionsList?.data]);
 
     // Handle Change
     const handleChange = (e) => {
@@ -172,17 +144,6 @@ const AddQuestionsListModal = ({
         } else {
             setSingleQuestion({ ...singleQuestion, [name]: value });
         }
-    };
-
-    // Formatting dta for dropdown reuse component
-    const QuestionsList =
-        questionInputFields?.length > 0 &&
-        questionInputFields?.find((item) => item?.label === "Parent Question");
-    const updateQuestionsList = {
-        label: "Parent Questions",
-        emptyOptionsLabel: "Select Parent Question",
-        id: "parentQuestion",
-        data: QuestionsList?.structure,
     };
 
     // Check if any field is empty
@@ -270,7 +231,7 @@ const AddQuestionsListModal = ({
         if (singleQuestion?.type?.name === "list") {
             const updateId = singleQuestion?.listItem?.map((item, index) => {
                 return {
-                    id: `${addQuestionsData?.id}_${index + 1}`,
+                    id: `${singleQuestion?.policy_id?.id}_${index + 1}`,
                     title: item?.title,
                 };
             });
@@ -324,7 +285,6 @@ const AddQuestionsListModal = ({
         resetQuestionForm();
         setQuestions([]);
         setAddQuestionsData({});
-        setAllQuestions([]);
     };
 
     // Reset Question Form
@@ -529,7 +489,7 @@ const AddQuestionsListModal = ({
                                     <ModalSelectContainer>
                                         <QuestionsSelect
                                             filedName="parent_question"
-                                            data={updateQuestionsList}
+                                            data={allQuestions}
                                             selected={
                                                 singleQuestion?.parent_question
                                             }

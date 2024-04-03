@@ -45,10 +45,8 @@ const SalesRiskQuestions = () => {
     // fetch policy questions
     const { data, isLoading } = useSaleAnalysisQuestionsListQuery(null);
 
-    const [
-        saleAnalysisQuestionSave,
-        { isLoading: isSaving },
-    ] = useSaleRiskQuestionAnswerSaveMutation();
+    const [saleAnalysisQuestionSave, { isLoading: isSaving }] =
+        useSaleRiskQuestionAnswerSaveMutation();
 
     const questions = data?.data;
 
@@ -114,22 +112,22 @@ const SalesRiskQuestions = () => {
                         value: item[`question_${item.id}`],
                     };
                 });
-                console.log(payload);
 
                 const res = await saleAnalysisQuestionSave(payload);
                 if (res?.data?.status === "success") {
                     toast.success("Successfully saved");
-                    if (res?.data?.data.point < 0) {
+                    if (res?.data?.data?.point < 0) {
                         setQuestionModalOpen(true);
                         setIsSubmitting(false);
                         setRedirectUrl(res?.data?.redirect_url);
                     } else {
                         console.log(res?.data);
                         debugger;
-                        window.location.href = res?.data?.redirect_url;
+                        window.location.reload();
                     }
                 }
             } catch (error) {
+                console.log(error);
                 toast.error("Something went wrong");
             }
         }
@@ -187,6 +185,13 @@ const SalesRiskQuestions = () => {
         return !_.isEmpty(isExit);
     };
 
+    const getYesNoQuestionValue = (question) => {
+        const getYesNoValue = inputsData.find(
+            (item) => item.parent_id === question.id
+        );
+        return !_.isEmpty(getYesNoValue);
+    };
+
     const handleListYesNoQuestion = (question, value, type) => {
         const getValue = () => {
             if (type === "list") {
@@ -221,8 +226,6 @@ const SalesRiskQuestions = () => {
 
         return setInputsData(addSelectValue);
     };
-
-    console.log(inputsData);
 
     return (
         <section>
@@ -284,6 +287,7 @@ const SalesRiskQuestions = () => {
                                         handleQuestionFocus,
                                         setInputsData,
                                         handleListYesNoQuestion,
+                                        getYesNoQuestionValue
                                     }}
                                 />
                             )}

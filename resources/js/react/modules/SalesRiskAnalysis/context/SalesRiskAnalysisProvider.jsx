@@ -23,6 +23,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     );
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
     const [policies, setPolicies] = React.useState({});
+    const [allQuestions, setAllQuestions] = React.useState({});
 
     // fetch filter options
     const { data: filterOptions, isFetching: isFilterOptionsFetching } =
@@ -43,8 +44,6 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             refetchOnMountOrArgChange: true,
         });
 
-
-    
     // set filter options state
     useEffect(() => {
         if (filterOptions && !isFilterOptionsFetching) {
@@ -69,12 +68,30 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                     label: value,
                 };
             });
-            const policyList = questionFieldsData?.data?.policies.map((policy) => {
-                return {
-                    id: policy.id,
-                    title: policy.title,
-                    label: policy.title,
-                };
+            const policyList = questionFieldsData?.data?.policies.map(
+                (policy) => {
+                    return {
+                        id: policy.id,
+                        title: policy.title,
+                        label: policy.title,
+                    };
+                }
+            );
+            const questionList = questionFieldsData?.data?.questionList.map(
+                (question) => {
+                    return {
+                        ...question,
+                        id: question.id,
+                        title: question.title,
+                        label: question.title,
+                    };
+                }
+            );
+            setAllQuestions({
+                label: "Parent Questions",
+                emptyOptionsLabel: "Select Parent Question",
+                id: "parentQuestion",
+                data: questionList,
             });
             setPolicies({
                 label: "Policy",
@@ -92,7 +109,9 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     }, [questionFieldsData, isQuestionType]);
 
     return (
-        <SalesRiskAnalysisContext.Provider value={{ questionsAnswerType, policies }}>
+        <SalesRiskAnalysisContext.Provider
+            value={{ questionsAnswerType, policies, allQuestions }}
+        >
             {children}
         </SalesRiskAnalysisContext.Provider>
     );

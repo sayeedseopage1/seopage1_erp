@@ -229,14 +229,14 @@ const QuestionsListTable = ({
                         )}
                     </tbody>
                 </table>
-                {(!isLoading || !isFetching) &&
+                {!(isLoading || isFetching) &&
                     _.size(table.getRowModel().rows) === 0 && (
                         <EmptyTable height="18vh" />
                     )}
             </div>
             {/* pagination */}
             <SalesRiskAnalysisTablePagination
-                tableData={tableData?.data}
+                tableData={tableData}
                 handlePageSizeChange={handlePageSizeChange}
                 handlePageChange={handlePageChange}
                 pageSize={pageSize}
@@ -248,7 +248,7 @@ const QuestionsListTable = ({
 export default QuestionsListTable;
 
 QuestionsListTable.propTypes = {
-    tableData: PropTypes.array,
+    tableData: PropTypes.object,
     tableColumns: PropTypes.array,
     tableName: PropTypes.string,
     isLoading: PropTypes.bool,

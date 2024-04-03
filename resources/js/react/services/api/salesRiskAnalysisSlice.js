@@ -148,6 +148,7 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         }),
         saleRiskQuestionsListFiledType: build.query({
             query: () => `account/sales-risk-policies/question/fields-type`,
+            providesTags: ["GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE"],
         }),
         saleAnalysisQuestionSave: build.mutation({
             query: (body) => ({
@@ -159,8 +160,9 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: (result, error, arg) => {
+                const tags = ["GET_SALES_RISK_ANALYSIS_QUESTION_LIST", "GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE"];
                 if (result && !error) {
-                    return [{ type: "GET_SALES_RISK_ANALYSIS_QUESTION_LIST" }];
+                    return tags.map((tag) => ({ type: tag }));
                 }
             },
         }),

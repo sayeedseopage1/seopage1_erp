@@ -26,8 +26,6 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
     // generate random id for dropdown menu
     const [dom, setDom] = useState(null);
 
-
-
     React.useEffect(() => {
         const el = document.createElement("div");
         el.setAttribute("id", "sp1_popover");
@@ -80,15 +78,17 @@ const Panel = ({ children, className, placement = "auto", ...props }) => {
 };
 
 // popover toggle
-const Toggle = ({ children, className, ...props }) => {
+const Toggle = ({ children, className,  ...props }) => {
     const { setRefElement, isVisible, setIsVisible } = usePopover();
-
     return (
         <div
             ref={setRefElement}
             className={`${css.popover_toggle} ${className}`}
             onMouseOver={() => {
                 setIsVisible(true);
+                // setTimeout(() => {
+                //     debugger;
+                // }, 5000);
             }}
             tabIndex={0}
             onKeyDown={() => {
@@ -122,7 +122,11 @@ const Popover = ({ children }) => {
                 setArrowElement,
             }}
         >
-            <div onMouseLeave={() => setIsVisible(false)} tabIndex={0} role="button">
+            <div
+                onMouseLeave={() => setIsVisible(false)}
+                tabIndex={0}
+                role="button"
+            >
                 {children}
             </div>
         </PopoverCtx.Provider>
@@ -134,19 +138,17 @@ Popover.Button = Toggle;
 
 export default Popover;
 
-
-
 Popover.propTypes = {
     children: PropTypes.node.isRequired,
-}
+};
 
 Panel.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
     placement: PropTypes.string,
-}
+};
 
 Toggle.propTypes = {
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
-}
+};

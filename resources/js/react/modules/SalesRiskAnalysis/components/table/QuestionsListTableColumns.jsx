@@ -87,12 +87,16 @@ export const QuestionsListTableColumns = [
         accessorKey: "type",
         cell: ({ row, table }) => {
             const data = row?.original;
-            const formatQuestionType = QuestionsTypes?.data.find(item => item?.name === data?.type);
+            const formatQuestionType = QuestionsTypes?.data.find(
+                (item) => item?.name === data?.type
+            );
             const action = table.options.meta;
             return (
                 <div className="multiline-ellipsis d-flex justify-content-end align-items-end">
                     <Switch>
-                        <Switch.Case condition={formatQuestionType?.name !== "list"}>
+                        <Switch.Case
+                            condition={formatQuestionType?.name !== "list"}
+                        >
                             <Tooltip
                                 text={formatQuestionType?.label}
                                 key="type-tooltip"
@@ -100,7 +104,9 @@ export const QuestionsListTableColumns = [
                                 {formatQuestionType?.label}
                             </Tooltip>
                         </Switch.Case>
-                        <Switch.Case condition={formatQuestionType?.name === "list"}>
+                        <Switch.Case
+                            condition={formatQuestionType?.name === "list"}
+                        >
                             <Popover>
                                 <Popover.Button>
                                     <div
@@ -109,15 +115,16 @@ export const QuestionsListTableColumns = [
                                         <p>{formatQuestionType?.label}</p>
                                     </div>
                                 </Popover.Button>
-                                {data?.listItem?.length > 0 && (
+                                {(data.type === "list" && data?.value?.length) >
+                                    0 && (
                                     <Popover.Panel placement="bottom-start">
                                         <div
                                             className={`${popoverStyle.questionModal_popover_panel}`}
                                         >
                                             <ol className="d-flex flex-column justify-content-start align-items-start">
-                                                {data?.listItem?.map(
+                                                {data?.value?.map(
                                                     (item, index) => (
-                                                        <li key={item.id}>
+                                                        <li key={item.id} className="py-1">
                                                             {index + 1}.{" "}
                                                             {item?.title}
                                                         </li>
