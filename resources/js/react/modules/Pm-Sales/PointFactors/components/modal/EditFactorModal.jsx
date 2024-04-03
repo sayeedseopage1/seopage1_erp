@@ -35,8 +35,8 @@ const EditFactorModal = ({
             closeModal={closeModal}
             contentLabel="Edit Point Table"
             width="800px"
-            height="650px"
-            maxHeight="650px"
+            height="550px"
+            maxHeight="550px"
             isCloseButtonShow={true}
         >
             {/* Modal Content */}

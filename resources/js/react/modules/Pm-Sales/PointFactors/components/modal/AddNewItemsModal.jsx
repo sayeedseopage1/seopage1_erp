@@ -37,7 +37,7 @@ const AddNewItemsModal = ({
             contentLabel="Add New Item"
             width="800px"
             // height="650px"
-            maxHeight="650px"
+            maxHeight="550px"
             isCloseButtonShow={true}
         >
             {/* Modal Content */}
@@ -195,13 +195,13 @@ const AddNewItemsModal = ({
                                         <CheckboxContainer>
                                             <StyledInput
                                                 type="checkbox"
-                                                id="percentageType"
+                                                id="percentageTypeLimit"
                                                 name="limit_type"
                                                 onChange={handleChange}
                                                 checked={newFactorData?.limit_type === '2'}
                                                 value="2"
                                             />
-                                            <StyledLabel htmlFor="percentageType">Percentage</StyledLabel>
+                                            <StyledLabel htmlFor="percentageTypeLimit">Percentage</StyledLabel>
                                         </CheckboxContainer>
                                         {newFactorDataValidation?.limit_type && (
                                             <p className="text-danger">
