@@ -17,13 +17,13 @@ return new class extends Migration
         Schema::create('sales_policy_questions', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->enum('type', SalesPolicyQuestion::$questionTypes);
+            $table->enum('type', array_keys(SalesPolicyQuestion::$types));
+            $table->enum('key', array_keys(SalesPolicyQuestion::$keys));
             $table->text('value')->nullable();
             $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->integer('sequence')->default('1');
             $table->bigInteger('policy_id')->unsigned();
             $table->string('placeholder')->nullable();
-            $table->tinyText('rule_list')->nullable();
             $table->timestamps();
 
             $table->foreign('policy_id')->references('id')->on('sales_risk_policies')->onUpdate('no action')->onDelete('no action');

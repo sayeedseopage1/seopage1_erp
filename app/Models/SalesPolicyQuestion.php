@@ -10,7 +10,23 @@ class SalesPolicyQuestion extends Model
 {
     use HasFactory;
 
-    static $questionTypes = ['yesNo', 'numeric', 'list', 'text', 'longText'];
+    static $types = [
+        'yesNo' => 'Yes\No',
+        'numeric' => 'Numeric',
+        'list' => 'List',
+        'text' => 'Text',
+        'longText' => 'Long Text'
+    ];
+    static $keys =  [
+        'hourlyRate' => 'Hourly Rate',
+        'milestore' => 'Milestone',
+        'threat' => 'Threat',
+        'doneByElse' => 'Done By Someone Else',
+        'routeWork' => 'Routine Work',
+        'availableWeekend' => 'Available During The Weekend',
+        'firstSubmisstoin' => 'First Submission',
+        'acceptPriceProposal' => "Accept Price Proposal"
+    ];
 
     protected $fillable = [
         'title',

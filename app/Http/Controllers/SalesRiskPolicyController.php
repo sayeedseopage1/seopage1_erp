@@ -78,15 +78,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function qustionInputField()
     {
-        $qustionTypes = [
-            'hourlyRate' => 'Hourly Rate',
-            'milestore' => 'Milestone',
-            'threat' => 'Threat',
-            'doneByElse' => 'Done By Someone Else',
-            'routeWork' => 'Routine Work',
-            'availableWeekend' => 'Available During The Weekend'
-        ];
-        return response()->json(['data' => ['questionTypes' => $qustionTypes]]);
+        $types = SalesPolicyQuestion::$types;
+        $questionKeys = SalesPolicyQuestion::$keys;
+        $policies = SalesRiskPolicy::whereNull('parent_id')->get(['id', 'title']);
+
+        return response()->json(['data' => compact('types', 'questionKeys', 'policies')]);
     }
 
     function index()
