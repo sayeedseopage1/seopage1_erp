@@ -32,10 +32,9 @@ import CKEditorComponent from "../../../ckeditor";
 
 import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
 import Button from "../Button";
-import {
-    useFinalTaskSubmissionStatusMutation,
-    useGetTaskListQuery,
-} from "../../../../react-latest/services/api/EvaluationApiSlice";
+import { useFinalTaskSubmissionStatusMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
+import { useGetTaskListQuery } from "../../../services/api/EvaluationApiSlice";
+
 const EvaluationModal = ({
     isEvaluationModal,
     setIsEvaluationModal,
