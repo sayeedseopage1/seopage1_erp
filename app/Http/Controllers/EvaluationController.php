@@ -5,14 +5,19 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\EmployeeEvaluation;
 use App\Models\EmployeeEvaluationTask;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\ProjectTimeLog;
 use App\Models\SubTask;
 use App\Models\Task;
 use App\Models\TaskRevision;
 use App\Models\TaskSubmission;
 use App\Models\TaskUser;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Auth;
+use Carbon\Carbon;
 
 class EvaluationController extends AccountBaseController
 {
@@ -193,6 +198,48 @@ class EvaluationController extends AccountBaseController
             $employee_evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first();
             $employee_evaluation->ld_submission_status = 1;
             $employee_evaluation->save();
+
+            $actions = PendingAction::where('code','NDPE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+            if($actions != null)
+            {
+                foreach ($actions as $key => $action) {
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $dev= User::where('id',$employee_evaluation->user_id)->first();
+                    
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading= 'New dedeloper <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> evaluations were successfully submitted!';
+                $past_action->message = 'Lead dedeloper <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->task_id = $action->task_id;
+                $past_action->developer_id = $action->developer_id;
+                $past_action->client_id = $action->client_id;
+                $button = [
+                    [
+                        'button_name' => 'Evaluate',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                    ],
+                ];
+                $past_action->button = json_encode($button);
+                $past_action->save();
+                }
+            }
+            
         }
 
         return response()->json(['status'=>200]);

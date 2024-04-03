@@ -1827,6 +1827,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->timeframe= 24;
                 $action->client_id = $task->id;
                $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
                 $action->authorization_for= $authorizer->id;
                 $button = [
                     [
@@ -1834,6 +1835,7 @@ class HelperPendingActionController extends AccountBaseController
                         'button_color' => 'primary',
                         'button_type' => 'redirect_url',
                         'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
                     ],
 
                 ];
