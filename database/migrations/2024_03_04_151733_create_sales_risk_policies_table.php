@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->bigInteger('parent_id')->nullable()->unsigned();
             $table->enum('type', SalesRiskPolicy::$types);
-            $table->enum('value_type', SalesRiskPolicy::$valueTypes)->nullable();
+            $table->enum('value_type', array_keys(SalesRiskPolicy::$valueTypes))->nullable();
             $table->enum('key', array_keys(SalesRiskPolicy::$keys))->nullable();
             $table->text('value')->nullable();
             $table->float('points')->default('0');

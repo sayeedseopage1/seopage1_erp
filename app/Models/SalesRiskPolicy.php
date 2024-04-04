@@ -23,7 +23,14 @@ class SalesRiskPolicy extends Model
     ];
 
     static $types = ['parent', 'greaterThan', 'lessThan', 'fixed', 'range', 'yesNo', 'list'];
-    static $valueTypes = ['percentage', 'currency', 'hourly', 'days', 'countries'];
+
+    static $valueTypes = [
+        'percentage' => 'Percentage',
+        'currency' => 'Currency',
+        'hourly' => 'Hourly',
+        'days' => 'Days',
+        'countries' => 'Countries'
+    ];
 
     static $keys =  [
         'hourlyRate' => 'Hourly Rate',
