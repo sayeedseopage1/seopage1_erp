@@ -16,8 +16,9 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import SalesRiskAnalysis from "./Pages/SalesRiskAnalysis";
 import SalesRiskQuestions from "./Pages/SalesRiskQuestions";
 import SalesRiskAuthorize from "./Pages/SalesRiskAuthorize";
-import SalesAnalysisReport from "./Pages/SalesAnalysisReport";
+import SalesRiskReport from "./Pages/SalesRiskReport";
 import SalesRiskQuestionList from "./Pages/SalesRiskQuestionList";
+import SaleSRiskQuestionNotice from "./Pages/SaleSRiskQuestionNotice";
 
 // Context
 import SalesRiskAnalysisProvider from "./context/SalesRiskAnalysisProvider";
@@ -95,7 +96,7 @@ if (container) {
     );
 }
 
-// Sales Risk Analysis Question
+// Sales Risk Analysis Question Answer
 const containerSalePolicyQuestion =
     document.getElementById("salePolicyQuestion");
 
@@ -109,6 +110,31 @@ if (containerSalePolicyQuestion) {
                             <Route
                                 path="account/deals/risk-analysis/:deal_id"
                                 element={<SalesRiskQuestions />}
+                            />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
+            </Provider>
+        </React.StrictMode>
+    );
+}
+
+// Sales Risk Analysis Question Answer Notice Page will show when point below 0
+
+const containerSalePolicyQuestionNotice = document.getElementById(
+    "salePolicyQuestionNotice"
+);
+
+if (containerSalePolicyQuestionNotice) {
+    ReactDOM.createRoot(containerSalePolicyQuestionNotice).render(
+        <React.StrictMode>
+            <Provider store={store}>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Content />}>
+                            <Route
+                                path="account/deals/risk-analysis/:deal_id"
+                                element={<SaleSRiskQuestionNotice />}
                             />
                         </Route>
                     </Routes>
@@ -160,7 +186,7 @@ if (containerSalesAnalysisReportTable) {
                             <Route path="/" element={<ContentWithDrag />}>
                                 <Route
                                     path="/account/sales-analysis-reports"
-                                    element={<SalesAnalysisReport />}
+                                    element={<SalesRiskReport />}
                                 />
                             </Route>
                         </Routes>

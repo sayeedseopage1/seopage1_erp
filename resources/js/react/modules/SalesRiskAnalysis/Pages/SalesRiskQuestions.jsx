@@ -233,102 +233,64 @@ const SalesRiskQuestions = () => {
                 <SalesRiskAnalysisQuestionTitleContainer>
                     <h5>Sale Risk Analysis</h5>
                 </SalesRiskAnalysisQuestionTitleContainer>
-                {redirectUrl ? (
-                    <div
-                        className="d-flex align-items-center justify-content-center flex-column py-4 px-3 px-md-5"
-                        style={{
-                            height: "calc(100vh - 190px)",
+                <>
+                    <div>
+                        {isLoading ? (
+                            <SaleRiskAnalysisQuestionsLoader />
+                        ) : (
+                            <SaleRiskQuestionsInputContainer
+                                isChild={false}
+                                questions={questions}
+                                inputsData={inputsData}
+                                allQuestions={allQuestions}
+                                isSubmitting={isSubmitting}
+                                focusedQuestion={focusedQuestion}
+                                inputContainerActions={{
+                                    getItsFocused,
+                                    handleQuestionFocus,
+                                    setInputsData,
+                                    handleListYesNoQuestion,
+                                    getYesNoQuestionValue,
+                                }}
+                            />
+                        )}
+                    </div>
+                    <QuestionConfirmModal
+                        open={questionModalOpen}
+                        closeModal={() => {
+                            setQuestionModalOpen(false);
                         }}
-                    >
-                        <InfoIcon />
-                        <p
-                            className="text-center py-4"
-                            style={{
-                                textAlign: "center",
-                                fontFamily: "Poppins",
-                                fontSize: "16px",
-                                fontStyle: "normal",
-                                fontWeight: 400,
-                                lineHeight: "normal",
-                            }}
-                        >
-                            This won deal has a negative risk analysis score
-                            hence it has to be authorized by the top management.
-                            You can still submit the larger form and it will be
-                            assigned to a project manager right after it will be
-                            authorized.
-                        </p>
+                        handleSaveQuestionAnswer={handleSaveQuestionAnswer}
+                        isLoading={isSaving}
+                    />
+                    <CustomCheckbox
+                        isChecked={isChecked}
+                        setIsChecked={setIsChecked}
+                    />
+                    <Flex justifyContent="center" className="my-3">
                         <button
-                            className="btn btn-primary"
+                            onClick={() => {
+                                handleSubmit();
+                            }}
+                            className="btn btn-primary d-flex align-items-center justify-content-center"
+                            disabled={!isChecked}
                             style={{
                                 width: "250px",
                             }}
-                            onClick={handleSaveQuestionAnswer}
-                            disabled={isLoading}
                         >
-                            {isLoading ? "Saving..." : "Continue"}
+                            <Switch>
+                                <Switch.Case condition={!isChecked}>
+                                    <Tooltip text="Please confirm the above statement">
+                                        Submit
+                                    </Tooltip>
+                                </Switch.Case>
+                                <Switch.Case condition={isChecked}>
+                                    {isSaving ? "Saving..." : "Submit"}
+                                </Switch.Case>
+                            </Switch>
                         </button>
-                    </div>
-                ) : (
-                    <>
-                        <div>
-                            {isLoading ? (
-                                <SaleRiskAnalysisQuestionsLoader />
-                            ) : (
-                                <SaleRiskQuestionsInputContainer
-                                    isChild={false}
-                                    questions={questions}
-                                    inputsData={inputsData}
-                                    allQuestions={allQuestions}
-                                    isSubmitting={isSubmitting}
-                                    focusedQuestion={focusedQuestion}
-                                    inputContainerActions={{
-                                        getItsFocused,
-                                        handleQuestionFocus,
-                                        setInputsData,
-                                        handleListYesNoQuestion,
-                                        getYesNoQuestionValue
-                                    }}
-                                />
-                            )}
-                        </div>
-                        <QuestionConfirmModal
-                            open={questionModalOpen}
-                            closeModal={() => {
-                                setQuestionModalOpen(false);
-                            }}
-                            handleSaveQuestionAnswer={handleSaveQuestionAnswer}
-                            isLoading={isSaving}
-                        />
-                        <CustomCheckbox
-                            isChecked={isChecked}
-                            setIsChecked={setIsChecked}
-                        />
-                        <Flex justifyContent="center" className="my-3">
-                            <button
-                                onClick={() => {
-                                    handleSubmit();
-                                }}
-                                className="btn btn-primary d-flex align-items-center justify-content-center"
-                                disabled={!isChecked}
-                                style={{
-                                    width: "250px",
-                                }}
-                            >
-                                <Switch>
-                                    <Switch.Case condition={!isChecked}>
-                                        <Tooltip text="Please confirm the above statement">
-                                            Submit
-                                        </Tooltip>
-                                    </Switch.Case>
-                                    <Switch.Case condition={isChecked}>
-                                        {isSaving ? "Saving..." : "Submit"}
-                                    </Switch.Case>
-                                </Switch>
-                            </button>
-                        </Flex>
-                    </>
-                )}
+                    </Flex>
+                </>
             </SalesRiskAnalysisQuestionContainer>
         </section>
     );
