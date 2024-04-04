@@ -107,7 +107,6 @@ const EvaluationModal = ({
                 content: {
                     borderRadius: "10px",
                     maxWidth: "80%",
-
                     height: "fit-content",
                     maxHeight: "90vh",
                     margin: "auto auto",

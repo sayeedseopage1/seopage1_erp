@@ -18,7 +18,7 @@ const ActionDropdown = ({ data }) => {
                 {auth.roleId === 6 && (
                     <button
                         className={ButtonStyles.sendContainer}
-                        disabled={data?.avg_rating}
+                        // disabled={data?.avg_rating}
                     >
                         {data?.avg_rating ? (
                             <h4>{data?.avg_rating}</h4>
