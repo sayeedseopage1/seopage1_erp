@@ -183,6 +183,7 @@ class EvaluationController extends AccountBaseController
         $evaluation_task->identiey_issues = $request->identiey_issues;
         $evaluation_task->dedication = $request->dedication;
         $evaluation_task->obedience = $request->obedience;
+        $evaluation_task->lead_dev_id = Auth::user()->id;
         $evaluation_task->lead_dev_cmnt = $request->lead_dev_cmnt;
 
         $total_ratings = array_sum([
@@ -242,6 +243,8 @@ class EvaluationController extends AccountBaseController
                 }
             }
             
+            $helper = new HelperPendingActionController();
+            $helper->leadDevSubmittedNewDevEvaluation($evaluation_task->id);
         }
 
         return response()->json(['status'=>200]);

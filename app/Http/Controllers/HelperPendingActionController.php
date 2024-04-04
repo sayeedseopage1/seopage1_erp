@@ -1844,6 +1844,39 @@ class HelperPendingActionController extends AccountBaseController
             }
         }
 
+        public function leadDevSubmittedNewDevEvaluation($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',8)->get();
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'LDSEND';
+                $action->serial = 'LDSEND'.'x'.$key;
+                $action->item_name= 'New developer\'s evaluation!';
+                $action->heading= 'Lead Dedeloper <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'</a> has submitted evaluation for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
+                $action->message = 'Fill out initial performance evaluation from for the dedeloper <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
+                $action->timeframe= 24;
+                $action->client_id = $task->id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
 
 
 }
