@@ -211,7 +211,10 @@ const EvaluationModal = ({
                         onClick={handleFinalSubmission}
                         size="md"
                         className="ml-2"
-                        disabled={!allTasksReviewed}
+                        disabled={
+                            !allTasksReviewed ||
+                            evaluationObject.ld_submission_status === 1
+                        }
                     >
                         {evaluationObject.ld_submission_status === 1 ? (
                             <div> submitted </div>
