@@ -199,12 +199,16 @@ class EvaluationController extends AccountBaseController
     }
     public function storeSubmissionEvaluation(Request $request)
     {
+        $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
+        $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
+        $average_rating = $task_count > 0 ? $task_sum / $task_count : 0;
+
         $employee_evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         $employee_evaluation->ld_submission_status = 1;
+        $employee_evaluation->lead_dev_avg_rating = $average_rating;
         $employee_evaluation->save();
 
-        $evaluation_task = EmployeeEvaluationTask::where('user_id',$employee_evaluation->user_id)->first();
-
+        $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
         $actions = PendingAction::where('code','NDPE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
         if($actions != null)
         {
