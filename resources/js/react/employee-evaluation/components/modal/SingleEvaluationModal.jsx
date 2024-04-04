@@ -211,14 +211,13 @@ const SingleEvaluationModal = ({
             return;
         }
 
-        // const fd = new FormData();
-        // fd.append("averageRating", averageRating);
-        // fd.append("evaluationStatus", "completed");
-        // Object.entries(formData).forEach(([key, value]) => {
-        //     fd.append(key, value);
-        // });
-
-        const response = await storeTaskRating(formData)
+        await storeTaskRating({
+            ...formData,
+            evaluation_id: evaluationObject.id,
+            _token: document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+        })
             .unwrap()
             .then((response) => {
                 toast.success("Rating submitted");
@@ -229,7 +228,9 @@ const SingleEvaluationModal = ({
                 toast.error("Rating not submitted");
             });
     };
-
+    const handleEdit = (e) => {
+        e.preventDefault();
+    };
     return (
         <ReactModal
             style={{
@@ -337,12 +338,6 @@ const SingleEvaluationModal = ({
                                 setFormData((prev) => ({
                                     ...prev,
                                     lead_dev_cmnt: data,
-                                    evaluation_id: evaluationObject.id,
-                                    _token: document
-                                        .querySelector(
-                                            "meta[name='csrf-token']"
-                                        )
-                                        .getAttribute("content"),
                                 }));
                             }}
                         />
@@ -379,29 +374,33 @@ const SingleEvaluationModal = ({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    {data?.assignByName}
+                                    {evaluationObject.added_by_name}
                                 </a>{" "}
-                                on <span>{data?.updatedAt}</span>
+                                on <span>{data?.updated_at}</span>
                             </div>
                         </section>
                     )}
                 </div>
                 <div className="d-flex justify-content-center">
-                    {auth.roleId === 6 && (
-                        <button
-                            className="mr-2 btn btn-primary "
-                            onClick={handleSubmit}
-                        >
-                            {data?.evaluationStatus === "pending" ? (
-                                <div> Submit Evaluation</div>
-                            ) : (
+                    {auth.roleId === 6 &&
+                        (data?.avg_rating === null ? (
+                            <button
+                                className="mr-2 btn btn-primary "
+                                onClick={handleSubmit}
+                            >
+                                Submit Evaluation
+                            </button>
+                        ) : (
+                            <button
+                                className="mr-2 btn btn-primary "
+                                onClick={handleEdit}
+                            >
                                 <div>
                                     <BiSolidEditAlt />
                                     <span> Edit Rating</span>
                                 </div>
-                            )}
-                        </button>
-                    )}
+                            </button>
+                        ))}
                     <Button
                         size="md"
                         onClick={() => toggleSingleEvaluationModal()}
