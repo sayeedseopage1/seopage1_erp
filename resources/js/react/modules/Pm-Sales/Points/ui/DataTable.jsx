@@ -143,7 +143,8 @@ const DataTable = ({ data, defaultColumns, isLoading }) => {
                         {!isLoading &&
                             <React.Fragment>
                                 {
-                                    currentPageData.length > 0 ? currentPageData.map((data) => (
+                                    // TODO: this sorting can remove later
+                                    currentPageData.length > 0 ? currentPageData?.sort((a, b) => a.id - b.id)?.map((data) => (
                                         <div key={data.id} className="cnx__table_tr sp1__pp_table_tr">
                                             {columns.map(d => (
                                                 <div key={d.id} className={`cnx__table_td sp1__pp_table_td sp1__pp_table_col_${d.id}`}>
@@ -281,7 +282,7 @@ const DraggableColumn = ({
 
     drag(drop(ref));
 
-
+    // TODO: sorting will be add 
     return (
         <>
             <div
@@ -290,7 +291,7 @@ const DraggableColumn = ({
 
             >
                 <div ref={ref}
-                    onClick={(() => requestSort(column.accessor))}
+                    // onClick={(() => requestSort(column.accessor))}
                     className={`cnx__table_th_toggle  ${isDragging ? '__dragging' : ''} ${isOver ? '__dragging_over' : ''}`}
                     style={{
                         opacity: isDragging ? 0.5 : 1,
@@ -301,14 +302,14 @@ const DraggableColumn = ({
                     }}
                 >
                     {column.header}
-                    {
+                    {/* {
                         sort.key === column.accessor ?
                             sort.direction === "asc" ? (
                                 <span className="table_asc_dec asc"></span>
                             ) : (
                                 <span className="table_asc_dec dec"></span>
                             ) : <span className="table_asc_dec"></span>
-                    }
+                    } */}
 
                 </div>
 
