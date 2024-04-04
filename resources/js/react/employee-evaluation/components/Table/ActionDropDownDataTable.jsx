@@ -6,9 +6,10 @@ import EvaluationModal from "../modal/EvaluationModal";
 import Switch from "../../../global/Switch";
 import { Tooltip } from "react-tooltip";
 import { useDispatch } from "react-redux";
-import { setEvaluationWiseTableData } from "../../../services/features/employeeEvaluation.";
+import useEmployeeEvaluation from "../../../zustand/store";
 
 const ActionDropdownDataTable = ({ data, table }) => {
+    const { setEvaluationObject } = useEmployeeEvaluation();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const userId = queryParams.get("userId");
@@ -20,7 +21,6 @@ const ActionDropdownDataTable = ({ data, table }) => {
     const [buttonVariant, setButtonVariant] = React.useState("");
     const handleEvaluationClick = () => {
         setIsEvaluationModal((prev) => !prev);
-        dispatch(setEvaluationWiseTableData(data));
     };
     React.useEffect(() => {
         if (data?.lead_dev_avg_rating === null) {
@@ -60,7 +60,11 @@ const ActionDropdownDataTable = ({ data, table }) => {
                                 condition={data?.accept_rejected === null}
                             >
                                 <Button
-                                    onClick={handleEvaluationClick}
+                                    onClick={() => {
+                                        console.log("Data:", data);
+                                        handleEvaluationClick();
+                                        setEvaluationObject(data);
+                                    }}
                                     variant={buttonVariant}
                                 >
                                     {data?.lead_dev_avg_rating !== null

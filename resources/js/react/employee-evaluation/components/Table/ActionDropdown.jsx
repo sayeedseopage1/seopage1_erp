@@ -1,16 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ColumnContent } from "./ui";
 import { IoIosSend } from "react-icons/io";
 import ButtonStyles from "./ActionButton.module.css";
 import SingleEvaluationModal from "../modal/SingleEvaluationModal";
 import { useAuth } from "../../../hooks/useAuth";
-import { useSelector } from "react-redux";
-const ActionDropdown = ({ data }) => {
-    const employeeWiseTableData = useSelector(
-        (state) => state.employeeWiseDataTable.data
-    );
 
-    console.log("employee wise table", employeeWiseTableData);
+const ActionDropdown = ({ data }) => {
     const auth = useAuth();
     const [isSingleEvaluationModalOpen, setSingleEvaluationModalOpen] =
         useState(false);
@@ -23,7 +18,7 @@ const ActionDropdown = ({ data }) => {
                 {auth.roleId === 6 && (
                     <button
                         className={ButtonStyles.sendContainer}
-                        disabled={data?.avg_rating}
+                        // disabled={data?.avg_rating}
                     >
                         {data?.avg_rating ? (
                             <h4>{data?.avg_rating}</h4>

@@ -28,9 +28,13 @@ import CKEditorComponent from "../../../ckeditor";
 
 import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
 import Button from "../Button";
-import { useFinalTaskSubmissionStatusMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
-import { useGetTaskListQuery } from "../../../services/api/EvaluationApiSlice";
+
+import {
+    useGetTaskListQuery,
+    useStoreTaskRatingMutation,
+} from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
+import useEmployeeEvaluation from "../../../zustand/store";
 
 const EvaluationModal = ({
     isEvaluationModal,
@@ -38,15 +42,13 @@ const EvaluationModal = ({
     singleEvaluation,
 }) => {
     const auth = useAuth();
-
-    const [updateFinalSubmissionStatus, { isError }] =
-        useFinalTaskSubmissionStatusMutation();
+    const { evaluationObject } = useEmployeeEvaluation();
+    const [leadDevFinalSubmission, { isError }] = useStoreTaskRatingMutation();
     const { data, isLoading, isFetching } = useGetTaskListQuery(
         singleEvaluation?.user_id
     );
 
     const Tasks = data?.data;
-    console.log("tasks", Tasks);
 
     const [allTasksReviewed, setAllTasksReviewed] = useState(false);
 
@@ -73,7 +75,12 @@ const EvaluationModal = ({
 
     const handleFinalSubmission = async () => {
         try {
-            await updateFinalSubmissionStatus(assignToId);
+            await leadDevFinalSubmission({
+                confirm_submission: "lead_dev_submitted",
+                _token: document
+                    .querySelector("meta[name='csrf-token']")
+                    .getAttribute("content"),
+            });
             toast.success("Final submission status updated successfully!");
             setIsEvaluationModal(false);
         } catch (error) {
@@ -100,7 +107,6 @@ const EvaluationModal = ({
                 content: {
                     borderRadius: "10px",
                     maxWidth: "80%",
-
                     height: "fit-content",
                     maxHeight: "90vh",
                     margin: "auto auto",
@@ -113,7 +119,7 @@ const EvaluationModal = ({
         >
             <EvalTableTitle>
                 <span>New Developer Evaluation :</span>
-                <span>Mitul</span>
+                <span>{evaluationObject.user_name}</span>
             </EvalTableTitle>
             <EvaluationTable
                 data={Tasks}
@@ -205,7 +211,7 @@ const EvaluationModal = ({
                         className="ml-2"
                         disabled={!allTasksReviewed}
                     >
-                        {!allTasksReviewed ? (
+                        {evaluationObject.ld_submission_status === 1 ? (
                             <div> submitted </div>
                         ) : (
                             <div> Confirm Submission</div>
