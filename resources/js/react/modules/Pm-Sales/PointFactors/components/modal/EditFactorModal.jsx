@@ -380,7 +380,7 @@ const EditFactorModal = ({
 
                         {/* status *****Optional****** */}
                         {
-                            singleDefaultFactor?.status && <div className="row mb-4 align-items-center">
+                            singleDefaultFactor?.status != null && <div className="row mb-4 align-items-center">
                                 <ModalInputLabel className="col-4">
                                     Status <sup>*</sup>:{" "}
                                 </ModalInputLabel>
