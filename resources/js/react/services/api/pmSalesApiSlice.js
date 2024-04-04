@@ -41,6 +41,9 @@ const pmSalesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["GET_PM_POINT_FACTORS"],
         }),
+        getPmCashPoints: build.query({
+            query: () => `/account/get-pm-cashpoint`,
+        }),
     }),
 });
 
@@ -51,4 +54,5 @@ export const {
     useGetFactorsFieldsByCriteriaQuery,
     useCreatePmPointFactorMutation,
     useUpdatePmPointfactorMutation,
+    useGetPmCashPointsQuery,
 } = pmSalesApiSlice;

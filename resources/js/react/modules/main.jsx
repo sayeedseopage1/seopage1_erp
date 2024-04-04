@@ -12,3 +12,4 @@ import './digital-marketing/DmWonDeals/main';
 
 // pm sales
 import './Pm-Sales/PointFactors/main'
+import './Pm-Sales/Points/main'
