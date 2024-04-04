@@ -42,6 +42,20 @@ const SaleRiskQuestionsInputContainer = ({
         }
     };
 
+    const handleDebug = (question) => {
+        // console.log(
+        //     "question",
+        //     getYesNoQuestionValue(question),
+        //     question,
+        //     questions
+        // );
+        const getQuestion = inputsData.find((item) => item.id === question.id);
+        if (getQuestion) {
+            console.log(getQuestion[`question_${question.id}`], question.id);
+            return getQuestion[`question_${question.id}`];
+        }
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -100,7 +114,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
-                                            getYesNoQuestionValue
+                                            getYesNoQuestionValue,
                                         }}
                                     />
                                 </Switch.Case>
@@ -125,8 +139,8 @@ const SaleRiskQuestionsInputContainer = ({
                                 />
                                 <Switch.Case
                                     condition={
-                                        getYesNoQuestionValue(question) &&
-                                        question.questions?.length
+                                        question?.questions?.length &&
+                                        handleDebug(question)
                                     }
                                 >
                                     <SaleRiskQuestionsInputContainer
@@ -143,7 +157,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
-                                            getYesNoQuestionValue
+                                            getYesNoQuestionValue,
                                         }}
                                     />
                                 </Switch.Case>
@@ -197,12 +211,11 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
-                                            getYesNoQuestionValue
+                                            getYesNoQuestionValue,
                                         }}
                                     />
                                 </Switch.Case>
                             </Switch.Case>
-
                             <Switch.Case condition={question.type === "list"}>
                                 <CustomAccordion
                                     label={`${isChild ? "" : `${index + 1}. `}${
@@ -245,7 +258,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
-                                            getYesNoQuestionValue
+                                            getYesNoQuestionValue,
                                         }}
                                     />
                                 </Switch.Case>
@@ -299,7 +312,7 @@ const SaleRiskQuestionsInputContainer = ({
                                             handleQuestionFocus,
                                             setInputsData,
                                             handleListYesNoQuestion,
-                                            getYesNoQuestionValue
+                                            getYesNoQuestionValue,
                                         }}
                                     />
                                 </Switch.Case>

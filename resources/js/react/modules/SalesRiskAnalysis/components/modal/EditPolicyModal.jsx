@@ -164,6 +164,7 @@ const EditPolicyModal = ({
                                     data={PolicyTypeItems}
                                     selected={editPolicyData?.policyType}
                                     setSelected={handlePolicyEditChange}
+                                    isDisableUse={false}
                                 />
                             </ModalSelectContainer>
                             {editPolicyDataValidation?.policyType && (

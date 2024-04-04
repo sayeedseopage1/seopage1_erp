@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
@@ -29,6 +29,9 @@ import { NewRulesModalTableColumnsData } from "../table/NewRulesModalTableColumn
 // sections components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
+// context data
+import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+
 const AddNewPolicyModal = ({
     open,
     closeModal,
@@ -39,6 +42,8 @@ const AddNewPolicyModal = ({
     isLoadingAddSalesRiskAnalysisRule,
     handlerAction,
 }) => {
+    const { policyKeys } = useContext(SalesRiskAnalysisContext);
+
     // Destructuring handlerAction
     const {
         handleChange,
@@ -57,7 +62,6 @@ const AddNewPolicyModal = ({
             allSelectedCountries.push(item?.countries);
         }
     });
-
 
     return (
         <CustomModal
@@ -114,6 +118,7 @@ const AddNewPolicyModal = ({
                             )}
                         </div>
                     </div>
+
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Policy Comment
@@ -156,6 +161,27 @@ const AddNewPolicyModal = ({
                     )}
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
+                            Policy Key<sup>*</sup>
+                        </ModalInputLabel>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    filedName="key"
+                                    data={policyKeys}
+                                    selected={newPolicyData?.key}
+                                    setSelected={handleChange}
+                                    isDisableUse={false}
+                                />
+                            </ModalSelectContainer>
+                            {newPolicyDataValidation?.key && (
+                                <p className="text-danger">
+                                    Policy key is required
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
                             Policy Type<sup>*</sup>{" "}
                         </ModalInputLabel>
                         <div className="col-8 px-0 flex-column">
@@ -165,6 +191,7 @@ const AddNewPolicyModal = ({
                                     data={PolicyTypeItems}
                                     selected={newPolicyData?.policyType}
                                     setSelected={handleChange}
+                                    isDisableUse={false}
                                 />
                             </ModalSelectContainer>
                             {newPolicyDataValidation?.policyType && (

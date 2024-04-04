@@ -30,9 +30,12 @@ import {
 
 // icon
 import InfoIcon from "../components/ui/InfoIcon";
+import _ from "lodash";
+import { set } from "lodash";
 
 const SalesRiskQuestions = () => {
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
+    const [yesNoQuestions, setYesNoQuestions] = React.useState([]);
     const [inputsData, setInputsData] = React.useState([]);
     const [allQuestions, setAllQuestions] = React.useState([]);
     const [isChecked, setIsChecked] = React.useState(false);
@@ -186,10 +189,11 @@ const SalesRiskQuestions = () => {
     };
 
     const getYesNoQuestionValue = (question) => {
-        const getYesNoValue = inputsData.find(
-            (item) => item.parent_id === question.id
+        const getYesNoValue = inputsData?.find(
+            (item) => item.id === question.id
         );
-        return !_.isEmpty(getYesNoValue);
+        console.log(getYesNoValue);
+        return getYesNoValue[`question_${question.id}`] ? true : false;
     };
 
     const handleListYesNoQuestion = (question, value, type) => {
@@ -203,10 +207,15 @@ const SalesRiskQuestions = () => {
         const removeAlreadyExistChild = inputsData.filter(
             (item) => item.parent_id !== question.id
         );
-        const addSelectValue = removeAlreadyExistChild.map((item) => ({
-            ...item,
-            [`question_${question.id}`]: getValue(),
-        }));
+        const addSelectValue = removeAlreadyExistChild.map((item) => {
+            if (item.id === question.id) {
+                return {
+                    ...item,
+                    [`question_${question.id}`]: getValue(),
+                };
+            }
+            return item;
+        });
 
         if (question.questions?.length) {
             const getChildWithSelectedValue = allQuestions.filter(

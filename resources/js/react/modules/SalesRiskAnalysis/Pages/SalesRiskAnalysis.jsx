@@ -40,6 +40,7 @@ const SalesRiskAnalysis = () => {
         policyName: "",
         department: {},
         policyType: {},
+        key:{},
         title: "",
         valueType: {},
         value: "",
@@ -61,6 +62,7 @@ const SalesRiskAnalysis = () => {
             department: false,
             policyType: false,
             valueType: false,
+            key: false,
             value: false,
             from: false,
             to: false,
@@ -103,6 +105,7 @@ const SalesRiskAnalysis = () => {
                 valueType: {},
                 value: "",
                 from: "",
+                key:{},
                 to: "",
                 comment: "",
                 yesComment: "",
@@ -120,6 +123,7 @@ const SalesRiskAnalysis = () => {
                 policyType: {},
                 title: "",
                 valueType: {},
+                key:{},
                 value: "",
                 from: "",
                 to: "",
@@ -142,6 +146,7 @@ const SalesRiskAnalysis = () => {
             value: false,
             from: false,
             to: false,
+            key: false,
             yes: false,
             no: false,
             countries: false,
@@ -165,6 +170,7 @@ const SalesRiskAnalysis = () => {
                 to: "",
                 yes: "",
                 no: "",
+                key: {},
                 yesComment: "",
                 noComment: "",
                 ruleComment: "",
@@ -246,6 +252,7 @@ const SalesRiskAnalysis = () => {
                         rule.valueType = item.valueType.name;
                     if (item.from) rule.from = item.from;
                     if (item.to) rule.to = item.to;
+                    if(item.key) rule.key = item.key.name;
                     if (item.points) rule.points = item.points;
                     if (item.yes && item.no) {
                         rule.value = {
@@ -303,6 +310,7 @@ const SalesRiskAnalysis = () => {
             to: "",
             yes: "",
             no: "",
+            key:{},
             comment: "",
             yesComment: "",
             noComment: "",
@@ -357,13 +365,29 @@ const SalesRiskAnalysis = () => {
             <SalesRiskAnalysisContainer>
                 {/* refresh button */}
                 <div className="d-flex justify-content-between align-items-center">
-                    <button
-                        onClick={handleAddNewPolicyModal}
-                        className="btn btn-primary"
-                    >
-                        <i className="fa fa-plus mr-2" aria-hidden="true" />{" "} Add
-                        New Policy
-                    </button>
+                    <div className="d-flex flex-column flex-md-row align-items-center">
+                        <button
+                            onClick={handleAddNewPolicyModal}
+                            className="btn btn-primary"
+                        >
+                            <i className="fa fa-plus mr-2" aria-hidden="true" />{" "}
+                            Add New Policy
+                        </button>
+                        <button
+                            onClick={() => {
+                                window.location.href = "/account/sales-risk-policies/question";
+                            }}
+                            className="btn btn-info ml-3"
+                            style={{
+                                padding: "9px 12px",
+                            }}
+                        >
+                            <i
+                                class="fa-solid fa-circle-question mr-2"
+                                aria-hidden="true"
+                            ></i>{" "} Questions List
+                        </button>
+                    </div>
                     <RefreshButton
                         onClick={() => {
                             refetch();

@@ -11,7 +11,8 @@ const CustomDropDown = ({
     setSelected,
     sidebarItem = false,
     className,
-    filedName
+    filedName,
+    isDisableUse
 }) => {
     // set selected value from data (because this dropdown reused in multiple places with different data)
     const _Options = data?.data;
@@ -67,6 +68,7 @@ const CustomDropDown = ({
                                         },
                                     });
                                 }}
+                                disabled={item?.disabled}
                             >
                                 {item?.label}
                             </Dropdown.Item>

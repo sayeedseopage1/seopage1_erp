@@ -104,6 +104,7 @@ const EditApplicableRulesModal = ({
                                     data={PolicyTypeItems}
                                     selected={editRuleData?.policyType}
                                     setSelected={handleChange}
+                                    isDisableUse={false}
                                 />
                             </ModalSelectContainer>
                         </div>

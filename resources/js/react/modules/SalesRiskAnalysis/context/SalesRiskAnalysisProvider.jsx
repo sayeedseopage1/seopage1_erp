@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 
 // Api services
-import { useGetAllFilterOptionQuery } from "../../../services/api/FilterBarOptionsApiSlice";
+import {
+    useGetAllCountryOptionsQuery,
+    useGetAllFilterOptionQuery,
+} from "../../../services/api/FilterBarOptionsApiSlice";
 import {
     useGetSalesRiskAnalysisInputsQuery,
     useSaleRiskQuestionsListFiledTypeQuery,
@@ -23,6 +26,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     );
     const [questionsAnswerType, setQuestionsAnswerType] = React.useState({});
     const [policies, setPolicies] = React.useState({});
+    const [policyKeys, setPolicyKeys] = React.useState({});
     const [allQuestions, setAllQuestions] = React.useState({});
 
     // fetch filter options
@@ -32,10 +36,18 @@ const SalesRiskAnalysisProvider = ({ children }) => {
             skip: departments?.length,
         });
 
+    // fetch all countries
+
+    const { data: countriesData, isFetching: isCountriesFetching } =
+        useGetAllCountryOptionsQuery("", {
+            refetchOnMountOrArgChange: true,
+            skip: countries?.length,
+        });
+
     const { data: salesRiskInputs, isFetching: isSalesRiskInputsFetching } =
         useGetSalesRiskAnalysisInputsQuery("", {
             refetchOnMountOrArgChange: true,
-            skip: countries?.length,
+            skip: policyKeys?.data?.length,
         });
 
     // fetch question fields
@@ -49,11 +61,32 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         if (filterOptions && !isFilterOptionsFetching) {
             dispatch(setFilterOptionsState(filterOptions));
         }
-    }, [filterOptions, isFilterOptionsFetching]);
+    }, [countriesData, isFilterOptionsFetching]);
 
     React.useEffect(() => {
+        if (countriesData && !isCountriesFetching) {
+            dispatch(setFilterCountriesState(countriesData?.data));
+        }
+    }, [countriesData, isCountriesFetching]);
+
+    // set policy keys
+    React.useEffect(() => {
         if (salesRiskInputs && !isSalesRiskInputsFetching) {
-            dispatch(setFilterCountriesState(salesRiskInputs));
+            const policyKeysData = Object.entries(
+                salesRiskInputs?.data?.policyKeys
+            ).map(([key, value], index) => {
+                return {
+                    id: index + 1,
+                    name: key,
+                    label: value,
+                };
+            });
+            setPolicyKeys({
+                label: "Policy Keys",
+                emptyOptionsLabel: "Select Policy Key",
+                id: "policyKey",
+                data: policyKeysData,
+            });
         }
     }, [salesRiskInputs, isSalesRiskInputsFetching]);
 
@@ -108,9 +141,10 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         }
     }, [questionFieldsData, isQuestionType]);
 
+    console.log("questionsAnswerType", policyKeys);
     return (
         <SalesRiskAnalysisContext.Provider
-            value={{ questionsAnswerType, policies, allQuestions }}
+            value={{ questionsAnswerType, policies, allQuestions, policyKeys }}
         >
             {children}
         </SalesRiskAnalysisContext.Provider>

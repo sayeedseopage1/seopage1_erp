@@ -90,27 +90,6 @@ const NewPolicyModalInputsContainer = ({
                         )
                     }
                 >
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Title<sup>*</sup>{" "}
-                        </ModalInputLabel>
-                        <div className="col-8 px-0">
-                            <ModalInput
-                                type="text"
-                                name="title"
-                                className="w-100"
-                                value={newPolicyData?.title}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                            {newPolicyDataValidation?.title && (
-                                <p className="text-danger py-1">
-                                    Title is required
-                                </p>
-                            )}
-                        </div>
-                    </div>
-                    {/* conditionally show only  "lessThan", "greaterThan", "fixed", "range", */}
                     <Switch.Case
                         condition={
                             !_.includes(
@@ -145,6 +124,7 @@ const NewPolicyModalInputsContainer = ({
                                             selected={newPolicyData?.valueType}
                                             setSelected={handleChange}
                                             filedName="valueType"
+                                            isDisableUse={false}
                                         />
                                     </ModalSelectContainer>
                                     {newPolicyDataValidation?.valueType && (
@@ -270,6 +250,28 @@ const NewPolicyModalInputsContainer = ({
                             </div>
                         </div>
                     </Switch.Case>
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Title<sup>*</sup>{" "}
+                        </ModalInputLabel>
+                        <div className="col-8 px-0">
+                            <ModalInput
+                                type="text"
+                                name="title"
+                                className="w-100"
+                                value={newPolicyData?.title}
+                                onChange={handleChange}
+                                placeholder="Write Here"
+                            />
+                            {newPolicyDataValidation?.title && (
+                                <p className="text-danger py-1">
+                                    Title is required
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    {/* conditionally show only  "lessThan", "greaterThan", "fixed", "range", */}
+
                     {/* conditionally show only  "yes/No",*/}
                     <Switch.Case
                         condition={_.includes(
@@ -397,6 +399,7 @@ const NewPolicyModalInputsContainer = ({
                                         selected={newPolicyData?.valueType}
                                         setSelected={handleChange}
                                         filedName="valueType"
+                                        isDisableUse={true}
                                     />
                                 </ModalSelectContainer>
                                 {newPolicyDataValidation?.valueType && (

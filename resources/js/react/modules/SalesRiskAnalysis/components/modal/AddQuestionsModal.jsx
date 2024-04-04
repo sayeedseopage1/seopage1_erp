@@ -498,6 +498,7 @@ const AddQuestionsModal = ({
                                     data={QuestionsTypes}
                                     selected={singleQuestion?.type}
                                     setSelected={handleChange}
+                                    isDisableUse={false}
                                 />
                             </ModalSelectContainer>
                         </div>

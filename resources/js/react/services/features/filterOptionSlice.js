@@ -29,12 +29,8 @@ const filterOptionSlice = createSlice({
             state.status = action.payload
         },
         setFilterCountriesState: (state, action) => {
-            const countries = _.get(action, 'payload.data', [])
-                .find(item => item?.label === "Policy type")
-                ?.structure?.list?.structure
-                ?.find(item => item?.label === "Type")
-                ?.structure?.countries?.structure;
-            state.countries = countries
+            console.log(action.payload);
+            state.countries = action.payload;
         }
     }
 });

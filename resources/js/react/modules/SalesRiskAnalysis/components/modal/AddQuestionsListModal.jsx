@@ -425,6 +425,7 @@ const AddQuestionsListModal = ({
                                     data={questionsAnswerType}
                                     selected={singleQuestion?.question_key}
                                     setSelected={handleChange}
+                                    isDisableUse={false}
                                 />
                             </ModalSelectContainer>
                             {singleQuestionValidation?.question_key && (
@@ -448,6 +449,7 @@ const AddQuestionsListModal = ({
                                     data={QuestionsTypes}
                                     selected={singleQuestion?.type}
                                     setSelected={handleChange}
+                                    isDisableUse={false}
                                 />
                             </ModalSelectContainer>
                             {singleQuestionValidation?.type && (
@@ -621,6 +623,7 @@ const AddQuestionsListModal = ({
                                             data={policies}
                                             selected={singleQuestion?.policy_id}
                                             setSelected={handleChange}
+                                            isDisableUse={false}
                                         />
                                     </ModalSelectContainer>
                                 </div>
