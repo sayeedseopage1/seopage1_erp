@@ -183,12 +183,21 @@ const SalesRiskAnalysis = () => {
                 [name]: value,
             });
         } else {
-          
             setNewPolicyData({
                 ...newPolicyData,
                 [name]: value,
             });
         }
+    };
+
+    const autoGenerateTitle = (data) => {
+        return `${data?.policyType?.label} ${
+            data?.valueType?.name === "currency" ? "$" : ""
+        }${data?.value}${data.from}${data?.from && data?.to ? "-" : ""}${
+            data.to
+        }${data?.valueType?.name === "percentage" ? "%" : ""}${
+            data?.valueType?.name === "hourly" ? "hr" : ""
+        }${data?.valueType?.name === "days" ? "days" : ""}`;
     };
 
     // handle add rule on policy data to the state
@@ -225,14 +234,16 @@ const SalesRiskAnalysis = () => {
                 if (newPolicyData.index === 0) {
                     return {
                         ...item,
-                        ...newPolicyData,
+                        title: autoGenerateTitle({
+                            ...item,
+                            valueType: newPolicyData.valueType,
+                        }),
                         valueType: newPolicyData.valueType,
                     };
                 } else {
                     return item;
                 }
             });
-
 
             setIsRuleUpdating(false);
             setNewPolicyInputData(updatedData);
@@ -247,7 +258,6 @@ const SalesRiskAnalysis = () => {
         }
         resetFormState();
     };
-
 
     // handle add new policy  with rules data to the server
     const handlePolicyAdded = async () => {
