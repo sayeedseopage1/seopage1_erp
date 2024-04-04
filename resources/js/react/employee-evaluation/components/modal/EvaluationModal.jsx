@@ -31,6 +31,7 @@ import Button from "../Button";
 
 import {
     useGetTaskListQuery,
+    useStoreTaskRatingFinalSubmissionMutation,
     useStoreTaskRatingMutation,
 } from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
@@ -43,6 +44,8 @@ const EvaluationModal = ({
 }) => {
     const auth = useAuth();
     const { evaluationObject } = useEmployeeEvaluation();
+    const [taskRatingFinalSubmission] =
+        useStoreTaskRatingFinalSubmissionMutation();
     const [leadDevFinalSubmission, { isError }] = useStoreTaskRatingMutation();
     const { data, isLoading, isFetching } = useGetTaskListQuery(
         singleEvaluation?.user_id
@@ -75,18 +78,17 @@ const EvaluationModal = ({
 
     const handleFinalSubmission = async () => {
         try {
-            await leadDevFinalSubmission({
+            await taskRatingFinalSubmission({
+                user_id: evaluationObject?.user_id,
                 confirm_submission: "lead_dev_submitted",
                 _token: document
                     .querySelector("meta[name='csrf-token']")
                     .getAttribute("content"),
             });
-            toast.success("Final submission status updated successfully!");
+            toast.success("Final Rating submission Successful!");
             setIsEvaluationModal(false);
         } catch (error) {
-            toast.error(
-                "Failed to update final submission status. Please try again later."
-            );
+            toast.error("Final submission failed. Please try again later.");
         }
     };
 
