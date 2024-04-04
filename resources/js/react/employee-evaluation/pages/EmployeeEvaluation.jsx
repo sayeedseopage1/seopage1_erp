@@ -124,9 +124,9 @@ const Tabs = (props) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const data = props.data;
 
-    useEffect(() => {
-        setSearchParams({ show: "pending" });
-    }, []);
+    // useEffect(() => {
+    //     setSearchParams({ show: "pending" });
+    // }, []);
 
     const handleRouteChange = (e, params) => {
         e.preventDefault();

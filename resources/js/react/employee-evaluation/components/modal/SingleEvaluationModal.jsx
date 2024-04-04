@@ -16,8 +16,8 @@ import Button from "../../../global/Button";
 import CKEditorComponent from "../../../ckeditor";
 
 import { useAuth } from "../../../hooks/useAuth";
-import { useUpdateSingleTaskMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
-useUpdateSingleTaskMutation;
+// import { useUpdateSingleTaskMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
+// useUpdateSingleTaskMutation;
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
@@ -26,27 +26,23 @@ const SingleEvaluationModal = ({
 }) => {
     const auth = useAuth();
 
-    const [updateTask] = useUpdateSingleTaskMutation();
-    const [averageRating, setAverageRating] = useState(data.averageRating);
+    // const [updateTask] = useUpdateSingleTaskMutation();
+    const [averageRating, setAverageRating] = useState(data.avg_rating);
     const [formData, setFormData] = useState({
-        averageRating: data?.averageRating ?? 0,
+        averageRating: data.avg_rating ?? 0,
         rating: {
-            work_quality_first_chance_rating:
-                data.rating?.work_quality_first_chance_rating ?? 0,
-            work_quality_first_revision_rating:
-                data.rating?.work_quality_first_chance_rating ?? 0,
-            work_quality_second_revision_rating:
-                data.rating?.work_quality_second_revision_rating ?? 0,
-            work_speed_rating: data.rating.work_speed_rating ?? 0,
+            work_quality_first_chance_rating: data.qw_first_chance ?? 0,
+            work_quality_first_revision_rating: data.qw_first_revision ?? 0,
+            work_quality_second_revision_rating: data.qw_second_revision ?? 0,
+            work_speed_rating: data.speed_of_work ?? 0,
             instruction_understanding_ability_rating:
-                data.rating.instruction_understanding_ability_rating ?? 0,
-            communication_rating: data.rating.communication_rating ?? 0,
-            professionalism_rating: data.rating.professionalism_rating ?? 0,
-            issues_identifications_ability_rating:
-                data.rating.issues_identifications_ability_rating ?? 0,
-            dedication_rating: data.rating.dedication_rating ?? 0,
-            obedience_rating: data.rating.obedience_rating ?? 0,
-            reporting_boss_comment: data.rating.reporting_boss_comment ?? "",
+                data.understand_instruction ?? 0,
+            communication_rating: data.communication ?? 0,
+            professionalism_rating: data.professionalism ?? 0,
+            issues_identifications_ability_rating: data.identiey_issues ?? 0,
+            dedication_rating: data.dedication ?? 0,
+            obedience_rating: data.obedience ?? 0,
+            reporting_boss_comment: data.lead_dev_cmnt ?? "",
         },
     });
 
@@ -246,16 +242,16 @@ const SingleEvaluationModal = ({
             fd.append(`rating[${key}]`, value);
         });
 
-        const response = await updateTask({ taskId: data._id, data: fd })
-            .unwrap()
-            .then((response) => {
-                toast.success("Rating submitted");
-                toggleSingleEvaluationModal();
-            })
-            .catch((error) => {
-                console.error("Error submitting rating:", error);
-                toast.error("Rating not submitted");
-            });
+        // const response = await updateTask({ taskId: data._id, data: fd })
+        //     .unwrap()
+        //     .then((response) => {
+        //         toast.success("Rating submitted");
+        //         toggleSingleEvaluationModal();
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error submitting rating:", error);
+        //         toast.error("Rating not submitted");
+        //     });
     };
 
     return (

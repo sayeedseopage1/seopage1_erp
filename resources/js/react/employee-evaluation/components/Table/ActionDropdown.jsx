@@ -4,8 +4,13 @@ import { IoIosSend } from "react-icons/io";
 import ButtonStyles from "./ActionButton.module.css";
 import SingleEvaluationModal from "../modal/SingleEvaluationModal";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+const ActionDropdown = ({ data }) => {
+    const employeeWiseTableData = useSelector(
+        (state) => state.employeeWiseDataTable.data
+    );
 
-const ActionDropdown = ({ data, table }) => {
+    console.log("employee wise table", employeeWiseTableData);
     const auth = useAuth();
     const [isSingleEvaluationModalOpen, setSingleEvaluationModalOpen] =
         useState(false);
@@ -18,10 +23,10 @@ const ActionDropdown = ({ data, table }) => {
                 {auth.roleId === 6 && (
                     <button
                         className={ButtonStyles.sendContainer}
-                        disabled={data.finalSubmissionStatus}
+                        disabled={data?.avg_rating}
                     >
-                        {data?.evaluationStatus === "completed" ? (
-                            <h4>{data?.averageRating}</h4>
+                        {data?.avg_rating ? (
+                            <h4>{data?.avg_rating}</h4>
                         ) : (
                             <div>
                                 <IoIosSend
@@ -42,8 +47,8 @@ const ActionDropdown = ({ data, table }) => {
 
                 {(auth.roleId === 8 || auth.roleId === 1) && (
                     <button className={ButtonStyles.sendContainer}>
-                        {data?.evaluationStatus === "completed" ? (
-                            <h4>{data?.averageRating}</h4>
+                        {data?.avg_rating ? (
+                            <h4>{data?.avg_rating}</h4>
                         ) : (
                             <div>
                                 <IoIosSend

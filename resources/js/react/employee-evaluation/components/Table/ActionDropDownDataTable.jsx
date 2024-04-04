@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-
+import { useLocation } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import Button from "../Button";
 import EvaluationModal from "../modal/EvaluationModal";
 import Switch from "../../../global/Switch";
 import { Tooltip } from "react-tooltip";
+import { useDispatch } from "react-redux";
+import { setEvaluationWiseTableData } from "../../../services/features/employeeEvaluation.";
+
 const ActionDropdownDataTable = ({ data, table }) => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const userId = queryParams.get("userId");
+    const dispatch = useDispatch();
     const auth = useAuth();
     const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
     const [toolTipTeamLead, setToolTipTeamLead] = React.useState("");
@@ -13,6 +20,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
     const [buttonVariant, setButtonVariant] = React.useState("");
     const handleEvaluationClick = () => {
         setIsEvaluationModal((prev) => !prev);
+        dispatch(setEvaluationWiseTableData(data));
     };
     React.useEffect(() => {
         if (data?.lead_dev_avg_rating === null) {
@@ -24,14 +32,12 @@ const ActionDropdownDataTable = ({ data, table }) => {
 
     React.useEffect(() => {
         if (data?.team_lead_cmnt === null) {
-            setToolTipAdmin(
-                // `Currently being Reviewed by ${data?.teamLeadName}`
-                `Currently being Reviewed by Sayeed Ullah`
-            );
+            setToolTipAdmin(`Currently being Reviewed by Sayeed Ullah`);
         }
         if (data?.lead_dev_avg_rating === null) {
-            // setToolTipAdmin(`Currently being evaluated by ${data?.leadName}`);
-            setToolTipAdmin(`Currently being evaluated by Hasnain Islam`);
+            setToolTipAdmin(
+                `Currently being evaluated by ${data?.added_by_name}`
+            );
         }
     }, [data]);
 
