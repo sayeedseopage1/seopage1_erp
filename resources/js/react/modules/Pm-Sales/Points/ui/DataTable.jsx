@@ -95,6 +95,8 @@ const DataTable = ({ data, defaultColumns, isLoading }) => {
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
         .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
 
+    console.log(currentPageData)
+
     return (
         <div style={{ maxWidth: '100%' }}>
             <div className='cnx__table_wrapper'>

@@ -41,9 +41,7 @@ const PmCashPoints = () => {
     //         });
     //         setTotalPointData(updatePointData); // Update the cumulative total points state
     //     }
-    // }, [data]);
-
-    console.log("data", data)
+    // }, [data]);)
 
     return (
         <div className='sp1_point_page'>
@@ -57,7 +55,7 @@ const PmCashPoints = () => {
                 <main className='sp1_point_page_main'>
                     <div className="" style={{ padding: '16px' }}>
                         <DataTable
-                            data={[...data]}
+                            data={data}
                             isLoading={loading || isDataFetching}
                             defaultColumns={TableColumns}
                         />
