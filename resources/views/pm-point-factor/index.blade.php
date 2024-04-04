@@ -4,7 +4,7 @@
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
         <!-- Task Box Start -->
-        <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
+        <div class="d-flex flex-column rounded mt-3">
             <div id="projectMangerCriteriaContainer"></div>
         </div>
         <!-- Task Box End -->

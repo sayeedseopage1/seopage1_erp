@@ -17494,7 +17494,6 @@ var StartTimerConfirmationModal = function StartTimerConfirmationModal(_ref) {
     var timeIntervelId = setInterval(function () {
       setCountDown(count--);
     }, 1000);
-    console.log("time", count);
     var timeOutId = setTimeout(function () {
       setButtonVisible(true);
       clearInterval(timeIntervelId);
