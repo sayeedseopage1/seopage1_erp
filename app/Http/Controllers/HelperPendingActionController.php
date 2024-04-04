@@ -1851,15 +1851,17 @@ class HelperPendingActionController extends AccountBaseController
             $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
             $task = Task::where('id',$evaluation_task->task_id)->first();
             $authorizers= User::where('role_id',8)->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
             foreach ($authorizers as $key => $authorizer) {
                 $action = new PendingAction();
                 $action->code = 'LDSEND';
                 $action->serial = 'LDSEND'.'x'.$key;
                 $action->item_name= 'New developer\'s evaluation!';
-                $action->heading= 'Lead Dedeloper <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'</a> has submitted evaluation for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
-                $action->message = 'Fill out initial performance evaluation from for the dedeloper <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a>!';
+                $action->heading= 'Lead Dedeloper '.$lead_dev->name.' has submitted evaluations for New Developer '.$new_dev->name.'!';
+                $action->message = 'Lead Dedeloper <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> on '.$formatted_date_time.'';
                 $action->timeframe= 24;
-                $action->client_id = $task->id;
+                $action->client_id = $task->client_id;
                $action->task_id = $task->id;
                $action->developer_id = $new_dev->id;
                 $action->authorization_for= $authorizer->id;

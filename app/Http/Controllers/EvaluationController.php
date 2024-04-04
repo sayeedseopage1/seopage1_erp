@@ -218,7 +218,7 @@ class EvaluationController extends AccountBaseController
                 $past_action->code = $action->code;
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
-                $past_action->heading= 'New dedeloper <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> evaluations were successfully submitted!';
+                $past_action->heading= 'New dedeloper '.$dev->name.' evaluations were successfully submitted!';
                 $past_action->message = 'Lead dedeloper <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has evaluated New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a>!';
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
