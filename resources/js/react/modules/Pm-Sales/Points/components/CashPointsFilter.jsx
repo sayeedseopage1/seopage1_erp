@@ -8,7 +8,6 @@ import DepartmentFilter from './DepartmentFilter';
 import _ from 'lodash';
 import ShiftFilterOption from './ShiftFilterOption.jsx';
 import EmployeeFilterOptions from './EmployeeFilterOptions';
-// import { usePointTableDataMutation } from '../../services/api/PointTableDataApiSlice';
 import Button from '../../../../Insights/ui/Button.jsx';
 
 import UserFilter from './UserFilter';
@@ -16,7 +15,6 @@ import TypeFilter from './TypeFilter';
 
 import { useUsers } from '../../../../hooks/useUsers.jsx';
 import { useAuth } from '../../../../hooks/useAuth.jsx';
-import { usePointTableDataMutation } from '../../../../services/api/PointTableDataApiSlice.js';
 import { useGetPmCashPointsQuery } from '../../../../services/api/pmSalesApiSlice.js';
 
 export default function CashPointsFilter({
@@ -70,15 +68,8 @@ export default function CashPointsFilter({
     }, [data, isFetching])
 
     // table data
-    // TODO:
-    // const [
-    //     pointTableData,
-    //     {
-    //         data: tableData,
-    //         isLoading: dataFetchingStateIsLoading
-    //     }
-    // ] = usePointTableDataMutation();
-    const { data: tableData, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery()
+    const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery()
+    const tableData = pmCashPoints?.data
 
     console.log(tableData)
 
@@ -353,9 +344,9 @@ export default function CashPointsFilter({
                 />
             </FilterItem>
 
-
+            {/* TODO:  */}
             {
-                Number(window?.Laravel?.user?.role_id) === 1 ? (
+                Number(window?.Laravel?.user?.role_id) !== 1 ? (
                     <>
                         <FilterItem className='hide'>
                             <DepartmentFilter

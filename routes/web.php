@@ -204,6 +204,7 @@ use App\Http\Controllers\PmPointFactorController;
 use App\Http\Controllers\PmPointFactorViewController;
 use App\Http\Controllers\PointIncentive\CriteriaController;
 use App\Http\Controllers\PointIncentive\GetCriteriaWiseFactorController;
+use App\Http\Controllers\PointIncentive\GetPmCashPointController;
 use App\Http\Controllers\PointIncentive\GetPmPointCriteriaController;
 use App\Http\Controllers\ProjectManagerPointController;
 use App\Http\Controllers\ProjectStatusController;
@@ -1549,6 +1550,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('project-manager-points', [ProjectManagerPointController::class, 'index'])->name('project.manager.points');
     Route::get('get-criteria-wise-factor/{id}', GetCriteriaWiseFactorController::class)->name('get.criteria.wise.factor');
     Route::resource('pm-point-criteria', CriteriaController::class)->only(['index']);
+    Route::get('get-pm-cashpoint', GetPmCashPointController::class)->name('get.pm.cashpoint');
 
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });

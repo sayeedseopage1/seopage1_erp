@@ -29,9 +29,9 @@ class ProjectManagerPointLogic
                 break;
             }
         }
-
-        if($earned_points==0) return false;
         
+        if($earned_points==0) return false;
+
         try {
             CashPoint::create([
                 'user_id' => $project->pm_id,

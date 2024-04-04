@@ -14,6 +14,8 @@ use App\Models\ProjectWebsiteType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+
 use function Google\Auth\Cache\get;
 use function Symfony\Component\HttpClient\Response\select;
 
@@ -24,7 +26,7 @@ class PortfolioController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Portfolio';
         $this->activeSettingMenu = 'portfolio';
-        
+
     }
     /**
      * Display a listing of the resource.
@@ -100,24 +102,24 @@ class PortfolioController extends AccountBaseController
             {
                 $project_time_logs_hours = ProjectTimeLog::where('project_id', $projectId)->sum('total_hours');
                 $project_time_logs_minutes = ProjectTimeLog::where('project_id', $projectId)->sum('total_minutes');
-                
+
                 $project_time_hours = intval($project_time_logs_minutes / 60);
                 $project_time_minutes = $project_time_logs_minutes % 60;
-                
+
                 $currentTime = Carbon::now();
-                
+
                 $totalMinutes = DB::table('project_time_logs')
                     ->where('project_id', $projectId)
                     ->whereNull('end_time')
                     ->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF('$currentTime', start_time)))/60 as total_minutes"))
                     ->value('total_minutes');
-                
+
                 $active_time_hours = intval(round($totalMinutes, 1) / 60);
                 $active_time_minutes = intval(round($totalMinutes, 1) % 60);
-                
+
                 $update_hours = $project_time_minutes + $active_time_minutes / 60;
                 $update_minutes = $project_time_minutes + $active_time_minutes % 60;
-                
+
                 if ($project_time_minutes + $active_time_minutes >= 60) {
                     $add_hours = intval(round(($project_time_minutes + $active_time_minutes) / 60, 1));
                     $add_minutes = ($project_time_minutes + $active_time_minutes) % 60;
@@ -125,11 +127,11 @@ class PortfolioController extends AccountBaseController
                     $add_hours = 0;
                     $add_minutes = $project_time_minutes + $active_time_minutes;
                 }
-                
-                $total_hours = intval(round($project_time_hours, 1)) + $active_time_hours + $add_hours + $add_minutes / 60; 
+
+                $total_hours = intval(round($project_time_hours, 1)) + $active_time_hours + $add_hours + $add_minutes / 60;
 
                 $total_minutes = $total_hours * 60 + $add_minutes;
-                
+
                 return [
                     'total_hours' => $total_hours,
                     'total_minutes' => $total_minutes
@@ -138,17 +140,17 @@ class PortfolioController extends AccountBaseController
 
 
     public function filterDataShow($portfolio_id)
-    { 
+    {
 
         $portfolio = DB::table('project_portfolios')
                     ->select(
-                        'project_portfolios.*', 
-                        'users.user_name as client_name', 
-                        'users.image as client_image', 
+                        'project_portfolios.*',
+                        'users.user_name as client_name',
+                        'users.image as client_image',
                         'users.id as client_id',
                         'projects.id as project_id',
-                        'projects.project_name', 
-                        'projects.project_budget', 
+                        'projects.project_name',
+                        'projects.project_budget',
                         'project_submissions.actual_link',
                         'projects.hours_allocated'
                     )
@@ -156,8 +158,8 @@ class PortfolioController extends AccountBaseController
                     ->leftJoin('projects', 'project_portfolios.project_id', '=', 'projects.id')
                     ->leftJoin('users', 'projects.client_id', '=', 'users.id')
                     ->leftJoin('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
-                    ->first(); 
-        
+                    ->first();
+
         if($portfolio->sub_niche){
             $portfolio->sub_niche = DB::table('project_niches')->where('id', $portfolio->sub_niche)->first();
         }
@@ -166,10 +168,9 @@ class PortfolioController extends AccountBaseController
             $portfolio->niche = DB::table('project_niches')->where('id', $portfolio->niche)->first();
         }
 
-        if($portfolio->theme_name && is_numeric($portfolio->theme_name)){
-            $theme_id = $portfolio->theme_name; 
-            $theme_data = ProjectWebsiteTheme::find($theme_id); 
-            $portfolio->theme_name = $theme_data? $theme_data->theme_name : null;   
+        if($portfolio->theme_id){
+            $theme_data = ProjectWebsiteTheme::find($portfolio->theme_id);
+            $portfolio->theme_name = $theme_data? $theme_data->theme_name : null;
         }
 
         $portfolio->estimated_total_minutes =  ($portfolio->hours_allocated) * 60;
@@ -181,7 +182,7 @@ class PortfolioController extends AccountBaseController
         $portfolio->hourly_budget = $total_hours > 0 ? round($portfolio->project_budget / $total_hours, 2) : 0;
 
         // Average hourly price based on the final logged hours
-         
+
         return response()->json($portfolio, 200);
     }
 
@@ -267,7 +268,7 @@ class PortfolioController extends AccountBaseController
             "website_categories" => $website_categories,
             "website_themes" => $website_themes,
             "website_plugins" => $website_plugins
-        ]; 
+        ];
 
         return Response()->json($data, 200);
     }
@@ -275,51 +276,101 @@ class PortfolioController extends AccountBaseController
 
     // get portfolio data
     public function get_portfolio_data(Request $request){
+
         $cms = $request->cms ?? null;
         $website_type = $request->website_type ?? null;
         $website_category = $request->website_category ?? null;
         $website_sub_category = $request->website_sub_category ?? null;
-        $theme_name = $request->theme_name ?? null;
         $theme_id = $request->theme_id ?? null;
-        $plugin_name = $request->plugin_name ?? null;
-        $plugin_id = $request->plugin_id ?? null; 
-        $page_size = $request->page_size ?? 10;
- 
-        
-        $data = DB::table('project_portfolios')
-            ->where('portfolio_link', '!=', null)
-            ->whereNotIn('portfolio_link',["n/a", "N/A","null", "na", "NA"])
-            ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_name, $theme_id, $plugin_name, $plugin_id) {
-                if ($cms) {
-                    $query->where('cms_category', $cms);
-                }
-        
-                if ($website_type) {
-                    $query->where('website_type', $website_type);
-                }
-        
-                if ($website_category) {
-                    $query->where('niche', $website_category);
-                }
-        
-                if ($website_sub_category) {
-                    $query->where('sub_niche', $website_sub_category);
-                }
-        
-                if ($theme_name) {
-                    $query->where('theme_name', $theme_name)
-                        ->orWhere('theme_name', $theme_id);
-                }
- 
-        
-                if ($plugin_name) {
-                    $query->where('plugin_name', $plugin_name)
-                        ->orWhere('plugin_name', $plugin_id);
-                }
- 
-            })->paginate($page_size);
-        
+        $plugin_id = $request->plugin_id ?? null;
+        $limit = $request->page_size ?? 30;
+
+        // $itemsPaginated = SalesRiskPolicy::where('parent_id', null)->offset($req->input('limit', 10) * $req->input('page', 1))->paginate($req->input('limit', 10));
+        $rawData1 = DB::table('project_portfolios as pp')
+        ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
+        ->select('pp.*')
+        ->where('pp.portfolio_link', '!=', null)
+        ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
+        ->where('ps.status', 'accepted')
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+            if ($cms) {
+                $query->where('pp.cms_category', $cms);
+            }
+
+            if ($website_type) {
+                $query->where('pp.website_type', $website_type);
+            }
+
+            if ($website_category) {
+                $query->where('pp.niche', $website_category);
+            }
+
+            if ($website_sub_category) {
+                $query->where('pp.sub_niche', $website_sub_category);
+            }
+
+            if ($theme_id) {
+                $query->where('pp.theme_id', $theme_id);
+            }
+
+            if ($plugin_id) {
+                $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
+            }
+
+        })
+        ->distinct();
+
+        $rawData2 = DB::table('project_portfolios as pp')
+        ->leftJoin('project_submissions as ps', 'ps.project_id', '=', 'pp.project_id')
+        ->select('pp.*')
+        ->where('pp.portfolio_link', '!=', null)
+        ->whereNotIn('pp.portfolio_link',["n/a", "N/A", "na", "NA"])
+        ->where('ps.status', 'accepted')
+        ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_id, $plugin_id) {
+            if ($cms) {
+                $query->where('pp.cms_category', $cms);
+            }
+
+            if ($website_type) {
+                $query->where('pp.website_type', $website_type);
+            }
+
+            if ($website_category) {
+                $query->where('pp.niche', $website_category);
+            }
+
+            if ($website_sub_category) {
+                $query->where('pp.sub_niche', $website_sub_category);
+            }
+
+            if ($theme_id) {
+                $query->where('pp.theme_id', $theme_id);
+            }
+
+            if ($plugin_id) {
+                $query->whereJsonContains('pp.plugin_list', [$plugin_id]);
+            }
+
+        })
+        ->distinct();
+
+        $totalRow = $rawData1->get()->count();
+        $itemsPaginated = $rawData1->paginate($limit);
+        $itemsTransformed = $rawData2->limit($limit)->offset($limit * ($request->input('page',1) -1))->get()->toArray();
+
+        $data = new \Illuminate\Pagination\LengthAwarePaginator(
+            $itemsTransformed,
+            $totalRow,
+            $itemsPaginated->perPage(),
+            $itemsPaginated->currentPage(),
+            [
+                'path' => FacadesRequest::url(),
+                'query' => [
+                    'page' => $itemsPaginated->currentPage()
+                ]
+            ]
+        );
+
         return response()->json($data, 200);
     }
 }
-    
