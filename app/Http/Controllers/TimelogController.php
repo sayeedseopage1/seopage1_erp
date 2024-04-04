@@ -762,6 +762,11 @@ class TimelogController extends AccountBaseController
                 if(Auth::user()->role_id == 14){
                     $user = Auth::user();
                     $evaluation = EmployeeEvaluation::where('user_id',$user->id)->first();
+                    if($evaluation->start_date == null){
+                        $evaluation->start_date = $timeLog->start_time;
+                        $evaluation->exp_date = Carbon::parse($timeLog->start_time)->addDays(7);
+                        $evaluation->save();
+                    }
                     return response()->json([
                         'status' => 'success',
                         'message' => 'task timer started',
