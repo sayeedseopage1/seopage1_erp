@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 
@@ -29,6 +29,7 @@ import { PolicyTypeItems } from "../../constant";
 
 // Sections Components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
+import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 
 const EditPolicyModal = ({
     open,
@@ -51,7 +52,7 @@ const EditPolicyModal = ({
         setIsRuleUpdating,
         handlePolicyEditChange,
     } = editPolicyAction;
-
+    const { policyKeys } = useContext(SalesRiskAnalysisContext);
     const { departments } = useSelector((state) => state.filterOptions);
     let allSelectedCountries = [];
 
@@ -111,6 +112,27 @@ const EditPolicyModal = ({
                             {editPolicyDataValidation?.department && (
                                 <p className="text-danger">
                                     Department is required
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Policy Key<sup>*</sup>
+                        </ModalInputLabel>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    filedName="key"
+                                    data={policyKeys}
+                                    selected={editPolicyDefaultData?.key}
+                                    setSelected={handlePolicyEditChange}
+                                    isDisableUse={false}
+                                />
+                            </ModalSelectContainer>
+                            {editPolicyDataValidation?.key && (
+                                <p className="text-danger">
+                                    Policy key is required
                                 </p>
                             )}
                         </div>

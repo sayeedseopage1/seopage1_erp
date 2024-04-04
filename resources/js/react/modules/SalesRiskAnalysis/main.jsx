@@ -133,7 +133,7 @@ if (containerSalePolicyQuestionNotice) {
                     <Routes>
                         <Route path="/" element={<Content />}>
                             <Route
-                                path="account/deals/risk-analysis/:deal_id"
+                                path="account/deals/risk-analysis/:deal_id" 
                                 element={<SaleSRiskQuestionNotice />}
                             />
                         </Route>

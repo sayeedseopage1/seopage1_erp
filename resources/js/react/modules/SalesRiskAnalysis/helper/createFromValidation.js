@@ -43,7 +43,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         value: inputsData.value,
         points: inputsData.points,
         policyName: inputsData.policyName,
-        department: inputsData.department
+        department: inputsData.department,
+        key: inputsData.key
       }
       const lessThenValidation = getValidFields(lessThenFields, newPolicyDataValidation);
      
@@ -55,7 +56,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         value: inputsData.value,
         points: inputsData.points,
         policyName: inputsData.policyName,
-        department: inputsData.department
+        department: inputsData.department,
+        key: inputsData.key
       }
       const greaterThenValidation = getValidFields(greaterThenFields, newPolicyDataValidation);
       return greaterThenValidation;
@@ -66,7 +68,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         value: inputsData.value,
         points: inputsData.points,
         policyName: inputsData.policyName,
-        department: inputsData.department
+        department: inputsData.department,
+        key: inputsData.key
       }
       // const fixedFieldsValidation = markEmptyFieldsValidation(fixedFields);
       // const prevFixedNewPolicyDataValidation = { ...newPolicyDataValidation };
@@ -86,7 +89,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         to: inputsData.to,
         points: inputsData.points,
         policyName: inputsData.policyName,
-        department: inputsData.department
+        department: inputsData.department,
+        key: inputsData.key
       }
       const rangeFieldsValidation = getValidFields(rangeFields, newPolicyDataValidation);
       return rangeFieldsValidation;
@@ -96,7 +100,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         yes: inputsData.yes,
         no: inputsData.no,
         policyName: inputsData.policyName,
-        department: inputsData.department
+        department: inputsData.department,
+        key: inputsData.key
       }
       const yesNoFieldsValidation = getValidFields(yesNoFields, newPolicyDataValidation);
       return yesNoFieldsValidation;
@@ -107,7 +112,8 @@ export const addNewRulesValidation = (inputsData, newPolicyDataValidation) => {
         countries: inputsData.countries,
         points: inputsData.points,
         policyName: inputsData.policyName,
-        department: inputsData.department
+        department: inputsData.department,
+        key: inputsData.key
       }
       const listFieldsValidation = getValidFields(listFields, newPolicyDataValidation);
       return listFieldsValidation;

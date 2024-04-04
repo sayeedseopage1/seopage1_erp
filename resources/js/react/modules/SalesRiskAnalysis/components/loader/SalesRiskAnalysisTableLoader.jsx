@@ -17,6 +17,11 @@ export default function SalesRiskAnalysisTableLoader({prevItemLength = 5,tableCo
                     </div>
                 </td> 
                 <td className="sp1_tasks_td">
+                    <div className="d-flex justify-content-center align-items-center">
+                     <Placeholder width="80px" height="13px" className="mb-1"/>
+                    </div>
+                </td> 
+                <td className="sp1_tasks_td">
                     <div className="d-flex justify-content-center flex-column align-items-center">
                         <Placeholder width="80px" height="13px" className="my-3"/>
                         <Placeholder width="80px" height="13px" className="my-3"/>

@@ -106,7 +106,7 @@ export const NewRulesModalTableColumnsData = [
                                     }}
                                     className="d-flex"
                                 >
-                                    No{' '}
+                                    No{" "}
                                     <span className="ml-2">
                                         {data?.noComment ? (
                                             <>
@@ -319,7 +319,6 @@ export const NewRulesModalTableColumnsData = [
         cell: ({ row, table }) => {
             const data = row?.original;
             const action = table.options.meta;
-            
             return (
                 <div className="d-flex justify-content-end flex-column align-items-end">
                     <Switch>
@@ -333,13 +332,19 @@ export const NewRulesModalTableColumnsData = [
                                 <p>{data?.points}</p>
                                 <div
                                     onClick={() => {
-                                        action.editSingleRules(data);
+                                        action.editSingleRules({
+                                            ...data,
+                                            index: row?.index,
+                                        });
                                     }}
                                     className=" d-flex"
                                     role="button"
                                     tabIndex={0}
                                     onKeyDown={() => {
-                                        action.editSingleRules(data);
+                                        action.editSingleRules({
+                                            ...data,
+                                            index: row?.index,
+                                        });
                                     }}
                                 >
                                     <EditIcon />

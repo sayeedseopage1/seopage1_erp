@@ -63,6 +63,8 @@ const AddNewPolicyModal = ({
         }
     });
 
+    console.log("newPolicyData", newPolicyData);
+
     return (
         <CustomModal
             open={open}
@@ -118,7 +120,27 @@ const AddNewPolicyModal = ({
                             )}
                         </div>
                     </div>
-
+                    <div className="row mb-4 align-items-center">
+                        <ModalInputLabel className="col-4">
+                            Policy Key<sup>*</sup>
+                        </ModalInputLabel>
+                        <div className="col-8 px-0 flex-column">
+                            <ModalSelectContainer>
+                                <CustomDropDown
+                                    filedName="key"
+                                    data={policyKeys}
+                                    selected={newPolicyData?.key}
+                                    setSelected={handleChange}
+                                    isDisableUse={false}
+                                />
+                            </ModalSelectContainer>
+                            {newPolicyDataValidation?.key && (
+                                <p className="text-danger">
+                                    Policy key is required
+                                </p>
+                            )}
+                        </div>
+                    </div>
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Policy Comment
@@ -132,11 +154,6 @@ const AddNewPolicyModal = ({
                                 onChange={handleChange}
                                 placeholder="Write Here"
                             />
-                            {newPolicyDataValidation?.policyName && (
-                                <p className="text-danger">
-                                    Policy name is required
-                                </p>
-                            )}
                         </div>
                     </div>
                     {newPolicyInputData?.length > 0 ? (
@@ -159,27 +176,7 @@ const AddNewPolicyModal = ({
                     ) : (
                         ""
                     )}
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Policy Key<sup>*</sup>
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="key"
-                                    data={policyKeys}
-                                    selected={newPolicyData?.key}
-                                    setSelected={handleChange}
-                                    isDisableUse={false}
-                                />
-                            </ModalSelectContainer>
-                            {newPolicyDataValidation?.key && (
-                                <p className="text-danger">
-                                    Policy key is required
-                                </p>
-                            )}
-                        </div>
-                    </div>
+
                     <div className="row mb-4 align-items-center">
                         <ModalInputLabel className="col-4">
                             Policy Type<sup>*</sup>{" "}
@@ -205,6 +202,7 @@ const AddNewPolicyModal = ({
                     <NewPolicyModalInputsContainer
                         newPolicyData={newPolicyData}
                         handleChange={handleChange}
+                        allPolicyData={newPolicyInputData}
                         selectedCountries={allSelectedCountries.flat()}
                         handleMultiSelectChange={setNewPolicyData}
                         newPolicyDataValidation={newPolicyDataValidation}

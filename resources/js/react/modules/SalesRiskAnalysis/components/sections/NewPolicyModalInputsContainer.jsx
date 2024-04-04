@@ -21,6 +21,7 @@ const NewPolicyModalInputsContainer = ({
     selectedCountries,
     handleMultiSelectChange,
     newPolicyDataValidation,
+    allPolicyData,
 }) => {
     const { countries } = useSelector((state) => state?.filterOptions);
 
@@ -124,7 +125,13 @@ const NewPolicyModalInputsContainer = ({
                                             selected={newPolicyData?.valueType}
                                             setSelected={handleChange}
                                             filedName="valueType"
-                                            isDisableUse={false}
+                                            isDisableUse={
+                                                allPolicyData?.length > 0
+                                                    ? newPolicyData?.index === 0
+                                                        ? false
+                                                        : true
+                                                    : false
+                                            }
                                         />
                                     </ModalSelectContainer>
                                     {newPolicyDataValidation?.valueType && (
@@ -399,7 +406,7 @@ const NewPolicyModalInputsContainer = ({
                                         selected={newPolicyData?.valueType}
                                         setSelected={handleChange}
                                         filedName="valueType"
-                                        isDisableUse={true}
+                                        isDisableUse={false}
                                     />
                                 </ModalSelectContainer>
                                 {newPolicyDataValidation?.valueType && (

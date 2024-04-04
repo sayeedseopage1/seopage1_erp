@@ -153,6 +153,7 @@ export const formatEditPolicyDataPayload = (editPolicyDefaultData, editPolicyInp
     id: editPolicyDefaultData?.id,
     title: editPolicyDefaultData?.policyName,
     department: editPolicyDefaultData?.department?.id,
+    key: editPolicyDefaultData?.key?.name,
     comment: editPolicyDefaultData?.comment,
     deletedRuleIds: editPolicyDeleteData,
     ruleList: editPolicyInputData.map((item) => {
@@ -192,7 +193,7 @@ export const formatEditPolicyDataPayload = (editPolicyDefaultData, editPolicyInp
 }
 
 
-export const formatSingleRuleData = (row, selectedRule) => {
+export const formatSingleRuleData = (row, selectedRule, policyKeys) => {
   const valueTypeConst =
     PolicyTypeItemValuesType?.data?.regularTypes?.data;
 
@@ -216,6 +217,7 @@ export const formatSingleRuleData = (row, selectedRule) => {
     policyName: row.title,
     policyId: row.id,
     department: row.department,
+    key: policyKeys?.data.find(item => item.name === row.key),
     policyType: PolicyTypeItems.data.find(
       (item) => item?.name === selectedRule?.type
     ),

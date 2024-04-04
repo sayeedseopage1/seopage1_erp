@@ -5,6 +5,8 @@ import Tooltip from "../Tooltip";
 import EditIcon from "../ui/EditIcon";
 import { SalesPointsContainer } from "../ui/Styles/ui";
 import "../Styles/salesRiskAnalysisTableColumns.css";
+import { useContext } from "react";
+import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 
 export const SalesRiskAnalysisTableColumns = [
     {
@@ -149,6 +151,31 @@ export const SalesRiskAnalysisTableColumns = [
                         }}
                     >
                         {data?.department?.name}
+                    </span>
+                </div>
+            );
+        },
+    },
+    {
+        id: "policy_key",
+        header: "Policy Key",
+        accessorKey: "policy_key",
+        cell: ({ row }) => {
+            const { policyKeys } = useContext(SalesRiskAnalysisContext);
+            const data = row?.original;
+            const policyKey = policyKeys?.data?.find(
+                (key) => key.name === data?.key
+            );
+            return (
+                <div className="d-flex justify-content-center align-items-center">
+                    <span
+                        style={{
+                            color: "#8F8F8F",
+                            fontSize: "14px",
+                            fontFamily: "Poppins",
+                        }}
+                    >
+                        {policyKey?.label}
                     </span>
                 </div>
             );

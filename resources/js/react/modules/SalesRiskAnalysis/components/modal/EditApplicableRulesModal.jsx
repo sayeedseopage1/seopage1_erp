@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
 // ui components
@@ -13,8 +13,6 @@ import {
     ModalSelectContainer,
     ModalTitle,
 } from "../ui/Styles/ui";
-
-
 
 // global styled components
 import { Flex } from "../../../../global/styled-component/Flex";
@@ -31,6 +29,9 @@ import { formatSingleRuleData } from "../../helper/formatEditPolicyData";
 // sections components
 import NewPolicyModalInputsContainer from "../sections/NewPolicyModalInputsContainer";
 
+// context
+import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
+
 const EditApplicableRulesModal = ({
     open,
     closeModal,
@@ -43,6 +44,7 @@ const EditApplicableRulesModal = ({
     editRuleDataValidation,
     ...props
 }) => {
+    const { policyKeys } = useContext(SalesRiskAnalysisContext);
     const { data: singlePolicyData, isLoading: isLoadingSinglePolicyData } =
         useGetSinglePolicySalesRiskAnalysisQuery(editRuleData?.policyId, {
             skip: !editRuleData?.policyId,
@@ -56,11 +58,14 @@ const EditApplicableRulesModal = ({
                 (item) => item.id === editRuleData?.id
             );
             setEditRuleData(
-                formatSingleRuleData(singlePolicyData?.data[0], getSingleRule)
+                formatSingleRuleData(
+                    singlePolicyData?.data[0],
+                    getSingleRule,
+                    policyKeys
+                )
             );
         }
     }, [singlePolicyData]);
-
     return (
         <CustomModal
             closeModal={closeModal}
@@ -90,6 +95,14 @@ const EditApplicableRulesModal = ({
                         </ModalInputLabel>
                         <ModalInputLabel className="col-7" color="#8F8F8F">
                             {editRuleData?.department?.name}
+                        </ModalInputLabel>
+                    </div>
+                    <div className="row mb-4">
+                        <ModalInputLabel className="col-5" color="#8F8F8F">
+                            Policy Key{" "}
+                        </ModalInputLabel>
+                        <ModalInputLabel className="col-7" color="#8F8F8F">
+                            {editRuleData?.key?.label}
                         </ModalInputLabel>
                     </div>
 

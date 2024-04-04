@@ -12,7 +12,7 @@ const CustomDropDown = ({
     sidebarItem = false,
     className,
     filedName,
-    isDisableUse
+    isDisableUse,
 }) => {
     // set selected value from data (because this dropdown reused in multiple places with different data)
     const _Options = data?.data;
@@ -33,6 +33,7 @@ const CustomDropDown = ({
                             ? "sp1__pp_filter_dd_toggle py-2 px-2 border w-100"
                             : "sp1__pp_filter_dd_toggle w-100 mw-100 cnx_dropdown__dd__toggle"
                     }
+                    disabled={isDisableUse}
                 >
                     <Tooltip text={startCase} key="select-department-sal-risk">
                         <span
@@ -42,7 +43,10 @@ const CustomDropDown = ({
                         >
                             {selected?.label ? (
                                 <span>
-                                    {startCase?.replace(/\b(Yes No)\b/g, "Yes/No")}
+                                    {startCase?.replace(
+                                        /\b(Yes No)\b/g,
+                                        "Yes/No"
+                                    )}
                                 </span>
                             ) : (
                                 data?.emptyOptionsLabel
@@ -50,7 +54,7 @@ const CustomDropDown = ({
                         </span>
                     </Tooltip>
                 </Dropdown.Toggle>
-                <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`} >
+                <Dropdown.Menu id={`cnx_dropdown__menu_open--${data?.id}`}>
                     <div className="sp1_filter--users">
                         {_Options?.map((item) => (
                             <Dropdown.Item
@@ -88,5 +92,5 @@ CustomDropDown.propTypes = {
     setSelected: PropTypes.func,
     sidebarItem: PropTypes.bool,
     className: PropTypes.string,
-    filedName: PropTypes.string
+    filedName: PropTypes.string,
 };

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useContext } from "react";
 
 import {
     useReactTable,
@@ -48,6 +48,7 @@ import {
 import { addNewRulesValidation } from "../../helper/createFromValidation";
 import { FormatJsonCountry, getYesNoValue } from "../../helper/countriesFormat";
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
+import { SalesRiskAnalysisContext } from "../../context/SalesRiskAnalysisProvider";
 
 const SalesRiskAnalysisTable = ({
     isLoading,
@@ -59,6 +60,11 @@ const SalesRiskAnalysisTable = ({
     onPageChange,
     refetch,
 }) => {
+    // context (for Policy key Add )
+    const { isSalesRiskInputsLoading, policyKeys } = useContext(
+        SalesRiskAnalysisContext
+    );
+
     // Table State
     const [sorting, setSorting] = React.useState([]);
     const [expanded, setExpanded] = React.useState({});
@@ -213,7 +219,11 @@ const SalesRiskAnalysisTable = ({
         getSortedRowModel: getSortedRowModel(),
         meta: {
             handleEditApplicableRule: (row, selectedRule) => {
-                const payload = formatSingleRuleData(row, selectedRule);
+                const payload = formatSingleRuleData(
+                    row,
+                    selectedRule,
+                    policyKeys
+                );
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -236,10 +246,8 @@ const SalesRiskAnalysisTable = ({
                 setRuleActionModalOpen(true);
             },
             handleEditPolicy: (data) => {
-                console.log("data", data);
                 // function to format data
                 const updateData = formatEditPolicyData(data);
-                console.log("updateData", updateData);
                 setEditPolicyInputData(updateData);
                 setEditPolicyDefaultData({
                     policyName: data.title,
@@ -249,11 +257,13 @@ const SalesRiskAnalysisTable = ({
                     },
                     comment: data.comment,
                     id: data.id,
+                    key: policyKeys?.data?.find(
+                        (item) => item.name === data.key
+                    ),
                 });
                 setEditPolicyModalOpen(true);
             },
             handleEditCountryList: (data, selectedRule) => {
-             
                 const payload = formatEditRuleData(data, selectedRule);
                 setEditRuleData(payload);
                 setEditCountryListModalOpen(true);
@@ -380,7 +390,8 @@ const SalesRiskAnalysisTable = ({
         if (
             name === "policyName" ||
             name === "department" ||
-            name === "comment"
+            name === "comment" ||
+            name === "key"
         ) {
             setEditPolicyDefaultData({
                 ...editPolicyDefaultData,
@@ -440,6 +451,7 @@ const SalesRiskAnalysisTable = ({
                 ...editPolicyData,
                 policyName: editPolicyDefaultData?.policyName,
                 department: editPolicyDefaultData?.department,
+                key: editPolicyDefaultData?.key,
             },
             editPolicyDataValidation
         );
@@ -636,6 +648,7 @@ const SalesRiskAnalysisTable = ({
                     {/* table Body */}
                     <tbody className="sp1_tasks_tbody">
                         {!isLoading &&
+                            !isSalesRiskInputsLoading &&
                             table.getRowModel().rows.map((row) => {
                                 return (
                                     <tr
@@ -668,7 +681,7 @@ const SalesRiskAnalysisTable = ({
                                 );
                             })}
                         {/* Loading Table */}
-                        {isLoading && (
+                        {(isLoading || isSalesRiskInputsLoading) && (
                             <SalesRiskAnalysisTableLoader
                                 prevItemLength={data?.length}
                             />
@@ -676,9 +689,9 @@ const SalesRiskAnalysisTable = ({
                     </tbody>
                 </table>
                 {/* Table for empty */}
-                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                    <EmptyTable />
-                )}
+                {!isLoading &&
+                    !isSalesRiskInputsLoading &&
+                    _.size(table.getRowModel().rows) === 0 && <EmptyTable />}
             </div>
 
             {/* Modals */}

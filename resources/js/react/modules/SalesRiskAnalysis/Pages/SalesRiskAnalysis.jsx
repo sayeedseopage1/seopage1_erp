@@ -40,7 +40,7 @@ const SalesRiskAnalysis = () => {
         policyName: "",
         department: {},
         policyType: {},
-        key:{},
+        key: {},
         title: "",
         valueType: {},
         value: "",
@@ -105,7 +105,7 @@ const SalesRiskAnalysis = () => {
                 valueType: {},
                 value: "",
                 from: "",
-                key:{},
+                key: {},
                 to: "",
                 comment: "",
                 yesComment: "",
@@ -123,7 +123,7 @@ const SalesRiskAnalysis = () => {
                 policyType: {},
                 title: "",
                 valueType: {},
-                key:{},
+
                 value: "",
                 from: "",
                 to: "",
@@ -162,15 +162,19 @@ const SalesRiskAnalysis = () => {
         if (name === "department" || name === "policyName") {
             setNewPolicyData({ ...newPolicyData, [name]: value });
         } else if (name === "policyType") {
+            // add default value for valueType on policy type change when if have any rules data on the form
+            const getValueType =
+                newPolicyInputData?.length > 0
+                    ? newPolicyInputData[0]?.valueType
+                    : {};
             setNewPolicyData({
                 ...newPolicyData,
-                valueType: {},
+                valueType: getValueType,
                 value: "",
                 from: "",
                 to: "",
                 yes: "",
                 no: "",
-                key: {},
                 yesComment: "",
                 noComment: "",
                 ruleComment: "",
@@ -179,7 +183,11 @@ const SalesRiskAnalysis = () => {
                 [name]: value,
             });
         } else {
-            setNewPolicyData({ ...newPolicyData, [name]: value });
+          
+            setNewPolicyData({
+                ...newPolicyData,
+                [name]: value,
+            });
         }
     };
 
@@ -214,8 +222,18 @@ const SalesRiskAnalysis = () => {
                         ...newPolicyData,
                     };
                 }
-                return item;
+                if (newPolicyData.index === 0) {
+                    return {
+                        ...item,
+                        ...newPolicyData,
+                        valueType: newPolicyData.valueType,
+                    };
+                } else {
+                    return item;
+                }
             });
+
+
             setIsRuleUpdating(false);
             setNewPolicyInputData(updatedData);
         } else {
@@ -230,6 +248,7 @@ const SalesRiskAnalysis = () => {
         resetFormState();
     };
 
+
     // handle add new policy  with rules data to the server
     const handlePolicyAdded = async () => {
         if (newPolicyInputData?.length === 0) {
@@ -242,6 +261,7 @@ const SalesRiskAnalysis = () => {
                 title: newPolicyInputData[0]?.policyName,
                 department: newPolicyInputData[0]?.department?.id,
                 comment: newPolicyInputData[0]?.comment,
+                key: newPolicyInputData[0]?.key?.name,
                 ruleList: newPolicyInputData.map((item) => {
                     const rule = {
                         policyType: item.policyType?.name,
@@ -252,7 +272,7 @@ const SalesRiskAnalysis = () => {
                         rule.valueType = item.valueType.name;
                     if (item.from) rule.from = item.from;
                     if (item.to) rule.to = item.to;
-                    if(item.key) rule.key = item.key.name;
+
                     if (item.points) rule.points = item.points;
                     if (item.yes && item.no) {
                         rule.value = {
@@ -310,7 +330,6 @@ const SalesRiskAnalysis = () => {
             to: "",
             yes: "",
             no: "",
-            key:{},
             comment: "",
             yesComment: "",
             noComment: "",
@@ -375,7 +394,8 @@ const SalesRiskAnalysis = () => {
                         </button>
                         <button
                             onClick={() => {
-                                window.location.href = "/account/sales-risk-policies/question";
+                                window.location.href =
+                                    "/account/sales-risk-policies/question";
                             }}
                             className="btn btn-info ml-3"
                             style={{
@@ -385,7 +405,8 @@ const SalesRiskAnalysis = () => {
                             <i
                                 class="fa-solid fa-circle-question mr-2"
                                 aria-hidden="true"
-                            ></i>{" "} Questions List
+                            ></i>{" "}
+                            Questions List
                         </button>
                     </div>
                     <RefreshButton

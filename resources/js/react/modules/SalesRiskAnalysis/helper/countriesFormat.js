@@ -1,4 +1,5 @@
 export const FormatJsonCountry = (data) => {
+  console.log(data);
   let countriesList = [];
   const parsedValue = JSON.parse(data);
   if(!parsedValue?.length) return;

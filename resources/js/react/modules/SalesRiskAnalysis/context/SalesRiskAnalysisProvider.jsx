@@ -38,17 +38,14 @@ const SalesRiskAnalysisProvider = ({ children }) => {
 
     // fetch all countries
 
-    const { data: countriesData, isFetching: isCountriesFetching } =
-        useGetAllCountryOptionsQuery("", {
-            refetchOnMountOrArgChange: true,
-            skip: countries?.length,
-        });
-
-    const { data: salesRiskInputs, isFetching: isSalesRiskInputsFetching } =
-        useGetSalesRiskAnalysisInputsQuery("", {
-            refetchOnMountOrArgChange: true,
-            skip: policyKeys?.data?.length,
-        });
+    const {
+        data: salesRiskInputs,
+        isFetching: isSalesRiskInputsFetching,
+        isLoading: isSalesRiskInputsLoading,
+    } = useGetSalesRiskAnalysisInputsQuery("", {
+        refetchOnMountOrArgChange: true,
+        skip: policyKeys?.data?.length,
+    });
 
     // fetch question fields
     const { data: questionFieldsData, isLoading: isQuestionType } =
@@ -61,13 +58,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         if (filterOptions && !isFilterOptionsFetching) {
             dispatch(setFilterOptionsState(filterOptions));
         }
-    }, [countriesData, isFilterOptionsFetching]);
-
-    React.useEffect(() => {
-        if (countriesData && !isCountriesFetching) {
-            dispatch(setFilterCountriesState(countriesData?.data));
-        }
-    }, [countriesData, isCountriesFetching]);
+    }, [filterOptions, isFilterOptionsFetching]);
 
     // set policy keys
     React.useEffect(() => {
@@ -81,6 +72,7 @@ const SalesRiskAnalysisProvider = ({ children }) => {
                     label: value,
                 };
             });
+            dispatch(setFilterCountriesState(salesRiskInputs?.data?.countries));
             setPolicyKeys({
                 label: "Policy Keys",
                 emptyOptionsLabel: "Select Policy Key",
@@ -144,7 +136,13 @@ const SalesRiskAnalysisProvider = ({ children }) => {
     console.log("questionsAnswerType", policyKeys);
     return (
         <SalesRiskAnalysisContext.Provider
-            value={{ questionsAnswerType, policies, allQuestions, policyKeys }}
+            value={{
+                questionsAnswerType,
+                policies,
+                allQuestions,
+                policyKeys,
+                isSalesRiskInputsLoading,
+            }}
         >
             {children}
         </SalesRiskAnalysisContext.Provider>
