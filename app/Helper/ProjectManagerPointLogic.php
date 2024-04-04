@@ -18,7 +18,7 @@ class ProjectManagerPointLogic
         $factor_id = null;
 
         foreach ($criteria->factors as $factor) {
-            if(!$factor->status) return false;
+            if(!$factor->status) continue;
             if(eval("return \$factor->lower_limit $factor->lower_limit_condition \$comparable_value;") && eval("return \$factor->upper_limit $factor->upper_limit_condition \$comparable_value;"))
             {
                 $earned_points = $factor->getCalculatedPoints($projectId);
