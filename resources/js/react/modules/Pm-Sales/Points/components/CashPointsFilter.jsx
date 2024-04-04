@@ -71,11 +71,6 @@ export default function CashPointsFilter({
     const { data: pmCashPoints, isLoading: dataFetchingStateIsLoading } = useGetPmCashPointsQuery()
     const tableData = pmCashPoints?.data
 
-    console.log(tableData)
-
-
-
-
     // select shift
     React.useEffect(() => {
         if (!dept || isFetching) return;

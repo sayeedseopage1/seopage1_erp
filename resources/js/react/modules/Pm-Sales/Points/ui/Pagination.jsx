@@ -5,6 +5,8 @@ import Button from '../../../../Insights/ui/Button';
 
 const Pagination = ({ data, setCurrentPageData, numOfPerPageRow = 10, sortConfig, sortedData, currentPage = 1, setCurrentPage }) => {
 
+    console.log(data)
+
     const [renderButtons, setRenderButtons] = React.useState([]);
     const [totalPages, setTotalPages] = React.useState(1);
 

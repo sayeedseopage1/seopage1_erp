@@ -10,10 +10,7 @@ import { Icon } from '../../../../Insights/utils/Icon';
 const DataTableContext = React.createContext();
 const ContextProvider = ({ children }) => {
     const [activeColumns, setActiveColumns] = React.useState([]);
-    const [sortConfig, setSortConfig] = React.useState({ key: 'id', direction: 'desc' });
-
-
-
+    const [sortConfig, setSortConfig] = React.useState({ key: 'id', direction: 'asc' });
 
     return <DataTableContext.Provider value={{
         activeColumns,
@@ -45,6 +42,7 @@ const DataTable = ({ data, defaultColumns, isLoading }) => {
 
     React.useEffect(() => {
         let columns = defaultColumns.map(d => d.id);
+
         let lsColumn = localStorage.getItem(`pointTableColumn_${window?.Laravel?.user?.id}`);
         if (lsColumn) {
             // order by lsColumn
@@ -97,7 +95,7 @@ const DataTable = ({ data, defaultColumns, isLoading }) => {
     const columns = defaultColumns.filter(d => activeColumns.includes(d.id))
         .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
 
-
+    console.log(currentPageData)
 
     return (
         <div style={{ maxWidth: '100%' }}>
