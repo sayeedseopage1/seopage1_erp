@@ -15,6 +15,7 @@ use App\Models\ProjectTimeLogBreak;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
 use App\Models\User;
+use App\Models\EmployeeEvaluation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -369,8 +370,7 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(Request $request)
     {
-
-    //DB::beginTransaction();
+    // DB::beginTransaction();
      $userID = Auth::id(); // Replace with the actual user ID
 
     //  $yesterdayDate = ProjectTimeLog::where('user_id', $userID)
@@ -759,12 +759,24 @@ class TimelogController extends AccountBaseController
 
                 $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'task timer started',
-                    'id' => $timeLog->id,
-                    'task_status'=> $task_board_column,
-                ]);
+                if(Auth::user()->role_id == 14){
+                    $user = Auth::user();
+                    $evaluation = EmployeeEvaluation::where('user_id',$user->id)->first();
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'task timer started',
+                        'id' => $timeLog->id,
+                        'evaluation' => $evaluation->exp_date,
+                        'task_status'=> $task_board_column,
+                    ]);
+                }else{
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'task timer started',
+                        'id' => $timeLog->id,
+                        'task_status'=> $task_board_column,
+                    ]);
+                }
             }
 
             return response()->json([
