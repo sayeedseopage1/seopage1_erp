@@ -34,6 +34,7 @@ return new class extends Migration
             $table->float('identiey_issues')->nullable();
             $table->float('dedication')->nullable();
             $table->float('obedience')->nullable();
+            $table->integer('lead_dev_id')->nullable();
             $table->longText('lead_dev_cmnt')->nullable();
             $table->integer('avg_rating')->nullable();
             $table->integer('status')->default(0);
