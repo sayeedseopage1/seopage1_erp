@@ -43,8 +43,11 @@ export const EvaluationTableColumns = [
         accessorKey: "completed_work",
         cell: ({ row }) => {
             const data = row.original;
-            return data?.completed_work?.map((data) => (
-                <a href={data.completed_work}>{data?.completed_work}</a>
+            return JSON.parse(data?.completed_work).map((data) => (
+                <div>
+                    <a href={data}>{data}</a>
+                    <br />
+                </div>
             ));
         },
     },
@@ -82,8 +85,7 @@ export const EvaluationTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            // return <ActionDropdown data={data} />;
-            return <button>Button</button>;
+            return <ActionDropdown data={data} />;
         },
     },
 ];

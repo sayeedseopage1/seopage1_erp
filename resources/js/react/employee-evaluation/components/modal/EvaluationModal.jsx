@@ -25,15 +25,12 @@ import EvaluationTable from "../Table/EvaluationTable";
 
 import { useAuth } from "../../../hooks/useAuth";
 import CKEditorComponent from "../../../ckeditor";
-// import {
-//     useFinalTaskSubmissionStatusMutation,
-//     useGetTaskListQuery,
-// } from "../../../services/api/EvaluationApiSlice";
 
 import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
 import Button from "../Button";
 import { useFinalTaskSubmissionStatusMutation } from "../../../../react-latest/services/api/EvaluationApiSlice";
 import { useGetTaskListQuery } from "../../../services/api/EvaluationApiSlice";
+import { useEffect } from "react";
 
 const EvaluationModal = ({
     isEvaluationModal,
@@ -50,6 +47,18 @@ const EvaluationModal = ({
 
     const Tasks = data?.data;
     console.log("tasks", Tasks);
+
+    const [allTasksReviewed, setAllTasksReviewed] = useState(false);
+
+    useEffect(() => {
+        if (data && data.data) {
+            const Tasks = data.data;
+            const allTasksReviewed =
+                Tasks.length ===
+                Tasks.filter((task) => task.lead_dev_cmnt !== null).length;
+            setAllTasksReviewed(allTasksReviewed);
+        }
+    }, [data]);
 
     const [sorting, setSorting] = useState([]);
 
@@ -141,8 +150,7 @@ const EvaluationModal = ({
                         <ReviewContent>
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: data?.data[0]?.rating
-                                        .reporting_boss_comment,
+                                    __html: data?.data[0]?.lead_dev_cmnt,
                                 }}
                             />
 
@@ -153,7 +161,7 @@ const EvaluationModal = ({
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    {data?.data[0]?.assignByName}
+                                    {singleEvaluation.user_name}
                                 </a>{" "}
                                 on <span>{data?.data[0]?.updatedAt}</span>
                             </ReviewFooter>
@@ -195,12 +203,9 @@ const EvaluationModal = ({
                         onClick={handleFinalSubmission}
                         size="md"
                         className="ml-2"
-                        disabled={
-                            data?.disableFinalSubmissionButton ||
-                            data?.finalSubmissionStatus
-                        }
+                        disabled={!allTasksReviewed}
                     >
-                        {data?.finalSubmissionStatus === true ? (
+                        {!allTasksReviewed ? (
                             <div> submitted </div>
                         ) : (
                             <div> Confirm Submission</div>
