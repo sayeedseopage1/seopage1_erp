@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('question_id')->references('id')->on('sales_policy_questions')->onUpdate('no action')->onDelete('no action');
+            $table->foreign('deal_id')->references('id')->on('deals')->onUpdate('no action')->onDelete('no action');
         });
     }
 
