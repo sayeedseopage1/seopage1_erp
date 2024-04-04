@@ -6,14 +6,14 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             query: (userId) => `account/employee-evaluation-task/${userId}`,
             providesTags: ["ALL_TASKS"],
         }),
-        updateTask: build.mutation({
-            query: ({ taskId, data }) => ({
-                url: `http://localhost:3000/api/task/update-task/${taskId}`,
-                method: "PUT",
+        storeTaskRating: build.mutation({
+            query: (data) => ({
+                url: `account/employee-task-evaluation-store`,
+                method: "POST",
                 body: data,
                 formData: true,
             }),
-            invalidatesTags: ["ALL_TASKS"],
+            invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
         }),
         finalTaskSubmissionStatus: build.mutation({
             query: (assignToId) => ({
@@ -31,7 +31,7 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetTaskListQuery,
-    useUpdateTaskMutation,
+    useStoreTaskRatingMutation,
     useFinalTaskSubmissionStatusMutation,
     useGetEvaluationListQuery,
 } = evaluationApiSlice;
