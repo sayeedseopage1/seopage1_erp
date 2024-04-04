@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\SalesPolicyQuestion;
+use App\Models\SalesRiskPolicy;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->enum('type', array_keys(SalesPolicyQuestion::$types));
-            $table->enum('key', array_keys(SalesPolicyQuestion::$keys));
+            $table->enum('key', array_keys(SalesRiskPolicy::$keys));
             $table->text('value')->nullable();
             $table->bigInteger('parent_id')->unsigned()->nullable();
             $table->integer('sequence')->default('1');

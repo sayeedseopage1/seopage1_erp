@@ -17,16 +17,6 @@ class SalesPolicyQuestion extends Model
         'text' => 'Text',
         'longText' => 'Long Text'
     ];
-    static $keys =  [
-        'hourlyRate' => 'Hourly Rate',
-        'milestore' => 'Milestone',
-        'threat' => 'Threat',
-        'doneByElse' => 'Done By Someone Else',
-        'routeWork' => 'Routine Work',
-        'availableWeekend' => 'Available During The Weekend',
-        'firstSubmisstoin' => 'First Submission',
-        'acceptPriceProposal' => "Accept Price Proposal"
-    ];
 
     protected $fillable = [
         'title',

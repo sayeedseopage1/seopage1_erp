@@ -332,7 +332,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 'label' => 'Points',
                 'type' => 'number',
                 'placeholder' => ''
-            ]
+            ],
+
+            'policyKeys' => SalesRiskPolicy::$keys
         ];
 
         return response()->json(['data' => $fileds]);
@@ -397,6 +399,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
+            'key' => 'nullable',
             'comment' => 'nullable',
             'ruleList' => 'required|array|min:1',
             'ruleList.*.policyType' => 'in:' . implode(',', SalesRiskPolicy::$types),
@@ -422,6 +425,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $policy->update([
                 'title' => $req->title,
                 'department' => $req->department,
+                'key' => $req->key,
                 'comment' => $req->comment,
             ]);
 
@@ -657,7 +661,7 @@ class SalesRiskPolicyController extends AccountBaseController
     function qustionInputField()
     {
         $types = SalesPolicyQuestion::$types;
-        $questionKeys = SalesPolicyQuestion::$keys;
+        $questionKeys = SalesRiskPolicy::$keys;
         $policies = SalesRiskPolicy::whereNull('parent_id')->get(['id', 'title']);
         $questionList = SalesPolicyQuestion::get(['id', 'title', 'key', 'type', 'value', 'parent_id', 'policy_id',]);
 
@@ -870,8 +874,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $dealId = $req->session()->get('deal_id');
 
         $deal = Deal::find($dealId);
-        if(! $deal)
-        {
+        if (!$deal) {
             return response()->json(['status' => 'error', 'message' => 'Deal is not valid.'], 500);
         }
 
@@ -916,19 +919,30 @@ class SalesRiskPolicyController extends AccountBaseController
         // $dealStage = DealStage::find($deal_id);
         // dd($dealStage);
         $deal = Deal::find($deal_id);
+        if (!$deal) {
+            return ['points' => null, 'error' => 'Deal not found'];
+        }
+
+        if (!PolicyQuestionValue::where('deal_id', $deal_id)->first()) {
+            return ['points' => null, 'error' => 'Policy question value not found'];
+        }
+
         // dd($deal);
         try {
 
             // get rules id and calculate point
             $pointData = [];
-            $totalPoints = 0;
-            $points = 0;
+            $points = (float) 0;
 
             // --------------------- hourly rate calculation ------------------ //
             // calculate first quetion key value (hourlyRate)
             //
             $questions = SalesPolicyQuestion::where('key', 'hourlyRate')->orderBy('sequence')->get();
-            $hours= 0;
+            if (count($questions) < 1) {
+                goto endHourlyRate;
+            }
+
+            $hours = 0;
             foreach ($questions as $item) {
 
                 $value = PolicyQuestionValue::where([
@@ -963,14 +977,16 @@ class SalesRiskPolicyController extends AccountBaseController
                     case 'lessThan':
                         if ($hourlyRate < $item->value) {
                             $points += $item->points;
+                            $pointData['hourlyRate'] = [$item->points, $hourlyRate];
                             goto endHourlyRate;
                             break;
                         }
                         break;
                     case 'range':
                         $value = explode(',', $item->value);
-                        if ($hourlyRate > $value[0] && $hourlyRate < $value[1] ) {
+                        if ($hourlyRate > $value[0] && $hourlyRate < $value[1]) {
                             $points += $item->points;
+                            $pointData['hourlyRate'] = [$item->points, $hourlyRate];
                             goto endHourlyRate;
                             break;
                         }
@@ -978,6 +994,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     case 'greaterThan':
                         if ($hourlyRate > $item->value) {
                             $points += $item->points;
+                            $pointData['hourlyRate'] = [$item->points, $hourlyRate];
                             goto endHourlyRate;
                             break;
                         }
@@ -1000,72 +1017,136 @@ class SalesRiskPolicyController extends AccountBaseController
             // check first question is yes
             if ($value == 'yes') {
                 $points += 1;
-            }
-            else {
+                $pointData['milestore'] = 1;
+            } else {
 
-                $value = PolicyQuestionValue::where([
+                $questionValue = PolicyQuestionValue::where([
                     'question_id' => $questions[2]->id,
                     'deal_id' => $deal_id
-                ])->first()->value;
+                ])->first();
+                $value = $questionValue ?  $questionValue->value : '';
 
                 switch ($value) {
-                    case $questions[2]->parent_id.'_1':
+                    case $questions[2]->parent_id . '_1':
                         $points += 0;
+                        $pointData['milestore'] = 0;
                         break;
-                    case $questions[2]->parent_id.'_2':
+                    case $questions[2]->parent_id . '_2':
                         $points += 0;
+                        $pointData['milestore'] = 0;
                         break;
-                    case $questions[2]->parent_id.'_3':
+                    case $questions[2]->parent_id . '_3':
                         $points += -2;
+                        $pointData['milestore'] = -2;
                         break;
-                    case $questions[2]->parent_id.'_4':
+                    case $questions[2]->parent_id . '_4':
                         $points += -1;
+                        $pointData['milestore'] = -1;
                         break;
                 }
             }
 
             // ---------------------- end milestore calculation ------------------------------- //
 
+            // ---------------------- threat calculation --------------------------------//
+            $question = SalesPolicyQuestion::where('key', 'threat')->orderBy('sequence')->first();
 
-            
+            if ($questions) {
+                $value = PolicyQuestionValue::where([
+                    'question_id' => $question->id,
+                    'deal_id' => $deal_id
+                ])->first()->value;
 
+                // get question policy
+                $policy = SalesRiskPolicy::where('parent_id', $question->policy_id)->first();
+                $policyValue = json_decode($policy->value);
 
-            $department = [
-                'WD' => 1,
-                'DM' => 11
-            ];
+                if ($value == 'yes') {
+                    $points += (float) $policyValue->yes->point;
+                    $pointData['threat'] = $policyValue->yes->point;
+                }
+                else {
+                    $points += (float) $policyValue->no->point;
+                    $pointData['threat'] = $policyValue->no->point;
+                }
 
-            // country list check
-            // dd(Deal::find($deal_id));
-            $lead_id = Deal::find($deal_id)->lead_id;
-            $lead = Lead::find($lead_id);
-            // dd($lead);
-            // dd($lead->status);
-            $rules = SalesRiskPolicy::where([
-                'department' => $department[$lead->status],
-                'type' => 'list'
-            ])->get();
+            }
 
-            foreach ($rules as $item) {
-                switch ($item->value_type) {
-                    case 'countries':
+            // ---------------------- end threat calculation --------------------------------//
 
-                        foreach (json_decode($item->value, true) as $value) {
+            // ----------------------------- doneByElse  ------------------------- //
 
-                            if ($lead->country == $value[key($value)]) {
-                                $totalPoints += $item->points;
-                                $pointData['countries'] = $item->points;
-                                break;
-                            }
-                        }
-                        break;
+            $questions = SalesPolicyQuestion::where('key', 'doneByElse')->orderBy('sequence')->get();
+
+            if (count($questions) > 0) {
+
+                $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->get();
+
+                $value = PolicyQuestionValue::where([
+                    'question_id' => $questions[0]->id,
+                    'deal_id' => $deal_id
+                ])->first()->value;
+
+                if ($value == 'no') {
+                    $points += (float) json_decode($policy[0]->value)->no->point;
+                    $pointData['doneByElse'] = json_decode($policy[0]->value)->no->point;
+                } else {
+                    $value = PolicyQuestionValue::where([
+                        'question_id' => $questions[1]->id,
+                        'deal_id' => $deal_id
+                    ])->first()->value;
+
+                    if ($value == 'yes') {
+                        $points += (float) json_decode($policy[1]->value)->yes->point;
+                        $pointData['doneByElse'] = json_decode($policy[1]->value)->yes->point;
+                    }
+                    else {
+                        $points += (float) json_decode($policy[1]->value)->no->point;
+                        $pointData['doneByElse'] = json_decode($policy[1]->value)->no->point;
+                    }
                 }
             }
 
-            return ['points' => $totalPoints, 'pointData' => $pointData];
+            // ----------------------------- end doneByElse ------------------------- //
+
+            // ---------------------------- routeWork, availableWeekend, firstSubmisstoin, acceptPriceProposal ------------------------------//
+
+            foreach (['routeWork', 'availableWeekend', 'firstSubmisstoin', 'acceptPriceProposal'] as $item) {
+                $questions = SalesPolicyQuestion::where('key', $item)->orderBy('sequence')->get();
+                if (count($questions) > 0) {
+
+                    $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->get();
+
+                    $questionValue = PolicyQuestionValue::where([
+                        'question_id' => $questions[0]->id,
+                        'deal_id' => $deal_id
+                    ])->first();
+
+                    $value = $questionValue ?  $questionValue->value : '';
+
+                    if ($value == 'yes') {
+                        $points += (float) json_decode($policy[0]->value)->yes->point;
+                        $pointData[$item] = json_decode($policy[0]->value)->yes->point;
+                    } else {
+                        $points += (float) json_decode($policy[0]->value)->no->point;
+                        $pointData[$item] = json_decode($policy[0]->value)->no->point;
+                    }
+                }
+            }
+
+
+            // ---------------------------- end routeWork, availableWeekend, firstSubmisstoin, acceptPriceProposal ------------------------------ //
+
+
+            // ----------------------------- common calculation -------------------------- //
+
+
+            return ['points' => $points, 'pointData' => $pointData];
         } catch (\Throwable $th) {
+
             throw $th;
         }
+
     }
 
     function questionValueReport($deal_id)

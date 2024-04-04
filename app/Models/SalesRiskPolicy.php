@@ -26,6 +26,14 @@ class SalesRiskPolicy extends Model
     static $valueTypes = ['percentage', 'currency', 'hourly', 'days', 'countries'];
 
     static $keys =  [
+        'hourlyRate' => 'Hourly Rate',
+        'milestore' => 'Milestone',
+        'threat' => 'Threat',
+        'doneByElse' => 'Done By Someone Else',
+        'routeWork' => 'Routine Work',
+        'availableWeekend' => 'Available During The Weekend',
+        'firstSubmisstoin' => 'First Submission',
+        'acceptPriceProposal' => "Accept Price Proposal",
         'clientCountry' => 'Client\'s Country',
         'projectDeadline' => 'Project Deadline',
         'projectBudget' => 'Project Budget',
