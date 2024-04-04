@@ -1837,5 +1837,5 @@ Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGu
 Route::get('/server-time-status', [TaskController::class, 'dailyServerStatus']);
 
 Route::get('test-point/{factorId}/{projectId}/{comparable_value}', function($factorId, $projectId, $comparable_value){
-    return ProjectManagerPointLogic::distribute($factorId, $projectId, $comparable_value);
+    return ProjectManagerPointLogic::distribute($factorId, $projectId, $comparable_value) ? 'Point distributed successfully' : 'The condition does not satisfied or something went wrong!';
 });
