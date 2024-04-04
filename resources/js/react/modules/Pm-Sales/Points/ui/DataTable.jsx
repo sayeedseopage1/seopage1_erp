@@ -292,7 +292,7 @@ const DraggableColumn = ({
 
             >
                 <div ref={ref}
-                    // onClick = {(() => requestSort(column.accessor))}
+                    onClick={(() => requestSort(column.accessor))}
                     className={`cnx__table_th_toggle  ${isDragging ? '__dragging' : ''} ${isOver ? '__dragging_over' : ''}`}
                     style={{
                         opacity: isDragging ? 0.5 : 1,
@@ -302,16 +302,16 @@ const DraggableColumn = ({
                         borderInline: isOver ? '1px solid #ccc' : 'none'
                     }}
                 >
-
-                    {/* {
+                    {column.header}
+                    {
                         sort.key === column.accessor ?
-                        sort.direction === "asc" ? (
+                            sort.direction === "asc" ? (
                                 <span className="table_asc_dec asc"></span>
                             ) : (
                                 <span className="table_asc_dec dec"></span>
-                        ) : <span className="table_asc_dec"></span>
-                    } */}
-                    {column.header}
+                            ) : <span className="table_asc_dec"></span>
+                    }
+
                 </div>
 
 
