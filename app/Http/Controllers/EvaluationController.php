@@ -361,8 +361,15 @@ class EvaluationController extends AccountBaseController
             $evaluation->managements_cmnt = $request->managements_cmnt;
             $evaluation->managements_decision = 'Accepted';
             $evaluation->accept_rejected = 'Accept';
+            $evaluation->managements_id = Auth::user()->id;
+            $evaluation->managements_name = Auth::user()->name;
+            $evaluation->managements_auth_at = Carbon::now();
             $evaluation->employee_status = 1;
             $evaluation->save();
+
+            $user= User::find($request->user_id);
+            $user->role_id= 5;
+            $user->save();
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
             $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
@@ -406,12 +413,23 @@ class EvaluationController extends AccountBaseController
                 $past_action->save();
                 }
             }
+
+            $helper = new HelperPendingActionController();
+            $helper->evaluationAuthForAdmin($evaluation_task->id);
+
+            return response()->json([
+                'message' => 'Top management authorized successfully',
+                'status' =>200
+            ]);
         }elseif($request->status == 'reject'){
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
             $evaluation->managements_cmnt = $request->managements_cmnt;
             $evaluation->managements_decision = 'Rejected';
             $evaluation->accept_rejected = 'reject';
-            $evaluation->employee_status = 1;
+            $evaluation->managements_id = Auth::user()->id;
+            $evaluation->managements_name = Auth::user()->name;
+            $evaluation->managements_auth_at = Carbon::now();
+            $evaluation->employee_status = 3;
             $evaluation->save();
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
@@ -456,12 +474,23 @@ class EvaluationController extends AccountBaseController
                 $past_action->save();
                 }
             }
+            $helper = new HelperPendingActionController();
+            $helper->evaluationRejectForAdmin($evaluation_task->id);
+
+            return response()->json([
+                'message' => 'Top management reject successfully',
+                'status' =>200
+            ]);
+
         }else{
             $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
             $evaluation->managements_cmnt = $request->managements_cmnt;
             $evaluation->managements_decision = 'One more week';
             $evaluation->accept_rejected = 'Trial';
-            $evaluation->employee_status = 0;
+            $evaluation->managements_id = Auth::user()->id;
+            $evaluation->managements_name = Auth::user()->name;
+            $evaluation->managements_auth_at = Carbon::now();
+            $evaluation->employee_status = 2;
             $evaluation->save();
 
             $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
@@ -505,6 +534,76 @@ class EvaluationController extends AccountBaseController
                 $past_action->button = json_encode($button);
                 $past_action->save();
                 }
+            }
+            $helper = new HelperPendingActionController();
+            $helper->evaluationExtendForAdmin($evaluation_task->id);
+
+            return response()->json([
+                'message' => 'Top management extend successfully',
+                'status' =>200
+            ]);
+        }
+    }
+    public function storeAcknowledged(Request $request)
+    {
+        $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
+        if($request->acknowledged == 'lead_dev'){
+            $evaluation->lead_dev_acknowledged = 1;
+        }else{
+            $evaluation->team_lead_acknowledged = 1;
+        }
+        $evaluation->save();
+
+        $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
+        $actions = PendingAction::where('task_id',$evaluation_task->task_id)->whereIn('code', ['EAFA', 'ERFA', 'EEFA'])->where('past_status',0)->get();
+        if($actions != null)
+        {
+            foreach ($actions as $key => $action) {
+            $action->authorized_by= Auth::id();
+            $action->authorized_at= Carbon::now();
+            $action->past_status = 1;
+            $action->save();
+            $authorize_by= User::where('id',$action->authorized_by)->first();
+            $top_management= User::where('id',$evaluation->managements_id)->first();
+            $dev= User::where('id',$evaluation->user_id)->first();
+                
+            $past_action= new PendingActionPast();
+            $past_action->item_name = $action->item_name;
+            $past_action->code = $action->code;
+            $past_action->serial = $action->serial;
+            $past_action->action_id = $action->id;
+            if($evaluation->employee_status == 1)
+            {
+                $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
+                $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+            }elseif($evaluation->employee_status == 2)
+            {
+                $past_action->heading= 'Top Management'.$top_management->name.' has extended the trial period for New Developer '.$dev->name.'!';
+                $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period one more week for New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> from ';
+            }else{
+                $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                $past_action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+            }
+            $past_action->timeframe = $action->timeframe;
+            $past_action->authorization_for = $action->authorization_for;
+            $past_action->authorized_by = $action->authorized_by;
+            $past_action->authorized_at = $action->authorized_at;
+            $past_action->expired_status = $action->expired_status;
+            $past_action->past_status = $action->past_status;
+            $past_action->task_id = $action->task_id;
+            $past_action->developer_id = $action->developer_id;
+            $past_action->client_id = $action->client_id;
+            $button = [
+                [
+                    'button_name' => 'View Details',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('employee-evaluation.index'),
+                    'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                ],
+            ];
+            $past_action->button = json_encode($button);
+            $past_action->save();
             }
         }
     }

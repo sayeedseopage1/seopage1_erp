@@ -1925,4 +1925,119 @@ class HelperPendingActionController extends AccountBaseController
             }
         }
 
+        public function evaluationAuthForAdmin($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',$evaluation_task->managements_id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::whereIn('role_id', [1, 6])->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'EAFA';
+                $action->serial = 'EAFA'.'x'.$key;
+                $action->item_name= 'Evaluation auth for admin!';
+                $action->heading= 'New Developer '.$new_dev->name.' was authorize for real work by Top Management '.$top_management->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has authorized New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> for real work from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Ackhowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+        public function evaluationRejectForAdmin($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',$evaluation_task->managements_id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::whereIn('role_id', [1, 6])->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'ERFA';
+                $action->serial = 'ERFA'.'x'.$key;
+                $action->item_name= 'Evaluation reject for admin!';
+                $action->heading= 'New Developer '.$new_dev->name.' was rejected for real work by Top Management '.$top_management->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has rejected New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> for real work from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Ackhowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+        public function evaluationExtendForAdmin($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $top_management = User::where('id',$evaluation_task->managements_id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers = User::whereIn('role_id', [1, 6])->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'EEFA';
+                $action->serial = 'EEFA'.'x'.$key;
+                $action->item_name= 'Evaluation extend for admin!';
+                $action->heading= 'Top Management '.$top_management->name.' has extended the trial period for New Developer '.$new_dev->name.'!';
+                $action->message = 'Top Management <a href="'.route('employees.show',$top_management->id).'">'.$top_management->name.'</a> has extended the trial period for one more week for New Developer <a href="'.route('employees.show',$new_dev->id).'">'.$new_dev->name.'</a> from '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Ackhowledge It',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                    ],
+
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
+
 }
