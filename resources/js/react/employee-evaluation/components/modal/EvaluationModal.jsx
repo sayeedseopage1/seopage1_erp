@@ -204,7 +204,7 @@ const EvaluationModal = ({
                         <ReviewContent>
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: singleEvaluation.team_lead_cmnt,
+                                    __html: singleEvaluation?.team_lead_cmnt,
                                 }}
                             />
 
@@ -213,7 +213,7 @@ const EvaluationModal = ({
                                 <a href="www.teamLead.com" target="_blank">
                                     Mohammad Sayeed Ullah
                                 </a>{" "}
-                                on <span>{data?.data[0]?.updated_at}</span>
+                                on <span>{singleEvaluation?.updated_at}</span>
                             </ReviewFooter>
                         </ReviewContent>
                     </section>
