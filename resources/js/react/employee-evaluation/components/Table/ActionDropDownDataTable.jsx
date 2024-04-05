@@ -105,9 +105,11 @@ const ActionDropdownDataTable = ({ data, table }) => {
                                         data?.lead_dev_avg_rating !== null
                                     }
                                 >
-                                    {data?.lead_dev_avg_rating === null
+                                    {data?.ld_submission_status === 0
                                         ? "Evaluating"
-                                        : "Review"}
+                                        : data?.team_lead_status === 0
+                                        ? "Review"
+                                        : "Reviewed"}
                                 </Button>
                             </Switch.Case>
                             <Switch.Case

@@ -159,7 +159,7 @@ const SingleEvaluationModal = ({
                 }),
         },
     ];
-
+    console.log("evaluation ");
     const handleSubmit = async (e) => {
         e.preventDefault();
         const requiredFields = [
@@ -216,7 +216,7 @@ const SingleEvaluationModal = ({
 
         await storeTaskRating({
             ...formData,
-            evaluation_id: evaluationObject.id,
+            evaluation_id: data.id,
             _token: document
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content"),
