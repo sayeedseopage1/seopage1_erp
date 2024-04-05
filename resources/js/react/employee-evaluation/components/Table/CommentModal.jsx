@@ -15,9 +15,17 @@ const CommentModal = ({ comment }) => {
 
     return (
         <div>
-            <button className="btn btn-info" onClick={openModal}>
-                View
-            </button>
+            <span
+                className="badge bg-info p-2 "
+                onClick={openModal}
+                style={{
+                    cursor: "pointer",
+                    marginLeft: "50px",
+                    color: "white",
+                }}
+            >
+                View comment
+            </span>
             <ReactModal
                 style={{
                     overlay: {

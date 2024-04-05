@@ -10781,7 +10781,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useLazyGetTaskDetail3 = _useLazyGetTaskDetail2[1],
     estimation = _useLazyGetTaskDetail3.data,
     isFetching = _useLazyGetTaskDetail3.isFetching;
-  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(true),
     _React$useState20 = _slicedToArray(_React$useState19, 2),
     showForm = _React$useState20[0],
     setShowForm = _React$useState20[1];
@@ -11043,6 +11043,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           task: task,
           onSubmit: function onSubmit() {
             refetchTask();
+            setShowForm(true);
           },
           close: close
         }), showForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
