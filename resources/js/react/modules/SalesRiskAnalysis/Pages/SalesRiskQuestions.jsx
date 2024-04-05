@@ -70,6 +70,7 @@ const SalesRiskQuestions = () => {
                         id: item?.id,
                         questions: item?.questions,
                         type: item.type,
+                        is_Active_YesNo: false,
                         parent_id: item.parent_id,
                         placeholder: item.placeholder,
                         [`question_${item?.id}`]: "",
@@ -90,6 +91,7 @@ const SalesRiskQuestions = () => {
                                 id: item?.id,
                                 questions: item?.questions,
                                 type: item.type,
+                                is_Active_YesNo: false,
                                 parent_id: item.parent_id,
                                 [`question_${item?.id}`]: "",
                             };
@@ -173,6 +175,7 @@ const SalesRiskQuestions = () => {
                         id: item.id,
                         questions: item.questions,
                         type: item.type,
+                        is_Active_YesNo: false,
                         parent_id: item.parent_id,
                         [`question_${item.id}`]: "",
                     }));
@@ -206,10 +209,21 @@ const SalesRiskQuestions = () => {
         const removeAlreadyExistChild = inputsData.filter(
             (item) => item.parent_id !== question.id
         );
+
         const addSelectValue = removeAlreadyExistChild.map((item) => {
             if (item.id === question.id) {
+                let is_Active_YesNo
+
+                if (type === "list") {
+                    is_Active_YesNo = value.questions?.length;
+                } else {
+                    is_Active_YesNo = question.questions?.length;
+                }
+
+
                 return {
                     ...item,
+                    is_Active_YesNo,
                     [`question_${question.id}`]: getValue(),
                 };
             }
@@ -226,6 +240,7 @@ const SalesRiskQuestions = () => {
                 questions: item?.questions,
                 type: item.type,
                 parent_id: item.parent_id,
+                is_Active_YesNo: false,
                 [`question_${item?.id}`]: "",
             }));
 
@@ -235,7 +250,7 @@ const SalesRiskQuestions = () => {
         return setInputsData(addSelectValue);
     };
 
-    console.log(inputsData)
+    console.log(inputsData);
 
     return (
         <section>
