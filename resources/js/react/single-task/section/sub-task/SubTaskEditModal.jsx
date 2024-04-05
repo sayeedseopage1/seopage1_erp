@@ -99,7 +99,8 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
     const { data: mainTask } = useGetTaskDetailsQuery(
         `/${isSubTask}/json?mode=basic`,
-        { refetchOnMountOrArgChange: true }
+        { refetchOnMountOrArgChange: true },
+        { skip: !isSubTask }
     );
 
     const uiUixDetails = new Object(mainTask?.task)

@@ -1261,10 +1261,15 @@ var SingleTaskPage = function SingleTaskPage() {
   var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_33__.useParams)();
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetTaskDetailsQuery)("/".concat(params === null || params === void 0 ? void 0 : params.taskId, "/json?mode=basic"), {
       refetchOnMountOrArgChange: true
+    }, {
+      skip: !(params !== null && params !== void 0 && params.taskId)
     }),
     data = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
-  var _useGetTaskStatusQuer = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetTaskStatusQuery)(params === null || params === void 0 ? void 0 : params.taskId),
+  console.log("task id", params === null || params === void 0 ? void 0 : params.taskId);
+  var _useGetTaskStatusQuer = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetTaskStatusQuery)(params === null || params === void 0 ? void 0 : params.taskId, {
+      skip: !(params !== null && params !== void 0 && params.taskId)
+    }),
     taskStatus = _useGetTaskStatusQuer.data;
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_9__.SingleTask(Task); // task instance
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user); // logged users data
@@ -11301,6 +11306,8 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     subTasks = _useGetSubTasksQuery.data;
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(isSubTask, "/json?mode=basic"), {
       refetchOnMountOrArgChange: true
+    }, {
+      skip: !isSubTask
     }),
     mainTask = _useGetTaskDetailsQue.data;
   var uiUixDetails = new Object(mainTask === null || mainTask === void 0 ? void 0 : mainTask.task);
@@ -14848,7 +14855,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       setOthers(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.design_instruction);
     }
   }, [row, graphicWorkDetails, graphicOptions]);
-  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(task.id, "/json?mode=estimation_time")),
+  var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_15__.useGetTaskDetailsQuery)("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=estimation_time"), {
+      skip: !(task !== null && task !== void 0 && task.id)
+    }),
     estimation = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
   var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;
@@ -15785,15 +15794,13 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                       })]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("div", {
                       className: "form-group pl-2",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("label", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("label", {
                         htmlFor: "",
-                        children: ["Where Should Designer Use this Color ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("sup", {
-                          children: "*"
-                        })]
+                        children: "Where Should Designer Use this Color"
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
                         className: "ck-editor-holder",
                         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                          data: primaryColorDescription,
+                          data: primaryColorDescription || "",
                           onChange: function onChange(e, editor) {
                             return setPrimaryColorDescription(editor.getData());
                           }
@@ -15876,9 +15883,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                           className: "form-group pl-3",
                           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsxs)("label", {
                             htmlFor: "",
-                            children: ["Where Should Designer Use this Color", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("sup", {
-                              children: "*"
-                            })]
+                            children: ["Where Should Designer Use this Color", " "]
                           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)("div", {
                             className: "ck-editor-holder",
                             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {

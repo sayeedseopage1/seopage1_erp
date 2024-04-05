@@ -221,14 +221,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.fontName = "Font name is required";
                 errCount++;
             }
-            if (!fontUrl) {
-                err.fontUrl = "You have to provide font URL";
-                errCount++;
-            } else if (!checkIsURL(fontUrl)) {
-                err.fontUrl = "You have to provide a valid font URL";
-                toast.warn("You have to provide a valid font URL");
-                errCount++;
-            }
+            // if (!checkIsURL(fontUrl)) {
+            //     err.fontUrl = "You have to provide a valid font URL";
+            //     toast.warn("You have to provide a valid font URL");
+            //     errCount++;
+            // }
             if (!brandGuideline) {
                 err.brandGuideline = "Brand guideline is required";
                 errCount++;
@@ -1219,7 +1216,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                 <label htmlFor="">
                                                                     Where Should
                                                                     Designer Use this
-                                                                    Color <sup>*</sup>
+                                                                    Color
                                                                 </label>
                                                                 <div className="ck-editor-holder">
                                                                     <CKEditorComponent
@@ -1366,9 +1363,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                                                 Designer
                                                                                 Use this
                                                                                 Color{" "}
-                                                                                <sup>
-                                                                                    *
-                                                                                </sup>
+
                                                                             </label>
                                                                             <div className="ck-editor-holder">
                                                                                 <CKEditorComponent

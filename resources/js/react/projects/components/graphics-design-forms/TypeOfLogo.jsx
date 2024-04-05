@@ -16,7 +16,7 @@ const logoOptions = [
     { id: 5, type_name: 'Abstract' },
     { id: 6, type_name: 'Mascot' },
     { id: 7, type_name: 'Combination Marks' },
-    { id: 8, type_name: 'The emblem' },
+    { id: 8, type_name: 'The Emblem' },
 ];
 
 

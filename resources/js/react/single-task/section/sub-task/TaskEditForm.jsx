@@ -228,7 +228,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     }, [row, graphicWorkDetails, graphicOptions])
 
     const { data: estimation, isFetching } = useGetTaskDetailsQuery(
-        `/${task.id}/json?mode=estimation_time`
+        `/${task?.id}/json?mode=estimation_time`, { skip: !task?.id }
     );
 
 
@@ -1260,11 +1260,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                     <label htmlFor="">
                                                         Where Should
                                                         Designer Use this
-                                                        Color <sup>*</sup>
+                                                        Color
                                                     </label>
                                                     <div className="ck-editor-holder">
                                                         <CKEditorComponent
-                                                            data={primaryColorDescription}
+                                                            data={primaryColorDescription || ""}
                                                             onChange={(e, editor) => (
                                                                 setPrimaryColorDescription(editor.getData())
                                                             )}
@@ -1388,9 +1388,6 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                                     Designer
                                                                     Use this
                                                                     Color{" "}
-                                                                    <sup>
-                                                                        *
-                                                                    </sup>
                                                                 </label>
                                                                 <div className="ck-editor-holder">
                                                                     <CKEditorComponent

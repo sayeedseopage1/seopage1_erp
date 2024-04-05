@@ -288,14 +288,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 err.fontName = "Font name is required";
                 errCount++;
             }
-            if (!fontUrl) {
-                err.fontUrl = "You have to provide font URL";
-                count++;
-            } else if (!checkIsURL(fontUrl)) {
-                err.fontUrl = "You have to provide a valid font URL";
-                toast.warn("You have to provide a valid font URL");
-                errCount++;
-            }
+            // if (!checkIsURL(fontUrl)) {
+            //     err.fontUrl = "You have to provide a valid font URL";
+            //     toast.warn("You have to provide a valid font URL");
+            //     errCount++;
+            // }
             if (!brandGuideline) {
                 err.brandGuideline = "Brand guideline is required";
                 errCount++;
@@ -1250,11 +1247,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             <label htmlFor="">
                                                                 Where Should
                                                                 Designer Use this
-                                                                Color <sup>*</sup>
+                                                                Color
                                                             </label>
                                                             <div className="ck-editor-holder">
                                                                 <CKEditorComponent
-                                                                    data={primaryColorDescription}
+                                                                    data={primaryColorDescription || ""}
                                                                     onChange={(
                                                                         e,
                                                                         editor
@@ -1398,13 +1395,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                                             Designer
                                                                             Use this
                                                                             Color{" "}
-                                                                            <sup>
-                                                                                *
-                                                                            </sup>
+
                                                                         </label>
                                                                         <div className="ck-editor-holder">
                                                                             <CKEditorComponent
-                                                                                data={item?.description}
+                                                                                data={item?.description || ""}
                                                                                 onChange={(
                                                                                     e,
                                                                                     editor
@@ -1601,7 +1596,13 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 
                             <div className="col-12">
                                 <div className="form-group my-3">
-                                    <label htmlFor=""> Description </label>
+                                    <label
+                                        htmlFor=""
+                                        className="f-14 text-dark-gray"
+                                    >
+                                        Description{" "}
+                                        <sup className="f-14"> * </sup>
+                                    </label>
                                     <div
                                         className="sp1_st_write_comment_editor"
                                         style={{ minHeight: "100px" }}

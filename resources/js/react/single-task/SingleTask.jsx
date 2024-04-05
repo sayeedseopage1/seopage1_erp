@@ -43,10 +43,13 @@ const SingleTaskPage = () => {
     const params = useParams();
     const { data, isFetching } = useGetTaskDetailsQuery(
         `/${params?.taskId}/json?mode=basic`,
-        { refetchOnMountOrArgChange: true }
+        { refetchOnMountOrArgChange: true },
+        { skip: !params?.taskId }
     );
 
-    const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
+    console.log("task id", params?.taskId)
+
+    const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId, { skip: !params?.taskId });
 
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
