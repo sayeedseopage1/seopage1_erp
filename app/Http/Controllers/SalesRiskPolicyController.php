@@ -1116,6 +1116,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionValueReport($deal_id)
     {
+        if(auth()->user()->role_id != 1)
+        {
+            return response()->json(['status' => 'error', 'message' => 'Not authorized.']);
+        }
+
         $calculation = self::calculatePolicyPoint($deal_id);
         $points = $calculation['points'];
         $pointData = $calculation['pointData'];
