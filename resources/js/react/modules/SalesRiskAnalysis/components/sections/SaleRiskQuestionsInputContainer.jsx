@@ -43,16 +43,10 @@ const SaleRiskQuestionsInputContainer = ({
     };
 
     const handleDebug = (question) => {
-        // console.log(
-        //     "question",
-        //     getYesNoQuestionValue(question),
-        //     question,
-        //     questions
-        // );
-        const getQuestion = inputsData.find((item) => item.id === question.id);
-        if (getQuestion) {
-            console.log(getQuestion[`question_${question.id}`], question.id);
-            return getQuestion[`question_${question.id}`];
+        const getQuestion = inputsData?.find((item) => item.id === question.id);
+        console.log(getQuestion);
+        if (!_.isEmpty(getQuestion)) {
+            return getQuestion.is_Active_YesNo;
         }
     };
 
@@ -65,6 +59,13 @@ const SaleRiskQuestionsInputContainer = ({
         >
             <React.Fragment>
                 {questions?.map((question, index) => {
+                    if (
+                        question.type === "yesNo" &&
+                        question?.questions?.length &&
+                        question.id === 5
+                    ) {
+                        console.log(handleDebug(question));
+                    }
                     return (
                         <Switch key={question?.id}>
                             <Switch.Case condition={question.type === "text"}>
