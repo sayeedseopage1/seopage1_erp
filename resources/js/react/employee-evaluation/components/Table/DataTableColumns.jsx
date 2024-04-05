@@ -113,7 +113,7 @@ export const DataTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
 
-            return <CommentModal comment={data.team_lead_cmnt} />;
+            return <CommentModal comment={data?.team_lead_cmnt} />;
         },
     },
     {
@@ -122,13 +122,8 @@ export const DataTableColumns = [
         accessorKey: "managements_cmnt",
         cell: ({ row }) => {
             const data = row.original;
-            return (
-                <div>
-                    {data?.managements_cmnt === ""
-                        ? "--"
-                        : data?.managements_cmnt}
-                </div>
-            );
+
+            return <CommentModal comment={data?.managements_cmnt} />;
         },
     },
     {
