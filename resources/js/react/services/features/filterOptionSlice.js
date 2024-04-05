@@ -29,7 +29,6 @@ const filterOptionSlice = createSlice({
             state.status = action.payload
         },
         setFilterCountriesState: (state, action) => {
-            console.log(action.payload);
             state.countries = action.payload;
         }
     }

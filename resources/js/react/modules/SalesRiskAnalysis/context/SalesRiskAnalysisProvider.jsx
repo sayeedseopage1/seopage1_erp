@@ -133,7 +133,6 @@ const SalesRiskAnalysisProvider = ({ children }) => {
         }
     }, [questionFieldsData, isQuestionType]);
 
-    console.log("questionsAnswerType", policyKeys);
     return (
         <SalesRiskAnalysisContext.Provider
             value={{

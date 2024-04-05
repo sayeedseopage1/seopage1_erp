@@ -199,6 +199,7 @@ const EditPolicyModal = ({
                     {/* All Rules Inputs */}
                     <NewPolicyModalInputsContainer
                         newPolicyData={editPolicyData}
+                        allPolicyData={editPolicyInputData}
                         handleChange={handlePolicyEditChange}
                         selectedCountries={allSelectedCountries.flat()}
                         handleMultiSelectChange={setEditPolicyData}

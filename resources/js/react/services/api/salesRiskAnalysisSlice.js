@@ -143,9 +143,6 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                 },
             }),
         }),
-        saleRiskQuestionsAnswerReport: build.query({
-            query: (deal_id) => `account/sales-risk-policies/question-value/report/${deal_id}`,
-        }),
         saleRiskQuestionsListFiledType: build.query({
             query: () => `account/sales-risk-policies/question/fields-type`,
             providesTags: ["GET_SALES_RISK_ANALYSIS_QUESTION_FIELDS_TYPE"],
@@ -170,6 +167,9 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             query: () => `account/sales-risk-policies/question/list`,
             providesTags: ["GET_SALES_RISK_ANALYSIS_QUESTION_LIST"],
         }),
+        saleRiskQuestionDealReport: build.query({
+            query: (deal_id) => `account/sales-risk-policies/deals/report/{deal_id}`,
+        }),
     })
 });
 
@@ -188,8 +188,8 @@ export const {
     usePolicyQuestionsListQuery,
     useEditQuestionSalesRiskAnalysisMutation,
     useSaleRiskQuestionAnswerSaveMutation,
-    useSaleRiskQuestionsAnswerReportQuery,
     useSaleRiskQuestionsListFiledTypeQuery,
     useSaleAnalysisQuestionSaveMutation,
     useSaleAnalysisQuestionsListQuery,
+    useSaleRiskQuestionDealReportQuery,
 } = salesRiskAnalysisApiSlice;
