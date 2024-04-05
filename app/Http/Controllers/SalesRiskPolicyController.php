@@ -656,7 +656,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $calculation = self::calculatePolicyPoint($dealId);
 
-            if ($calculation['points'] == null) {
+            if ($calculation['points'] === null) {
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
             }
 
@@ -1104,7 +1104,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return ['points' => $points, 'pointData' => $pointData];
         } catch (\Throwable $th) {
 
-            throw $th;
+            // throw $th;
             return ['points' => null, 'error' => $th->getMessage()];
         }
     }
