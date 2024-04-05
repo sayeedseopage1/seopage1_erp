@@ -1122,6 +1122,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $deal = Deal::find($deal_id);
         $projectName = $deal->project_name;
+        $client_name = $deal->client_name;
         $user = User::whereId($deal->added_by)->first(['id', 'name']);
 
         //get Date diff as intervals
@@ -1144,7 +1145,7 @@ class SalesRiskPolicyController extends AccountBaseController
          * projectBudget
          */
 
-        return response()->json(['status' => 'success', 'data' => compact('points', 'pointData', 'projectName', 'user', 'deadline')]);
+        return response()->json(['status' => 'success', 'data' => compact('points', 'pointData', 'projectName', 'user', 'client_name', 'deadline')]);
     }
 
     function salesRiskReport()
