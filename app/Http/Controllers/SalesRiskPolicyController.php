@@ -241,13 +241,13 @@ class SalesRiskPolicyController extends AccountBaseController
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Error occured while saveing data.'
+                'message' => 'Error occurred while saving data.'
             ], 500);
         }
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Policy edited succesfully.'
+            'message' => 'Policy edited successfully.'
         ]);
     }
 
@@ -318,7 +318,7 @@ class SalesRiskPolicyController extends AccountBaseController
             //throw $th;
             return response()->json([
                 'status' => 'error',
-                'message' => 'Applicatoin error'
+                'message' => 'Application error'
             ], 500);
         }
     }
@@ -337,7 +337,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $policy = SalesRiskPolicy::findOrFail($id);
 
             // if parent id is not null
-            if ($policy->parrent_id) {
+            if ($policy->parent_id) {
                 $policy->status = $status;
             } else {
                 SalesRiskPolicy::where('parent_id', $id)->update([
@@ -356,9 +356,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
     /**
      * @param $rule array single rule value
-     * @param $extra array extra values like department, parrent_id
+     * @param $extra array extra values like department, parent_id
      *
-     * @return $data formated single rule
+     * @return $data formatted single rule
      * */
     function policyRuleDataFormat($rule, $extra = []): array
     {
@@ -459,7 +459,7 @@ class SalesRiskPolicyController extends AccountBaseController
             return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
         }
 
-        return response()->json(['status' => 'success', 'message' => 'Question added succesfully']);
+        return response()->json(['status' => 'success', 'message' => 'Question added successfully']);
     }
 
     function policyQuestionEdit(Request $req, $id)
@@ -493,7 +493,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 'comment' => $req->comment
             ]);
 
-            return response()->json(['status' => 'success', 'message' => 'Question Edited succesfully']);
+            return response()->json(['status' => 'success', 'message' => 'Question Edited successfully']);
         } catch (\Throwable $th) {
             //throw $th;
             return response()->json(['status' => 'error', 'message' => 'Data not saved correctly.']);
@@ -552,7 +552,7 @@ class SalesRiskPolicyController extends AccountBaseController
     function policyQuestionInputFields($policyId)
     {
 
-        $fileds = [
+        $fields = [
             [
                 'label' => 'Title',
                 'name' => 'title',
@@ -572,8 +572,8 @@ class SalesRiskPolicyController extends AccountBaseController
                         'name' => 'yes_no',
                     ],
                     [
-                        'label' => 'Nemeric',
-                        'name' => 'nemeric',
+                        'label' => 'Numeric',
+                        'name' => 'Numeric',
                     ],
                     [
                         'label' => 'List',
@@ -598,7 +598,7 @@ class SalesRiskPolicyController extends AccountBaseController
             ],
         ];
 
-        return response()->json($fileds);
+        return response()->json($fields);
     }
 
 
@@ -662,14 +662,14 @@ class SalesRiskPolicyController extends AccountBaseController
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Questons values stored successfully.',
+                'message' => 'Questions values stored successfully.',
                 'redirectUrl' => route('dealDetails', $dealId),
                 'data' => ['points' => $calculation['points']]
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
-            return response()->json(['status' => 'error', 'message' => 'Data did not stroed successfully.'], 500);
+            return response()->json(['status' => 'error', 'message' => 'Data did not stored successfully.'], 500);
         }
     }
 
@@ -935,9 +935,9 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // ----------------------------- end doneByElse ------------------------- //
 
-            // ---------------------------- routeWork, availableWeekend, firstSubmisstoin, acceptPriceProposal ------------------------------//
+            // ---------------------------- routeWork, availableWeekend, firstSubmission, acceptPriceProposal ------------------------------//
 
-            foreach (['routeWork', 'availableWeekend', 'firstSubmisstoin', 'acceptPriceProposal'] as $item) {
+            foreach (['routeWork', 'availableWeekend', 'firstSubmission', 'acceptPriceProposal'] as $item) {
                 $questions = SalesPolicyQuestion::where('key', $item)->orderBy('sequence')->get();
                 if (count($questions) > 0) {
 
@@ -966,7 +966,7 @@ class SalesRiskPolicyController extends AccountBaseController
             }
 
 
-            // ---------------------------- end routeWork, availableWeekend, firstSubmisstoin, acceptPriceProposal ------------------------------ //
+            // ---------------------------- end routeWork, availableWeekend, firstSubmission, acceptPriceProposal ------------------------------ //
 
 
             // ----------------------------- common calculations -------------------------- //
@@ -1132,12 +1132,12 @@ class SalesRiskPolicyController extends AccountBaseController
 
         /**
          * hourlyRate
-         * milestore
+         * milestone
          * threat
          * doneByElse
          * routeWork
          * availableWeekend
-         * firstSubmisstoin
+         * firstSubmission
          * acceptPriceProposal
          * clientCountry
          * projectDeadline
