@@ -502,11 +502,16 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionList(Request $req)
     {
-        $list = SalesPolicyQuestion::parent()
-            ->where(function ($query) use ($req) {
-                if ($req->policy_id)
-                    $query->where('policy_id', $req->policy_id);
-            })->get()
+        $itemsPaginated = SalesPolicyQuestion::parent()
+        ->where(function ($query) use ($req) {
+            if ($req->policy_id)
+                $query->where('policy_id', $req->policy_id);
+        })
+        ->offset($req->input('limit', 10) * $req->input('page', 1))
+        ->paginate($req->input('limit', 10));
+
+        $itemsTransformed = $itemsPaginated
+            ->getCollection()
             ->map(function ($item) {
 
                 return [
@@ -521,9 +526,22 @@ class SalesRiskPolicyController extends AccountBaseController
                     'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
                     'questions' => self::questionListChild($item->id)
                 ];
-            });
+            })->toArray();
 
-        return response()->json(['status' => 'success', 'data' =>  $list]);
+            $data = new \Illuminate\Pagination\LengthAwarePaginator(
+                $itemsTransformed,
+                $itemsPaginated->total(),
+                $itemsPaginated->perPage(),
+                $itemsPaginated->currentPage(),
+                [
+                    'path' => FacadesRequest::url(),
+                    'query' => [
+                        'page' => $itemsPaginated->currentPage()
+                    ]
+                ]
+            );
+
+        return response()->json(['status' => 'success', 'data' =>  $data]);
     }
 
     function questionListChild($parentId)
@@ -609,7 +627,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $req->session()->put('deal_id', $deal_id);
 
         $data = $this->data;
-        $data['addedBefor'] = PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0;
+        $data['addedBefore'] = PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0;
         // Note: big form route : route('dealDetails', $deal->id)
         return view('deals.sales-questions-render', $data);
     }
@@ -695,6 +713,7 @@ class SalesRiskPolicyController extends AccountBaseController
             // get rules id and calculate point
             $pointData = [];
             $points = (float) 0;
+            $message = [];
 
             // --------------------- hourly rate calculation ------------------ //
             // calculate first question key value (hourlyRate)
@@ -789,6 +808,11 @@ class SalesRiskPolicyController extends AccountBaseController
 
             // ---------------------- milestone calculation ------------------------------- //
             $questions = SalesPolicyQuestion::where('key', 'milestone')->orderBy('sequence')->get();
+            if(count($questions) < 3)
+            {
+                $message[] = 'All milestone questions are not added.';
+                goto endMilestone;
+            }
             $data = [];
 
             $questionValue = PolicyQuestionValue::where([
@@ -800,7 +824,10 @@ class SalesRiskPolicyController extends AccountBaseController
             if ($questionValue)
                 $value = $questionValue->value;
             else
+            {
+                $message[] = 'All milestone questions values are not defined.';
                 goto endMilestone;
+            }
 
             // check first question is yes
             if ($value == 'yes') {
@@ -864,7 +891,10 @@ class SalesRiskPolicyController extends AccountBaseController
                 if ($questionValue)
                     $value = $questionValue->value;
                 else
+                {
+                    $message[] = 'Threat question value is not added.';
                     goto endThreat;
+                }
 
 
                 // get question policy
@@ -891,7 +921,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
             $questions = SalesPolicyQuestion::where('key', 'doneByElse')->orderBy('sequence')->get();
 
-            if (count($questions) > 0) {
+            if (count($questions) > 2) {
                 $data = [];
                 $policy = SalesRiskPolicy::where('parent_id', $questions[0]->policy_id)->get();
 
@@ -904,7 +934,10 @@ class SalesRiskPolicyController extends AccountBaseController
                 if ($questionValue)
                     $value = $questionValue->value;
                 else
+                {
+                    $message[] = 'Done By Else section question value is not added.';
                     goto endDoneByElse;
+                }
 
                 if ($value == 'no') {
                     $points += (float) json_decode($policy[0]->value)->no->point;
@@ -932,6 +965,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
                 endDoneByElse:
             }
+            else
+                $message[] = 'All Done By Else section question are not added.';
 
             // ----------------------------- end doneByElse ------------------------- //
 
@@ -951,7 +986,10 @@ class SalesRiskPolicyController extends AccountBaseController
                     if ($questionValue)
                         $value = $questionValue->value;
                     else
+                    {
+                        $message[] = "$item value is not added.";
                         continue;
+                    }
 
                     if ($value == 'yes') {
                         $points += (float) json_decode($policy[0]->value)->yes->point;
@@ -975,6 +1013,7 @@ class SalesRiskPolicyController extends AccountBaseController
             $policy = SalesRiskPolicy::where('key', 'clientCountry')->first();
 
             if (! $policy) {
+                $message = 'Client\'s Country policy not found.';
                 goto endClientCountry;
             }
 
@@ -1052,6 +1091,8 @@ class SalesRiskPolicyController extends AccountBaseController
                 $pointData['projectDeadline']['questionAnswer'][] = ['title' => 'What is the deadline for this project?', 'value' => $deadline, 'parent_id' => null];
                 $data ? $pointData['projectDeadline']['questionAnswer'][] = $data : '';
             }
+            else
+                $message = 'Project Deadline policy not found.';
 
             // --------------------------------- end projectDeadline -------------------------- //
 
@@ -1106,7 +1147,7 @@ class SalesRiskPolicyController extends AccountBaseController
 
 
 
-            return ['points' => $points, 'pointData' => $pointData];
+            return ['points' => $points, 'pointData' => $pointData, 'message' => $message];
         } catch (\Throwable $th) {
 
             // throw $th;
