@@ -765,7 +765,7 @@ class SalesRiskPolicyController extends AccountBaseController
                         break;
                     case 'range':
                         $value = explode(',', $item->value);
-                        if ($hourlyRate > $value[0] && $hourlyRate < $value[1]) {
+                        if ($hourlyRate >= $value[0] && $hourlyRate <= $value[1]) {
                             $points += $item->points;
                             $pointData['hourlyRate']['points'] = [$item->points, $hourlyRate];
                             goto endHourlyRate;
