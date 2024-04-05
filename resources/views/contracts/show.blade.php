@@ -26,7 +26,10 @@
             <x-tab :href="route('contracts.show', $contract->id).'?tab=cross_departmental_work'" :text="__('Cross Departmental Work')"
                 class="cross_departmental_work" />
 
+            @if (auth()->user()->role_id == 1)
             <x-tab :href="route('contracts.show', $contract->id).'?tab=sales-analysis-report'" :text="__('Sales Analysis Report')" ajax="false"  />
+            @endif
+
 
           {{-- <x-tab :href="route('contracts.show', $contract->id).'?tab=renew'"
                 :text="__('Deal Renewal History')" class="renew" /> --}}
