@@ -199,6 +199,7 @@ class EvaluationController extends AccountBaseController
     }
     public function storeSubmissionEvaluation(Request $request)
     {
+        // DB::beginTransaction();
         $task_sum = EmployeeEvaluationTask::where('user_id',$request->user_id)->sum('avg_rating');
         $task_count = EmployeeEvaluationTask::where('user_id',$request->user_id)->count('avg_rating');
         $average_rating = $task_count > 0 ? $task_sum / $task_count : 0;
@@ -238,7 +239,7 @@ class EvaluationController extends AccountBaseController
             $past_action->client_id = $action->client_id;
             $button = [
                 [
-                    'button_name' => 'Evaluate',
+                    'button_name' => 'See Evaluations',
                     'button_color' => 'primary',
                     'button_type' => 'redirect_url',
                     'button_url' => route('employee-evaluation.index'),
@@ -288,6 +289,15 @@ class EvaluationController extends AccountBaseController
         $average_rating = $number_of_ratings > 0 ? $total_ratings / $number_of_ratings : 0;
         $evaluation_task->avg_rating = $average_rating;
         $evaluation_task->save();
+
+        return response()->json(['status'=>200]);
+    }
+
+    public function storeTeamLeadCmnt(Request $request)
+    {
+        $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
+        $evaluation->team_lead_cmnt = $request->team_lead_cmnt;
+        $evaluation->save();
 
         return response()->json(['status'=>200]);
     }
