@@ -332,7 +332,9 @@ const formatSingleQuestions = (item) => {
     ruleList: item?.rule_list,
     comment: item?.comment,
     id: item?.id,
+    key: item?.key,
     policy_id: item?.policy_id,
+    policy_title: item?.policy_title,
     listItem: item?.type === "list" ? item?.value : [],
   };
 };

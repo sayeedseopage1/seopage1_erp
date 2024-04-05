@@ -129,6 +129,14 @@ const SalesRiskAuthorizeTable = ({
                                                 <td
                                                     key={cell.id}
                                                     className="px-2 sp1_tasks_td"
+                                                    style={{
+                                                        verticalAlign:
+                                                            cell.id.includes(
+                                                                "answered_sales_person"
+                                                            )
+                                                                ? "top"
+                                                                : "middle",
+                                                    }}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef

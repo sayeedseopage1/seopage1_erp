@@ -117,6 +117,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
                     "X-CSRF-TOKEN": _token,
                 },
             }),
+            invalidatesTags: (result, error, arg) => {
+                if (result && !error) {
+                    return [{ type: "GET_SALES_RISK_ANALYSIS_RULES" }];
+                }
+            },
         }),
         editQuestionSalesRiskAnalysis: build.mutation({
             query: (body) => ({
@@ -167,8 +172,11 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             query: () => `account/sales-risk-policies/question/list`,
             providesTags: ["GET_SALES_RISK_ANALYSIS_QUESTION_LIST"],
         }),
+        saleAnalysisQuestionByPolicyId: build.query({
+            query: (policy_id) => `account/sales-risk-policies/question/list?policy_id=${policy_id}`,
+        }),
         saleRiskQuestionDealReport: build.query({
-            query: (deal_id) => `account/sales-risk-policies/deals/report/{deal_id}`,
+            query: (deal_id) => `account/sales-risk-policies/deals/report/${deal_id}`,
         }),
     })
 });
@@ -192,4 +200,5 @@ export const {
     useSaleAnalysisQuestionSaveMutation,
     useSaleAnalysisQuestionsListQuery,
     useSaleRiskQuestionDealReportQuery,
+    useSaleAnalysisQuestionByPolicyIdQuery
 } = salesRiskAnalysisApiSlice;

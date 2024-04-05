@@ -126,6 +126,7 @@ const Popover = ({ children }) => {
                 onMouseLeave={() => setIsVisible(false)}
                 tabIndex={0}
                 role="button"
+                className="singleline-ellipsis"
             >
                 {children}
             </div>

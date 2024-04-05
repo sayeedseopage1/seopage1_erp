@@ -275,6 +275,15 @@ export const SaleRiskAuthorizeHeaderWrapper = styled.div`
             padding: 10px 0;
         }
     }
+    .lastLoader {
+        border-right: none !important;
+        @media screen and (max-width: 768px) {
+            border-right: none !important;
+            border-bottom: none !important;
+            padding: 10px 0;
+        }
+    
+    }
 `;
 
 export const SaleRiskAuthorizeHeaderButton = styled.button`

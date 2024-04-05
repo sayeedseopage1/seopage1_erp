@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // Section component
 import SaleRiskAuthorizeHeader from "../components/sections/SaleRiskAuthorizeHeader";
@@ -28,21 +28,39 @@ import { Placeholder } from "../../../global/Placeholder";
 import { useSaleRiskQuestionDealReportQuery } from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskAuthorize = () => {
+    const [answersPoint, setAnswersPoint] = useState([]);
+    const [metaInfo, setMetaInfo] = useState({});
     const pathnames = window.location.pathname.split("/");
     const deal_id = pathnames[pathnames?.length - 1];
     const auth = useAuth();
 
     // fetch data
     const { data, isLoading } = useSaleRiskQuestionDealReportQuery(deal_id);
-
-    console.log("data", data);
+    useEffect(() => {
+        if (data?.data && !isLoading) {
+            const { pointData, ...rest } = data?.data;
+            const formatData = Object.entries(data?.data?.pointData).map(
+                ([key, value]) => {
+                    return {
+                        ...value,
+                        key: key,
+                        id: key,
+                    };
+                }
+            );
+            setMetaInfo({
+                ...rest,
+            });
+            setAnswersPoint(formatData);
+        }
+    }, [data?.data, isLoading]);
 
     return (
         <section>
             <Switch>
                 <Switch.Case condition={auth.getRoleId() === 1}>
                     <SaleRiskAuthorizeHeader
-                        headerData={DummyHeaderData}
+                        headerData={metaInfo}
                         isLoading={isLoading}
                     />
                 </Switch.Case>
@@ -59,7 +77,7 @@ const SalesRiskAuthorize = () => {
                     <SalesRiskAuthorizeTable
                         tableColumns={SalesRiskAuthorizeColumns}
                         tableName="SalesRiskAuthorizeTable"
-                        tableData={DummyQuestionsPoints}
+                        tableData={answersPoint}
                         isLoading={isLoading}
                     />
                     <SaleRiskAuthorizeTotalPointContainer
@@ -77,7 +95,16 @@ const SalesRiskAuthorize = () => {
                                     />
                                 </div>
                             ) : (
-                                "-0.2"
+                                <span
+                                    style={{
+                                        color:
+                                            metaInfo?.points > 0
+                                                ? "#000"
+                                                : "#F66",
+                                    }}
+                                >
+                                    {metaInfo?.points}
+                                </span>
                             )}
                         </span>
                     </SaleRiskAuthorizeTotalPointContainer>

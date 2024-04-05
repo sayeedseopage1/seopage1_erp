@@ -27,7 +27,7 @@ const SaleRiskAuthorizeHeaderLoader = () => {
             </div>
             <div className="col-12 col-md-2 px-0 ">
                 <div className="singleline-ellipsis d-flex align-items-center">
-                    <div className="singleline-ellipsis">Clients Name : </div>
+                    <div className="singleline-ellipsis lastLoader">Clients Name : </div>
                     <Placeholder height="20px" width="50px" className="ml-1" />
                 </div>
             </div>

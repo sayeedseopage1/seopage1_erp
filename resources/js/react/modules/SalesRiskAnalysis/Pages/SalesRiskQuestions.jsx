@@ -125,8 +125,7 @@ const SalesRiskQuestions = () => {
                         setRedirectUrl(res?.data?.redirect_url);
                     } else {
                         console.log(res?.data);
-                        debugger;
-                        window.location.reload();
+                        // window.location.reload();
                     }
                 }
             } catch (error) {
@@ -235,6 +234,8 @@ const SalesRiskQuestions = () => {
 
         return setInputsData(addSelectValue);
     };
+
+    console.log(inputsData)
 
     return (
         <section>

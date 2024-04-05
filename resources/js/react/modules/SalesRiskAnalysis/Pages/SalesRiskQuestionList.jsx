@@ -39,7 +39,9 @@ const SalesRiskQuestionList = () => {
         isFetching,
         isLoading: isQuestionsListLoading,
         refetch,
-    } = useSaleAnalysisQuestionsListQuery();
+    } = useSaleAnalysisQuestionsListQuery("", {
+        refetchOnMountOrArgChange: true,
+    });
 
     const handleScrollToBottom = () => {};
 

@@ -34,6 +34,7 @@ import {
     useGetSinglePolicySalesRiskAnalysisQuery,
     usePolicyQuestionsListByPolicyIdQuery,
     useQuestionAddonPolicyMutation,
+    useSaleAnalysisQuestionByPolicyIdQuery,
     useSinglePolicyQuestionsQuery,
 } from "../../../../services/api/salesRiskAnalysisSlice";
 
@@ -106,14 +107,23 @@ const AddQuestionsModal = ({
             refetchOnMountOrArgChange: true,
         });
 
+    // const {
+    //     data: questionsList,
+    //     isFetching: isQuestionsListFetching,
+    //     isLoading: isQuestionsListLoading,
+    // } = usePolicyQuestionsListByPolicyIdQuery(addQuestionsData?.id, {
+    //     staleTime: 0,
+    //     refetchOnMountOrArgChange: true,
+    //     skip: !addQuestionsData?.id,
+    // });
+
     const {
         data: questionsList,
         isFetching: isQuestionsListFetching,
         isLoading: isQuestionsListLoading,
-    } = usePolicyQuestionsListByPolicyIdQuery(addQuestionsData?.id, {
-        staleTime: 0,
-        refetchOnMountOrArgChange: true,
+    } = useSaleAnalysisQuestionByPolicyIdQuery(addQuestionsData?.id, {
         skip: !addQuestionsData?.id,
+        refetchOnMountOrArgChange: true,
     });
 
     useEffect(() => {
@@ -414,44 +424,14 @@ const AddQuestionsModal = ({
             contentLabel="Add New Policy"
             width="1200px"
             maxWidth="1200px"
-            height={
-                questions.length > 0 || !_.isEmpty(singleQuestion?.type)
-                    ? "650px"
-                    : "550px"
-            }
-            maxHeight={
-                questions.length > 0 || !_.isEmpty(singleQuestion?.type)
-                    ? "650px"
-                    : "550px"
-            }
+            height="fit-content"
+            maxHeight={"550px"}
             isCloseButtonShow={true}
         >
             {/* Modal Content */}
             <div className="d-flex flex-column">
                 <div className="d-flex justify-content-center align-items-center mb-4">
-                    <ModalTitle>Questions</ModalTitle>
-                </div>
-                <div className="d-flex flex-column mb-4 px-3  w-100">
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Policy Name
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInputLabel>
-                                {addQuestionsData?.title}
-                            </ModalInputLabel>
-                        </div>
-                    </div>
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Department Name
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInputLabel>
-                                {addQuestionsData?.department?.name}
-                            </ModalInputLabel>
-                        </div>
-                    </div>
+                    <ModalTitle>Policy Questions</ModalTitle>
                 </div>
                 {/* 
                 Questions Table
@@ -459,7 +439,7 @@ const AddQuestionsModal = ({
                 <div
                     className="d-flex flex-column mb-4 px-4  w-100"
                     style={{
-                        height: questions.length > 0 ? "365px" : "265px",
+                        maxHeight: "500px",
                         overflowY: "scroll",
                     }}
                 >
@@ -483,272 +463,6 @@ const AddQuestionsModal = ({
                             handleScrollToBottom={handleScrollToBottom}
                         />
                     </div>
-
-                    <div
-                        id="scrollTarget"
-                        className="row mb-4 align-items-center"
-                    >
-                        <ModalInputLabel className="col-4">
-                            Answer Type<sup>*</sup>
-                        </ModalInputLabel>
-                        <div className="col-8 px-0 flex-column">
-                            <ModalSelectContainer>
-                                <CustomDropDown
-                                    filedName="type"
-                                    data={QuestionsTypes}
-                                    selected={singleQuestion?.type}
-                                    setSelected={handleChange}
-                                    isDisableUse={false}
-                                />
-                            </ModalSelectContainer>
-                        </div>
-                    </div>
-
-                    {/* 
-                    Add Question Form
-                    */}
-                    <Switch>
-                        <Switch.Case
-                            condition={!_.isEmpty(singleQuestion?.type)}
-                        >
-                            <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Question Title <sup>*</sup>{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="text"
-                                        className="w-100"
-                                        name="title"
-                                        value={singleQuestion?.title}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    />
-                                    {singleQuestionValidation?.title && (
-                                        <p className="text-danger py-1">
-                                            Title is required
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                            <Switch.Case
-                                condition={
-                                    singleQuestion?.type?.name === "list"
-                                }
-                            >
-                                <AddQuestionTypeListInputs
-                                    isListEmpty={isListEmpty}
-                                    singleQuestion={singleQuestion}
-                                    setSingleQuestion={setSingleQuestion}
-                                />
-                            </Switch.Case>
-                            <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Parent Question
-                                </ModalInputLabel>
-                                <div className="col-8 px-0 flex-column">
-                                    <ModalSelectContainer>
-                                        <QuestionsSelect
-                                            filedName="parent_question"
-                                            data={updateQuestionsList}
-                                            selected={
-                                                singleQuestion?.parent_question
-                                            }
-                                            setSelected={handleChange}
-                                        />
-                                    </ModalSelectContainer>
-                                </div>
-                            </div>
-                            <Switch.Case
-                                condition={
-                                    singleQuestion?.parent_question?.type ===
-                                    "yesNo"
-                                }
-                            >
-                                <div className="row mb-4 align-items-center">
-                                    <ModalInputLabel className="col-4">
-                                        Parent Question For
-                                    </ModalInputLabel>
-                                    <div className="col-8 flex-column px-0">
-                                        <div className="d-flex">
-                                            <div className="d-flex">
-                                                <ModalInput
-                                                    type="radio"
-                                                    className="w-100"
-                                                    name="parent_question_for"
-                                                    id="parent_question_for_yes"
-                                                    value="yes"
-                                                    checked={
-                                                        singleQuestion?.parent_question_for ===
-                                                        "yes"
-                                                    }
-                                                    onChange={handleChange}
-                                                    placeholder="Write Here"
-                                                />
-                                                <ModalInputLabel
-                                                    htmlFor="parent_question_for_yes"
-                                                    className="ml-2"
-                                                >
-                                                    Yes
-                                                </ModalInputLabel>
-                                            </div>
-                                            <div className="d-flex ml-2">
-                                                <ModalInput
-                                                    type="radio"
-                                                    className="w-100"
-                                                    name="parent_question_for"
-                                                    id="parent_question_for_no"
-                                                    value="no"
-                                                    checked={
-                                                        singleQuestion?.parent_question_for ===
-                                                        "no"
-                                                    }
-                                                    onChange={handleChange}
-                                                    placeholder="Write Here"
-                                                />
-                                                <ModalInputLabel
-                                                    htmlFor="parent_question_for_no"
-                                                    className="ml-2"
-                                                >
-                                                    No
-                                                </ModalInputLabel>
-                                            </div>
-                                        </div>
-                                        {yesNoValueEmpty &&
-                                            !singleQuestion?.parent_question_for && (
-                                                <p className="text-danger py-1">
-                                                    Parent Question For is
-                                                    required
-                                                </p>
-                                            )}
-                                    </div>
-                                </div>
-                            </Switch.Case>
-                            <Switch.Case
-                                condition={
-                                    singleQuestion?.parent_question?.type ===
-                                    "list"
-                                }
-                            >
-                                <div className="row mb-4 align-items-start">
-                                    <ModalInputLabel className="col-4">
-                                        Parent Question For
-                                    </ModalInputLabel>
-                                    <div className="col-8 flex-column px-0">
-                                        <div className="d-flex flex-column justify-content-start">
-                                            {singleQuestion?.parent_question?.listItem?.map(
-                                                (list) => (
-                                                    <div
-                                                        className="d-flex justify-content-start align-items-center mb-2"
-                                                        key={list.id}
-                                                    >
-                                                        <ModalInput
-                                                            type="radio"
-                                                            className="ml-2"
-                                                            name="parent_question_for"
-                                                            id={`parent_question_for_${list.id}`}
-                                                            value={list.id}
-                                                            checked={
-                                                                singleQuestion?.parent_question_for ===
-                                                                list?.id
-                                                            }
-                                                            onChange={
-                                                                handleChange
-                                                            }
-                                                            placeholder="Write Here"
-                                                        />
-                                                        <ModalInputLabel
-                                                            htmlFor={`parent_question_for_${list?.id}`}
-                                                            className="ml-2"
-                                                        >
-                                                            {list?.title}
-                                                        </ModalInputLabel>
-                                                    </div>
-                                                )
-                                            )}
-                                        </div>
-                                        {yesNoValueEmpty &&
-                                            !singleQuestion?.parent_question_for && (
-                                                <p className="text-danger py-1">
-                                                    Parent Question For is
-                                                    required
-                                                </p>
-                                            )}
-                                    </div>
-                                </div>
-                            </Switch.Case>
-                            <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Rule List
-                                </ModalInputLabel>
-                                <div className="col-8 px-0 flex-column">
-                                    <ModalSelectContainer>
-                                        <RuleMultiSelect
-                                            filedName="ruleList"
-                                            data={addQuestionsData?.ruleList}
-                                            selected={singleQuestion?.ruleList}
-                                            singleQuestion={singleQuestion}
-                                            setSelected={setSingleQuestion}
-                                        />
-                                    </ModalSelectContainer>
-                                </div>
-                            </div>
-                            <div className="row mb-4 align-items-center">
-                                <ModalInputLabel className="col-4">
-                                    Placeholder <sup>*</sup>{" "}
-                                </ModalInputLabel>
-                                <div className="col-8 flex-column px-0">
-                                    <ModalInput
-                                        type="text"
-                                        className="w-100"
-                                        name="placeholder"
-                                        value={singleQuestion?.placeholder}
-                                        onChange={handleChange}
-                                        placeholder="Write Here"
-                                    />
-                                    {singleQuestionValidation?.placeholder && (
-                                        <p className="text-danger py-1">
-                                            Placeholder is required
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-                        </Switch.Case>
-                    </Switch>
-                    <div className="row mb-4 align-items-center">
-                        <ModalInputLabel className="col-4">
-                            Comment
-                        </ModalInputLabel>
-                        <div className="col-8 flex-column px-0">
-                            <ModalInput
-                                type="text"
-                                className="w-100"
-                                name="comment"
-                                value={singleQuestion?.comment}
-                                onChange={handleChange}
-                                placeholder="Write Here"
-                            />
-                        </div>
-                    </div>
-                    <Flex gap="10px" justifyContent="center">
-                        <ModalButton onClick={handleAddQuestion} width="200px">
-                            {isLoading ||
-                            isEditSinglePolicySalesRiskAnalysisLoading
-                                ? "Saving..."
-                                : isQuestionUpdating
-                                ? "Update Question"
-                                : "Save Question"}
-                        </ModalButton>
-                        <ModalButton
-                            onClick={handleCloseAddQuestionsModal}
-                            width="200px"
-                            color="white"
-                            border="1px solid #1492E6"
-                            textColor="#1492E6"
-                        >
-                            Do it latter
-                        </ModalButton>
-                    </Flex>
                 </div>
             </div>
         </CustomModal>
@@ -764,5 +478,4 @@ AddQuestionsModal.propTypes = {
     singlePolicyQuestions: PropTypes.array,
     setAddQuestionsData: PropTypes.func,
     refetchSaleRiskAnalysis: PropTypes.func,
-    
 };

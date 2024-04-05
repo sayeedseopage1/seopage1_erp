@@ -10,6 +10,7 @@ import Switch from "../Switch";
 // styles
 import style from "../styles/questionModalTableColumns.module.css";
 import popoverStyle from "../popover.module.css";
+import { camelToFlat } from "../../../../utils/utils";
 
 export const QuestionsModalTableColumns = [
     {
@@ -36,31 +37,32 @@ export const QuestionsModalTableColumns = [
         },
     },
     {
-        id: "ruleList",
-        header: "Rules List",
-        accessorKey: "ruleList",
+        id: "question_type",
+        header: "Question Key",
+        accessorKey: "question_type",
         cell: ({ row }) => {
             const data = row?.original;
             return (
-                <div
-                    className="d-flex flex-wrap "
-                    style={{
-                        width: "fit-content",
-                    }}
-                >
-                    {data?.ruleList?.length > 0
-                        ? data?.ruleList?.map((item, index) => (
-                              <span
-                                  className={`${style?.ruleItem} ${
-                                      index !== 0 ? "ml-1" : ""
-                                  } mb-1`}
-                                  key={item.id}
-                              >
-                                  {item?.title}
-                              </span>
-                          ))
-                        : "No Rules"}
-                </div>
+                <p className="multiline-ellipsis">
+                    <Tooltip text={camelToFlat(data?.key)} key="title-tooltip">
+                        {camelToFlat(data?.key)}
+                    </Tooltip>
+                </p>
+            );
+        },
+    },
+    {
+        id: "policy_name",
+        header: "Policy Name",
+        accessorKey: "policy_name",
+        cell: ({ row }) => {
+            const data = row?.original;
+            return (
+                <p className="multiline-ellipsis">
+                    <Tooltip text={data?.policy_title} key="title-tooltip">
+                        {data?.policy_title}
+                    </Tooltip>
+                </p>
             );
         },
     },
@@ -127,7 +129,7 @@ export const QuestionsModalTableColumns = [
                             </Popover>
                         </Switch.Case>
                     </Switch>
-                    <div
+                    {/* <div
                         onClick={() => {
                             action.editSingleQuestion(data);
                         }}
@@ -139,7 +141,7 @@ export const QuestionsModalTableColumns = [
                         }}
                     >
                         <EditIcon />
-                    </div>
+                    </div> */}
                 </div>
             );
         },

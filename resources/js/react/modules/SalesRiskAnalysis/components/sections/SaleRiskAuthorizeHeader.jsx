@@ -10,8 +10,9 @@ import {
 import Tooltip from "../Tooltip";
 import { Placeholder } from "../../../../global/Placeholder";
 import SaleRiskAuthorizeHeaderLoader from "../loader/SaleRiskAuthorizeHeaderLoder";
+import Popover from "../Popover";
 
-// hooks
+import popoverStyle from "../popover.module.css";
 
 const SaleRiskAuthorizeHeader = ({ headerData, isLoading }) => {
     return (
@@ -25,33 +26,75 @@ const SaleRiskAuthorizeHeader = ({ headerData, isLoading }) => {
                 <SaleRiskAuthorizeHeaderLoader />
             ) : (
                 <SaleRiskAuthorizeHeaderWrapper className="col-12 col-md-12 col-lg-10 d-flex flex-column flex-md-row mb-3 mb-md-3 mb-lg-0">
-                    <div className="col-12 col-md-4 col-lg-4 px-0 ">
-                        <div className="singleline-ellipsis d-flex align-items-center">
+                    <div className="col-12 col-md-4 col-lg-4 px-0">
+                        <Popover>
+                            <Popover.Button>
+                                <p
+                                    className={`${popoverStyle.questionModal_popover_button} singleline-ellipsis`}
+                                >
+                                    Project name:{" "}
+                                    <span> {headerData?.projectName} </span>
+                                </p>
+                            </Popover.Button>
+                            <Popover.Panel placement="bottom-start">
+                                <div
+                                    className={`${popoverStyle.questionModal_popover_panel}`}
+                                >
+                                    {headerData?.projectName ?? "-"}
+                                </div>
+                            </Popover.Panel>
+                        </Popover>
+                        {/* <div className="d-flex align-items-center ">
                             Project name:{" "}
-                            <span className="ml-1">
-                                {" "}
-                                <Tooltip text={headerData?.project_name}>
-                                    {headerData?.project_name}
-                                </Tooltip>
-                            </span>
-                        </div>
+                            <Popover>
+                                <Popover.Button>
+                                    <div
+                                        className={`${popoverStyle.questionModal_popover_button} singleline-ellipsis`}
+                                    >
+                                        {headerData?.projectName}
+                                    </div>
+                                </Popover.Button>
+                                <Popover.Panel placement="bottom-start">
+                                    <div
+                                        className={`${popoverStyle.questionModal_popover_panel}`}
+                                    >
+                                        {headerData?.projectName}
+                                    </div>
+                                </Popover.Panel>
+                            </Popover>
+                        </div> */}
                     </div>
                     <div className="col-12 col-md-4 px-0 ">
-                        <p className="singleline-ellipsis d-flex align-items-center">
+                        <p className=" singleline-ellipsis">
                             Sales Person :{" "}
-                            <span className="ml-1">{headerData.person}</span>
+                            <span className="ml-1 ">
+                                {headerData?.user?.name}
+                            </span>
                         </p>
                     </div>
-                    <div className="col-12 col-md-2 px-0 singleline-ellipsis">
-                        <p className="singleline-ellipsis d-flex align-items-center">
+                    <div className="col-12 col-md-2 px-0">
+                        <p className="singleline-ellipsis">
                             {" "}
-                            Deadline: {headerData.deadline}
+                            Deadline: {headerData.deadline} Days
                         </p>
                     </div>
-                    <div className="col-12 col-md-2 px-0 ">
-                        <p className="singleline-ellipsis d-flex align-items-center">
-                            Clients Name : {headerData.clients_name}
-                        </p>
+                    <div className="col-12 col-md-2 px-0">
+                        <Popover>
+                            <Popover.Button>
+                                <p
+                                    className={`${popoverStyle.questionModal_popover_button} singleline-ellipsis`}
+                                >
+                                    Clients: {headerData?.client_name}
+                                </p>
+                            </Popover.Button>
+                            <Popover.Panel placement="bottom-start">
+                                <div
+                                    className={`${popoverStyle.questionModal_popover_panel}`}
+                                >
+                                    {headerData.client_name ?? "-"}
+                                </div>
+                            </Popover.Panel>
+                        </Popover>
                     </div>
                 </SaleRiskAuthorizeHeaderWrapper>
             )}

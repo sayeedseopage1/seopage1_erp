@@ -10,26 +10,33 @@ export const SalesRiskAuthorizeColumns = [
             const data = row.original;
             return (
                 <div className="d-flex flex-column justify-content-center align-items-start">
-                    {data?.questions?.map((question, index) => (
-                        <Switch key={question.id}>
-                            <Switch.Case
-                                condition={question?.parent_id === null}
-                            >
-                                <div key={question?.id} className="py-3">
-                                    <p style={customStyles.mainQuestion}>
-                                        {question?.question}
-                                    </p>
-                                </div>
-                            </Switch.Case>
-                            <Switch.Case condition={question?.parent_id}>
-                                <div key={question?.id} className="ml-2 py-3">
-                                    <p style={customStyles.subQuestion}>
-                                        {question?.question}
-                                    </p>
-                                </div>
-                            </Switch.Case>
-                        </Switch>
-                    ))}
+                    {data?.questionAnswer?.map((question) => {
+                        return (
+                            <Switch key={question.id}>
+                                <Switch.Case
+                                    condition={question?.parent_id !== null}
+                                >
+                                    <div
+                                        key={question?.id}
+                                        className="ml-2 py-3"
+                                    >
+                                        <p style={customStyles.subQuestion}>
+                                            {question?.title}
+                                        </p>
+                                    </div>
+                                </Switch.Case>
+                                <Switch.Case
+                                    condition={question?.parent_id === null}
+                                >
+                                    <div key={question?.id} className="py-3">
+                                        <p style={customStyles.mainQuestion}>
+                                            {question?.title}
+                                        </p>
+                                    </div>
+                                </Switch.Case>
+                            </Switch>
+                        );
+                    })}
                 </div>
             );
         },
@@ -42,13 +49,13 @@ export const SalesRiskAuthorizeColumns = [
             const data = row.original;
             return (
                 <div className="d-flex flex-column justify-content-center align-items-center">
-                    {data?.questions?.map((question) => (
+                    {data?.questionAnswer?.map((question) => (
                         <div key={question?.id} className="py-3">
                             <p
                                 className="text-center"
                                 style={customStyles.subQuestion}
                             >
-                                {question?.answer}
+                                {question?.value ?? "-"}
                             </p>
                         </div>
                     ))}
@@ -62,9 +69,22 @@ export const SalesRiskAuthorizeColumns = [
         accessorKey: "points",
         cell: ({ row }) => {
             const data = row.original;
+
             return (
                 <div className="d-flex justify-content-end align-items-center pr-3">
-                    <span style={customStyles.points}>{data.points}</span>
+                    <Switch>
+                        <Switch.Case condition={data.key === "hourlyRate"}>
+                            <span style={customStyles.points}>
+                                {data?.points[0]}($
+                                {Number(data?.points[1]).toFixed(2)}/hours)
+                            </span>
+                        </Switch.Case>
+                        <Switch.Case condition={data.key !== "hourlyRate"}>
+                            <span style={customStyles.points}>
+                                {data.points}
+                            </span>
+                        </Switch.Case>
+                    </Switch>
                 </div>
             );
         },
