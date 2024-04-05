@@ -25,6 +25,7 @@ import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../utils/check-is-url";
+import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
 
 // const fileInputStyle = {
 //     height: "39px",
@@ -70,7 +71,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     //state for graphic designer end
 
     // state for ui/ux start
-    const [cms, setCms] = useState("")
+    // const [cms, setCms] = useState("")
+    const [cms, setCms] = useState("");
     const [themeType, setThemeType] = useState("")
     const [themeName, setThemeName] = useState("")
     const [themeTemplate, setThemeTemplate] = useState("")
@@ -391,7 +393,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         // graphics end 
 
         // ui/ux start 
-        fd.append("cms", cms ?? "");
+        fd.append("cms", cms?.type_name ?? "");
         fd.append("theme_name", themeName ?? "");
         fd.append("theme_template_library_link", themeTemplate ?? "");
         // ui/ux end 
@@ -1423,8 +1425,22 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                 {/* it will show conditionally here, when task category is UI/UIX Design  */}
                                 {
                                     taskCategory ? taskCategory?.category_name === "UI/UIX Design" && <>
+
+                                        {/* CMS Category */}
+
                                         {/* cms name  */}
                                         <div className="col-12 col-md-6">
+                                            <CmsDropdown
+                                                selected={cms}
+                                                onSelect={setCms}
+                                            />
+                                            {formError?.cms && (
+                                                <div style={{ color: "red" }}>
+                                                    {formError?.cms}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* <div className="col-12 col-md-6">
                                             <Input
                                                 id="cms"
                                                 label="CMS"
@@ -1438,7 +1454,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     handleChange(e, setCms)
                                                 }
                                             />
-                                        </div>
+                                        </div> */}
                                         <div className="col-12 col-md-6">
                                             <ThemeTypeSelect
                                                 selected={themeType}

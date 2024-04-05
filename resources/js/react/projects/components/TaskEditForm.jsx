@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsWorkSelection";
 import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
+import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
     const { tasks, filter } = useSelector(s => s.tasks);
@@ -203,7 +204,9 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             setEstimateTimeMin(row.estimate_minutes);
             setAttachedFiles(row?.files);
             setDescription(row?.description);
-            setCms(row?.cms);
+            setCms({
+                type_name: row?.cms
+            });
             setThemeName(row?.theme_name);
             setThemeTemplate(row?.theme_template_library_link);
             // graphics 
@@ -449,7 +452,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         // graphics end 
 
         // ui/ux start 
-        fd.append("cms", cms ?? "");
+        fd.append("cms", cms?.type_name ?? "");
         if (themeType?.id == 2) {
             fd.append("theme_name", themeName ?? "");
             fd.append("theme_template_library_link", themeTemplate ?? "");
@@ -1457,19 +1460,15 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                 taskCategory ? taskCategory?.category_name === "UI/UIX Design" && <>
                                     {/* cms name  */}
                                     <div className="col-12 col-md-6">
-                                        <Input
-                                            id="cms"
-                                            label="CMS"
-                                            type="text"
-                                            placeholder="Enter a CMS"
-                                            name="cms"
-                                            required={true}
-                                            value={cms}
-                                            error={formError?.cms}
-                                            onChange={(e) =>
-                                                handleChange(e, setCms)
-                                            }
+                                        <CmsDropdown
+                                            selected={cms}
+                                            onSelect={setCms}
                                         />
+                                        {formError?.cms && (
+                                            <div style={{ color: "red" }}>
+                                                {formError?.cms}
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="col-12 col-md-6">
                                         <ThemeTypeSelect

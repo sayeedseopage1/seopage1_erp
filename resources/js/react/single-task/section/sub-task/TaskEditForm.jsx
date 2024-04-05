@@ -31,6 +31,7 @@ import TypeOfLogo from "../../../projects/components/graphics-design-forms/TypeO
 import FileTypesNeeded from "../../../projects/components/graphics-design-forms/FileTypesNeeded";
 import ThemeTypeSelect from "../../../projects/components/ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../../utils/check-is-url";
+import CmsDropdown from "../../../projects/components/ui-ux-design-forms/CmsDropdown";
 
 const dayjs = new CompareDate();
 
@@ -201,21 +202,37 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     }, [themeName, themeTemplate])
 
     // initial default data
+    // Effect for setting CMS, theme name, and template
     useEffect(() => {
         if (row) {
-            setCms(row?.cms);
+            setCms({
+                type_name: row?.cms
+            });
             setThemeName(row?.theme_name);
             setThemeTemplate(row?.theme_template_library_link);
-            // graphics 
+        }
+    }, [row]);
+
+    // Effect for setting graphics-related state
+    useEffect(() => {
+        if (row && graphicOptions) {
+            const graphicWorkDetail = row.graphic_work_detail;
+            const selectedOption = graphicOptions.find(item => item.id === graphicWorkDetail?.type_of_graphic_work_id);
+
             setTypeOfGraphicsCategory({
-                id: row?.graphic_work_detail?.type_of_graphic_work_id,
-                name: graphicOptions?.find((item) => item.id == row?.graphic_work_detail?.type_of_graphic_work_id)?.name,
+                id: graphicWorkDetail?.type_of_graphic_work_id,
+                name: selectedOption?.name,
             });
             setTypeOfLogo({
-                type_name: graphicWorkDetails?.type_of_logo,
+                type_name: graphicWorkDetail?.type_of_logo,
             });
+        }
+    }, [row, graphicOptions]);
 
-            setBrandName(graphicWorkDetails?.brand_name)
+    // Effect for setting graphic work details
+    useEffect(() => {
+        if (graphicWorkDetails) {
+            setBrandName(graphicWorkDetails?.brand_name);
             setNumOfVersions(graphicWorkDetails?.number_of_versions);
             setReference(graphicWorkDetails?.reference);
             setFontName(graphicWorkDetails?.font_name);
@@ -225,7 +242,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             setIllustration(graphicWorkDetails?.design_instruction);
             setOthers(graphicWorkDetails?.design_instruction);
         }
-    }, [row, graphicWorkDetails, graphicOptions])
+    }, [graphicWorkDetails]);
 
     const { data: estimation, isFetching } = useGetTaskDetailsQuery(
         `/${task?.id}/json?mode=estimation_time`, { skip: !task?.id }
@@ -473,7 +490,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         // graphics end 
 
         // ui/ux start 
-        fd.append("cms", cms ?? "");
+        fd.append("cms", cms?.type_name ?? "");
         if (themeType?.id == 2) {
             fd.append("theme_name", themeName ?? "");
             fd.append("theme_template_library_link", themeTemplate ?? "");
@@ -1430,24 +1447,19 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
                         </> : null
                     }
-
                     {
                         taskCategory ? taskCategory?.category_name === "UI/UIX Design" && <>
                             {/* cms name  */}
                             <div className="col-12 col-md-6">
-                                <Input
-                                    id="cms"
-                                    label="CMS"
-                                    type="text"
-                                    placeholder="Enter a CMS"
-                                    name="cms"
-                                    required={true}
-                                    value={cms}
-                                    error={error?.cms}
-                                    onChange={(e) =>
-                                        handleChange(e, setCms)
-                                    }
+                                <CmsDropdown
+                                    selected={cms}
+                                    onSelect={setCms}
                                 />
+                                {error?.cms && (
+                                    <div style={{ color: "red" }}>
+                                        {error?.cms}
+                                    </div>
+                                )}
                             </div>
                             <div className="col-12 col-md-6">
                                 <ThemeTypeSelect
