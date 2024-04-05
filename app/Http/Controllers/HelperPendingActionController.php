@@ -1886,7 +1886,7 @@ class HelperPendingActionController extends AccountBaseController
             $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
             $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
             $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
-            $team_lead = User::where('id',$evaluation_task->team_lead_id)->first(); 
+            $team_lead = User::where('id',$evaluation->team_lead_id)->first();
             $task = Task::where('id',$evaluation_task->task_id)->first();
             $authorizers= User::where('role_id',1)->get();
             $updated_at = Carbon::parse($evaluation_task->updated_at);

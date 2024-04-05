@@ -295,6 +295,8 @@ class EvaluationController extends AccountBaseController
 
     public function storeTeamLeadCmnt(Request $request)
     {
+        // dd($request->all());
+        // DB::beginTransaction();
         $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
         $evaluation->team_lead_cmnt = $request->team_lead_cmnt;
         $evaluation->team_lead_status = 1;
@@ -302,7 +304,7 @@ class EvaluationController extends AccountBaseController
         $evaluation->save();
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
-        $actions = PendingAction::where('code','NDPE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+        $actions = PendingAction::where('code','LDSEND')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
         if($actions != null)
         {
             foreach ($actions as $key => $action) {
@@ -342,6 +344,7 @@ class EvaluationController extends AccountBaseController
             $past_action->button = json_encode($button);
             $past_action->save();
             }
+
         }
         
         $helper = new HelperPendingActionController();
