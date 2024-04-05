@@ -30,7 +30,7 @@ return new class extends Migration
         });
 
         Schema::table('sales_risk_policies', function (Blueprint $table) {
-            $table->foreign('parent_id')->references('id')->on('sales_risk_policies')->onUpdate('no action')->onDelete('no action');
+            $table->foreign('parent_id')->references('id')->on('sales_risk_policies')->onUpdate('no action')->onDelete('cascade');
         });
 
         /*
