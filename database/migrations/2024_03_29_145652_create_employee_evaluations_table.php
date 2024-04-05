@@ -23,7 +23,7 @@ return new class extends Migration
             $table->decimal('lead_dev_avg_rating')->nullable();
             $table->longText('team_lead_cmnt')->nullable();
             $table->longText('managements_cmnt')->nullable();
-            $table->string('management_decision')->nullable();
+            $table->string('managements_decision')->nullable();
             $table->integer('managements_id')->nullable();
             $table->string('managements_name')->nullable();
             $table->dateTime('managements_auth_at')->nullable();
