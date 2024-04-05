@@ -33,6 +33,7 @@ import {
     useGetTaskListQuery,
     useStoreTaskRatingFinalSubmissionMutation,
     useStoreTaskRatingMutation,
+    useStoreTeamLeadReviewMutation,
 } from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
 import useEmployeeEvaluation from "../../../zustand/store";
@@ -43,10 +44,11 @@ const EvaluationModal = ({
     singleEvaluation,
 }) => {
     const auth = useAuth();
+    const [teamLeadReview, setTeamLeadReview] = useState("");
     const { evaluationObject } = useEmployeeEvaluation();
     const [taskRatingFinalSubmission] =
         useStoreTaskRatingFinalSubmissionMutation();
-    const [leadDevFinalSubmission, { isError }] = useStoreTaskRatingMutation();
+    const [leadDevSubmission] = useStoreTeamLeadReviewMutation();
     const { data, isLoading, isFetching } = useGetTaskListQuery(
         singleEvaluation?.user_id
     );
@@ -93,7 +95,18 @@ const EvaluationModal = ({
     };
 
     const handleTeamLeadComment = async (e) => {
-        e.preventDefault();
+        try {
+            await leadDevSubmission({
+                team_lead_cmnt: teamLeadReview,
+                _token: document
+                    .querySelector("meta[name='csrf-token']")
+                    .getAttribute("content"),
+            });
+            toast.success("Review submission Successful!");
+            setIsEvaluationModal(false);
+        } catch (error) {
+            toast.error("Review submission failed. Please try again later.");
+        }
     };
     const handleAdminComment = async (e) => {
         e.preventDefault();
@@ -139,7 +152,14 @@ const EvaluationModal = ({
                         Team Leader's Review
                     </TeamLeadReviewTitle>
                     <CommentBox>
-                        <CKEditorComponent placeholder="Write your comment here" />
+                        <CKEditorComponent
+                            placeholder="Write your comment here"
+                            data={teamLeadReview}
+                            onChange={(e, editor) => {
+                                const data = editor.getData();
+                                setTeamLeadReview(data);
+                            }}
+                        />
                     </CommentBox>
                 </div>
             )}

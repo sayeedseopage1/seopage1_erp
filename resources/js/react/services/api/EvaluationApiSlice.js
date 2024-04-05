@@ -34,6 +34,15 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
         }),
+        storeTeamLeadReview: build.mutation({
+            query: (data) => ({
+                url: `/account/employee-evaluation-team-lead-cmnt`,
+                method: "POST",
+                body: data,
+                formData: true,
+            }),
+            invalidatesTags: ["ALL_TASKS", "ALL_EVALUATION"],
+        }),
 
         finalTaskSubmissionStatus: build.mutation({
             query: (assignToId) => ({
@@ -52,6 +61,7 @@ const evaluationApiSlice = apiSlice.injectEndpoints({
 export const {
     useGetTaskListQuery,
     useStoreTaskRatingMutation,
+    useStoreTeamLeadReviewMutation,
     useUpdateTaskRatingSubmissionMutation,
     useStoreTaskRatingFinalSubmissionMutation,
     useFinalTaskSubmissionStatusMutation,
