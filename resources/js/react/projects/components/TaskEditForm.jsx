@@ -1505,9 +1505,9 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                             <div className="col-12 col-md-6">
                                                 <Input
                                                     id="themeTemplate"
-                                                    label="Theme template library link"
+                                                    label="Theme Template Library URL"
                                                     type="url"
-                                                    placeholder="Enter a template library link"
+                                                    placeholder="Enter a Theme Template Library URL"
                                                     name="themeTemplate"
                                                     required={true}
                                                     value={themeTemplate}

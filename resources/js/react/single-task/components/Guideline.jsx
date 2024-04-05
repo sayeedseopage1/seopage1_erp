@@ -343,7 +343,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         }
                         {
                             theme_template_library_link && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>CMS</strong>: <br /> <a target="__blank" href={theme_template_library_link}>{theme_template_library_link}</a></span>
+                                <span><strong>Theme Template Library URL</strong>: <br /> <a target="__blank" href={theme_template_library_link}>{theme_template_library_link}</a></span>
                             </div>
                         }
                     </div>
@@ -658,7 +658,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     }
                                     {
                                         theme_template_library_link && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>CMS</strong>: <br /> <a target="__blank" href={theme_template_library_link}>{theme_template_library_link}</a></span>
+                                            <span><strong>Theme Template Library URL</strong>: <br /> <a target="__blank" href={theme_template_library_link}>{theme_template_library_link}</a></span>
                                         </div>
                                     }
                                 </div>

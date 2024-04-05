@@ -1137,7 +1137,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             themeTemplate && <div className="col-12 col-md-6">
                                 <Input
                                     id="themeTemplate"
-                                    label="Theme template library link"
+                                    label="Theme Template Library URL"
                                     type="url"
                                     name="themeTemplate"
                                     value={themeTemplate}

@@ -2814,7 +2814,7 @@ var Guideline = function Guideline(_ref) {
           className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
-              children: "CMS"
+              children: "Theme Template Library URL"
             }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
               target: "__blank",
               href: theme_template_library_link,
@@ -3175,7 +3175,7 @@ var Guideline = function Guideline(_ref) {
                 className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
-                    children: "CMS"
+                    children: "Theme Template Library URL"
                   }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
                     target: "__blank",
                     href: theme_template_library_link,
@@ -12132,7 +12132,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
               id: "themeTemplate",
-              label: "Theme template library link",
+              label: "Theme Template Library URL",
               type: "url",
               name: "themeTemplate",
               value: themeTemplate,
@@ -13473,7 +13473,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           className: "col-12 col-md-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
             id: "themeTemplate",
-            label: "Theme template library link",
+            label: "Theme Template Library URL",
             type: "url",
             name: "themeTemplate",
             value: themeTemplate,
@@ -15964,9 +15964,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               className: "col-12 col-md-6",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_25__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
                 id: "themeTemplate",
-                label: "Theme template library link",
+                label: "Theme Template Library URL",
                 type: "url",
-                placeholder: "Enter a template library link",
+                placeholder: "Theme Template Library URL",
                 name: "themeTemplate",
                 required: true,
                 value: themeTemplate,
