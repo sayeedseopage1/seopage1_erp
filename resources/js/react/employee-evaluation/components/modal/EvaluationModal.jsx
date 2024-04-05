@@ -36,7 +36,6 @@ import {
     useStoreTeamLeadReviewMutation,
 } from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
-import useEmployeeEvaluation from "../../../zustand/store";
 
 const EvaluationModal = ({
     isEvaluationModal,
@@ -45,7 +44,7 @@ const EvaluationModal = ({
 }) => {
     const auth = useAuth();
     const [teamLeadReview, setTeamLeadReview] = useState("");
-    const { evaluationObject } = useEmployeeEvaluation();
+
     const [taskRatingFinalSubmission] =
         useStoreTaskRatingFinalSubmissionMutation();
     const [leadDevSubmission] = useStoreTeamLeadReviewMutation();
@@ -81,7 +80,7 @@ const EvaluationModal = ({
     const handleFinalSubmission = async () => {
         try {
             await taskRatingFinalSubmission({
-                user_id: evaluationObject?.user_id,
+                user_id: singleEvaluation?.user_id,
                 confirm_submission: "lead_dev_submitted",
                 _token: document
                     .querySelector("meta[name='csrf-token']")
@@ -98,7 +97,7 @@ const EvaluationModal = ({
         try {
             await leadDevSubmission({
                 team_lead_cmnt: teamLeadReview,
-                user_id: evaluationObject.user_id,
+                user_id: singleEvaluation.user_id,
                 _token: document
                     .querySelector("meta[name='csrf-token']")
                     .getAttribute("content"),
@@ -135,7 +134,7 @@ const EvaluationModal = ({
         >
             <EvalTableTitle>
                 <span>New Developer Evaluation :</span>
-                <span>{evaluationObject.user_name}</span>
+                <span>{singleEvaluation.user_name}</span>
             </EvalTableTitle>
             <EvaluationTable
                 data={Tasks}
@@ -147,7 +146,7 @@ const EvaluationModal = ({
                 setSorting={setSorting}
             />
             {/* //team lead comment start */}
-            {auth.roleId === 8 && (
+            {auth.roleId === 8 && singleEvaluation.team_lead_status === 0 ? (
                 <div>
                     <TeamLeadReviewTitle>
                         Team Leader's Review
@@ -163,6 +162,30 @@ const EvaluationModal = ({
                         />
                     </CommentBox>
                 </div>
+            ) : (
+                <section>
+                    <SectionFlex>
+                        <HorizontalLineLeftTL />
+                        <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
+                        <HorizontalLineRightTL />
+                    </SectionFlex>
+
+                    <ReviewContent>
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: singleEvaluation.team_lead_cmnt,
+                            }}
+                        />
+
+                        <ReviewFooter>
+                            By{" "}
+                            <a href="www.teamLead.com" target="_blank">
+                                Mohammad Sayeed Ullah
+                            </a>{" "}
+                            on <span>{data?.data[0]?.updated_at}</span>
+                        </ReviewFooter>
+                    </ReviewContent>
+                </section>
             )}
             {/* //team lead comment end */}
 
@@ -234,10 +257,10 @@ const EvaluationModal = ({
                         className="ml-2"
                         disabled={
                             !allTasksReviewed ||
-                            evaluationObject.ld_submission_status === 1
+                            singleEvaluation.ld_submission_status === 1
                         }
                     >
-                        {evaluationObject.ld_submission_status === 1 ? (
+                        {singleEvaluation.ld_submission_status === 1 ? (
                             <div> submitted </div>
                         ) : (
                             <div> Confirm Submission</div>
@@ -249,15 +272,16 @@ const EvaluationModal = ({
 
                 {/* Team Lead submit button start */}
 
-                {auth.roleId === 8 && (
-                    <Button
-                        onClick={handleTeamLeadComment}
-                        size="md"
-                        className="ml-2"
-                    >
-                        Submit Review
-                    </Button>
-                )}
+                {auth.roleId === 8 &&
+                    singleEvaluation.team_lead_status === 0 && (
+                        <Button
+                            onClick={handleTeamLeadComment}
+                            size="md"
+                            className="ml-2"
+                        >
+                            Submit Review
+                        </Button>
+                    )}
 
                 {/* Team Lead Submit button end */}
 
