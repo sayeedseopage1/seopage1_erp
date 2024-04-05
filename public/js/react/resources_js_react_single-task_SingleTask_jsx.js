@@ -1266,7 +1266,6 @@ var SingleTaskPage = function SingleTaskPage() {
     }),
     data = _useGetTaskDetailsQue.data,
     isFetching = _useGetTaskDetailsQue.isFetching;
-  console.log("task id", params === null || params === void 0 ? void 0 : params.taskId);
   var _useGetTaskStatusQuer = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetTaskStatusQuery)(params === null || params === void 0 ? void 0 : params.taskId, {
       skip: !(params !== null && params !== void 0 && params.taskId)
     }),

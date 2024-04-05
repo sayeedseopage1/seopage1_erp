@@ -47,8 +47,6 @@ const SingleTaskPage = () => {
         { skip: !params?.taskId }
     );
 
-    console.log("task id", params?.taskId)
-
     const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId, { skip: !params?.taskId });
 
     const task = new SingleTask(Task); // task instance
