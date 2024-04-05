@@ -146,7 +146,7 @@ const EvaluationModal = ({
                 setSorting={setSorting}
             />
             {/* //team lead comment start */}
-            {auth.roleId === 8 && singleEvaluation.team_lead_status === 0 ? (
+            {auth.roleId === 8 && singleEvaluation.team_lead_status === 0 && (
                 <div>
                     <TeamLeadReviewTitle>
                         Team Leader's Review
@@ -162,7 +162,9 @@ const EvaluationModal = ({
                         />
                     </CommentBox>
                 </div>
-            ) : (
+            )}
+
+            {auth.roleId === 8 && singleEvaluation.team_lead_status === 1 && (
                 <section>
                     <SectionFlex>
                         <HorizontalLineLeftTL />
@@ -202,20 +204,16 @@ const EvaluationModal = ({
                         <ReviewContent>
                             <div
                                 dangerouslySetInnerHTML={{
-                                    __html: data?.data[0]?.lead_dev_cmnt,
+                                    __html: singleEvaluation.team_lead_cmnt,
                                 }}
                             />
 
                             <ReviewFooter>
                                 By{" "}
-                                <a
-                                    href="www.LeadDevId.com"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {singleEvaluation.user_name}
+                                <a href="www.teamLead.com" target="_blank">
+                                    Mohammad Sayeed Ullah
                                 </a>{" "}
-                                on <span>{data?.data[0]?.updatedAt}</span>
+                                on <span>{data?.data[0]?.updated_at}</span>
                             </ReviewFooter>
                         </ReviewContent>
                     </section>

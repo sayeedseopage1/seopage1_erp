@@ -164,9 +164,9 @@ const ActionDropdownDataTable = ({ data, table }) => {
                                         </Switch.Case>
                                         <Switch.Case
                                             condition={
-                                                data?.lead_dev_avg_rating ===
-                                                    null &&
-                                                data?.team_lead_cmnt !== null
+                                                data?.ld_submission_status ===
+                                                    1 &&
+                                                data?.team_lead_status === 1
                                             }
                                         >
                                             Authorize

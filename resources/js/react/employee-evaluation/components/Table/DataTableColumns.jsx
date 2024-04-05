@@ -1,6 +1,8 @@
 import ActionDropdown from "./ActionDropdown";
 import ActionDropdownDataTable from "./ActionDropDownDataTable";
 import Person from "./Person";
+import TeamLeadComment from "./CommentModal";
+import CommentModal from "./CommentModal";
 
 export const DataTableColumns = [
     // {
@@ -110,11 +112,8 @@ export const DataTableColumns = [
         accessorKey: "team_lead_cmnt",
         cell: ({ row }) => {
             const data = row.original;
-            return (
-                <div>
-                    {data?.team_lead_cmnt === "" ? "--" : data?.team_lead_cmnt}
-                </div>
-            );
+
+            return <CommentModal comment={data.team_lead_cmnt} />;
         },
     },
     {
