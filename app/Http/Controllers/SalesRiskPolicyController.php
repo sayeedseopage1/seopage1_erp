@@ -98,7 +98,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function save(Request $req)
     {
-        // dd($req->all());
         $validator = Validator::make($req->all(), [
             'title' => 'required',
             'department' => 'required',
@@ -120,6 +119,7 @@ class SalesRiskPolicyController extends AccountBaseController
         DB::beginTransaction();
 
         try {
+
             $policy =  SalesRiskPolicy::create([
                 'title' => $req->title,
                 'department' => $req->department,
@@ -666,7 +666,6 @@ class SalesRiskPolicyController extends AccountBaseController
                 'redirectUrl' => route('dealDetails', $dealId),
                 'data' => ['points' => $calculation['points']]
             ]);
-
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
@@ -965,13 +964,147 @@ class SalesRiskPolicyController extends AccountBaseController
             // ---------------------------- end routeWork, availableWeekend, firstSubmisstoin, acceptPriceProposal ------------------------------ //
 
 
-            // ----------------------------- common calculation -------------------------- //
+            // ----------------------------- common calculations -------------------------- //
+
+            // ------------------------------ clientCountry country --------------------------- //
+            $policy = SalesRiskPolicy::where('key', 'clientCountry')->first();
+
+            if (! $policy) {
+                goto endClientCountry;
+            }
+
+            $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
+
+            $lead = Lead::find($deal->lead_id);
+            foreach ($policies as $item) {
+
+                $countries = json_decode($item->value, true);
+                foreach ($countries as $country) {
+                    if ($lead->country == array_values($country)[0]) {
+                        $points += $item->points;
+                        $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => array_values($country)[0]];
+                        $pointData['clientCountry']['points'] = $item->points;
+                        goto endClientCountry;
+                    }
+                }
+            }
+            $pointData['clientCountry']['questionAnswer'][] = ['title' => 'From which country does the client originate?', 'value' => $lead->country];
+            $pointData['clientCountry']['points'] = 0;
+            endClientCountry:
+            // ------------------------------ end clientCountry country --------------------------- //
+
+            // --------------------------------- projectDeadline -------------------------- //
+            $policy = SalesRiskPolicy::where('key', 'projectDeadline')->first();
+
+            if ($policy) {
+                $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
+                $d1 = new DateTime("$deal->start_date 00:00:00");
+                $d2 = new DateTime("$deal->deadline 23:59:59");
+                $interval = $d1->diff($d2);
+                $deadline = $interval->d;
+                $pointValue = 0;
+                $data = [];
+
+                foreach ($policies as $item) {
+
+                    switch ($item->type) {
+                        case 'lessThan':
+                            if ($deadline < $item->value) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Less Then', 'value' => $item->value];
+                                goto endProjectDeadline;
+                            }
+                            break;
+                        case 'greaterThan':
+                            if ($deadline > $item->value) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Greater Then', 'value' => $item->value];
+                                goto endProjectDeadline;
+                            }
+                            break;
+                        case 'fixed':
+                            if ($deadline == $item->value) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Fixed', 'value' => $item->value];
+                                goto endProjectDeadline;
+                            }
+                            break;
+                        case 'range':
+                            $value = explode(',', $item->value);
+                            if ($deadline >= $value[0] && $deadline <= $value[1]) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Range', 'value' => $value[0] .' - '. $value[1]];
+                                goto endProjectDeadline;
+                            }
+                            break;
+                    }
+                }
+
+                endProjectDeadline:
+
+                $points += (float) $pointValue;
+                $pointData['projectDeadline']['points'] = $pointValue;
+                $pointData['projectDeadline']['questionAnswer'][] = ['title' => 'What is the deadline for this project?', 'value' => $deadline];
+                $data ? $pointData['projectDeadline']['questionAnswer'][] = $data : '';
+            }
+
+            // --------------------------------- end projectDeadline -------------------------- //
+
+            // -------------------------------- projectBudget -------------------------------------- //
+            $policy = SalesRiskPolicy::where('key', 'projectBudget')->first();
+            if ($policy) {
+                $policies = SalesRiskPolicy::where('parent_id', $policy->id)->get();
+                $pointValue = 0;
+                $data = [];
+                foreach ($policies as $item) {
+
+                    switch ($item->type) {
+                        case 'lessThan':
+                            if ($deal->amount < $item->value) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Less Then', 'value' => $item->value];
+                                goto endProjectBudget;
+                            }
+                            break;
+                        case 'greaterThan':
+                            if ($deal->amount > $item->value) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Greater Then', 'value' => $item->value];
+                                goto endProjectBudget;
+                            }
+                            break;
+                        case 'fixed':
+                            if ($deal->amount == $item->value) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Fixed', 'value' => $item->value];
+                                goto endProjectBudget;
+                            }
+                            break;
+                        case 'range':
+                            $value = explode(',', $item->value);
+                            if ($deal->amount >= $value[0] && $deal->amount <= $value[1]) {
+                                $pointValue = $item->points;
+                                $data = ['title' => 'Range', 'value' => $value[0] .' - '. $value[1]];
+                                goto endProjectBudget;
+                            }
+                            break;
+                    }
+                }
+
+                endProjectBudget:
+                $points += (float) $pointValue;
+                $pointData['projectBudget']['points'] = $pointValue;
+                $pointData['projectBudget']['questionAnswer'][] = ['title' => 'What is the budget for this project?', 'value' => $deal->amount];
+                $data ? $pointData['projectBudget']['questionAnswer'][] = $data : '';
+            }
+            // -------------------------------- end projectBudget -------------------------------------- //
+
 
 
             return ['points' => $points, 'pointData' => $pointData];
         } catch (\Throwable $th) {
 
-            // throw $th;
+            throw $th;
             return ['points' => null, 'error' => $th->getMessage()];
         }
     }
@@ -984,14 +1117,13 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $deal = Deal::find($deal_id);
         $projectName = $deal->project_name;
-        $user = User::whereId($deal->added_by)->first(['id','name']);
+        $user = User::whereId($deal->added_by)->first(['id', 'name']);
 
         //get Date diff as intervals
         $d1 = new DateTime("$deal->start_date 00:00:00");
         $d2 = new DateTime("$deal->deadline 23:59:59");
         $interval = $d1->diff($d2);
         $deadline = $interval->d;
-
 
         /**
          * hourlyRate
@@ -1007,7 +1139,7 @@ class SalesRiskPolicyController extends AccountBaseController
          * projectBudget
          */
 
-         return response()->json(['status' => 'success', 'data' => compact('points', 'pointData', 'projectName', 'user', 'deadline')]);
+        return response()->json(['status' => 'success', 'data' => compact('points', 'pointData', 'projectName', 'user', 'deadline')]);
     }
 
     function salesRiskReport()
