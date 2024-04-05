@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deal;
+use App\Models\EmployeeEvaluation;
 use App\Models\EmployeeEvaluationTask;
 use App\Models\PendingAction;
 use App\Models\Project;
@@ -1879,6 +1880,49 @@ class HelperPendingActionController extends AccountBaseController
                 $action->save();
             }
         }
+        public function teamLeadSubmittedNewDevEvaluation($evaluation_task)
+        {
+            $evaluation_task = EmployeeEvaluationTask::where('id',$evaluation_task)->first(); 
+            $new_dev = User::where('id',$evaluation_task->user_id)->first(); 
+            $lead_dev = User::where('id',$evaluation_task->lead_dev_id)->first(); 
+            $evaluation = EmployeeEvaluation::where('user_id',$evaluation_task->user_id)->first(); 
+            $team_lead = User::where('id',$evaluation_task->team_lead_id)->first(); 
+            $task = Task::where('id',$evaluation_task->task_id)->first();
+            $authorizers= User::where('role_id',1)->get();
+            $updated_at = Carbon::parse($evaluation_task->updated_at);
+            $formatted_date_time = $updated_at->format('d F Y \a\t g:i A');
+            foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'TLSDE';
+                $action->serial = 'TLSDE'.'x'.$key;
+                $action->item_name= 'Team leader submission!';
+                $action->heading= 'Team Leader '.$team_lead->name.'\'s Lead Developer '.$lead_dev->name.'\'s evaluation on Employee '.$new_dev->name.'!';
+                $action->message = 'Team Leader <a href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name.'</a> has reviewed Lead Developer <a href="'.route('employees.show',$lead_dev->id).'">'.$lead_dev->name.'\'s</a> evaluations  on New Developer on '.$formatted_date_time.'';
+                $action->timeframe= 24;
+                $action->client_id = $task->client_id;
+               $action->task_id = $task->id;
+               $action->developer_id = $new_dev->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Authorize',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                    ],
+                    [
+                        'button_name' => 'Continue this trial for 1 more week!',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                    ],
 
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+            }
+        }
 
 }
