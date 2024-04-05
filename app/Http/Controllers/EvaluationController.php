@@ -349,5 +349,110 @@ class EvaluationController extends AccountBaseController
 
         return response()->json(['status'=>200]);
     }
+    public function storeAuthorization(Request $request)
+    {
+        if($request->status == 'authorize')
+        {
+            $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
+            $evaluation->managements_cmnt = $request->managements_cmnt;
+            $evaluation->managements_decision = 'Accepted';
+            $evaluation->accept_rejected = 'Accept';
+            $evaluation->employee_status = 1;
+            $evaluation->save();
+
+            $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
+            $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+            if($actions != null)
+            {
+                foreach ($actions as $key => $action) {
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $teamLead= User::where('id',$evaluation->team_lead_id)->first();
+                $dev= User::where('id',$evaluation->user_id)->first();
+                    
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading= 'New Developer '.$dev->name.' was authorize for real work by Top Management '.$authorize_by->name.'!';
+                $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has authorized New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->task_id = $action->task_id;
+                $past_action->developer_id = $action->developer_id;
+                $past_action->client_id = $action->client_id;
+                $button = [
+                    [
+                        'button_name' => 'See Evaluations',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                    ],
+                ];
+                $past_action->button = json_encode($button);
+                $past_action->save();
+                }
+            }
+        }else{
+            $evaluation = EmployeeEvaluation::where('user_id',$request->user_id)->first();
+            $evaluation->managements_cmnt = $request->managements_cmnt;
+            $evaluation->managements_decision = 'Rejected';
+            $evaluation->accept_rejected = 'reject';
+            $evaluation->employee_status = 1;
+            $evaluation->save();
+
+            $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
+            $actions = PendingAction::where('code','TLSDE')->where('task_id',$evaluation_task->task_id)->where('past_status',0)->get();
+            if($actions != null)
+            {
+                foreach ($actions as $key => $action) {
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $teamLead= User::where('id',$evaluation->team_lead_id)->first();
+                $dev= User::where('id',$evaluation->user_id)->first();
+                    
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading= 'New Developer '.$dev->name.' was rejected for real work by Top Management '.$authorize_by->name.'!';
+                $past_action->message = 'Top Management <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a> has rejected New Developer <a href="'.route('employees.show',$dev->id).'">'.$dev->name.'</a> for real work from ';
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->task_id = $action->task_id;
+                $past_action->developer_id = $action->developer_id;
+                $past_action->client_id = $action->client_id;
+                $button = [
+                    [
+                        'button_name' => 'See Evaluations',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('employee-evaluation.index'),
+                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $dev->id]),
+                    ],
+                ];
+                $past_action->button = json_encode($button);
+                $past_action->save();
+                }
+            }
+        }
+    }
 
 }
