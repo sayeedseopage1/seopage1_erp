@@ -16,7 +16,10 @@ import CKEditorComponent from "../../../ckeditor";
 useStoreTaskRatingMutation;
 import { useAuth } from "../../../hooks/useAuth";
 import useEmployeeEvaluation from "../../../zustand/store";
-import { useStoreTaskRatingMutation } from "../../../services/api/EvaluationApiSlice";
+import {
+    useStoreTaskRatingMutation,
+    useUpdateTaskRatingSubmissionMutation,
+} from "../../../services/api/EvaluationApiSlice";
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
@@ -26,6 +29,7 @@ const SingleEvaluationModal = ({
     const auth = useAuth();
     const { evaluationObject } = useEmployeeEvaluation();
     const [storeTaskRating] = useStoreTaskRatingMutation();
+    const [updateTaskRating] = useUpdateTaskRatingSubmissionMutation();
     const [averageRating, setAverageRating] = useState(data.avg_rating);
     const [formData, setFormData] = useState({
         qw_first_chance: data.qw_first_chance ?? 0,
@@ -51,10 +55,9 @@ const SingleEvaluationModal = ({
             return sum / ratings.length;
         };
 
-        setAverageRating(calculateAverageRating(formData));
+        setAverageRating(calculateAverageRating(formData).toFixed(2));
     }, [formData]);
 
-    console.log("form data", formData);
     const formFields = [
         {
             label: "Quality of work (in the first chance)",
@@ -228,8 +231,25 @@ const SingleEvaluationModal = ({
                 toast.error("Rating not submitted");
             });
     };
-    const handleEdit = (e) => {
+    const handleEdit = async (e) => {
         e.preventDefault();
+
+        await updateTaskRating({
+            ...formData,
+            evaluation_id: evaluationObject.id,
+            _token: document
+                .querySelector("meta[name='csrf-token']")
+                .getAttribute("content"),
+        })
+            .unwrap()
+            .then((response) => {
+                toast.success("Rating updated");
+                toggleSingleEvaluationModal();
+            })
+            .catch((error) => {
+                console.error("Error updating rating:", error);
+                toast.error("Error updating rating");
+            });
     };
     return (
         <ReactModal
@@ -283,14 +303,15 @@ const SingleEvaluationModal = ({
                                 }min`}
                             </td>
                             <td>
-                                {JSON.parse(data?.completed_work).map(
-                                    (data) => (
-                                        <div>
-                                            <a href={data}>{data}</a>
-                                            <br />
-                                        </div>
-                                    )
-                                )}
+                                {data?.completed_work &&
+                                    JSON.parse(data?.completed_work).map(
+                                        (data) => (
+                                            <div>
+                                                <a href={data}>{data}</a>
+                                                <br />
+                                            </div>
+                                        )
+                                    )}
                             </td>
                             <td>{data.revision_number}</td>
                             <td>{averageRating ?? "N/A"}</td>
@@ -302,9 +323,18 @@ const SingleEvaluationModal = ({
             <div>
                 <div className={styles.rating_container}>
                     {auth.roleId === 6 &&
-                        formFields.map((field, index) => (
-                            <ReusableSection key={index} {...field} />
-                        ))}
+                        (evaluationObject.ld_submission_status === 0
+                            ? formFields.map((field, index) => (
+                                  <ReusableSection key={index} {...field} />
+                              ))
+                            : evaluationObject.ld_submission_status === 1 &&
+                              formFields.map((field, index) => (
+                                  <ReusableSectionTeamLeadAndAdmin
+                                      key={index}
+                                      {...field}
+                                  />
+                              )))}
+
                     {(auth.roleId === 8 || auth.roleId === 1) &&
                         formFields.map((field, index) => (
                             <ReusableSectionTeamLeadAndAdmin
@@ -329,19 +359,55 @@ const SingleEvaluationModal = ({
                         marginTop: "10px",
                     }}
                 >
-                    {auth.roleId === 6 && (
-                        <CKEditorComponent
-                            placeholder="Write your comment here"
-                            data={formData?.lead_dev_cmnt}
-                            onChange={(e, editor) => {
-                                const data = editor.getData();
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    lead_dev_cmnt: data,
-                                }));
-                            }}
-                        />
-                    )}
+                    {auth.roleId === 6 &&
+                        (evaluationObject.ld_submission_status === 0 ? (
+                            <CKEditorComponent
+                                placeholder="Write your comment here"
+                                data={formData?.lead_dev_cmnt}
+                                onChange={(e, editor) => {
+                                    const data = editor.getData();
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        lead_dev_cmnt: data,
+                                    }));
+                                }}
+                            />
+                        ) : (
+                            <section
+                                style={{
+                                    height: "auto",
+                                    position: "relative",
+                                    width: "100%",
+                                    padding: "10px",
+                                    paddingBottom: "40px",
+                                }}
+                            >
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: data?.lead_dev_cmnt,
+                                    }}
+                                ></div>
+                                <div
+                                    style={{
+                                        position: "absolute",
+                                        bottom: "10px",
+                                        right: "10px",
+                                        padding: "3px",
+                                        border: "1px solid grey",
+                                    }}
+                                >
+                                    By{" "}
+                                    <a
+                                        href="www.LeadDevId.com"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {evaluationObject.added_by_name}
+                                    </a>{" "}
+                                    on <span>{data?.updated_at}</span>
+                                </div>
+                            </section>
+                        ))}
 
                     {(auth.roleId === 8 || auth.roleId === 1) && (
                         <section
@@ -383,6 +449,7 @@ const SingleEvaluationModal = ({
                 </div>
                 <div className="d-flex justify-content-center">
                     {auth.roleId === 6 &&
+                        evaluationObject.ld_submission_status === 0 &&
                         (data?.avg_rating === null ? (
                             <button
                                 className="mr-2 btn btn-primary "

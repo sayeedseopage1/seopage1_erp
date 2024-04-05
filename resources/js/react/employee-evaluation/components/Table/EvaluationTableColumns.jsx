@@ -43,12 +43,16 @@ export const EvaluationTableColumns = [
         accessorKey: "completed_work",
         cell: ({ row }) => {
             const data = row.original;
-            return JSON.parse(data?.completed_work).map((data) => (
-                <div>
-                    <a href={data}>{data}</a>
-                    <br />
-                </div>
-            ));
+            if (data?.completed_work) {
+                return JSON.parse(data.completed_work).map((data) => (
+                    <div>
+                        <a href={data}>{data}</a>
+                        <br />
+                    </div>
+                ));
+            } else {
+                return "--";
+            }
         },
     },
     {

@@ -21,6 +21,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
     const [buttonVariant, setButtonVariant] = React.useState("");
     const handleEvaluationClick = () => {
         setIsEvaluationModal((prev) => !prev);
+        setEvaluationObject(data);
     };
     React.useEffect(() => {
         if (data?.lead_dev_avg_rating === null) {
