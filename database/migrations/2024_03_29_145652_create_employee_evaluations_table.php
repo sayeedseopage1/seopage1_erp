@@ -28,6 +28,7 @@ return new class extends Migration
             $table->dateTime('pending_action_sending_time')->nullable();
             $table->integer('ld_submission_status')->default(0);
             $table->integer('team_lead_id')->nullable();
+            $table->dateTime('team_lead_cmnt_at')->nullable();
             $table->integer('team_lead_status')->default(0);
             $table->integer('employee_status')->default(0);
             $table->timestamps();

@@ -301,6 +301,7 @@ class EvaluationController extends AccountBaseController
         $evaluation->team_lead_cmnt = $request->team_lead_cmnt;
         $evaluation->team_lead_status = 1;
         $evaluation->team_lead_id = Auth::user()->id;
+        $evaluation->team_lead_cmnt_at = Carbon::now();
         $evaluation->save();
 
         $evaluation_task = EmployeeEvaluationTask::where('user_id',$request->user_id)->first();
