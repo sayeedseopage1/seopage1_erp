@@ -25,7 +25,7 @@ import { DummyHeaderData, DummyQuestionsPoints } from "../constant";
 import { Placeholder } from "../../../global/Placeholder";
 
 // api
-import { useSaleRiskQuestionsAnswerReportQuery } from "../../../services/api/salesRiskAnalysisSlice";
+import { useSaleRiskQuestionDealReportQuery } from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskAuthorize = () => {
     const pathnames = window.location.pathname.split("/");
@@ -33,9 +33,7 @@ const SalesRiskAuthorize = () => {
     const auth = useAuth();
 
     // fetch data
-    const { data, isLoading } =
-        useSaleRiskQuestionsAnswerReportQuery(deal_id);
-
+    const { data, isLoading } = useSaleRiskQuestionDealReportQuery(deal_id);
 
     console.log("data", data);
 

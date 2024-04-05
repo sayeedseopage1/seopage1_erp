@@ -101,6 +101,7 @@ const SalesRiskAnalysisTable = ({
         department: false,
         policyType: false,
         valueType: false,
+        key: false,
         value: false,
         from: false,
         to: false,
@@ -118,6 +119,7 @@ const SalesRiskAnalysisTable = ({
             valueType: false,
             value: false,
             from: false,
+            key: false,
             to: false,
             yes: false,
             no: false,
@@ -224,6 +226,10 @@ const SalesRiskAnalysisTable = ({
                     selectedRule,
                     policyKeys
                 );
+                const getIndex = row.ruleList.findIndex(
+                    (item) => item.id === selectedRule.id
+                );
+                console.log("getIndex", getIndex);
                 setEditRuleData(payload);
                 setEditRuleModalOpen(true);
             },
@@ -398,9 +404,13 @@ const SalesRiskAnalysisTable = ({
                 [name]: value,
             });
         } else if (name === "policyType") {
+            const getValueType =
+            editPolicyInputData?.length > 0
+                    ? editPolicyInputData[0]?.valueType
+                    : {};
             setEditPolicyData({
                 ...editPolicyData,
-                valueType: {},
+                valueType: getValueType,
                 value: "",
                 from: "",
                 to: "",
@@ -414,6 +424,8 @@ const SalesRiskAnalysisTable = ({
             setEditPolicyData({ ...editPolicyData, [name]: value });
         }
     };
+
+    console.log("editPolicyData", editPolicyDefaultData);
 
     // reset form for policy on close
     const resetFormForPolicy = (single) => {
@@ -480,7 +492,18 @@ const SalesRiskAnalysisTable = ({
                         ...editPolicyData,
                     };
                 }
-                return item;
+                if (editPolicyData.index === 0) {
+                    return {
+                        ...item,
+                        title: autoGenerateTitle({
+                            ...item,
+                            valueType: editPolicyData.valueType,
+                        }),
+                        valueType: editPolicyData.valueType,
+                    };
+                } else {
+                    return item;
+                }
             });
             setIsRuleUpdating(false);
             setEditPolicyInputData(updatedData);
@@ -544,6 +567,7 @@ const SalesRiskAnalysisTable = ({
             valueType: false,
             value: false,
             from: false,
+            hey: false,
             to: false,
             yes: false,
             no: false,

@@ -406,7 +406,7 @@ export const SalesRiskAnalysisTableColumns = [
                                                 onClick={() => {
                                                     action.handleEditApplicableRule(
                                                         data,
-                                                        rule
+                                                        rule,
                                                     );
                                                 }}
                                                 tabIndex={0}
