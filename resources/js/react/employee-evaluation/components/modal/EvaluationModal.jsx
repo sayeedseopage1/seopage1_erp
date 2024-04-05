@@ -27,7 +27,7 @@ import { useAuth } from "../../../hooks/useAuth";
 import CKEditorComponent from "../../../ckeditor";
 
 import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
-import Button from "../Button";
+import { Button } from "react-bootstrap";
 
 import {
     useGetTaskListQuery,
@@ -131,10 +131,26 @@ const EvaluationModal = ({
             );
         }
     };
+
     const handleAdminRejection = async (e) => {
         try {
             await adminAuthorization({
                 status: "reject",
+                user_id: singleEvaluation.user_id,
+                managements_cmnt: adminComment,
+                _token: document
+                    .querySelector("meta[name='csrf-token']")
+                    .getAttribute("content"),
+            });
+            toast.success("Employee Rejection Successful!");
+            setIsEvaluationModal(false);
+        } catch (error) {
+            toast.error("Employee Rejection failed. Please try again later.");
+        }
+    };
+    const handleAdminExtention = async (e) => {
+        try {
+            await adminAuthorization({
                 user_id: singleEvaluation.user_id,
                 managements_cmnt: adminComment,
                 _token: document
@@ -254,7 +270,7 @@ const EvaluationModal = ({
                         </ReviewContent>
                     </section>
 
-                    {singleEvaluation.management_decision === null ? (
+                    {singleEvaluation.managements_decision === null ? (
                         <section>
                             <SectionFlex>
                                 <HorizontalLineLeftA />
@@ -359,8 +375,23 @@ const EvaluationModal = ({
 
                 {/* Admin submit button start */}
                 {auth.roleId === 1 &&
-                    singleEvaluation.management_decision === null && (
+                    singleEvaluation.managements_decision === null && (
                         <Flex>
+                            <Button
+                                onClick={handleAdminAuthorization}
+                                size="md"
+                                className="ml-2"
+                            >
+                                Authorize
+                            </Button>
+                            <Button
+                                variant="info"
+                                onClick={handleAdminExtention}
+                                size="md"
+                                className="ml-2"
+                            >
+                                Continue this trial for 1 more week!
+                            </Button>
                             <Button
                                 variant="danger"
                                 onClick={handleAdminRejection}
@@ -368,13 +399,6 @@ const EvaluationModal = ({
                                 className="ml-2"
                             >
                                 Reject
-                            </Button>
-                            <Button
-                                onClick={handleAdminAuthorization}
-                                size="md"
-                                className="ml-2"
-                            >
-                                Authorize
                             </Button>
                         </Flex>
                     )}

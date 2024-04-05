@@ -30,7 +30,10 @@ const SingleEvaluationModal = ({
     const { evaluationObject } = useEmployeeEvaluation();
     const [storeTaskRating] = useStoreTaskRatingMutation();
     const [updateTaskRating] = useUpdateTaskRatingSubmissionMutation();
-    const [averageRating, setAverageRating] = useState(data.avg_rating);
+    const [averageRating, setAverageRating] = useState(
+        evaluationObject.lead_dev_avg_rating
+    );
+
     const [formData, setFormData] = useState({
         qw_first_chance: data.qw_first_chance ?? 0,
         qw_first_revision: data.qw_first_revision ?? 0,
@@ -159,7 +162,7 @@ const SingleEvaluationModal = ({
                 }),
         },
     ];
-    console.log("evaluation ");
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const requiredFields = [
@@ -314,7 +317,11 @@ const SingleEvaluationModal = ({
                                     )}
                             </td>
                             <td>{data.revision_number}</td>
-                            <td>{averageRating ?? "N/A"}</td>
+                            {evaluationObject.lead_dev_avg_rating ? (
+                                <td>{evaluationObject.lead_dev_avg_rating} </td>
+                            ) : (
+                                <td>{averageRating ?? "N/A"}</td>
+                            )}
                         </tr>
                     </tbody>
                 </table>

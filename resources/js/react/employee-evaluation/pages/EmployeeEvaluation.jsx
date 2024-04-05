@@ -44,21 +44,21 @@ const EmployeeEvaluation = () => {
     // console.log("evaluations", Evaluations);
     // filter data
     const getData = (type) => {
-        let _data = _.orderBy(Evaluations, "management_decision", "asc");
+        let _data = _.orderBy(Evaluations, "managements_decision", "asc");
         switch (type) {
             case "all":
                 return _data;
             case "pending":
-                return _.filter(_data, (d) => d.management_decision === null);
+                return _.filter(_data, (d) => d.managements_decision === null);
             case "denied":
                 return _.filter(
                     _data,
-                    (d) => d.management_decision === "denied"
+                    (d) => d.managements_decision === "Rejected"
                 );
             case "authorized":
                 return _.filter(
                     _data,
-                    (d) => d.management_decision === "authorized"
+                    (d) => d.managements_decision === "Accepted"
                 );
             default:
                 return _data;

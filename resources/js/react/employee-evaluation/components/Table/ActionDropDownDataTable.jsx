@@ -58,7 +58,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(6)}>
                         <Switch>
                             <Switch.Case
-                                condition={data?.accept_rejected === null}
+                                condition={data?.managements_decision === null}
                             >
                                 <Button
                                     onClick={() => {
@@ -75,7 +75,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    data?.accept_rejected === "authorized"
+                                    data?.managements_decision === "Accepted"
                                 }
                             >
                                 <Button
@@ -85,6 +85,31 @@ const ActionDropdownDataTable = ({ data, table }) => {
                                     Accepted
                                 </Button>
                             </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    data?.managements_decision === "Rejected"
+                                }
+                            >
+                                <Button
+                                    onClick={handleEvaluationClick}
+                                    variant="danger"
+                                >
+                                    Rejected
+                                </Button>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    data?.managements_decision ===
+                                    "One more week"
+                                }
+                            >
+                                <Button
+                                    onClick={handleEvaluationClick}
+                                    variant="info"
+                                >
+                                    Extended For 1 week
+                                </Button>
+                            </Switch.Case>
                         </Switch>
                     </Switch.Case>
 
@@ -92,7 +117,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(8)}>
                         <Switch>
                             <Switch.Case
-                                condition={data?.accept_rejected === null}
+                                condition={data?.managements_decision === null}
                             >
                                 <Button
                                     onClick={handleEvaluationClick}
@@ -114,7 +139,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    data?.accept_rejected === "authorized"
+                                    data?.managements_decision === "Accepted"
                                 }
                             >
                                 <Button
@@ -124,6 +149,31 @@ const ActionDropdownDataTable = ({ data, table }) => {
                                     Accepted
                                 </Button>
                             </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    data?.managements_decision === "Rejected"
+                                }
+                            >
+                                <Button
+                                    onClick={handleEvaluationClick}
+                                    variant="danger"
+                                >
+                                    Rejected
+                                </Button>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    data?.managements_decision ===
+                                    "One more week"
+                                }
+                            >
+                                <Button
+                                    onClick={handleEvaluationClick}
+                                    variant="info"
+                                >
+                                    Extended For 1 week
+                                </Button>
+                            </Switch.Case>
                         </Switch>
                     </Switch.Case>
 
@@ -131,7 +181,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                     <Switch.Case condition={auth.isHasRolePermission(1)}>
                         <Switch>
                             <Switch.Case
-                                condition={data?.accept_rejected === null}
+                                condition={data?.managements_decision === null}
                             >
                                 <Button
                                     dataTip={toolTipAdmin}
@@ -178,7 +228,7 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             </Switch.Case>
                             <Switch.Case
                                 condition={
-                                    data?.accept_rejected === "authorized"
+                                    data?.managements_decision === "Accepted"
                                 }
                             >
                                 <Button
@@ -186,6 +236,31 @@ const ActionDropdownDataTable = ({ data, table }) => {
                                     variant="success"
                                 >
                                     Accepted
+                                </Button>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    data?.managements_decision === "Rejected"
+                                }
+                            >
+                                <Button
+                                    onClick={handleEvaluationClick}
+                                    variant="danger"
+                                >
+                                    Rejected
+                                </Button>
+                            </Switch.Case>
+                            <Switch.Case
+                                condition={
+                                    data?.managements_decision ===
+                                    "One more week"
+                                }
+                            >
+                                <Button
+                                    onClick={handleEvaluationClick}
+                                    variant="info"
+                                >
+                                    Extended For 1 week
                                 </Button>
                             </Switch.Case>
                         </Switch>
