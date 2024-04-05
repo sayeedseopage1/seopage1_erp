@@ -431,21 +431,24 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
 
                     {/* Project Milestone Selection Menu */}
-                    <div className="col-12 col-md-6">
-                        <div className="form-group my-3">
-                            <label
-                                className={`f-14 text-dark-gray mb-1`}
-                                data-label="true"
-                            >
-                                Milestone
-                            </label>
-                            <input
-                                className={`form-control height-35 f-14`}
-                                readOnly
-                                defaultValue={milestone?.milestone_title}
-                            />
+                    {
+                        task?.category?.name !== "Graphic Design" && <div className="col-12 col-md-6">
+                            <div className="form-group my-3">
+                                <label
+                                    className={`f-14 text-dark-gray mb-1`}
+                                    data-label="true"
+                                >
+                                    Milestone
+                                </label>
+                                <input
+                                    className={`form-control height-35 f-14`}
+                                    readOnly
+                                    defaultValue={milestone?.milestone_title}
+                                />
+                            </div>
                         </div>
-                    </div>
+                    }
+
 
 
                     <div className="col-12 col-md-6">
@@ -464,7 +467,13 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                         </div>
                     </div>
 
-
+                    <div className="col-12 col-md-6">
+                        <TaskCategorySelectionBox
+                            selected={taskCategory}
+                            onSelect={setTaskCategory}
+                            isDesignerTask={true}
+                        />
+                    </div>
 
                     <div className="col-12 col-md-6">
                         <div className="form-group my-3">
@@ -522,14 +531,6 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                 </div>
                             )}
                         </div>
-                    </div>
-
-                    <div className="col-12 col-md-6">
-                        <TaskCategorySelectionBox
-                            selected={taskCategory}
-                            onSelect={setTaskCategory}
-                            isDesignerTask={true}
-                        />
                     </div>
 
                     {

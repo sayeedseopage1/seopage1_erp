@@ -11286,7 +11286,7 @@ var EditFormProvider = function EditFormProvider(_ref) {
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFormProvider);
 var SubTaskEditModal = function SubTaskEditModal(_ref2) {
-  var _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category2;
+  var _required_error$title, _task$category, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category2, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category3;
   var task = _ref2.task,
     taskDetails = _ref2.singleTask,
     onSubmit = _ref2.onSubmit,
@@ -11723,7 +11723,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               defaultValue: project
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+        }), (task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.name) !== "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
             className: "form-group my-3",
@@ -11750,6 +11750,13 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               readOnly: true,
               defaultValue: task === null || task === void 0 ? void 0 : task.parentTaskTitle
             })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          className: "col-12 col-md-6",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_12__["default"], {
+            selected: taskCategory,
+            onSelect: setTaskCategory,
+            isDesignerTask: true
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
           className: "col-12 col-md-6",
@@ -11803,16 +11810,9 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               children: required_error === null || required_error === void 0 || (_required_error$due_d2 = required_error.due_date) === null || _required_error$due_d2 === void 0 ? void 0 : _required_error$due_d2[0]
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
-          className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_12__["default"], {
-            selected: taskCategory,
-            onSelect: setTaskCategory,
-            isDesignerTask: true
-          })
         }),
         // lead designer to graphic designer
-        (task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+        (task === null || task === void 0 || (_task$category2 = task.category) === null || _task$category2 === void 0 ? void 0 : _task$category2.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_20__["default"], {
@@ -12108,7 +12108,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
           })]
         }),
         // lead designer to ui/ux designer
-        (task === null || task === void 0 || (_task$category2 = task.category) === null || _task$category2 === void 0 ? void 0 : _task$category2.name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
+        (task === null || task === void 0 || (_task$category3 = task.category) === null || _task$category3 === void 0 ? void 0 : _task$category3.name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.Fragment, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -12347,7 +12347,7 @@ var fileInputStyle = {
   zIndex: '0'
 };
 var SubTaskForm = function SubTaskForm(_ref) {
-  var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category4, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category5, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category6, _required_error$page_2, _required_error$descr, _required_error$descr2;
+  var _window, _required_error$title, _task$category9, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _task$category10, _defaultSecondaryColo, _defaultSecondaryColo2, _task$category11, _task$category12, _ref5, _required_error$pageT, _required_error$pageT2, _ref8, _required_error$pageT3, _required_error$pageT4, _ref11, _ref14, _ref17, _required_error$page_, _task$category13, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     isDesignerTask = _ref.isDesignerTask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
@@ -12664,6 +12664,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     });
   }, [isDesignerTask]);
   var isValid = function isValid() {
+    var _task$category4;
     var count = 0;
     var error = new Object();
     if (!title) {
@@ -12690,69 +12691,71 @@ var SubTaskForm = function SubTaskForm(_ref) {
       react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 04 Submittable tasks."));
       count++;
     }
-    if (!pageType) {
-      error.taskType = "You have to Select task type";
-      count++;
-    } else {
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("New Page Design")) {
-        if (!pageTypePriority) {
-          error.pageTypePriority = "You have to Select page type";
-          count++;
-        }
-        if (!pageName) {
-          error.pageName = "You have to Select page name";
-          count++;
-        }
-
-        // if (!pageURL) {
-        //     error.pageUrl = "You have to provide page URL";
-        //     count++;
-        // } else if (!checkIsURL(pageURL)) {
-        //     error.pageUrl = "You have to provide a valid page URL";
-        //     toast.warn("You have to provide a valid page URL");
-        //     count++;
-        // }
-      }
-
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Others")) {
-        if (!pageTypeOthers) {
-          error.pageTypeOthers = "You have to select an option";
-          count++;
-        }
-        if (!pageName) {
-          error.pageName = "You have to Select page name";
-          count++;
-        }
-        if (!pageURL) {
-          error.pageUrl = "You have to provide page URL";
-          count++;
-        } else if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_14__.checkIsURL)(pageURL)) {
-          error.pageUrl = "You have to provide a valid page URL";
-          react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You have to provide a valid page URL");
-          count++;
-        }
-      }
-      if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Cloning Existing Design")) {
-        if (!pageTypeName) {
-          error.pageTypeName = "You have to select an option";
-          count++;
-        }
-        if (!numberOfPage) {
-          error.numberOfPage = "The minimum required number is 1";
-          count++;
-        }
-        if (!existingDesignLink) {
-          error.existingDesignLink = "You have to provide Exiting Design Link";
-          count++;
-        } else if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_14__.checkIsURL)(existingDesignLink)) {
-          error.existingDesignLink = "You have to provide a valid Exiting Design Link";
-          react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You have to provide a valid Exiting Design Link");
-          count++;
-        }
-      }
-      if (!description) {
-        error.description = "The description field is required";
+    if ((task === null || task === void 0 || (_task$category4 = task.category) === null || _task$category4 === void 0 ? void 0 : _task$category4.name) !== "Graphic Design") {
+      if (!pageType) {
+        error.taskType = "You have to Select task type";
         count++;
+      } else {
+        if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("New Page Design")) {
+          if (!pageTypePriority) {
+            error.pageTypePriority = "You have to Select page type";
+            count++;
+          }
+          if (!pageName) {
+            error.pageName = "You have to Select page name";
+            count++;
+          }
+
+          // if (!pageURL) {
+          //     error.pageUrl = "You have to provide page URL";
+          //     count++;
+          // } else if (!checkIsURL(pageURL)) {
+          //     error.pageUrl = "You have to provide a valid page URL";
+          //     toast.warn("You have to provide a valid page URL");
+          //     count++;
+          // }
+        }
+
+        if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Others")) {
+          if (!pageTypeOthers) {
+            error.pageTypeOthers = "You have to select an option";
+            count++;
+          }
+          if (!pageName) {
+            error.pageName = "You have to Select page name";
+            count++;
+          }
+          if (!pageURL) {
+            error.pageUrl = "You have to provide page URL";
+            count++;
+          } else if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_14__.checkIsURL)(pageURL)) {
+            error.pageUrl = "You have to provide a valid page URL";
+            react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You have to provide a valid page URL");
+            count++;
+          }
+        }
+        if (lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower(pageType) === lodash__WEBPACK_IMPORTED_MODULE_9___default().toLower("Cloning Existing Design")) {
+          if (!pageTypeName) {
+            error.pageTypeName = "You have to select an option";
+            count++;
+          }
+          if (!numberOfPage) {
+            error.numberOfPage = "The minimum required number is 1";
+            count++;
+          }
+          if (!existingDesignLink) {
+            error.existingDesignLink = "You have to provide Exiting Design Link";
+            count++;
+          } else if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_14__.checkIsURL)(existingDesignLink)) {
+            error.existingDesignLink = "You have to provide a valid Exiting Design Link";
+            react_toastify__WEBPACK_IMPORTED_MODULE_12__.toast.warn("You have to provide a valid Exiting Design Link");
+            count++;
+          }
+        }
+        if (!description) {
+          error.description = "The description field is required";
+          count++;
+        }
       }
     }
     setErr(error);
@@ -12766,8 +12769,8 @@ var SubTaskForm = function SubTaskForm(_ref) {
   // handle submission
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
-      var _task$boardColumn, _typeOfGraphicsCatego, _typeOfLogo$type_name, _JSON$stringify, _ref3, _JSON$stringify2;
-      var _startDate, _dueDate, fd, submit, primaryPageConfirmation, response, _error, checkViolationWord, alert;
+      var _task$boardColumn, _typeOfGraphicsCatego, _typeOfLogo$type_name, _JSON$stringify, _ref3, _JSON$stringify2, _task$category5;
+      var _startDate, _dueDate, fd, submit, primaryPageConfirmation, response, _error, checkViolationWord, alert, _task$category7, _task$category8;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -12866,6 +12869,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return _ref4.apply(this, arguments);
               };
             }();
+            if ((task === null || task === void 0 || (_task$category5 = task.category) === null || _task$category5 === void 0 ? void 0 : _task$category5.name) === "Graphic Design") {
+              submit();
+            }
             primaryPageConfirmation = function primaryPageConfirmation() {
               if (!isDesignerTask && pageTypePriority === "Primary Page Development") {
                 Swal.fire({
@@ -12891,9 +12897,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 });
               }
             }; // check violation words
-            _context2.next = 49;
+            _context2.next = 50;
             return checkRestrictedWords(task === null || task === void 0 ? void 0 : task.projectId).unwrap();
-          case 49:
+          case 50:
             response = _context2.sent;
             if (response.status === 400) {
               _error = new Object();
@@ -12911,7 +12917,10 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   showCancelButton: true
                 }).then(function (res) {
                   if (res.isConfirmed) {
-                    primaryPageConfirmation();
+                    var _task$category6;
+                    if ((task === null || task === void 0 || (_task$category6 = task.category) === null || _task$category6 === void 0 ? void 0 : _task$category6.name) !== "Graphic Design") {
+                      primaryPageConfirmation();
+                    }
                   }
                 });
               }; // check title
@@ -12925,15 +12934,20 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 _error.violationWord = "Some violation word found. You do not use <span class=\"badge badge-danger\">revision</span> <span class=\"badge badge-danger\">Fix</span> <span class=\"badge badge-danger\">Modify</span> <span class=\"badge badge-danger\">Fixing</span> <span class=\"badge badge-danger\">Revise</span> <span class=\"badge badge-danger\">Edit</span>";
                 alert();
               } else {
-                primaryPageConfirmation();
+                if ((task === null || task === void 0 || (_task$category7 = task.category) === null || _task$category7 === void 0 ? void 0 : _task$category7.name) !== "Graphic Design") {
+                  primaryPageConfirmation();
+                }
               }
               setErr(function (prev) {
                 return _objectSpread(_objectSpread({}, prev), _error);
               });
             } else {
-              primaryPageConfirmation();
+              if ((task === null || task === void 0 || (_task$category8 = task.category) === null || _task$category8 === void 0 ? void 0 : _task$category8.name) !== "Graphic Design") {
+                primaryPageConfirmation();
+                console.log("clicked!!!");
+              }
             }
-          case 51:
+          case 52:
           case "end":
             return _context2.stop();
         }
@@ -12999,7 +13013,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             return handleChange(e, setTitle);
           }
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+      }), (task === null || task === void 0 || (_task$category9 = task.category) === null || _task$category9 === void 0 ? void 0 : _task$category9.name) !== "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "form-group my-3",
@@ -13041,6 +13055,18 @@ var SubTaskForm = function SubTaskForm(_ref) {
             defaultValue: project
           })]
         })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+        className: "col-12 col-md-6",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_8__["default"], {
+          selected: taskCategory,
+          onSelect: setTaskCategory,
+          isDesignerTask: isDesignerTask
+        }), (err === null || err === void 0 ? void 0 : err.taskCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+          style: {
+            color: "red"
+          },
+          children: err === null || err === void 0 ? void 0 : err.taskCategory
+        })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
@@ -13111,21 +13137,9 @@ var SubTaskForm = function SubTaskForm(_ref) {
             children: err === null || err === void 0 ? void 0 : err.dueDate
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-        className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_TaskCategorySelectionBox__WEBPACK_IMPORTED_MODULE_8__["default"], {
-          selected: taskCategory,
-          onSelect: setTaskCategory,
-          isDesignerTask: isDesignerTask
-        }), (err === null || err === void 0 ? void 0 : err.taskCategory) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          style: {
-            color: "red"
-          },
-          children: err === null || err === void 0 ? void 0 : err.taskCategory
-        })]
       }),
       // lead designer to graphic designer
-      (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category4 = task.category) === null || _task$category4 === void 0 ? void 0 : _task$category4.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+      (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category10 = task.category) === null || _task$category10 === void 0 ? void 0 : _task$category10.name) === "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
           className: "col-12 col-md-6",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_projects_components_graphics_design_forms_TypeOfGraphicsWorkSelection__WEBPACK_IMPORTED_MODULE_19__["default"], {
@@ -13435,7 +13449,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
         })]
       }),
       // lead designer to ui/ux designer
-      (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category5 = task.category) === null || _task$category5 === void 0 ? void 0 : _task$category5.name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+      (auth === null || auth === void 0 ? void 0 : auth.isHasRolePermission(13)) && (task === null || task === void 0 || (_task$category11 = task.category) === null || _task$category11 === void 0 ? void 0 : _task$category11.name) === "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -13484,332 +13498,334 @@ var SubTaskForm = function SubTaskForm(_ref) {
           },
           children: "You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === "male" ? "He " : "She ", " has more than 4 Submittable tasks.")
         })]
-      }), auth !== null && auth !== void 0 && auth.isHasRolePermission(13) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-        className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
-          value: pageType,
-          onChange: setPageType,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-            className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
-              htmlFor: "",
-              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
-                children: "*"
-              }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
-              className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
-                className: "singleline-ellipsis pr-3",
-                children: pageType || "Select task type"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-                className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                  className: "fa-solid fa-sort"
-                })
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
-              className: "sp1-select-options",
-              children: (_ref5 = ["New Page Design", "Cloning Existing Design"
-              // "Others",
-              ]) === null || _ref5 === void 0 ? void 0 : _ref5.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref6) {
-                    var active = _ref6.active;
-                    return "sp1-select-option ".concat(active ? "active" : "");
-                  },
-                  value: s,
-                  children: function children(_ref7) {
-                    var selected = _ref7.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                        className: "fa-solid fa-check ml-2"
-                      }) : ""]
-                    });
-                  }
-                }, i);
-              })
-            })]
-          })
-        }), (required_error === null || required_error === void 0 || (_required_error$pageT = required_error.pageType) === null || _required_error$pageT === void 0 ? void 0 : _required_error$pageT[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          style: {
-            color: "red"
-          },
-          children: required_error === null || required_error === void 0 || (_required_error$pageT2 = required_error.pageType) === null || _required_error$pageT2 === void 0 ? void 0 : _required_error$pageT2[0]
-        }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          style: {
-            color: "red"
-          },
-          children: err === null || err === void 0 ? void 0 : err.taskType
-        })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-        className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
-          value: pageType,
-          onChange: setPageType,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-            className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
-              htmlFor: "",
-              children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
-                children: "*"
-              }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
-              className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
-                className: "singleline-ellipsis pr-3",
-                children: pageType || "Select task type"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-                className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                  className: "fa-solid fa-sort"
-                })
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
-              className: "sp1-select-options",
-              children: (_ref8 = ["New Page Design", "Cloning Existing Design", "Others"]) === null || _ref8 === void 0 ? void 0 : _ref8.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref9) {
-                    var active = _ref9.active;
-                    return "sp1-select-option ".concat(active ? "active" : "");
-                  },
-                  value: s,
-                  children: function children(_ref10) {
-                    var selected = _ref10.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                        className: "fa-solid fa-check ml-2"
-                      }) : ""]
-                    });
-                  }
-                }, i);
-              })
-            })]
-          })
-        }), (required_error === null || required_error === void 0 || (_required_error$pageT3 = required_error.pageType) === null || _required_error$pageT3 === void 0 ? void 0 : _required_error$pageT3[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          style: {
-            color: "red"
-          },
-          children: required_error === null || required_error === void 0 || (_required_error$pageT4 = required_error.pageType) === null || _required_error$pageT4 === void 0 ? void 0 : _required_error$pageT4[0]
-        }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          style: {
-            color: "red"
-          },
-          children: err === null || err === void 0 ? void 0 : err.taskType
-        })]
-      }), pageType === "New Page Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-        className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
-          value: pageTypePriority,
-          onChange: setPageTypePriority,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-            className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
-              htmlFor: "",
-              children: ["Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
-                children: "*"
-              }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
-              className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
-                className: "singleline-ellipsis pr-3",
-                children: pageTypePriority || "Select page type"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-                className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                  className: "fa-solid fa-sort"
-                })
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
-              className: "sp1-select-options",
-              children: (_ref11 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref11 === void 0 ? void 0 : _ref11.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref12) {
-                    var active = _ref12.active;
-                    return "sp1-select-option ".concat(active ? "active" : "");
-                  },
-                  value: s,
-                  children: function children(_ref13) {
-                    var selected = _ref13.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                        className: "fa-solid fa-check ml-2"
-                      }) : ""]
-                    });
-                  }
-                }, i);
-              })
-            })]
-          })
-        }), (err === null || err === void 0 ? void 0 : err.pageTypePriority) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          style: {
-            color: "red"
-          },
-          children: err === null || err === void 0 ? void 0 : err.pageTypePriority
-        })]
-      }) : null, pageType === "Others" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-        className: "col-12 col-md-6",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
-          value: pageTypeOthers,
-          onChange: setPageTypeOthers,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-            className: "form-group position-relative my-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
-              htmlFor: "",
-              children: [" ", "Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
-                children: "*"
-              }), " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
-              className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
-                className: "singleline-ellipsis pr-3",
-                children: pageTypeOthers !== null && pageTypeOthers !== void 0 ? pageTypeOthers : "--"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-                className: "__icon",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                  className: "fa-solid fa-sort"
-                })
-              })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
-              className: "sp1-select-options",
-              children: (_ref14 = ["Page Design Change", "Speed Optimization", "Fixing Issues/Bugs", "Responsiveness Issue Fixing/Making Something Responsive"]) === null || _ref14 === void 0 ? void 0 : _ref14.map(function (s, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                  className: function className(_ref15) {
-                    var active = _ref15.active;
-                    return "sp1-select-option ".concat(active ? "active" : "");
-                  },
-                  value: s,
-                  children: function children(_ref16) {
-                    var selected = _ref16.selected;
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-                      children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                        className: "fa-solid fa-check ml-2"
-                      }) : ""]
-                    });
-                  }
-                }, i);
-              })
-            })]
-          })
-        }), (err === null || err === void 0 ? void 0 : err.pageTypeOthers) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-          style: {
-            color: "red"
-          },
-          children: err === null || err === void 0 ? void 0 : err.pageTypeOthers
-        })]
-      }) : null, pageType ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-        children: [pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-            className: "col-12 col-md-6",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
-              value: pageTypeName,
-              onChange: setPageTypeName,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-                className: "form-group position-relative my-3",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
-                  htmlFor: "",
-                  children: ["Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
-                    children: "*"
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
-                  className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
-                    className: "singleline-ellipsis pr-3",
-                    children: pageTypeName || "Select page type name"
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-                    className: "__icon",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                      className: "fa-solid fa-sort"
-                    })
-                  })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
-                  className: "sp1-select-options",
-                  children: (_ref17 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref17 === void 0 ? void 0 : _ref17.map(function (s, i) {
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
-                      className: function className(_ref18) {
-                        var active = _ref18.active;
-                        return "sp1-select-option ".concat(active ? "active" : "");
-                      },
-                      value: s,
-                      children: function children(_ref19) {
-                        var selected = _ref19.selected;
-                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-                          children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
-                            className: "fa-solid fa-check ml-2"
-                          }) : ""]
-                        });
-                      }
-                    }, i);
+      }), (task === null || task === void 0 || (_task$category12 = task.category) === null || _task$category12 === void 0 ? void 0 : _task$category12.name) !== "Graphic Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+        children: [auth !== null && auth !== void 0 && auth.isHasRolePermission(13) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+          className: "col-12 col-md-6",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
+            value: pageType,
+            onChange: setPageType,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+              className: "form-group position-relative my-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
+                htmlFor: "",
+                children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
+                  children: "*"
+                }), " "]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
+                className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+                  className: "singleline-ellipsis pr-3",
+                  children: pageType || "Select task type"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                  className: "__icon",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                    className: "fa-solid fa-sort"
                   })
                 })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
+                className: "sp1-select-options",
+                children: (_ref5 = ["New Page Design", "Cloning Existing Design"
+                // "Others",
+                ]) === null || _ref5 === void 0 ? void 0 : _ref5.map(function (s, i) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
+                    className: function className(_ref6) {
+                      var active = _ref6.active;
+                      return "sp1-select-option ".concat(active ? "active" : "");
+                    },
+                    value: s,
+                    children: function children(_ref7) {
+                      var selected = _ref7.selected;
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                        children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                          className: "fa-solid fa-check ml-2"
+                        }) : ""]
+                      });
+                    }
+                  }, i);
+                })
+              })]
+            })
+          }), (required_error === null || required_error === void 0 || (_required_error$pageT = required_error.pageType) === null || _required_error$pageT === void 0 ? void 0 : _required_error$pageT[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+            style: {
+              color: "red"
+            },
+            children: required_error === null || required_error === void 0 || (_required_error$pageT2 = required_error.pageType) === null || _required_error$pageT2 === void 0 ? void 0 : _required_error$pageT2[0]
+          }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+            style: {
+              color: "red"
+            },
+            children: err === null || err === void 0 ? void 0 : err.taskType
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+          className: "col-12 col-md-6",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
+            value: pageType,
+            onChange: setPageType,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+              className: "form-group position-relative my-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
+                htmlFor: "",
+                children: [" ", "Task Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
+                  children: "*"
+                }), " "]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
+                className: "sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+                  className: "singleline-ellipsis pr-3",
+                  children: pageType || "Select task type"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                  className: "__icon",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                    className: "fa-solid fa-sort"
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
+                className: "sp1-select-options",
+                children: (_ref8 = ["New Page Design", "Cloning Existing Design", "Others"]) === null || _ref8 === void 0 ? void 0 : _ref8.map(function (s, i) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
+                    className: function className(_ref9) {
+                      var active = _ref9.active;
+                      return "sp1-select-option ".concat(active ? "active" : "");
+                    },
+                    value: s,
+                    children: function children(_ref10) {
+                      var selected = _ref10.selected;
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                        children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                          className: "fa-solid fa-check ml-2"
+                        }) : ""]
+                      });
+                    }
+                  }, i);
+                })
+              })]
+            })
+          }), (required_error === null || required_error === void 0 || (_required_error$pageT3 = required_error.pageType) === null || _required_error$pageT3 === void 0 ? void 0 : _required_error$pageT3[0]) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+            style: {
+              color: "red"
+            },
+            children: required_error === null || required_error === void 0 || (_required_error$pageT4 = required_error.pageType) === null || _required_error$pageT4 === void 0 ? void 0 : _required_error$pageT4[0]
+          }), (err === null || err === void 0 ? void 0 : err.taskType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+            style: {
+              color: "red"
+            },
+            children: err === null || err === void 0 ? void 0 : err.taskType
+          })]
+        }), pageType === "New Page Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+          className: "col-12 col-md-6",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
+            value: pageTypePriority,
+            onChange: setPageTypePriority,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+              className: "form-group position-relative my-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
+                htmlFor: "",
+                children: ["Page Type ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
+                  children: "*"
+                }), " "]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
+                className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+                  className: "singleline-ellipsis pr-3",
+                  children: pageTypePriority || "Select page type"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                  className: "__icon",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                    className: "fa-solid fa-sort"
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
+                className: "sp1-select-options",
+                children: (_ref11 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref11 === void 0 ? void 0 : _ref11.map(function (s, i) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
+                    className: function className(_ref12) {
+                      var active = _ref12.active;
+                      return "sp1-select-option ".concat(active ? "active" : "");
+                    },
+                    value: s,
+                    children: function children(_ref13) {
+                      var selected = _ref13.selected;
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                        children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                          className: "fa-solid fa-check ml-2"
+                        }) : ""]
+                      });
+                    }
+                  }, i);
+                })
+              })]
+            })
+          }), (err === null || err === void 0 ? void 0 : err.pageTypePriority) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+            style: {
+              color: "red"
+            },
+            children: err === null || err === void 0 ? void 0 : err.pageTypePriority
+          })]
+        }) : null, pageType === "Others" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+          className: "col-12 col-md-6",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
+            value: pageTypeOthers,
+            onChange: setPageTypeOthers,
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+              className: "form-group position-relative my-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
+                htmlFor: "",
+                children: [" ", "Others ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
+                  children: "*"
+                }), " "]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
+                className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+                  className: "singleline-ellipsis pr-3",
+                  children: pageTypeOthers !== null && pageTypeOthers !== void 0 ? pageTypeOthers : "--"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                  className: "__icon",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                    className: "fa-solid fa-sort"
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
+                className: "sp1-select-options",
+                children: (_ref14 = ["Page Design Change", "Speed Optimization", "Fixing Issues/Bugs", "Responsiveness Issue Fixing/Making Something Responsive"]) === null || _ref14 === void 0 ? void 0 : _ref14.map(function (s, i) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
+                    className: function className(_ref15) {
+                      var active = _ref15.active;
+                      return "sp1-select-option ".concat(active ? "active" : "");
+                    },
+                    value: s,
+                    children: function children(_ref16) {
+                      var selected = _ref16.selected;
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                        children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                          className: "fa-solid fa-check ml-2"
+                        }) : ""]
+                      });
+                    }
+                  }, i);
+                })
+              })]
+            })
+          }), (err === null || err === void 0 ? void 0 : err.pageTypeOthers) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+            style: {
+              color: "red"
+            },
+            children: err === null || err === void 0 ? void 0 : err.pageTypeOthers
+          })]
+        }) : null, pageType ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+          children: [pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+              className: "col-12 col-md-6",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox, {
+                value: pageTypeName,
+                onChange: setPageTypeName,
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "form-group position-relative my-3",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
+                    htmlFor: "",
+                    children: ["Page Type Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
+                      children: "*"
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Button, {
+                    className: " sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+                      className: "singleline-ellipsis pr-3",
+                      children: pageTypeName || "Select page type name"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                      className: "__icon",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                        className: "fa-solid fa-sort"
+                      })
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Options, {
+                    className: "sp1-select-options",
+                    children: (_ref17 = isDesignerTask ? ["Primary Page Design", "Secondary Page Design"] : ["Primary Page Development", "Secondary Page Development"]) === null || _ref17 === void 0 ? void 0 : _ref17.map(function (s, i) {
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_26__.Listbox.Option, {
+                        className: function className(_ref18) {
+                          var active = _ref18.active;
+                          return "sp1-select-option ".concat(active ? "active" : "");
+                        },
+                        value: s,
+                        children: function children(_ref19) {
+                          var selected = _ref19.selected;
+                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+                            children: [s, selected ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("i", {
+                              className: "fa-solid fa-check ml-2"
+                            }) : ""]
+                          });
+                        }
+                      }, i);
+                    })
+                  })]
+                })
+              }), (err === null || err === void 0 ? void 0 : err.pageTypeName) || (required_error === null || required_error === void 0 || (_required_error$page_ = required_error.page_type) === null || _required_error$page_ === void 0 ? void 0 : _required_error$page_[0])]
+            })
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                id: "page_name",
+                label: "Page Name",
+                type: "text",
+                placeholder: "Enter page name",
+                name: "page name",
+                required: true,
+                value: pageName,
+                error: err === null || err === void 0 ? void 0 : err.pageName,
+                onChange: function onChange(e) {
+                  return handleChange(e, setPageName);
+                }
               })
-            }), (err === null || err === void 0 ? void 0 : err.pageTypeName) || (required_error === null || required_error === void 0 || (_required_error$page_ = required_error.page_type) === null || _required_error$page_ === void 0 ? void 0 : _required_error$page_[0])]
-          })
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-            className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              id: "page_name",
-              label: "Page Name",
-              type: "text",
-              placeholder: "Enter page name",
-              name: "page name",
-              required: true,
-              value: pageName,
-              error: err === null || err === void 0 ? void 0 : err.pageName,
-              onChange: function onChange(e) {
-                return handleChange(e, setPageName);
-              }
-            })
-          }), (task === null || task === void 0 || (_task$category6 = task.category) === null || _task$category6 === void 0 ? void 0 : _task$category6.name) !== "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-            className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              id: "page_url",
-              label: "Page URL",
-              type: "text",
-              placeholder: "Enter page url",
-              name: "page url",
-              required: true,
-              value: pageURL,
-              error: (err === null || err === void 0 ? void 0 : err.pageUrl) || (required_error === null || required_error === void 0 || (_required_error$page_2 = required_error.page_url) === null || _required_error$page_2 === void 0 ? void 0 : _required_error$page_2[0]),
-              onChange: function onChange(e) {
-                return handleChange(e, setPageURL);
-              }
-            })
-          })]
-        }), pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-            className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              id: "number_of_pages",
-              label: "Number of Pages",
-              type: "number",
-              placeholder: "--",
-              name: "number_of_pages",
-              required: true,
-              value: numberOfPage,
-              error: err === null || err === void 0 ? void 0 : err.numberOfPage,
-              onChange: function onChange(e) {
-                return handleChange(e, setNumberOfPage);
-              }
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
-            className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-              id: "exiting_project_url",
-              label: "Existing Design Link",
-              type: "Link",
-              placeholder: "--",
-              name: "exiting_project_url",
-              required: true,
-              value: existingDesignLink,
-              error: err === null || err === void 0 ? void 0 : err.existingDesignLink,
-              onChange: function onChange(e) {
-                return handleChange(e, setExistingDesignLink);
-              }
-            })
-          })]
+            }), (task === null || task === void 0 || (_task$category13 = task.category) === null || _task$category13 === void 0 ? void 0 : _task$category13.name) !== "UI/UIX Design" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                id: "page_url",
+                label: "Page URL",
+                type: "text",
+                placeholder: "Enter page url",
+                name: "page url",
+                required: true,
+                value: pageURL,
+                error: (err === null || err === void 0 ? void 0 : err.pageUrl) || (required_error === null || required_error === void 0 || (_required_error$page_2 = required_error.page_url) === null || _required_error$page_2 === void 0 ? void 0 : _required_error$page_2[0]),
+                onChange: function onChange(e) {
+                  return handleChange(e, setPageURL);
+                }
+              })
+            })]
+          }), pageType === "Cloning Existing Design" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                id: "number_of_pages",
+                label: "Number of Pages",
+                type: "number",
+                placeholder: "--",
+                name: "number_of_pages",
+                required: true,
+                value: numberOfPage,
+                error: err === null || err === void 0 ? void 0 : err.numberOfPage,
+                onChange: function onChange(e) {
+                  return handleChange(e, setNumberOfPage);
+                }
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                id: "exiting_project_url",
+                label: "Existing Design Link",
+                type: "Link",
+                placeholder: "--",
+                name: "exiting_project_url",
+                required: true,
+                value: existingDesignLink,
+                error: err === null || err === void 0 ? void 0 : err.existingDesignLink,
+                onChange: function onChange(e) {
+                  return handleChange(e, setExistingDesignLink);
+                }
+              })
+            })]
+          }) : null]
         }) : null]
-      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
         className: "col-12 col-md-6",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_PrioritySelection__WEBPACK_IMPORTED_MODULE_7__["default"], {
           selected: priority,

@@ -241,82 +241,86 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             count++;
         }
 
-        if (!pageType) {
-            error.taskType = "You have to Select task type";
-            count++;
-        } else {
-            if (_.toLower(pageType) === _.toLower("New Page Design")) {
-                if (!pageTypePriority) {
-                    error.pageTypePriority = "You have to Select page type";
-                    count++;
-                }
-
-                if (!pageName) {
-                    error.pageName = "You have to Select page name";
-                    count++;
-                }
-
-                // if (!pageURL) {
-                //     error.pageUrl = "You have to provide page URL";
-                //     count++;
-                // } else if (!checkIsURL(pageURL)) {
-                //     error.pageUrl = "You have to provide a valid page URL";
-                //     toast.warn("You have to provide a valid page URL");
-                //     count++;
-                // }
-            }
-
-            if (_.toLower(pageType) === _.toLower("Others")) {
-                if (!pageTypeOthers) {
-                    error.pageTypeOthers = "You have to select an option";
-                    count++;
-                }
-
-                if (!pageName) {
-                    error.pageName = "You have to Select page name";
-                    count++;
-                }
-
-                if (!pageURL) {
-                    error.pageUrl = "You have to provide page URL";
-                    count++;
-                } else if (!checkIsURL(pageURL)) {
-                    error.pageUrl = "You have to provide a valid page URL";
-                    toast.warn("You have to provide a valid page URL");
-                    count++;
-                }
-            }
-
-            if (_.toLower(pageType) === _.toLower("Cloning Existing Design")) {
-                if (!pageTypeName) {
-                    error.pageTypeName = "You have to select an option";
-                    count++;
-                }
-
-                if (!numberOfPage) {
-                    error.numberOfPage = "The minimum required number is 1";
-                    count++;
-                }
-
-                if (!existingDesignLink) {
-                    error.existingDesignLink =
-                        "You have to provide Exiting Design Link";
-                    count++;
-                } else if (!checkIsURL(existingDesignLink)) {
-                    error.existingDesignLink =
-                        "You have to provide a valid Exiting Design Link";
-                    toast.warn(
-                        "You have to provide a valid Exiting Design Link"
-                    );
-                    count++;
-                }
-            }
-
-            if (!description) {
-                error.description = "The description field is required";
+        if (task?.category?.name !== "Graphic Design") {
+            if (!pageType) {
+                error.taskType = "You have to Select task type";
                 count++;
+            } else {
+                if (_.toLower(pageType) === _.toLower("New Page Design")) {
+                    if (!pageTypePriority) {
+                        error.pageTypePriority = "You have to Select page type";
+                        count++;
+                    }
+
+                    if (!pageName) {
+                        error.pageName = "You have to Select page name";
+                        count++;
+                    }
+
+                    // if (!pageURL) {
+                    //     error.pageUrl = "You have to provide page URL";
+                    //     count++;
+                    // } else if (!checkIsURL(pageURL)) {
+                    //     error.pageUrl = "You have to provide a valid page URL";
+                    //     toast.warn("You have to provide a valid page URL");
+                    //     count++;
+                    // }
+                }
+
+                if (_.toLower(pageType) === _.toLower("Others")) {
+                    if (!pageTypeOthers) {
+                        error.pageTypeOthers = "You have to select an option";
+                        count++;
+                    }
+
+                    if (!pageName) {
+                        error.pageName = "You have to Select page name";
+                        count++;
+                    }
+
+                    if (!pageURL) {
+                        error.pageUrl = "You have to provide page URL";
+                        count++;
+                    } else if (!checkIsURL(pageURL)) {
+                        error.pageUrl = "You have to provide a valid page URL";
+                        toast.warn("You have to provide a valid page URL");
+                        count++;
+                    }
+                }
+
+                if (_.toLower(pageType) === _.toLower("Cloning Existing Design")) {
+                    if (!pageTypeName) {
+                        error.pageTypeName = "You have to select an option";
+                        count++;
+                    }
+
+                    if (!numberOfPage) {
+                        error.numberOfPage = "The minimum required number is 1";
+                        count++;
+                    }
+
+                    if (!existingDesignLink) {
+                        error.existingDesignLink =
+                            "You have to provide Exiting Design Link";
+                        count++;
+                    } else if (!checkIsURL(existingDesignLink)) {
+                        error.existingDesignLink =
+                            "You have to provide a valid Exiting Design Link";
+                        toast.warn(
+                            "You have to provide a valid Exiting Design Link"
+                        );
+                        count++;
+                    }
+                }
+
+                if (!description) {
+                    error.description = "The description field is required";
+                    count++;
+                }
             }
         }
+
+
 
         setErr(error);
         return !count;
@@ -424,6 +428,10 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
             }
         };
 
+        if (task?.category?.name === "Graphic Design") {
+            submit();
+        }
+
         const primaryPageConfirmation = () => {
             if (
                 !isDesignerTask &&
@@ -483,7 +491,9 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     showCancelButton: true,
                 }).then((res) => {
                     if (res.isConfirmed) {
-                        primaryPageConfirmation();
+                        if (task?.category?.name !== "Graphic Design") {
+                            primaryPageConfirmation();
+                        }
                     }
                 });
             };
@@ -500,12 +510,17 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                 error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`;
                 alert();
             } else {
-                primaryPageConfirmation();
+                if (task?.category?.name !== "Graphic Design") {
+                    primaryPageConfirmation();
+                }
             }
 
             setErr((prev) => ({ ...prev, ...error }));
         } else {
-            primaryPageConfirmation();
+            if (task?.category?.name !== "Graphic Design") {
+                primaryPageConfirmation();
+                console.log("clicked!!!");
+            }
         }
     };
 
@@ -570,21 +585,23 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                     />
                 </div>
 
-                <div className="col-12 col-md-6">
-                    <div className="form-group my-3">
-                        <label
-                            className={`f-14 text-dark-gray mb-1`}
-                            data-label="true"
-                        >
-                            Milestone
-                        </label>
-                        <input
-                            className={`form-control height-35 f-14`}
-                            readOnly
-                            defaultValue={milestone}
-                        />
+                {
+                    task?.category?.name !== "Graphic Design" && <div className="col-12 col-md-6">
+                        <div className="form-group my-3">
+                            <label
+                                className={`f-14 text-dark-gray mb-1`}
+                                data-label="true"
+                            >
+                                Milestone
+                            </label>
+                            <input
+                                className={`form-control height-35 f-14`}
+                                readOnly
+                                defaultValue={milestone}
+                            />
+                        </div>
                     </div>
-                </div>
+                }
 
                 <div className="col-12 col-md-6">
                     <div className="form-group my-3">
@@ -616,6 +633,18 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             defaultValue={project}
                         />
                     </div>
+                </div>
+
+                <div className="col-12 col-md-6">
+                    <TaskCategorySelectionBox
+                        selected={taskCategory}
+                        onSelect={setTaskCategory}
+                        isDesignerTask={isDesignerTask}
+                    />
+
+                    {err?.taskCategory && (
+                        <div style={{ color: "red" }}>{err?.taskCategory}</div>
+                    )}
                 </div>
 
                 <div className="col-12 col-md-6">
@@ -700,18 +729,6 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
                             <div style={{ color: "red" }}>{err?.dueDate}</div>
                         )}
                     </div>
-                </div>
-
-                <div className="col-12 col-md-6">
-                    <TaskCategorySelectionBox
-                        selected={taskCategory}
-                        onSelect={setTaskCategory}
-                        isDesignerTask={isDesignerTask}
-                    />
-
-                    {err?.taskCategory && (
-                        <div style={{ color: "red" }}>{err?.taskCategory}</div>
-                    )}
                 </div>
 
                 {
@@ -1162,396 +1179,403 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                 {/* {console.log("roleId", auth?.isHasRolePermission(13))} */}
 
-                {auth?.isHasRolePermission(13) ? (
-                    <div className="col-12 col-md-6">
-                        <Listbox value={pageType} onChange={setPageType}>
-                            <div className="form-group position-relative my-3">
-                                <label htmlFor="">
-                                    {" "}
-                                    Task Type <sup>*</sup>{" "}
-                                </label>
-                                <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                    <span className="singleline-ellipsis pr-3">
-                                        {pageType || "Select task type"}
-                                    </span>
+                {
+                    task?.category?.name !== "Graphic Design" && <>
+                        {auth?.isHasRolePermission(13) ? (
+                            <div className="col-12 col-md-6">
+                                <Listbox value={pageType} onChange={setPageType}>
+                                    <div className="form-group position-relative my-3">
+                                        <label htmlFor="">
+                                            {" "}
+                                            Task Type <sup>*</sup>{" "}
+                                        </label>
+                                        <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                            <span className="singleline-ellipsis pr-3">
+                                                {pageType || "Select task type"}
+                                            </span>
 
-                                    <div className="__icon">
-                                        <i className="fa-solid fa-sort"></i>
-                                    </div>
-                                </Listbox.Button>
-                                <Listbox.Options className="sp1-select-options">
-                                    {[
-                                        "New Page Design",
-                                        "Cloning Existing Design",
-                                        // "Others",
-                                    ]?.map((s, i) => (
-                                        <Listbox.Option
-                                            key={i}
-                                            className={({ active }) =>
-                                                `sp1-select-option ${active ? "active" : ""
-                                                }`
-                                            }
-                                            value={s}
-                                        >
-                                            {({ selected }) => (
-                                                <>
-                                                    {s}
+                                            <div className="__icon">
+                                                <i className="fa-solid fa-sort"></i>
+                                            </div>
+                                        </Listbox.Button>
+                                        <Listbox.Options className="sp1-select-options">
+                                            {[
+                                                "New Page Design",
+                                                "Cloning Existing Design",
+                                                // "Others",
+                                            ]?.map((s, i) => (
+                                                <Listbox.Option
+                                                    key={i}
+                                                    className={({ active }) =>
+                                                        `sp1-select-option ${active ? "active" : ""
+                                                        }`
+                                                    }
+                                                    value={s}
+                                                >
+                                                    {({ selected }) => (
+                                                        <>
+                                                            {s}
 
-                                                    {selected ? (
-                                                        <i className="fa-solid fa-check ml-2" />
-                                                    ) : (
-                                                        ""
+                                                            {selected ? (
+                                                                <i className="fa-solid fa-check ml-2" />
+                                                            ) : (
+                                                                ""
+                                                            )}
+                                                        </>
                                                     )}
-                                                </>
-                                            )}
-                                        </Listbox.Option>
-                                    ))}
-                                </Listbox.Options>
-                            </div>
-                        </Listbox>
-
-                        {required_error?.pageType?.[0] && (
-                            <div style={{ color: "red" }}>
-                                {required_error?.pageType?.[0]}
-                            </div>
-                        )}
-
-                        {err?.taskType && (
-                            <div style={{ color: "red" }}>{err?.taskType}</div>
-                        )}
-                    </div>
-                ) : (
-                    <div className="col-12 col-md-6">
-                        <Listbox value={pageType} onChange={setPageType}>
-                            <div className="form-group position-relative my-3">
-                                <label htmlFor="">
-                                    {" "}
-                                    Task Type <sup>*</sup>{" "}
-                                </label>
-                                <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                    <span className="singleline-ellipsis pr-3">
-                                        {pageType || "Select task type"}
-                                    </span>
-
-                                    <div className="__icon">
-                                        <i className="fa-solid fa-sort"></i>
+                                                </Listbox.Option>
+                                            ))}
+                                        </Listbox.Options>
                                     </div>
-                                </Listbox.Button>
-                                <Listbox.Options className="sp1-select-options">
-                                    {[
-                                        "New Page Design",
-                                        "Cloning Existing Design",
-                                        "Others",
-                                    ]?.map((s, i) => (
-                                        <Listbox.Option
-                                            key={i}
-                                            className={({ active }) =>
-                                                `sp1-select-option ${active ? "active" : ""
-                                                }`
-                                            }
-                                            value={s}
-                                        >
-                                            {({ selected }) => (
-                                                <>
-                                                    {s}
+                                </Listbox>
 
-                                                    {selected ? (
-                                                        <i className="fa-solid fa-check ml-2" />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </>
-                                            )}
-                                        </Listbox.Option>
-                                    ))}
-                                </Listbox.Options>
-                            </div>
-                        </Listbox>
-
-                        {required_error?.pageType?.[0] && (
-                            <div style={{ color: "red" }}>
-                                {required_error?.pageType?.[0]}
-                            </div>
-                        )}
-
-                        {err?.taskType && (
-                            <div style={{ color: "red" }}>{err?.taskType}</div>
-                        )}
-                    </div>
-                )}
-
-                {pageType === "New Page Design" ? (
-                    <div className="col-12 col-md-6">
-                        <Listbox
-                            value={pageTypePriority}
-                            onChange={setPageTypePriority}
-                        >
-                            <div className="form-group position-relative my-3">
-                                <label htmlFor="">
-                                    Page Type <sup>*</sup>{" "}
-                                </label>
-                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                    <span className="singleline-ellipsis pr-3">
-                                        {pageTypePriority || "Select page type"}
-                                    </span>
-
-                                    <div className="__icon">
-                                        <i className="fa-solid fa-sort"></i>
+                                {required_error?.pageType?.[0] && (
+                                    <div style={{ color: "red" }}>
+                                        {required_error?.pageType?.[0]}
                                     </div>
-                                </Listbox.Button>
-                                <Listbox.Options className="sp1-select-options">
-                                    {(isDesignerTask
-                                        ? [
-                                            "Primary Page Design",
-                                            "Secondary Page Design",
-                                        ]
-                                        : [
-                                            "Primary Page Development",
-                                            "Secondary Page Development",
-                                        ]
-                                    )?.map((s, i) => (
-                                        <Listbox.Option
-                                            key={i}
-                                            className={({ active }) =>
-                                                `sp1-select-option ${active ? "active" : ""
-                                                }`
-                                            }
-                                            value={s}
-                                        >
-                                            {({ selected }) => (
-                                                <>
-                                                    {s}
+                                )}
 
-                                                    {selected ? (
-                                                        <i className="fa-solid fa-check ml-2" />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </>
-                                            )}
-                                        </Listbox.Option>
-                                    ))}
-                                </Listbox.Options>
+                                {err?.taskType && (
+                                    <div style={{ color: "red" }}>{err?.taskType}</div>
+                                )}
                             </div>
-                        </Listbox>
-
-                        {err?.pageTypePriority && (
-                            <div style={{ color: "red" }}>
-                                {err?.pageTypePriority}
-                            </div>
-                        )}
-                    </div>
-                ) : null}
-
-                {/* Others */}
-                {pageType === "Others" ? (
-                    <div className="col-12 col-md-6">
-                        <Listbox
-                            value={pageTypeOthers}
-                            onChange={setPageTypeOthers}
-                        >
-                            <div className="form-group position-relative my-3">
-                                <label htmlFor="">
-                                    {" "}
-                                    Others <sup>*</sup>{" "}
-                                </label>
-                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                    <span className="singleline-ellipsis pr-3">
-                                        {pageTypeOthers ?? "--"}
-                                    </span>
-
-                                    <div className="__icon">
-                                        <i className="fa-solid fa-sort"></i>
-                                    </div>
-                                </Listbox.Button>
-                                <Listbox.Options className="sp1-select-options">
-                                    {[
-                                        "Page Design Change",
-                                        "Speed Optimization",
-                                        "Fixing Issues/Bugs",
-                                        "Responsiveness Issue Fixing/Making Something Responsive",
-                                    ]?.map((s, i) => (
-                                        <Listbox.Option
-                                            key={i}
-                                            className={({ active }) =>
-                                                `sp1-select-option ${active ? "active" : ""
-                                                }`
-                                            }
-                                            value={s}
-                                        >
-                                            {({ selected }) => (
-                                                <>
-                                                    {s}
-
-                                                    {selected ? (
-                                                        <i className="fa-solid fa-check ml-2" />
-                                                    ) : (
-                                                        ""
-                                                    )}
-                                                </>
-                                            )}
-                                        </Listbox.Option>
-                                    ))}
-                                </Listbox.Options>
-                            </div>
-                        </Listbox>
-
-                        {err?.pageTypeOthers && (
-                            <div style={{ color: "red" }}>
-                                {err?.pageTypeOthers}
-                            </div>
-                        )}
-                    </div>
-                ) : null}
-
-                {pageType ? (
-                    <React.Fragment>
-                        {pageType === "Cloning Existing Design" ? (
-                            <>
-                                <div className="col-12 col-md-6">
-                                    <Listbox
-                                        value={pageTypeName}
-                                        onChange={setPageTypeName}
-                                    >
-                                        <div className="form-group position-relative my-3">
-                                            <label htmlFor="">
-                                                Page Type Name <sup>*</sup>
-                                            </label>
-                                            <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                                <span className="singleline-ellipsis pr-3">
-                                                    {pageTypeName || "Select page type name"}
-                                                </span>
-
-                                                <div className="__icon">
-                                                    <i className="fa-solid fa-sort"></i>
-                                                </div>
-                                            </Listbox.Button>
-                                            <Listbox.Options className="sp1-select-options">
-                                                {(isDesignerTask
-                                                    ? [
-                                                        "Primary Page Design",
-                                                        "Secondary Page Design",
-                                                    ]
-                                                    : [
-                                                        "Primary Page Development",
-                                                        "Secondary Page Development",
-                                                    ]
-                                                )?.map((s, i) => (
-                                                    <Listbox.Option
-                                                        key={i}
-                                                        className={({
-                                                            active,
-                                                        }) =>
-                                                            `sp1-select-option ${active
-                                                                ? "active"
-                                                                : ""
-                                                            }`
-                                                        }
-                                                        value={s}
-                                                    >
-                                                        {({ selected }) => (
-                                                            <>
-                                                                {s}
-
-                                                                {selected ? (
-                                                                    <i className="fa-solid fa-check ml-2" />
-                                                                ) : (
-                                                                    ""
-                                                                )}
-                                                            </>
-                                                        )}
-                                                    </Listbox.Option>
-                                                ))}
-                                            </Listbox.Options>
-                                        </div>
-                                    </Listbox>
-                                    {err?.pageTypeName ||
-                                        required_error?.page_type?.[0]}
-                                </div>
-                            </>
                         ) : (
-                            <>
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="page_name"
-                                        label="Page Name"
-                                        type="text"
-                                        placeholder="Enter page name"
-                                        name="page name"
-                                        required={true}
-                                        value={pageName}
-                                        error={err?.pageName}
-                                        onChange={(e) =>
-                                            handleChange(e, setPageName)
-                                        }
-                                    />
-                                </div>
+                            <div className="col-12 col-md-6">
+                                <Listbox value={pageType} onChange={setPageType}>
+                                    <div className="form-group position-relative my-3">
+                                        <label htmlFor="">
+                                            {" "}
+                                            Task Type <sup>*</sup>{" "}
+                                        </label>
+                                        <Listbox.Button className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                            <span className="singleline-ellipsis pr-3">
+                                                {pageType || "Select task type"}
+                                            </span>
 
-                                {
-                                    task?.category?.name !== "UI/UIX Design" && <div className="col-12 col-md-6">
-                                        <Input
-                                            id="page_url"
-                                            label="Page URL"
-                                            type="text"
-                                            placeholder="Enter page url"
-                                            name="page url"
-                                            required={true}
-                                            value={pageURL}
-                                            error={
-                                                err?.pageUrl ||
-                                                required_error?.page_url?.[0]
-                                            }
-                                            onChange={(e) =>
-                                                handleChange(e, setPageURL)
-                                            }
-                                        />
+                                            <div className="__icon">
+                                                <i className="fa-solid fa-sort"></i>
+                                            </div>
+                                        </Listbox.Button>
+                                        <Listbox.Options className="sp1-select-options">
+                                            {[
+                                                "New Page Design",
+                                                "Cloning Existing Design",
+                                                "Others",
+                                            ]?.map((s, i) => (
+                                                <Listbox.Option
+                                                    key={i}
+                                                    className={({ active }) =>
+                                                        `sp1-select-option ${active ? "active" : ""
+                                                        }`
+                                                    }
+                                                    value={s}
+                                                >
+                                                    {({ selected }) => (
+                                                        <>
+                                                            {s}
+
+                                                            {selected ? (
+                                                                <i className="fa-solid fa-check ml-2" />
+                                                            ) : (
+                                                                ""
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </Listbox.Option>
+                                            ))}
+                                        </Listbox.Options>
                                     </div>
-                                }
+                                </Listbox>
 
-                            </>
+                                {required_error?.pageType?.[0] && (
+                                    <div style={{ color: "red" }}>
+                                        {required_error?.pageType?.[0]}
+                                    </div>
+                                )}
+
+                                {err?.taskType && (
+                                    <div style={{ color: "red" }}>{err?.taskType}</div>
+                                )}
+                            </div>
                         )}
 
-                        {pageType === "Cloning Existing Design" ? (
-                            <>
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="number_of_pages"
-                                        label="Number of Pages"
-                                        type="number"
-                                        placeholder="--"
-                                        name="number_of_pages"
-                                        required={true}
-                                        value={numberOfPage}
-                                        error={err?.numberOfPage}
-                                        onChange={(e) =>
-                                            handleChange(e, setNumberOfPage)
-                                        }
-                                    />
-                                </div>
+                        {pageType === "New Page Design" ? (
+                            <div className="col-12 col-md-6">
+                                <Listbox
+                                    value={pageTypePriority}
+                                    onChange={setPageTypePriority}
+                                >
+                                    <div className="form-group position-relative my-3">
+                                        <label htmlFor="">
+                                            Page Type <sup>*</sup>{" "}
+                                        </label>
+                                        <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                            <span className="singleline-ellipsis pr-3">
+                                                {pageTypePriority || "Select page type"}
+                                            </span>
 
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="exiting_project_url"
-                                        label="Existing Design Link"
-                                        type="Link"
-                                        placeholder="--"
-                                        name="exiting_project_url"
-                                        required={true}
-                                        value={existingDesignLink}
-                                        error={err?.existingDesignLink}
-                                        onChange={(e) =>
-                                            handleChange(
-                                                e,
-                                                setExistingDesignLink
-                                            )
-                                        }
-                                    />
-                                </div>
-                            </>
+                                            <div className="__icon">
+                                                <i className="fa-solid fa-sort"></i>
+                                            </div>
+                                        </Listbox.Button>
+                                        <Listbox.Options className="sp1-select-options">
+                                            {(isDesignerTask
+                                                ? [
+                                                    "Primary Page Design",
+                                                    "Secondary Page Design",
+                                                ]
+                                                : [
+                                                    "Primary Page Development",
+                                                    "Secondary Page Development",
+                                                ]
+                                            )?.map((s, i) => (
+                                                <Listbox.Option
+                                                    key={i}
+                                                    className={({ active }) =>
+                                                        `sp1-select-option ${active ? "active" : ""
+                                                        }`
+                                                    }
+                                                    value={s}
+                                                >
+                                                    {({ selected }) => (
+                                                        <>
+                                                            {s}
+
+                                                            {selected ? (
+                                                                <i className="fa-solid fa-check ml-2" />
+                                                            ) : (
+                                                                ""
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </Listbox.Option>
+                                            ))}
+                                        </Listbox.Options>
+                                    </div>
+                                </Listbox>
+
+                                {err?.pageTypePriority && (
+                                    <div style={{ color: "red" }}>
+                                        {err?.pageTypePriority}
+                                    </div>
+                                )}
+                            </div>
                         ) : null}
-                    </React.Fragment>
-                ) : null}
-                {/*  */}
+
+                        {/* Others */}
+                        {pageType === "Others" ? (
+                            <div className="col-12 col-md-6">
+                                <Listbox
+                                    value={pageTypeOthers}
+                                    onChange={setPageTypeOthers}
+                                >
+                                    <div className="form-group position-relative my-3">
+                                        <label htmlFor="">
+                                            {" "}
+                                            Others <sup>*</sup>{" "}
+                                        </label>
+                                        <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                            <span className="singleline-ellipsis pr-3">
+                                                {pageTypeOthers ?? "--"}
+                                            </span>
+
+                                            <div className="__icon">
+                                                <i className="fa-solid fa-sort"></i>
+                                            </div>
+                                        </Listbox.Button>
+                                        <Listbox.Options className="sp1-select-options">
+                                            {[
+                                                "Page Design Change",
+                                                "Speed Optimization",
+                                                "Fixing Issues/Bugs",
+                                                "Responsiveness Issue Fixing/Making Something Responsive",
+                                            ]?.map((s, i) => (
+                                                <Listbox.Option
+                                                    key={i}
+                                                    className={({ active }) =>
+                                                        `sp1-select-option ${active ? "active" : ""
+                                                        }`
+                                                    }
+                                                    value={s}
+                                                >
+                                                    {({ selected }) => (
+                                                        <>
+                                                            {s}
+
+                                                            {selected ? (
+                                                                <i className="fa-solid fa-check ml-2" />
+                                                            ) : (
+                                                                ""
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </Listbox.Option>
+                                            ))}
+                                        </Listbox.Options>
+                                    </div>
+                                </Listbox>
+
+                                {err?.pageTypeOthers && (
+                                    <div style={{ color: "red" }}>
+                                        {err?.pageTypeOthers}
+                                    </div>
+                                )}
+                            </div>
+                        ) : null}
+
+                        {pageType ? (
+                            <React.Fragment>
+                                {pageType === "Cloning Existing Design" ? (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <Listbox
+                                                value={pageTypeName}
+                                                onChange={setPageTypeName}
+                                            >
+                                                <div className="form-group position-relative my-3">
+                                                    <label htmlFor="">
+                                                        Page Type Name <sup>*</sup>
+                                                    </label>
+                                                    <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                                        <span className="singleline-ellipsis pr-3">
+                                                            {pageTypeName || "Select page type name"}
+                                                        </span>
+
+                                                        <div className="__icon">
+                                                            <i className="fa-solid fa-sort"></i>
+                                                        </div>
+                                                    </Listbox.Button>
+                                                    <Listbox.Options className="sp1-select-options">
+                                                        {(isDesignerTask
+                                                            ? [
+                                                                "Primary Page Design",
+                                                                "Secondary Page Design",
+                                                            ]
+                                                            : [
+                                                                "Primary Page Development",
+                                                                "Secondary Page Development",
+                                                            ]
+                                                        )?.map((s, i) => (
+                                                            <Listbox.Option
+                                                                key={i}
+                                                                className={({
+                                                                    active,
+                                                                }) =>
+                                                                    `sp1-select-option ${active
+                                                                        ? "active"
+                                                                        : ""
+                                                                    }`
+                                                                }
+                                                                value={s}
+                                                            >
+                                                                {({ selected }) => (
+                                                                    <>
+                                                                        {s}
+
+                                                                        {selected ? (
+                                                                            <i className="fa-solid fa-check ml-2" />
+                                                                        ) : (
+                                                                            ""
+                                                                        )}
+                                                                    </>
+                                                                )}
+                                                            </Listbox.Option>
+                                                        ))}
+                                                    </Listbox.Options>
+                                                </div>
+                                            </Listbox>
+                                            {err?.pageTypeName ||
+                                                required_error?.page_type?.[0]}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="page_name"
+                                                label="Page Name"
+                                                type="text"
+                                                placeholder="Enter page name"
+                                                name="page name"
+                                                required={true}
+                                                value={pageName}
+                                                error={err?.pageName}
+                                                onChange={(e) =>
+                                                    handleChange(e, setPageName)
+                                                }
+                                            />
+                                        </div>
+
+                                        {
+                                            task?.category?.name !== "UI/UIX Design" && <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="page_url"
+                                                    label="Page URL"
+                                                    type="text"
+                                                    placeholder="Enter page url"
+                                                    name="page url"
+                                                    required={true}
+                                                    value={pageURL}
+                                                    error={
+                                                        err?.pageUrl ||
+                                                        required_error?.page_url?.[0]
+                                                    }
+                                                    onChange={(e) =>
+                                                        handleChange(e, setPageURL)
+                                                    }
+                                                />
+                                            </div>
+                                        }
+
+                                    </>
+                                )}
+
+                                {pageType === "Cloning Existing Design" ? (
+                                    <>
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="number_of_pages"
+                                                label="Number of Pages"
+                                                type="number"
+                                                placeholder="--"
+                                                name="number_of_pages"
+                                                required={true}
+                                                value={numberOfPage}
+                                                error={err?.numberOfPage}
+                                                onChange={(e) =>
+                                                    handleChange(e, setNumberOfPage)
+                                                }
+                                            />
+                                        </div>
+
+                                        <div className="col-12 col-md-6">
+                                            <Input
+                                                id="exiting_project_url"
+                                                label="Existing Design Link"
+                                                type="Link"
+                                                placeholder="--"
+                                                name="exiting_project_url"
+                                                required={true}
+                                                value={existingDesignLink}
+                                                error={err?.existingDesignLink}
+                                                onChange={(e) =>
+                                                    handleChange(
+                                                        e,
+                                                        setExistingDesignLink
+                                                    )
+                                                }
+                                            />
+                                        </div>
+                                    </>
+                                ) : null}
+                            </React.Fragment>
+                        ) : null}
+                        {/*  */}
+
+                    </>
+                }
+
+
 
                 <div className="col-12 col-md-6">
                     <PrioritySelection
