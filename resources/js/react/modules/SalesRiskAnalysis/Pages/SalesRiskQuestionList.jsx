@@ -57,7 +57,7 @@ const SalesRiskQuestionList = () => {
         })
     );
 
-    const questionsList = data?.data || [];
+    const questionsList = data?.data;
 
     const handleScrollToBottom = () => {};
 
@@ -82,6 +82,7 @@ const SalesRiskQuestionList = () => {
             setAllQuestions(flattenArray(questionsList?.data));
         }
     }, [questionsList]);
+
 
 
     return (
