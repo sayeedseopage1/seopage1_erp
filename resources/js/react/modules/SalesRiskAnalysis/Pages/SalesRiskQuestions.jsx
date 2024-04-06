@@ -117,7 +117,6 @@ const SalesRiskQuestions = () => {
         const skipKey = ["is_Active_YesNo", "parent_id"]
         const isEmpty = isArrayObjectEmpty(inputsData, skipKey);
         if (isEmpty) {
-            console.log("empty");
             setIsSubmitting(true);
         } else {
             try {
@@ -136,13 +135,14 @@ const SalesRiskQuestions = () => {
                         setIsSubmitting(false);
                         setRedirectUrl(res?.data?.redirect_url);
                     } else {
-                        console.log(res?.data);
-                        // window.location.reload();
+                        window.location.reload();
                     }
+                } else {
+                    toast.error("Something went wrong");
+                    setIsSubmitting(false);
                 }
             } catch (error) {
-                console.log(error);
-                toast.error("Something went wrong");
+                console.log(error);toast.error("Something went wrong");
             }
         }
     };

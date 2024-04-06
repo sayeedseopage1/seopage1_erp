@@ -145,7 +145,6 @@ const QuestionsListTable = ({
                     },
                     parent_question_for: row?.value,
                 };
-                console.log(payload);
                 if (row?.parent_question?.type === "list") {
                     setSingleQuestion({
                         ...payload,
@@ -161,7 +160,6 @@ const QuestionsListTable = ({
         },
     });
 
-    console.log("table", data);
     return (
         <React.Fragment>
             <div

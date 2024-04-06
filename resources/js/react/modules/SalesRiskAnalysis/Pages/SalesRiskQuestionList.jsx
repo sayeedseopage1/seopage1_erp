@@ -83,7 +83,6 @@ const SalesRiskQuestionList = () => {
         }
     }, [questionsList]);
 
-    console.log(allQuestions);
 
     return (
         <React.Fragment>
