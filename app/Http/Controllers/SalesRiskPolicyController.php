@@ -423,7 +423,7 @@ class SalesRiskPolicyController extends AccountBaseController
         $types = SalesPolicyQuestion::$types;
         $questionKeys = SalesRiskPolicy::$keys;
         $policies = SalesRiskPolicy::whereNull('parent_id')->get(['id', 'title']);
-        $questionList = SalesPolicyQuestion::get(['id', 'title', 'key', 'type', 'value', 'parent_id', 'policy_id',]);
+        $questionList = SalesPolicyQuestion::get(['id', 'title', 'key', 'type', 'value', 'parent_id', 'policy_id']);
 
         return response()->json(['data' => compact('types', 'questionKeys', 'policies', 'questionList')]);
     }
@@ -509,11 +509,17 @@ class SalesRiskPolicyController extends AccountBaseController
             if ($req->policy_id)
                 $query->where('policy_id', $req->policy_id);
         })
-        ->offset($req->input('limit', 10) * $req->input('page', 1))
-        ->paginate($req->input('limit', 10));
+        ->limit($req->input('limit', 10))
+        // ->offset($req->input('limit', 10) * $req->input('page', 1))
+        ->get();
+        dd($itemsPaginated);
+        // ->paginate($req->input('limit', 10));
 
         $itemsTransformed = $itemsPaginated
             ->getCollection()
+            ->filter(
+                fn (SalesPolicyQuestion $question) => (bool) SalesRiskPolicy::find($question->policy_id)->status
+            )
             ->map(function ($item) {
 
                 return [
@@ -1199,12 +1205,12 @@ class SalesRiskPolicyController extends AccountBaseController
     {
         if(url()->current() == route('account.sale-risk-policies.report-data'))
         {
-
             $itemsPaginated = Deal::where(function ($query) use ($req) {
                 if ($req->id)
                     $query->where('id', $req->id);
+                if($req->page > 2)
+                    $query->offset($req->input('limit', 10) * $req->page);
             })
-            ->offset($req->input('limit', 10) * $req->input('page', 1))
             ->paginate($req->input('limit', 10));
 
             $itemsTransformed = $itemsPaginated
@@ -1212,13 +1218,17 @@ class SalesRiskPolicyController extends AccountBaseController
             ->map(function ($item) {
 
                 return [
-                    'id' => $item->id,
+                    'client_id' => $item->client_id,
                     'client_name' => $item->client_name,
+                    'deal_id' => $item->id,
+                    'deal_name' => $item->deal_id,
                     'project_name' => $item->project_name,
-                    'deal_id' => $item->deal_id,
                     'lead_id' => $item->lead_id,
                     'country' => Lead::find($item->lead_id)->country,
                     'award_time' => $item->award_time,
+                    'authorize_by_id' =>'',
+                    'authorize_by_name' => '',
+                    'authorize_by_photo' => '',
                     'points' => 0
                 ];
             })->toArray();
@@ -1236,7 +1246,7 @@ class SalesRiskPolicyController extends AccountBaseController
                 ]
             );
 
-            return ['data' => $data];
+            return response()->json(['data' => $data]);
         }
 
         $this->pageTitle = 'Sales Analysis Reports';
