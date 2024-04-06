@@ -253,13 +253,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.fileTypesNeeded = "File types is required";
                 errCount++;
             }
-            if (fileTypesNeeded?.includes("Others")) {
-                if (!fileType) {
-                    err.fileType = "The others file type is required";
-                    errCount++;
-                }
-
-            }
         }
 
         if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
@@ -378,7 +371,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
         fd.append("brand_name", brandName ?? "");
         fd.append("number_of_versions", numOfVersions ?? "");
-        fd.append("file_types_needed", JSON.stringify([...fileTypesNeeded, fileType]) ?? "");
+        fd.append("file_types_needed", JSON.stringify([...(fileTypesNeeded?.filter(type => type !== 'Others'))]) ?? "");
         fd.append("reference", reference ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
@@ -596,8 +589,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     //     });
     // }
 
-
-
+    // add other file type 
+    const handleAddOtherFileType = () => {
+        fileTypesNeeded.push(fileType);
+        setFileType('')
+    }
 
     return (
         <Modal isOpen={isOpen}>
@@ -901,7 +897,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         <FileTypesNeeded
                                                             className={`form-control height-35 w-100 f-14`}
                                                             id='fileTypesNeeded'
-                                                            fileTypesNeeded={fileTypesNeeded}
+                                                            fileTypesNeeded={fileTypesNeeded?.filter(type => type !== 'Others')}
                                                             setFileTypesNeeded={setFileTypesNeeded}
                                                             multiple
                                                         />
@@ -914,19 +910,27 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                 </div>
                                                 {
                                                     fileTypesNeeded?.includes('Others') && <div className="col-12 col-md-6">
-                                                        <Input
-                                                            id="fileType"
-                                                            label="Describe the file type"
-                                                            type="text"
-                                                            placeholder="Describe the file type"
-                                                            name="fileType"
-                                                            required={true}
-                                                            value={fileType}
-                                                            error={formError?.fileType}
-                                                            onChange={(e) =>
-                                                                handleChange(e, setFileType)
-                                                            }
-                                                        />
+                                                        <div className={`form-group my-3 w-100`}>
+                                                            <label
+                                                                htmlFor='fileType'
+                                                                className={`f-14 text-dark-gray mb-1`}
+                                                                data-label="true"
+                                                            >
+                                                                Describe The File Type
+                                                            </label>
+                                                            <div className="d-flex align-items-center justify-content-between w-100">
+                                                                <input
+                                                                    type="text"
+                                                                    className={`form-control height-35 f-14`}
+                                                                    placeholder={'Describe the file type'}
+                                                                    value={fileType}
+                                                                    onChange={(e) =>
+                                                                        handleChange(e, setFileType)
+                                                                    }
+                                                                />
+                                                                <button style={{ marginLeft: '10px', height: '39px' }} className="btn btn-success btn-sm" onClick={handleAddOtherFileType}>Add</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 }
                                             </>
@@ -992,17 +996,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             files={imgOrVidForWork}
                                                             setFiles={setImgOrVidForWork}
                                                         />
-                                                        {/* <div className="custom-file z-n1" style={fileInputStyle}>
-                                                            <input type="file" className="custom-file-input" id="imgOrVidForWork" required={true} error={formError?.imgOrVidForWork} onChange={(e) =>
-                                                                handleChange(e, setImgOrVidForWork)
-                                                            } multiple />
-                                                            <label className="custom-file-label" htmlFor="imgOrVidForWork">Choose file</label>
-                                                        </div>
-                                                        {formError?.imgOrVidForWork && (
-                                                            <div style={{ color: "red" }}>
-                                                                {formError?.imgOrVidForWork}
-                                                            </div>
-                                                        )} */}
                                                     </div>
                                                 </div>
                                             </>

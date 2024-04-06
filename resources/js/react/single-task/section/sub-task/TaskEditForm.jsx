@@ -150,6 +150,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
+    const [fileType, setFileType] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
     const [imageForDesigner, setImageForDesigner] = useState([]);
     const [imgOrVidForWork, setImgOrVidForWork] = useState([]);
@@ -323,14 +324,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.fontName = "Font name is required";
                 count++;
             }
-            if (!fontUrl) {
-                err.fontUrl = "You have to provide font URL";
-                count++;
-            } else if (!checkIsURL(fontUrl)) {
-                err.fontUrl = "You have to provide a valid font URL";
-                toast.warn("You have to provide a valid font URL");
-                count++;
-            }
+            // if (!checkIsURL(fontUrl)) {
+            //     err.fontUrl = "You have to provide a valid font URL";
+            //     toast.warn("You have to provide a valid font URL");
+            //     count++;
+            // }
             if (!brandGuideline) {
                 err.brandGuideline = "Brand guideline is required";
                 count++;
@@ -454,7 +452,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
             fd.append("brand_name", brandName ?? "");
             fd.append("number_of_versions", numOfVersions ?? "");
-            fd.append("file_types_needed", JSON.stringify(fileTypesNeeded) ?? "");
+            fd.append("file_types_needed", JSON.stringify([...(fileTypesNeeded?.filter(type => type !== 'Others'))]) ?? "");
         }
         if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
             Array.from(textForDesign).forEach((file) => {
@@ -656,6 +654,12 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     const onChange = (e, setState) => {
         setState(e.target.value);
     };
+
+    // add other file type 
+    const handleAddOtherFileType = () => {
+        fileTypesNeeded.push(fileType);
+        setFileType('')
+    }
 
     return (
         <React.Fragment>
@@ -940,7 +944,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                             <FileTypesNeeded
                                                 className={`form-control height-35 w-100 f-14`}
                                                 id='fileTypesNeeded'
-                                                fileTypesNeeded={fileTypesNeeded}
+                                                fileTypesNeeded={fileTypesNeeded?.filter(type => type !== 'Others')}
                                                 setFileTypesNeeded={setFileTypesNeeded}
                                                 multiple
                                             />
@@ -951,6 +955,31 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                             )}
                                         </div>
                                     </div>
+                                    {
+                                        fileTypesNeeded?.includes('Others') && <div className="col-12 col-md-6">
+                                            <div className={`form-group my-3 w-100`}>
+                                                <label
+                                                    htmlFor='fileType'
+                                                    className={`f-14 text-dark-gray mb-1`}
+                                                    data-label="true"
+                                                >
+                                                    Describe The File Type
+                                                </label>
+                                                <div className="d-flex align-items-center justify-content-between w-100">
+                                                    <input
+                                                        type="text"
+                                                        className={`form-control height-35 f-14`}
+                                                        placeholder={'Describe the file type'}
+                                                        value={fileType}
+                                                        onChange={(e) =>
+                                                            handleChange(e, setFileType)
+                                                        }
+                                                    />
+                                                    <button style={{ marginLeft: '10px', height: '39px' }} className="btn btn-success btn-sm" onClick={handleAddOtherFileType}>Add</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                 </>
                             }
                             {/* for Banner, Brochure or company profile */}

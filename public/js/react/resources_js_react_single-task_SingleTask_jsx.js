@@ -14716,38 +14716,42 @@ var TaskEditForm = function TaskEditForm(_ref2) {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     fileTypesNeeded = _React$useState4[0],
     setFileTypesNeeded = _React$useState4[1];
-  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+  var _useState43 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
     _useState44 = _slicedToArray(_useState43, 2),
-    textForDesign = _useState44[0],
-    setTextForDesign = _useState44[1];
+    fileType = _useState44[0],
+    setFileType = _useState44[1];
   var _useState45 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState46 = _slicedToArray(_useState45, 2),
-    imageForDesigner = _useState46[0],
-    setImageForDesigner = _useState46[1];
+    textForDesign = _useState46[0],
+    setTextForDesign = _useState46[1];
   var _useState47 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState48 = _slicedToArray(_useState47, 2),
-    imgOrVidForWork = _useState48[0],
-    setImgOrVidForWork = _useState48[1];
-  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+    imageForDesigner = _useState48[0],
+    setImageForDesigner = _useState48[1];
+  var _useState49 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState50 = _slicedToArray(_useState49, 2),
-    fontName = _useState50[0],
-    setFontName = _useState50[1];
+    imgOrVidForWork = _useState50[0],
+    setImgOrVidForWork = _useState50[1];
   var _useState51 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
     _useState52 = _slicedToArray(_useState51, 2),
-    fontUrl = _useState52[0],
-    setFontUrl = _useState52[1];
-  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+    fontName = _useState52[0],
+    setFontName = _useState52[1];
+  var _useState53 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
     _useState54 = _slicedToArray(_useState53, 2),
-    brandGuideline = _useState54[0],
-    setBrandGuideline = _useState54[1];
-  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    fontUrl = _useState54[0],
+    setFontUrl = _useState54[1];
+  var _useState55 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState56 = _slicedToArray(_useState55, 2),
-    illustration = _useState56[0],
-    setIllustration = _useState56[1];
+    brandGuideline = _useState56[0],
+    setBrandGuideline = _useState56[1];
   var _useState57 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState58 = _slicedToArray(_useState57, 2),
-    others = _useState58[0],
-    setOthers = _useState58[1];
+    illustration = _useState58[0],
+    setIllustration = _useState58[1];
+  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState60 = _slicedToArray(_useState59, 2),
+    others = _useState60[0],
+    setOthers = _useState60[1];
   var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     primaryColor = _React$useState6[0],
@@ -14765,63 +14769,63 @@ var TaskEditForm = function TaskEditForm(_ref2) {
   //state for graphic designer end
 
   // state for ui/ux start
-  var _useState59 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
-    _useState60 = _slicedToArray(_useState59, 2),
-    cms = _useState60[0],
-    setCms = _useState60[1];
   var _useState61 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState62 = _slicedToArray(_useState61, 2),
-    themeType = _useState62[0],
-    setThemeType = _useState62[1];
+    cms = _useState62[0],
+    setCms = _useState62[1];
   var _useState63 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState64 = _slicedToArray(_useState63, 2),
-    themeName = _useState64[0],
-    setThemeName = _useState64[1];
+    themeType = _useState64[0],
+    setThemeType = _useState64[1];
   var _useState65 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState66 = _slicedToArray(_useState65, 2),
-    themeTemplate = _useState66[0],
-    setThemeTemplate = _useState66[1];
+    themeName = _useState66[0],
+    setThemeName = _useState66[1];
+  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState68 = _slicedToArray(_useState67, 2),
+    themeTemplate = _useState68[0],
+    setThemeTemplate = _useState68[1];
   // state for ui/ux end
 
   // let defaultTextForDesignBanner;
-  var _useState67 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 2 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g3 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g3 === void 0 ? void 0 : _graphicWorkDetails$g3.filter(function (item) {
-      return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
-    }))),
-    _useState68 = _slicedToArray(_useState67, 2),
-    defaultTextForDesignBanner = _useState68[0],
-    setDefaultTextForDesignBanner = _useState68[1];
-
-  // let defaultTextForDesignBrochure;
-  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 3 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g4 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g4 === void 0 ? void 0 : _graphicWorkDetails$g4.filter(function (item) {
+  var _useState69 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 2 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g3 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g3 === void 0 ? void 0 : _graphicWorkDetails$g3.filter(function (item) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
     }))),
     _useState70 = _slicedToArray(_useState69, 2),
-    defaultTextForDesignBrochure = _useState70[0],
-    setDefaultTextForDesignBrochure = _useState70[1];
+    defaultTextForDesignBanner = _useState70[0],
+    setDefaultTextForDesignBanner = _useState70[1];
 
-  // let defaultTextForDesignCompanyProfile;
-  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 4 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g5 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g5 === void 0 ? void 0 : _graphicWorkDetails$g5.filter(function (item) {
+  // let defaultTextForDesignBrochure;
+  var _useState71 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 3 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g4 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g4 === void 0 ? void 0 : _graphicWorkDetails$g4.filter(function (item) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
     }))),
     _useState72 = _slicedToArray(_useState71, 2),
-    defaultTextForDesignCompanyProfile = _useState72[0],
-    setFefaultTextForDesignCompanyProfile = _useState72[1];
+    defaultTextForDesignBrochure = _useState72[0],
+    setDefaultTextForDesignBrochure = _useState72[1];
 
-  // let defaultImageForDesignerRetouching;
-  var _useState73 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 5 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g6 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g6 === void 0 ? void 0 : _graphicWorkDetails$g6.filter(function (item) {
-      return (item === null || item === void 0 ? void 0 : item.file_type) == 2;
+  // let defaultTextForDesignCompanyProfile;
+  var _useState73 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 4 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g5 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g5 === void 0 ? void 0 : _graphicWorkDetails$g5.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 1;
     }))),
     _useState74 = _slicedToArray(_useState73, 2),
-    defaultImageForDesignerRetouching = _useState74[0],
-    setDefaultImageForDesignerRetouching = _useState74[1];
+    defaultTextForDesignCompanyProfile = _useState74[0],
+    setFefaultTextForDesignCompanyProfile = _useState74[1];
 
-  // let defaultImageForDesignerBgRemoval;
-  var _useState75 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 6 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g7 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g7 === void 0 ? void 0 : _graphicWorkDetails$g7.filter(function (item) {
+  // let defaultImageForDesignerRetouching;
+  var _useState75 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 5 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g6 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g6 === void 0 ? void 0 : _graphicWorkDetails$g6.filter(function (item) {
       return (item === null || item === void 0 ? void 0 : item.file_type) == 2;
     }))),
     _useState76 = _slicedToArray(_useState75, 2),
-    defaultImageForDesignerBgRemoval = _useState76[0],
-    setDefaultImageForDesignerBgRemoval = _useState76[1];
+    defaultImageForDesignerRetouching = _useState76[0],
+    setDefaultImageForDesignerRetouching = _useState76[1];
+
+  // let defaultImageForDesignerBgRemoval;
+  var _useState77 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)((graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.type_of_graphic_work_id) === 6 && (graphicWorkDetails === null || graphicWorkDetails === void 0 || (_graphicWorkDetails$g7 = graphicWorkDetails.graphic_task_files) === null || _graphicWorkDetails$g7 === void 0 ? void 0 : _graphicWorkDetails$g7.filter(function (item) {
+      return (item === null || item === void 0 ? void 0 : item.file_type) == 2;
+    }))),
+    _useState78 = _slicedToArray(_useState77, 2),
+    defaultImageForDesignerBgRemoval = _useState78[0],
+    setDefaultImageForDesignerBgRemoval = _useState78[1];
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (themeName || themeTemplate) {
       setThemeType({
@@ -14951,14 +14955,11 @@ var TaskEditForm = function TaskEditForm(_ref2) {
         err.fontName = "Font name is required";
         count++;
       }
-      if (!fontUrl) {
-        err.fontUrl = "You have to provide font URL";
-        count++;
-      } else if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_24__.checkIsURL)(fontUrl)) {
-        err.fontUrl = "You have to provide a valid font URL";
-        react_toastify__WEBPACK_IMPORTED_MODULE_14__.toast.warn("You have to provide a valid font URL");
-        count++;
-      }
+      // if (!checkIsURL(fontUrl)) {
+      //     err.fontUrl = "You have to provide a valid font URL";
+      //     toast.warn("You have to provide a valid font URL");
+      //     count++;
+      // }
       if (!brandGuideline) {
         err.brandGuideline = "Brand guideline is required";
         count++;
@@ -15071,7 +15072,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       fd.append("type_of_logo", (_typeOfLogo$type_name = typeOfLogo === null || typeOfLogo === void 0 ? void 0 : typeOfLogo.type_name) !== null && _typeOfLogo$type_name !== void 0 ? _typeOfLogo$type_name : "");
       fd.append("brand_name", brandName !== null && brandName !== void 0 ? brandName : "");
       fd.append("number_of_versions", numOfVersions !== null && numOfVersions !== void 0 ? numOfVersions : "");
-      fd.append("file_types_needed", (_JSON$stringify = JSON.stringify(fileTypesNeeded)) !== null && _JSON$stringify !== void 0 ? _JSON$stringify : "");
+      fd.append("file_types_needed", (_JSON$stringify = JSON.stringify(_toConsumableArray(fileTypesNeeded === null || fileTypesNeeded === void 0 ? void 0 : fileTypesNeeded.filter(function (type) {
+        return type !== 'Others';
+      })))) !== null && _JSON$stringify !== void 0 ? _JSON$stringify : "");
     }
     if ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4) {
       Array.from(textForDesign).forEach(function (file) {
@@ -15285,6 +15288,12 @@ var TaskEditForm = function TaskEditForm(_ref2) {
   // color schema
   var _onChange = function onChange(e, setState) {
     setState(e.target.value);
+  };
+
+  // add other file type 
+  var handleAddOtherFileType = function handleAddOtherFileType() {
+    fileTypesNeeded.push(fileType);
+    setFileType('');
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
@@ -15535,7 +15544,9 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)(_projects_components_graphics_design_forms_FileTypesNeeded__WEBPACK_IMPORTED_MODULE_22__["default"], {
                   className: "form-control height-35 w-100 f-14",
                   id: "fileTypesNeeded",
-                  fileTypesNeeded: fileTypesNeeded,
+                  fileTypesNeeded: fileTypesNeeded === null || fileTypesNeeded === void 0 ? void 0 : fileTypesNeeded.filter(function (type) {
+                    return type !== 'Others';
+                  }),
                   setFileTypesNeeded: setFileTypesNeeded,
                   multiple: true
                 }), (error === null || error === void 0 ? void 0 : error.fileTypesNeeded) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
@@ -15543,6 +15554,36 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     color: "red"
                   },
                   children: error === null || error === void 0 ? void 0 : error.fileTypesNeeded
+                })]
+              })
+            }), (fileTypesNeeded === null || fileTypesNeeded === void 0 ? void 0 : fileTypesNeeded.includes('Others')) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("div", {
+              className: "col-12 col-md-6",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
+                className: "form-group my-3 w-100",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("label", {
+                  htmlFor: "fileType",
+                  className: "f-14 text-dark-gray mb-1",
+                  "data-label": "true",
+                  children: "Describe The File Type"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsxs)("div", {
+                  className: "d-flex align-items-center justify-content-between w-100",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("input", {
+                    type: "text",
+                    className: "form-control height-35 f-14",
+                    placeholder: 'Describe the file type',
+                    value: fileType,
+                    onChange: function onChange(e) {
+                      return handleChange(e, setFileType);
+                    }
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_26__.jsx)("button", {
+                    style: {
+                      marginLeft: '10px',
+                      height: '39px'
+                    },
+                    className: "btn btn-success btn-sm",
+                    onClick: handleAddOtherFileType,
+                    children: "Add"
+                  })]
                 })]
               })
             })]
