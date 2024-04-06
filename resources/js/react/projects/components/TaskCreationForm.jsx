@@ -70,15 +70,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         },
     ]);
 
-    // set otgher file type in fileTypesNeeded
-    // useEffect(() => {
-    //     setFileTypesNeeded([...fileTypesNeeded, fileType])
-    //     // fileTypesNeeded.push(fileType)
-    // }, [fileType])
-    //state for graphic designer end
-
-    console.log("fileTypesNeeded", fileTypesNeeded);
-
     // state for ui/ux start
     // const [cms, setCms] = useState("")
     const [cms, setCms] = useState("");
