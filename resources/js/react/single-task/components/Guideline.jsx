@@ -64,6 +64,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
     const { cms, theme_name, theme_template_library_link } = commonUiUixWorkDetails || {}
 
+    const referenceList = reference ? JSON.parse(reference) : [];
+
     let defaultSecondaryColors;
     let defaultFileTypesNeeded;
     // files
@@ -245,8 +247,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                             </div>
                         }
                         {
-                            reference && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Reference</strong>: <br /> {reference}</span>
+                            referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}><a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a></li>)}</span>
                             </div>
                         }
                         {
@@ -560,8 +562,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                         </div>
                                     }
                                     {
-                                        reference && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Reference</strong>: <br /> {reference}</span>
+                                        referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                            <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}><a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a></li>)}</span>
                                         </div>
                                     }
                                     {

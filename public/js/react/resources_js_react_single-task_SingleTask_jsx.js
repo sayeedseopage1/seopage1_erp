@@ -2530,6 +2530,7 @@ var Guideline = function Guideline(_ref) {
     cms = _ref2.cms,
     theme_name = _ref2.theme_name,
     theme_template_library_link = _ref2.theme_template_library_link;
+  var referenceList = reference ? JSON.parse(reference) : [];
   var defaultSecondaryColors;
   var defaultFileTypesNeeded;
   // files
@@ -2702,12 +2703,21 @@ var Guideline = function Guideline(_ref) {
               children: "Font Name"
             }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", font_name]
           })
-        }), reference && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        }), referenceList && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
               children: "Reference"
-            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", reference]
+            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (item, i) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("li", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                  href: item === null || item === void 0 ? void 0 : item.reference,
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  children: item === null || item === void 0 ? void 0 : item.reference
+                })
+              }, i);
+            })]
           })
         }), font_url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
@@ -3063,12 +3073,21 @@ var Guideline = function Guideline(_ref) {
                     children: "Font Name"
                   }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", font_name]
                 })
-              }), reference && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+              }), referenceList && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
                 className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
                     children: "Reference"
-                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", reference]
+                  }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (item, i) {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("li", {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                        href: item === null || item === void 0 ? void 0 : item.reference,
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        children: item === null || item === void 0 ? void 0 : item.reference
+                      })
+                    }, i);
+                  })]
                 })
               }), font_url && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
                 className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",

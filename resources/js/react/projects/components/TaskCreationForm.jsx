@@ -26,6 +26,7 @@ import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../utils/check-is-url";
 import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 // const fileInputStyle = {
 //     height: "39px",
@@ -47,7 +48,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
-    const [reference, setReference] = useState("");
+    // const [reference, setReference] = useState("");
+    const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [fileTypesNeeded, setFileTypesNeeded] = useState([]);
     const [fileType, setFileType] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
@@ -126,7 +128,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setTypeOfLogo("");
         setBrandName("");
         setNumOfVersions(null);
-        setReference("");
+        // setReference("");
+        setReferenceList([{ reference: "" }])
         setFileTypesNeeded([]);
         setTextForDesign([]);
         setImageForDesigner([]);
@@ -208,10 +211,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 errCount++;
             }
-            if (!reference) {
-                err.reference = "The reference field is required";
-                errCount++;
-            }
+            // if (!reference) {
+            //     err.reference = "The reference field is required";
+            //     errCount++;
+            // }
             if (!fontName) {
                 err.fontName = "Font name is required";
                 errCount++;
@@ -363,7 +366,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("brand_name", brandName ?? "");
         fd.append("number_of_versions", numOfVersions ?? "");
         fd.append("file_types_needed", JSON.stringify([...(fileTypesNeeded?.filter(type => type !== 'Others'))]) ?? "");
-        fd.append("reference", reference ?? "");
+        fd.append("reference", JSON.stringify(referenceList) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
         fd.append("design_instruction", (illustration || others) ?? "");
@@ -585,6 +588,31 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fileTypesNeeded.push(fileType);
         setFileType('')
     }
+
+
+    // reference 
+    const handleReferenceChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...referenceList];
+        list[index][name] = value;
+        setReferenceList(list);
+    };
+
+    const handleReferenceRemove = (index) => {
+        const list = [...referenceList];
+        list.splice(index, 1);
+        setReferenceList(list);
+    };
+
+    const handleReferenceAdd = () => {
+        setReferenceList([...referenceList, { reference: "" }]);
+    };
+
+    const validateUrl = (url) => {
+        // Regular expression for URL validation
+        const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+        return urlRegex.test(url);
+    };
 
     return (
         <Modal isOpen={isOpen}>
@@ -1062,7 +1090,63 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                         }
 
                                         {/* Reference */}
-                                        <div className="col-12 col-md-6">
+                                        {<div className="col-12 col-md-6">
+                                            <div className={`form-group my-3 w-100`}>
+                                                <label
+                                                    htmlFor='fileType'
+                                                    className={`f-14 text-dark-gray mb-1`}
+                                                    data-label="true"
+                                                >
+                                                    Referrence
+                                                </label>
+                                                {referenceList.map((singleReference, index) => (
+                                                    <div key={index}>
+                                                        <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>
+                                                            <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                                                <input
+                                                                    type="url"
+                                                                    name="reference"
+                                                                    className={`form-control height-35 f-14`}
+                                                                    placeholder={'Enter Task Reference'}
+                                                                    value={singleReference.reference}
+                                                                    onChange={(e) => handleReferenceChange(e, index)}
+
+                                                                />
+                                                                {singleReference.reference && !validateUrl(singleReference.reference) && (
+                                                                    <div style={{ color: "red" }}>Please enter a valid URL</div>
+                                                                )}
+                                                            </div>
+                                                            <div className="">
+                                                                {referenceList.length !== 1 && (
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => handleReferenceRemove(index)}
+                                                                        className="btn btn-outline-danger btn-sm "
+                                                                        style={{ marginLeft: '10px', height: '39px' }}
+                                                                    >
+                                                                        <RiDeleteBinLine />
+                                                                    </button>
+                                                                )}
+                                                            </div>
+
+                                                        </div>
+                                                        <div>
+                                                            {referenceList.length - 1 === index && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={handleReferenceAdd}
+                                                                    className="btn btn-success btn-sm mt-2"
+                                                                >
+                                                                    <span>+</span>
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        }
+                                        {/* <div className="col-12 col-md-6">
                                             <Input
                                                 id="reference"
                                                 label="Reference"
@@ -1076,7 +1160,9 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     handleChange(e, setReference)
                                                 }
                                             />
-                                        </div>
+                                            
+
+                                        </div> */}
 
                                         {/* Font name */}
                                         <div className="col-12 col-md-6">
