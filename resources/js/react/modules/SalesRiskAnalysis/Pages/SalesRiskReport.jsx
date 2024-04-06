@@ -68,6 +68,7 @@ const SalesRiskReport = () => {
                         tableData={saleAnalysisReportTableData}
                         isLoading={isQuestionsListLoading}
                         tableName="Sales Analysis Report"
+                        isFetching={isFetching}
                         onPageChange={onPageChange}
                     />
                 </div>

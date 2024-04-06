@@ -1,14 +1,13 @@
 import React from "react";
 import {
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getExpandedRowModel,
-  getSortedRowModel,
-  flexRender,
+    useReactTable,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getExpandedRowModel,
+    getSortedRowModel,
+    flexRender,
 } from "@tanstack/react-table";
 import PropTypes from "prop-types";
-
 
 // table components
 import { DraggableColumnHeader } from "./DraggableColumnHeader";
@@ -25,6 +24,7 @@ const SalesAnalysisReportTable = ({
     onPageChange,
     filter,
     search,
+    isFetching,
 }) => {
     // table state
     const [sorting, setSorting] = React.useState([]);
@@ -154,6 +154,7 @@ const SalesAnalysisReportTable = ({
                     {/* table Body */}
                     <tbody className="sp1_tasks_tbody">
                         {!isLoading &&
+                            !isFetching &&
                             table.getRowModel().rows.map((row) => {
                                 return (
                                     <tr
@@ -186,7 +187,7 @@ const SalesAnalysisReportTable = ({
                                 );
                             })}
                         {/* Loading Table */}
-                        {isLoading && (
+                        {(isLoading || isFetching) && (
                             <SalesAnalysisReportTableLoader
                                 prevItemLength={data?.length}
                             />
@@ -194,9 +195,8 @@ const SalesAnalysisReportTable = ({
                     </tbody>
                 </table>
                 {/* Table for empty */}
-                {!isLoading && _.size(table.getRowModel().rows) === 0 && (
-                    <EmptyTable />
-                )}
+                {(!isLoading || !isFetching) &&
+                    _.size(table.getRowModel().rows) === 0 && <EmptyTable />}
             </div>
             {/* pagination */}
             <SalesRiskAnalysisTablePagination
@@ -211,7 +211,6 @@ const SalesAnalysisReportTable = ({
 
 export default SalesAnalysisReportTable;
 
-
 SalesAnalysisReportTable.propTypes = {
     tableData: PropTypes.object,
     tableColumns: PropTypes.array,
@@ -220,5 +219,4 @@ SalesAnalysisReportTable.propTypes = {
     onPageChange: PropTypes.func,
     filter: PropTypes.object,
     search: PropTypes.string,
-
-}
+};
