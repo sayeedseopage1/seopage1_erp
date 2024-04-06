@@ -46,7 +46,7 @@ const QuestionsListTable = ({
     const [skipPageReset, setSkipPageReset] = React.useState(false);
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
         pageIndex: 0,
-        pageSize: 15,
+        pageSize: 10,
     });
 
     // sales risk analysis rules data

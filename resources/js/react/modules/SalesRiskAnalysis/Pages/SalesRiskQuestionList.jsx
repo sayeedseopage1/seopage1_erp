@@ -15,6 +15,10 @@ import { QuestionsListTableColumns } from "../components/table/QuestionsListTabl
 import { useSaleAnalysisQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskQuestionList = () => {
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
     // modal state management
     const [addQuestionsModalOpen, setAddQuestionsModalOpen] =
         React.useState(false);
@@ -33,15 +37,26 @@ const SalesRiskQuestionList = () => {
         policy_id: {},
     });
 
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
     // api call
     const {
         data,
         isFetching,
         isLoading: isQuestionsListLoading,
         refetch,
-    } = useSaleAnalysisQuestionsListQuery("", {
-        refetchOnMountOrArgChange: true,
-    });
+    } = useSaleAnalysisQuestionsListQuery(
+        queryString({
+            page: pageIndex + 1,
+            limit: pageSize,
+        })
+    );
+
+    const questionsList = data?.data || [];
 
     const handleScrollToBottom = () => {};
 
@@ -53,7 +68,6 @@ const SalesRiskQuestionList = () => {
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
-
 
     return (
         <React.Fragment>
@@ -80,7 +94,7 @@ const SalesRiskQuestionList = () => {
                 <div className="sp1_tlr_tbl_container mx-0 py-3">
                     {/* sales risk analysis table */}
                     <QuestionsListTable
-                        tableData={data}
+                        tableData={questionsList}
                         tableColumns={QuestionsListTableColumns}
                         tableName="Questions"
                         setSingleQuestion={setSingleQuestion}

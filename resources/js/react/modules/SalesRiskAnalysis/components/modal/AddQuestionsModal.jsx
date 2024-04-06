@@ -15,11 +15,7 @@ import AddQuestionTypeListInputs from "../sections/AddQuestionTypeListInputs";
 
 // local styled components
 import {
-    ModalButton,
-    ModalInput,
     ModalTitle,
-    ModalInputLabel,
-    ModalSelectContainer,
 } from "../ui/Styles/ui";
 
 // global styled components
@@ -35,6 +31,7 @@ import {
     usePolicyQuestionsListByPolicyIdQuery,
     useQuestionAddonPolicyMutation,
     useSaleAnalysisQuestionByPolicyIdQuery,
+    useSaleAnalysisQuestionsListQuery,
     useSinglePolicyQuestionsQuery,
 } from "../../../../services/api/salesRiskAnalysisSlice";
 
@@ -56,6 +53,10 @@ const AddQuestionsModal = ({
     refetchSaleRiskAnalysis,
 }) => {
     const modalRef = useRef(null);
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    });
     const [isQuestionUpdating, setIsQuestionUpdating] = useState(false);
     const [questions, setQuestions] = useState([]);
     const [isListEmpty, setIsListEmpty] = useState(false);
@@ -117,14 +118,35 @@ const AddQuestionsModal = ({
     //     skip: !addQuestionsData?.id,
     // });
 
-    const {
-        data: questionsList,
-        isFetching: isQuestionsListFetching,
-        isLoading: isQuestionsListLoading,
-    } = useSaleAnalysisQuestionByPolicyIdQuery(addQuestionsData?.id, {
-        skip: !addQuestionsData?.id,
-        refetchOnMountOrArgChange: true,
-    });
+    // const {
+    //     data: questionsList,
+    //     isFetching: isQuestionsListFetching,
+    //     isLoading: isQuestionsListLoading,
+    // } = useSaleAnalysisQuestionByPolicyIdQuery(addQuestionsData?.id, {
+    //     skip: !addQuestionsData?.id,
+    //     refetchOnMountOrArgChange: true,
+    // });
+
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
+
+    // api call
+    const { data, isLoading: isQuestionsListLoading } =
+        useSaleAnalysisQuestionsListQuery(
+            queryString({
+                page: pageIndex + 1,
+                limit: pageSize,policy_id: addQuestionsData?.id,
+            }),
+            {
+                skip: !addQuestionsData?.id,
+                refetchOnMountOrArgChange: true,
+            }
+        );
+
+    const questionsList = data?.data || [];
 
     useEffect(() => {
         if (questionsList?.data?.length) {
@@ -456,7 +478,7 @@ const AddQuestionsModal = ({
                             tableName="Questions"
                             setSingleQuestion={setSingleQuestion}
                             setIsQuestionUpdating={setIsQuestionUpdating}
-                            isFetching={isQuestionsListFetching}
+                            isFetching={isQuestionsListLoading}
                             isLoading={isQuestionsListLoading}
                             setAllQuestions={setAllQuestions}
                             allQuestions={allQuestions}
