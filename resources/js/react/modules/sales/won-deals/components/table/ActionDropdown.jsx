@@ -84,8 +84,8 @@ const ActionDropdown = ({ ...rest }) => {
 
                     {(_.includes([1], auth.getRoleId()) ||
                         (_.includes([7, 8], auth.getRoleId()) &&
-                            rest?.row?.original?.status?.toLowerCase() !==
-                                "accepted")) && (
+                            rest?.row?.original?.status?.toLowerCase() ===
+                                "pending")) && (
                         <Dropdown.Item
                             onClick={() =>
                                 handleRedirection(
