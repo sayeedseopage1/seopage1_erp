@@ -8,7 +8,6 @@ import Switch from "../Switch";
 // utils
 import { generateUniqueString } from "../../../../utils/customUidGenerate";
 
-
 const AddQuestionTypeListInputs = ({
     singleQuestion,
     setSingleQuestion,
@@ -54,7 +53,11 @@ const AddQuestionTypeListInputs = ({
                             </div>
                             <div className="col-1 d-flex align-items-center justify-content-center px-0 ml-2">
                                 <Switch>
-                                    <Switch.Case condition={index === 0}>
+                                    <Switch.Case
+                                        condition={
+                                            list?.length === 1 && index === 0
+                                        }
+                                    >
                                         <button
                                             className="btn btn-success d-flex align-items-center justify-content-center p-2"
                                             style={{
@@ -85,7 +88,12 @@ const AddQuestionTypeListInputs = ({
                                             ></i>
                                         </button>
                                     </Switch.Case>
-                                    <Switch.Case condition={index !== 0}>
+                                    <Switch.Case
+                                        condition={
+                                            list?.length !== 1 &&
+                                            list?.length - 1 !== index
+                                        }
+                                    >
                                         <button
                                             className="btn btn-danger d-flex align-items-center justify-content-center  p-2"
                                             style={{
@@ -105,6 +113,42 @@ const AddQuestionTypeListInputs = ({
                                         >
                                             <i
                                                 className="fa-solid fa-trash"
+                                                style={{
+                                                    fontSize: "12px",
+                                                }}
+                                            ></i>
+                                        </button>
+                                    </Switch.Case>
+                                    <Switch.Case
+                                        condition={
+                                            list?.length !== 1 &&
+                                            list?.length - 1 === index
+                                        }
+                                    >
+                                        <button
+                                            className="btn btn-success d-flex align-items-center justify-content-center p-2"
+                                            style={{
+                                                width: "25px",
+                                                height: "25px",
+                                            }}
+                                            onClick={() => {
+                                                const list = [
+                                                    ...singleQuestion.listItem,
+                                                ];
+                                                list.push({
+                                                    id: generateUniqueString(
+                                                        15
+                                                    ),
+                                                    title: "",
+                                                });
+                                                setSingleQuestion({
+                                                    ...singleQuestion,
+                                                    listItem: list,
+                                                });
+                                            }}
+                                        >
+                                            <i
+                                                className="fa fa-plus"
                                                 style={{
                                                     fontSize: "12px",
                                                 }}

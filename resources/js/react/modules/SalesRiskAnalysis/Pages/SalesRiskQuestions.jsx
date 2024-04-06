@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Ui components
@@ -28,12 +27,11 @@ import {
     useSaleRiskQuestionAnswerSaveMutation,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
-// icon
-import InfoIcon from "../components/ui/InfoIcon";
-import _ from "lodash";
-import { set } from "lodash";
-
 const SalesRiskQuestions = () => {
+    const [{ pageIndex, pageSize }, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 50,
+    });
     const [focusedQuestion, setFocusedQuestion] = React.useState([]);
     const [yesNoQuestions, setYesNoQuestions] = React.useState([]);
     const [inputsData, setInputsData] = React.useState([]);
@@ -45,8 +43,18 @@ const SalesRiskQuestions = () => {
     // modal open close state
     const [questionModalOpen, setQuestionModalOpen] = React.useState(false);
 
+    // make query string
+    const queryString = (object) => {
+        const queryObject = _.pickBy(object, Boolean);
+        return new URLSearchParams(queryObject).toString();
+    };
     // fetch policy questions
-    const { data, isLoading } = useSaleAnalysisQuestionsListQuery(null);
+    const { data, isLoading } = useSaleAnalysisQuestionsListQuery(
+        queryString({
+            page: pageIndex + 1,
+            limit: pageSize,
+        })
+    );
 
     const [saleAnalysisQuestionSave, { isLoading: isSaving }] =
         useSaleRiskQuestionAnswerSaveMutation();
@@ -59,8 +67,8 @@ const SalesRiskQuestions = () => {
                 const nestedQuestions = item?.questions || [];
                 return [item, ...flattenArray(nestedQuestions)];
             });
-        if (questions?.length > 0) {
-            const copyArray = [...questions];
+        if (questions?.data?.length > 0) {
+            const copyArray = [...questions?.data];
             const flattenedArray = flattenArray(copyArray);
             setAllQuestions(flattenedArray);
             const addInputFiled = flattenedArray
@@ -103,11 +111,13 @@ const SalesRiskQuestions = () => {
 
             setInputsData([...addInputFiled, ...addChildInputField]);
         }
-    }, [questions]);
+    }, [questions?.data]);
 
     const handleSubmit = async () => {
-        const isEmpty = isArrayObjectEmpty(inputsData, "parent_id");
+        const skipKey = ["is_Active_YesNo", "parent_id"]
+        const isEmpty = isArrayObjectEmpty(inputsData, skipKey);
         if (isEmpty) {
+            console.log("empty");
             setIsSubmitting(true);
         } else {
             try {
@@ -205,21 +215,18 @@ const SalesRiskQuestions = () => {
             }
             return value;
         };
-
         const removeAlreadyExistChild = inputsData.filter(
             (item) => item.parent_id !== question.id
         );
-
         const addSelectValue = removeAlreadyExistChild.map((item) => {
             if (item.id === question.id) {
-                let is_Active_YesNo
+                let is_Active_YesNo;
 
                 if (type === "list") {
                     is_Active_YesNo = value.questions?.length;
                 } else {
                     is_Active_YesNo = question.questions?.length;
                 }
-
 
                 return {
                     ...item,
@@ -250,8 +257,6 @@ const SalesRiskQuestions = () => {
         return setInputsData(addSelectValue);
     };
 
-    console.log(inputsData);
-
     return (
         <section>
             <SalesRiskAnalysisQuestionContainer>
@@ -265,7 +270,7 @@ const SalesRiskQuestions = () => {
                         ) : (
                             <SaleRiskQuestionsInputContainer
                                 isChild={false}
-                                questions={questions}
+                                questions={questions?.data}
                                 inputsData={inputsData}
                                 allQuestions={allQuestions}
                                 isSubmitting={isSubmitting}

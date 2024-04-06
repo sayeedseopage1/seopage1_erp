@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 
 // local styled components
 import { SalesRiskAnalysisContainer } from "../components/ui/Styles/ui";
@@ -13,6 +13,7 @@ import AddQuestionsListModal from "../components/modal/AddQuestionsListModal";
 import QuestionsListTable from "../components/table/QuestionsListTable";
 import { QuestionsListTableColumns } from "../components/table/QuestionsListTableColumns";
 import { useSaleAnalysisQuestionsListQuery } from "../../../services/api/salesRiskAnalysisSlice";
+import { setWith } from "lodash";
 
 const SalesRiskQuestionList = () => {
     const [{ pageIndex, pageSize }, setPagination] = React.useState({
@@ -68,6 +69,21 @@ const SalesRiskQuestionList = () => {
     const onPageChange = (paginate) => {
         setPagination(paginate);
     };
+
+    useEffect(() => {
+        if (questionsList?.data?.length > 0) {
+            // flat the questions list data
+            const flattenArray = (arr) =>
+                arr?.flatMap((item) => {
+                    const nestedQuestions = item?.questions || [];
+                    return [item, ...flattenArray(nestedQuestions)];
+                });
+
+            setAllQuestions(flattenArray(questionsList?.data));
+        }
+    }, [questionsList]);
+
+    console.log(allQuestions);
 
     return (
         <React.Fragment>

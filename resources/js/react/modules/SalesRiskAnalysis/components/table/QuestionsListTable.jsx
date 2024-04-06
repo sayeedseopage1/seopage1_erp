@@ -123,10 +123,15 @@ const QuestionsListTable = ({
             editSingleQuestion: (row) => {
                 setIsQuestionUpdating(true);
                 handleOpenAddQuestionsModal();
+                
+                const parent_question = allQuestions.find(
+                    (item) => item?.id === row?.parent_id
+                );
                 const payload = {
                     ...row,
                     id: row?.id,
                     title: row?.title,
+                    parent_question: parent_question,
                     type: QuestionsTypes?.data.find(
                         (item) => item?.name === row?.type
                     ),
@@ -138,8 +143,9 @@ const QuestionsListTable = ({
                         title: row?.policy_title,
                         label: row?.policy_title,
                     },
-                    parent_question_for: row?.parent_question_for,
+                    parent_question_for: row?.value,
                 };
+                console.log(payload);
                 if (row?.parent_question?.type === "list") {
                     setSingleQuestion({
                         ...payload,
@@ -154,7 +160,6 @@ const QuestionsListTable = ({
             },
         },
     });
-
 
     console.log("table", data);
     return (
