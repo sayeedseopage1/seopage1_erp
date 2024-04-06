@@ -508,12 +508,14 @@ class SalesRiskPolicyController extends AccountBaseController
         ->where(function ($query) use ($req) {
             if ($req->policy_id)
                 $query->where('policy_id', $req->policy_id);
+            if($req->page > 2)
+                $query->offset($req->input('limit', 10) * $req->page);
+
         })
         ->limit($req->input('limit', 10))
-        // ->offset($req->input('limit', 10) * $req->input('page', 1))
-        ->get();
-        dd($itemsPaginated);
-        // ->paginate($req->input('limit', 10));
+        // ->get();
+        // dd($itemsPaginated);
+        ->paginate($req->input('limit', 10));
 
         $itemsTransformed = $itemsPaginated
             ->getCollection()
