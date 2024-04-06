@@ -80,8 +80,13 @@ const ActionDropdown = ({ ...rest }) => {
                         View Won Deal
                     </Dropdown.Item>
 
-                    {_.includes([1, 7, 8], auth.getRoleId()) && rest?.row?.original?.status?.toLowerCase() !== "accepted" && (
-                        <Dropdown.Item 
+                    {/* {_.includes([1, 7, 8], auth.getRoleId()) && rest?.row?.original?.status?.toLowerCase() !== "accepted" && ( */}
+
+                    {(_.includes([1], auth.getRoleId()) ||
+                        (_.includes([7, 8], auth.getRoleId()) &&
+                            rest?.row?.original?.status?.toLowerCase() !==
+                                "accepted")) && (
+                        <Dropdown.Item
                             onClick={() =>
                                 handleRedirection(
                                     `/deals/details/edit/${rest?.row?.original?.id}`
@@ -90,14 +95,16 @@ const ActionDropdown = ({ ...rest }) => {
                             className={styles.dropdownItem}
                         >
                             <i className="fa-regular fa-pen-to-square" />
-                            { rest?.row?.original?.is_drafted===1 ? "Draft Edit" : "Edit"}
-                            
+                            {rest?.row?.original?.is_drafted === 1
+                                ? "Draft Edit"
+                                : "Edit"}
                         </Dropdown.Item>
                     )}
 
                     {/* Authorization Need */}
-                    {(rest?.row?.original.authorization_status === 2 &&
-                        auth.getRoleId() === 8 && rest?.row?.original?.is_drafted===0 )&& (
+                    {rest?.row?.original.authorization_status === 2 &&
+                        auth.getRoleId() === 8 &&
+                        rest?.row?.original?.is_drafted === 0 && (
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(
@@ -113,12 +120,10 @@ const ActionDropdown = ({ ...rest }) => {
                     {/* delete lead */}
                     {(auth.getRoleId() === 1 ||
                         // auth.getRoleId() === 4 ||
-                        auth.getRoleId() === 8) && 
-                        rest?.row?.original.authorization_status === 1 &&
-                        // rest?.row?.original.status ===
-                        //     ("pending" || "Accepted") && 
-                        (
-
+                        auth.getRoleId() === 8) &&
+                        rest?.row?.original.authorization_status === 1 && (
+                            // rest?.row?.original.status ===
+                            //     ("pending" || "Accepted") &&
                             <Dropdown.Item
                                 onClick={() =>
                                     handleRedirection(
