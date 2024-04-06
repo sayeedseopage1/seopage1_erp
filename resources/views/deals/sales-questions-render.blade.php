@@ -6,7 +6,7 @@
             <!-- Task Box Start -->
             <div class="d-flex flex-column">
 
-                @if (! $addedBefor)
+                @if (! $addedBefore)
                 <div id="salePolicyQuestion"></div>
                 @else
                 <div id="salePolicyQuestionNotice"></div>
