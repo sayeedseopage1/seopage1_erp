@@ -48,7 +48,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
     const [reference, setReference] = useState("");
-    const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
+    const [fileTypesNeeded, setFileTypesNeeded] = useState([]);
+    const [fileType, setFileType] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
     const [imageForDesigner, setImageForDesigner] = useState([]);
     const [imgOrVidForWork, setImgOrVidForWork] = useState([]);
@@ -68,7 +69,15 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             description: "",
         },
     ]);
+
+    // set otgher file type in fileTypesNeeded
+    // useEffect(() => {
+    //     setFileTypesNeeded([...fileTypesNeeded, fileType])
+    //     // fileTypesNeeded.push(fileType)
+    // }, [fileType])
     //state for graphic designer end
+
+    console.log("fileTypesNeeded", fileTypesNeeded);
 
     // state for ui/ux start
     // const [cms, setCms] = useState("")
@@ -106,14 +115,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [checkRestrictedWords, { isLoading: checking }] =
         useCheckRestrictedWordsMutation();
 
-    const taskData = {
-        themeType: themeType ?? "",
-        cms: cms ?? "",
-        theme_name: themeName ?? "",
-        theme_template_library_link: themeTemplate ?? "",
-    }
 
-    // console.log(taskData)
 
     //TODO: clear form for new added fields
     const clearForm = () => {
@@ -251,6 +253,13 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.fileTypesNeeded = "File types is required";
                 errCount++;
             }
+            if (fileTypesNeeded?.includes("Others")) {
+                if (!fileType) {
+                    err.fileType = "The others file type is required";
+                    errCount++;
+                }
+
+            }
         }
 
         if (typeOfGraphicsCategory?.id === 2 || typeOfGraphicsCategory?.id === 3 || typeOfGraphicsCategory?.id === 4) {
@@ -369,7 +378,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         fd.append("type_of_logo", typeOfLogo?.type_name ?? "");
         fd.append("brand_name", brandName ?? "");
         fd.append("number_of_versions", numOfVersions ?? "");
-        fd.append("file_types_needed", JSON.stringify(fileTypesNeeded) ?? "");
+        fd.append("file_types_needed", JSON.stringify([...fileTypesNeeded, fileType]) ?? "");
         fd.append("reference", reference ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
@@ -586,6 +595,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     //         }
     //     });
     // }
+
+
 
 
     return (
@@ -901,6 +912,23 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         )}
                                                     </div>
                                                 </div>
+                                                {
+                                                    fileTypesNeeded?.includes('Others') && <div className="col-12 col-md-6">
+                                                        <Input
+                                                            id="fileType"
+                                                            label="Describe the file type"
+                                                            type="text"
+                                                            placeholder="Describe the file type"
+                                                            name="fileType"
+                                                            required={true}
+                                                            value={fileType}
+                                                            error={formError?.fileType}
+                                                            onChange={(e) =>
+                                                                handleChange(e, setFileType)
+                                                            }
+                                                        />
+                                                    </div>
+                                                }
                                             </>
                                         }
                                         {/* for Banner, Brochure or company profile */}
@@ -942,17 +970,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                             files={imageForDesigner}
                                                             setFiles={setImageForDesigner}
                                                         />
-                                                        {/* <div className="custom-file" style={fileInputStyle}>
-                                                            <input type="file" className="custom-file-input" id="imageForDesigner" required={true} multiple error={formError?.imageForDesigner} onChange={(e) =>
-                                                                handleChange(e, setImageForDesigner)
-                                                            } />
-                                                            <label className="custom-file-label" htmlFor="imageForDesigner">Choose file</label>
-                                                        </div>
-                                                        {formError?.imageForDesigner && (
-                                                            <div style={{ color: "red" }}>
-                                                                {formError?.imageForDesigner}
-                                                            </div>
-                                                        )} */}
                                                     </div>
                                                 </div>
                                             </>

@@ -7,7 +7,7 @@ import style from "./multiselect.module.css";
 const FileTypesNeeded = ({ fileTypesNeeded, setFileTypesNeeded, multiple, readOnly }) => {
     const [search, setSearch] = React.useState('');
 
-    const options = () => (["Favicon", "Only icon", "Logo with icon", "Logo without icon"]);
+    const options = () => (["Favicon", "Only icon", "Logo with icon", "Logo without icon", "Others"]);
 
     const onSelected = (option) => {
         if (!readOnly) {
