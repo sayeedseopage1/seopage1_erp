@@ -2986,7 +2986,7 @@ public function getAllContracts(Request $request){
     $startDate = $request->start_date ?? null;
     $endDate = $request->end_date ?? null;
     $limit = $request->limit ??  10;
-
+    $now = \Carbon\Carbon::now()->toDateTimeString();
     $dealsQuery = Deal::select(
         'deals.*',
         'deals.status as deal_status',
@@ -2999,8 +2999,62 @@ public function getAllContracts(Request $request){
         )
     ->leftJoin('users as added_by', 'added_by.id', 'deals.added_by')
     ->leftJoin('users as pm', 'pm.id', 'deals.pm_id')
+    // ->leftJoin('users as pm', function($join) use($now) {
+    //     $join->on('deals.pm_id', '=', 'pm.id')
+    //         ->where('deals.authorization_status', 1)
+    //         ->orWhere(function ($subquery) use ($now) {
+    //             $subquery->where('deals.authorization_status', 2)
+    //                 ->where(function ($innerSubquery) use ($now) {
+    //                     $innerSubquery->whereRaw('
+    //                         (
+    //                             (
+    //                                 (TIME(deals.released_at) >= "23:30" OR TIME(deals.released_at) < "07:00")
+    //                                 AND (DATE(deals.released_at) < CURDATE())
+    //                             )
+    //                             OR
+    //                             (
+    //                                 (TIME(deals.released_at) >= "23:30" OR TIME(deals.released_at) < "07:00")
+    //                                 AND TIME(?) >= "10:00"
+    //                             )
+    //                             OR
+    //                             (
+    //                                 TIME(deals.released_at) >= "07:00" AND TIME(deals.released_at) < "23:30"
+    //                                 AND TIMESTAMPDIFF(SECOND, deals.released_at, ?) > ?
+    //                             )
+    //                         )
+    //                     ', [$now, $now, (180 * 60)]);
+    //                 });
+    //         });
+    // })
     ->leftJoin('users as client', 'client.id', 'deals.client_id')
     ->leftJoin('p_m_projects', 'deals.id', 'p_m_projects.deal_id')
+    // ->leftJoin('p_m_projects', function($join) use ($now) {
+    //     $join->on('deals.id', '=', 'p_m_projects.deal_id')
+    //         ->where('deals.authorization_status', 1)
+    //         ->orWhere(function ($subquery) use ($now) {
+    //             $subquery->where('deals.authorization_status', 2)
+    //                 ->where(function ($innerSubquery) use ($now) {
+    //                     $innerSubquery->whereRaw('
+    //                         (
+    //                             (
+    //                                 (TIME(deals.released_at) >= "23:30" OR TIME(deals.released_at) < "07:00")
+    //                                 AND (DATE(deals.released_at) < CURDATE())
+    //                             )
+    //                             OR
+    //                             (
+    //                                 (TIME(deals.released_at) >= "23:30" OR TIME(deals.released_at) < "07:00")
+    //                                 AND TIME(?) >= "10:00"
+    //                             )
+    //                             OR
+    //                             (
+    //                                 TIME(deals.released_at) >= "07:00" AND TIME(deals.released_at) < "23:30"
+    //                                 AND TIMESTAMPDIFF(SECOND, deals.released_at, ?) > ?
+    //                             )
+    //                         )
+    //                     ', [$now, $now, (180 * 60)]);
+    //                 });
+    //         });
+    // })
     ->where('deals.dept_status','WD');
 
     if ($startDate !== null && $endDate !== null) {
@@ -3142,6 +3196,14 @@ public function getAllContracts(Request $request){
 
 
         $itemDeal->action = $action;
+
+        if((Auth::user()->role_id == 7 || Auth::user()->role_id == 8) && !($itemDeal->is_drafted == 0 && ($itemDeal->authorization_status == 1 || (((Carbon::now()->diffInSeconds($itemDeal->released_at) > 10800) && (Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '07:00' && Carbon::parse($itemDeal->released_at)->format('H:i:s') < '23:30')) || ((Carbon::parse($itemDeal->released_at)->format('H:i:s') < '07:00' || Carbon::parse($itemDeal->released_at)->format('H:i:s') >= '23:30') && (Carbon::parse(now())->format('H:i:s') >= '10:00') || Carbon::parse($itemDeal->released_at)->format('Y-m-d') < now()->format('Y-m-d')))))){
+            $itemDeal->pm_name = null;
+            $itemDeal->pm_avatar = null;
+            $itemDeal->closing_date = null;
+            $itemDeal->pm_id = null;
+        }
+        
     }
     /**AMOUNT CHECK ITS UPSELL OR NOT END */
     /**COUNT OF AWARD TIME REQUEST DATA START */
