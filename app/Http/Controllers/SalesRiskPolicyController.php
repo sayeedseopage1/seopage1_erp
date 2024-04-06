@@ -65,7 +65,9 @@ class SalesRiskPolicyController extends AccountBaseController
         });
 
         Route::get('account/deals/risk-analysis/{deal_id}', [self::class, 'salesPolicyQuestionRender'])->name('account.sale-risk-policies.risk-analysis');
-        Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReport'])->name('account.sale-risk-policies.report-list');
+        Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-list');
+        Route::get('account/sales-analysis-reports/data', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-data');
+
     }
 
     function index()
@@ -618,7 +620,6 @@ class SalesRiskPolicyController extends AccountBaseController
 
         return response()->json($fields);
     }
-
 
     function salesPolicyQuestionRender(Request $req, $deal_id)
     {
@@ -1194,8 +1195,50 @@ class SalesRiskPolicyController extends AccountBaseController
         return response()->json(['status' => 'success', 'data' => compact('points', 'pointData', 'projectName', 'user', 'client_name', 'deadline')]);
     }
 
-    function salesRiskReport()
+    function salesRiskReportList(Request $req)
     {
+        if(url()->current() == route('account.sale-risk-policies.report-data'))
+        {
+
+            $itemsPaginated = Deal::where(function ($query) use ($req) {
+                if ($req->id)
+                    $query->where('id', $req->id);
+            })
+            ->offset($req->input('limit', 10) * $req->input('page', 1))
+            ->paginate($req->input('limit', 10));
+
+            $itemsTransformed = $itemsPaginated
+            ->getCollection()
+            ->map(function ($item) {
+
+                return [
+                    'id' => $item->id,
+                    'client_name' => $item->client_name,
+                    'project_name' => $item->project_name,
+                    'deal_id' => $item->deal_id,
+                    'lead_id' => $item->lead_id,
+                    'country' => Lead::find($item->lead_id)->country,
+                    'award_time' => $item->award_time,
+                    'points' => 0
+                ];
+            })->toArray();
+
+            $data = new \Illuminate\Pagination\LengthAwarePaginator(
+                $itemsTransformed,
+                $itemsPaginated->total(),
+                $itemsPaginated->perPage(),
+                $itemsPaginated->currentPage(),
+                [
+                    'path' => FacadesRequest::url(),
+                    'query' => [
+                        'page' => $itemsPaginated->currentPage()
+                    ]
+                ]
+            );
+
+            return ['data' => $data];
+        }
+
         $this->pageTitle = 'Sales Analysis Reports';
         return view('sales-risk-policies.analysisReport', $this->data);
     }
