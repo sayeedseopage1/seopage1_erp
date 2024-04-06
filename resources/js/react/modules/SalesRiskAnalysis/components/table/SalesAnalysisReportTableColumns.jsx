@@ -28,6 +28,11 @@ export const SalesAnalysisReportTableColumns = [
       accessorKey: "lead",
   },
   {
+      id: "project_budget",
+      header: "Project Budget",
+      accessorKey: "project_budget",
+  },
+  {
       id: "country",
       header: "Country",
       accessorKey: "country",

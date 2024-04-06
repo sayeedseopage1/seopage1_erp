@@ -26,7 +26,6 @@ const SaleRiskQuestionsInputContainer = ({
         getYesNoQuestionValue,
     } = inputContainerActions;
 
-    const [yesNoValue, setYesNoValue] = useState(null);
     const [listItem, setListItem] = useState(null);
 
     const getInputValue = (questionId) => {
@@ -42,11 +41,10 @@ const SaleRiskQuestionsInputContainer = ({
         }
     };
 
-    const handleDebug = (question) => {
+    const handleActiveData = (question) => {
         const getQuestion = inputsData?.find((item) => item.id === question.id);
-        console.log(getQuestion);
         if (!_.isEmpty(getQuestion)) {
-            return getQuestion.is_Active_YesNo;
+            return getQuestion.is_Active_YesNo ? true : false;
         }
     };
 
@@ -59,13 +57,6 @@ const SaleRiskQuestionsInputContainer = ({
         >
             <React.Fragment>
                 {questions?.map((question, index) => {
-                    if (
-                        question.type === "yesNo" &&
-                        question?.questions?.length &&
-                        question.id === 5
-                    ) {
-                        console.log(handleDebug(question));
-                    }
                     return (
                         <Switch key={question?.id}>
                             <Switch.Case condition={question.type === "text"}>
@@ -128,7 +119,6 @@ const SaleRiskQuestionsInputContainer = ({
                                     isChild={isChild}
                                     comment={question.comment}
                                     onChange={(value) => {
-                                        setYesNoValue(value);
                                         handleListYesNoQuestion(
                                             question,
                                             value,
@@ -141,12 +131,14 @@ const SaleRiskQuestionsInputContainer = ({
                                 <Switch.Case
                                     condition={
                                         question?.questions?.length &&
-                                        handleDebug(question)
+                                        handleActiveData(question)
                                     }
                                 >
                                     <SaleRiskQuestionsInputContainer
                                         questions={question?.questions?.filter(
-                                            (item) => item?.value === yesNoValue
+                                            (item) =>
+                                                item?.value ===
+                                                getInputValue(question.id)
                                         )}
                                         inputsData={inputsData}
                                         isChild={true}
@@ -247,7 +239,8 @@ const SaleRiskQuestionsInputContainer = ({
                                     <SaleRiskQuestionsInputContainer
                                         questions={question?.questions?.filter(
                                             (item) =>
-                                                item?.value === listItem?.id
+                                                item?.value ===
+                                                getInputValue(question.id)
                                         )}
                                         isChild={true}
                                         inputsData={inputsData}
