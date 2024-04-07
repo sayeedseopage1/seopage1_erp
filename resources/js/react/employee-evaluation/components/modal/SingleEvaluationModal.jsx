@@ -27,6 +27,7 @@ const SingleEvaluationModal = ({
     isSingleEvaluationModalOpen,
     data,
 }) => {
+    const [userIdFromUrl, setUserIdFromUrl] = useState(null);
     const auth = useAuth();
     const { evaluationObject } = useEmployeeEvaluation();
     const [storeTaskRating] = useStoreTaskRatingMutation();
