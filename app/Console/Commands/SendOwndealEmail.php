@@ -8,7 +8,6 @@ use App\Models\User;
 use Illuminate\Console\Command;
 use App\Notifications\WonDealNotification;
 use App\Notifications\HourlyDealNotification;
-use App\Notifications\DealAuthorizationSendNotification;
 
 class SendOwndealEmail extends Command
 {
