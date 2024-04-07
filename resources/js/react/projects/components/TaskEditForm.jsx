@@ -26,6 +26,8 @@ import TypeOfGraphicsWorkSelection from "./graphics-design-forms/TypeOfGraphicsW
 import TypeOfLogo from "./graphics-design-forms/TypeOfLogo";
 import FileTypesNeeded from "./graphics-design-forms/FileTypesNeeded";
 import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { validateUrl } from "../utils/validateUrl";
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
     const { tasks, filter } = useSelector(s => s.tasks);
@@ -73,7 +75,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
-    const [reference, setReference] = useState("");
+    // const [reference, setReference] = useState("");
+    const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
     const [fileType, setFileType] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
@@ -221,7 +224,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 
             setBrandName(graphicWorkDetails?.brand_name)
             setNumOfVersions(graphicWorkDetails?.number_of_versions);
-            setReference(graphicWorkDetails?.reference);
+
+            if (graphicWorkDetails?.reference) {
+                setReferenceList(JSON.parse(graphicWorkDetails?.reference));
+            }
+
             setFontName(graphicWorkDetails?.font_name);
             setFontUrl(graphicWorkDetails?.font_url);
             setPrimaryColor(graphicWorkDetails?.primary_color);
@@ -441,7 +448,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             });
         }
 
-        fd.append("reference", reference ?? "");
+        fd.append("reference", JSON.stringify(referenceList) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
         fd.append("primary_color", primaryColor ?? "");
@@ -656,6 +663,24 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         fileTypesNeeded.push(fileType);
         setFileType('')
     }
+
+    // reference 
+    const handleReferenceChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...referenceList];
+        list[index][name] = value;
+        setReferenceList(list);
+    };
+
+    const handleReferenceRemove = (index) => {
+        const list = [...referenceList];
+        list.splice(index, 1);
+        setReferenceList(list);
+    };
+
+    const handleReferenceAdd = () => {
+        setReferenceList([...referenceList, { reference: "" }]);
+    };
 
     return (
         <Modal isOpen={isOpen}>
@@ -1129,7 +1154,65 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     }
 
                                     {/* Reference */}
-                                    <div className="col-12 col-md-6">
+                                    {/* Reference */}
+                                    {<div className="col-12 col-md-6">
+                                        <div className={`form-group my-3 w-100`}>
+                                            <label
+                                                htmlFor='fileType'
+                                                className={`f-14 text-dark-gray mb-1`}
+                                                data-label="true"
+                                            >
+                                                Reference
+                                                <sup className='f-14 mr-1'>*</sup>
+                                            </label>
+                                            {referenceList?.map((singleReference, index) => (
+                                                <div key={index}>
+                                                    <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>
+                                                        <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                                            <input
+                                                                type="url"
+                                                                name="reference"
+                                                                className={`form-control height-35 f-14`}
+                                                                placeholder={'Enter Task Reference'}
+                                                                value={singleReference.reference}
+                                                                onChange={(e) => handleReferenceChange(e, index)}
+
+                                                            />
+                                                            {singleReference?.reference && !validateUrl(singleReference?.reference) && (
+                                                                <div style={{ color: "red" }}>Please enter a valid URL</div>
+                                                            )}
+                                                        </div>
+                                                        <div className="">
+                                                            {referenceList?.length !== 1 && (
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleReferenceRemove(index)}
+                                                                    className="btn btn-outline-danger btn-sm "
+                                                                    style={{ marginLeft: '10px', height: '39px' }}
+                                                                >
+                                                                    <RiDeleteBinLine />
+                                                                </button>
+                                                            )}
+                                                        </div>
+
+                                                    </div>
+                                                    <div>
+                                                        {referenceList?.length - 1 === index && (
+                                                            <button
+                                                                type="button"
+                                                                onClick={handleReferenceAdd}
+                                                                className="btn btn-success btn-sm mt-2"
+                                                            >
+                                                                <span>+</span>
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    }
+                                    {/* <div className="col-12 col-md-6">
                                         <Input
                                             id="reference"
                                             label="Reference"
@@ -1143,7 +1226,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 handleChange(e, setReference)
                                             }
                                         />
-                                    </div>
+                                    </div> */}
 
                                     {/* Font name */}
                                     <div className="col-12 col-md-6">
