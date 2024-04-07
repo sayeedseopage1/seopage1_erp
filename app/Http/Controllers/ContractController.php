@@ -1462,28 +1462,28 @@ class ContractController extends AccountBaseController
                 'body' => 'You have new project. Please check',
                 'redirectUrl' => route('contracts.show', $deal_pm_id->id)
             ]);
-            if ($deal->project_type == 'fixed') {
-                $user = User::where('id', $deal_pm_id->pm_id)->first();
-                Notification::send($user, new WonDealNotification($deal));
-            }else{
-                Notification::send($user, new HourlyDealNotification($deal));
-            }
+            // if ($deal->project_type == 'fixed') {
+            //     $user = User::where('id', $deal_pm_id->pm_id)->first();
+            //     Notification::send($user, new WonDealNotification($deal));
+            // }else{
+            //     Notification::send($user, new HourlyDealNotification($deal));
+            // }
            // dd("skdlkasmd ");
 
 
 
             //  Mail::to($test->email)->send(new WonDealMail($project));
-            if ($deal->project_type == 'fixed') {
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new WonDealNotification($deal));
-                }
-            }else{
-                $users = User::where('role_id', 1)->get();
-                foreach ($users as $usr) {
-                    Notification::send($usr, new HourlyDealNotification($deal));
-                }
-            }
+            // if ($deal->project_type == 'fixed') {
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new WonDealNotification($deal));
+            //     }
+            // }else{
+            //     $users = User::where('role_id', 1)->get();
+            //     foreach ($users as $usr) {
+            //         Notification::send($usr, new HourlyDealNotification($deal));
+            //     }
+            // }
             // $check_new_pm= User::where('id',$deal->pm_id)->first();
             // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
             // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
@@ -1533,7 +1533,7 @@ class ContractController extends AccountBaseController
                 //end authorization action
 
 
-                Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+                // Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
 
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
@@ -1990,12 +1990,12 @@ class ContractController extends AccountBaseController
 
 
 
-                if ($deal->project_type == 'fixed') {
-                    $user = User::where('id', $deal_pm_id->pm_id)->first();
-                    Notification::send($user, new WonDealNotification($deal));
-                }else{
-                    Notification::send($user, new HourlyDealNotification($deal));
-                }
+                // if ($deal->project_type == 'fixed') {
+                //     $user = User::where('id', $deal_pm_id->pm_id)->first();
+                //     Notification::send($user, new WonDealNotification($deal));
+                // }else{
+                //     Notification::send($user, new HourlyDealNotification($deal));
+                // }
                 $users = User::where('role_id', 8)->get();
 
                 foreach ($users as $key => $user) {
@@ -2014,7 +2014,7 @@ class ContractController extends AccountBaseController
                     //end authorization action
 
 
-                    Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+                    // Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
 
                     $this->triggerPusher('notification-channel', 'notification', [
                         'user_id' => $user->id,
@@ -2474,6 +2474,7 @@ class ContractController extends AccountBaseController
 
     public function authorization_submit(Request $request)
     {
+        dd($request);
         $request->validate([
             'price_authorization' => 'required',
             'requirment_define' => 'required',
@@ -2562,6 +2563,33 @@ class ContractController extends AccountBaseController
             $qualified_sale->total_points = $point;
             $qualified_sale->sales_lead_id = Auth::id();
             $qualified_sale->save();
+        }
+
+        if(!$request->denyDeal){
+            $user = User::where('id', $deal->pm_id)->first();
+            if ($deal->project_type == 'fixed') {
+                Notification::send($user, new WonDealNotification($deal));
+            }else{
+                Notification::send($user, new HourlyDealNotification($deal));
+            }
+
+            if ($deal->project_type == 'fixed') {
+                $users = User::where('role_id', 1)->get();
+                foreach ($users as $usr) {
+                    Notification::send($usr, new WonDealNotification($deal));
+                }
+            }else{
+                $users = User::where('role_id', 1)->get();
+                foreach ($users as $usr) {
+                    Notification::send($usr, new HourlyDealNotification($deal));
+                }
+            }
+
+            $users = User::where('role_id', 8)->get();
+
+            foreach ($users as $key => $user) {
+                Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+            }
         }
 
         if ($deal->save()) {
