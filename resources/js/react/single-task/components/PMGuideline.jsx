@@ -31,7 +31,8 @@ export const ColorItem = ({ color, desc }) => {
                     <span> Copied {state.value}</span> : null
                 }
             </div>
-            <div className='p-2 f-12'>
+            <div className='py-2 f-12'>
+                <p className='font-weight-bold mr-2 mb-2'>Where should the designer use this color:</p>
                 <div dangerouslySetInnerHTML={{ __html: desc }} />
             </div>
         </div>
