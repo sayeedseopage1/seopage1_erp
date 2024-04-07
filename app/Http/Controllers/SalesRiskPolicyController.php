@@ -504,24 +504,20 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function questionList(Request $req)
     {
-        $itemsPaginated = SalesPolicyQuestion::parent()
+        $itemsPaginated = SalesPolicyQuestion::from('sales_policy_questions as sq')->join('sales_risk_policies as sp', 'policy_id', 'sp.id')
         ->where(function ($query) use ($req) {
+            $query->whereNull('sq.parent_id');
+            $query->where('status', '1');
+
             if ($req->policy_id)
                 $query->where('policy_id', $req->policy_id);
             if($req->page > 2)
                 $query->offset($req->input('limit', 10) * $req->page);
-
         })
-        ->limit($req->input('limit', 10))
-        // ->get();
-        // dd($itemsPaginated);
         ->paginate($req->input('limit', 10));
 
         $itemsTransformed = $itemsPaginated
             ->getCollection()
-            ->filter(
-                fn (SalesPolicyQuestion $question) => (bool) SalesRiskPolicy::find($question->policy_id)->status
-            )
             ->map(function ($item) {
 
                 return [
@@ -861,19 +857,19 @@ class SalesRiskPolicyController extends AccountBaseController
                 $data[] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $value, 'parent_id' => $questions[2]->parent_id];
 
                 switch ($value) {
-                    case $questions[2]->parent_id . '_1':
+                    case $questions[0]->policy_id . '_1':
                         $points += 0;
                         $pointValue = 0;
                         break;
-                    case $questions[2]->parent_id . '_2':
+                    case $questions[0]->policy_id . '_2':
                         $points += 0;
                         $pointValue = 0;
                         break;
-                    case $questions[2]->parent_id . '_3':
+                    case $questions[0]->policy_id . '_3':
                         $points += -2;
                         $pointValue = -2;
                         break;
-                    case $questions[2]->parent_id . '_4':
+                    case $questions[0]->policy_id . '_4':
                         $points += -1;
                         $pointValue = -1;
                         break;
@@ -1225,6 +1221,7 @@ class SalesRiskPolicyController extends AccountBaseController
                     'deal_id' => $item->id,
                     'deal_name' => $item->deal_id,
                     'project_name' => $item->project_name,
+                    'project_budget' => $item->actual_amount,
                     'lead_id' => $item->lead_id,
                     'country' => Lead::find($item->lead_id)->country,
                     'award_time' => $item->award_time,
