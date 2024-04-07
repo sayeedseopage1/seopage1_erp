@@ -32,6 +32,8 @@ import FileTypesNeeded from "../../../projects/components/graphics-design-forms/
 import ThemeTypeSelect from "../../../projects/components/ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../../utils/check-is-url";
 import CmsDropdown from "../../../projects/components/ui-ux-design-forms/CmsDropdown";
+import { validateUrl } from "../../../projects/utils/validateUrl";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const dayjs = new CompareDate();
 
@@ -134,7 +136,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
 
     const [defaultImgOrVidForWork, setDefaultImgOrVidForWork] = useState(graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 3))
 
-    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed || graphicWorkDetails?.graphic_task_files) {
+    if (graphicWorkDetails?.secondary_colors || graphicWorkDetails?.file_types_needed) {
         defaultSecondaryColors = JSON.parse(graphicWorkDetails?.secondary_colors)
         defaultFileTypesNeeded = JSON.parse(graphicWorkDetails?.file_types_needed)
         // defaultTextForDesign = graphicWorkDetails?.graphic_task_files?.filter((item) => item?.file_type == 1)
@@ -148,7 +150,8 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
-    const [reference, setReference] = useState("");
+    // const [reference, setReference] = useState("");
+    const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
     const [fileType, setFileType] = useState('');
     const [textForDesign, setTextForDesign] = useState([]);
@@ -235,7 +238,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         if (graphicWorkDetails) {
             setBrandName(graphicWorkDetails?.brand_name);
             setNumOfVersions(graphicWorkDetails?.number_of_versions);
-            setReference(graphicWorkDetails?.reference);
+            setReferenceList(JSON.parse(graphicWorkDetails?.reference));
             setFontName(graphicWorkDetails?.font_name);
             setFontUrl(graphicWorkDetails?.font_url);
             setPrimaryColor(graphicWorkDetails?.primary_color);
@@ -316,10 +319,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 count++;
             }
-            if (!reference) {
-                err.reference = "The reference field is required";
-                count++;
-            }
+            // if (!reference) {
+            //     err.reference = "The reference field is required";
+            //     count++;
+            // }
+
             if (!fontName) {
                 err.fontName = "Font name is required";
                 count++;
@@ -476,7 +480,8 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             });
         }
 
-        fd.append("reference", reference ?? "");
+        // fd.append("reference", reference ?? "");
+        fd.append("reference", JSON.stringify(referenceList) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
         fd.append("primary_color", primaryColor ?? "");
@@ -660,6 +665,24 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         fileTypesNeeded.push(fileType);
         setFileType('')
     }
+
+    // reference 
+    const handleReferenceChange = (e, index) => {
+        const { name, value } = e.target;
+        const list = [...referenceList];
+        list[index][name] = value;
+        setReferenceList(list);
+    };
+
+    const handleReferenceRemove = (index) => {
+        const list = [...referenceList];
+        list.splice(index, 1);
+        setReferenceList(list);
+    };
+
+    const handleReferenceAdd = () => {
+        setReferenceList([...referenceList, { reference: "" }]);
+    };
 
     return (
         <React.Fragment>
@@ -1153,7 +1176,64 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                             }
 
                             {/* Reference */}
-                            <div className="col-12 col-md-6">
+                            {<div className="col-12 col-md-6">
+                                <div className={`form-group my-3 w-100`}>
+                                    <label
+                                        htmlFor='fileType'
+                                        className={`f-14 text-dark-gray mb-1`}
+                                        data-label="true"
+                                    >
+                                        Reference
+                                        <sup className='f-14 mr-1'>*</sup>
+                                    </label>
+                                    {referenceList?.map((singleReference, index) => (
+                                        <div key={index}>
+                                            <div className={`d-flex align-items-start justify-content-between w-100 ${index !== 0 && 'mt-2'}`}>
+                                                <div className="d-flex flex-column justify-content-start align-items-start w-100">
+                                                    <input
+                                                        type="url"
+                                                        name="reference"
+                                                        className={`form-control height-35 f-14`}
+                                                        placeholder={'Enter Task Reference'}
+                                                        value={singleReference.reference}
+                                                        onChange={(e) => handleReferenceChange(e, index)}
+
+                                                    />
+                                                    {singleReference?.reference && !validateUrl(singleReference?.reference) && (
+                                                        <div style={{ color: "red" }}>Please enter a valid URL</div>
+                                                    )}
+                                                </div>
+                                                <div className="">
+                                                    {referenceList?.length !== 1 && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleReferenceRemove(index)}
+                                                            className="btn btn-outline-danger btn-sm "
+                                                            style={{ marginLeft: '10px', height: '39px' }}
+                                                        >
+                                                            <RiDeleteBinLine />
+                                                        </button>
+                                                    )}
+                                                </div>
+
+                                            </div>
+                                            <div>
+                                                {referenceList?.length - 1 === index && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={handleReferenceAdd}
+                                                        className="btn btn-success btn-sm mt-2"
+                                                    >
+                                                        <span>+</span>
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            }
+                            {/* <div className="col-12 col-md-6">
                                 <Input
                                     id="reference"
                                     label="Reference"
@@ -1167,7 +1247,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                         handleChange(e, setReference)
                                     }
                                 />
-                            </div>
+                            </div> */}
 
                             {/* Font name */}
                             <div className="col-12 col-md-6">

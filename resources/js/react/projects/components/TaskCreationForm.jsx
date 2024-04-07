@@ -216,6 +216,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
             //     err.reference = "The reference field is required";
             //     errCount++;
             // }
+
             if (!fontName) {
                 err.fontName = "Font name is required";
                 errCount++;
@@ -1092,7 +1093,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     className={`f-14 text-dark-gray mb-1`}
                                                     data-label="true"
                                                 >
-                                                    Referrence
+                                                    Reference
+                                                    <sup className='f-14 mr-1'>*</sup>
                                                 </label>
                                                 {referenceList.map((singleReference, index) => (
                                                     <div key={index}>
