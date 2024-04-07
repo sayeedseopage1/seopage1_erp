@@ -31,6 +31,9 @@ class IncentiveController extends AccountBaseController
      */
     public function index()
     {
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
         return view('incentives.index', $this->data);
     }
 

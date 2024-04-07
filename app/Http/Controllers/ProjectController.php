@@ -163,6 +163,9 @@ class ProjectController extends AccountBaseController
     {
         $viewPermission = user()->permission('view_projects');
         abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
 
         if (!request()->ajax()) {
 
@@ -592,6 +595,9 @@ class ProjectController extends AccountBaseController
             ->withTrashed()
             ->findOrFail($id)
             ->withCustomFields();
+        $deal = Deal::where('id', $this->project->deal_id)->first();
+        // if($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInMinutes($deal->released_at) < 180)) abort_403(true);
+        if ($deal->is_drafted == 1 || ($deal->authorization_status == 2 && Carbon::now()->diffInSeconds($deal->released_at) < 10800)) abort_403(true);
 
         $memberIds = $this->project->members->pluck('user_id')->toArray();
 
@@ -2370,6 +2376,7 @@ class ProjectController extends AccountBaseController
      */
     public function show($id)
     {
+
         if(Auth::user()->role_id == 4)
         {
             $project_id= Project::where('pm_id',Auth::id())->where('id',$id)->first();
@@ -2378,6 +2385,9 @@ class ProjectController extends AccountBaseController
                 abort(403);
             };
 
+        }
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
         }
 
         $this->viewPermission = user()->permission('view_projects');
@@ -2440,14 +2450,14 @@ class ProjectController extends AccountBaseController
                 $this->view = 'projects.ajax.members';
                 break;
 
-                    case 'milestones':
-                        if(Auth::user()->role_id != 6)
-                        {
-                        $this->view = 'projects.ajax.milestones';
-                    }else {
-                        abort(403);
-                    }
-                        break;
+            case 'milestones':
+                if(Auth::user()->role_id != 6)
+                {
+                    $this->view = 'projects.ajax.milestones';
+                }else {
+                    abort(403);
+                }
+                break;
 
             case 'deliverables':
                 $this->view = 'projects.ajax.deliverables';
@@ -3694,16 +3704,10 @@ class ProjectController extends AccountBaseController
     }
     public function ProjectCompletion($id)
     {
-
-
-
         $this->editPermission = user()->permission('edit_projects');
         $this->editProjectMembersPermission = user()->permission('edit_project_members');
 
-
-
         $this->pageTitle = __('Project') . ' ' . __('Completion Form');
-
 
         $this->clients = User::allClients();
         $this->categories = ProjectNiche::all();
@@ -3724,11 +3728,13 @@ class ProjectController extends AccountBaseController
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
-
         abort_403(user()->permission('edit_projects') == 'added' && $this->milestone->added_by != user()->id);
         $this->view = 'projects.ajax.project-completion';
+        $data = $this->data;
+        $data['themeList'] = ProjectWebsiteTheme::all();
+        $data['pluginList'] = ProjectWebsitePlugin::all();
 
-        return view('projects.create', $this->data);
+        return view('projects.create', $data);
     }
     public function ProjectCompletionSubmit(Request $request)
     {
@@ -3747,8 +3753,9 @@ class ProjectController extends AccountBaseController
             'main_page_number' => 'required',
             'secondary_page_number' => 'required',
             'backup_email_address' => 'required',
-            'theme_name' => 'required',
-            'theme_url' => 'required',
+            // 'theme_name' => 'required',
+            // 'theme_url' => 'required',
+            'theme_id' => 'required',
             'day_interval' => 'required',
             'notify' => 'required',
             'actual_yes' => 'required',
@@ -3787,11 +3794,12 @@ class ProjectController extends AccountBaseController
             'secondary_page_number.required' => 'This field is required!!',
             'backup_email_address.required' => 'This field is required!!',
             'day_interval.required' => 'This field is required!!',
-            'theme_name.required' => 'This field is required!!',
-            'theme_url.required' => 'This field is required!!',
+            // 'theme_name.required' => 'This field is required!!',
+            // 'theme_url.required' => 'This field is required!!',
+            'theme_id.required' => 'This field is required!!',
             'website_plugin_box_information.required' => 'This field is required. Please select Yes or No!!',
         ]);
-        //      dd($request);
+        // dd($request->all());
         $milestone = new ProjectSubmission();
         $milestone->qc_protocol = $request->qc_protocol;
         $milestone->milestone_id = $request->milestone_id;
@@ -3826,17 +3834,17 @@ class ProjectController extends AccountBaseController
 
         $milestone->save();
 
-        $website_themes = new ProjectWebsiteTheme();
-        $website_themes->theme_name = $request->theme_name;
-        $website_themes->theme_url = $request->theme_url;
-        $website_themes->save();
+        // $website_themes = new ProjectWebsiteTheme();
+        // $website_themes->theme_name = $request->theme_name;
+        // $website_themes->theme_url = $request->theme_url;
+        // $website_themes->save();
 
-        foreach($request->plugin_name as $key => $plugin_name) {
-            $website_plugins = new ProjectWebsitePlugin();
-            $website_plugins->plugin_name = $plugin_name;
-            $website_plugins->plugin_url = $request->plugin_url[$key] ;
-            $website_plugins->save();
-        }
+        // foreach($request->plugin_name as $key => $plugin_name) {
+        //     $website_plugins = new ProjectWebsitePlugin();
+        //     $website_plugins->plugin_name = $plugin_name;
+        //     $website_plugins->plugin_url = $request->plugin_url[$key] ;
+        //     $website_plugins->save();
+        // }
 
         $data = $request->all();
 
@@ -3845,6 +3853,7 @@ class ProjectController extends AccountBaseController
         $project_cms = ProjectCms::where('cms_name',$request->cms_category)->first();
 
         $project_portfolio = new ProjectPortfolio();
+
         $project_portfolio->project_id = $project->project_id;
         if ($project_cms) {
             $project_portfolio->cms_category = $project_cms->id;
@@ -3854,8 +3863,9 @@ class ProjectController extends AccountBaseController
         $project_portfolio->website_type = $data['website_type'];
         $project_portfolio->niche = $data['niche'];
         $project_portfolio->sub_niche = $data['sub_niche'];
-        $project_portfolio->theme_name = $website_themes->id;
-        $project_portfolio->theme_url = $website_themes->id;
+        // $project_portfolio->theme_name = $website_themes->id;
+        // $project_portfolio->theme_url = $website_themes->id;
+        $project_portfolio->theme_id = $request->theme_id;
         $project_portfolio->plugin_information = $data['website_plugin_box_information'];
         $project_portfolio->main_page_number = $data['main_page_number'];
         $project_portfolio->secondary_page_number = $data['secondary_page_number'];
@@ -3864,8 +3874,16 @@ class ProjectController extends AccountBaseController
         $project_portfolio->description = $data['description'];
         $project_portfolio->portfolio_link = $data['actual_link'];
         $project_portfolio->added_by = $data['added_by'];
-        $project_portfolio->plugin_name = $website_plugins->id;
-        $project_portfolio->plugin_url = $website_plugins->id;
+        // $project_portfolio->plugin_name = $website_plugins->id;
+        // $project_portfolio->plugin_url = $website_plugins->id;
+        if($project_portfolio->plugin_information)
+        {
+            $project_portfolio->plugin_list = $request->plugin_list ? json_encode($request->plugin_list) : null;
+        }
+        else{
+            $project_portfolio->plugin_list = null;
+        }
+
         $project_portfolio->save();
         $milestone_update = ProjectMilestone::where('id', $milestone->milestone_id)->first();
         $milestone_update->project_completion_status = 2;

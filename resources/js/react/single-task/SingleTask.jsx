@@ -60,7 +60,6 @@ const SingleTaskPage = () => {
 
     const calculateTotalTime = (task) => {
         if (task) {
-            console.log("task in function", task);
             let totalTimeInMinutes = 0;
             const parentTimeArray = task?.parent_task_time_log?.split(" ");
             const subTimeArray = task?.sub_task_time_log?.split(" ");

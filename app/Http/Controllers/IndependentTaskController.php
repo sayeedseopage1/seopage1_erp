@@ -31,6 +31,9 @@ class IndependentTaskController extends AccountBaseController
      */
     public function index()
     {
+        if(Auth::user()->role_id == 6 || Auth::user()->role_id == 13){
+            abort(403);
+        }
         $this->pageTitle = 'Independent Task';
         return view('independent-task.index',$this->data);
     }

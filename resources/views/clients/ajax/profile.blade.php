@@ -94,7 +94,24 @@
   $profile .= '<a href="'.$deal_data->profile_link.'" target="_blank" class="mb-0 text-dark-grey f-14 w-70 text-wrap">'.$deal_data->profile_link.'</a>';
   $message = '';
   $message .= '<a href="'.$deal_data->message_link.'" target="_blank" class="mb-0 text-dark-grey f-14 w-70 text-wrap">'.$deal_data->message_link.'</a>';
-//  dd($profile);
+    
+  $emails = DB::table('projects')
+    ->join('contract_signs', 'projects.id', '=', 'contract_signs.project_id')
+    ->where('projects.client_id', $client->id)
+    ->pluck('contract_signs.email')
+    ->toArray();
+  $phones = DB::table('projects')
+    ->join('contract_signs', 'projects.id', '=', 'contract_signs.project_id')
+    ->where('projects.client_id', $client->id)
+    ->pluck('contract_signs.number')
+    ->toArray();
+    
+  $mergedEmails = array_unique(array_merge($emails, array_merge([$client->email], [$client_data->client_email??''])));
+  $mergedPhones = array_unique(array_merge($phones, array_merge([$client->mobile], [$client_data->client_phone??''])));
+  $filteredEmails = array_filter($mergedEmails, function($email) { return !is_null($email) && $email !== ''; });
+  $filteredPhones = array_filter($mergedPhones, function($phone) { return !is_null($phone) && $phone !== ''; });
+  $client_emails = implode(', ', $filteredEmails);
+  $client_phones = implode(', ', $filteredPhones);
  ?>
 <div class="row mt-4">
     <div class="col-xl-7 col-lg-12 col-md-12 mb-4 mb-xl-0 mb-lg-4">
@@ -106,7 +123,7 @@
             <x-cards.data-row :label="__('modules.employees.fullName')" :value="mb_ucwords($client->name)" />
                 @endif
                   @if(Auth::user()->role_id == 1)
-            <x-cards.data-row :label="__('app.email')" :value="$client->email ?? '--'" />
+                  <x-cards.data-row :label="__('app.email')" :value="$client_emails ?? '--'" />
               @endif
                 @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
               <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
@@ -122,8 +139,7 @@
 
 
                     @if(Auth::user()->role_id == 1)
-                  <x-cards.data-row :label="__('app.mobile')"
-                                :value="($client_data->client_phone) ?? '--'" />
+                    <x-cards.data-row :label="__('app.mobile')" :value="($client_phones) ?? '--'" />
                   <x-cards.data-row :label="__('WhatsApp Number')"
                                 :value="($client_data->client_whatsapp) ?? '--'" />
                   <x-cards.data-row :label="__('Skype ID')"
