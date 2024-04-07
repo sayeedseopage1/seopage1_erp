@@ -1,7 +1,7 @@
 import ActionDropdown from "./ActionDropdown";
 import ActionDropdownDataTable from "./ActionDropDownDataTable";
 import Person from "./Person";
-import TeamLeadComment from "./CommentModal";
+
 import CommentModal from "./CommentModal";
 
 export const DataTableColumns = [
@@ -84,7 +84,9 @@ export const DataTableColumns = [
         cell: ({ row }) => {
             const data = row.original;
             return (
-                <div>{`${data?.total_hours} hr ${data?.total_minutes}min`}</div>
+                <div
+                    style={{ marginLeft: "50px" }}
+                >{`${data?.total_hours} hr ${data?.total_minutes} min`}</div>
             );
         },
     },
@@ -103,7 +105,11 @@ export const DataTableColumns = [
         accessorKey: "lead_dev_avg_rating",
         cell: ({ row }) => {
             const data = row.original;
-            return <div>{data?.lead_dev_avg_rating}</div>;
+            return (
+                <div style={{ marginLeft: "50px" }}>
+                    {data?.lead_dev_avg_rating}
+                </div>
+            );
         },
     },
     {
