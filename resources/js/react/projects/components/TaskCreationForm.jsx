@@ -212,10 +212,10 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 errCount++;
             }
-            // if (!reference) {
-            //     err.reference = "The reference field is required";
-            //     errCount++;
-            // }
+            if (!referenceList[0].reference) {
+                err.reference = "The reference field is required";
+                errCount++;
+            }
 
             if (!fontName) {
                 err.fontName = "Font name is required";
@@ -1140,6 +1140,11 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                         </div>
                                                     </div>
                                                 ))}
+                                                {formError?.reference && (
+                                                    <div style={{ color: "red" }}>
+                                                        {formError?.reference}
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                         }

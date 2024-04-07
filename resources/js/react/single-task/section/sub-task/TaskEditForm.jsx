@@ -319,10 +319,10 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 count++;
             }
-            // if (!reference) {
-            //     err.reference = "The reference field is required";
-            //     count++;
-            // }
+            if (!referenceList[0].reference) {
+                err.reference = "The reference field is required";
+                errCount++;
+            }
 
             if (!fontName) {
                 err.fontName = "Font name is required";
@@ -1240,21 +1240,11 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                             </div>
                             }
 
-                            {/* <div className="col-12 col-md-6">
-                                <Input
-                                    id="reference"
-                                    label="Reference"
-                                    type="text"
-                                    placeholder="Enter a task reference"
-                                    name="reference"
-                                    required={true}
-                                    value={reference}
-                                    error={error?.reference}
-                                    onChange={(e) =>
-                                        handleChange(e, setReference)
-                                    }
-                                />
-                            </div> */}
+                            {formError?.reference && (
+                                <div style={{ color: "red" }}>
+                                    {formError?.reference}
+                                </div>
+                            )}
 
                             {/* Font name */}
                             <div className="col-12 col-md-6">

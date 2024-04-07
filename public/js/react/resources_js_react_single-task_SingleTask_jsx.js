@@ -3485,7 +3485,7 @@ var ColorItem = function ColorItem(_ref) {
       }) : null
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "py-2 f-12",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
+      children: [desc && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
         className: "font-weight-bold mr-2 mb-2",
         children: "Where should the designer use this color:"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -12859,10 +12859,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
     return !count;
   };
 
-  // TODO: hide fields conditionally by this condition
-  // console.log("task", task?.category?.name)
-  // console.log("task1", task)
-
   // handle submission
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
@@ -14723,7 +14719,7 @@ var EditFormProvider = function EditFormProvider(_ref) {
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditFormProvider);
 var TaskEditForm = function TaskEditForm(_ref2) {
-  var _graphicWorkDetails$g, _graphicWorkDetails$g2, _graphicWorkDetails$g3, _graphicWorkDetails$g4, _graphicWorkDetails$g5, _graphicWorkDetails$g6, _graphicWorkDetails$g7, _required_error$title, _milestone$milestone_, _$find, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2;
+  var _graphicWorkDetails$g, _graphicWorkDetails$g2, _graphicWorkDetails$g3, _graphicWorkDetails$g4, _graphicWorkDetails$g5, _graphicWorkDetails$g6, _graphicWorkDetails$g7, _required_error$title, _milestone$milestone_, _$find, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _formError, _formError2;
   var task = _ref2.task,
     row = _ref2.singleTask,
     onSubmit = _ref2.onSubmit,
@@ -15087,11 +15083,10 @@ var TaskEditForm = function TaskEditForm(_ref2) {
         err.typeOfGraphicsCategory = "You have to select Type of graphic work";
         count++;
       }
-      // if (!reference) {
-      //     err.reference = "The reference field is required";
-      //     count++;
-      // }
-
+      if (!referenceList[0].reference) {
+        err.reference = "The reference field is required";
+        errCount++;
+      }
       if (!fontName) {
         err.fontName = "Font name is required";
         count++;
@@ -15993,6 +15988,11 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 }, index);
               })]
             })
+          }), ((_formError = formError) === null || _formError === void 0 ? void 0 : _formError.reference) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+            style: {
+              color: "red"
+            },
+            children: (_formError2 = formError) === null || _formError2 === void 0 ? void 0 : _formError2.reference
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {

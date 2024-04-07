@@ -291,10 +291,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 errCount++;
             }
-            // if (!reference) {
-            //     err.reference = "The reference field is required";
-            //     errCount++;
-            // }
+            if (!referenceList[0].reference) {
+                err.reference = "The reference field is required";
+                errCount++;
+            }
+
             if (!fontName) {
                 err.fontName = "Font name is required";
                 errCount++;
@@ -1214,6 +1215,11 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                     </div>
                                                 </div>
                                             ))}
+                                            {formError?.reference && (
+                                                <div style={{ color: "red" }}>
+                                                    {formError?.reference}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                     }
