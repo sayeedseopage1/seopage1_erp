@@ -616,35 +616,37 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                                 Attach text that will be used for the design
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
-                                            <FileUploader>
-                                                {_.map(
-                                                    textForDesign,
-                                                    (attachment) => {
-                                                        const file_icon = attachment?.filename.split(".").pop();
+                                            <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                <FileUploader>
+                                                    {_.map(
+                                                        textForDesign,
+                                                        (attachment) => {
+                                                            const file_icon = attachment?.filename.split(".").pop();
 
-                                                        return attachment?.filename ? (
-                                                            <FileUploader.Preview
-                                                                key={attachment?.id}
-                                                                fileName={attachment?.filename}
-                                                                downloadAble={true}
-                                                                deleteAble={false}
-                                                                downloadUrl={attachment?.file_url}
-                                                                previewUrl={attachment?.file_url}
-                                                                fileType={
-                                                                    _.includes(
-                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                        file_icon
-                                                                    )
-                                                                        ? "images"
-                                                                        : "others"
-                                                                }
-                                                                classname="comment_file"
-                                                                ext={file_icon}
-                                                            />
-                                                        ) : null;
-                                                    }
-                                                )}
-                                            </FileUploader>
+                                                            return attachment?.filename ? (
+                                                                <FileUploader.Preview
+                                                                    key={attachment?.id}
+                                                                    fileName={attachment?.filename}
+                                                                    downloadAble={true}
+                                                                    deleteAble={false}
+                                                                    downloadUrl={attachment?.file_url}
+                                                                    previewUrl={attachment?.file_url}
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                            file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={file_icon}
+                                                                />
+                                                            ) : null;
+                                                        }
+                                                    )}
+                                                </FileUploader>
+                                            </div>
                                         </div>
                                     </div>
                                 </>
@@ -662,35 +664,37 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                                 Image where the designer will work
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
-                                            <FileUploader>
-                                                {_.map(
-                                                    imageForDesigner,
-                                                    (attachment) => {
-                                                        const file_icon = attachment?.filename.split(".").pop();
+                                            <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                <FileUploader>
+                                                    {_.map(
+                                                        imageForDesigner,
+                                                        (attachment) => {
+                                                            const file_icon = attachment?.filename.split(".").pop();
 
-                                                        return attachment?.filename ? (
-                                                            <FileUploader.Preview
-                                                                key={attachment?.id}
-                                                                fileName={attachment?.filename}
-                                                                downloadAble={true}
-                                                                deleteAble={false}
-                                                                downloadUrl={attachment?.file_url}
-                                                                previewUrl={attachment?.file_url}
-                                                                fileType={
-                                                                    _.includes(
-                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                        file_icon
-                                                                    )
-                                                                        ? "images"
-                                                                        : "others"
-                                                                }
-                                                                classname="comment_file"
-                                                                ext={file_icon}
-                                                            />
-                                                        ) : null;
-                                                    }
-                                                )}
-                                            </FileUploader>
+                                                            return attachment?.filename ? (
+                                                                <FileUploader.Preview
+                                                                    key={attachment?.id}
+                                                                    fileName={attachment?.filename}
+                                                                    downloadAble={true}
+                                                                    deleteAble={false}
+                                                                    downloadUrl={attachment?.file_url}
+                                                                    previewUrl={attachment?.file_url}
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                            file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={file_icon}
+                                                                />
+                                                            ) : null;
+                                                        }
+                                                    )}
+                                                </FileUploader>
+                                            </div>
                                         </div>
                                     </div>
                                 </>
@@ -709,35 +713,37 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                                 Images/videos that will be used for the work
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
-                                            <FileUploader>
-                                                {_.map(
-                                                    imgOrVidForWork,
-                                                    (attachment) => {
-                                                        const file_icon = attachment?.filename.split(".").pop();
+                                            <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                <FileUploader>
+                                                    {_.map(
+                                                        imgOrVidForWork,
+                                                        (attachment) => {
+                                                            const file_icon = attachment?.filename.split(".").pop();
 
-                                                        return attachment?.filename ? (
-                                                            <FileUploader.Preview
-                                                                key={attachment?.id}
-                                                                fileName={attachment?.filename}
-                                                                downloadAble={true}
-                                                                deleteAble={false}
-                                                                downloadUrl={attachment?.file_url}
-                                                                previewUrl={attachment?.file_url}
-                                                                fileType={
-                                                                    _.includes(
-                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                        file_icon
-                                                                    )
-                                                                        ? "images"
-                                                                        : "others"
-                                                                }
-                                                                classname="comment_file"
-                                                                ext={file_icon}
-                                                            />
-                                                        ) : null;
-                                                    }
-                                                )}
-                                            </FileUploader>
+                                                            return attachment?.filename ? (
+                                                                <FileUploader.Preview
+                                                                    key={attachment?.id}
+                                                                    fileName={attachment?.filename}
+                                                                    downloadAble={true}
+                                                                    deleteAble={false}
+                                                                    downloadUrl={attachment?.file_url}
+                                                                    previewUrl={attachment?.file_url}
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                            file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={file_icon}
+                                                                />
+                                                            ) : null;
+                                                        }
+                                                    )}
+                                                </FileUploader>
+                                            </div>
                                         </div>
                                     </div>
                                 </>
@@ -837,37 +843,39 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                                             className={`f-14 text-dark-gray mb-2`}
                                             data-label="true"
                                         >
-                                            Brand guideline hello
+                                            Brand guideline
                                         </label>
-                                        <FileUploader>
-                                            {_.map(
-                                                brandGuideline,
-                                                (attachment) => {
-                                                    const file_icon = attachment?.filename.split(".").pop();
+                                        <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                            <FileUploader>
+                                                {_.map(
+                                                    brandGuideline,
+                                                    (attachment) => {
+                                                        const file_icon = attachment?.filename.split(".").pop();
 
-                                                    return attachment?.filename ? (
-                                                        <FileUploader.Preview
-                                                            key={attachment?.id}
-                                                            fileName={attachment?.filename}
-                                                            downloadAble={true}
-                                                            deleteAble={false}
-                                                            downloadUrl={attachment?.file_url}
-                                                            previewUrl={attachment?.file_url}
-                                                            fileType={
-                                                                _.includes(
-                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                    file_icon
-                                                                )
-                                                                    ? "images"
-                                                                    : "others"
-                                                            }
-                                                            classname="comment_file"
-                                                            ext={file_icon}
-                                                        />
-                                                    ) : null;
-                                                }
-                                            )}
-                                        </FileUploader>
+                                                        return attachment?.filename ? (
+                                                            <FileUploader.Preview
+                                                                key={attachment?.id}
+                                                                fileName={attachment?.filename}
+                                                                downloadAble={true}
+                                                                deleteAble={false}
+                                                                downloadUrl={attachment?.file_url}
+                                                                previewUrl={attachment?.file_url}
+                                                                fileType={
+                                                                    _.includes(
+                                                                        ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                        file_icon
+                                                                    )
+                                                                        ? "images"
+                                                                        : "others"
+                                                                }
+                                                                classname="comment_file"
+                                                                ext={file_icon}
+                                                            />
+                                                        ) : null;
+                                                    }
+                                                )}
+                                            </FileUploader>
+                                        </div>
                                     </div>
                                 </div>
                             }

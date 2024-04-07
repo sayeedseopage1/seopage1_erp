@@ -997,28 +997,28 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
                                                     {
-                                                        typeOfGraphicsCategory?.id === 2 && <UploadFilesInLine
+                                                        typeOfGraphicsCategory?.id === 2 && <div style={{ maxHeight: "300px", overflowY: "auto" }}><UploadFilesInLine
                                                             files={textForDesign}
                                                             setFiles={setTextForDesign}
                                                             {...(defaultTextForDesignBanner && { previous: defaultTextForDesignBanner })}
                                                             onPreviousFileDelete={handleDeleteTextForDesignBanner}
-                                                        />
+                                                        /></div>
                                                     }
                                                     {
-                                                        typeOfGraphicsCategory?.id === 3 && <UploadFilesInLine
+                                                        typeOfGraphicsCategory?.id === 3 && <div style={{ maxHeight: "300px", overflowY: "auto" }}><UploadFilesInLine
                                                             files={textForDesign}
                                                             setFiles={setTextForDesign}
                                                             {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
                                                             onPreviousFileDelete={handleDeleteTextForDesignBrochure}
-                                                        />
+                                                        /></div>
                                                     }
                                                     {
-                                                        typeOfGraphicsCategory?.id === 4 && <UploadFilesInLine
+                                                        typeOfGraphicsCategory?.id === 4 && <div style={{ maxHeight: "300px", overflowY: "auto" }}> <UploadFilesInLine
                                                             files={textForDesign}
                                                             setFiles={setTextForDesign}
                                                             {...(defaultTextForDesignCompanyProfile && { previous: defaultTextForDesignCompanyProfile })}
                                                             onPreviousFileDelete={handleDeleteTextForDesignCompanyProfile}
-                                                        />
+                                                        /></div>
                                                     }
 
                                                 </div>
@@ -1039,23 +1039,27 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Image where the designer will work
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
-                                                    {
-                                                        typeOfGraphicsCategory?.id === 5 && <UploadFilesInLine
-                                                            files={imageForDesigner}
-                                                            setFiles={setImageForDesigner}
-                                                            {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
-                                                            onPreviousFileDelete={handleDeleteImgForDesigner}
-                                                        />
-                                                    }
-                                                    {
-                                                        typeOfGraphicsCategory?.id === 6 && <UploadFilesInLine
+                                                </div>
+                                                {
+                                                    typeOfGraphicsCategory?.id === 5 && <div style={{ maxHeight: "300px", overflowY: "auto" }}><UploadFilesInLine
+                                                        files={imageForDesigner}
+                                                        setFiles={setImageForDesigner}
+                                                        {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
+                                                        onPreviousFileDelete={handleDeleteImgForDesigner}
+                                                    />
+                                                    </div>
+                                                }
+                                                {
+
+                                                    typeOfGraphicsCategory?.id === 6 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                        <UploadFilesInLine
                                                             files={imageForDesigner}
                                                             setFiles={setImageForDesigner}
                                                             {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
                                                             onPreviousFileDelete={handleDeleteImgBgForDesigner}
                                                         />
-                                                    }
-                                                </div>
+                                                    </div>
+                                                }
                                             </div>
                                         </>
                                     }
@@ -1073,12 +1077,14 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Images/videos that will be used for the work
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
-                                                    <UploadFilesInLine
-                                                        files={imgOrVidForWork}
-                                                        setFiles={setImgOrVidForWork}
-                                                        previous={defaultImgOrVidForWork}
-                                                        onPreviousFileDelete={handleDeletedefaultImgOrVidForWorkFile}
-                                                    />
+                                                    <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                        <UploadFilesInLine
+                                                            files={imgOrVidForWork}
+                                                            setFiles={setImgOrVidForWork}
+                                                            previous={defaultImgOrVidForWork}
+                                                            onPreviousFileDelete={handleDeletedefaultImgOrVidForWorkFile}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </>
@@ -1154,7 +1160,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     }
 
                                     {/* Reference */}
-                                    {/* Reference */}
                                     {<div className="col-12 col-md-6">
                                         <div className={`form-group my-3 w-100`}>
                                             <label
@@ -1212,21 +1217,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                         </div>
                                     </div>
                                     }
-                                    {/* <div className="col-12 col-md-6">
-                                        <Input
-                                            id="reference"
-                                            label="Reference"
-                                            type="text"
-                                            placeholder="Enter a task reference"
-                                            name="reference"
-                                            required={true}
-                                            value={reference}
-                                            error={formError?.reference}
-                                            onChange={(e) =>
-                                                handleChange(e, setReference)
-                                            }
-                                        />
-                                    </div> */}
 
                                     {/* Font name */}
                                     <div className="col-12 col-md-6">
@@ -1270,12 +1260,14 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                             >
                                                 Brand guideline
                                             </label>
-                                            <UploadFilesInLine
-                                                files={brandGuideline}
-                                                setFiles={setBrandGuideline}
-                                                previous={defaultBrandGuidelineFiles}
-                                                onPreviousFileDelete={handleDeleteBrandFile}
-                                            />
+                                            <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                <UploadFilesInLine
+                                                    files={brandGuideline}
+                                                    setFiles={setBrandGuideline}
+                                                    previous={defaultBrandGuidelineFiles}
+                                                    onPreviousFileDelete={handleDeleteBrandFile}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
 
@@ -1778,7 +1770,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                     {/* end body */}
                 </div>
             </div>
-        </Modal>
+        </Modal >
     );
 };
 

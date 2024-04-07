@@ -2614,7 +2614,11 @@ var Guideline = function Guideline(_ref) {
           })]
         }), (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            className: "col-12 mb-2 word-break",
+            style: {
+              maxHeight: "300px",
+              overflowY: "auto"
+            },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                 children: "Attach text that will be used for the design"
@@ -2637,7 +2641,11 @@ var Guideline = function Guideline(_ref) {
           })
         }), (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            className: "col-12 mb-2 word-break",
+            style: {
+              maxHeight: "300px",
+              overflowY: "auto"
+            },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                 children: "Image where the designer will work"
@@ -2660,7 +2668,11 @@ var Guideline = function Guideline(_ref) {
           })
         }), type_of_graphic_work_id === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-            className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+            className: "col-12 mb-2 word-break",
+            style: {
+              maxHeight: "300px",
+              overflowY: "auto"
+            },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                 children: "Images/videos that will be used for the work"
@@ -2733,7 +2745,11 @@ var Guideline = function Guideline(_ref) {
             })]
           })
         }), ((_defaultBrandGuidelin = defaultBrandGuidelineFiles) === null || _defaultBrandGuidelin === void 0 ? void 0 : _defaultBrandGuidelin.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+          className: "col-12 mb-2 word-break",
+          style: {
+            maxHeight: "300px",
+            overflowY: "auto"
+          },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
               children: "Brand Guideline"
@@ -2984,7 +3000,11 @@ var Guideline = function Guideline(_ref) {
                 })]
               }), (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  className: "col-12 mb-2 word-break",
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Attach text that will be used for the design"
@@ -3007,7 +3027,11 @@ var Guideline = function Guideline(_ref) {
                 })
               }), (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  className: "col-12 mb-2 word-break",
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Image where the designer will work"
@@ -3030,7 +3054,11 @@ var Guideline = function Guideline(_ref) {
                 })
               }), type_of_graphic_work_id === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-                  className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                  className: "col-12 mb-2 word-break",
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Images/videos that will be used for the work"
@@ -3103,7 +3131,11 @@ var Guideline = function Guideline(_ref) {
                   })]
                 })
               }), ((_defaultBrandGuidelin2 = defaultBrandGuidelineFiles) === null || _defaultBrandGuidelin2 === void 0 ? void 0 : _defaultBrandGuidelin2.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
-                className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                className: "col-12 mb-2 word-break",
+                style: {
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                },
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                     children: "Brand Guideline"
@@ -11914,19 +11946,25 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                     className: "f-14 mr-1",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                  children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(textForDesign, function (attachment) {
-                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
-                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                      downloadAble: true,
-                      deleteAble: false,
-                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                      fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                      classname: "comment_file",
-                      ext: file_icon
-                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                    children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(textForDesign, function (attachment) {
+                      var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                      return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                        fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                        downloadAble: true,
+                        deleteAble: false,
+                        downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                        classname: "comment_file",
+                        ext: file_icon
+                      }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                    })
                   })
                 })]
               })
@@ -11944,19 +11982,25 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                     className: "f-14 mr-1",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                  children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(imageForDesigner, function (attachment) {
-                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
-                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                      downloadAble: true,
-                      deleteAble: false,
-                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                      fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                      classname: "comment_file",
-                      ext: file_icon
-                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                    children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(imageForDesigner, function (attachment) {
+                      var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                      return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                        fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                        downloadAble: true,
+                        deleteAble: false,
+                        downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                        classname: "comment_file",
+                        ext: file_icon
+                      }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                    })
                   })
                 })]
               })
@@ -11974,19 +12018,25 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                     className: "f-14 mr-1",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                  children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(imgOrVidForWork, function (attachment) {
-                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
-                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                      downloadAble: true,
-                      deleteAble: false,
-                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                      fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                      classname: "comment_file",
-                      ext: file_icon
-                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                    children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(imgOrVidForWork, function (attachment) {
+                      var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                      return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                        fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                        downloadAble: true,
+                        deleteAble: false,
+                        downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                        fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                        classname: "comment_file",
+                        ext: file_icon
+                      }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                    })
                   })
                 })]
               })
@@ -12087,20 +12137,26 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                 htmlFor: 'brandGuideline',
                 className: "f-14 text-dark-gray mb-2",
                 "data-label": "true",
-                children: "Brand guideline hello"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
-                children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(brandGuideline, function (attachment) {
-                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
-                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                    downloadAble: true,
-                    deleteAble: false,
-                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                    classname: "comment_file",
-                    ext: file_icon
-                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                children: "Brand guideline"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+                style: {
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(brandGuideline, function (attachment) {
+                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"].Preview, {
+                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                      downloadAble: true,
+                      deleteAble: false,
+                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      fileType: lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                      classname: "comment_file",
+                      ext: file_icon
+                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                  })
                 })
               })]
             })
@@ -13267,19 +13323,25 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
-                children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(textForDesign, function (attachment) {
-                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
-                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                    downloadAble: true,
-                    deleteAble: false,
-                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                    classname: "comment_file",
-                    ext: file_icon
-                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                style: {
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(textForDesign, function (attachment) {
+                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
+                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                      downloadAble: true,
+                      deleteAble: false,
+                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                      classname: "comment_file",
+                      ext: file_icon
+                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                  })
                 })
               })]
             })
@@ -13297,19 +13359,25 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
-                children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(imageForDesigner, function (attachment) {
-                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
-                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                    downloadAble: true,
-                    deleteAble: false,
-                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                    classname: "comment_file",
-                    ext: file_icon
-                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                style: {
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(imageForDesigner, function (attachment) {
+                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
+                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                      downloadAble: true,
+                      deleteAble: false,
+                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                      classname: "comment_file",
+                      ext: file_icon
+                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                  })
                 })
               })]
             })
@@ -13327,19 +13395,25 @@ var SubTaskForm = function SubTaskForm(_ref) {
                   className: "f-14 mr-1",
                   children: "*"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
-                children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(imgOrVidForWork, function (attachment) {
-                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
-                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                    downloadAble: true,
-                    deleteAble: false,
-                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                    fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                    classname: "comment_file",
-                    ext: file_icon
-                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                style: {
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
+                  children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(imgOrVidForWork, function (attachment) {
+                    var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                    return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
+                      fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                      downloadAble: true,
+                      deleteAble: false,
+                      downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                      fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                      classname: "comment_file",
+                      ext: file_icon
+                    }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                  })
                 })
               })]
             })
@@ -13442,19 +13516,25 @@ var SubTaskForm = function SubTaskForm(_ref) {
               className: "f-14 text-dark-gray mb-2",
               "data-label": "true",
               children: "Brand guideline"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
-              children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(brandGuideline, function (attachment) {
-                var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
-                return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
-                  fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
-                  downloadAble: true,
-                  deleteAble: false,
-                  downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                  previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
-                  fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
-                  classname: "comment_file",
-                  ext: file_icon
-                }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+              style: {
+                maxHeight: "300px",
+                overflowY: "auto"
+              },
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"], {
+                children: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(brandGuideline, function (attachment) {
+                  var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
+                  return attachment !== null && attachment !== void 0 && attachment.filename ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_23__["default"].Preview, {
+                    fileName: attachment === null || attachment === void 0 ? void 0 : attachment.filename,
+                    downloadAble: true,
+                    deleteAble: false,
+                    downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.file_url,
+                    fileType: lodash__WEBPACK_IMPORTED_MODULE_9___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], file_icon) ? "images" : "others",
+                    classname: "comment_file",
+                    ext: file_icon
+                  }, attachment === null || attachment === void 0 ? void 0 : attachment.id) : null;
+                })
               })
             })]
           })
@@ -15683,28 +15763,46 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     className: "f-14 mr-1",
                     children: "*"
                   })]
-                }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
-                  files: textForDesign,
-                  setFiles: setTextForDesign
-                }, defaultTextForDesignBanner && {
-                  previous: defaultTextForDesignBanner
-                }), {}, {
-                  onPreviousFileDelete: handleDeleteTextForDesignBanner
-                })), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
-                  files: textForDesign,
-                  setFiles: setTextForDesign
-                }, defaultTextForDesignBrochure && {
-                  previous: defaultTextForDesignBrochure
-                }), {}, {
-                  onPreviousFileDelete: handleDeleteTextForDesignBrochure
-                })), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
-                  files: textForDesign,
-                  setFiles: setTextForDesign
-                }, defaultTextForDesignCompanyProfile && {
-                  previous: defaultTextForDesignCompanyProfile
-                }), {}, {
-                  onPreviousFileDelete: handleDeleteTextForDesignCompanyProfile
-                }))]
+                }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
+                    files: textForDesign,
+                    setFiles: setTextForDesign
+                  }, defaultTextForDesignBanner && {
+                    previous: defaultTextForDesignBanner
+                  }), {}, {
+                    onPreviousFileDelete: handleDeleteTextForDesignBanner
+                  }))
+                }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
+                    files: textForDesign,
+                    setFiles: setTextForDesign
+                  }, defaultTextForDesignBrochure && {
+                    previous: defaultTextForDesignBrochure
+                  }), {}, {
+                    onPreviousFileDelete: handleDeleteTextForDesignBrochure
+                  }))
+                }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
+                    files: textForDesign,
+                    setFiles: setTextForDesign
+                  }, defaultTextForDesignCompanyProfile && {
+                    previous: defaultTextForDesignCompanyProfile
+                  }), {}, {
+                    onPreviousFileDelete: handleDeleteTextForDesignCompanyProfile
+                  }))
+                })]
               })
             })
           }), ((typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 || (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.Fragment, {
@@ -15720,21 +15818,33 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     className: "f-14 mr-1",
                     children: "*"
                   })]
-                }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
-                  files: imageForDesigner,
-                  setFiles: setImageForDesigner
-                }, defaultImageForDesignerRetouching ? {
-                  previous: defaultImageForDesignerRetouching
-                } : {}), {}, {
-                  onPreviousFileDelete: handleDeleteImgForDesigner
-                })), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
-                  files: imageForDesigner,
-                  setFiles: setImageForDesigner
-                }, defaultImageForDesignerBgRemoval ? {
-                  previous: defaultImageForDesignerBgRemoval
-                } : {}), {}, {
-                  onPreviousFileDelete: handleDeleteImgBgForDesigner
-                }))]
+                }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
+                    files: imageForDesigner,
+                    setFiles: setImageForDesigner
+                  }, defaultImageForDesignerRetouching ? {
+                    previous: defaultImageForDesignerRetouching
+                  } : {}), {}, {
+                    onPreviousFileDelete: handleDeleteImgForDesigner
+                  }))
+                }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], _objectSpread(_objectSpread({
+                    files: imageForDesigner,
+                    setFiles: setImageForDesigner
+                  }, defaultImageForDesignerBgRemoval ? {
+                    previous: defaultImageForDesignerBgRemoval
+                  } : {}), {}, {
+                    onPreviousFileDelete: handleDeleteImgBgForDesigner
+                  }))
+                })]
               })
             })
           }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.Fragment, {
@@ -15750,11 +15860,17 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     className: "f-14 mr-1",
                     children: "*"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
-                  files: imgOrVidForWork,
-                  setFiles: setImgOrVidForWork,
-                  previous: defaultImgOrVidForWork,
-                  onPreviousFileDelete: handleDeletedefaultImgOrVidForWorkFile
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                  style: {
+                    maxHeight: "300px",
+                    overflowY: "auto"
+                  },
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                    files: imgOrVidForWork,
+                    setFiles: setImgOrVidForWork,
+                    previous: defaultImgOrVidForWork,
+                    onPreviousFileDelete: handleDeletedefaultImgOrVidForWorkFile
+                  })
                 })]
               })
             })
@@ -15915,11 +16031,17 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 className: "f-14 text-dark-gray mb-2",
                 "data-label": "true",
                 children: "Brand guideline"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
-                files: brandGuideline,
-                setFiles: setBrandGuideline,
-                previous: defaultBrandGuidelineFiles,
-                onPreviousFileDelete: handleDeleteBrandFile
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {
+                style: {
+                  maxHeight: "300px",
+                  overflowY: "auto"
+                },
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                  files: brandGuideline,
+                  setFiles: setBrandGuideline,
+                  previous: defaultBrandGuidelineFiles,
+                  onPreviousFileDelete: handleDeleteBrandFile
+                })
               })]
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("div", {

@@ -22,7 +22,9 @@ class GraphicWorkDetails extends Model
         'font_url',
         'primary_color',
         'primary_color_description',
-        'secondary_colors'
+        'secondary_colors',
+        'workable_url',
+        'file_extensions'
     ];
 
     public function graphicTaskFiles()

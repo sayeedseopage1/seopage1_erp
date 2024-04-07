@@ -351,7 +351,9 @@ class SubTaskController extends AccountBaseController
                     'font_url' => $request->font_url ?? null,
                     'primary_color' => $request->primary_color ?? null,
                     'primary_color_description' => $request->primary_color_description ?? null,
-                    'secondary_colors' => $request->secondary_colors ?? null
+                    'secondary_colors' => $request->secondary_colors ?? null,
+                    'workable_url' => $request->workable_url ?? null,
+                    'file_extensions' => $request->file_extensions ?? null
                 ]);
 
                 // attach_text_files
@@ -416,6 +418,24 @@ class SubTaskController extends AccountBaseController
                         $graphicTaskFile->task_id = $task_s->id;
                         $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
                         $graphicTaskFile->file_type = 4;
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        $graphicTaskFile->user_id = $this->user->id;
+                        $graphicTaskFile->filename = $filename;
+                        $graphicTaskFile->hashname = $filename;
+                        $graphicTaskFile->size = $file->getSize();
+                        $graphicTaskFile->save();
+                        Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                    }
+                }
+
+                // reference_files
+                if ($request->hasFile('reference_files')) {
+                    $files = $request->file('reference_files');
+                    foreach ($files as $file) {
+                        $graphicTaskFile = new GraphicTaskFile();
+                        $graphicTaskFile->task_id = $task_s->id;
+                        $graphicTaskFile->graphic_work_detail_id = $graphicWorkDetails->id;
+                        $graphicTaskFile->file_type = 5;
                         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                         $graphicTaskFile->user_id = $this->user->id;
                         $graphicTaskFile->filename = $filename;

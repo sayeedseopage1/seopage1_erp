@@ -123,7 +123,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         }
                         {
                             (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && <>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                     <div>
                                         <strong>Attach text that will be used for the design</strong>: <br /> <FileUploader>
                                             {_.map(
@@ -160,7 +160,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         }
                         {
                             (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && <>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                     <div>
                                         <strong>Image where the designer will work</strong>: <br /> <FileUploader>
                                             {_.map(
@@ -197,7 +197,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         }
                         {
                             type_of_graphic_work_id === 8 && <>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                     <div>
                                         <strong>Images/videos that will be used for the work</strong>: <br /> <FileUploader>
                                             {_.map(
@@ -263,7 +263,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                             </div>
                         }
                         {
-                            defaultBrandGuidelineFiles?.length > 0 && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            defaultBrandGuidelineFiles?.length > 0 && <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                 <div>
                                     <strong>Brand Guideline</strong>: <br /> <FileUploader>
                                         {_.map(
@@ -443,7 +443,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     }
                                     {
                                         (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && <>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                                 <div>
                                                     <strong>Attach text that will be used for the design</strong>: <br /> <FileUploader>
                                                         {_.map(
@@ -480,7 +480,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     }
                                     {
                                         (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && <>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                                 <div>
                                                     <strong>Image where the designer will work</strong>: <br /> <FileUploader>
                                                         {_.map(
@@ -517,7 +517,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     }
                                     {
                                         type_of_graphic_work_id === 8 && <>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                                 <div>
                                                     <strong>Images/videos that will be used for the work</strong>: <br /> <FileUploader>
                                                         {_.map(
@@ -583,7 +583,7 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                         </div>
                                     }
                                     {
-                                        defaultBrandGuidelineFiles?.length > 0 && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                        defaultBrandGuidelineFiles?.length > 0 && <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                             <div>
                                                 <strong>Brand Guideline</strong>: <br /> <FileUploader>
                                                     {_.map(
