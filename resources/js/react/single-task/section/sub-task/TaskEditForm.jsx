@@ -684,6 +684,9 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         setReferenceList([...referenceList, { reference: "" }]);
     };
 
+    console.log("firstDate", dayjs.dayjs(task?.startDate))
+    console.log("secondDate", dayjs.dayjs(task?.dueDate))
+
     return (
         <React.Fragment>
             <div className="sp1-subtask-form --modal-panel-body position-relative">
@@ -1179,7 +1182,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                             {<div className="col-12 col-md-6">
                                 <div className={`form-group my-3 w-100`}>
                                     <label
-                                        htmlFor='fileType'
+                                        htmlFor='reference'
                                         className={`f-14 text-dark-gray mb-1`}
                                         data-label="true"
                                     >

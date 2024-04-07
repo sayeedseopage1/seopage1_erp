@@ -200,8 +200,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             });
             setTaskCategory({ id: row.task_category_id, category_name: row.category_name });
             setProject(row?.project_name);
-            setStartDate(dayjs.dayjs(row.startDate).toDate());
-            setDueDate(dayjs.dayjs(row?.dueDate).toDate());
+            setStartDate(dayjs.dayjs(row.start_date).toDate());
+            setDueDate(dayjs.dayjs(row?.due_date).toDate());
             setAssignedTo({ id: row.assigned_to_id, name: row?.assigned_to_name })
             setPriority(_.startCase(row?.priority));
             setEstimateTimeHour(row.estimate_hours);
@@ -291,10 +291,10 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                 err.typeOfGraphicsCategory = "You have to select Type of graphic work";
                 errCount++;
             }
-            if (!reference) {
-                err.reference = "The reference field is required";
-                errCount++;
-            }
+            // if (!reference) {
+            //     err.reference = "The reference field is required";
+            //     errCount++;
+            // }
             if (!fontName) {
                 err.fontName = "Font name is required";
                 errCount++;

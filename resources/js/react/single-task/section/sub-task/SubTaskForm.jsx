@@ -95,7 +95,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
-    const [reference, setReference] = useState("");
+    const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState(defaultFileTypesNeeded);
     const [textForDesign, setTextForDesign] = useState(defaultTextForDesign);
     const [imageForDesigner, setImageForDesigner] = useState(defaultImageForDesigner);
@@ -155,7 +155,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         setParentTask(task?.title);
         setBrandName(graphicWorkDetails?.brand_name)
         setNumOfVersions(graphicWorkDetails?.number_of_versions);
-        setReference(graphicWorkDetails?.reference);
+        setReferenceList(JSON.parse(graphicWorkDetails?.reference));
         setFontName(graphicWorkDetails?.font_name);
         setFontUrl(graphicWorkDetails?.font_url);
         setPrimaryColor(graphicWorkDetails?.primary_color);
@@ -377,7 +377,7 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
         fd.append("number_of_versions", numOfVersions ?? "");
         fd.append("file_types_needed", JSON.stringify(fileTypesNeeded) ?? "");
         fd.append("design_instruction", (illustration || others) ?? "");
-        fd.append("reference", reference ?? "");
+        fd.append("reference", JSON.stringify(referenceList) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
         fd.append("primary_color", primaryColor ?? "");
@@ -985,16 +985,28 @@ const SubTaskForm = ({ close, isDesignerTask }) => {
 
                         {/* Reference */}
                         <div className="col-12 col-md-6">
-                            <Input
-                                id="reference"
-                                label="Reference"
-                                type="text"
-                                placeholder="Enter a task reference"
-                                name="reference"
-                                value={reference}
-                                error={err?.reference}
-                                readOnly={true}
-                            />
+                            <div className={`form-group my-3 w-100`}>
+                                <label
+                                    htmlFor='reference'
+                                    className={`f-14 text-dark-gray mb-1`}
+                                    data-label="true"
+                                >
+                                    Reference
+                                    <sup className='f-14 mr-1'>*</sup>
+                                </label>
+                                {
+                                    referenceList?.map((singleReference, index) => <input
+                                        key={index}
+                                        type="url"
+                                        name="reference"
+                                        className={`form-control height-35 f-14 ${index !== 0 && 'mt-2'}`}
+                                        placeholder={'Enter Task Reference'}
+                                        value={singleReference.reference}
+                                        readOnly={true}
+
+                                    />)
+                                }
+                            </div>
                         </div>
 
                         {/* Font name */}

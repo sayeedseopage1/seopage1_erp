@@ -12491,10 +12491,12 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _useState38 = _slicedToArray(_useState37, 2),
     numOfVersions = _useState38[0],
     setNumOfVersions = _useState38[1];
-  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+  var _useState39 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
+      reference: ""
+    }]),
     _useState40 = _slicedToArray(_useState39, 2),
-    reference = _useState40[0],
-    setReference = _useState40[1];
+    referenceList = _useState40[0],
+    setReferenceList = _useState40[1];
   var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(defaultFileTypesNeeded),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     fileTypesNeeded = _React$useState4[0],
@@ -12636,7 +12638,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
     setParentTask(task === null || task === void 0 ? void 0 : task.title);
     setBrandName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.brand_name);
     setNumOfVersions(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.number_of_versions);
-    setReference(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference);
+    setReferenceList(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference));
     setFontName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_name);
     setFontUrl(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_url);
     setPrimaryColor(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color);
@@ -12789,7 +12791,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
   // handle submission
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
-      var _task$boardColumn, _typeOfGraphicsCatego, _typeOfLogo$type_name, _JSON$stringify, _ref3, _JSON$stringify2, _task$category5;
+      var _task$boardColumn, _typeOfGraphicsCatego, _typeOfLogo$type_name, _JSON$stringify, _ref3, _JSON$stringify2, _JSON$stringify3, _task$category5;
       var _startDate, _dueDate, fd, submit, primaryPageConfirmation, response, _error, checkViolationWord, alert, _task$category7, _task$category8;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -12833,12 +12835,12 @@ var SubTaskForm = function SubTaskForm(_ref) {
             fd.append("number_of_versions", numOfVersions !== null && numOfVersions !== void 0 ? numOfVersions : "");
             fd.append("file_types_needed", (_JSON$stringify = JSON.stringify(fileTypesNeeded)) !== null && _JSON$stringify !== void 0 ? _JSON$stringify : "");
             fd.append("design_instruction", (_ref3 = illustration || others) !== null && _ref3 !== void 0 ? _ref3 : "");
-            fd.append("reference", reference !== null && reference !== void 0 ? reference : "");
+            fd.append("reference", (_JSON$stringify2 = JSON.stringify(referenceList)) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
             fd.append("font_name", fontName !== null && fontName !== void 0 ? fontName : "");
             fd.append("font_url", fontUrl !== null && fontUrl !== void 0 ? fontUrl : "");
             fd.append("primary_color", primaryColor !== null && primaryColor !== void 0 ? primaryColor : "");
             fd.append("primary_color_description", primaryColorDescription !== null && primaryColorDescription !== void 0 ? primaryColorDescription : "");
-            fd.append("secondary_colors", (_JSON$stringify2 = JSON.stringify(secondaryColors)) !== null && _JSON$stringify2 !== void 0 ? _JSON$stringify2 : "");
+            fd.append("secondary_colors", (_JSON$stringify3 = JSON.stringify(secondaryColors)) !== null && _JSON$stringify3 !== void 0 ? _JSON$stringify3 : "");
             // graphics end
 
             // ui/ux start
@@ -13367,15 +13369,26 @@ var SubTaskForm = function SubTaskForm(_ref) {
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_4__["default"], {
-            id: "reference",
-            label: "Reference",
-            type: "text",
-            placeholder: "Enter a task reference",
-            name: "reference",
-            value: reference,
-            error: err === null || err === void 0 ? void 0 : err.reference,
-            readOnly: true
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+            className: "form-group my-3 w-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("label", {
+              htmlFor: "reference",
+              className: "f-14 text-dark-gray mb-1",
+              "data-label": "true",
+              children: ["Reference", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
+                className: "f-14 mr-1",
+                children: "*"
+              })]
+            }), referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("input", {
+                type: "url",
+                name: "reference",
+                className: "form-control height-35 f-14 ".concat(index !== 0 && 'mt-2'),
+                placeholder: 'Enter Task Reference',
+                value: singleReference.reference,
+                readOnly: true
+              }, index);
+            })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
           className: "col-12 col-md-6",
@@ -15346,6 +15359,8 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       reference: ""
     }]));
   };
+  console.log("firstDate", dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate));
+  console.log("secondDate", dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate));
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel-body position-relative",
@@ -15789,7 +15804,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
               className: "form-group my-3 w-100",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("label", {
-                htmlFor: "fileType",
+                htmlFor: "reference",
                 className: "f-14 text-dark-gray mb-1",
                 "data-label": "true",
                 children: ["Reference", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)("sup", {
