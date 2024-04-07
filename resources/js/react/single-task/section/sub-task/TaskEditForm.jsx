@@ -684,9 +684,6 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
         setReferenceList([...referenceList, { reference: "" }]);
     };
 
-    console.log("firstDate", dayjs.dayjs(task?.startDate))
-    console.log("secondDate", dayjs.dayjs(task?.dueDate))
-
     return (
         <React.Fragment>
             <div className="sp1-subtask-form --modal-panel-body position-relative">

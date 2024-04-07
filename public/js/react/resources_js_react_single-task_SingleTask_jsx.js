@@ -11456,10 +11456,12 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
     _useState36 = _slicedToArray(_useState35, 2),
     numOfVersions = _useState36[0],
     setNumOfVersions = _useState36[1];
-  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+  var _useState37 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([{
+      reference: ""
+    }]),
     _useState38 = _slicedToArray(_useState37, 2),
-    reference = _useState38[0],
-    setReference = _useState38[1];
+    referenceList = _useState38[0],
+    setReferenceList = _useState38[1];
   var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([]),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     fileTypesNeeded = _React$useState4[0],
@@ -11529,7 +11531,9 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     setBrandName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.brand_name);
     setNumOfVersions(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.number_of_versions);
-    setReference(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference);
+    if (graphicWorkDetails !== null && graphicWorkDetails !== void 0 && graphicWorkDetails.reference) {
+      setReferenceList(JSON.parse(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.reference));
+    }
     setFontName(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_name);
     setFontUrl(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.font_url);
     setPrimaryColor(graphicWorkDetails === null || graphicWorkDetails === void 0 ? void 0 : graphicWorkDetails.primary_color);
@@ -12028,14 +12032,26 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
             className: "col-12 col-md-6",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_components_form_Input__WEBPACK_IMPORTED_MODULE_8__["default"], {
-              id: "reference",
-              label: "Reference",
-              type: "text",
-              placeholder: "Enter a task reference",
-              name: "reference",
-              value: reference,
-              readOnly: true
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
+              className: "form-group my-3 w-100",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("label", {
+                htmlFor: "reference",
+                className: "f-14 text-dark-gray mb-1",
+                "data-label": "true",
+                children: ["Reference", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("sup", {
+                  className: "f-14 mr-1",
+                  children: "*"
+                })]
+              }), referenceList === null || referenceList === void 0 ? void 0 : referenceList.map(function (singleReference, index) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("input", {
+                  type: "url",
+                  name: "reference",
+                  className: "form-control height-35 f-14 ".concat(index !== 0 && 'mt-2'),
+                  placeholder: 'Enter Task Reference',
+                  value: singleReference.reference,
+                  readOnly: true
+                }, index);
+              })]
             })
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
             className: "col-12 col-md-6",
@@ -12060,7 +12076,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
               value: fontUrl,
               readOnly: true
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
+          }), !lodash__WEBPACK_IMPORTED_MODULE_0___default().isEmpty(brandGuideline) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
             className: "col-12 col-md-6",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsxs)("div", {
               className: "form-group my-3 w-100",
@@ -12068,7 +12084,7 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
                 htmlFor: 'brandGuideline',
                 className: "f-14 text-dark-gray mb-2",
                 "data-label": "true",
-                children: "Brand guideline"
+                children: "Brand guideline hello"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_21__["default"], {
                 children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(brandGuideline, function (attachment) {
                   var file_icon = attachment === null || attachment === void 0 ? void 0 : attachment.filename.split(".").pop();
@@ -15359,8 +15375,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
       reference: ""
     }]));
   };
-  console.log("firstDate", dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate));
-  console.log("secondDate", dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate));
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_27__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel-body position-relative",

@@ -165,7 +165,7 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
     const [numOfVersions, setNumOfVersions] = useState(null);
-    const [reference, setReference] = useState("");
+    const [referenceList, setReferenceList] = useState([{ reference: "" }]);
     const [fileTypesNeeded, setFileTypesNeeded] = React.useState([]);
     const [textForDesign, setTextForDesign] = useState([]);
     const [imageForDesigner, setImageForDesigner] = useState([]);
@@ -192,7 +192,9 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
     useEffect(() => {
         setBrandName(graphicWorkDetails?.brand_name)
         setNumOfVersions(graphicWorkDetails?.number_of_versions);
-        setReference(graphicWorkDetails?.reference);
+        if (graphicWorkDetails?.reference) {
+            setReferenceList(JSON.parse(graphicWorkDetails?.reference));
+        }
         setFontName(graphicWorkDetails?.font_name);
         setFontUrl(graphicWorkDetails?.font_url);
         setPrimaryColor(graphicWorkDetails?.primary_color);
@@ -775,15 +777,28 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
 
                             {/* Reference */}
                             <div className="col-12 col-md-6">
-                                <Input
-                                    id="reference"
-                                    label="Reference"
-                                    type="text"
-                                    placeholder="Enter a task reference"
-                                    name="reference"
-                                    value={reference}
-                                    readOnly={true}
-                                />
+                                <div className={`form-group my-3 w-100`}>
+                                    <label
+                                        htmlFor='reference'
+                                        className={`f-14 text-dark-gray mb-1`}
+                                        data-label="true"
+                                    >
+                                        Reference
+                                        <sup className='f-14 mr-1'>*</sup>
+                                    </label>
+                                    {
+                                        referenceList?.map((singleReference, index) => <input
+                                            key={index}
+                                            type="url"
+                                            name="reference"
+                                            className={`form-control height-35 f-14 ${index !== 0 && 'mt-2'}`}
+                                            placeholder={'Enter Task Reference'}
+                                            value={singleReference.reference}
+                                            readOnly={true}
+
+                                        />)
+                                    }
+                                </div>
                             </div>
 
                             {/* Font name */}
@@ -814,46 +829,49 @@ const SubTaskEditModal = ({ task, singleTask: taskDetails, onSubmit, isLoading, 
                             </div>
 
                             {/* Brand guideline */}
-                            <div className="col-12 col-md-6">
-                                <div className={`form-group my-3 w-100`}>
-                                    <label
-                                        htmlFor={'brandGuideline'}
-                                        className={`f-14 text-dark-gray mb-2`}
-                                        data-label="true"
-                                    >
-                                        Brand guideline
-                                    </label>
-                                    <FileUploader>
-                                        {_.map(
-                                            brandGuideline,
-                                            (attachment) => {
-                                                const file_icon = attachment?.filename.split(".").pop();
+                            {
+                                !_.isEmpty(brandGuideline) && <div className="col-12 col-md-6">
+                                    <div className={`form-group my-3 w-100`}>
+                                        <label
+                                            htmlFor={'brandGuideline'}
+                                            className={`f-14 text-dark-gray mb-2`}
+                                            data-label="true"
+                                        >
+                                            Brand guideline hello
+                                        </label>
+                                        <FileUploader>
+                                            {_.map(
+                                                brandGuideline,
+                                                (attachment) => {
+                                                    const file_icon = attachment?.filename.split(".").pop();
 
-                                                return attachment?.filename ? (
-                                                    <FileUploader.Preview
-                                                        key={attachment?.id}
-                                                        fileName={attachment?.filename}
-                                                        downloadAble={true}
-                                                        deleteAble={false}
-                                                        downloadUrl={attachment?.file_url}
-                                                        previewUrl={attachment?.file_url}
-                                                        fileType={
-                                                            _.includes(
-                                                                ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                file_icon
-                                                            )
-                                                                ? "images"
-                                                                : "others"
-                                                        }
-                                                        classname="comment_file"
-                                                        ext={file_icon}
-                                                    />
-                                                ) : null;
-                                            }
-                                        )}
-                                    </FileUploader>
+                                                    return attachment?.filename ? (
+                                                        <FileUploader.Preview
+                                                            key={attachment?.id}
+                                                            fileName={attachment?.filename}
+                                                            downloadAble={true}
+                                                            deleteAble={false}
+                                                            downloadUrl={attachment?.file_url}
+                                                            previewUrl={attachment?.file_url}
+                                                            fileType={
+                                                                _.includes(
+                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                    file_icon
+                                                                )
+                                                                    ? "images"
+                                                                    : "others"
+                                                            }
+                                                            classname="comment_file"
+                                                            ext={file_icon}
+                                                        />
+                                                    ) : null;
+                                                }
+                                            )}
+                                        </FileUploader>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
 
                             {/* color schema */}
                             <div className="col-12">
