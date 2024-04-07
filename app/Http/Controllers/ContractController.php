@@ -1533,7 +1533,7 @@ class ContractController extends AccountBaseController
                 //end authorization action
 
 
-                // Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+                Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
 
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
@@ -2014,7 +2014,7 @@ class ContractController extends AccountBaseController
                     //end authorization action
 
 
-                    // Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+                    Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
 
                     $this->triggerPusher('notification-channel', 'notification', [
                         'user_id' => $user->id,
