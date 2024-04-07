@@ -37,6 +37,7 @@ import {
     useStoreAdminAuthorizedMutation,
 } from "../../../services/api/EvaluationApiSlice";
 import { useEffect } from "react";
+import FormatDate from "../../../UI/comments/utils/FormatDate";
 
 const EvaluationModal = ({
     isEvaluationModal,
@@ -82,7 +83,7 @@ const EvaluationModal = ({
         setPagination(paginate);
     };
 
-    const handleFinalSubmission = async () => {
+    const handleLeadDevFinalSubmission = async () => {
         try {
             await taskRatingFinalSubmission({
                 user_id: singleEvaluation?.user_id,
@@ -236,7 +237,10 @@ const EvaluationModal = ({
                             <a href="www.teamLead.com" target="_blank">
                                 Mohammad Sayeed Ullah
                             </a>{" "}
-                            on <span>{data?.data[0]?.updated_at}</span>
+                            on{" "}
+                            <span>
+                                {FormatDate(singleEvaluation.updated_at)}
+                            </span>
                         </ReviewFooter>
                     </ReviewContent>
                 </section>
@@ -265,7 +269,10 @@ const EvaluationModal = ({
                                 <a href="www.teamLead.com" target="_blank">
                                     Mohammad Sayeed Ullah
                                 </a>{" "}
-                                on <span>{singleEvaluation?.updated_at}</span>
+                                on{" "}
+                                <span>
+                                    {FormatDate(singleEvaluation?.updated_at)}
+                                </span>
                             </ReviewFooter>
                         </ReviewContent>
                     </section>
@@ -315,7 +322,9 @@ const EvaluationModal = ({
                                     </a>{" "}
                                     on{" "}
                                     <span>
-                                        {singleEvaluation?.managements_auth_at}
+                                        {FormatDate(
+                                            singleEvaluation?.managements_auth_at
+                                        )}
                                     </span>
                                 </ReviewFooter>
                             </ReviewContent>
@@ -340,7 +349,7 @@ const EvaluationModal = ({
                 {/* lead dev submit button start */}
                 {auth.roleId === 6 && (
                     <Button
-                        onClick={handleFinalSubmission}
+                        onClick={handleLeadDevFinalSubmission}
                         size="md"
                         className="ml-2"
                         disabled={

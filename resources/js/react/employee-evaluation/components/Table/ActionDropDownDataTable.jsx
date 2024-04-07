@@ -5,15 +5,14 @@ import Button from "../Button";
 import EvaluationModal from "../modal/EvaluationModal";
 import Switch from "../../../global/Switch";
 import { Tooltip } from "react-tooltip";
-import { useDispatch } from "react-redux";
+
 import useEmployeeEvaluation from "../../../zustand/store";
 
 const ActionDropdownDataTable = ({ data, table }) => {
     const { setEvaluationObject } = useEmployeeEvaluation();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const userId = queryParams.get("userId");
-    const dispatch = useDispatch();
+
     const auth = useAuth();
     const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
     const [toolTipTeamLead, setToolTipTeamLead] = React.useState("");
@@ -33,7 +32,9 @@ const ActionDropdownDataTable = ({ data, table }) => {
 
     React.useEffect(() => {
         if (data?.team_lead_cmnt === null) {
-            setToolTipAdmin(`Currently being Reviewed by Sayeed Ullah`);
+            setToolTipAdmin(
+                `Currently being Reviewed by Mohammad Sayeed Ullah`
+            );
         }
         if (data?.lead_dev_avg_rating === null) {
             setToolTipAdmin(
@@ -105,9 +106,9 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             >
                                 <Button
                                     onClick={handleEvaluationClick}
-                                    variant="info"
+                                    variant="tertiary"
                                 >
-                                    Extended For 1 week
+                                    Extended
                                 </Button>
                             </Switch.Case>
                         </Switch>
@@ -169,9 +170,9 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             >
                                 <Button
                                     onClick={handleEvaluationClick}
-                                    variant="info"
+                                    variant="tertiary"
                                 >
-                                    Extended For 1 week
+                                    Extended
                                 </Button>
                             </Switch.Case>
                         </Switch>
@@ -258,9 +259,9 @@ const ActionDropdownDataTable = ({ data, table }) => {
                             >
                                 <Button
                                     onClick={handleEvaluationClick}
-                                    variant="info"
+                                    variant="tertiary"
                                 >
-                                    Extended For 1 week
+                                    Extended
                                 </Button>
                             </Switch.Case>
                         </Switch>

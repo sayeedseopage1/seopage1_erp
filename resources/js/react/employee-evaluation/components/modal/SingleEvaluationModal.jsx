@@ -20,6 +20,7 @@ import {
     useStoreTaskRatingMutation,
     useUpdateTaskRatingSubmissionMutation,
 } from "../../../services/api/EvaluationApiSlice";
+import FormatDate from "../../../UI/comments/utils/FormatDate";
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
@@ -411,7 +412,8 @@ const SingleEvaluationModal = ({
                                     >
                                         {evaluationObject.added_by_name}
                                     </a>{" "}
-                                    on <span>{data?.updated_at}</span>
+                                    on{" "}
+                                    <span>{FormatDate(data?.updated_at)}</span>
                                 </div>
                             </section>
                         ))}
@@ -449,7 +451,7 @@ const SingleEvaluationModal = ({
                                 >
                                     {evaluationObject.added_by_name}
                                 </a>{" "}
-                                on <span>{data?.updated_at}</span>
+                                on <span>{FormatDate(data?.updated_at)}</span>
                             </div>
                         </section>
                     )}
@@ -471,7 +473,7 @@ const SingleEvaluationModal = ({
                             >
                                 <div>
                                     <BiSolidEditAlt />
-                                    <span> Edit Rating</span>
+                                    <span> Update Rating</span>
                                 </div>
                             </button>
                         ))}
