@@ -9,6 +9,7 @@ import { useGetTaskDetailsQuery, useGetTypesOfGraphicWorksQuery } from '../../se
 import './styles/guideline.css'
 import { useGetSubTasksQuery } from '../../services/api/tasksApiSlice';
 import { de } from '@faker-js/faker';
+import { validateUrl } from '../../projects/utils/validateUrl';
 
 const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singleTask }) => {
     const [expend, setExpend] = useState(false);
@@ -248,7 +249,12 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                         }
                         {
                             referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}><a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a></li>)}</span>
+                                <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}>
+                                    {
+                                        !validateUrl(item?.reference) ? item?.reference : <a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a>
+                                    }
+
+                                </li>)}</span>
                             </div>
                         }
                         {
@@ -563,7 +569,12 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     }
                                     {
                                         referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}><a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a></li>)}</span>
+                                            <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}>
+                                                {
+                                                    !validateUrl(item?.reference) ? item?.reference : <a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a>
+                                                }
+
+                                            </li>)}</span>
                                         </div>
                                     }
                                     {

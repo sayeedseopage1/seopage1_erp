@@ -27,6 +27,7 @@ import ThemeTypeSelect from "./ui-ux-design-forms/ThemeTypeSelect";
 import { checkIsURL } from "../../utils/check-is-url";
 import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { validateUrl } from "../utils/validateUrl";
 
 // const fileInputStyle = {
 //     height: "39px",
@@ -606,12 +607,6 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
 
     const handleReferenceAdd = () => {
         setReferenceList([...referenceList, { reference: "" }]);
-    };
-
-    const validateUrl = (url) => {
-        // Regular expression for URL validation
-        const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-        return urlRegex.test(url);
     };
 
     return (
