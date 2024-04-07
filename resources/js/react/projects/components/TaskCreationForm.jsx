@@ -28,6 +28,7 @@ import { checkIsURL } from "../../utils/check-is-url";
 import CmsDropdown from "./ui-ux-design-forms/CmsDropdown";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { validateUrl } from "../utils/validateUrl";
+import FileUploadWithInput from "./ui/FileUploadWithInput";
 
 // const fileInputStyle = {
 //     height: "39px",
@@ -610,6 +611,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
         setReferenceList([...referenceList, { reference: "" }]);
     };
 
+    console.log(textForDesign)
+
     return (
         <Modal isOpen={isOpen}>
             <React.Fragment>
@@ -970,6 +973,22 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                                     </div>
                                                 </div>
                                             </>
+                                        }
+                                        {/* TODO: work on this */}
+                                        {
+                                            <div className="col-12 col-md-6">
+                                                <div className={`form-group my-3 w-100`}>
+                                                    <label
+                                                        htmlFor={'textForDesign'}
+                                                        className={`f-14 text-dark-gray mb-2`}
+                                                        data-label="true"
+                                                    >
+                                                        Experiment File With Url
+                                                        <sup className='f-14 mr-1'>*</sup>
+                                                    </label>
+                                                    <FileUploadWithInput />
+                                                </div>
+                                            </div>
                                         }
 
                                         {/* background removal or image retouching */}
