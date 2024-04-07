@@ -18,6 +18,7 @@ use App\Models\TaskRevisionDispute;
 use App\Models\Task;
 use App\Models\Taskuser;
 use App\Models\ProjectMember;
+use App\Models\TaskComment;
 use DB;
 
 class HelperPendingActionController extends AccountBaseController
@@ -1105,6 +1106,7 @@ class HelperPendingActionController extends AccountBaseController
    public function NewCommentAdded($taskId,$commentor)
    {
     $task= Task::where('id',$taskId)->first();
+    $task_count= TaskComment::where('task_id',$taskId)->count();
     if($task->independent_task_status == 0)
     {
         $project= Project::where('id',$task->project_id)->first();
@@ -1129,7 +1131,7 @@ class HelperPendingActionController extends AccountBaseController
                 $action->code = 'TCOA';
                 $action->serial = 'TCOA'.'x'.$key;
                 $action->item_name= 'New comment';
-                $action->heading= 'A new comment has been added!';      
+                $action->heading= 'A new comment has been added! ( '.$task_count.' )';      
                 $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
                 $action->timeframe= 12;
                 $action->project_id = $project->id;
@@ -1232,12 +1234,11 @@ class HelperPendingActionController extends AccountBaseController
                 ];
                 $past_action->button = json_encode($button);
                 $past_action->save();
-
             foreach ($allUsers as $key => $authorizer) {
                 $active_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->where('authorization_for', $authorizer)->where('past_status',0)->first();
                 if($active_action){ 
+                    $active_action->heading= 'A new comment has been added! ( '.$task_count.' )';   
                     $active_action->message = 'A new comment has been added by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
-                    $active_action->timeframe= 12;
                     $active_action->created_at = Carbon::now();
                     $active_action->updated_at = Carbon::now();
                     $active_action->save();
@@ -1246,7 +1247,7 @@ class HelperPendingActionController extends AccountBaseController
                     $action->code = 'TCOA';
                     $action->serial = 'TCOA'.'x'.$key;
                     $action->item_name= 'New comment';
-                    $action->heading= 'A new comment has been added!';      
+                    $action->heading= 'A new comment has been added! ( '.$task_count.' )';       
                     $action->message = 'A new comment has been added by <a href="'.route('employees.show',$commentor->id).'">'.$commentor->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
                     $action->timeframe= 12;
                     $action->project_id = $project->id;
