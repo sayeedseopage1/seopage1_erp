@@ -2,72 +2,72 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\WonDealsDataTable;
-use App\Events\ContractSignedEvent;
+use Auth;
+use Mail;
+use Crypt;
+use Toastr;
+use DateTime;
+use Exception;
+use DataTables;
+use Notification;
+use Carbon\Carbon;
+use App\Models\Deal;
+use App\Models\Lead;
+use App\Models\User;
 use App\Helper\Files;
 use App\Helper\Reply;
-use App\Http\Requests\Admin\Contract\StoreRequest;
-use App\Http\Requests\Admin\Contract\UpdateRequest;
-use App\Http\Requests\ClientContracts\SignRequest;
-use App\Models\Contract;
-use App\Models\ContractSign;
-use App\Models\ContractTemplate;
-use App\Models\ContractType;
-use App\Models\Currency;
-use App\Models\kpiSettingGenerateSale;
-use App\Models\PendingAction;
-use App\Models\PendingActionPast;
-use App\Models\User;
-use Carbon\Carbon;
-use DateTime;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use App\Models\ContractCustomForm;
-use App\Traits\CustomFieldsTrait;
-use App\Models\CustomField;
-use App\Models\CustomFieldData;
-use App\Models\RoleUser;
-use App\Models\Deal;
-use Illuminate\Support\Facades\Redirect;
-use App\Models\Project;
-use App\Models\PMProject;
-use App\Models\PMAssign;
-use Auth;
-use Crypt;
-use App\Models\ClientForm;
-use App\Models\ClientDetails;
-use App\Models\DealStage;
-use App\Models\Lead;
-use App\Models\ProjectMember;
-use App\Models\ProjectMilestone;
-use Illuminate\Support\Facades\Validator;
-use App\Models\SalesCount;
-use Mail;
-use App\Mail\WonDealMail;
 use App\Models\Country;
-use Toastr;
-use Exception;
-use App\Models\EmployeeDetails;
-use App\Notifications\DealAuthorizationSendNotification;
-use Notification;
-use App\Models\kpiSetting;
-use App\Models\CashPoint;
-use App\Models\LeadsDealsActivityLog;
-use App\Models\DealStageChange;
-use App\Models\QualifiedSale;
-use App\Models\AuthorizationAction;
-use App\Models\AwardTimeIncress;
-use DataTables;
+use App\Models\Project;
 use App\Models\BasicSeo;
-use App\Models\BlogArticle;
-use App\Models\ProductCategoryCollection;
-use App\Models\ProductDescription;
+use App\Models\Contract;
+use App\Models\Currency;
+use App\Models\PMAssign;
+use App\Models\RoleUser;
+use App\Mail\WonDealMail;
+use App\Models\CashPoint;
+use App\Models\DealStage;
+use App\Models\PMProject;
+use App\Models\ClientForm;
+use App\Models\kpiSetting;
+use App\Models\SalesCount;
 use App\Models\WebContent;
-use App\Notifications\HourlyDealNotification;
+use App\Models\BlogArticle;
+use App\Models\CustomField;
+use App\Models\ContractSign;
+use App\Models\ContractType;
+use Illuminate\Http\Request;
+use App\Models\ClientDetails;
+use App\Models\PendingAction;
+use App\Models\ProjectMember;
+use App\Models\QualifiedSale;
+use App\Models\CustomFieldData;
+use App\Models\DealStageChange;
+use App\Models\EmployeeDetails;
+use App\Models\AwardTimeIncress;
+use App\Models\ContractTemplate;
+use App\Models\ProjectMilestone;
+use App\Models\PendingActionPast;
+use App\Traits\CustomFieldsTrait;
+use App\Models\ContractCustomForm;
+use App\Models\ProductDescription;
+use Illuminate\Support\Facades\DB;
+use App\Events\ContractSignedEvent;
+use App\Models\AuthorizationAction;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
+use App\DataTables\WonDealsDataTable;
+use App\Models\LeadsDealsActivityLog;
+use App\Models\kpiSettingGenerateSale;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\ProductCategoryCollection;
+use Illuminate\Support\Facades\Validator;
 use App\Notifications\WonDealNotification;
+use App\Notifications\HourlyDealNotification;
+use App\Http\Requests\Admin\Contract\StoreRequest;
+use App\Http\Requests\ClientContracts\SignRequest;
+use App\Http\Requests\Admin\Contract\UpdateRequest;
 use App\Http\Controllers\HelperPendingActionController;
+use App\Notifications\DealAuthorizationSendNotification;
 
 class ContractController extends AccountBaseController
 {
@@ -226,7 +226,7 @@ class ContractController extends AccountBaseController
             return $next($request);
         });
         $deal = Deal::where('id', $id)->first();
-
+        if($deal->status!='pending') abort_403(true);
         return view('contracts.editdealdetails', $this->data, compact('deal'));
     }
 //storing new deals
@@ -464,7 +464,7 @@ class ContractController extends AccountBaseController
     //storing lead to deal
     public function storeLeadDeal(Request $request)
     {
-            //    dd($request->all());
+        // dd($request->all());
         \DB::beginTransaction();
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
@@ -554,6 +554,7 @@ class ContractController extends AccountBaseController
         $deal->currency_id = 1;
         $deal->project_type = $request->project_type;
         $deal->actual_amount =  $request->amount;
+        $deal->is_drafted = 1;
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //  dd($currency);
         $deal->amount = ($request->amount) / $currency->exchange_rate;
@@ -1272,6 +1273,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
+        if(!$request->is_drafted){
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
@@ -1422,51 +1424,36 @@ class ContractController extends AccountBaseController
                 }
             }
 
-
             $deal_pm_id = Deal::where('id', $request->id)->first();
-
             $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
-
             $project_admin_update = Project::find($project_id->id);
             $project_admin_update->added_by = $project_id->pm_id;
             $project_admin_update->project_admin = $project_id->pm_id;
             $project_admin_update->save();
 
-
-            //qualified sales start from here
             $qualified_sale = new QualifiedSale();
             $qualified_sale->project_name = $deal->project_name;
 
             $qualified_sale->deal_id = $deal->id;
-
             $qualified_sale->project_id = $project->id;
             $qualified_sale->deal_short_code = $deal->deal_id;
-
             $qualified_sale->date = Carbon::now();
-
             $qualified_sale->client_id = $deal->client_id;
-
             $qualified_sale->client_name = $deal->client_name;
             $qualified_sale->pm_id = $project_id->pm_id;
-
             $qualified_sale->pm_name = $project_id->pm_name->name;
-
             // $actual_currency= Currency::where('id',$deal->currency_id)->first();
 
             $qualified_sale->amount = $deal->amount;
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
+
             $qualified_sale->save();
-        //  /   dd($qualified_sale);
             $helper = new HelperPendingActionController();
 
 
             $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
 
 
-
-
-
-            //qualified sales start from here
 
             $user = User::where('id', $deal_pm_id->pm_id)->first();
             $this->triggerPusher('notification-channel', 'notification', [
@@ -1524,9 +1511,7 @@ class ContractController extends AccountBaseController
             // //dd($clientdetail);
             // $clientdetail->company_name= $request->organization;
             // $clientdetail->save();
-            $deal = Deal::find($deal->id);
-            $deal->authorization_status = 2;
-            $deal->save();
+
 
             $sender = User::where('id', Auth::id())->first();
 
@@ -1559,6 +1544,14 @@ class ContractController extends AccountBaseController
                     'redirectUrl' => route('deals.show', $project_id->deal_id)
                 ]);
             }
+
+        }
+
+        $deal = Deal::find($deal->id);
+        $deal->authorization_status = $request->is_drafted ? 0 : 2;
+        $deal->is_drafted = $request->is_drafted;
+        $deal->released_at = $request->is_drafted ? null : Carbon::now();
+        $deal->save();
 
           //  dd($project);
             //need pending action
@@ -1674,6 +1667,9 @@ class ContractController extends AccountBaseController
         $milestone = ProjectMilestone::where('project_id', $project_milestone->id)->first();
         //      dd($milestone);
         $won_deal_id = Deal::where('id', $request->id)->first();
+
+        if(!$won_deal_id->is_drafted && $request->is_drafted) abort_403(true);
+
         if ($won_deal_id->project_type != 'hourly') {
 
 
@@ -1815,7 +1811,7 @@ class ContractController extends AccountBaseController
             $client->name = $request->client_name;
             $client->save();
 
-            if ($deal->pm_id == null) {
+            if ($deal->pm_id == null && ($deal->is_drafted && !$request->is_drafted)) {
                 $lead_developer_id = RoleUser::where('role_id', 6)->get();
                 //dd($lead_developer_id);
                 foreach ($lead_developer_id as $lead) {
@@ -2071,9 +2067,12 @@ class ContractController extends AccountBaseController
 
 
             }
-            // $deal= Deal::find($deal->id);
-            //         $deal->authorization_status= 2;
-            //         $deal->save();
+            $deal= Deal::find($deal->id);
+            $deal->authorization_status = $deal->is_drafted && !$request->is_drafted ? 2 : $deal->authorization_status;
+            $deal->is_drafted = $request->is_drafted;
+            $deal->released_at = $request->is_drafted ? null : Carbon::now();
+            $deal->save();
+
             //         $sender= User::where('id',Auth::id())->first();
             //         $users= User::where('role_id',8)->orWhere('role_id',1)->get();
 
@@ -2459,6 +2458,8 @@ class ContractController extends AccountBaseController
 
     public function authorization_request(Deal $data)
     {
+        if($data->is_drafted) abort_403(true);
+
         $this->pageTitle = 'Authorize Deal';
         $this->middleware(function ($request, $next) {
             abort_403(!in_array('contracts', $this->user->modules));
@@ -3035,7 +3036,35 @@ public function getAllContracts(Request $request){
     }
 
     if (Auth::user()->role_id == 4) {
-        $dealsQuery->where('deals.pm_id',Auth::id());
+        $now = \Carbon\Carbon::now()->toDateTimeString();
+        $dealsQuery->where('deals.pm_id',Auth::id())
+        ->where('is_drafted', 0)
+        ->where(function ($query) use ($now) {
+            $query->where('authorization_status', 1)
+                ->orWhere(function ($subquery) use ($now) {
+                    $subquery->where('authorization_status', 2)
+                        ->where(function ($innerSubquery) use ($now) {
+                            $innerSubquery->whereRaw('
+                                (
+                                    (
+                                        (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                        AND (DATE(released_at) < CURDATE())
+                                    )
+                                    OR
+                                    (
+                                        (TIME(released_at) >= "23:30" OR TIME(released_at) < "07:00")
+                                        AND TIME(?) >= "10:00"
+                                    )
+                                    OR
+                                    (
+                                        TIME(released_at) >= "07:00" AND TIME(released_at) < "23:30"
+                                        AND TIMESTAMPDIFF(SECOND, released_at, ?) > ?
+                                    )
+                                )
+                            ', [$now, $now, (180 * 60)]);
+                        });
+                });
+        });
     }
     $deals = $dealsQuery
         ->orderBy('deals.id', 'desc')

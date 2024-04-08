@@ -5,12 +5,15 @@
         <div class="content-wrapper">
             <!-- Task Box Start -->
             <div class="d-flex flex-column">
-
                 @if (! $addedBefore)
                 <div id="salePolicyQuestion"></div>
                 @else
-                <div id="salePolicyQuestionNotice"></div>
+                <div id="salePolicyQuestionNotice" data-status="{{ $dealStatus }}"></div>
                 @endif
+                <div id="data"
+                data-redirect-Url="{{ $redirectUrl }}"
+                
+                ></div>
             </div>
             <!-- Task Box End -->
         </div>

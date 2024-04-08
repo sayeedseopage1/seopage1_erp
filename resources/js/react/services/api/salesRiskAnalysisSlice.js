@@ -178,9 +178,18 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
         saleRiskQuestionDealReport: build.query({
             query: (deal_id) => `account/sales-risk-policies/deals/report/${deal_id}`,
         }),
+        salesRiskDealsQuestionList: build.query({
+            query: (query) => `account/deals/risk-analysis/question/list?${query}`,
+        }),
+        salesRiskDealsQuestionListByPolicyId: build.query({
+            query: (policy_id) => `account/deals/risk-analysis/question/list?policy_id=${policy_id}`,
+        }),
         saleRiskAnalysisReportTableData: build.query({
             query: (query) => `account/sales-analysis-reports/data?${query}`,
         }),
+        saleRiskAnalysisActions: build.query({
+            query: (query) => `/account/sales-risk-policies/deals/authorize-deny/${query.deal_id}/${query.action}`,
+        })
     })
 });
 
@@ -205,4 +214,7 @@ export const {
     useSaleRiskQuestionDealReportQuery,
     useSaleAnalysisQuestionByPolicyIdQuery,
     useSaleRiskAnalysisReportTableDataQuery,
+    useSalesRiskDealsQuestionListQuery,
+    useSalesRiskDealsQuestionListByPolicyIdQuery,
+    useLazySaleRiskAnalysisActionsQuery
 } = salesRiskAnalysisApiSlice;

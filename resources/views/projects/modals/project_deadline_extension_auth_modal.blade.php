@@ -62,6 +62,7 @@
         var data= {
             '_token': "{{ csrf_token() }}",
             'type': $('#acceptBtn').val(),
+            'old_deadline': document.getElementById("current_deadline").value,
             'new_deadline': document.getElementById("new_deadline").value,
             'admin_comment': admin_comment,
             'pde_id': {{$pde->id}},

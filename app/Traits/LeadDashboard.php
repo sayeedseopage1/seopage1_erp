@@ -2001,7 +2001,7 @@ trait LeadDashboard
     
                 $estimate_minutes_task = $task->estimate_hours * 60 + $task->estimate_minutes;
     
-                if ($log_time_per_task > $estimate_minutes_task) {
+                if ($log_time_per_task??0 > $estimate_minutes_task) {
                     $number_task_cross_estimate_time++;
                 }
     

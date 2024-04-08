@@ -23,8 +23,8 @@ import { isArrayObjectEmpty } from "../../../utils/stateValidation";
 
 // Api
 import {
-    useSaleAnalysisQuestionsListQuery,
     useSaleRiskQuestionAnswerSaveMutation,
+    useSalesRiskDealsQuestionListQuery,
 } from "../../../services/api/salesRiskAnalysisSlice";
 
 const SalesRiskQuestions = () => {
@@ -49,7 +49,7 @@ const SalesRiskQuestions = () => {
         return new URLSearchParams(queryObject).toString();
     };
     // fetch policy questions
-    const { data, isLoading } = useSaleAnalysisQuestionsListQuery(
+    const { data, isLoading } = useSalesRiskDealsQuestionListQuery(
         queryString({
             page: pageIndex + 1,
             limit: pageSize,
@@ -114,7 +114,7 @@ const SalesRiskQuestions = () => {
     }, [questions?.data]);
 
     const handleSubmit = async () => {
-        const skipKey = ["is_Active_YesNo", "parent_id"]
+        const skipKey = ["is_Active_YesNo", "parent_id"];
         const isEmpty = isArrayObjectEmpty(inputsData, skipKey);
         if (isEmpty) {
             setIsSubmitting(true);
@@ -142,7 +142,8 @@ const SalesRiskQuestions = () => {
                     setIsSubmitting(false);
                 }
             } catch (error) {
-                console.log(error);toast.error("Something went wrong");
+                console.log(error);
+                toast.error("Something went wrong");
             }
         }
     };
@@ -256,6 +257,8 @@ const SalesRiskQuestions = () => {
 
         return setInputsData(addSelectValue);
     };
+
+    console.log(questions?.data);
 
     return (
         <section>

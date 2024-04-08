@@ -171,8 +171,11 @@ $countries = App\Models\Country::all();
                             <td class="f-14 text-dark">
                                 <p class="mb-0 text-left"><span
                                         class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
+                                        @if($project->clientdetails->company_name)
+                                        {{ mb_ucwords($project->clientdetails->company_name) }}<br>
+                                        @endif
                                         {{ mb_ucwords($project->client->name) }}<br>
-                                          {{ mb_ucwords($project->client->email) }}<br>
+                                        {{ mb_ucwords($project->client->email) }}<br>
 
 
                             </td>

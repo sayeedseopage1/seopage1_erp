@@ -27,7 +27,7 @@
                 class="cross_departmental_work" />
 
             @if (auth()->user()->role_id == 1)
-            <x-tab :href="route('contracts.show', $contract->id).'?tab=sales-analysis-report'" :text="__('Sales Analysis Report')" ajax="false"  />
+            <x-tab :href="route('contracts.show', $contract->id).'?tab=sales-analysis-report'" :text="__('Sales Analysis Report')" ajax="false" class="sales-analysis-report" />
             @endif
 
 
