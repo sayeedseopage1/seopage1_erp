@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 // Section component
 import SaleRiskAuthorizeHeader from "../components/sections/SaleRiskAuthorizeHeader";
@@ -26,10 +27,9 @@ import { Placeholder } from "../../../global/Placeholder";
 
 // api
 import {
-    useLazySaleRiskAnalysisActionsQuery,
     useSaleRiskQuestionDealReportQuery,
+    useSaleRiskAnalysisActionsMutation,
 } from "../../../services/api/salesRiskAnalysisSlice";
-import Toaster from "../../../global/Toaster";
 
 const SalesRiskAuthorize = () => {
     const [status, setStatus] = useState("");
@@ -60,16 +60,9 @@ const SalesRiskAuthorize = () => {
         }
     }, [data?.data, isLoading]);
 
-    const [] = useLazySaleRiskAnalysisActionsQuery();
-
     // project extend images Api call
-    const [
-        saleRiskAnalysisActionHandler,
-        {
-            data: saleRiskAnalysisActions,
-            isLoading: saleRiskAnalysisActionsLoading,
-        },
-    ] = useLazySaleRiskAnalysisActionsQuery();
+    const [saleRiskAnalysisActionHandler, { isLoading: isActionLoading }] =
+        useSaleRiskAnalysisActionsMutation();
 
     const handleAuthorize = async (status) => {
         try {
@@ -81,13 +74,15 @@ const SalesRiskAuthorize = () => {
             const res = await saleRiskAnalysisActionHandler(payload);
             if (res?.data) {
                 // show success message
-                if (status === "authorize") {
+                if (status === 1) {
                     toast.success("Sale Risk Analysis Authorized Successfully");
                 } else {
                     toast.success("Sale Risk Analysis Denied Successfully");
                 }
             }
-        } catch (error) {}
+        } catch (error) {
+            toast.error("Something went wrong");
+        }
     };
 
     return (
@@ -153,9 +148,9 @@ const SalesRiskAuthorize = () => {
                                     onClick={() => {
                                         handleAuthorize(1);
                                     }}
-                                    disabled={isLoading}
+                                    disabled={isActionLoading}
                                 >
-                                    {isLoading && status === 1
+                                    {isActionLoading && status === 1
                                         ? "Authorizing.."
                                         : "Authorize"}
                                 </SaleRiskAuthorizeButton>
@@ -166,9 +161,9 @@ const SalesRiskAuthorize = () => {
                                     onClick={() => {
                                         handleAuthorize(0);
                                     }}
-                                    disabled={isLoading}
+                                    disabled={isActionLoading}
                                 >
-                                    {isLoading && status === 1
+                                    {isActionLoading && status === 0
                                         ? "Saving.."
                                         : "Deny"}
                                 </SaleRiskAuthorizeButton>
