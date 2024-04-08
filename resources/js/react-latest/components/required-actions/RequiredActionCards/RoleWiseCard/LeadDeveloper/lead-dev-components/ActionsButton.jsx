@@ -12,14 +12,15 @@ import { useDispatch } from "react-redux";
 
 import { useGetCommentsQuery } from "../../../../../../services/api/commentsApiSlice";
 import { useWindowSize } from "react-use";
-import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
+
 import RelevantModal from "../../Developer/dev-components/RelevantModal";
-import CommentsBody from "../../../../../../../react/UI/comments/CommentsBody";
+
 import CommentBodyForPendingActions from "../../../../../../../react/UI/comments/CommentBodyForPendingActions";
 import CommentContainerDecider from "../../../../../../../react/UI/comments/CommentContainerDecider";
 import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
+import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
@@ -29,7 +30,7 @@ const ActionsButton = ({ data }) => {
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
     const [viewModal, setViewModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
-    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
+    const [acknowledgement, setAcknowledgement] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
 
@@ -72,6 +73,7 @@ const ActionsButton = ({ data }) => {
                         <div>
                             {btn.button_name === "View and Reply" && (
                                 <button
+                                    key={i}
                                     onClick={() => {
                                         setViewCommentModal((prev) => !prev);
                                         dispatch(setPendingActionId(data?.id));
@@ -84,6 +86,7 @@ const ActionsButton = ({ data }) => {
 
                             {btn.button_name === "Not relevant to me" && (
                                 <button
+                                    key={i}
                                     onClick={() => {
                                         setIsRelevantModal((prev) => !prev);
 
@@ -96,6 +99,7 @@ const ActionsButton = ({ data }) => {
                             )}
                             {btn.button_name === "View" && (
                                 <button
+                                    key={i}
                                     onClick={() =>
                                         setViewModal((prev) => !prev)
                                     }
@@ -135,16 +139,16 @@ const ActionsButton = ({ data }) => {
 
             {/* mitul work start */}
 
-            {/* {data?.task_id && (
+            {data?.task_id && (
                 <button
-                    onClick={() => setIsEvaluationModal((prev) => !prev)}
+                    onClick={() => setAcknowledgement((prev) => !prev)}
                     className={`${style.action_btn}`}
                 >
-                    Evaluate
+                    Acknowledge it
                 </button>
-            )} */}
+            )}
 
-            {/* this modal is for view and reply button  */}
+            {/* this modal is for live view and reply button  */}
             <CommentContainerDecider
                 fullScreenView={fullScreenView}
                 isOpen={viewCommentModal}
@@ -195,9 +199,9 @@ const ActionsButton = ({ data }) => {
                 isRelevantModal={isRelevantModal}
             />
 
-            <EvaluationModal
-                setIsEvaluationModal={setIsEvaluationModal}
-                isEvaluationModal={isEvaluationModal}
+            <EvaluationAcknowledgeModal
+                setAcknowledgement={setAcknowledgement}
+                acknowledgement={acknowledgement}
             />
         </>
     );

@@ -2,7 +2,6 @@ import ModalForm from "./ModalForm";
 import ModalWithBtnTemplate from "./ModalWithBtnTemplate";
 import style from "../../../../../../styles/required-action-card.module.css";
 import handleBtnDisable from "../../../../utils/handleBtnDisable";
-import EvaluationModal from "../../../EmployeeEvaluation/modal/EvaluationModal";
 import React, { useEffect, useState } from "react";
 
 //mitul work start
