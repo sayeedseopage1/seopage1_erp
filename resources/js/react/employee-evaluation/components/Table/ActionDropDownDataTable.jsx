@@ -11,10 +11,11 @@ import useEmployeeEvaluation from "../../../zustand/store";
 const ActionDropdownDataTable = ({ data, table }) => {
     const { setEvaluationObject } = useEmployeeEvaluation();
     const location = useLocation();
-    const queryParams = new URLSearchParams(location.search);
-
+    const userIdFromParam = new URLSearchParams(location.search).get("user_id");
     const auth = useAuth();
-    const [isEvaluationModal, setIsEvaluationModal] = React.useState(false);
+    const [isEvaluationModal, setIsEvaluationModal] = useState(
+        userIdFromParam === data.user_id
+    );
     const [toolTipTeamLead, setToolTipTeamLead] = React.useState("");
     const [toolTipAdmin, setToolTipAdmin] = React.useState("");
     const [buttonVariant, setButtonVariant] = React.useState("");
@@ -269,11 +270,13 @@ const ActionDropdownDataTable = ({ data, table }) => {
                 </Switch>
             </div>
 
-            <EvaluationModal
-                singleEvaluation={data}
-                setIsEvaluationModal={setIsEvaluationModal}
-                isEvaluationModal={isEvaluationModal}
-            />
+            {userIdFromParam === data.user_id && (
+                <EvaluationModal
+                    singleEvaluation={data}
+                    setIsEvaluationModal={setIsEvaluationModal}
+                    isEvaluationModal={isEvaluationModal}
+                />
+            )}
 
             <Tooltip id="my-tooltip" style={{ zIndex: 99999999999999 }} />
         </React.Fragment>
