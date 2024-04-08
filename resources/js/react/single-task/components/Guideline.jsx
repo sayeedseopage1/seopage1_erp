@@ -58,7 +58,8 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         task_id,
         type_of_graphic_work_id,
         type_of_logo,
-        updated_at
+        updated_at,
+        workable_url
     } = commonGraphicWorkDetails;
 
     const commonUiUixWorkDetails = singleTask?.cms !== null ? singleTask : subUiUixDetails
@@ -92,182 +93,45 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
         setExpend(false)
     })
 
-    return (
-        <div className='sp1_task_card--sub-card'>
-            {/* graphics and ui start  */}
-            {
-                singleTask?.category?.category_name === "Graphic Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
-                    <h6 className="mb-2">Graphic Work Details</h6>
-                    <hr />
-                    <div className="row">
-                        {
-                            typeOfGraphicsCategoryName && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
-                            </div>
-                        }
-                        {
-                            type_of_graphic_work_id === 1 && <>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Type of Logo</strong>: <br /> {type_of_logo}</span>
-                                </div>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Brand Name</strong>: <br /> {brand_name}</span>
-                                </div>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Number of Versions</strong>: <br /> {number_of_versions}</span>
-                                </div>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded.join(", ")}</span>
-                                </div>
-                            </>
-                        }
-                        {
-                            (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && <>
-                                <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                    <div>
-                                        <strong>Attach text that will be used for the design</strong>: <br /> <FileUploader>
-                                            {_.map(
-                                                defaultTextForDesign,
-                                                (attachment) => {
-                                                    const file_icon = attachment?.filename.split(".").pop();
 
-                                                    return attachment?.filename ? (
-                                                        <FileUploader.Preview
-                                                            key={attachment?.id}
-                                                            fileName={attachment?.filename}
-                                                            downloadAble={true}
-                                                            deleteAble={false}
-                                                            downloadUrl={attachment?.file_url}
-                                                            previewUrl={attachment?.file_url}
-                                                            fileType={
-                                                                _.includes(
-                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                    file_icon
-                                                                )
-                                                                    ? "images"
-                                                                    : "others"
-                                                            }
-                                                            classname="comment_file"
-                                                            ext={file_icon}
-                                                        />
-                                                    ) : null;
-                                                }
-                                            )}
-                                        </FileUploader>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                        {
-                            (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && <>
-                                <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                    <div>
-                                        <strong>Image where the designer will work</strong>: <br /> <FileUploader>
-                                            {_.map(
-                                                defaultImageForDesigner,
-                                                (attachment) => {
-                                                    const file_icon = attachment?.filename.split(".").pop();
+    // Graphics and Ui task Details for common use start********************************
+    const GraphicsAndUiDetails = <>
+        {/* graphics and ui start  */}
 
-                                                    return attachment?.filename ? (
-                                                        <FileUploader.Preview
-                                                            key={attachment?.id}
-                                                            fileName={attachment?.filename}
-                                                            downloadAble={true}
-                                                            deleteAble={false}
-                                                            downloadUrl={attachment?.file_url}
-                                                            previewUrl={attachment?.file_url}
-                                                            fileType={
-                                                                _.includes(
-                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                    file_icon
-                                                                )
-                                                                    ? "images"
-                                                                    : "others"
-                                                            }
-                                                            classname="comment_file"
-                                                            ext={file_icon}
-                                                        />
-                                                    ) : null;
-                                                }
-                                            )}
-                                        </FileUploader>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                        {
-                            type_of_graphic_work_id === 8 && <>
-                                <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                    <div>
-                                        <strong>Images/videos that will be used for the work</strong>: <br /> <FileUploader>
-                                            {_.map(
-                                                defaultImgOrVidForWork,
-                                                (attachment) => {
-                                                    const file_icon = attachment?.filename.split(".").pop();
+        {
+            singleTask?.category?.category_name === "Graphic Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
+                <h6 className="mb-2">Graphic Work Details</h6>
+                <hr />
+                <div className="row">
+                    {
+                        typeOfGraphicsCategoryName && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
+                        </div>
+                    }
+                    {
+                        type_of_graphic_work_id === 1 && <>
+                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <span><strong>Type of Logo</strong>: <br /> {type_of_logo}</span>
+                            </div>
+                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <span><strong>Brand Name</strong>: <br /> {brand_name}</span>
+                            </div>
+                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <span><strong>Number of Versions</strong>: <br /> {number_of_versions}</span>
+                            </div>
+                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded.join(", ")}</span>
+                            </div>
+                        </>
+                    }
 
-                                                    return attachment?.filename ? (
-                                                        <FileUploader.Preview
-                                                            key={attachment?.id}
-                                                            fileName={attachment?.filename}
-                                                            downloadAble={true}
-                                                            deleteAble={false}
-                                                            downloadUrl={attachment?.file_url}
-                                                            previewUrl={attachment?.file_url}
-                                                            fileType={
-                                                                _.includes(
-                                                                    ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                    file_icon
-                                                                )
-                                                                    ? "images"
-                                                                    : "others"
-                                                            }
-                                                            classname="comment_file"
-                                                            ext={file_icon}
-                                                        />
-                                                    ) : null;
-                                                }
-                                            )}
-                                        </FileUploader>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                        {
-                            (type_of_graphic_work_id === 7 || type_of_graphic_work_id === 9) && <>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <div>
-                                        <strong>Name of the illustration work</strong>: <br /> <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: design_instruction }}>
-                                        </div>
-                                    </div>
-                                </div>
-                            </>
-                        }
-                        {
-                            font_name && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Font Name</strong>: <br /> {font_name}</span>
-                            </div>
-                        }
-                        {
-                            referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}>
-                                    {
-                                        !validateUrl(item?.reference) ? item?.reference : <a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a>
-                                    }
-
-                                </li>)}</span>
-                            </div>
-                        }
-                        {
-                            font_url && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Font Url</strong>: <br /> <a target="__blank" href={font_url}>{font_url}</a></span>
-                            </div>
-                        }
-                        {
-                            defaultBrandGuidelineFiles?.length > 0 && <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
+                    {
+                        type_of_graphic_work_id === 8 && <>
+                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
                                 <div>
-                                    <strong>Brand Guideline</strong>: <br /> <FileUploader>
+                                    <strong>Images/videos that will be used for the work</strong>: <br /> <FileUploader>
                                         {_.map(
-                                            defaultBrandGuidelineFiles,
+                                            defaultImgOrVidForWork,
                                             (attachment) => {
                                                 const file_icon = attachment?.filename.split(".").pop();
 
@@ -296,68 +160,247 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
                                     </FileUploader>
                                 </div>
                             </div>
-                        }
-                    </div>
-                    {/* color schema */}
+                        </>
+                    }
                     {
-                        (primary_color || defaultSecondaryColors) && <div className="row">
-                            <div className="col-12">
-                                <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
-                                <div className='mb-3 rounded'>
-                                    <div className='row' style={{ marginLeft: "0px" }}>
-                                        <div className='col-12 col-md-6 px-0'>
-                                            <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
-                                            <ColorItem color={primary_color} desc={primary_color_description} />
-                                        </div>
+                        (type_of_graphic_work_id === 7 || type_of_graphic_work_id === 9) && <>
+                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                <div>
+                                    <strong>Name of the illustration work</strong>: <br /> <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: design_instruction }}>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    }
+                    {
+                        font_name && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>Font Name</strong>: <br /> {font_name}</span>
+                        </div>
+                    }
+                    {
+                        referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}>
+                                {
+                                    !validateUrl(item?.reference) ? item?.reference : <a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a>
+                                }
 
-                                        <div className='col-12 col-md-6 px-0'>
-                                            <p className='font-weight-bold mr-2 mb-2'>
-                                                {
-                                                    defaultSecondaryColors?.length > 1
-                                                        ? "Secondary Colors: "
-                                                        : "Secondary Color: "
-                                                }
-                                            </p>
+                            </li>)}</span>
+                        </div>
+                    }
+                    {
+                        font_url && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>Font Url</strong>: <br /> <a target="__blank" href={font_url}>{font_url}</a></span>
+                        </div>
+                    }
+                    {
+                        (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && <>
+                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                <div>
+                                    <strong>Attach text that will be used for the design</strong>: <br />
+                                    <div>
+                                        {
+                                            workable_url && <div>
+                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>URL</span>: <br />
+                                                <a href={workable_url} target="_blank">{workable_url}</a>
+                                            </div>
+                                        }
+                                        {
+                                            defaultTextForDesign && <div>
+                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultTextForDesign?.length > 1 ? "Files" : "File"}</span>: <br />
+                                                <FileUploader>
+                                                    {_.map(
+                                                        defaultTextForDesign,
+                                                        (attachment) => {
+                                                            const file_icon = attachment?.filename.split(".").pop();
+
+                                                            return attachment?.filename ? (
+                                                                <FileUploader.Preview
+                                                                    key={attachment?.id}
+                                                                    fileName={attachment?.filename}
+                                                                    downloadAble={true}
+                                                                    deleteAble={false}
+                                                                    downloadUrl={attachment?.file_url}
+                                                                    previewUrl={attachment?.file_url}
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                            file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={file_icon}
+                                                                />
+                                                            ) : null;
+                                                        }
+                                                    )}
+                                                </FileUploader></div>
+                                        }
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </>
+                    }
+                    {
+                        (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && <>
+                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                <div>
+                                    <strong>Image where the designer will work</strong>: <br />
+                                    <div>
+                                        {
+                                            workable_url && <div>
+                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>URL</span>: <br />
+                                                <a href={workable_url} target="_blank">{workable_url}</a>
+                                            </div>
+                                        }
+                                        {
+                                            defaultImageForDesigner && <div>
+                                                <span style={{ fontSize: "10px", fontWeight: "500" }}>{defaultTextForDesign?.length > 1 ? "Files" : "File"}</span>: <br />
+
+                                                <FileUploader>
+                                                    {_.map(
+                                                        defaultImageForDesigner,
+                                                        (attachment) => {
+                                                            const file_icon = attachment?.filename.split(".").pop();
+
+                                                            return attachment?.filename ? (
+                                                                <FileUploader.Preview
+                                                                    key={attachment?.id}
+                                                                    fileName={attachment?.filename}
+                                                                    downloadAble={true}
+                                                                    deleteAble={false}
+                                                                    downloadUrl={attachment?.file_url}
+                                                                    previewUrl={attachment?.file_url}
+                                                                    fileType={
+                                                                        _.includes(
+                                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                                            file_icon
+                                                                        )
+                                                                            ? "images"
+                                                                            : "others"
+                                                                    }
+                                                                    classname="comment_file"
+                                                                    ext={file_icon}
+                                                                />
+                                                            ) : null;
+                                                        }
+                                                    )}
+                                                </FileUploader>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    }
+                    {
+                        defaultBrandGuidelineFiles?.length > 0 && <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
+                            <div>
+                                <strong>Brand Guideline</strong>: <br /> <FileUploader>
+                                    {_.map(
+                                        defaultBrandGuidelineFiles,
+                                        (attachment) => {
+                                            const file_icon = attachment?.filename.split(".").pop();
+
+                                            return attachment?.filename ? (
+                                                <FileUploader.Preview
+                                                    key={attachment?.id}
+                                                    fileName={attachment?.filename}
+                                                    downloadAble={true}
+                                                    deleteAble={false}
+                                                    downloadUrl={attachment?.file_url}
+                                                    previewUrl={attachment?.file_url}
+                                                    fileType={
+                                                        _.includes(
+                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
+                                                            file_icon
+                                                        )
+                                                            ? "images"
+                                                            : "others"
+                                                    }
+                                                    classname="comment_file"
+                                                    ext={file_icon}
+                                                />
+                                            ) : null;
+                                        }
+                                    )}
+                                </FileUploader>
+                            </div>
+                        </div>
+                    }
+                </div>
+                {/* color schema */}
+                {
+                    (primary_color || defaultSecondaryColors) && <div className="row">
+                        <div className="col-12">
+                            <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
+                            <div className='mb-3 rounded'>
+                                <div className='row' style={{ marginLeft: "0px" }}>
+                                    <div className='col-12 col-md-6 px-0'>
+                                        <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
+                                        <ColorItem color={primary_color} desc={primary_color_description} />
+                                    </div>
+
+                                    <div className='col-12 col-md-6 px-0'>
+                                        <p className='font-weight-bold mr-2 mb-2'>
                                             {
-                                                defaultSecondaryColors?.map((color, i) => (
-                                                    <ColorItem key={i + color} color={color?.color}
-                                                        desc={color?.description} />
-                                                ))
+                                                defaultSecondaryColors?.length > 1
+                                                    ? "Secondary Colors: "
+                                                    : "Secondary Color: "
                                             }
-                                        </div>
+                                        </p>
+                                        {
+                                            defaultSecondaryColors?.map((color, i) => (
+                                                <ColorItem key={i + color} color={color?.color}
+                                                    desc={color?.description} />
+                                            ))
+                                        }
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
-                    {/* end color schema */}
-                </div>
-            }
-            {singleTask?.category?.category_name === "Graphic Design" && <hr />}
-            {
-                singleTask?.category?.category_name === "UI/UIX Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
-                    <h6 className="mb-2">UI/UIX Work Details</h6>
-                    <hr />
-                    <div className="row">
-                        {
-                            cms && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>CMS</strong>: <br /> {cms}</span>
-                            </div>
-                        }
-                        {
-                            theme_name && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Theme Name</strong>: <br /> {theme_name}</span>
-                            </div>
-                        }
-                        {
-                            theme_template_library_link && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                <span><strong>Theme Template Library URL</strong>: <br /> <a target="__blank" href={theme_template_library_link}>{theme_template_library_link}</a></span>
-                            </div>
-                        }
                     </div>
+                }
+                {/* end color schema */}
+            </div>
+        }
+        {singleTask?.category?.category_name === "Graphic Design" && <hr />}
+        {
+            singleTask?.category?.category_name === "UI/UIX Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
+                <h6 className="mb-2">UI/UIX Work Details</h6>
+                <hr />
+                <div className="row">
+                    {
+                        cms && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>CMS</strong>: <br /> {cms}</span>
+                        </div>
+                    }
+                    {
+                        theme_name && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>Theme Name</strong>: <br /> {theme_name}</span>
+                        </div>
+                    }
+                    {
+                        theme_template_library_link && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                            <span><strong>Theme Template Library URL</strong>: <br /> <a target="__blank" href={theme_template_library_link}>{theme_template_library_link}</a></span>
+                        </div>
+                    }
                 </div>
-            }
-            {singleTask?.category?.category_name === "UI/UIX Design" && <hr />}
+            </div>
+        }
+        {singleTask?.category?.category_name === "UI/UIX Design" && <hr />}
+        {/* graphics and ui end  */}
+    </>
+    // Graphics and Ui task Details for common use end********************************
+
+
+    return (
+        <div className='sp1_task_card--sub-card'>
+            {/* graphics and ui start  */}
+            {GraphicsAndUiDetails}
             {/* graphics and ui end  */}
 
             <div>
@@ -414,271 +457,13 @@ const Guideline = ({ text, task, type = "", editorContainerClass, workEnv, singl
 
                         {type === "TASK_DESCRIPTION" ? <h5>Task Description</h5> : null}
 
+
                         {/* graphics and ui start  */}
-                        {
-                            singleTask?.category?.category_name === "Graphic Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
-                                <h6 className="mb-2">Graphic Work Details</h6>
-                                <hr />
-                                <div className="row">
-                                    {
-                                        typeOfGraphicsCategoryName && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Type Of Graphics Work</strong>: <br /> {typeOfGraphicsCategoryName}</span>
-                                        </div>
-                                    }
-                                    {
-                                        type_of_graphic_work_id === 1 && <>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Type of Logo</strong>: <br /> {type_of_logo}</span>
-                                            </div>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Brand Name</strong>: <br /> {brand_name}</span>
-                                            </div>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>Number of Versions</strong>: <br /> {number_of_versions}</span>
-                                            </div>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <span><strong>File Types Needed</strong>: <br /> {defaultFileTypesNeeded.join(", ")}</span>
-                                            </div>
-                                        </>
-                                    }
-                                    {
-                                        (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && <>
-                                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                                <div>
-                                                    <strong>Attach text that will be used for the design</strong>: <br /> <FileUploader>
-                                                        {_.map(
-                                                            defaultTextForDesign,
-                                                            (attachment) => {
-                                                                const file_icon = attachment?.filename.split(".").pop();
-
-                                                                return attachment?.filename ? (
-                                                                    <FileUploader.Preview
-                                                                        key={attachment?.id}
-                                                                        fileName={attachment?.filename}
-                                                                        downloadAble={true}
-                                                                        deleteAble={false}
-                                                                        downloadUrl={attachment?.file_url}
-                                                                        previewUrl={attachment?.file_url}
-                                                                        fileType={
-                                                                            _.includes(
-                                                                                ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                                file_icon
-                                                                            )
-                                                                                ? "images"
-                                                                                : "others"
-                                                                        }
-                                                                        classname="comment_file"
-                                                                        ext={file_icon}
-                                                                    />
-                                                                ) : null;
-                                                            }
-                                                        )}
-                                                    </FileUploader>
-                                                </div>
-                                            </div>
-                                        </>
-                                    }
-                                    {
-                                        (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && <>
-                                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                                <div>
-                                                    <strong>Image where the designer will work</strong>: <br /> <FileUploader>
-                                                        {_.map(
-                                                            defaultImageForDesigner,
-                                                            (attachment) => {
-                                                                const file_icon = attachment?.filename.split(".").pop();
-
-                                                                return attachment?.filename ? (
-                                                                    <FileUploader.Preview
-                                                                        key={attachment?.id}
-                                                                        fileName={attachment?.filename}
-                                                                        downloadAble={true}
-                                                                        deleteAble={false}
-                                                                        downloadUrl={attachment?.file_url}
-                                                                        previewUrl={attachment?.file_url}
-                                                                        fileType={
-                                                                            _.includes(
-                                                                                ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                                file_icon
-                                                                            )
-                                                                                ? "images"
-                                                                                : "others"
-                                                                        }
-                                                                        classname="comment_file"
-                                                                        ext={file_icon}
-                                                                    />
-                                                                ) : null;
-                                                            }
-                                                        )}
-                                                    </FileUploader>
-                                                </div>
-                                            </div>
-                                        </>
-                                    }
-                                    {
-                                        type_of_graphic_work_id === 8 && <>
-                                            <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                                <div>
-                                                    <strong>Images/videos that will be used for the work</strong>: <br /> <FileUploader>
-                                                        {_.map(
-                                                            defaultImgOrVidForWork,
-                                                            (attachment) => {
-                                                                const file_icon = attachment?.filename.split(".").pop();
-
-                                                                return attachment?.filename ? (
-                                                                    <FileUploader.Preview
-                                                                        key={attachment?.id}
-                                                                        fileName={attachment?.filename}
-                                                                        downloadAble={true}
-                                                                        deleteAble={false}
-                                                                        downloadUrl={attachment?.file_url}
-                                                                        previewUrl={attachment?.file_url}
-                                                                        fileType={
-                                                                            _.includes(
-                                                                                ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                                file_icon
-                                                                            )
-                                                                                ? "images"
-                                                                                : "others"
-                                                                        }
-                                                                        classname="comment_file"
-                                                                        ext={file_icon}
-                                                                    />
-                                                                ) : null;
-                                                            }
-                                                        )}
-                                                    </FileUploader>
-                                                </div>
-                                            </div>
-                                        </>
-                                    }
-                                    {
-                                        (type_of_graphic_work_id === 7 || type_of_graphic_work_id === 9) && <>
-                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                <div>
-                                                    <strong>Name of the illustration work</strong>: <br /> <div className={`sp1_ck_content sp1_guideline_text px-2 py-2 rounded`} style={{ backgroundColor: "#E9ECEF" }} dangerouslySetInnerHTML={{ __html: design_instruction }}>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </>
-                                    }
-                                    {
-                                        font_name && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Font Name</strong>: <br /> {font_name}</span>
-                                        </div>
-                                    }
-                                    {
-                                        referenceList && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Reference</strong>: <br /> {referenceList?.map((item, i) => <li key={i}>
-                                                {
-                                                    !validateUrl(item?.reference) ? item?.reference : <a href={item?.reference} target="_blank" rel="noopener noreferrer">{item?.reference}</a>
-                                                }
-
-                                            </li>)}</span>
-                                        </div>
-                                    }
-                                    {
-                                        font_url && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Font Url</strong>: <br /> <a target="__blank" href={font_url}>{font_url}</a></span>
-                                        </div>
-                                    }
-                                    {
-                                        defaultBrandGuidelineFiles?.length > 0 && <div className="col-12 mb-2 word-break" style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                            <div>
-                                                <strong>Brand Guideline</strong>: <br /> <FileUploader>
-                                                    {_.map(
-                                                        defaultBrandGuidelineFiles,
-                                                        (attachment) => {
-                                                            const file_icon = attachment?.filename.split(".").pop();
-
-                                                            return attachment?.filename ? (
-                                                                <FileUploader.Preview
-                                                                    key={attachment?.id}
-                                                                    fileName={attachment?.filename}
-                                                                    downloadAble={true}
-                                                                    deleteAble={false}
-                                                                    downloadUrl={attachment?.file_url}
-                                                                    previewUrl={attachment?.file_url}
-                                                                    fileType={
-                                                                        _.includes(
-                                                                            ["png", "jpeg", "jpg", "svg", "webp", "gif"],
-                                                                            file_icon
-                                                                        )
-                                                                            ? "images"
-                                                                            : "others"
-                                                                    }
-                                                                    classname="comment_file"
-                                                                    ext={file_icon}
-                                                                />
-                                                            ) : null;
-                                                        }
-                                                    )}
-                                                </FileUploader>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-                                {/* color schema */}
-                                {
-                                    (primary_color || defaultSecondaryColors) && <div className="row">
-                                        <div className="col-12">
-                                            <div className='mb-2 f-16' style={{ color: '#878E97' }}><strong>Color Scheme: </strong></div>
-                                            <div className='mb-3 rounded'>
-                                                <div className='row' style={{ marginLeft: "0px" }}>
-                                                    <div className='col-12 col-md-6 px-0'>
-                                                        <p className='font-weight-bold mr-2 mb-2'>Primary Color: </p>
-                                                        <ColorItem color={primary_color} desc={primary_color_description} />
-                                                    </div>
-
-                                                    <div className='col-12 col-md-6 px-0'>
-                                                        <p className='font-weight-bold mr-2 mb-2'>
-                                                            {
-                                                                defaultSecondaryColors?.length > 1
-                                                                    ? "Secondary Colors: "
-                                                                    : "Secondary Color: "
-                                                            }
-                                                        </p>
-                                                        {
-                                                            defaultSecondaryColors?.map((color, i) => (
-                                                                <ColorItem key={i + color} color={color?.color}
-                                                                    desc={color?.description} />
-                                                            ))
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                {/* end color schema */}
-                            </div>
-                        }
-                        {singleTask?.category?.category_name === "Graphic Design" && <hr />}
-                        {
-                            singleTask?.category?.category_name === "UI/UIX Design" && <div className="px-4 py-3" style={{ background: '#F3F5F9' }}>
-                                <h6 className="mb-2">UI/UIX Work Details</h6>
-                                <hr />
-                                <div className="row">
-                                    {
-                                        cms && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>CMS</strong>: <br /> {cms}</span>
-                                        </div>
-                                    }
-                                    {
-                                        theme_name && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Theme Name</strong>: <br /> {theme_name}</span>
-                                        </div>
-                                    }
-                                    {
-                                        theme_template_library_link && <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                            <span><strong>Theme Template Library URL</strong>: <br /> <a target="__blank" href={theme_template_library_link}>{theme_template_library_link}</a></span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                        {singleTask?.category?.category_name === "UI/UIX Design" && <hr />}
+                        {/* This is inside modal  */}
+                        {GraphicsAndUiDetails}
                         {/* graphics and ui end  */}
+
+
                         <div>
                             <h6 className="mb-2">General Description:</h6>
                             <div className={`sp1_ck_content word-break ${editorContainerClass}`} dangerouslySetInnerHTML={{ __html: text }} />
