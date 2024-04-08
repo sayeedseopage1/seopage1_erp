@@ -1106,7 +1106,17 @@ class HelperPendingActionController extends AccountBaseController
    public function NewCommentAdded($taskId,$commentor)
    {
     $task= Task::where('id',$taskId)->first();
-    $task_count= TaskComment::where('task_id',$taskId)->count();
+    $task_added= TaskComment::where('task_id',$taskId)->where('added_by',Auth::user()->id)->latest()->first();
+    if($task_added != null)
+    {
+    $task_count = TaskComment::where('task_id', $taskId)
+                ->where('created_at', '>', $task_added->created_at)
+                ->count();
+
+    }else{
+        $task_count = TaskComment::where('task_id', $taskId)->count();
+    }
+
     if($task->independent_task_status == 0)
     {
         $project= Project::where('id',$task->project_id)->first();
@@ -1127,6 +1137,19 @@ class HelperPendingActionController extends AccountBaseController
         $pending_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->count();
         if(! $pending_action){
             foreach ($allUsers as $key => $authorizer) {
+                
+                $task_added= TaskComment::where('task_id',$taskId)->where('added_by',$authorizer)->latest()->first();
+                if($task_added != null)
+                {
+                $task_count = TaskComment::where('task_id', $taskId)
+                            ->where('created_at', '>', $task_added->created_at)
+                            ->count();
+
+                }else{
+                    $task_count = TaskComment::where('task_id', $taskId)->count();
+                }
+                
+                
                 $action = new PendingAction();
                 $action->code = 'TCOA';
                 $action->serial = 'TCOA'.'x'.$key;
@@ -1199,6 +1222,8 @@ class HelperPendingActionController extends AccountBaseController
             }
         }else{
             $live_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->where('authorization_for', Auth::user()->id)->where('past_status',0)->first();
+            if($live_action != null)
+            {
                 $live_action->authorized_by= Auth::id();
                 $live_action->authorized_at= Carbon::now();
                 $live_action->past_status = 1;
@@ -1234,10 +1259,21 @@ class HelperPendingActionController extends AccountBaseController
                 ];
                 $past_action->button = json_encode($button);
                 $past_action->save();
+            }
             foreach ($allUsers as $key => $authorizer) {
+                $task_added= TaskComment::where('task_id',$taskId)->where('added_by',$authorizer)->latest()->first();
+                if($task_added != null)
+                {
+                $task_count = TaskComment::where('task_id', $taskId)
+                            ->where('created_at', '>', $task_added->created_at)
+                            ->count();
+
+                }else{
+                    $task_count = TaskComment::where('task_id', $taskId)->count();
+                }
                 $active_action = PendingAction::where('task_id',$task->id)->where('code','TCOA')->where('authorization_for', $authorizer)->where('past_status',0)->first();
                 if($active_action){ 
-                    $active_action->heading= 'A new comment has been added! ( '.$task_count.' )';   
+                    $active_action->heading= 'A new comment has been added! ( '.$task_count++.' )';   
                     $active_action->message = 'A new comment has been added by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a> in task <a href="'.route('tasks.show',$task->id).'">'.$task->heading.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
                     $active_action->created_at = Carbon::now();
                     $active_action->updated_at = Carbon::now();
