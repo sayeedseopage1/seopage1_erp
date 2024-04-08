@@ -134,7 +134,8 @@ const SalesRiskQuestions = () => {
                         window.location.reload();
                     }
                 } else {
-                    toast.error("Something went wrong");
+                    console.log(res);
+                    toast.error(res?.message);
                     setIsSubmitting(false);
                 }
             } catch (error) {

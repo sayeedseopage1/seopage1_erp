@@ -179,7 +179,7 @@ const salesRiskAnalysisApiSlice = apiSlice.injectEndpoints({
             query: (deal_id) => `account/sales-risk-policies/deals/report/${deal_id}`,
         }),
         salesRiskDealsQuestionList: build.query({
-            query: (query) => `account/deals/risk-analysis/question/list?${query}`,
+            query: (query) => `account/deals/risk-analysis/question/list`,
         }),
         salesRiskDealsQuestionListByPolicyId: build.query({
             query: (policy_id) => `account/deals/risk-analysis/question/list?policy_id=${policy_id}`,
