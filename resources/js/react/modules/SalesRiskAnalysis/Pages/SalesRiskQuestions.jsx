@@ -254,8 +254,6 @@ const SalesRiskQuestions = () => {
         return setInputsData(addSelectValue);
     };
 
-    console.log(questions);
-
     return (
         <section>
             <SalesRiskAnalysisQuestionContainer>
