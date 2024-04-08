@@ -9,13 +9,21 @@ import { Tooltip } from "react-tooltip";
 import useEmployeeEvaluation from "../../../zustand/store";
 
 const ActionDropdownDataTable = ({ data, table }) => {
+    const [isEvaluationModal, setIsEvaluationModal] = useState(false);
     const { setEvaluationObject } = useEmployeeEvaluation();
     const location = useLocation();
     const userIdFromParam = new URLSearchParams(location.search).get("user_id");
+
+    React.useEffect(() => {
+        // console.log("userIdFromParam:", userIdFromParam);
+        // console.log("data.user_id:", data.user_id);
+        if (userIdFromParam == data.user_id) {
+            setIsEvaluationModal(true);
+        }
+    }, [userIdFromParam]);
+
+    // console.log("is evaluation modal", isEvaluationModal);
     const auth = useAuth();
-    const [isEvaluationModal, setIsEvaluationModal] = useState(
-        userIdFromParam === data.user_id
-    );
     const [toolTipTeamLead, setToolTipTeamLead] = React.useState("");
     const [toolTipAdmin, setToolTipAdmin] = React.useState("");
     const [buttonVariant, setButtonVariant] = React.useState("");
@@ -44,6 +52,13 @@ const ActionDropdownDataTable = ({ data, table }) => {
         }
     }, [data]);
 
+    React.useEffect(() => {
+        if (data?.lead_dev_avg_rating !== null) {
+            setButtonVariant("success");
+        } else if (data?.lead_dev_avg_rating === null) {
+            setButtonVariant("primary");
+        }
+    }, [data]);
     React.useEffect(() => {
         if (data?.lead_dev_avg_rating !== null) {
             setButtonVariant("success");
@@ -270,13 +285,11 @@ const ActionDropdownDataTable = ({ data, table }) => {
                 </Switch>
             </div>
 
-            {userIdFromParam === data.user_id && (
-                <EvaluationModal
-                    singleEvaluation={data}
-                    setIsEvaluationModal={setIsEvaluationModal}
-                    isEvaluationModal={isEvaluationModal}
-                />
-            )}
+            <EvaluationModal
+                singleEvaluation={data}
+                setIsEvaluationModal={setIsEvaluationModal}
+                isEvaluationModal={isEvaluationModal}
+            />
 
             <Tooltip id="my-tooltip" style={{ zIndex: 99999999999999 }} />
         </React.Fragment>
