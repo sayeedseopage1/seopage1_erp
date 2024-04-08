@@ -17,6 +17,7 @@ import CommentContainerDecider from "../../../../../../../react/UI/comments/Comm
 import { useCommentStore } from "../../../../../../../react/UI/comments/zustand/store";
 import { setPendingActionId } from "../../../../../../services/features/pendingActionSlice";
 import CommentsBodyWithoutSendBox from "../../../../../../../react/UI/comments/CommentBodyWithoutSendBox";
+import EvaluationAcknowledgeModal from "../../../EmployeeEvaluation/modal/EvaluationAcknowledgeModal";
 
 const ActionsButton = ({ data }) => {
     const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const ActionsButton = ({ data }) => {
     const [viewCommentModal, setViewCommentModal] = React.useState(false);
     const [viewModal, setViewModal] = React.useState(false);
     const [isRelevantModal, setIsRelevantModal] = React.useState(false);
-
+    const [acknowledgement, setAcknowledgement] = React.useState(false);
     const { width } = useWindowSize();
     const taskId = data?.task_id;
 
@@ -102,6 +103,15 @@ const ActionsButton = ({ data }) => {
                 }
             })}
 
+            {data?.task_id && (
+                <button
+                    onClick={() => setAcknowledgement((prev) => !prev)}
+                    className={`${style.action_btn}`}
+                >
+                    Acknowledge it
+                </button>
+            )}
+
             {/* this modal is for view and reply button  */}
             <CommentContainerDecider
                 fullScreenView={fullScreenView}
@@ -151,6 +161,11 @@ const ActionsButton = ({ data }) => {
             <RelevantModal
                 setIsRelevantModal={setIsRelevantModal}
                 isRelevantModal={isRelevantModal}
+            />
+
+            <EvaluationAcknowledgeModal
+                setAcknowledgement={setAcknowledgement}
+                acknowledgement={acknowledgement}
             />
         </>
     );

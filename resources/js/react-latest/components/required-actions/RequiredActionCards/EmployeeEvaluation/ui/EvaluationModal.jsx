@@ -19,21 +19,22 @@ export const SectionFlex = styled.div`
 
 export const HorizontalLineLeftTL = styled.div`
     height: 3px;
-    background-color: #1d81f4;
-    width: 45%;
+    background-color: #1492e6;
+    width: 40%;
 `;
 
 export const HorizontalLineRightTL = styled.div`
     height: 3px;
-    background-color: #1d81f4;
-    width: 45%;
+    background-color: #1492e6;
+    width: 40%;
 `;
 
 export const ReviewTitleTL = styled.div`
-    font-weight: bold;
+    font-weight: 20px;
     padding: 8px 0;
-    width: 10%;
+    width: 20%;
     text-align: center;
+    font-size: 24px;
 `;
 
 export const ReviewContent = styled.div`
@@ -55,13 +56,13 @@ export const ReviewFooter = styled.div`
 
 export const HorizontalLineLeftA = styled.div`
     height: 3px;
-    background-color: #1d81f4;
+    background-color: #1492e6;
     width: 43%;
 `;
 
 export const HorizontalLineRightA = styled.div`
     height: 3px;
-    background-color: #1d81f4;
+    background-color: #1492e6;
     width: 43%;
 `;
 

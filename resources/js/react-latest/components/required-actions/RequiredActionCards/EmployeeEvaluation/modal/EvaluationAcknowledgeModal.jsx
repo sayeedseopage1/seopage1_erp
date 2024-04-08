@@ -4,7 +4,14 @@ import ReactModal from "react-modal";
 
 import { EvaluationTableColumns } from "../Table/EvaluationTableColumns";
 import React, { useEffect, useState } from "react";
-import { EvalTableTitle, Flex, FooterButtons } from "../Table/ui";
+import {
+    EvalTableSubTitle,
+    EvalTableTitle,
+    NameLink,
+    ReviewTableSubTitle,
+    ReviewTableSubTitleDate,
+    FooterButtons,
+} from "../Table/ui";
 
 import Button from "../../../../../ui/Button";
 
@@ -28,6 +35,17 @@ const EvaluationAcknowledgeModal = ({
     acknowledgement,
     setAcknowledgement,
 }) => {
+    const DecisionColor = {
+        Accepted: "green",
+        Rejected: "red",
+        "One more week": "blue",
+        default: "blue",
+    };
+    const decisionColor =
+        DecisionColor[singleEvaluation?.managements_decision] ||
+        DecisionColor["default"];
+
+    console.log("decisionColor", decisionColor);
     const auth = useAuth();
     const { setEvaluationObject } = useEmployeeEvaluation();
     const evaluationId = 2580;
@@ -60,23 +78,22 @@ const EvaluationAcknowledgeModal = ({
 
     useEffect(() => {
         const fetchTasks = async () => {
-            setIsLoading(true); // Set isLoading to true before fetching
+            setIsLoading(true);
             try {
                 const response = await axios.get(
                     `/account/employee-evaluation-task/${evaluationId}`
                 );
-                setTasks(response.data.data); // Assuming the tasks are in a 'tasks' field in the response
+                setTasks(response.data.data);
             } catch (error) {
                 console.error("Error fetching tasks:", error);
             } finally {
-                setIsLoading(false); // Set isLoading to false after fetching (whether successful or not)
+                setIsLoading(false);
             }
         };
 
         fetchTasks();
     }, [evaluationId]);
 
-    console.log("tasks", tasks);
     const [sorting, setSorting] = useState([]);
 
     const [{ pageIndex, pageSize }, setPagination] = useState({
@@ -109,55 +126,36 @@ const EvaluationAcknowledgeModal = ({
             isOpen={acknowledgement}
             onRequestClose={() => setAcknowledgement(false)}
         >
-            <EvalTableTitle>
-                <span>New Developer Evaluation :</span>
-                <span>{singleEvaluation?.user_name}</span>
-            </EvalTableTitle>
-            <EvaluationTable
-                data={tasks}
-                columns={[...EvaluationTableColumns]}
-                isLoading={isLoading}
-                onPageChange={onPageChange}
-                sorting={sorting}
-                tableName="Evaluation Task Table"
-                setSorting={setSorting}
-            />
+            <section>
+                <EvalTableTitle>
+                    <span>New Developer Evaluation :</span>
+                    <span>{singleEvaluation?.user_name}</span>
+                </EvalTableTitle>
 
-            {/* Lead Developer section */}
-            {auth.roleId === 6 && (
-                <section>
-                    <SectionFlex>
-                        <HorizontalLineLeftTL />
-                        <ReviewTitleTL>
-                            Top Management's Authorization
-                        </ReviewTitleTL>
-                        <HorizontalLineRightTL />
-                    </SectionFlex>
+                <EvalTableSubTitle>
+                    {`Lead Developer `}
+                    <NameLink href="#">
+                        {singleEvaluation?.added_by_name}
+                    </NameLink>
+                    {` has evaluated New Developer `}
+                    <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
+                    {` on `}
+                    <span style={{ color: "green" }}>
+                        {singleEvaluation?.team_lead_cmnt_at}
+                    </span>
+                </EvalTableSubTitle>
+                <EvaluationTable
+                    data={tasks}
+                    columns={[...EvaluationTableColumns]}
+                    isLoading={isLoading}
+                    onPageChange={onPageChange}
+                    sorting={sorting}
+                    tableName="Evaluation Task Table"
+                    setSorting={setSorting}
+                />
+            </section>
 
-                    <ReviewContent>
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: singleEvaluation?.managements_cmnt,
-                            }}
-                        />
-
-                        <ReviewFooter>
-                            By{" "}
-                            <a href="www.teamLead.com" target="_blank">
-                                {singleEvaluation?.managements_name}
-                            </a>{" "}
-                            on{" "}
-                            <span>
-                                {FormatDate(
-                                    singleEvaluation?.managements_auth_at
-                                )}
-                            </span>
-                        </ReviewFooter>
-                    </ReviewContent>
-                </section>
-            )}
-
-            {auth.roleId === 8 && singleEvaluation?.team_lead_status === 1 && (
+            {auth.roleId === 8 && (
                 <section>
                     <SectionFlex>
                         <HorizontalLineLeftTL />
@@ -185,76 +183,49 @@ const EvaluationAcknowledgeModal = ({
                     </ReviewContent>
                 </section>
             )}
-            {/* //team lead comment end */}
 
-            {/* admin view section start */}
-            {auth.roleId === 1 && (
-                <div>
-                    <section>
-                        <SectionFlex>
-                            <HorizontalLineLeftTL />
-                            <ReviewTitleTL>Team Leader's Review</ReviewTitleTL>
-                            <HorizontalLineRightTL />
-                        </SectionFlex>
+            <section>
+                <SectionFlex>
+                    <HorizontalLineLeftTL />
+                    <ReviewTitleTL>Authorization Details</ReviewTitleTL>
+                    <HorizontalLineRightTL />
+                </SectionFlex>
+                <ReviewTableSubTitle>
+                    {`Top Management `}
+                    <NameLink href="#">
+                        {singleEvaluation?.managements_name}
+                    </NameLink>
+                    {` has `}
+                    <span style={{ color: decisionColor }}>
+                        {singleEvaluation?.managements_decision}
+                    </span>
+                    {` New Developer `}
+                    <NameLink href="#">{singleEvaluation?.user_name}</NameLink>
+                    {` for real work on `}
+                    <ReviewTableSubTitleDate>
+                        {singleEvaluation?.managements_auth_at}
+                    </ReviewTableSubTitleDate>
+                </ReviewTableSubTitle>
 
-                        <ReviewContent>
-                            <div
-                                dangerouslySetInnerHTML={{
-                                    __html: singleEvaluation?.team_lead_cmnt,
-                                }}
-                            />
+                <ReviewContent>
+                    <div
+                        dangerouslySetInnerHTML={{
+                            __html: singleEvaluation?.managements_cmnt,
+                        }}
+                    />
 
-                            <ReviewFooter>
-                                By{" "}
-                                <a href="www.teamLead.com" target="_blank">
-                                    Mohammad Sayeed Ullah
-                                </a>{" "}
-                                on{" "}
-                                <span>
-                                    {FormatDate(singleEvaluation?.updated_at)}
-                                </span>
-                            </ReviewFooter>
-                        </ReviewContent>
-                    </section>
-
-                    {
-                        <section>
-                            <SectionFlex>
-                                <HorizontalLineLeftTL />
-                                <ReviewTitleTL>
-                                    Top Management's Authorization
-                                </ReviewTitleTL>
-                                <HorizontalLineRightTL />
-                            </SectionFlex>
-
-                            <ReviewContent>
-                                <div
-                                    dangerouslySetInnerHTML={{
-                                        __html: singleEvaluation?.managements_cmnt,
-                                    }}
-                                />
-
-                                <ReviewFooter>
-                                    By{" "}
-                                    <a href="www.teamLead.com" target="_blank">
-                                        {singleEvaluation?.managements_name}
-                                    </a>{" "}
-                                    on{" "}
-                                    <span>
-                                        {FormatDate(
-                                            singleEvaluation?.managements_auth_at
-                                        )}
-                                    </span>
-                                </ReviewFooter>
-                            </ReviewContent>
-                        </section>
-                    }
-                </div>
-            )}
-
-            {/* admin view section end */}
-
-            {/* Buttons start */}
+                    <ReviewFooter>
+                        By{" "}
+                        <a href="www.teamLead.com" target="_blank">
+                            {singleEvaluation?.managements_name}
+                        </a>{" "}
+                        on{" "}
+                        <span>
+                            {FormatDate(singleEvaluation?.managements_auth_at)}
+                        </span>
+                    </ReviewFooter>
+                </ReviewContent>
+            </section>
 
             <FooterButtons>
                 <Button
@@ -265,33 +236,13 @@ const EvaluationAcknowledgeModal = ({
                     Close
                 </Button>
 
-                {/* lead dev submit button start */}
-                {auth.roleId === 6 && (
-                    <Button
-                        // onClick={handleLeadDevFinalSubmission}
-                        size="md"
-                        className="ml-2"
-                    >
-                        <div> Ok, Acknowledged it</div>
-                    </Button>
-                )}
-
-                {/* lead dev submit button end */}
-
-                {/* Team Lead submit button start */}
-
-                {auth.roleId === 8 &&
-                    singleEvaluation?.team_lead_status === 0 && (
-                        <Button
-                            // onClick={handleTeamLeadComment}
-                            size="md"
-                            className="ml-2"
-                        >
-                            Submit Review
-                        </Button>
-                    )}
-
-                {/* Team Lead Submit button end */}
+                <Button
+                    // onClick={handleLeadDevFinalSubmission}
+                    size="md"
+                    className="ml-2"
+                >
+                    <div> Ok, Acknowledged it</div>
+                </Button>
             </FooterButtons>
         </ReactModal>
     );
