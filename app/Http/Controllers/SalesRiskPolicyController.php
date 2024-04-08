@@ -642,48 +642,23 @@ class SalesRiskPolicyController extends AccountBaseController
 
     function renderQuestionList(Request $req)
     {
-        $itemsPaginated = SalesPolicyQuestion::from('sales_policy_questions as sq')->join('sales_risk_policies as sp', 'policy_id', 'sp.id')
-        ->where(function ($query) use ($req) {
-            $query->whereNull('sq.parent_id');
-            $query->where('status', '1');
+        $data = SalesPolicyQuestion::parent()
+        ->get()->filter(fn($item) => SalesRiskPolicy::find($item->policy_id)->status)
+        ->map(function ($item) {
 
-            if ($req->policy_id)
-                $query->where('policy_id', $req->policy_id);
-            if($req->page > 2)
-                $query->offset($req->input('limit', 10) * $req->page);
-        })
-        ->paginate($req->input('limit', 10));
-
-        $itemsTransformed = $itemsPaginated
-            ->getCollection()
-            ->map(function ($item) {
-
-                return [
-                    'id' => $item->id,
-                    'title' => $item->title,
-                    'key' => $item->key,
-                    'type' => $item->type,
-                    'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
-                    'placeholder' => $item->placeholder,
-                    'parent_id' => $item->parent_id,
-                    'policy_id' => $item->policy_id,
-                    'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
-                    'questions' => self::questionListChild($item->id)
-                ];
-            })->toArray();
-
-            $data = new \Illuminate\Pagination\LengthAwarePaginator(
-                $itemsTransformed,
-                $itemsPaginated->total(),
-                $itemsPaginated->perPage(),
-                $itemsPaginated->currentPage(),
-                [
-                    'path' => FacadesRequest::url(),
-                    'query' => [
-                        'page' => $itemsPaginated->currentPage()
-                    ]
-                ]
-            );
+            return [
+                'id' => $item->id,
+                'title' => $item->title,
+                'key' => $item->key,
+                'type' => $item->type,
+                'value' => json_decode($item->value) ? json_decode($item->value) : $item->value,
+                'placeholder' => $item->placeholder,
+                'parent_id' => $item->parent_id,
+                'policy_id' => $item->policy_id,
+                'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
+                'questions' => self::questionListChild($item->id)
+            ];
+        });
 
         return response()->json(['status' => 'success', 'data' =>  $data]);
     }
@@ -732,6 +707,13 @@ class SalesRiskPolicyController extends AccountBaseController
 
             if ($calculation['points'] === null) {
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
+            }
+
+            if ($calculation['points'] >= 0) {
+                $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
+                $dealStage->won_lost = 'Yes';
+                $dealStage->deal_status = 'accepted';
+                $deal->status = 'accepted';
             }
 
             return response()->json([
@@ -1357,12 +1339,12 @@ class SalesRiskPolicyController extends AccountBaseController
         if($status == '1')
         {
             $dealStage->won_lost = 'Yes';
-            $dealStage->status = 'accepted';
+            $dealStage->deal_status = 'accepted';
             $deal->status = 'accepted';
         }
         elseif ($status == '0')
         {
-            $dealStage->status = 'denied';
+            $dealStage->deal_status = 'denied';
             $deal->status = 'denied';
         }
 
