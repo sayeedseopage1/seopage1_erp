@@ -1003,7 +1003,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Attach text that will be used for the design
                                                     </label>
                                                     {
-                                                        typeOfGraphicsCategory?.id === 2 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                        typeOfGraphicsCategory?.id === 2 && <div   >
                                                             <FileUploadWithInput
                                                                 inputType="url"
                                                                 placeholder="Enter the URL"
@@ -1017,7 +1017,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         </div>
                                                     }
                                                     {
-                                                        typeOfGraphicsCategory?.id === 3 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                        typeOfGraphicsCategory?.id === 3 && <div   >
                                                             <FileUploadWithInput
                                                                 inputType="url"
                                                                 placeholder="Enter the URL"
@@ -1031,7 +1031,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         </div>
                                                     }
                                                     {
-                                                        typeOfGraphicsCategory?.id === 4 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                        typeOfGraphicsCategory?.id === 4 && <div   >
                                                             <FileUploadWithInput
                                                                 inputType="url"
                                                                 placeholder="Enter the URL"
@@ -1065,7 +1065,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                     </label>
                                                 </div>
                                                 {
-                                                    typeOfGraphicsCategory?.id === 5 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                    typeOfGraphicsCategory?.id === 5 && <div   >
                                                         <FileUploadWithInput
                                                             inputType="url"
                                                             placeholder="Enter the URL"
@@ -1080,7 +1080,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                 }
                                                 {
 
-                                                    typeOfGraphicsCategory?.id === 6 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                    typeOfGraphicsCategory?.id === 6 && <div   >
                                                         <FileUploadWithInput
                                                             inputType="url"
                                                             placeholder="Enter the URL"
@@ -1110,7 +1110,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                         Images/videos that will be used for the work
                                                         <sup className='f-14 mr-1'>*</sup>
                                                     </label>
-                                                    <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                    <div   >
                                                         <UploadFilesInLine
                                                             files={imgOrVidForWork}
                                                             setFiles={setImgOrVidForWork}
@@ -1298,7 +1298,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                             >
                                                 Brand guideline
                                             </label>
-                                            <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                            <div   >
                                                 <UploadFilesInLine
                                                     files={brandGuideline}
                                                     setFiles={setBrandGuideline}

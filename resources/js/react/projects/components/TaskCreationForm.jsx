@@ -432,7 +432,7 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
-                                title: "Please fill out the all required fields",
+                                title: (err?.data?.message || "Something went wrong"),
                                 showConfirmButton: true,
                             });
                         }
@@ -1660,9 +1660,9 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
                                             min
                                         </div>
 
-                                        <div style={{ color: "red" }}>
+                                        {/* <div style={{ color: "red" }}>
                                             {estimateError(required_error)}
-                                        </div>
+                                        </div> */}
                                         <div style={{ color: "#F01F0A" }}>
                                             Estimation time can't exceed{" "}
                                             {convertTime(

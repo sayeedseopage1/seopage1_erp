@@ -61,7 +61,7 @@ const EditFormProvider = ({ task, singleTask }) => {
             }
         }).catch((err) => {
             if (err?.status === 422) {
-                toast.warn("Please fill out all required fields")
+                toast.warn(err?.data?.message || "Something went wrong")
             }
         })
     };
@@ -1024,7 +1024,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
                                             {
-                                                typeOfGraphicsCategory?.id === 2 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                typeOfGraphicsCategory?.id === 2 && <div   >
                                                     <FileUploadWithInput
                                                         inputType="url"
                                                         placeholder="Enter the URL"
@@ -1038,7 +1038,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 </div>
                                             }
                                             {
-                                                typeOfGraphicsCategory?.id === 3 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                typeOfGraphicsCategory?.id === 3 && <div   >
                                                     <FileUploadWithInput
                                                         inputType="url"
                                                         placeholder="Enter the URL"
@@ -1052,7 +1052,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 </div>
                                             }
                                             {
-                                                typeOfGraphicsCategory?.id === 4 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                typeOfGraphicsCategory?.id === 4 && <div   >
                                                     <FileUploadWithInput
                                                         inputType="url"
                                                         placeholder="Enter the URL"
@@ -1085,7 +1085,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
                                             {
-                                                typeOfGraphicsCategory?.id === 5 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                typeOfGraphicsCategory?.id === 5 && <div   >
                                                     <FileUploadWithInput
                                                         inputType="url"
                                                         placeholder="Enter the URL"
@@ -1099,7 +1099,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 </div>
                                             }
                                             {
-                                                typeOfGraphicsCategory?.id === 6 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                typeOfGraphicsCategory?.id === 6 && <div   >
                                                     <FileUploadWithInput
                                                         inputType="url"
                                                         placeholder="Enter the URL"
@@ -1130,7 +1130,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 Images/videos that will be used for the work
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
-                                            <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                            <div   >
                                                 <UploadFilesInLine
                                                     files={imgOrVidForWork}
                                                     setFiles={setImgOrVidForWork}
@@ -1319,7 +1319,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                     >
                                         Brand guideline
                                     </label>
-                                    <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                    <div   >
                                         <UploadFilesInLine
                                             files={brandGuideline}
                                             setFiles={setBrandGuideline}

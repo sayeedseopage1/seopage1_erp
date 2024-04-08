@@ -2617,10 +2617,6 @@ var Guideline = function Guideline(_ref) {
         }), type_of_graphic_work_id === 8 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             className: "col-12 mb-2 word-break",
-            style: {
-              maxHeight: "300px",
-              overflowY: "auto"
-            },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                 children: "Images/videos that will be used for the work"
@@ -2695,10 +2691,6 @@ var Guideline = function Guideline(_ref) {
         }), (type_of_graphic_work_id === 2 || type_of_graphic_work_id === 3 || type_of_graphic_work_id === 4) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             className: "col-12 mb-2 word-break",
-            style: {
-              maxHeight: "300px",
-              overflowY: "auto"
-            },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                 children: "Attach text that will be used for the design"
@@ -2744,10 +2736,6 @@ var Guideline = function Guideline(_ref) {
         }), (type_of_graphic_work_id === 5 || type_of_graphic_work_id === 6) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             className: "col-12 mb-2 word-break",
-            style: {
-              maxHeight: "300px",
-              overflowY: "auto"
-            },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                 children: "Image where the designer will work"
@@ -2792,10 +2780,6 @@ var Guideline = function Guideline(_ref) {
           })
         }), ((_defaultBrandGuidelin = defaultBrandGuidelineFiles) === null || _defaultBrandGuidelin === void 0 ? void 0 : _defaultBrandGuidelin.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 mb-2 word-break",
-          style: {
-            maxHeight: "300px",
-            overflowY: "auto"
-          },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
               children: "Brand Guideline"
@@ -14456,7 +14440,8 @@ var EditFormProvider = function EditFormProvider(_ref) {
       }
     })["catch"](function (err) {
       if ((err === null || err === void 0 ? void 0 : err.status) === 422) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_14__.toast.warn("Please fill out all required fields");
+        var _err$data;
+        react_toastify__WEBPACK_IMPORTED_MODULE_14__.toast.warn((err === null || err === void 0 || (_err$data = err.data) === null || _err$data === void 0 ? void 0 : _err$data.message) || "Something went wrong");
       }
     });
   };
@@ -15532,10 +15517,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     children: "*"
                   })]
                 }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                  style: {
-                    maxHeight: "300px",
-                    overflowY: "auto"
-                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_projects_components_ui_FileUploadWithInput__WEBPACK_IMPORTED_MODULE_27__["default"], _objectSpread(_objectSpread({
                     inputType: "url",
                     placeholder: "Enter the URL",
@@ -15549,10 +15530,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     onPreviousFileDelete: handleDeleteTextForDesignBanner
                   }))
                 }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 3 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                  style: {
-                    maxHeight: "300px",
-                    overflowY: "auto"
-                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_projects_components_ui_FileUploadWithInput__WEBPACK_IMPORTED_MODULE_27__["default"], _objectSpread(_objectSpread({
                     inputType: "url",
                     placeholder: "Enter the URL",
@@ -15566,10 +15543,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     onPreviousFileDelete: handleDeleteTextForDesignBrochure
                   }))
                 }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 4 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                  style: {
-                    maxHeight: "300px",
-                    overflowY: "auto"
-                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_projects_components_ui_FileUploadWithInput__WEBPACK_IMPORTED_MODULE_27__["default"], _objectSpread(_objectSpread({
                     inputType: "url",
                     placeholder: "Enter the URL",
@@ -15599,10 +15572,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     children: "*"
                   })]
                 }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 5 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                  style: {
-                    maxHeight: "300px",
-                    overflowY: "auto"
-                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_projects_components_ui_FileUploadWithInput__WEBPACK_IMPORTED_MODULE_27__["default"], _objectSpread(_objectSpread({
                     inputType: "url",
                     placeholder: "Enter the URL",
@@ -15616,10 +15585,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     onPreviousFileDelete: handleDeleteImgForDesigner
                   }))
                 }), (typeOfGraphicsCategory === null || typeOfGraphicsCategory === void 0 ? void 0 : typeOfGraphicsCategory.id) === 6 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                  style: {
-                    maxHeight: "300px",
-                    overflowY: "auto"
-                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_projects_components_ui_FileUploadWithInput__WEBPACK_IMPORTED_MODULE_27__["default"], _objectSpread(_objectSpread({
                     inputType: "url",
                     placeholder: "Enter the URL",
@@ -15649,10 +15614,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                     children: "*"
                   })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                  style: {
-                    maxHeight: "300px",
-                    overflowY: "auto"
-                  },
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
                     files: imgOrVidForWork,
                     setFiles: setImgOrVidForWork,
@@ -15825,10 +15786,6 @@ var TaskEditForm = function TaskEditForm(_ref2) {
                 "data-label": "true",
                 children: "Brand guideline"
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("div", {
-                style: {
-                  maxHeight: "300px",
-                  overflowY: "auto"
-                },
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
                   files: brandGuideline,
                   setFiles: setBrandGuideline,
