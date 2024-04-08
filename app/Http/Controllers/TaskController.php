@@ -1953,8 +1953,8 @@ class TaskController extends AccountBaseController
                 return response($validator->errors(), 422);
             }
             $project_id = Project::where('id', $request->project_id)->first();
-            $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-            $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+            $task_estimation_hours = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->sum('estimate_hours');
+            $task_estimation_minutes = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->sum('estimate_minutes');
             $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
             $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
 
@@ -1962,25 +1962,25 @@ class TaskController extends AccountBaseController
             $left_in_minutes = $left_minutes % 60;
             //dd($left_minutes);
             if ($left_minutes < 0) {
-                // return response()->json([
-                //     "message" => "The given data was invalid.",
-                //     "errors" => [
-                //         "hours" => [
-                //             "Estimate hours cannot exceed from project allocation hours !"
-                //         ]
-                //     ]
-                // ], 422);
+                return response()->json([
+                    "message" => "The given data was invalid.",
+                    "errors" => [
+                        "hours" => [
+                            "Estimate hours cannot exceed from project allocation hours !"
+                        ]
+                    ]
+                ], 422);
             }
 
             if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
-                // return response()->json([
-                //     "message" => "Wrong Input",
-                //     "errors" => [
-                //         "hours" => [
-                //             "Estimate hours and minutes cannot be 0 !"
-                //         ]
-                //     ]
-                // ], 422);
+                return response()->json([
+                    "message" => "Wrong Input",
+                    "errors" => [
+                        "hours" => [
+                            "Estimate hours and minutes cannot be 0 !"
+                        ]
+                    ]
+                ], 422);
             }
 
             //dd($request);
@@ -2426,34 +2426,36 @@ class TaskController extends AccountBaseController
         }
         $project_id = Project::where('id', $request->project_id)->first();
         $task_id = Task::where('id', $request->task_id)->first();
-        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
-        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->where('id', '!=', $request->task_id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->whereNull('subtask_id')->where('id', '!=', $request->task_id)->sum('estimate_minutes');
         $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
         //  $left_minutes = ($project_id->hours_allocated+ $task_id->estimate_hours - $request->estimate_hours) * 60 - (($total_task_estimation_minutes  + $request->estimate_minutes);
-        $left_minutes = ($project_id->hours_allocated - $task_id->estimate_hours + $request->estimate_hours) * 60 - (($total_task_estimation_minutes - $task_id->estimate_minutes  + $request->estimate_minutes));
+        // $left_minutes = ($project_id->hours_allocated - $task_id->estimate_hours + $request->estimate_hours) * 60 - (($total_task_estimation_minutes - $task_id->estimate_minutes  + $request->estimate_minutes));
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - (($total_task_estimation_minutes + $request->estimate_minutes));
+        // dd($left_minutes);
         $left_in_hours = round($left_minutes / 60, 0);
         $left_in_minutes = $left_minutes % 60;
         //   / dd($left_minutes);
-        // if ($left_minutes < 0) {
-        //     return response()->json([
-        //         "message" => "Something went wrong",
-        //         "errors" => [
-        //             "hours" => [
-        //                 "Estimate hours cannot exceed from project allocation hours !"
-        //             ]
-        //         ]
-        //     ], 422);
-        // }
-        // if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
-        //     return response()->json([
-        //         "message" => "Wrong Input",
-        //         "errors" => [
-        //             "hours" => [
-        //                 "Estimate hours and minutes cannot be 0 !"
-        //             ]
-        //         ]
-        //     ], 422);
-        // }
+        if ($left_minutes < 0) {
+            return response()->json([
+                "message" => "Something went wrong",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours cannot exceed from project allocation hours !"
+                    ]
+                ]
+            ], 422);
+        }
+        if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
+            return response()->json([
+                "message" => "Wrong Input",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours and minutes cannot be 0 !"
+                    ]
+                ]
+            ], 422);
+        }
 
 
         // dd($request);
