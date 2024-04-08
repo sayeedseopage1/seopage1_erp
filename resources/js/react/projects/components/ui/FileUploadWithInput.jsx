@@ -3,8 +3,7 @@ import { AiOutlineUpload } from "react-icons/ai";
 import { TiDelete } from "react-icons/ti";
 import { getFileIcon, shortenFileName, validateUrl } from '../../utils';
 
-function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, inputFiles, setInputFiles }) {
-
+function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, inputFiles, setInputFiles, previous, onPreviousFileDelete }) {
 
     const handleUrlChange = (event) => {
         setInputUrl(event.target.value);
@@ -58,6 +57,19 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
 
                     </div>
                 ))}
+                {
+                    previous && previous.map((file, index) => (
+                        <div title={file?.filename} style={{ width: "150px" }} key={index} className='p-1 text-center mt-2 bg-light rounded d-flex align-items-center justify-content-between'>
+                            <a href={file?.file_url} target="_blank" rel="noopener noreferrer">
+                                <div>{getFileIcon(file?.filename.split('.').pop())} {shortenFileName(file?.filename)}</div>
+                            </a>
+                            <span className='text-danger' style={{ cursor: 'pointer', marginLeft: '5px' }} onClick={(e) => onPreviousFileDelete(e, file, previous)} >
+                                <TiDelete size={20} />
+                            </span>
+
+                        </div>
+                    ))
+                }
             </div>
         </div>
     );

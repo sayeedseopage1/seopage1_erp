@@ -48,12 +48,8 @@ const TaskCreationForm = ({ handleRefresh, isOpen, close, onSuccess }) => {
     const [taskCategory, setTaskCategory] = useState("");
 
     //state for graphic designer start
-
     const [textForDesignUrl, setTextForDesignUrl] = useState('');
-    // const [testfiles, setTestFiles] = useState([]);
-
     console.log("textForDesignUrl", textForDesignUrl);
-    // console.log("files", testfiles);
 
 
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
