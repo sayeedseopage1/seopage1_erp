@@ -66,6 +66,7 @@ class SalesRiskPolicyController extends AccountBaseController
             Route::put('deals/authorize-deny/{deal_id}/{status}', 'authorizeDenyDeal')->name('deal.authorize-deny');
         });
 
+        // question render for sales person
         Route::get('account/deals/risk-analysis/{deal_id}', [self::class, 'salesPolicyQuestionRender'])->name('account.sale-risk-policies.risk-analysis');
         Route::get('account/deals/risk-analysis/question/list', [self::class, 'renderQuestionList'])->name('account.sale-risk-policies.risk-analysis.question-list');
         Route::get('account/sales-analysis-reports', [self::class, 'salesRiskReportList'])->name('account.sale-risk-policies.report-list');
@@ -632,6 +633,8 @@ class SalesRiskPolicyController extends AccountBaseController
 
         $data = $this->data;
         $data['addedBefore'] = PolicyQuestionValue::where('deal_id', $deal_id)->count() > 0;
+        $data['dealStatus'] = Deal::find($deal_id) ? Deal::find($deal_id)->status : null;
+        $data['redirectUrl'] = route('dealDetails', $deal_id);
         // Note: big form route : route('dealDetails', $deal->id)
 
         return view('deals.sales-questions-render', $data);
@@ -902,9 +905,14 @@ class SalesRiskPolicyController extends AccountBaseController
                     'deal_id' => $deal_id
                 ])->first()->value;
 
-                $data[] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $value, 'parent_id' => $questions[2]->parent_id];
+                $list = json_decode($questions[2]->value);
 
-                
+                foreach ($list as $item) {
+                    if ($value == $item->id) {
+                        $data[] = ['id' => $questions[2]->id, 'title' => $questions[2]->title, 'value' => $item->title, 'parent_id' => $questions[2]->parent_id];
+                        break;
+                    }
+                }
                 /**
                  * NOTE:  when saving list policy id is used for prefix
                  * this is because policy id is is fixed for a question
@@ -1250,8 +1258,6 @@ class SalesRiskPolicyController extends AccountBaseController
         $message = $calculation['message'];
 
         $deal = Deal::find($deal_id);
-        $projectName = $deal->project_name;
-        $client_name = $deal->client_name;
         $user = User::whereId($deal->added_by)->first(['id', 'name']);
 
         //get Date diff as intervals
@@ -1274,7 +1280,7 @@ class SalesRiskPolicyController extends AccountBaseController
          * projectBudget
          */
 
-        return response()->json(['status' => 'success', 'data' => compact('points', 'pointData', 'message', 'projectName', 'user', 'client_name', 'deadline')]);
+        return response()->json(['status' => 'success', 'data' => compact('deal', 'points', 'pointData', 'message', 'user', 'deadline')]);
     }
 
     function salesRiskReportList(Request $req)
