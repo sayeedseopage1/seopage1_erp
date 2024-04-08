@@ -734,6 +734,13 @@ class SalesRiskPolicyController extends AccountBaseController
                 return response()->json(['status' => 'error', 'message' => $calculation['error']], 500);
             }
 
+            if ($calculation['points'] >= 0) {
+                $dealStage = DealStage::where('lead_id', $deal->lead_id)->first();
+                $dealStage->won_lost = 'Yes';
+                $dealStage->deal_status = 'accepted';
+                $deal->status = 'accepted';
+            }
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Questions values stored successfully.',
@@ -1357,12 +1364,12 @@ class SalesRiskPolicyController extends AccountBaseController
         if($status == '1')
         {
             $dealStage->won_lost = 'Yes';
-            $dealStage->status = 'accepted';
+            $dealStage->deal_status = 'accepted';
             $deal->status = 'accepted';
         }
         elseif ($status == '0')
         {
-            $dealStage->status = 'denied';
+            $dealStage->deal_status = 'denied';
             $deal->status = 'denied';
         }
 
