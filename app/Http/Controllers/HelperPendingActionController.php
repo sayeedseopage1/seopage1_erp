@@ -1953,9 +1953,9 @@ class HelperPendingActionController extends AccountBaseController
                     [
                         'button_name' => 'Ackhowledge It',
                         'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
                     ],
 
                 ];
@@ -1991,9 +1991,9 @@ class HelperPendingActionController extends AccountBaseController
                     [
                         'button_name' => 'Ackhowledge It',
                         'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
                     ],
 
                 ];
@@ -2029,9 +2029,9 @@ class HelperPendingActionController extends AccountBaseController
                     [
                         'button_name' => 'Ackhowledge It',
                         'button_color' => 'primary',
-                        'button_type' => 'redirect_url',
-                        'button_url' => route('employee-evaluation.index'),
-                        'button_url' => route('employee-evaluation.index', ['modal_type' => 'new_dev_evaluation', 'user_id' => $new_dev->id]),
+                        'button_type' => 'modal',
+                        'button_url' => '',
+                        'modal_form'=> false,
                     ],
 
                 ];
