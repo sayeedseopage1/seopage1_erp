@@ -1091,13 +1091,6 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                                             {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
                                                             onPreviousFileDelete={handleDeleteImgBgForDesigner}
                                                         />
-
-                                                        {/* <UploadFilesInLine
-                                                            files={imageForDesigner}
-                                                            setFiles={setImageForDesigner}
-                                                            {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
-                                                            onPreviousFileDelete={handleDeleteImgBgForDesigner}
-                                                        /> */}
                                                     </div>
                                                 }
                                             </div>

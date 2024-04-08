@@ -35,6 +35,7 @@ import CmsDropdown from "../../../projects/components/ui-ux-design-forms/CmsDrop
 // import { validateUrl } from "../../../projects/utils/validateUrl";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { validateUrl } from "../../../projects/utils";
+import FileUploadWithInput from "../../../projects/components/ui/FileUploadWithInput";
 
 const dayjs = new CompareDate();
 
@@ -147,6 +148,8 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
     }
 
     //state for graphic designer start
+    const [workableUrl, setWorkableUrl] = useState('');
+
     const [typeOfGraphicsCategory, setTypeOfGraphicsCategory] = useState("");
     const [typeOfLogo, setTypeOfLogo] = useState("");
     const [brandName, setBrandName] = useState("");
@@ -246,6 +249,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             setPrimaryColorDescription(graphicWorkDetails?.primary_color_description);
             setIllustration(graphicWorkDetails?.design_instruction);
             setOthers(graphicWorkDetails?.design_instruction);
+            setWorkableUrl(graphicWorkDetails?.workable_url);
         }
     }, [graphicWorkDetails]);
 
@@ -481,7 +485,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
             });
         }
 
-        // fd.append("reference", reference ?? "");
+        fd.append("workable_url", workableUrl ?? "")
         fd.append("reference", JSON.stringify(referenceList) ?? "");
         fd.append("font_name", fontName ?? "");
         fd.append("font_url", fontUrl ?? "");
@@ -1020,28 +1024,46 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                                 <sup className='f-14 mr-1'>*</sup>
                                             </label>
                                             {
-                                                typeOfGraphicsCategory?.id === 2 && <div style={{ maxHeight: "300px", overflowY: "auto" }}><UploadFilesInLine
-                                                    files={textForDesign}
-                                                    setFiles={setTextForDesign}
-                                                    {...(defaultTextForDesignBanner && { previous: defaultTextForDesignBanner })}
-                                                    onPreviousFileDelete={handleDeleteTextForDesignBanner}
-                                                /></div>
+                                                typeOfGraphicsCategory?.id === 2 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        placeholder="Enter the URL"
+                                                        inputUrl={workableUrl}
+                                                        setInputUrl={setWorkableUrl}
+                                                        inputFiles={textForDesign}
+                                                        setInputFiles={setTextForDesign}
+                                                        {...(defaultTextForDesignBanner && { previous: defaultTextForDesignBanner })}
+                                                        onPreviousFileDelete={handleDeleteTextForDesignBanner}
+                                                    />
+                                                </div>
                                             }
                                             {
-                                                typeOfGraphicsCategory?.id === 3 && <div style={{ maxHeight: "300px", overflowY: "auto" }}><UploadFilesInLine
-                                                    files={textForDesign}
-                                                    setFiles={setTextForDesign}
-                                                    {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
-                                                    onPreviousFileDelete={handleDeleteTextForDesignBrochure}
-                                                /></div>
+                                                typeOfGraphicsCategory?.id === 3 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        placeholder="Enter the URL"
+                                                        inputUrl={workableUrl}
+                                                        setInputUrl={setWorkableUrl}
+                                                        inputFiles={textForDesign}
+                                                        setInputFiles={setTextForDesign}
+                                                        {...(defaultTextForDesignBrochure && { previous: defaultTextForDesignBrochure })}
+                                                        onPreviousFileDelete={handleDeleteTextForDesignBrochure}
+                                                    />
+                                                </div>
                                             }
                                             {
-                                                typeOfGraphicsCategory?.id === 4 && <div style={{ maxHeight: "300px", overflowY: "auto" }}><UploadFilesInLine
-                                                    files={textForDesign}
-                                                    setFiles={setTextForDesign}
-                                                    {...(defaultTextForDesignCompanyProfile && { previous: defaultTextForDesignCompanyProfile })}
-                                                    onPreviousFileDelete={handleDeleteTextForDesignCompanyProfile}
-                                                /></div>
+                                                typeOfGraphicsCategory?.id === 4 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        placeholder="Enter the URL"
+                                                        inputUrl={workableUrl}
+                                                        setInputUrl={setWorkableUrl}
+                                                        inputFiles={textForDesign}
+                                                        setInputFiles={setTextForDesign}
+                                                        {...(defaultTextForDesignCompanyProfile && { previous: defaultTextForDesignCompanyProfile })}
+                                                        onPreviousFileDelete={handleDeleteTextForDesignCompanyProfile}
+                                                    />
+                                                </div>
                                             }
 
                                         </div>
@@ -1064,9 +1086,13 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                             </label>
                                             {
                                                 typeOfGraphicsCategory?.id === 5 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                                    <UploadFilesInLine
-                                                        files={imageForDesigner}
-                                                        setFiles={setImageForDesigner}
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        placeholder="Enter the URL"
+                                                        inputUrl={workableUrl}
+                                                        setInputUrl={setWorkableUrl}
+                                                        inputFiles={imageForDesigner}
+                                                        setInputFiles={setImageForDesigner}
                                                         {...(defaultImageForDesignerRetouching ? { previous: defaultImageForDesignerRetouching } : {})}
                                                         onPreviousFileDelete={handleDeleteImgForDesigner}
                                                     />
@@ -1074,9 +1100,13 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                                             }
                                             {
                                                 typeOfGraphicsCategory?.id === 6 && <div style={{ maxHeight: "300px", overflowY: "auto" }}>
-                                                    <UploadFilesInLine
-                                                        files={imageForDesigner}
-                                                        setFiles={setImageForDesigner}
+                                                    <FileUploadWithInput
+                                                        inputType="url"
+                                                        placeholder="Enter the URL"
+                                                        inputUrl={workableUrl}
+                                                        setInputUrl={setWorkableUrl}
+                                                        inputFiles={imageForDesigner}
+                                                        setInputFiles={setImageForDesigner}
                                                         {...(defaultImageForDesignerBgRemoval ? { previous: defaultImageForDesignerBgRemoval } : {})}
                                                         onPreviousFileDelete={handleDeleteImgBgForDesigner}
                                                     />
@@ -1241,7 +1271,7 @@ const TaskEditForm = ({ task, singleTask: row, onSubmit, isLoading, onClose }) =
                             </div>
                             }
 
-                            {formError?.reference && (
+                            {error?.reference && (
                                 <div style={{ color: "red" }}>
                                     {formError?.reference}
                                 </div>

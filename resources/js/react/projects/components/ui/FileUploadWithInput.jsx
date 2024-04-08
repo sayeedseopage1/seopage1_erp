@@ -39,7 +39,7 @@ function FileUploadWithInput({ inputType, placeholder, inputUrl, setInputUrl, in
                     <AiOutlineUpload size={20} />
                 </label>
             </div>
-            {inputUrl && !validateUrl(inputUrl) && (
+            {(inputUrl && inputType === 'url') && !validateUrl(inputUrl) && (
                 <div style={{ color: "red" }}>Please enter a valid URL</div>
             )}
             <div className='d-flex align-items-center flex-wrap' style={{ gap: '10px' }}>
