@@ -658,9 +658,9 @@ class SalesRiskPolicyController extends AccountBaseController
                 'policy_title' => SalesRiskPolicy::find($item->policy_id)->title,
                 'questions' => self::questionListChild($item->id)
             ];
-        });
+        })->toArray();
 
-        return response()->json(['status' => 'success', 'data' =>  $data]);
+        return response()->json(['status' => 'success', 'data' =>  array_values($data)]);
     }
 
     function questionValueSave(Request $req)
