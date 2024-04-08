@@ -20,17 +20,22 @@ import {
     useStoreTaskRatingMutation,
     useUpdateTaskRatingSubmissionMutation,
 } from "../../../services/api/EvaluationApiSlice";
+import FormatDate from "../../../UI/comments/utils/FormatDate";
 
 const SingleEvaluationModal = ({
     toggleSingleEvaluationModal,
     isSingleEvaluationModalOpen,
     data,
 }) => {
+    const [userIdFromUrl, setUserIdFromUrl] = useState(null);
     const auth = useAuth();
     const { evaluationObject } = useEmployeeEvaluation();
     const [storeTaskRating] = useStoreTaskRatingMutation();
     const [updateTaskRating] = useUpdateTaskRatingSubmissionMutation();
-    const [averageRating, setAverageRating] = useState(data.avg_rating);
+    const [averageRating, setAverageRating] = useState(
+        evaluationObject.lead_dev_avg_rating
+    );
+
     const [formData, setFormData] = useState({
         qw_first_chance: data.qw_first_chance ?? 0,
         qw_first_revision: data.qw_first_revision ?? 0,
@@ -216,7 +221,7 @@ const SingleEvaluationModal = ({
 
         await storeTaskRating({
             ...formData,
-            evaluation_id: evaluationObject.id,
+            evaluation_id: data.id,
             _token: document
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content"),
@@ -314,7 +319,11 @@ const SingleEvaluationModal = ({
                                     )}
                             </td>
                             <td>{data.revision_number}</td>
-                            <td>{averageRating ?? "N/A"}</td>
+                            {evaluationObject.lead_dev_avg_rating ? (
+                                <td>{evaluationObject.lead_dev_avg_rating} </td>
+                            ) : (
+                                <td>{averageRating ?? "N/A"}</td>
+                            )}
                         </tr>
                     </tbody>
                 </table>
@@ -404,7 +413,8 @@ const SingleEvaluationModal = ({
                                     >
                                         {evaluationObject.added_by_name}
                                     </a>{" "}
-                                    on <span>{data?.updated_at}</span>
+                                    on{" "}
+                                    <span>{FormatDate(data?.updated_at)}</span>
                                 </div>
                             </section>
                         ))}
@@ -442,7 +452,7 @@ const SingleEvaluationModal = ({
                                 >
                                     {evaluationObject.added_by_name}
                                 </a>{" "}
-                                on <span>{data?.updated_at}</span>
+                                on <span>{FormatDate(data?.updated_at)}</span>
                             </div>
                         </section>
                     )}
@@ -464,7 +474,7 @@ const SingleEvaluationModal = ({
                             >
                                 <div>
                                     <BiSolidEditAlt />
-                                    <span> Edit Rating</span>
+                                    <span> Update Rating</span>
                                 </div>
                             </button>
                         ))}

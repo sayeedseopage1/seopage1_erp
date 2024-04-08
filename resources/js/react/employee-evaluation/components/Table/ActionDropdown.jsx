@@ -41,24 +41,11 @@ const ActionDropdown = ({ data }) => {
                 )}
 
                 {(auth.roleId === 8 || auth.roleId === 1) && (
-                    <button className={ButtonStyles.sendContainer}>
-                        {data?.avg_rating ? (
-                            <h4>{data?.avg_rating}</h4>
-                        ) : (
-                            <div>
-                                <IoIosSend
-                                    className={ButtonStyles.send}
-                                    color="#fff"
-                                    size={`20px`}
-                                />
-                                <IoIosSend
-                                    className={ButtonStyles.send2}
-                                    color="#696666"
-                                    size={`20px`}
-                                />
-                                <p>Evaluate</p>
-                            </div>
-                        )}
+                    <button
+                        className={ButtonStyles.sendContainer}
+                        style={{ color: "white", fontSize: "16px" }}
+                    >
+                        {data?.avg_rating}
                     </button>
                 )}
             </ColumnContent>

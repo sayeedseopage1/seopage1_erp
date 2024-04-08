@@ -11043,6 +11043,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           task: task,
           onSubmit: function onSubmit() {
             refetchTask();
+            setShowForm(true);
           },
           close: close
         }), showForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {

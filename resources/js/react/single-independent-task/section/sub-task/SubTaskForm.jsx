@@ -366,6 +366,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                             task={task}
                             onSubmit={() => {
                                 refetchTask();
+                                setShowForm(true);
                             }}
                             close={close}
                         />
