@@ -603,6 +603,16 @@
                                 </div>
                             </div>
                           @endif
+                          <div class="row pb-2 {{ $deal->is_drafted ? '' : 'd-none'}}">
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" name="is_drafted" id="is_drafted">
+                                    <label class="form-check-label m-1" for="flexCheckDefault">
+                                        Keep it as draft
+                                    </label>
+                                </div>
+                              </div>
+                          </div>
                             <br>
 
                                 <div class="alert alert-danger" role="alert" id="commonError">
@@ -876,6 +886,7 @@
                 'organization': document.getElementById("organization").value,
                 'client_email': document.getElementById("client_email").value,
                 'profile_link': document.getElementById("profile_link").value,
+                'is_drafted': $('#is_drafted').is(":checked") ? 1 : 0,
                 'deal_category': deal_category,
                 'cms_id': cms_id,
                 'message_link': message_links_values,
@@ -1062,6 +1073,7 @@
                     'client_email': document.getElementById("client_email").value,
                     'profile_link': document.getElementById("profile_link").value,
                     'long_project': document.getElementById("long_project").value,
+                    'is_drafted': $('#is_drafted').is(":checked") ? 1 : 0,
                     'deal_category': deal_category,
                     'cms_id': cmsId,
                     'hubstaff_tracking': hubstaff_tracking,

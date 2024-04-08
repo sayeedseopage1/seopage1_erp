@@ -334,7 +334,7 @@ function commentDemoData() {
     //   This paragraph
     //   contains a lot of lines
     //   in the source code,
-    //   but the browser 
+    //   but the browser
     //   ignores it.
     // </p>
 
@@ -342,7 +342,7 @@ function commentDemoData() {
     //   This paragraph
     //   contains      a lot of spaces
     //   in the source     code,
-    //   but the    browser 
+    //   but the    browser
     //   ignores it.
     // </p>
 
@@ -365,10 +365,10 @@ function commentDemoData() {
     // <h3>quotes</h3>
     //  <blockquote>
     //    This a long quotations
-    //    For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally. 
+    //    For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.
     //    <br />
     //    <q>can nested some short quote</q>
-    // </blockquote> 
+    // </blockquote>
     // <q>This is a short quotations</q>
     // <hr />
     // <h3>preformatted</h3>
@@ -378,7 +378,7 @@ function commentDemoData() {
     // font, and it preserves
     // both      spaces and
     // line breaks
-    // </p> 
+    // </p>
     // <hr />
     // <h3>abbreviations</h3>
     // <p>
@@ -394,10 +394,10 @@ function commentDemoData() {
     //     Example.com<br />
     //     Box 564, Disneyland<br />
     //     USA
-    //   </address> 
+    //   </address>
     // <hr />
     // <h3>citation</h3>
-    //  <p><cite>The Scream</cite> by Edward Munch. Painted in 1893.</p> 
+    //  <p><cite>The Scream</cite> by Edward Munch. Painted in 1893.</p>
     // <hr /></p></p>;
     // const comment = faker.number.int({ max: 1, min: 0 }) ? faker.lorem.lines({
     //   min: 2,
@@ -714,7 +714,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var useRevision = function useRevision(task) {
   var _task$category;
-  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? "design" : "development";
+  var isIndependent = task === null || task === void 0 ? void 0 : task.isIndependentTask;
 
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
@@ -722,27 +723,46 @@ var useRevision = function useRevision(task) {
     if (isAlreadyAccepted) {
       return [];
     }
+    if (isIndependent) {
+      return [{
+        id: "PLRx01",
+        revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
+        isDeniable: false
+      }, {
+        id: "PLRx02",
+        revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
+        isDeniable: false
+      }, {
+        id: "PLRx3",
+        revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+        isDeniable: true
+      }, {
+        id: "PLRx04",
+        revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
+        isDeniable: true
+      }];
+    }
     return [{
-      id: 'PLRx01',
+      id: "PLRx01",
       revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
       isDeniable: false
     }, {
-      id: 'PLRx02',
+      id: "PLRx02",
       revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
       isDeniable: false
     }, {
-      id: 'PLRx3',
-      revision: "The Lead ".concat(taskType === 'design' ? 'designer' : 'developer', "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+      id: "PLRx3",
+      revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
       isDeniable: true
     }, {
-      id: 'PLRx04',
-      revision: "The instruction was followed, but the lead ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out some default/basic things or best practices which are not essential to write in instruction"),
+      id: "PLRx04",
+      revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
       isDeniable: true
     }, {
-      id: 'PLRx05',
+      id: "PLRx05",
       revision: "I have some general revisions",
       isDeniable: false,
-      type: 'GENERAL_REVISION'
+      type: "GENERAL_REVISION"
     }];
   };
 
@@ -754,20 +774,20 @@ var useRevision = function useRevision(task) {
       return [];
     } else {
       return [{
-        id: 'LDRx1',
-        revision: "The concerned ".concat(taskType === 'design' ? 'designer’s' : 'developer’s', "  delivered work doesn\u2019t match my shared requirement"),
+        id: "LDRx1",
+        revision: "The concerned ".concat(taskType === "design" ? "designer’s" : "developer’s", "  delivered work doesn\u2019t match my shared requirement"),
         isDeniable: true
       }, {
-        id: 'LDRx2',
+        id: "LDRx2",
         revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right.",
         isDeniable: false
       }, {
-        id: 'LDRx3',
+        id: "LDRx3",
         revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes.",
         isDeniable: false
       }, {
-        id: 'LDRx4',
-        revision: "The instruction was followed but the ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
+        id: "LDRx4",
+        revision: "The instruction was followed but the ".concat(taskType === "design" ? "designer" : "developer", " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
         isDeniable: true
       }];
     }
@@ -2832,7 +2852,7 @@ var Modal = function Modal(_ref) {
   //     }else{
   //         document.body.classList.remove('cnx_body-overflow-hidden')
   //     }
-  // }, [isOpen]) 
+  // }, [isOpen])
 
   if (!DOM) return;
   var modalContent = isOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -3291,13 +3311,30 @@ var RevisionText = function RevisionText(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "px-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      children: [revision !== null && revision !== void 0 && revision.revisionAcknowledgement ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+        className: "d-block mb-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+          className: "font-weight-bold text-danger",
+          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+            children: "Reason: "
+          }), " "]
+        }), revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement, revision !== null && revision !== void 0 && revision.isDeny ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "badge badge-danger",
+          children: "Rejected By Developer"
+        }) : null, revision !== null && revision !== void 0 && revision.isAccept ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "badge badge-success",
+          children: "Accepted By Developer"
+        }) : null]
+      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "font-weight-bold text-success",
+          children: "Statement:"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "sp1_ck_content",
           dangerouslySetInnerHTML: {
             __html: showText
           }
-        })
+        })]
       }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
         href: "#",
         className: "ml-2",
@@ -8027,7 +8064,7 @@ var HistorySection = function HistorySection() {
     error = _useSWR.error,
     isFetching = _useSWR.isLoading;
 
-  //fetch all task 
+  //fetch all task
   // const [getTaskDetails, {isFetching}] = useLazyGetTaskDetailsQuery('', {
   //   skip: histories?.length
   // })
@@ -8045,8 +8082,8 @@ var HistorySection = function HistorySection() {
   //     .catch(err => {
   //       console.log(err)
   //     })
-  //   } 
-  // }, [task]); 
+  //   }
+  // }, [task]);
 
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (!isFetching && data) {
@@ -8557,7 +8594,7 @@ var EditNote = function EditNote(_ref) {
     updateNote = _useUpdateNoteMutatio2[0],
     isLoading = _useUpdateNoteMutatio2[1].isLoading;
 
-  // fetch all task 
+  // fetch all task
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useGetTaskDetailsQuery)("/".concat(noteId, "/json?mode=task_note_edit"), {
       skip: type ? type !== 'edit' || !noteId : true,
       refetchOnMountOrArgChange: true
@@ -8945,7 +8982,7 @@ var NoteSection = function NoteSection() {
     searchParams = _useSearchParams2[0];
   var paramType = searchParams.get('type');
 
-  // fetch all task 
+  // fetch all task
   var _useLazyGetTaskDetail = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_6__.useLazyGetTaskDetailsQuery)('', {
       skip: notes === null || notes === void 0 ? void 0 : notes.length
     }),
@@ -8953,7 +8990,7 @@ var NoteSection = function NoteSection() {
     getTaskDetails = _useLazyGetTaskDetail2[0],
     isFetching = _useLazyGetTaskDetail2[1].isFetching;
 
-  // control mode 
+  // control mode
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     var _mode = paramType ? paramType : '';
     setMode(_mode);
@@ -9179,7 +9216,7 @@ var NoteView = function NoteView(_ref) {
   var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_9__["default"])(),
     deviceWidth = _useWindowSize.width;
 
-  // fetch all task 
+  // fetch all task
   var _useGetTaskDetailsQue = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__.useGetTaskDetailsQuery)("/".concat(noteId, "/json?mode=task_note_edit"), {
       skip: type ? type !== 'view' || !noteId : true,
       refetchOnMountOrArgChange: true
@@ -20895,7 +20932,7 @@ var ReportControl = function ReportControl(_ref) {
   var _useSearchParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_6__.useSearchParams)(),
     _useSearchParams2 = _slicedToArray(_useSearchParams, 1),
     searchParams = _useSearchParams2[0]; // get search params
-  var isVisible = searchParams.get("modal") === "report"; // check has modal 
+  var isVisible = searchParams.get("modal") === "report"; // check has modal
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useLocation)();
 
@@ -21287,7 +21324,7 @@ var TimeLogSection = function TimeLogSection() {
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useDispatch)();
 
   // get data
-  // fetch all task 
+  // fetch all task
   var _useLazyGetTaskDetail = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__.useLazyGetTaskDetailsQuery)('', {
       skip: timeLogs === null || timeLogs === void 0 ? void 0 : timeLogs.length
     }),
@@ -21776,7 +21813,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_checkbox_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./checkbox.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/UI/form/checkbox.css");
 
-            
+
 
 var options = {};
 
@@ -21805,7 +21842,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_AvatarGroup_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./AvatarGroup.module.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/global/AvatarGroup.module.css");
 
-            
+
 
 var options = {};
 
@@ -21834,7 +21871,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_DataTable_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./DataTable.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/single-task/section/daily-submission/styles/DataTable.css");
 
-            
+
 
 var options = {};
 
@@ -21863,7 +21900,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_task_edit_form_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./task-edit-form.module.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/single-task/section/sub-task/task-edit-form.module.css");
 
-            
+
 
 var options = {};
 

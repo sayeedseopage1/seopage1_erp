@@ -714,7 +714,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var useRevision = function useRevision(task) {
   var _task$category;
-  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? 'design' : 'development';
+  var taskType = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 7], task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.id) ? "design" : "development";
+  var isIndependent = task === null || task === void 0 ? void 0 : task.isIndependentTask;
 
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
@@ -722,27 +723,46 @@ var useRevision = function useRevision(task) {
     if (isAlreadyAccepted) {
       return [];
     }
+    if (isIndependent) {
+      return [{
+        id: "PLRx01",
+        revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
+        isDeniable: false
+      }, {
+        id: "PLRx02",
+        revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
+        isDeniable: false
+      }, {
+        id: "PLRx3",
+        revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+        isDeniable: true
+      }, {
+        id: "PLRx04",
+        revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
+        isDeniable: true
+      }];
+    }
     return [{
-      id: 'PLRx01',
+      id: "PLRx01",
       revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
       isDeniable: false
     }, {
-      id: 'PLRx02',
+      id: "PLRx02",
       revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
       isDeniable: false
     }, {
-      id: 'PLRx3',
-      revision: "The Lead ".concat(taskType === 'design' ? 'designer' : 'developer', "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
+      id: "PLRx3",
+      revision: "The Lead ".concat(taskType === "design" ? "designer" : "developer", "/project coordinator\u2019s delivered work doesn\u2019t match my shared requirement"),
       isDeniable: true
     }, {
-      id: 'PLRx04',
-      revision: "The instruction was followed, but the lead ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out some default/basic things or best practices which are not essential to write in instruction"),
+      id: "PLRx04",
+      revision: "The instruction was followed, but the lead ".concat(taskType === "design" ? "designer" : "developer", " missed out some default/basic things or best practices which are not essential to write in instruction"),
       isDeniable: true
     }, {
-      id: 'PLRx05',
+      id: "PLRx05",
       revision: "I have some general revisions",
       isDeniable: false,
-      type: 'GENERAL_REVISION'
+      type: "GENERAL_REVISION"
     }];
   };
 
@@ -754,20 +774,20 @@ var useRevision = function useRevision(task) {
       return [];
     } else {
       return [{
-        id: 'LDRx1',
-        revision: "The concerned ".concat(taskType === 'design' ? 'designer’s' : 'developer’s', "  delivered work doesn\u2019t match my shared requirement"),
+        id: "LDRx1",
+        revision: "The concerned ".concat(taskType === "design" ? "designer’s" : "developer’s", "  delivered work doesn\u2019t match my shared requirement"),
         isDeniable: true
       }, {
-        id: 'LDRx2',
+        id: "LDRx2",
         revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right.",
         isDeniable: false
       }, {
-        id: 'LDRx3',
+        id: "LDRx3",
         revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes.",
         isDeniable: false
       }, {
-        id: 'LDRx4',
-        revision: "The instruction was followed but the ".concat(taskType === 'design' ? 'designer' : 'developer', " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
+        id: "LDRx4",
+        revision: "The instruction was followed but the ".concat(taskType === "design" ? "designer" : "developer", " missed out on some default/basic things or best practices which are not essential to mention in instruction."),
         isDeniable: true
       }];
     }
@@ -2751,9 +2771,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Insights_ui_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Insights/ui/Modal */ "./resources/js/react/Insights/ui/Modal.jsx");
-/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
 /* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Button */ "./resources/js/react/single-independent-task/components/Button.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _hooks_useUsers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useUsers */ "./resources/js/react/hooks/useUsers.jsx");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -2766,138 +2790,214 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+// const RevisionText = ({text, index, date, time, revision}) => {
+//     const [expend, setExpend] = React.useState(false);
+//     const ref = React.useRef();
+
+//     let isLong = text?.length > 800;
+//     const showText = isLong ? text?.slice(0, 800) + '...' : text;
+
+//     const toggleModal = (e) => {
+//         e.preventDefault();
+//         setExpend(!expend)
+//     }
+
+//     useClickAway(ref, () => {
+//         setExpend(false)
+//     })
+
+//   return (
+//     <div className="sp1_task_card--sub-card" style={{minHeight: '110px'}}>
+//         <div className="sp1_tc_sc-inx">
+//             <h2>{index}</h2>
+//             <span className="d-block"><strong>Date</strong> {date} </span>
+//             <span className="d-block"><strong>Time</strong>: {time}</span>
+//         </div>
+//         <div className="">
+//             {revision?.revisionAcknowledgement ?
+//                 <span className='d-block mb-2'>
+//                     <span className='font-weight-bold text-danger'> <strong>Reason: </strong>  </span>
+//                     {revision?.revisionAcknowledgement} {" "}
+//                     {revision?.isDeny ? <span className='badge badge-danger'>Rejected By Developer</span> : null}
+//                     {revision?.isAccept ? <span className='badge badge-success'>Accepted By Developer</span> : null}
+//                 </span>
+//             : null}
+//             <div>
+//                 <span className='font-weight-bold text-success'>Statement:</span>
+//                 <div className='sp1_ck_content' style={{textIndent: '2rem'}} dangerouslySetInnerHTML={{__html: showText}} />
+//             </div>
+
+//             {isLong ? <a href="#" className='ml-2' onClick={toggleModal}>Read full guideline</a> : ''}
+
+//             <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>
+//                 <div ref={ref} className='sp1_task_card--sub-card-modal-content'>
+//                     <div className='d-flex align-items-center justify-content-between __header'>
+//                         <button onClick={() => setExpend(false)}>
+//                         <i className="fa-solid fa-xmark"></i>
+//                         </button>
+//                     </div>
+//                     <div className='__content'>
+//                         <div className="sp1_tc_sc-inx">
+//                             <h2>{index}</h2>
+//                             <span className="d-block"><strong>Date</strong> {date} </span>
+//                             <span className="d-block"><strong>Time</strong>: {time}</span>
+//                         </div>
+//                         <div>
+//                         <span className='d-block mb-2'> <span className='font-weight-bold text-danger'><strong>Reason: </strong></span> {revision?.revisionAcknowledgement}</span>
+//                             <span className='font-weight-bold text-success'>Commitment:</span>
+//                             <div className='sp1_ck_content' style={{textIndent: '2rem'}} dangerouslySetInnerHTML={{__html: text}} />
+//                         </div>
+//                     </div>
+
+//                     <div className=' __footer'>
+//                         <button className='btn btn-sm py-1 btn-primary ml-auto' onClick={() => setExpend(false)}>
+//                             Close
+//                         </button>
+//                     </div>
+//                 </div>
+//             </Modal>
+//         </div>
+
+//     </div>
+//   )
+// }
+
+
 var RevisionText = function RevisionText(_ref) {
-  var text = _ref.text,
-    index = _ref.index,
-    date = _ref.date,
-    time = _ref.time,
+  var index = _ref.index,
     revision = _ref.revision;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     expend = _React$useState2[0],
     setExpend = _React$useState2[1];
   var ref = react__WEBPACK_IMPORTED_MODULE_0__.useRef();
-  var isLong = (text === null || text === void 0 ? void 0 : text.length) > 800;
-  var showText = isLong ? (text === null || text === void 0 ? void 0 : text.slice(0, 800)) + '...' : text;
+  console.log("revision", revision);
   var toggleModal = function toggleModal(e) {
     e.preventDefault();
     setExpend(!expend);
   };
-  (0,react_use__WEBPACK_IMPORTED_MODULE_4__["default"])(ref, function () {
+  (0,react_use__WEBPACK_IMPORTED_MODULE_7__["default"])(ref, function () {
     setExpend(false);
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+  var getComment = function getComment(key) {
+    switch (key) {
+      case "PLR":
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
+      case "SPR":
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
+      case "CPR":
+        return revision === null || revision === void 0 ? void 0 : revision.pmComment;
+      case "LDR":
+        return revision === null || revision === void 0 ? void 0 : revision.leadComment;
+      default:
+        return (revision === null || revision === void 0 ? void 0 : revision.pmComment) || (revision === null || revision === void 0 ? void 0 : revision.leadComment);
+    }
+  };
+  var text = getComment(revision === null || revision === void 0 ? void 0 : revision.disputeBetween);
+  var isLong = (text === null || text === void 0 ? void 0 : text.length) > 800;
+  var showText = isLong ? (text === null || text === void 0 ? void 0 : text.slice(0, 800)) + "..." : text;
+  var date = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("MMM DD, YYYY");
+  var time = dayjs__WEBPACK_IMPORTED_MODULE_3___default()(revision === null || revision === void 0 ? void 0 : revision.createdAt).format("hh:mm A");
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
     className: "sp1_task_card--sub-card",
     style: {
-      minHeight: '110px'
+      minHeight: "110px"
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "sp1_tc_sc-inx",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
-        children: index
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
+        children: index < 10 ? "0".concat(index) : index
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
-          children: "Date"
-        }), " ", date, " "]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+          children: "Date: "
+        }), date]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
           children: "Time"
         }), ": ", time]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "",
-      children: [revision !== null && revision !== void 0 && revision.revisionAcknowledgement ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "px-3",
+      children: [revision !== null && revision !== void 0 && revision.revisionAcknowledgement ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
         className: "d-block mb-2",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
           className: "font-weight-bold text-danger",
-          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
             children: "Reason: "
-          }), "  "]
-        }), revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement, " ", " ", revision !== null && revision !== void 0 && revision.isDeny ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+          }), " "]
+        }), revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement, revision !== null && revision !== void 0 && revision.isDeny ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
           className: "badge badge-danger",
           children: "Rejected By Developer"
-        }) : null, revision !== null && revision !== void 0 && revision.isAccept ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        }) : null, revision !== null && revision !== void 0 && revision.isAccept ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
           className: "badge badge-success",
           children: "Accepted By Developer"
         }) : null]
-      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
           className: "font-weight-bold text-success",
           children: "Statement:"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "sp1_ck_content",
-          style: {
-            textIndent: '2rem'
-          },
           dangerouslySetInnerHTML: {
             __html: showText
           }
         })]
-      }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
+      }), isLong ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
         href: "#",
         className: "ml-2",
         onClick: toggleModal,
-        children: "Read full guideline"
-      }) : '', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Insights_ui_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: "View more"
+      }) : "", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Insights_ui_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         className: "sp1_task_card--sub-card-modal",
         isOpen: expend,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           ref: ref,
           className: "sp1_task_card--sub-card-modal-content",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: "d-flex align-items-center justify-content-between __header",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
               onClick: function onClick() {
                 return setExpend(false);
               },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
                 className: "fa-solid fa-xmark"
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "__content",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
               className: "sp1_tc_sc-inx",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h2", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h2", {
                 children: index
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
                 className: "d-block",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
-                  children: "Date"
-                }), " ", date, " "]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+                  children: "Date: "
+                }), " ", date]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
                 className: "d-block",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
                   children: "Time"
                 }), ": ", time]
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
-                className: "d-block mb-2",
-                children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-                  className: "font-weight-bold text-danger",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("strong", {
-                    children: "Reason: "
-                  })
-                }), " ", revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-                className: "font-weight-bold text-success",
-                children: "Commitment:"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "sp1_ck_content",
                 style: {
-                  textIndent: '2rem'
+                  textIndent: "2rem"
                 },
                 dangerouslySetInnerHTML: {
                   __html: text
                 }
-              })]
+              })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: " __footer",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("button", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
               className: "btn btn-sm py-1 btn-primary ml-auto",
               onClick: function onClick() {
                 return setExpend(false);
@@ -17273,7 +17373,8 @@ var RevisionControl = function RevisionControl(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     revisionModal = _useState2[0],
     setRevisionModal = _useState2[1];
-  var singleTask = new _utils_single_task__WEBPACK_IMPORTED_MODULE_3__.SingleTask(task);
+  // const singleTask = new SingleTask(task)
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       variant: "tertiary",
@@ -17294,7 +17395,7 @@ var RevisionControl = function RevisionControl(_ref) {
         className: "sp1_single_task--modal-panerl-wrapper",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_RevisionCreationModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
           auth: auth,
-          task: singleTask,
+          task: task,
           close: function close() {
             return setRevisionModal(false);
           }
@@ -17375,7 +17476,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     isDeniable = _useState10[0],
     setIsDeniable = _useState10[1];
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useDispatch)();
-  var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(),
+  var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(task),
     getLeadDeveloperAcknowladgementOptions = _useRevision.getLeadDeveloperAcknowladgementOptions,
     getProjectManagerAcknowladgementOptions = _useRevision.getProjectManagerAcknowladgementOptions;
   var _useLocation = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useLocation)(),
@@ -18224,6 +18325,7 @@ var StartTimerConfirmationModal = function StartTimerConfirmationModal(_ref) {
     var timeIntervelId = setInterval(function () {
       setCountDown(count--);
     }, 1000);
+    console.log("time", count);
     var timeOutId = setTimeout(function () {
       setButtonVisible(true);
       clearInterval(timeIntervelId);
